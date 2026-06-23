@@ -1,0 +1,40 @@
+# ── Agent / Claude tooling ──────────────────────────────────────────
+CLAUDE.md
+context.md
+graphify-out/
+
+# ── IDE / Editor ────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.iml
+
+# ── Python ──────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+.env
+.venv/
+venv/
+env/
+
+# ── Jupyter ─────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+
+# ── PyTorch / experiment artefacts ──────────────────────────────────
+*.pt
+*.pth
+*.ckpt
+runs/
+wandb/
+mlruns/
+outputs/
+logs/
+
+# ── macOS ────────────────────────────────────────────────────────────
+.DS_Store
