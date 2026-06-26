@@ -1,0 +1,31 @@
+"Thesis Timeline  -  A Unified Benchmark of Grokking Predictors in Neural Networks
+Jonathan John  |  M.Sc. Artificial Intelligence, IU  |  Supervisor: Prof. Dr.-Ing. Sheikh Faisal Rashid  |  Start: June 22, 2026",,,,,,,,,,,,,,,,,,,,,,,,,,
+Phase,Task / Activity,Deliverable,Jun 2026,,,,Jul 2026,,,,Aug 2026,,,,Sep 2026,,,,Oct 2026,,,,Nov 2026,,,
+,,,W1,W2,W3,W4,W1,W2,W3,W4,W1,W2,W3,W4,W1,W2,W3,W4,W1,W2,W3,W4,W1,W2,W3,W4
+"Ph 1
+Setup",Git repo + environment setup,Pinned requirements.txt + repo,,,,,,,,,,,,,,,,,,,,,,,,
+,Transformer + task generators,Working PyTorch MPS pipeline,,,,,,,,,,,,,,,,,,,,,,,,
+,Reproduce Nanda grokking GATE,Canonical grokking on (a+b) mod 97,,,,,,,,M,,,,,,,,,,,,,,,,
+"Ph 2
+Baseline",Implement 4 baseline predictors,4 predictors verified vs. papers,,,,,,,,,,,,,,,,,,,,,,,,
+,Run baseline experiments,Baseline results table + mini-leaderboard,,,,,,,,,,,,M,,,,,,,,,,,,
+"Ph 3
+Predictors",P1-P4: Norm/Dropout/Spectral/AGE,4 predictors verified vs. papers,,,,,,,,,,,,,,,,,,,,,,,,
+,P5-P6: HTSR Alpha + Corr. Traps,WeightWatcher integration complete,,,,,,,,,,,,,,,,,,,,,,,,
+,P7-P9: PCA / Higher-MI / Commutator,All 9 predictors unit-tested,,,,,,,,,,,,,,,,M,,,,,,,,
+,Standardised eval (10% FPR),Calibration protocol built,,,,,,,,,,,,,,,,,,,,,,,,
+"Ph 4
+Sweep",Run ~80 training runs overnight,~3 GB Parquet + JSONL logs,,,,,,,,,,,,,,,,,,,,,,,,
+,Leaderboard: AUC + Lead Time,Plot 1 (bar) + Plot 2 (scatter),,,,,,,,,,,,,,,,,,,,M,,,,
+,Cross-task transfer (RQ3),Plot 3 (transfer heatmap),,,,,,,,,,,,,,,,,,,,,,,,
+"Ph 5
+Ensemble",Train logistic meta-predictor,Ensemble AUC in + out-of-distribution,,,,,,,,,,,,,,,,,,,,,,,,
+,Anti-grokking side experiment,Anti-grokking AUC table (H7+H8),,,,,,,,,,,,,,,,,,,,,,,,
+,Plot 4: Ensemble vs best single,All 4 canonical plots complete,,,,,,,,,,,,,,,,,,,,,,,M,
+"Ph 6
+Writing",Statistical tests (Bootstrap+DeLong),95% CIs + significance results,,,,,,,,,,,,,,,,,,,,,,,,
+,Thesis draft to supervisor,Full draft delivered to Prof. Rashid,,,,,,,,,,,,,,,,,,,,,,,,
+,Revisions + final submission,Thesis uploaded to myCampus DONE,,,,,,,,,,,,,,,,,,,,,,,,M
+,,,,,,,,,,,,,,,,,,,,,,,,,,
+LEGEND:,,,,,,,Ph1,,,Ph2,,,Ph3,,,Ph4,,,Ph5,,,Ph6,,,M,
+Milestones:  M(Jun W4) Supervision uploaded  |  M(Jul W4) Grokking reproduced - GATE  |  M(Aug W4) Baseline results done  |  M(Sep W4) All 9 predictors verified  |  M(Oct W4) Leaderboard + plots done  |  M(Nov W3) Ensemble + anti-grokking done  |  M(Nov W4) Thesis submitted,,,,,,,,,,,,,,,,,,,,,,,,,,
