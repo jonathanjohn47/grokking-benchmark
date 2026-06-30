@@ -1,7 +1,27 @@
 {
-  "/Users/jonathanjohn/Documents/grokking-benchmark/context.md": {
+  "context.md": {
     "mtime": 1782216297.1190045,
     "ast_hash": "916a0e4f33d2556de626c397b36c5fb4",
     "semantic_hash": "916a0e4f33d2556de626c397b36c5fb4"
+  },
+  "src/data/modular_arithmetic.py": {
+    "mtime": 1782836968.2763646,
+    "ast_hash": "8d6263b6ce53bd7d72be0b5003e90154",
+    "semantic_hash": ""
+  },
+  "src/models/transformer.py": {
+    "mtime": 1782833262.0913548,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "src/train.py": {
+    "mtime": 1782836883.1622248,
+    "ast_hash": "beac8f4882b7f019376847a853fb5f20",
+    "semantic_hash": ""
+  },
+  "requirements.txt": {
+    "mtime": 1782217698.4460037,
+    "ast_hash": "8200c752c6779728099a0daad8611534",
+    "semantic_hash": ""
   }
 }

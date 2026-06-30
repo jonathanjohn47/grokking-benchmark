@@ -129,10 +129,61 @@
 
 ---
 
+## Session 5 — June 30, 2026 (ModularArithmeticDataset — Concepts)
+
+### Covered
+- ✅ What variables are needed inside `ModularArithmeticDataset.__init__`
+  - Only one: `self.data = data`
+  - `__len__` returns `len(self.data)`, `__getitem__` returns `self.data[index]`
+- ✅ What `__init__` does — explained directly:
+  - Python automatically calls `__init__` the moment an object is created
+  - Its job: store starting values inside the object so other methods can use them
+  - Jonathan asked "agar `__init__` naa likhu to?" → explained `AttributeError` and `TypeError` that result
+- ✅ Where to write the class:
+  - `src/data/modular_arithmetic.py` — same file as `generate_pairs` and `get_dataloaders`
+  - No new folder needed; class belongs in data module
+- ✅ Git lock file issue encountered:
+  - `HEAD.lock` was blocking commits
+  - Fix: `rm .git/HEAD.lock` then re-run `git commit`
+
+### Jonathan's Learning Style Notes (Further Updated)
+- Asks "agar ye naa karu to kya hoga?" — always answer the negative case directly
+- Wants to understand each concept fully before writing any code
+- Hinglish explanations work best when he phrases questions in Hindi
+
+### Next Session — Pick Up Here
+1. Write `ModularArithmeticDataset` class in `src/data/modular_arithmetic.py`
+2. Wrap `train`/`test` in `DataLoader`
+3. Write `src/models/transformer.py`
+4. Write training loop in `src/train.py`
+5. Run and confirm grokking curve (M1 gate)
+
+---
+
+## Session 6 — June 30, 2026 (ModularArithmeticDataset — Implementation)
+
+### Completed
+- ✅ `ModularArithmeticDataset` class written in a **separate file**: `src/data/dataset.py` (Jonathan chose to split it out, not keep it in `modular_arithmetic.py`)
+- ✅ Two bugs fixed during creation:
+  - Circular import removed (`from data.dataset import ModularArithmeticDataset` was at top of the same file — deleted)
+  - Import path corrected from `src.data.modular_arithmetic` → `data.modular_arithmetic` to match project convention in `train.py`
+- ✅ Final class structure in `src/data/dataset.py`:
+  - `__init__(self, number_of_tuples)` — calls `generate_pairs`, stores result as `self.data`
+  - `__len__` — returns `len(self.data)`
+  - `__getitem__(self, idx)` — returns `self.data[idx]`
+
+### Next Session — Pick Up Here
+1. Wrap `train`/`test` lists in PyTorch `DataLoader` (import `ModularArithmeticDataset` from `data.dataset`)
+2. Write `src/models/transformer.py` (Embedding → Attn → MLP → Output Head)
+3. Write training loop in `src/train.py`
+4. Run and confirm grokking curve (M1 gate)
+
+---
+
 ## Pending (Not Yet Done)
 
 - [ ] Reply to Prof. Rashid's two questions (previous thesis topic + Jammu clarification)
-- [ ] Wrap `train`/`test` in PyTorch `DataLoader` objects (needs `Dataset` class first)
+- [ ] Wrap `train`/`test` in PyTorch `DataLoader` objects (`ModularArithmeticDataset` now ready in `src/data/dataset.py`)
 - [ ] Write transformer model and training loop
 - [ ] Reproduce canonical Nanda et al. grokking (M1 gate)
 
