@@ -104,6 +104,31 @@
 
 ---
 
+## Session 4 — June 30, 2026 (Python Concepts)
+
+### Covered
+- ✅ What goes inside a `Dataset` class: `__init__`, `__len__`, `__getitem__` — explained with purpose before code
+- ✅ How to write a Python class — `__init__`, methods, instances explained
+- ✅ What `self` is — long discussion in Hinglish, final understanding:
+  - `self` is needed because `bark()` function andar se nahi jaanta ki kis object ke liye chal raha hai
+  - Tu bahar se `rex.bark()` likhta hai — Python `rex` ko function ke andar `self` ke roop mein bhej deta hai
+  - `self` woh bridge hai between the call outside and the data inside
+
+### Jonathan's Learning Style Notes (Updated)
+- Explains in Hindi/Hinglish when confused — respond in same language
+- Very literal thinker — analogies backfire, direct logical explanation works better
+- Asks "why does this even exist?" before accepting syntax — answer that first
+- Does not move on until genuinely understood
+
+### Next Session — Pick Up Here (unchanged)
+1. Write `ModularArithmeticDataset` class in `src/data/modular_arithmetic.py`
+2. Wrap `train`/`test` in `DataLoader`
+3. Write `src/models/transformer.py`
+4. Write training loop in `src/train.py`
+5. Run and confirm grokking curve (M1 gate)
+
+---
+
 ## Pending (Not Yet Done)
 
 - [ ] Reply to Prof. Rashid's two questions (previous thesis topic + Jammu clarification)
