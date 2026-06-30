@@ -65,11 +65,51 @@
 
 ---
 
+## Session 2 — Phase 1 Implementation (June 30, 2026)
+
+### Completed
+- ✅ Virtual environment created (`.venv`) and all `requirements.txt` packages installed
+- ✅ MPS confirmed working (`torch.backends.mps.is_available()` → `True`)
+- ✅ Project structure created: `src/data/`, `src/models/`, `src/train.py`
+- ✅ `generate_pairs(number)` written in `src/data/modular_arithmetic.py` using `yield`
+  - Loops `i` in `range(number)`, `j` in `range(number)`
+  - Yields `(i, j, (i+j) % number)` — 9409 triples for p=97
+
+### Also Completed (Session 3 — June 30, 2026)
+- ✅ `get_dataloaders(number_of_tuples)` written in `src/data/modular_arithmetic.py`
+  - Generates all 9409 pairs, splits 30% train / 70% val
+  - Returns `train, test` as plain lists (DataLoader wrapping still pending)
+  - Jonathan understands why 30/70 split: grokking requires forcing generalization, not memorization
+- ✅ `train.py` cleaned up: duplicate `generate_pairs` removed, correct import from `data.modular_arithmetic`
+- ✅ Exposed API key in `train.py` comment removed
+- ✅ Conceptual understanding confirmed:
+  - `p=97` is prime → forms a finite field → clean algebraic structure
+  - 97×97 = 9409 total input pairs (full input space)
+  - `DataLoader` is a PyTorch built-in, not written by hand
+
+### In Progress
+- 🔄 `get_dataloaders` returns plain lists — needs to wrap in PyTorch `DataLoader` objects
+  - Requires a `Dataset` class with `__len__` and `__getitem__` first
+
+### Next Session — Pick Up Here
+1. Write `Dataset` class in `src/data/modular_arithmetic.py`, wrap `train`/`test` in `DataLoader`
+2. Write `src/models/transformer.py` (Embedding → Attn → MLP → Output Head)
+3. Write training loop in `src/train.py` (setup → train loop → logging → plot grokking curve)
+4. Run training and observe grokking curve (M1 gate)
+
+### Jonathan's Coding Style Note
+- Jonathan is learning Python while implementing — explain concepts before code
+- He writes code himself; Claude only helps when stuck
+- Prefers to understand the *purpose* of each function before writing it
+
+---
+
 ## Pending (Not Yet Done)
 
 - [ ] Reply to Prof. Rashid's two questions (previous thesis topic + Jammu clarification)
-- [ ] Environment setup — Git repo, PyTorch MPS, requirements.txt
-- [ ] Reproduce canonical Nanda et al. grokking (first critical gate)
+- [ ] Wrap `train`/`test` in PyTorch `DataLoader` objects (needs `Dataset` class first)
+- [ ] Write transformer model and training loop
+- [ ] Reproduce canonical Nanda et al. grokking (M1 gate)
 
 ---
 
