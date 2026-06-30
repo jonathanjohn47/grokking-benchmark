@@ -19,8 +19,71 @@
       }
     ]
   },
-  "nodes": [],
-  "links": [],
+  "nodes": [
+    {
+      "label": "modular_arithmetic.py",
+      "file_type": "code",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "data_modular_arithmetic",
+      "community": 0,
+      "norm_label": "modular_arithmetic.py"
+    },
+    {
+      "label": "generate_pairs()",
+      "file_type": "code",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "data_modular_arithmetic_generate_pairs",
+      "community": 0,
+      "norm_label": "generate_pairs()"
+    },
+    {
+      "label": "get_dataloaders()",
+      "file_type": "code",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "data_modular_arithmetic_get_dataloaders",
+      "community": 0,
+      "norm_label": "get_dataloaders()"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "data_modular_arithmetic",
+      "target": "data_modular_arithmetic_generate_pairs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "data_modular_arithmetic",
+      "target": "data_modular_arithmetic_get_dataloaders",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "data_modular_arithmetic_get_dataloaders",
+      "target": "data_modular_arithmetic_generate_pairs",
+      "confidence_score": 1.0
+    }
+  ],
   "hyperedges": [
     {
       "id": "thesis_organization_and_direction",
@@ -37,5 +100,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "70b8d1e66c6fbffb64bfd3205399ce2dca627f59"
+  "built_at_commit": "d6395de8e5f5ffc6a1d95646ce1b99753c36c447"
 }

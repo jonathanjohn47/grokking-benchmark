@@ -5,8 +5,8 @@
     "semantic_hash": "916a0e4f33d2556de626c397b36c5fb4"
   },
   "src/data/modular_arithmetic.py": {
-    "mtime": 1782836968.2763646,
-    "ast_hash": "8d6263b6ce53bd7d72be0b5003e90154",
+    "mtime": 1782843585.9393718,
+    "ast_hash": "0b6847b189c1777022b775630783320a",
     "semantic_hash": ""
   },
   "src/models/transformer.py": {
@@ -22,6 +22,11 @@
   "requirements.txt": {
     "mtime": 1782217698.4460037,
     "ast_hash": "8200c752c6779728099a0daad8611534",
+    "semantic_hash": ""
+  },
+  "src/data/dataset.py": {
+    "mtime": 1782841616.1098866,
+    "ast_hash": "96c0e25a1a155c9c5baed8490c109554",
     "semantic_hash": ""
   }
 }
