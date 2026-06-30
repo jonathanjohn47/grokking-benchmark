@@ -1,28 +1,31 @@
-# Graph Report - grokking-benchmark  (2026-06-30)
+# Graph Report - grokking-benchmark  (2026-07-01)
 
 ## Corpus Check
-- 4 files · ~216 words
+- 4 files · ~209 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3 nodes · 3 edges · 1 communities (0 shown, 1 thin omitted)
+- 9 nodes · 11 edges · 3 communities (1 shown, 2 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d6395de8`
+- Built from commit: `fbebaba1`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- [[_COMMUNITY_Community 0|Community 0]]
+- [[_COMMUNITY_Community 1|Community 1]]
+- [[_COMMUNITY_Community 2|Community 2]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `generate_pairs()` - 2 edges
-2. `get_dataloaders()` - 2 edges
+1. `ModularArithmeticDataset` - 4 edges
+2. `generate_pairs()` - 3 edges
+3. `get_dataloaders()` - 2 edges
 
 ## Surprising Connections (you probably didn't know these)
-- None detected - all connections are within the same source files.
+- `get_dataloaders()` --calls--> `generate_pairs()`  [EXTRACTED]
+  src/data/dataset.py → src/data/modular_arithmetic.py
 
 ## Import Cycles
 - None detected.
@@ -30,10 +33,17 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (1 total, 1 thin omitted)
+## Communities (3 total, 2 thin omitted)
 
 ## Knowledge Gaps
-- **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **2 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
-_Not enough signal to generate questions. This usually means the corpus has no AMBIGUOUS edges, no bridge nodes, no INFERRED relationships, and all communities are tightly cohesive. Add more files or run with --mode deep to extract richer edges._
+_Questions this graph is uniquely positioned to answer:_
+
+- **Why does `ModularArithmeticDataset` connect `Community 2` to `Community 0`, `Community 1`?**
+  _High betweenness centrality (0.518) - this node is a cross-community bridge._
+- **Why does `generate_pairs()` connect `Community 1` to `Community 0`?**
+  _High betweenness centrality (0.107) - this node is a cross-community bridge._
+- **Why does `get_dataloaders()` connect `Community 1` to `Community 0`?**
+  _High betweenness centrality (0.018) - this node is a cross-community bridge._
