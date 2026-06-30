@@ -34,71 +34,21 @@
       "label": "ModularArithmeticDataset",
       "file_type": "code",
       "source_file": "src/data/dataset.py",
-      "source_location": "L5",
+      "source_location": "L4",
       "_origin": "ast",
       "id": "data_dataset_modulararithmeticdataset",
-      "community": 2,
+      "community": 1,
       "norm_label": "modulararithmeticdataset"
     },
     {
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "src/data/dataset.py",
-      "source_location": "L6",
+      "source_location": "L5",
       "_origin": "ast",
       "id": "data_dataset_modulararithmeticdataset_init",
       "community": 1,
       "norm_label": ".__init__()"
-    },
-    {
-      "label": ".__len__()",
-      "file_type": "code",
-      "source_file": "src/data/dataset.py",
-      "source_location": "L11",
-      "_origin": "ast",
-      "id": "data_dataset_modulararithmeticdataset_len",
-      "community": 2,
-      "norm_label": ".__len__()"
-    },
-    {
-      "label": ".__getitem__()",
-      "file_type": "code",
-      "source_file": "src/data/dataset.py",
-      "source_location": "L14",
-      "_origin": "ast",
-      "id": "data_dataset_modulararithmeticdataset_getitem",
-      "community": 2,
-      "norm_label": ".__getitem__()"
-    },
-    {
-      "label": "get_dataloaders()",
-      "file_type": "code",
-      "source_file": "src/data/dataset.py",
-      "source_location": "L19",
-      "_origin": "ast",
-      "id": "data_dataset_get_dataloaders",
-      "community": 1,
-      "norm_label": "get_dataloaders()"
-    },
-    {
-      "label": "modular_arithmetic.py",
-      "file_type": "code",
-      "source_file": "src/data/modular_arithmetic.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "data_modular_arithmetic",
-      "community": 0,
-      "norm_label": "modular_arithmetic.py"
-    },
-    {
-      "label": "generate_pairs()",
-      "file_type": "code",
-      "source_file": "src/data/modular_arithmetic.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "data_modular_arithmetic_generate_pairs",
-      "community": 1,
-      "norm_label": "generate_pairs()"
     },
     {
       "label": "train.py",
@@ -109,6 +59,26 @@
       "id": "src_train",
       "community": 0,
       "norm_label": "train.py"
+    },
+    {
+      "label": "modular_arithmetic.py",
+      "file_type": "code",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "modular_arithmetic.py",
+      "id": "data_modular_arithmetic"
+    },
+    {
+      "label": "generate_pairs()",
+      "file_type": "code",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "generate_pairs()",
+      "id": "data_modular_arithmetic_generate_pairs"
     }
   ],
   "links": [
@@ -116,21 +86,11 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/data/dataset.py",
-      "source_location": "L19",
-      "weight": 1.0,
-      "source": "data_dataset",
-      "target": "data_dataset_get_dataloaders",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/data/dataset.py",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "data_dataset",
-      "target": "data_dataset_modulararithmeticdataset",
-      "confidence_score": 1.0
+      "target": "data_dataset_modulararithmeticdataset"
     },
     {
       "relation": "imports_from",
@@ -139,9 +99,9 @@
       "source_file": "src/data/dataset.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "data_dataset",
-      "target": "data_modular_arithmetic",
-      "confidence_score": 1.0
+      "target": "data_modular_arithmetic"
     },
     {
       "relation": "imports_from",
@@ -150,19 +110,9 @@
       "source_file": "src/train.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_train",
-      "target": "data_dataset",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/data/dataset.py",
-      "source_location": "L14",
-      "weight": 1.0,
-      "source": "data_dataset_modulararithmeticdataset",
-      "target": "data_dataset_modulararithmeticdataset_getitem",
-      "confidence_score": 1.0
+      "target": "data_dataset"
     },
     {
       "relation": "method",
@@ -170,19 +120,9 @@
       "source_file": "src/data/dataset.py",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "data_dataset_modulararithmeticdataset",
-      "target": "data_dataset_modulararithmeticdataset_init",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/data/dataset.py",
-      "source_location": "L11",
-      "weight": 1.0,
-      "source": "data_dataset_modulararithmeticdataset",
-      "target": "data_dataset_modulararithmeticdataset_len",
-      "confidence_score": 1.0
+      "target": "data_dataset_modulararithmeticdataset_init"
     },
     {
       "relation": "calls",
@@ -196,15 +136,15 @@
       "target": "data_modular_arithmetic_generate_pairs"
     },
     {
-      "relation": "calls",
-      "context": "call",
+      "relation": "imports",
+      "context": "import",
       "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/data/dataset.py",
-      "source_location": "L20",
+      "source_file": "src/train.py",
+      "source_location": "L2",
       "weight": 1.0,
-      "source": "data_dataset_get_dataloaders",
-      "target": "data_modular_arithmetic_generate_pairs"
+      "confidence_score": 1.0,
+      "source": "src_train",
+      "target": "data_modular_arithmetic"
     },
     {
       "relation": "contains",
@@ -215,17 +155,6 @@
       "confidence_score": 1.0,
       "source": "data_modular_arithmetic",
       "target": "data_modular_arithmetic_generate_pairs"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/train.py",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "src_train",
-      "target": "data_modular_arithmetic",
-      "confidence_score": 1.0
     }
   ],
   "hyperedges": [
@@ -244,5 +173,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "fbebaba1ac2f2d8a2798866ce75b596208e14cbc"
+  "built_at_commit": "774ccf4cf31f360bedc5df1ddb05ce7c702ff7a3"
 }

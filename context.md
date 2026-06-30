@@ -260,18 +260,23 @@
 - ✅ Project folder structure recreated via CLI: `src/data/`, `src/models/`
 - ✅ Empty files created: `modular_arithmetic.py`, `dataset.py`, `transformer.py`, `train.py`
 - ✅ `generate_pairs(number)` rewritten in `src/data/modular_arithmetic.py` — correct, uses `yield`, returns `(i, j, (i+j)%number)` tuples
-- ✅ `ModularArithmeticDataset.__init__` written in `src/data/dataset.py`:
-  - Imports `generate_pairs` from `data.modular_arithmetic` (correct path)
-  - Stores `self.data = list(generate_pairs(number))`
-  - Fixed: removed incorrect `self.generate_pairs()` call and wrong `from train import generate_pairs`
-- 🔄 `__len__` and `__getitem__` not yet written — next immediate step
+- ✅ `ModularArithmeticDataset.__init__` written in `src/data/dataset.py`
+- ✅ `__len__` and `__getitem__` written in `ModularArithmeticDataset`
+- ✅ Jonathan understood dunder methods (`__len__`, `__getitem__`) — why `__` prefix, how Python hooks into them automatically
+
+### Session 10 — July 1, 2026 (Dunder Methods)
+
+### Covered
+- ✅ `__len__` and `__getitem__` written and understood
+- ✅ Dunder method concept explained: Python pre-defined rules that hook built-in syntax (`len()`, `[]`) to class methods
+- ✅ Jonathan asked "agar `__abracadabra__` likhun?" — explained correctly: no error, but Python never auto-calls it
+- ✅ Final understanding: `DataLoader` internally calls `len(dataset)` and `dataset[i]` — dunder methods make this work
 
 ### Next Session — Pick Up Here
-1. Write `__len__` and `__getitem__` in `ModularArithmeticDataset`
-2. Write `get_dataloaders` function in `dataset.py` using `random_split` + `DataLoader`
-3. Write `src/models/transformer.py`
-4. Write training loop in `src/train.py`
-5. Run and confirm grokking curve (M1 gate)
+1. Write `get_dataloaders` function in `dataset.py` using `random_split` + `DataLoader`
+2. Write `src/models/transformer.py`
+3. Write training loop in `src/train.py`
+4. Run and confirm grokking curve (M1 gate)
 
 ---
 
