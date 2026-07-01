@@ -34,7 +34,7 @@
       "label": "ModularArithmeticDataset",
       "file_type": "code",
       "source_file": "src/data/dataset.py",
-      "source_location": "L4",
+      "source_location": "L6",
       "_origin": "ast",
       "id": "data_dataset_modulararithmeticdataset",
       "community": 2,
@@ -44,7 +44,7 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "src/data/dataset.py",
-      "source_location": "L5",
+      "source_location": "L7",
       "_origin": "ast",
       "id": "data_dataset_modulararithmeticdataset_init",
       "community": 1,
@@ -54,7 +54,7 @@
       "label": ".__len__()",
       "file_type": "code",
       "source_file": "src/data/dataset.py",
-      "source_location": "L8",
+      "source_location": "L10",
       "_origin": "ast",
       "id": "data_dataset_modulararithmeticdataset_len",
       "community": 2,
@@ -64,11 +64,21 @@
       "label": ".__getitem__()",
       "file_type": "code",
       "source_file": "src/data/dataset.py",
-      "source_location": "L11",
+      "source_location": "L13",
       "_origin": "ast",
       "id": "data_dataset_modulararithmeticdataset_getitem",
       "community": 2,
       "norm_label": ".__getitem__()"
+    },
+    {
+      "label": "get_dataloaders()",
+      "file_type": "code",
+      "source_file": "src/data/dataset.py",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "data_dataset_get_dataloaders",
+      "community": 2,
+      "norm_label": "get_dataloaders()"
     },
     {
       "label": "train.py",
@@ -106,6 +116,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/data/dataset.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "data_dataset",
+      "target": "data_dataset_get_dataloaders",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/dataset.py",
       "source_location": "L5",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -135,14 +155,25 @@
       "target": "data_dataset"
     },
     {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/dataset.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "data_dataset_get_dataloaders",
+      "target": "data_dataset_modulararithmeticdataset",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/data/dataset.py",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "data_dataset_modulararithmeticdataset",
-      "target": "data_dataset_modulararithmeticdataset_getitem",
-      "confidence_score": 1.0
+      "target": "data_dataset_modulararithmeticdataset_getitem"
     },
     {
       "relation": "method",
@@ -160,9 +191,9 @@
       "source_file": "src/data/dataset.py",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "data_dataset_modulararithmeticdataset",
-      "target": "data_dataset_modulararithmeticdataset_len",
-      "confidence_score": 1.0
+      "target": "data_dataset_modulararithmeticdataset_len"
     },
     {
       "relation": "calls",
@@ -213,5 +244,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "1b61b53ac55ec4af15ba5d56ba0b44695fca3045"
+  "built_at_commit": "823f630f33d9222d448ea5bd36b5e45e39b5dd9b"
 }

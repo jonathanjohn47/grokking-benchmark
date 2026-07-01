@@ -1,16 +1,16 @@
 # Graph Report - grokking-benchmark  (2026-07-01)
 
 ## Corpus Check
-- 4 files · ~168 words
+- 4 files · ~207 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 8 nodes · 9 edges · 3 communities (1 shown, 2 thin omitted)
+- 9 nodes · 11 edges · 3 communities (1 shown, 2 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `1b61b53a`
+- Built from commit: `823f630f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -19,8 +19,9 @@
 - [[_COMMUNITY_Community 2|Community 2]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `ModularArithmeticDataset` - 4 edges
-2. `generate_pairs()` - 2 edges
+1. `ModularArithmeticDataset` - 5 edges
+2. `get_dataloaders()` - 2 edges
+3. `generate_pairs()` - 2 edges
 
 ## Surprising Connections (you probably didn't know these)
 - None detected - all connections are within the same source files.
@@ -40,6 +41,6 @@
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `ModularArithmeticDataset` connect `Community 2` to `Community 0`, `Community 1`?**
-  _High betweenness centrality (0.595) - this node is a cross-community bridge._
+  _High betweenness centrality (0.571) - this node is a cross-community bridge._
 - **Why does `generate_pairs()` connect `Community 1` to `Community 0`?**
-  _High betweenness centrality (0.071) - this node is a cross-community bridge._
+  _High betweenness centrality (0.054) - this node is a cross-community bridge._

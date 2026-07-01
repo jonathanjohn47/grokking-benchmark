@@ -328,10 +328,41 @@
 
 ---
 
+---
+
+## Session 13 — July 1, 2026 (Transformer Embedding Layer Complete)
+
+### Completed
+- ✅ `Transformer` class skeleton written in `src/models/transformer.py`
+- ✅ Inherits from `nn.Module` — Jonathan understood what `(nn.Module)` in class definition means (inheritance)
+- ✅ `super().__init__()` understood — parent's `__init__` must run before own setup
+- ✅ `self.token_embedding = nn.Embedding(num_tokens, d_model)` added
+- ✅ `self.position_embedding = nn.Embedding(2, d_model)` added
+- ✅ Jonathan fixed multiple issues himself: wrong class name (`Transformers` → `Transformer`), wrong param name (`vec_size` → `d_model`), removed incorrect comment, removed `nn.Transformer` (wrong approach), removed premature `nn.Linear`
+
+### Concepts Covered
+- Inheritance: `(nn.Module)` means "borrow everything from this parent class"
+- `super().__init__()`: runs parent's `__init__` before own setup — required for PyTorch internal machinery
+- `d_model`: the size of the vector each token is represented as (128 in our case)
+- Why NOT to use `nn.Transformer`: it's a ready-made encoder-decoder, we're building decoder-only from scratch
+
+### Next Session — Pick Up Here
+1. Attention layer — explain what attention does between `i` and `j` tokens, then implement
+2. MLP layer
+3. Output head (97 logits)
+4. `forward()` method to wire everything together
+5. Training loop in `src/train.py`
+6. Run and confirm grokking curve (M1 gate)
+
+---
+
 ## Pending (Not Yet Done)
 
 - [ ] Reply to Prof. Rashid's two questions (previous thesis topic + Jammu clarification)
-- [ ] Write `Transformer` class in `src/models/transformer.py` (embedding layer first)
+- [ ] Attention layer in `src/models/transformer.py`
+- [ ] MLP layer in `src/models/transformer.py`
+- [ ] Output head in `src/models/transformer.py`
+- [ ] `forward()` method in `src/models/transformer.py`
 - [ ] Write training loop in `src/train.py`
 - [ ] Reproduce canonical Nanda et al. grokking (M1 gate)
 
