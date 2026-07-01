@@ -273,18 +273,66 @@
 - ✅ Final understanding: `DataLoader` internally calls `len(dataset)` and `dataset[i]` — dunder methods make this work
 
 ### Next Session — Pick Up Here
-1. Write `get_dataloaders` function in `dataset.py` using `random_split` + `DataLoader`
-2. Write `src/models/transformer.py`
-3. Write training loop in `src/train.py`
-4. Run and confirm grokking curve (M1 gate)
+1. Write `src/models/transformer.py` (Embedding → Attn → MLP → Output Head)
+2. Write training loop in `src/train.py`
+3. Run and confirm grokking curve (M1 gate)
+
+---
+
+## Session 11 — July 1, 2026 (get_dataloaders Complete)
+
+### Completed
+- ✅ `get_dataloaders(number)` written in `src/data/dataset.py` as a standalone function (outside the class)
+- ✅ Uses `random_split` for 30/70 train/val split
+- ✅ Wraps both halves in `DataLoader` with `batch_size=512` (matching Nanda et al.), `shuffle=True` for train, `shuffle=False` for val
+- ✅ Clean imports: `DataLoader` and `random_split` imported directly from `torch.utils.data`
+- ✅ Jonathan understood what batch size means — chunked feeding, one update per batch, 6 batches per epoch with 2822 train examples
+- ✅ Committed: `feat: add ModularArithmeticDataset and get_dataloaders`
+
+### Next Session — Pick Up Here
+1. Write `src/models/transformer.py` (Embedding → Attn → MLP → Output Head)
+2. Write training loop in `src/train.py`
+3. Run and confirm grokking curve (M1 gate)
+
+---
+
+## Session 12 — July 1, 2026 (Transformer Concepts — Embedding Layer)
+
+### Covered
+- ✅ "Data pipeline" term explained: `generate_pairs → ModularArithmeticDataset → get_dataloaders → model`
+- ✅ Why decoder-only transformer (not encoder-decoder): task is simple input→output, no sequence translation needed
+- ✅ Why model outputs 97 probabilities (not a raw number): classification over 97 classes; raw number output is unbounded and unstable
+- ✅ What an embedding layer is: integer → vector lookup table; `nn.Embedding(num_entries, vector_size)`
+- ✅ Token embedding: `nn.Embedding(97, 128)` — 97 possible values, 128-dimensional vectors
+- ✅ Positional embedding: `nn.Embedding(2, 128)` — 2 positions (for i and j), 128-dimensional vectors
+- ✅ Jonathan correctly identified 97 entries and 128 vector size for token embedding unprompted
+- ✅ Jonathan confirmed understanding: embedding = "vector converter", integer in, vector out
+
+### Next Session — Pick Up Here
+1. Jonathan to write `Transformer` class skeleton in `src/models/transformer.py`:
+   - `import torch.nn as nn`
+   - `class Transformer(nn.Module):`
+   - `__init__(self, num_tokens, d_model)` with `super().__init__()`
+   - `self.token_embedding = nn.Embedding(num_tokens, d_model)`
+   - `self.pos_embedding = nn.Embedding(2, d_model)`
+2. Then: Attention layer
+3. Then: MLP layer
+4. Then: Output head
+5. Then: training loop in `src/train.py`
+6. Then: run and confirm grokking curve (M1 gate)
+
+### Jonathan's Learning Notes (Updated)
+- Asks clarifying "so you mean X?" questions — always confirm or correct directly
+- Understood embedding concept quickly once framed as "vector converter"
+- Still writing code himself; Claude only guides
 
 ---
 
 ## Pending (Not Yet Done)
 
 - [ ] Reply to Prof. Rashid's two questions (previous thesis topic + Jammu clarification)
-- [ ] Fix `get_dataloaders` to use `ModularArithmeticDataset` + `random_split` + `DataLoader` (see Session 7 next steps)
-- [ ] Write transformer model and training loop
+- [ ] Write `Transformer` class in `src/models/transformer.py` (embedding layer first)
+- [ ] Write training loop in `src/train.py`
 - [ ] Reproduce canonical Nanda et al. grokking (M1 gate)
 
 ---
