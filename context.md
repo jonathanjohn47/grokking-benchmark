@@ -71,6 +71,56 @@
 
 ---
 
+## Session Summary — July 6, 2026 (get_dataloaders + code review session)
+
+- **`get_dataloaders(number, batch_size=32)` implemented** in `src/data/modular_arithmetic.py`
+  (same file as `generate_pairs`/`ModularArithmeticDataset` — kept together since it's all part of
+  the same data pipeline; `train.py` will import it from there).
+  - Uses `torch.utils.data.random_split` to split the full `ModularArithmeticDataset` into
+    train/test, then wraps each half in a `DataLoader`.
+  - **Bug found and fixed:** initial version called `torch.utils.data.random_split(...)` /
+    `torch.utils.data.DataLoader(...)` without importing `torch` itself (only
+    `from torch.utils.data import Dataset` was imported) — would have raised `NameError`.
+    Fixed by importing `Dataset, DataLoader, random_split` directly from `torch.utils.data`.
+  - **Design choice flagged (not yet confirmed as intentional):** `train_size = int(0.3 * len(pairs))`
+    — only 30% train / 70% test split. This may be intentional for grokking (small train fraction is
+    part of what causes the grokking phenomenon — model memorizes first, generalizes later), but
+    Jonathan has not yet explicitly confirmed the reasoning. **Revisit before M1 gate run.**
+  - **Still open:** `train_dataloader` does not set `shuffle=True`. Needs decision — test loader
+    correctly has no shuffle, but train loader should very likely shuffle each epoch.
+  - **Still open (minor):** variable name `pairs = ModularArithmeticDataset(number)` inside
+    `get_dataloaders` is misleading — it holds a `Dataset` object, not a list of pairs. Rename
+    suggested but not yet applied.
+- **`ModularArithmeticDataset` no longer inherits `Dataset`** (Jonathan removed
+  `class ModularArithmeticDataset(Dataset):` → `class ModularArithmeticDataset:` as a deliberate
+  experiment to see what breaks — same debugging-by-experiment learning style as before).
+  - Confirmed via mentoring (not yet re-tested by running code) that this **will NOT break**
+    `DataLoader`/`random_split` at runtime, because both rely on duck typing (`len()` +
+    `__getitem__`), not `isinstance(dataset, Dataset)` checks. The one `isinstance` check
+    (`IterableDataset`) is a negative check that still passes correctly either way.
+  - What IS lost by not inheriting: `Dataset.__add__` (no `dataset1 + dataset2` via `ConcatDataset`),
+    type-checker/IDE clarity, and the explicit "this is a PyTorch Dataset" contract.
+  - **Recommendation given:** re-inherit `Dataset` as best practice even though nothing currently
+    breaks. Jonathan has not yet made this change back.
+- **Concepts taught this session (mentor mode):** what `DataLoader` is and why it's needed (batching,
+  shuffling, iteration boilerplate removal); why inheriting from `Dataset` matters for PyTorch's
+  data-loading ecosystem; how to print all list items without an explicit `for` loop
+  (`print(*pairs, sep="\n")` via unpacking).
+
+### Still Open / Next Steps (updated)
+
+1. Confirm/fix `train_size` ratio in `get_dataloaders` (0.3 — intentional for grokking or mistake?).
+2. Add `shuffle=True` to `train_dataloader` in `get_dataloaders`.
+3. Rename misleading `pairs` variable inside `get_dataloaders` (holds a Dataset, not a list).
+4. Decide whether to re-inherit `Dataset` in `ModularArithmeticDataset` (recommended, not yet done).
+5. Decide `__getitem__` return shape (raw tuple vs. tensor split) — still open, depends on
+   `transformer.py` input format.
+6. Build `src/models/transformer.py` (not started).
+7. Write training loop in `src/train.py` (not started).
+8. Run and confirm grokking curve (**M1 gate**) (not started).
+
+---
+
 ## Current Project State (Updated — July 6, 2026, later session)
 
 - Scaffold created: `scaffold.py` (project root) generates the full `src/` folder structure —
@@ -123,7 +173,9 @@
 - [x] `generate_pairs` (Option A, list-based)
 - [x] `ModularArithmeticDataset` (`__init__`, `__len__`, `__getitem__`) — basic version
 - [ ] Decide `__getitem__` return shape (raw tuple vs. tensor split) once model input format is known
-- [ ] `get_dataloaders(number)`
+- [x] `get_dataloaders(number)` — implemented, but has open issues: confirm 0.3 train ratio,
+      add `shuffle=True` to train loader, rename misleading `pairs` variable, and decide whether
+      to re-inherit `Dataset` in `ModularArithmeticDataset` (currently doesn't, works via duck typing)
 - [ ] Rebuild `src/models/transformer.py` (embedding → attention → MLP → output head → `forward()`)
 - [ ] Write training loop in `src/train.py`
 - [ ] Reproduce canonical Nanda et al. grokking (M1 gate)

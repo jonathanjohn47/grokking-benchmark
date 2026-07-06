@@ -1,4 +1,4 @@
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader, random_split
 
 def generate_pairs(number):
     pairs = []
@@ -6,6 +6,18 @@ def generate_pairs(number):
         for j in range(number):
             pairs.append((i, j, (i + j) % number))
     return pairs
+
+
+def get_dataloaders(number, batch_size=32):
+    pairs = ModularArithmeticDataset(number)
+    train_size = int(0.3 * len(pairs))
+    test_size = len(pairs) - train_size
+    
+    train_dataset, test_dataset = random_split(pairs, [train_size, test_size])
+    train_dataloader = DataLoader(train_dataset, batch_size=batch_size)
+    test_dataloader = DataLoader(test_dataset, batch_size=batch_size)
+
+    return train_dataloader, test_dataloader
 
 
 class ModularArithmeticDataset(Dataset):
@@ -17,8 +29,3 @@ class ModularArithmeticDataset(Dataset):
 
     def __getitem__(self, idx):
         return self.pairs[idx]
-    
-    
-if __name__ == "__main__":
-    dataset = ModularArithmeticDataset(number = 10)
-    print(len(dataset))
