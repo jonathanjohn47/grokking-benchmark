@@ -21,14 +21,44 @@
   },
   "nodes": [
     {
+      "label": "transformer.py",
+      "file_type": "code",
+      "source_file": "src/models/transformer.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "models_transformer",
+      "community": 3,
+      "norm_label": "transformer.py"
+    },
+    {
+      "label": "Transformer",
+      "file_type": "code",
+      "source_file": "src/models/transformer.py",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "models_transformer_transformer",
+      "community": 3,
+      "norm_label": "transformer"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "src/models/transformer.py",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "models_transformer_transformer_init",
+      "community": 3,
+      "norm_label": ".__init__()"
+    },
+    {
       "label": "dataset.py",
       "file_type": "code",
       "source_file": "src/data/dataset.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "data_dataset",
       "community": 0,
-      "norm_label": "dataset.py"
+      "norm_label": "dataset.py",
+      "id": "data_dataset"
     },
     {
       "label": "ModularArithmeticDataset",
@@ -36,9 +66,9 @@
       "source_file": "src/data/dataset.py",
       "source_location": "L6",
       "_origin": "ast",
-      "id": "data_dataset_modulararithmeticdataset",
       "community": 2,
-      "norm_label": "modulararithmeticdataset"
+      "norm_label": "modulararithmeticdataset",
+      "id": "data_dataset_modulararithmeticdataset"
     },
     {
       "label": ".__init__()",
@@ -46,9 +76,9 @@
       "source_file": "src/data/dataset.py",
       "source_location": "L7",
       "_origin": "ast",
-      "id": "data_dataset_modulararithmeticdataset_init",
       "community": 1,
-      "norm_label": ".__init__()"
+      "norm_label": ".__init__()",
+      "id": "data_dataset_modulararithmeticdataset_init"
     },
     {
       "label": ".__len__()",
@@ -56,9 +86,9 @@
       "source_file": "src/data/dataset.py",
       "source_location": "L10",
       "_origin": "ast",
-      "id": "data_dataset_modulararithmeticdataset_len",
       "community": 2,
-      "norm_label": ".__len__()"
+      "norm_label": ".__len__()",
+      "id": "data_dataset_modulararithmeticdataset_len"
     },
     {
       "label": ".__getitem__()",
@@ -66,9 +96,9 @@
       "source_file": "src/data/dataset.py",
       "source_location": "L13",
       "_origin": "ast",
-      "id": "data_dataset_modulararithmeticdataset_getitem",
       "community": 2,
-      "norm_label": ".__getitem__()"
+      "norm_label": ".__getitem__()",
+      "id": "data_dataset_modulararithmeticdataset_getitem"
     },
     {
       "label": "get_dataloaders()",
@@ -76,9 +106,9 @@
       "source_file": "src/data/dataset.py",
       "source_location": "L17",
       "_origin": "ast",
-      "id": "data_dataset_get_dataloaders",
       "community": 2,
-      "norm_label": "get_dataloaders()"
+      "norm_label": "get_dataloaders()",
+      "id": "data_dataset_get_dataloaders"
     },
     {
       "label": "train.py",
@@ -115,12 +145,32 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/models/transformer.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "models_transformer",
+      "target": "models_transformer_transformer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/models/transformer.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "models_transformer_transformer",
+      "target": "models_transformer_transformer_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "src/data/dataset.py",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "data_dataset",
-      "target": "data_dataset_get_dataloaders",
-      "confidence_score": 1.0
+      "target": "data_dataset_get_dataloaders"
     },
     {
       "relation": "contains",
@@ -161,9 +211,9 @@
       "source_file": "src/data/dataset.py",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "data_dataset_get_dataloaders",
-      "target": "data_dataset_modulararithmeticdataset",
-      "confidence_score": 1.0
+      "target": "data_dataset_modulararithmeticdataset"
     },
     {
       "relation": "method",
@@ -244,5 +294,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "823f630f33d9222d448ea5bd36b5e45e39b5dd9b"
+  "built_at_commit": "1b53ec2224b8be664b993a552a521fad75ef9532"
 }
