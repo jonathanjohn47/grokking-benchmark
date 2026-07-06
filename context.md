@@ -155,6 +155,81 @@
 
 ---
 
+## Session Summary — July 6, 2026 (data pipeline code review, close-out)
+
+- **Reviewed final state of `src/data/modular_arithmetic.py`** — all previously open issues from
+  the last session resolved this session:
+  1. **Train/test split ratio (0.3) confirmed correct** — checked against the attached Obsidian
+     vault (`Grokking Master Thesis`). Both `03 - Literature/Grokking: Generalisation Beyond
+     Overfitting on Small Algorithmic Datasets.md` ("Training split | ~30% train, ~70% test") and
+     the thesis's own `05 - Thesis/Experimental Designs Used in Literature.md` factorial design
+     table document 30%/70% as the standard split for grokking experiments (small train fraction
+     is intentional — it's what causes the memorize-first-generalize-later dynamic). **Not a bug,
+     no change needed.**
+  2. **`test_dataloader` shuffle fixed** — Jonathan removed `shuffle=True` from the test
+     `DataLoader` (now defaults to `False`), correct since shuffling eval data has no benefit.
+  3. **Misleading variable renamed** — `pairs = ModularArithmeticDataset(number)` inside
+     `get_dataloaders` renamed to `modular_arithmetic_dataset` for clarity (first to
+     `modularArithmeticDataset`, then corrected to Python's `snake_case` convention on Claude's
+     suggestion).
+  4. **`ModularArithmeticDataset(Dataset)` inheritance restored** (was removed in the prior
+     session as a deliberate experiment; confirmed back in place this session).
+- **Concept taught (mentor mode):** clarified why `ModularArithmeticDataset(number)` returns an
+  **instance of the class**, not a list — `ClassName(...)` always invokes `__init__` and returns
+  a new object, even though `__init__` internally builds `self.pairs` from a list. `__init__`
+  itself never returns anything; the object holds the list as an attribute. This is why the old
+  variable name `pairs` was misleading (it held a `Dataset` object, not a list).
+- **Current state of `src/data/modular_arithmetic.py` (verified correct, no open issues):**
+  ```python
+  from torch.utils.data import Dataset, DataLoader, random_split
+
+  def generate_pairs(number):
+      pairs = []
+      for i in range(number):
+          for j in range(number):
+              pairs.append((i, j, (i + j) % number))
+      return pairs
+
+
+  def get_dataloaders(number, batch_size=32):
+      modular_arithmetic_dataset = ModularArithmeticDataset(number)
+      train_size = int(0.3 * len(modular_arithmetic_dataset))
+      test_size = len(modular_arithmetic_dataset) - train_size
+
+      train_dataset, test_dataset = random_split(modular_arithmetic_dataset, [train_size, test_size])
+      train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+      test_dataloader = DataLoader(test_dataset, batch_size=batch_size)
+
+      return train_dataloader, test_dataloader
+
+
+  class ModularArithmeticDataset(Dataset):
+      def __init__(self, number):
+          self.pairs = generate_pairs(number)
+
+      def __len__(self):
+          return len(self.pairs)
+
+      def __getitem__(self, idx):
+          return self.pairs[idx]
+  ```
+- **Data pipeline is now considered fully done and closed out.** Next up per the project plan is
+  `src/models/transformer.py`.
+
+### Still Open / Next Steps (updated)
+
+1. Decide `__getitem__` return shape (raw tuple vs. `(input_tensor, target_tensor)` tensor split)
+   — still open, depends on `transformer.py`'s `forward()` input format (two separate number
+   inputs vs. one combined token sequence). **Decide this while designing the model.**
+2. Build `src/models/transformer.py`: token + position embedding → attention → MLP → output head
+   → `forward()` (not started — this is the current next action).
+3. Write training loop in `src/train.py` (not started).
+4. Run and confirm grokking curve (**M1 gate**) (not started).
+5. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) —
+   still pending, unrelated to the code track.
+
+---
+
 ## Jonathan's Learning Style Notes (carried forward)
 
 - Learning Python while implementing — explain concepts before code; he writes the code himself, Claude only guides when stuck
@@ -171,12 +246,13 @@
 
 - [ ] Reply to Prof. Rashid's two questions (previous thesis topic + Jammu clarification)
 - [x] `generate_pairs` (Option A, list-based)
-- [x] `ModularArithmeticDataset` (`__init__`, `__len__`, `__getitem__`) — basic version
+- [x] `ModularArithmeticDataset` (`__init__`, `__len__`, `__getitem__`, inherits `Dataset`) — done
 - [ ] Decide `__getitem__` return shape (raw tuple vs. tensor split) once model input format is known
-- [x] `get_dataloaders(number)` — implemented, but has open issues: confirm 0.3 train ratio,
-      add `shuffle=True` to train loader, rename misleading `pairs` variable, and decide whether
-      to re-inherit `Dataset` in `ModularArithmeticDataset` (currently doesn't, works via duck typing)
+- [x] `get_dataloaders(number)` — fully done: 0.3 train ratio confirmed correct against literature/
+      vault, `shuffle=True` on train loader only, variable renamed (`modular_arithmetic_dataset`,
+      snake_case), `Dataset` inheritance restored. **Data pipeline closed out, no open issues.**
 - [ ] Rebuild `src/models/transformer.py` (embedding → attention → MLP → output head → `forward()`)
+      — **current next action**
 - [ ] Write training loop in `src/train.py`
 - [ ] Reproduce canonical Nanda et al. grokking (M1 gate)
 

@@ -9,12 +9,12 @@ def generate_pairs(number):
 
 
 def get_dataloaders(number, batch_size=32):
-    pairs = ModularArithmeticDataset(number)
-    train_size = int(0.3 * len(pairs))
-    test_size = len(pairs) - train_size
-    
-    train_dataset, test_dataset = random_split(pairs, [train_size, test_size])
-    train_dataloader = DataLoader(train_dataset, batch_size=batch_size)
+    modular_arithmetic_dataset = ModularArithmeticDataset(number)
+    train_size = int(0.3 * len(modular_arithmetic_dataset))
+    test_size = len(modular_arithmetic_dataset) - train_size
+
+    train_dataset, test_dataset = random_split(modular_arithmetic_dataset, [train_size, test_size])
+    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     test_dataloader = DataLoader(test_dataset, batch_size=batch_size)
 
     return train_dataloader, test_dataloader
@@ -29,3 +29,4 @@ class ModularArithmeticDataset(Dataset):
 
     def __getitem__(self, idx):
         return self.pairs[idx]
+    
