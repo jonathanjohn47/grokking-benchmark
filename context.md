@@ -34,6 +34,43 @@
 
 ---
 
+## Session Summary — July 6, 2026 (data pipeline session)
+
+- **Decision made:** generator-vs-list question resolved in favor of **Option A**.
+  `generate_pairs(number)` now builds and returns a plain list (no `yield`), reasoning:
+  9409 pairs (number=97) is small enough that memory efficiency doesn't matter; simplicity wins.
+  Implemented as nested loop + `pairs.append(...)` + `return pairs`.
+- **`ModularArithmeticDataset` class implemented** in `src/data/modular_arithmetic.py`:
+  - Inherits from `torch.utils.data.Dataset` (`from torch.utils.data import Dataset` imported).
+  - `__init__(self, number)`: calls `self.pairs = generate_pairs(number)` — stores data once at
+    construction so `__len__`/`__getitem__` don't recompute on every call.
+  - `__len__`: returns `len(self.pairs)`.
+  - `__getitem__(self, idx)`: returns `self.pairs[idx]` (raw tuple `(a, b, target)` for now —
+    **not yet split into `(input_tensor, target_tensor)`**; this decision is still open and should
+    be revisited once `transformer.py`'s `forward()` signature is designed, since the input format
+    depends on whether the model expects two separate numbers or a combined token sequence).
+  - `if __name__ == "__main__":` block added for manual testing (`ModularArithmeticDataset(number=10)`,
+    prints `len(dataset)`).
+- **Debugging exercise (intentional):** Jonathan first wrote the class without `__init__` and without
+  inheriting `Dataset`, then deliberately ran it *without* `__init__` to observe the resulting error
+  firsthand (learning exercise, not a mistake to fix silently) — confirmed missing `self.pairs`
+  causes an `AttributeError` (not an empty list, which is a distinct case he initially guessed).
+  This was mentoring-mode teaching, not direct implementation by Claude.
+
+### Still Open / Next Steps
+
+1. **Decide `__getitem__` return shape** — raw tuple (current) vs. `(input_tensor, target_tensor)`
+   split. Depends on `transformer.py` `forward()` design (two separate number inputs vs. one
+   combined token sequence). Must decide before/while building the model.
+2. `get_dataloaders(number)` — split `ModularArithmeticDataset` output + wrap in `DataLoader`
+   (not started).
+3. `src/models/transformer.py`: token + position embedding → attention → MLP → output head →
+   `forward()` (not started).
+4. Training loop in `src/train.py` (not started).
+5. Run and confirm grokking curve (**M1 gate**) (not started).
+
+---
+
 ## Current Project State (Updated — July 6, 2026, later session)
 
 - Scaffold created: `scaffold.py` (project root) generates the full `src/` folder structure —
@@ -56,10 +93,12 @@
 
 ### What Still Needs to Be Done (Full Rebuild)
 
-1. ~~`generate_pairs(number)` in `src/data/modular_arithmetic.py`~~ — done, pending the
-   generator-vs-list decision above (may need a small revision depending on which option is chosen)
-2. `ModularArithmeticDataset` class (`__init__`, `__len__`, `__getitem__`) — next up
-3. `get_dataloaders(number)` — split + wrap in `DataLoader`
+1. ~~`generate_pairs(number)` in `src/data/modular_arithmetic.py`~~ — done, Option A (returns list),
+   generator-vs-list decision resolved.
+2. ~~`ModularArithmeticDataset` class (`__init__`, `__len__`, `__getitem__`)~~ — done, basic version
+   working (returns raw tuple from `__getitem__`); return-shape may need revision once
+   `transformer.py` input format is decided.
+3. `get_dataloaders(number)` — split + wrap in `DataLoader` — next up
 4. `src/models/transformer.py`: token + position embedding → attention → MLP → output head → `forward()`
 5. Training loop in `src/train.py`
 6. Run and confirm grokking curve (**M1 gate**)
@@ -81,7 +120,10 @@
 ## Pending (Not Yet Done)
 
 - [ ] Reply to Prof. Rashid's two questions (previous thesis topic + Jammu clarification)
-- [ ] Rebuild data pipeline (`generate_pairs`, `ModularArithmeticDataset`, `get_dataloaders`)
+- [x] `generate_pairs` (Option A, list-based)
+- [x] `ModularArithmeticDataset` (`__init__`, `__len__`, `__getitem__`) — basic version
+- [ ] Decide `__getitem__` return shape (raw tuple vs. tensor split) once model input format is known
+- [ ] `get_dataloaders(number)`
 - [ ] Rebuild `src/models/transformer.py` (embedding → attention → MLP → output head → `forward()`)
 - [ ] Write training loop in `src/train.py`
 - [ ] Reproduce canonical Nanda et al. grokking (M1 gate)
