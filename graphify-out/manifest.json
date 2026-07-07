@@ -5,18 +5,18 @@
     "semantic_hash": "916a0e4f33d2556de626c397b36c5fb4"
   },
   "src/data/modular_arithmetic.py": {
-    "mtime": 1782847078.3263693,
-    "ast_hash": "2bc117009fbbb26ae16088d1fd9bfc7d",
+    "mtime": 1783358681.3831828,
+    "ast_hash": "30fe9b1ac660d5bafbab716f0b41ed07",
     "semantic_hash": ""
   },
   "src/models/transformer.py": {
-    "mtime": 1782872269.8651729,
-    "ast_hash": "c1aaf5f08ac70d05786d34f93adcbf60",
+    "mtime": 1783354585.9545982,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
     "semantic_hash": ""
   },
   "src/train.py": {
-    "mtime": 1782847076.0222976,
-    "ast_hash": "e1c06d85ae7b8b032bef47e42e4c08f9",
+    "mtime": 1783354585.9553185,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
     "semantic_hash": ""
   },
   "requirements.txt": {
@@ -24,9 +24,24 @@
     "ast_hash": "8200c752c6779728099a0daad8611534",
     "semantic_hash": ""
   },
-  "src/data/dataset.py": {
-    "mtime": 1782867763.0654006,
-    "ast_hash": "78750959cbd784215a9ae3eec75ec7f1",
+  "scaffold.py": {
+    "mtime": 1783354582.828764,
+    "ast_hash": "6b2b753730158530881cef3f5b7cc48e",
+    "semantic_hash": ""
+  },
+  "src/__init__.py": {
+    "mtime": 1783354585.950716,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "src/data/__init__.py": {
+    "mtime": 1783354585.9516907,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "src/models/__init__.py": {
+    "mtime": 1783354585.9538653,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
     "semantic_hash": ""
   }
 }

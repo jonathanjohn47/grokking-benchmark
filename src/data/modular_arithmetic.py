@@ -1,3 +1,4 @@
+from torch import long, tensor
 from torch.utils.data import Dataset, DataLoader, random_split
 
 def generate_pairs(number):
@@ -30,3 +31,10 @@ class ModularArithmeticDataset(Dataset):
     def __getitem__(self, idx):
         return self.pairs[idx]
     
+    def get_tensor(self, item):
+        sequence = [item[0], item[1], 97]
+        return tensor(sequence)
+    
+    
+if __name__ == "__main__":
+    print(tensor([5, 3, 8, 97]))

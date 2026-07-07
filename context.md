@@ -247,7 +247,9 @@
 - [ ] Reply to Prof. Rashid's two questions (previous thesis topic + Jammu clarification)
 - [x] `generate_pairs` (Option A, list-based)
 - [x] `ModularArithmeticDataset` (`__init__`, `__len__`, `__getitem__`, inherits `Dataset`) — done
-- [ ] Decide `__getitem__` return shape (raw tuple vs. tensor split) once model input format is known
+- [x] Transformer input format decided: combined token sequence `[a, b, "="]` (July 7, 2026)
+- [ ] Apply decision: update `__getitem__` to return `(input_tensor, target)` using `get_tensor`
+      (method written, not yet wired into `__getitem__` — **current next action**)
 - [x] `get_dataloaders(number)` — fully done: 0.3 train ratio confirmed correct against literature/
       vault, `shuffle=True` on train loader only, variable renamed (`modular_arithmetic_dataset`,
       snake_case), `Dataset` inheritance restored. **Data pipeline closed out, no open issues.**
@@ -255,6 +257,102 @@
       — **current next action**
 - [ ] Write training loop in `src/train.py`
 - [ ] Reproduce canonical Nanda et al. grokking (M1 gate)
+
+---
+
+## Session Summary — July 7, 2026 (transformer input design, mentoring session)
+
+- **No code written this session** — pure mentoring/discussion, picking up from "current next action:
+  build `src/models/transformer.py`".
+- **Concept taught: two possible input designs for the transformer**, tied directly to the still-open
+  `__getitem__` return-shape decision:
+  1. **Separate numbers** — `forward(a, b)`: embed `a` and `b` independently, combine (add/concat),
+     no attention needed (just MLP-style), since there's no real "sequence."
+  2. **Combined token sequence** (Nanda et al. original approach) — build `[a, b, "="]` as one
+     sequence, pass through transformer attention, predict from the "=" position.
+  - Either way, raw tuple `(a, b, target)` from `__getitem__` must be converted to tensors — the
+    *shape* of that conversion depends on which design is picked (separate scalars vs. one sequence
+    tensor `[a, b]`).
+- **Concept taught: what a tensor is.** PyTorch's multi-dim array type — needed for gradient tracking
+  and fast math (list/tuple can't do this). Scalar (`tensor(5)`, dim 0) → vector (`tensor([3,5])`,
+  dim 1) → matrix (dim 2) → higher dims for batches/images/sequences. Showed
+  `torch.tensor([3, 5])` as an illustrative snippet only (not implementation).
+- **Question asked to Jonathan, still unanswered:** what input format did the original 4-predictor
+  baseline use for the transformer — separate numbers or combined sequence? Needed to decide the
+  `__getitem__` shape + `transformer.py` `forward()` signature consistently with existing baseline
+  work. **Must resolve this before writing `transformer.py`.**
+
+### Still Open / Next Steps (updated — July 7, 2026)
+
+1. **Immediate blocker:** confirm from the existing 4-predictor baseline whether transformer input
+   was separate numbers (`a`, `b`) or a combined token sequence (`[a, b, "="]`) — determines both
+   `__getitem__` tensor shape and `transformer.py` `forward()` design.
+2. Build `src/models/transformer.py`: token + position embedding → attention → MLP → output head →
+   `forward()` — current next action, blocked on #1.
+3. Once transformer input format is settled, update `ModularArithmeticDataset.__getitem__` to return
+   tensors (currently returns raw Python tuple `(a, b, target)`).
+4. Write training loop in `src/train.py` (not started).
+5. Run and confirm grokking curve (**M1 gate**) (not started).
+6. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) — still
+   pending, unrelated to code track.
+
+---
+
+## Session Summary — July 7, 2026 (input format decided + get_tensor debugging)
+
+- **Blocker resolved:** Jonathan decided the transformer input format — **combined token sequence**
+  `[a, b, "="]` (Nanda et al. style), not separate numbers. This unblocks both `transformer.py`
+  design and the `__getitem__` return-shape decision that were open from the previous session.
+- **Token scheme decided:** numbers use their own value as token ID (0 to `number-1`); `"="` gets
+  a special token ID equal to `number` (currently hardcoded as `97` in code, since `number=97` for
+  the canonical `(a+b) mod 97` task). Vocab size will effectively be `number + 1`.
+- **Concept taught: label leakage.** `target` (`(a+b) % number`) must NOT be included in the input
+  sequence — only `a`, `b`, `"="` go into the input; `target` is kept separate, used only for the
+  loss/prediction check. Including it in the input would let the model "copy" the answer instead
+  of learning to predict it.
+- **`get_tensor(self, item)` method added** to `ModularArithmeticDataset` in
+  `src/data/modular_arithmetic.py`. Takes an `item` = `(a, b, target)` tuple, builds
+  `[item[0], item[1], 97]`, returns as a tensor. Two bugs found and fixed by Jonathan during this
+  session (debugging-by-doing, mentor-guided):
+  1. First version did `list(i for i in item)` then appended `97` — pulled in all 3 elements
+     including `target` (label leakage bug, 4 elements: `[a, b, target, 97]`). Fixed by explicitly
+     indexing `item[0]`, `item[1]` only.
+  2. Second version still had a leftover `sequence.append(97)` after `97` was already placed in the
+     list literal — produced `[a, b, 97, 97]` (duplicate). Fixed by removing the redundant
+     `.append(97)` line.
+  - Current (correct) state of the method:
+    ```python
+    def get_tensor(self, item):
+        sequence = [item[0], item[1], 97]
+        return tensor(sequence)
+    ```
+- **Concept taught: `__getitem__`'s real contract.** It's not just "return the raw item at this
+  index" — `DataLoader` calls `__getitem__` per index and batches whatever it returns. Since
+  `self.pairs[idx]` only holds raw `(a, b, target)` ints (no `"="` token, not a tensor), the actual
+  `[a, b, "="]` input format only exists if `__getitem__` calls `get_tensor` internally. This was
+  Jonathan's point of confusion (why call `get_tensor` from inside `get_item`) — resolved via
+  explanation, not yet applied to code.
+- **`__getitem__` NOT yet updated** — still returns raw `self.pairs[idx]` tuple (line 31-32 as of
+  this session's end). `get_tensor` exists but is currently unused/uncalled — this is the immediate
+  next action.
+- **Not yet flagged as fixed (carry forward):** `97` is hardcoded in `get_tensor` instead of being
+  derived from the `number` passed to `__init__` (`ModularArithmeticDataset.__init__` doesn't store
+  `self.number`). Works fine for the canonical `number=97` case but isn't general. Revisit if/when
+  running with a different `number`.
+
+### Still Open / Next Steps (updated — July 7, 2026, end of session)
+
+1. **Immediate next action:** update `__getitem__` to call `self.get_tensor(...)` and return
+   `(input_tensor, target)` — currently still returns raw tuple, `get_tensor` unused.
+2. Generalize `get_tensor`'s hardcoded `97` to use `number` (store `self.number` in `__init__`) —
+   minor, not urgent, flagged for later.
+3. Build `src/models/transformer.py`: token + position embedding → attention → MLP → output head →
+   `forward()` — input format now settled (`[a, b, "="]` sequence), so this can proceed once
+   `__getitem__` is finalized.
+4. Write training loop in `src/train.py` (not started).
+5. Run and confirm grokking curve (**M1 gate**) (not started).
+6. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) — still
+   pending, unrelated to code track.
 
 ---
 
