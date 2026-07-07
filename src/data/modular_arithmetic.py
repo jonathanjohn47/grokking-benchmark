@@ -29,7 +29,7 @@ class ModularArithmeticDataset(Dataset):
         return len(self.pairs)
 
     def __getitem__(self, idx):
-        return self.pairs[idx]
+        return (self.get_tensor(self.pairs[idx]), self.pairs[idx][2])
     
     def get_tensor(self, item):
         sequence = [item[0], item[1], 97]
