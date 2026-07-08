@@ -714,6 +714,260 @@
 
 ---
 
+## Session Summary — July 8, 2026 (Q/K/V wired into forward(), `__call__` vs `forward` experiments)
+
+- **Picked up from:** "immediate next action" was wiring `self.query`/`self.key`/`self.value` into
+  `forward()` — layers existed from the prior session but were unused.
+- **`forward()` updated** to actually apply Q/K/V to the combined token+position vector:
+  ```python
+  def forward(self, x):
+      token_vectors = self.token_embedding(x)
+      position_vectors = self.position_embedding(arange(x.size(1)))
+      combined_vector = token_vectors + position_vectors
+      query_vector = self.query(combined_vector)
+      key_vector = self.key(combined_vector)
+      value_vector = self.value(combined_vector)
+      return query_vector, key_vector, value_vector
+  ```
+  Verified with a dummy batched input (`vocab_size=2, d_model=5`, `x = tensor([[0,1,0],[1,0,1]])`):
+  all three outputs came out `torch.Size([2, 3, 5])` — i.e. `(batch_size, seq_len, d_model)`, as
+  expected since Q/K/V are shape-preserving (`nn.Linear(d_model, d_model)`).
+- **Debug prints added temporarily** (not yet cleaned up): `print(self.query.weight.shape)` /
+  `.key` / `.value` in `__init__`, and `print(query_vector.shape)` / `.key_vector` / `.value_vector`
+  in `forward()`. Flagged for removal before training loop.
+- **Extended mentoring detour: `nn.Module.__call__` vs `forward()`.** Jonathan was confused why
+  `model(x)` runs `forward()` without the word "forward" appearing anywhere in the call. Resolved
+  through a sequence of self-driven experiments (Jonathan wrote the code, Claude reviewed):
+  1. **Baseline confusion:** why does `model(x)` (not `model.forward(x)`) trigger `forward()`?
+     Explained: `nn.Module` defines `__call__`, and `()` syntax on any object invokes `__call__`;
+     `nn.Module.__call__` is hardcoded to internally run `self.forward(x)`.
+  2. **Test 1 — added 3 unrelated dummy methods** (`dummy_function`, `another_dummy_function`,
+     `yet_another_dummy_function`, each just a `print(...)`) to the class, then called `model(x)`.
+     Result: only `forward()`'s prints appeared; none of the three dummy functions ran. This
+     empirically confirmed `__call__` does **not** run "all methods in the class" — only the one
+     named `forward`.
+  3. **Test 2 — renamed `forward` to `reverse`**, kept dummy methods, called `model.reverse(x)`
+     explicitly (not `model(x)`) since `model(x)` would no longer find a `forward` method to
+     dispatch to. Confirmed: `nn.Module.__call__`'s internal dispatch is hardcoded to the **exact
+     method name `forward`** — renaming it breaks the automatic `model(x)` shortcut entirely;
+     explicit `.reverse(x)` call was required instead. This proved `forward` is not a generic
+     placeholder but a mandatory, fixed convention PyTorch's `__call__` specifically looks for.
+  4. **Renamed back to `forward`.** Jonathan said the `__call__` mechanism still isn't fully
+     "jam" (clicked) for him and **explicitly chose to call `model.forward(x)` directly** going
+     forward rather than relying on `model(x)` — confirmed this works identically (same output).
+     Decision recorded: **use `model.forward(x)` explicitly for now**, revisit `model(x)` convention
+     understanding later without blocking progress.
+- **Current verified state of `src/models/transformer.py`:**
+  ```python
+  import pandas as pd
+
+  from torch import arange, nn
+  import torch
+  torch.set_printoptions(profile="full")
+
+
+  class Transformer(nn.Module):
+      def __init__(self, vocab_size, d_model):
+          super().__init__()
+          self.token_embedding = nn.Embedding(vocab_size, d_model)
+          self.position_embedding = nn.Embedding(3, d_model)
+
+          self.query = nn.Linear(d_model, d_model)
+          self.key = nn.Linear(d_model, d_model)
+          self.value = nn.Linear(d_model, d_model)
+
+          print(self.query.weight.shape)
+          print(self.key.weight.shape)
+          print(self.value.weight.shape)
+
+      def forward(self, x):
+          token_vectors = self.token_embedding(x)
+          position_vectors = self.position_embedding(arange(x.size(1)))
+          combined_vector = token_vectors + position_vectors
+          query_vector = self.query(combined_vector)
+          key_vector = self.key(combined_vector)
+          value_vector = self.value(combined_vector)
+
+          print(query_vector.shape)
+          print(key_vector.shape)
+          print(value_vector.shape)
+
+          return query_vector, key_vector, value_vector
+
+
+  if __name__ == "__main__":
+      model = Transformer(vocab_size=2, d_model=5)
+
+      x = torch.tensor([[0, 1, 0], [1, 0, 1]])
+      model.forward(x)
+  ```
+  **Note:** the 3 dummy test methods and the `reverse` experiment were reverted — not present in
+  this final state.
+- **Not yet done, carried forward:**
+  1. Debug `print(...)` statements (4 in `__init__`/`forward` combined) still present — cleanup
+     before training loop.
+  2. `forward()` still just returns raw `(query_vector, key_vector, value_vector)` — actual
+     **attention computation** (Query·Key scores → softmax → weighted sum of Value) not yet
+     implemented. This is the **immediate next action**.
+  3. `__main__` test values (`vocab_size=2, d_model=5`) still placeholder — revisit before training
+     loop / M1 gate run (real values: `vocab_size=98, d_model=128`).
+  4. `model.forward(x)` used explicitly per Jonathan's stated preference (see above) — `model(x)`
+     convention understanding deferred, not blocking.
+
+### Still Open / Next Steps (updated — July 8, 2026, end of session)
+
+1. **Immediate next action:** implement attention score computation in `forward()` — Query·Key dot
+   product, scale, softmax, then weighted-sum the Value vectors.
+2. Remove leftover debug `print()` statements (weight shapes in `__init__`, output shapes in
+   `forward()`) — minor cleanup, not urgent.
+3. After attention: MLP → output head to complete `forward()`'s full pipeline.
+4. Fix `__main__` test values (`vocab_size=2, d_model=5`) → real values (`98`, `128`) before
+   training loop / M1 gate run.
+5. Write training loop in `src/train.py` (not started).
+6. Run and confirm grokking curve (**M1 gate**) (not started).
+7. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) — still
+   pending, unrelated to code track.
+8. (Very minor, no urgency) revisit the intermittent `KeyboardInterrupt`-during-pandas-import flake
+   if it recurs.
+
+---
+
+## Session Summary — July 8, 2026 (attention computation completed, MLP + output head built, `transformer.py` architecture complete)
+
+- **Picked up from:** "immediate next action" was implementing attention score computation
+  (Query·Key → scale → softmax → weighted Value sum) — Q/K/V layers existed but were unused in
+  `forward()`.
+- **Attention computation implemented and verified, step by step (Jonathan wrote all code, Claude
+  reviewed each step):**
+  1. `scores = torch.matmul(query_vector, key_vector.transpose(-2, -1))` — verified shape
+     `(2, 3, 3)` = `(batch_size, seq_len, seq_len)`, correct.
+  2. Scaling added: divide `scores` by `sqrt(d_model)` via
+     `torch.sqrt(torch.tensor(query_vector.size(-1), dtype=torch.float32))` — functionally correct
+     (more verbose than `d_model ** 0.5` but no bug).
+  3. Softmax added: `attention_weights = torch.softmax(scores, dim=-1)` — rows sum to 1, shape
+     unchanged `(2, 3, 3)`.
+  4. Weighted Value sum added: `attended_values = torch.matmul(attention_weights, value_vector)` —
+     verified shape `(2, 3, 128)` = `(batch_size, seq_len, d_model)`, correct. Jonathan asked what
+     `@` (matmul operator) is — explained, but **explicitly chose to keep using `torch.matmul` for
+     clarity, not `@`** (decision recorded, avoid suggesting `@` going forward).
+  - **Concept taught: attention output shape meaning.** `(2, 3, 128)` = 2 sequences in the batch, 3
+    positions per sequence (`a`, `b`, `"="`), each position's final vector still 128-dim (attention
+    reweights/mixes Value vectors across positions but doesn't change their dimensionality).
+  - **Concept taught: batch_size is dynamic, not hardcoded anywhere in the model** — determined
+    entirely by however many rows are in the input `x` at call time; `DataLoader`'s `batch_size=32`
+    will control it during training.
+- **`vocab_size` hardcoded value fixed:** `97` → `98` in `__main__` test block (accounts for the
+  `"="` token, `0`–`96` are number tokens). This was a long-standing carried-forward cleanup item —
+  **now resolved.**
+- **Experiment (Jonathan's own, debugging-by-doing style): tried `torch.eye(5, 5, dtype=torch.long)`
+  as test input `x` instead of the original `[[0,1,0],[1,0,1]]`.** This produced a 5×5 identity
+  matrix, meaning `seq_len=5` — broke with `IndexError: index out of range in self` because
+  `self.position_embedding = nn.Embedding(3, d_model)` only supports 3 positions (indices 0–2).
+  Root cause explained (position embedding size must match actual seq_len used at call time).
+  Jonathan understood the cause, discussed the fix (`nn.Embedding(5, d_model)` would resolve it if
+  5×5 were kept), then **explicitly abandoned the 5×5 experiment** and reverted to the correct test
+  input: `x = torch.eye(2, 3, dtype=torch.long)` (2 rows = batch_size, 3 columns = seq_len, matches
+  `position_embedding`'s size of 3). **Model is back in a consistent, working state.**
+- **MLP layer added:** `self.mlp = nn.Linear(d_model, d_model)` in `__init__`, wired into `forward()`
+  as `mlp_output = self.mlp(attended_values)` — verified shape `(2, 3, 128)` (unchanged, as expected
+  for a same-size Linear layer). **Note: this is currently a single Linear layer only — no
+  non-linearity (e.g. ReLU) and no second Linear layer yet.** A "real" MLP block (two Linear layers
+  with a non-linearity in between) is a likely future refinement, not yet done or explicitly
+  requested.
+- **Output head added:** `self.output_head = nn.Linear(d_model, vocab_size)` in `__init__`, wired
+  into `forward()` as `logits = self.output_head(mlp_output)` — verified shape `(2, 3, 98)`
+  (`batch_size, seq_len, vocab_size`). **Concept taught:** output head maps the internal 128-dim
+  representation to a score ("logit") per possible token class (98 classes); this is what
+  `softmax`/`cross_entropy` will operate on during training to produce a prediction distribution.
+  Only the `"="` position's logits will actually be used for the loss/prediction (the other two
+  positions' outputs are computed but not needed for this task).
+- **`forward()`'s return value fixed:** previously returned the unused
+  `(query_vector, key_vector, value_vector)` tuple even after `mlp_output`/`logits` were computed —
+  now correctly returns `logits`, the actual model output.
+- **`transformer.py`'s architecture is now considered structurally complete** per the project plan:
+  token embedding → position embedding → attention (Q/K/V, scaled scores, softmax, weighted Value
+  sum) → MLP → output head → `forward()` returns `logits`. This closes out the long-running "build
+  `transformer.py`" task that spanned several sessions (July 8, multiple sub-sessions).
+- **Current verified state of `src/models/transformer.py`:**
+  ```python
+  import pandas as pd
+
+  from torch import arange, nn
+  import torch
+  torch.set_printoptions(profile="full")
+
+
+  class Transformer(nn.Module):
+      def __init__(self, vocab_size, d_model):
+          super().__init__()
+          self.token_embedding = nn.Embedding(vocab_size, d_model)
+          self.position_embedding = nn.Embedding(3, d_model)
+
+          self.query = nn.Linear(d_model, d_model)
+          self.key = nn.Linear(d_model, d_model)
+          self.value = nn.Linear(d_model, d_model)
+
+          self.mlp = nn.Linear(d_model, d_model)
+
+          self.output_head = nn.Linear(d_model, vocab_size)
+
+      def forward(self, x):
+          token_vectors = self.token_embedding(x)
+          position_vectors = self.position_embedding(arange(x.size(1)))
+          combined_vector = token_vectors + position_vectors
+          query_vector = self.query(combined_vector)
+          key_vector = self.key(combined_vector)
+          value_vector = self.value(combined_vector)
+
+          scores = torch.matmul(query_vector, key_vector.transpose(-2, -1)) / torch.sqrt(torch.tensor(query_vector.size(-1), dtype=torch.float32))
+          attention_weights = torch.softmax(scores, dim=-1)
+          attended_values = torch.matmul(attention_weights, value_vector)
+          mlp_output = self.mlp(attended_values)
+
+          logits = self.output_head(mlp_output)
+
+          print("Logits shape:", logits.shape)
+
+          return logits
+
+
+  if __name__ == "__main__":
+      model = Transformer(vocab_size=98, d_model=128)
+
+      x = torch.eye(2, 3, dtype=torch.long)
+      print(x)
+      model.forward(x)
+  ```
+- **Not yet done, carried forward (all flagged, none urgent/blocking):**
+  1. Debug `print("Logits shape:", ...)` still sits inside `forward()` — fine during construction,
+     should be removed/moved once used by the real training loop.
+  2. `__main__` test input is still the identity matrix `torch.eye(2, 3, ...)` (a convenient test
+     pattern, not real training data) — will be replaced once training loop pulls real batches from
+     `get_dataloaders`.
+  3. `mlp` is a single `nn.Linear` layer, not a full MLP block (no non-linearity, no second Linear
+     layer) — works and produces correct shapes, but may be revisited as an architectural refinement
+     later. Not flagged as a bug, just noted for completeness against a "standard" transformer MLP
+     block.
+  4. `1` import (`pandas`) — no longer used anywhere in current `forward()`/`__main__` (was used
+     earlier for embedding-matrix DataFrame visualization, now dead in this file). Not urgent.
+
+### Still Open / Next Steps (updated — July 8, 2026, end of session)
+
+1. **Immediate next action:** write the training loop in `src/train.py` — needs: loss function
+   (likely `cross_entropy` on the `"="` position's logits vs. `target`), optimizer, training loop
+   over `get_dataloaders`'s `train_dataloader`/`test_dataloader`, and tracking train/test accuracy
+   over epochs (needed to observe the grokking curve).
+2. Run and confirm grokking curve (**M1 gate**) — blocked on #1.
+3. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) — still
+   pending, unrelated to code track.
+4. (Very minor, no urgency) revisit the intermittent `KeyboardInterrupt`-during-pandas-import flake
+   if it recurs.
+5. (Very minor, optional) consider upgrading `self.mlp` from a single `nn.Linear` to a proper
+   2-layer MLP block with non-linearity — not required to proceed, purely an architectural
+   refinement to revisit later.
+
+---
+
 ## Tools & Preferences
 
 | Tool | Preference |
