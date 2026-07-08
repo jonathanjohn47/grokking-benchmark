@@ -248,13 +248,14 @@
 - [x] `generate_pairs` (Option A, list-based)
 - [x] `ModularArithmeticDataset` (`__init__`, `__len__`, `__getitem__`, inherits `Dataset`) — done
 - [x] Transformer input format decided: combined token sequence `[a, b, "="]` (July 7, 2026)
-- [ ] Apply decision: update `__getitem__` to return `(input_tensor, target)` using `get_tensor`
-      (method written, not yet wired into `__getitem__` — **current next action**)
+- [x] Apply decision: `__getitem__` returns `(input_tensor, target)` using `get_tensor` — **verified
+      correct and stable as of July 8, 2026** (the July 7 revert bug did not recur).
 - [x] `get_dataloaders(number)` — fully done: 0.3 train ratio confirmed correct against literature/
       vault, `shuffle=True` on train loader only, variable renamed (`modular_arithmetic_dataset`,
       snake_case), `Dataset` inheritance restored. **Data pipeline closed out, no open issues.**
-- [ ] Rebuild `src/models/transformer.py` (embedding → attention → MLP → output head → `forward()`)
-      — **current next action**
+- [~] `src/models/transformer.py` — **in progress**: token embedding (`nn.Embedding`) done and
+      verified. Position embedding is the **current next action**. Then attention → MLP → output
+      head → `forward()`.
 - [ ] Write training loop in `src/train.py`
 - [ ] Reproduce canonical Nanda et al. grokking (M1 gate)
 
@@ -450,6 +451,95 @@
 5. Run and confirm grokking curve (**M1 gate**) (not started).
 6. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) — still
    pending, unrelated to code track.
+
+---
+
+## Session Summary — July 8, 2026 (transformer.py: token embedding built)
+
+- **Verified `__getitem__` blocker (carried over from July 7) is resolved.** Read the actual file at
+  session start: `src/data/modular_arithmetic.py` already has the correct version —
+  `return (self.get_tensor(self.pairs[idx]), self.pairs[idx][2])`. The July 7 revert did not recur.
+  **Data pipeline is stable, no open issues.**
+- **Started `src/models/transformer.py`** — mentoring session, Jonathan wrote all code, Claude
+  reviewed/guided. First sub-task: token embedding only (not full model yet).
+- **Bug found and fixed: missing `super().__init__()`.** First attempt at `Transformer(nn.Module)`
+  didn't call the parent constructor, so assigning `self.token_embedding = nn.Embedding(...)` raised
+  `AttributeError: cannot assign module before Module.__init__() call`. Jonathan reproduced the error
+  himself (asked to run it and report the traceback) before the fix was explained — same
+  debugging-by-doing style as prior sessions.
+  - **Concept taught:** `nn.Module.__init__()` sets up internal bookkeeping (e.g. `self._modules`
+    dict) that `nn.Module`'s overridden `__setattr__` relies on to register submodules. Skipping
+    `super().__init__()` means that dict doesn't exist yet, so any `self.x = nn.Something(...)`
+    assignment fails.
+  - **Concept taught (follow-up, simplified on request):** what `nn.Module` itself is/for — base
+    class all layers inherit from; provides `.parameters()`, `.to(device)`, and auto-calling
+    `forward()` via `model(input)`, once `super().__init__()` has run.
+- **Concept taught: `nn.Embedding(vocab_size, d_model)`.** Builds a `vocab_size × d_model` lookup
+  matrix (random-initialized), one row per token id, each row a learnable `d_model`-length vector.
+  This is how discrete token ids get turned into vectors a network can learn on.
+- **Bug/confusion resolved: printing the module vs. printing its weights.** `print(self.token_embedding)`
+  only shows the module's repr (`Embedding(98, 128)`), not the actual numbers. The real matrix lives
+  at `self.token_embedding.weight`; `print(self.token_embedding.weight)` shows the tensor values.
+- **`torch.set_printoptions(profile="full")` introduced** to stop PyTorch truncating large tensor
+  output (`...` in the middle) when Jonathan wanted to inspect more of the matrix.
+- **DataFrame visualization added** (Jonathan's request, for a more readable table view of the
+  embedding matrix):
+  - Bug found and fixed: first attempt had `from turtle import pd` (nonsensical — `turtle` is
+    Python's graphics module). Corrected to `import pandas as pd`.
+  - `pd.DataFrame(model.token_embedding.weight.detach().numpy())` used — `.detach()` needed before
+    `.numpy()` because the tensor is still attached to the autograd graph.
+  - **Environment flake (unresolved, not a code bug):** running the script via plain `python
+    src/models/transformer.py` intermittently raised `KeyboardInterrupt` partway through pandas'
+    internal import chain (different internal file each time), with no keyboard input from Jonathan
+    and no editor "Run" button involved (ruled out by testing directly in a plain terminal). Root
+    cause not identified. It self-resolved on a later run (completed in ~0s). **Flag for
+    investigation if it recurs** — possibly an IDE/terminal integration or a background
+    process/security tool sending SIGINT, not urgent since it's not currently blocking work.
+  - Verified working: with `vocab_size=5` (Jonathan's own choice, for a smaller/simpler test) and
+    `d_model=128`, the DataFrame printed a `5 × 128` table correctly.
+  - **Concept taught/revised:** DataFrame rows = token ids (count = `vocab_size`), columns = the
+    `d_model` numbers representing each token's vector. Row/column count matches the
+    `nn.Embedding` matrix shape exactly.
+- **Current verified state of `src/models/transformer.py`:**
+  ```python
+  import pandas as pd
+
+  from torch import nn
+  import torch
+  torch.set_printoptions(profile="full")
+
+
+  class Transformer(nn.Module):
+      def __init__(self, vocab_size, d_model):
+          super().__init__()
+          self.token_embedding = nn.Embedding(vocab_size, d_model)
+          print(self.token_embedding.weight)
+
+  if __name__ == "__main__":
+      model = Transformer(vocab_size=97, d_model=128)
+
+      dataframe = pd.DataFrame(model.token_embedding.weight.detach().numpy())
+      print(dataframe)
+  ```
+  - **Minor cleanup flagged, not urgent:** `print(self.token_embedding.weight)` currently sits
+    inside `__init__`, so it fires on every instantiation — fine for now during exploration, but
+    should likely move out (or be removed) once `transformer.py` is a real model used by the
+    training loop. `vocab_size=97` in the `__main__` block is hardcoded, consistent with the
+    existing hardcoded `97` in `modular_arithmetic.py`'s `get_tensor` (same `number=97` assumption,
+    not yet generalized anywhere).
+
+### Still Open / Next Steps (updated — July 8, 2026)
+
+1. **Immediate next action:** add **position embedding** to `Transformer.__init__` (token embedding
+   alone doesn't tell the model *where* in the sequence `a`, `b`, `"="` are).
+2. After position embedding: attention → MLP → output head → `forward()` to complete
+   `transformer.py`.
+3. Write training loop in `src/train.py` (not started).
+4. Run and confirm grokking curve (**M1 gate**) (not started).
+5. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) — still
+   pending, unrelated to code track.
+6. (Very minor, no urgency) revisit the intermittent `KeyboardInterrupt`-during-pandas-import flake
+   if it happens again.
 
 ---
 
