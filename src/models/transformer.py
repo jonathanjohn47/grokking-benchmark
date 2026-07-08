@@ -11,6 +11,10 @@ class Transformer(nn.Module):
         self.token_embedding = nn.Embedding(vocab_size, d_model)
         self.position_embedding = nn.Embedding(3, d_model)
         
+        self.query = nn.Linear(d_model, d_model)
+        self.key = nn.Linear(d_model, d_model)
+        self.value = nn.Linear(d_model, d_model)
+        
     def forward(self, x):
         token_vectors = self.token_embedding(x)
         position_vectors = self.position_embedding(arange(x.size(1)))
@@ -20,4 +24,4 @@ class Transformer(nn.Module):
         
         
 if __name__ == "__main__":
-    model = Transformer(vocab_size=97, d_model=128)
+    model = Transformer(vocab_size=2, d_model=5)

@@ -22,7 +22,7 @@ def should_skip(path: Path):
 
 
 def main():
-    project_path = input("Enter project folder path: ").strip().strip('"')
+    project_path = "/Users/jonathanjohn/Documents/grokking-benchmark/src"
 
     root = Path(project_path)
 

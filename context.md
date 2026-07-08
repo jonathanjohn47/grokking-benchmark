@@ -254,8 +254,9 @@
       vault, `shuffle=True` on train loader only, variable renamed (`modular_arithmetic_dataset`,
       snake_case), `Dataset` inheritance restored. **Data pipeline closed out, no open issues.**
 - [~] `src/models/transformer.py` — **in progress**: token embedding + position embedding done and
-      verified; `forward()` implemented (adds token + position vectors). Attention is the **current
-      next action**, then MLP → output head.
+      verified; `forward()` implemented (adds token + position vectors). Query/Key/Value `nn.Linear`
+      layers built in `__init__` (July 8, later session) — not yet used in `forward()`. Wiring Q/K/V
+      into actual attention computation is the **current next action**, then MLP → output head.
 - [ ] Write training loop in `src/train.py`
 - [ ] Reproduce canonical Nanda et al. grokking (M1 gate)
 
@@ -616,6 +617,99 @@
 6. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) — still
    pending, unrelated to code track.
 7. (Very minor, no urgency) revisit the intermittent `KeyboardInterrupt`-during-pandas-import flake
+   if it recurs.
+
+---
+
+## Session Summary — July 8, 2026 (Q/K/V projections built, mentoring session)
+
+- **Picked up from:** "immediate next action" was building the self-attention layer — token +
+  position embeddings already done.
+- **Concept taught: what attention does and why Query/Key/Value exist.** Token+position vectors
+  alone are isolated (no interaction between positions). Attention lets the model weigh how much
+  each position (`a`, `b`) matters when predicting from `"="`. Explained via library analogy:
+  Query = "what am I looking for," Key = "what do I offer" (used only for matching/scoring), Value
+  = "what you actually get if selected" (used in the final weighted output). Jonathan initially
+  thought Key and Value were redundant — resolved via the analogy (Key = label for matching, Value
+  = actual content returned).
+- **Bug found and fixed: `get_query` as a per-call method instead of a persistent layer.** First
+  attempt was a method `get_query(x): return nn.Linear(...)` that constructed a **new** `nn.Linear`
+  every time it was called — weights would never persist or train (recreated from scratch each
+  call, not registered as a submodule). Fixed by moving `nn.Linear` construction into `__init__` as
+  `self.query = nn.Linear(d_model, d_model)`, same pattern as `token_embedding`. Confirmed correct
+  by running and inspecting `self.query.weight` (random-initialized `5×5` matrix, `requires_grad=True`,
+  using test values `vocab_size=2, d_model=5`).
+- **Concept taught: why `nn.Linear(d_model, d_model)` is square.** Not because `nn.Linear` is
+  inherently square — `in_features`/`out_features` can differ — but because Query/Key/Value are
+  deliberately given matching input and output size (`d_model`) so their outputs stay comparable/
+  combinable with the original embeddings (dot product, weighted sum later). Explained with
+  concrete numbers (`nn.Linear(5, 5)` because both input and output vectors are size 5 by choice).
+- **Concept taught: why weights start random.** Random initialization is standard — if all weights
+  started identical, the layer couldn't learn diverse features; gradient descent during training
+  adjusts these random values toward useful ones. The large block of random numbers Jonathan saw
+  printed is just the untrained `d_model × d_model` weight matrix.
+- **`self.key` and `self.value` added** using the same corrected pattern — all three now built in
+  `__init__`:
+  ```python
+  self.query = nn.Linear(d_model, d_model)
+  self.key = nn.Linear(d_model, d_model)
+  self.value = nn.Linear(d_model, d_model)
+  ```
+  Confirmed correct (persistent, registered submodules, no more per-call recreation bug).
+- **Current verified state of `src/models/transformer.py`:**
+  ```python
+  import pandas as pd
+
+  from torch import arange, nn
+  import torch
+  torch.set_printoptions(profile="full")
+
+
+  class Transformer(nn.Module):
+      def __init__(self, vocab_size, d_model):
+          super().__init__()
+          self.token_embedding = nn.Embedding(vocab_size, d_model)
+          self.position_embedding = nn.Embedding(3, d_model)
+
+          self.query = nn.Linear(d_model, d_model)
+          self.key = nn.Linear(d_model, d_model)
+          self.value = nn.Linear(d_model, d_model)
+          print(self.query.weight)
+
+      def forward(self, x):
+          token_vectors = self.token_embedding(x)
+          position_vectors = self.position_embedding(arange(x.size(1)))
+          return token_vectors + position_vectors
+
+
+  if __name__ == "__main__":
+      model = Transformer(vocab_size=2, d_model=5)
+  ```
+- **Not yet done, carried forward:**
+  1. `print(self.query.weight)` still sits in `__init__` — was only for verification, should be
+     removed (not urgent, flagged for cleanup).
+  2. `forward()` does **not yet use** `self.query`/`self.key`/`self.value` — they exist as layers
+     but aren't called anywhere yet. This is the **immediate next action**: apply Q/K/V to the
+     token+position output, compute attention scores, and combine with Value.
+  3. `__main__` block still uses small test values (`vocab_size=2, d_model=5`) instead of the real
+     `vocab_size=98, d_model=128` — fine for now during construction/testing, revisit before
+     training loop.
+- **Session ended here** — Jonathan stopped for the day after Q/K/V layers were confirmed correct.
+
+### Still Open / Next Steps (updated — July 8, 2026, end of session)
+
+1. **Immediate next action:** implement the actual attention computation in `forward()` — apply
+   `self.query`, `self.key`, `self.value` to the combined token+position vectors, compute
+   Query·Key attention scores, softmax, then weighted-sum the Values.
+2. Remove leftover `print(self.query.weight)` debug line from `__init__` (minor cleanup).
+3. After attention: MLP → output head to complete `forward()`'s full pipeline.
+4. Fix `__main__` test values (`vocab_size=2, d_model=5`) → real values (`98`, `128`) before
+   training loop / M1 gate run.
+5. Write training loop in `src/train.py` (not started).
+6. Run and confirm grokking curve (**M1 gate**) (not started).
+7. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) — still
+   pending, unrelated to code track.
+8. (Very minor, no urgency) revisit the intermittent `KeyboardInterrupt`-during-pandas-import flake
    if it recurs.
 
 ---
