@@ -104,7 +104,7 @@
       "label": "train.py",
       "file_type": "document",
       "source_file": "src/project_compilation.md",
-      "source_location": "L106",
+      "source_location": "L118",
       "_origin": "ast",
       "id": "src_project_compilation_train_py",
       "community": 4,
@@ -278,9 +278,9 @@
       "source_file": "src/models/transformer.py",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "models_transformer_transformer",
-      "target": "models_transformer_transformer_forward",
-      "confidence_score": 1.0
+      "target": "models_transformer_transformer_forward"
     },
     {
       "relation": "method",
@@ -298,9 +298,9 @@
       "source_file": "src/project_compilation.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_project_compilation",
-      "target": "src_project_compilation_python_project_compilation",
-      "confidence_score": 1.0
+      "target": "src_project_compilation_python_project_compilation"
     },
     {
       "relation": "contains",
@@ -308,9 +308,9 @@
       "source_file": "src/project_compilation.md",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_project_compilation_python_project_compilation",
-      "target": "src_project_compilation_data_modular_arithmetic_py",
-      "confidence_score": 1.0
+      "target": "src_project_compilation_data_modular_arithmetic_py"
     },
     {
       "relation": "contains",
@@ -318,9 +318,9 @@
       "source_file": "src/project_compilation.md",
       "source_location": "L56",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_project_compilation_python_project_compilation",
-      "target": "src_project_compilation_models_transformer_py",
-      "confidence_score": 1.0
+      "target": "src_project_compilation_models_transformer_py"
     },
     {
       "relation": "contains",
@@ -328,9 +328,9 @@
       "source_file": "src/project_compilation.md",
       "source_location": "L106",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_project_compilation_python_project_compilation",
-      "target": "src_project_compilation_train_py",
-      "confidence_score": 1.0
+      "target": "src_project_compilation_train_py"
     },
     {
       "relation": "imports_from",
@@ -546,5 +546,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "5d45be72f02631d8e402d151fbbf9baf49db1875"
+  "built_at_commit": "53d1f0ddb84f4d9e36f42c53d08118818ee084e9"
 }

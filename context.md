@@ -1002,6 +1002,86 @@
 
 ---
 
+## Session Summary — July 9, 2026 (debug print cleanup + train.py single-batch loss)
+
+- **Debug prints removed from `transformer.py` (direct implementation, Jonathan explicitly asked
+  Claude to do it — "too monotonous for me").** All 11 `print(...)` tensor-trace lines removed from
+  `forward()`. Also dropped now-unused `import pandas as pd` and `torch.set_printoptions(...)` call
+  (no longer needed without prints). Architecture itself unchanged — same token+position embedding →
+  Q/K/V attention → MLP → output head pipeline as July 8 close-out.
+- **`src/train.py` started (was empty).** Goal: get a single loss number out of one batch, first
+  step before a real training loop. Jonathan wrote all code, Claude reviewed/guided each attempt
+  (mentoring, no direct implementation on this file).
+- **Concepts taught this session:**
+  1. `DataLoader` is not subscriptable (`data_loader[0]` on a `DataLoader` fails) — it's iterable
+     only, batches built lazily on iteration, not stored as an indexable sequence.
+  2. `iter()` / `next()` — `iter(x)` turns an iterable into a stateful iterator; `next(iterator)`
+     pulls one item. `for` loops do this internally already; used manually here to grab just the
+     first batch without a full loop.
+  3. What `y` is in `x, y = batch` — the `target` half of `__getitem__`'s `(input_tensor, target)`
+     return, batched by `DataLoader` into a `(32,)` tensor of correct `(a+b)%97` answers.
+- **Bugs found and fixed across several attempts (Jonathan wrote, Claude caught each one):**
+  1. `data_loader[0][0]` — tried indexing the `DataLoader` itself (see concept #1 above). Root cause:
+     `get_dataloaders` returns a **tuple** `(train_loader, test_loader)`, so `data_loader[0]` (tuple
+     indexing) is valid, but the *inner* `DataLoader` object is not further indexable.
+  2. Called `next(iter(data_loader[0]))` **multiple separate times** (once for `x`, once for `y`,
+     and once again to feed `model.forward`) — since `train_loader` has `shuffle=True`, each
+     `iter()` call produces a **different random batch**, so `x`/`y`/`logit` ended up mismatched
+     (label leakage's opposite problem: label *misalignment*). Fixed by calling `iter()`/`next()`
+     **exactly once**, storing the batch, then unpacking: `x, y = next(iter(data_loader[0]))`.
+  3. Passed the whole `(x, y)` tuple into `model.forward(...)` instead of just `x` — caught before
+     it was run (would have failed inside `token_embedding`, which expects a tensor not a tuple).
+- **Current correct state of `src/train.py`:**
+  ```python
+  from torch import nn
+
+  from data.modular_arithmetic import get_dataloaders
+  from models.transformer import Transformer
+
+  data_loader = get_dataloaders(97, batch_size=32)
+  model = Transformer(vocab_size=98, d_model=128)
+
+  x, y = next(iter(data_loader[0]))
+  logit = model.forward(x)
+  equal_sign_logit = logit[:, 2, :]
+
+  print(equal_sign_logit.shape)
+
+  cross_entropy_loss = nn.CrossEntropyLoss()
+  loss = cross_entropy_loss(equal_sign_logit, y)
+
+  print(loss)
+  ```
+- **Verified run output:** `equal_sign_logit.shape` → `torch.Size([32, 98])` (correct: batch_size,
+  vocab_size). `loss` → `tensor(4.5240, grad_fn=<NllLossBackward0>)`. Confirmed this is the expected
+  baseline: `ln(98) ≈ 4.585` is the theoretical loss for a uniformly random 98-class guess, and an
+  untrained model should sit right around there. `grad_fn=<NllLossBackward0>` confirms gradient
+  tracking is wired correctly through the whole model.
+- **Gantt chart check (Jonathan asked, referencing `Thesis Gantt - Grokking Predictors Benchmark -
+  Gantt.csv` at project root):** Phase 1 ("Setup") has 3 tasks — (1) Git repo + env setup: done,
+  (2) Transformer + task generators / "Working PyTorch MPS pipeline": architecture done, but MPS
+  device usage **not yet verified** (model has only been run on CPU/default tensors so far, never
+  explicitly moved to `mps`), (3) **Reproduce Nanda grokking (GATE)**: not done — this is the M1
+  gate, due Jul W4 per the timeline (i.e. now/imminent). **Phase 1 is NOT closed** — gate task is
+  the blocking item.
+
+### Still Open / Next Steps (updated — July 9, 2026, end of session)
+
+1. **Immediate next action:** extend `src/train.py`'s single-batch loss check into a real training
+   loop — needs: optimizer (e.g. `torch.optim.Adam`), `loss.backward()`, `optimizer.step()`,
+   `optimizer.zero_grad()`, looping over multiple epochs/batches, and tracking train/test accuracy
+   per epoch (required to observe the grokking curve, not just a single loss number).
+2. Verify/confirm MPS device usage — model and tensors should be moved to `mps` device (Phase 1
+   Gantt item #2, "Working PyTorch MPS pipeline," not yet verified).
+3. Run and confirm grokking curve (**M1 gate**, Gantt Phase 1 item #3) — blocked on #1. This is the
+   most time-pressing item; Gantt timeline places this milestone at Jul W4 (imminent).
+4. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) — still
+   pending, unrelated to code track.
+5. (Very minor, optional) consider upgrading `self.mlp` from a single `nn.Linear` to a proper
+   2-layer MLP block with non-linearity.
+
+---
+
 ## Tools & Preferences
 
 | Tool | Preference |
