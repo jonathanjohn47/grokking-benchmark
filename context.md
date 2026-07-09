@@ -968,6 +968,40 @@
 
 ---
 
+## Session Summary — July 9, 2026 (debug tracing added to transformer.py, image asset cleanup)
+
+- **Debug print tracing added throughout `forward()`** in `src/models/transformer.py` — every
+  intermediate tensor (`token_vectors`, `position_vectors`, `combined_vector`, `query_vector`,
+  `key_vector`, `value_vector`, `scores`, `attention_weights`, `attended_values`, `mlp_output`,
+  `logits`) now prints its shape and value. Replaces the single leftover `print("Logits shape:", ...)`
+  debug line flagged in the July 8 session. Still exploratory/debug-only, not cleaned up for the
+  training loop yet — carry forward the existing "remove debug prints before training loop" item.
+- **`torch.set_printoptions` changed** from `profile="full"` to `threshold=20, edgeitems=3` — avoids
+  flooding the terminal with full tensor dumps now that many more tensors are printed per call.
+- **`__main__` block cleaned up slightly** — removed a redundant `print(x)` before
+  `model.forward(x)` (shape/values now visible via the new in-`forward()` prints instead).
+- **Image assets reorganized:** old `CLAUDE_images/` (`collage.png`, `page_001.png`–`page_007.png`)
+  deleted; new `images/image.png` added (untracked prior to this commit). Reason for the swap not
+  discussed this session — noting the change, not a decision record.
+- **Graphify outputs regenerated** (`graphify-out/GRAPH_REPORT.md`, `graph.json`, `graph.html`,
+  `manifest.json`, `.graphify_labels.json`, `cache/stat-index.json`) to reflect the updated
+  `transformer.py` and `project_compilation.md` — routine re-index, no manual edits.
+- **No architectural change to the model** — Q/K/V → attention → MLP → output head pipeline from the
+  July 8 session is unchanged; this session only added instrumentation and touched unrelated assets.
+
+### Still Open / Next Steps (unchanged from July 8 close-out)
+
+1. Remove debug `print()` statements from `transformer.py` before the training loop (now a larger
+   set of prints than previously flagged).
+2. Write the training loop in `src/train.py` (not started).
+3. Run and confirm grokking curve (**M1 gate**) (not started).
+4. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) — still
+   pending, unrelated to code track.
+5. (Very minor, optional) consider upgrading `self.mlp` from a single `nn.Linear` to a proper
+   2-layer MLP block with non-linearity.
+
+---
+
 ## Tools & Preferences
 
 | Tool | Preference |

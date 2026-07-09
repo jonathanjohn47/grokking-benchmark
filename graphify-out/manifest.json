@@ -5,13 +5,13 @@
     "semantic_hash": "916a0e4f33d2556de626c397b36c5fb4"
   },
   "src/data/modular_arithmetic.py": {
-    "mtime": 1783358681.3831828,
-    "ast_hash": "30fe9b1ac660d5bafbab716f0b41ed07",
+    "mtime": 1783441496.6493309,
+    "ast_hash": "9208f3eae55a2b5d3f127d340385aaaa",
     "semantic_hash": ""
   },
   "src/models/transformer.py": {
-    "mtime": 1783354585.9545982,
-    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "mtime": 1783488910.8945992,
+    "ast_hash": "3d1c1696f755440175ee620a02ae905a",
     "semantic_hash": ""
   },
   "src/train.py": {
@@ -25,23 +25,73 @@
     "semantic_hash": ""
   },
   "scaffold.py": {
-    "mtime": 1783354582.828764,
-    "ast_hash": "6b2b753730158530881cef3f5b7cc48e",
+    "mtime": 1783383412.0667756,
+    "ast_hash": "ba030a8b37cfef50a9127f97ce540875",
     "semantic_hash": ""
   },
-  "src/__init__.py": {
-    "mtime": 1783354585.950716,
-    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+  "collage_images.py": {
+    "mtime": 1783438372.4365609,
+    "ast_hash": "39e1d670c6b00163c7f910561ad0ab95",
     "semantic_hash": ""
   },
-  "src/data/__init__.py": {
-    "mtime": 1783354585.9516907,
-    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+  "compile_python_files.py": {
+    "mtime": 1783480482.3371239,
+    "ast_hash": "6054ab774d9810317d9e3bee1366d191",
     "semantic_hash": ""
   },
-  "src/models/__init__.py": {
-    "mtime": 1783354585.9538653,
-    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+  "inherticance_example.py": {
+    "mtime": 1783470445.7237935,
+    "ast_hash": "5fa8874c2e0c5a26a8983d162ac8159e",
+    "semantic_hash": ""
+  },
+  "md_to_image.py": {
+    "mtime": 1783438151.3514178,
+    "ast_hash": "8f3a0bc966ea76586846b877d189de63",
+    "semantic_hash": ""
+  },
+  "src/project_compilation.md": {
+    "mtime": 1783488720.4949758,
+    "ast_hash": "b8627a73498c24b3374360fe1b99e29f",
+    "semantic_hash": ""
+  },
+  "CLAUDE_images/collage.png": {
+    "mtime": 1783438401.503285,
+    "ast_hash": "7ed446e1f61cf3005b00e91d796287d2",
+    "semantic_hash": ""
+  },
+  "CLAUDE_images/page_001.png": {
+    "mtime": 1783438175.5289736,
+    "ast_hash": "cd2249eaa09ade851d09511383eea479",
+    "semantic_hash": ""
+  },
+  "CLAUDE_images/page_002.png": {
+    "mtime": 1783438175.5901773,
+    "ast_hash": "7fc9e1b33983f988702975bc9777f325",
+    "semantic_hash": ""
+  },
+  "CLAUDE_images/page_003.png": {
+    "mtime": 1783438175.6426952,
+    "ast_hash": "c4e7909a046d936578ea583609f6e27c",
+    "semantic_hash": ""
+  },
+  "CLAUDE_images/page_004.png": {
+    "mtime": 1783438175.7008812,
+    "ast_hash": "c1b70d7e2c8b22648255c1878b39164e",
+    "semantic_hash": ""
+  },
+  "CLAUDE_images/page_005.png": {
+    "mtime": 1783438175.7551603,
+    "ast_hash": "1eb5e3c7ad58121746c1a724b82e3e29",
+    "semantic_hash": ""
+  },
+  "CLAUDE_images/page_006.png": {
+    "mtime": 1783438175.8053794,
+    "ast_hash": "b4de0ad872052ecbce23ceb723c94faf",
+    "semantic_hash": ""
+  },
+  "CLAUDE_images/page_007.png": {
+    "mtime": 1783438175.8558307,
+    "ast_hash": "b4e3929a43576d435ba7a5de1bef4433",
     "semantic_hash": ""
   }
 }
