@@ -1,16 +1,16 @@
 # Graph Report - grokking-benchmark  (2026-07-09)
 
 ## Corpus Check
-- 10 files · ~26,641 words
+- 10 files · ~26,632 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 24 nodes · 26 edges · 5 communities (2 shown, 3 thin omitted)
+- 24 nodes · 27 edges · 5 communities (2 shown, 3 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `53d1f0dd`
+- Built from commit: `c9d062e3`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -60,11 +60,9 @@ Nodes (4): data/modular_arithmetic.py, models/transformer.py, Python Project Com
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `ModularArithmeticDataset` connect `Community 0` to `Community 1`, `Community 2`?**
-  _High betweenness centrality (0.153) - this node is a cross-community bridge._
+- **Why does `ModularArithmeticDataset` connect `Community 0` to `Community 1`?**
+  _High betweenness centrality (0.209) - this node is a cross-community bridge._
 - **Why does `ModularArithmeticDataset` connect `Community 2` to `Community 1`?**
-  _High betweenness centrality (0.112) - this node is a cross-community bridge._
-- **Why does `generate_pairs()` connect `Community 1` to `Community 2`?**
-  _High betweenness centrality (0.050) - this node is a cross-community bridge._
+  _High betweenness centrality (0.152) - this node is a cross-community bridge._
 - **What connects `data/modular_arithmetic.py`, `models/transformer.py`, `train.py` to the rest of the system?**
   _3 weakly-connected nodes found - possible documentation gaps or missing edges._
