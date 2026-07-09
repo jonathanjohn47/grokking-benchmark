@@ -1082,6 +1082,82 @@
 
 ---
 
+## Session Summary — July 10, 2026 (training loop built, transformer.py debug prints removed)
+
+- **`src/train.py` extended into a real training loop**, resolving the "immediate next action" carried
+  over from July 9 (single-batch loss check → full multi-epoch training):
+  - Added `from torch.optim import Adam`; `optimizer = Adam(model.parameters(), lr=0.001)`.
+  - Replaced the single `next(iter(...))` batch check with a nested loop: `for epoch in range(100):
+    for x, y in data_loader[0]:` — iterates all train batches per epoch, not just one.
+  - Per batch: `logit = model.forward(x)` → `equal_sign_logit = logit[:, 2, :]` → `loss =
+    cross_entropy_loss(equal_sign_logit, y)` → `optimizer.zero_grad()` → `loss.backward()` →
+    `optimizer.step()`.
+  - `print(f"Epoch {epoch + 1}: Loss = {loss.item()}")` at the end of each epoch (reports last
+    batch's loss, not an averaged epoch loss — acceptable for now, not flagged as a bug).
+  - **Current state of `src/train.py`:**
+    ```python
+    from torch import nn
+    from torch.optim import Adam
+
+    from data.modular_arithmetic import get_dataloaders
+    from models.transformer import Transformer
+
+    data_loader = get_dataloaders(97, batch_size=32)
+    model = Transformer(vocab_size=98, d_model=128)
+    optimizer = Adam(model.parameters(), lr=0.001)
+
+    print("Optimizer:", optimizer)
+    cross_entropy_loss = nn.CrossEntropyLoss()
+
+    for epoch in range(100):
+        for x, y in data_loader[0]:
+            logit = model.forward(x)
+            equal_sign_logit = logit[:, 2, :]
+
+            loss = cross_entropy_loss(equal_sign_logit, y)
+
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+        print(f"Epoch {epoch + 1}: Loss = {loss.item()}")
+    ```
+- **`src/models/transformer.py` cleaned up:** all intermediate debug `print()` statements (shapes/
+  values of token_vectors, position_vectors, combined_vector, query/key/value_vector, scores,
+  attention_weights, attended_values, mlp_output, logits) removed from `forward()`. Also dropped
+  `import pandas as pd` and `torch.set_printoptions(threshold=20, edgeitems=3)` (no longer needed
+  now that debug printing is gone). `forward()` is now the clean, final pipeline (no logging).
+- **Concept discussed (mentor mode):** what an output head is and why its per-sequence logits shape
+  is `(3, 98)` — 3 = seq_len (`a`, `b`, `"="` positions), 98 = vocab_size (0–96 number tokens + `"="`
+  token). Full batched shape is `(batch_size, 3, 98)`; only the `"="` position's 98 logits
+  (`logit[:, 2, :]`) are used for loss/prediction.
+- **Image assets swapped:** `images/image.png` deleted; four new named diagrams added —
+  `initial_loss_ln98_explanation.png`, `pytorch_training_loop_explained.png`,
+  `transformer_forward_pass_pipeline.png`, `what_is_a_logit.png`.
+- **`src/project_compilation.md` regenerated/updated** to reflect the current `transformer.py`
+  (debug prints removed) and `train.py` (full training loop) source.
+- **Not yet done, carried forward:** loop runs but **has not yet been executed/observed** this
+  session — train/test accuracy per epoch is not tracked (only last-batch loss is printed), so the
+  actual grokking curve (loss dropping, then train acc high while test acc lags, then test acc
+  catching up) is not yet confirmed. MPS device usage still not verified (model/tensors still on
+  CPU/default device).
+
+### Still Open / Next Steps (updated — July 10, 2026)
+
+1. **Immediate next action:** run `src/train.py` and observe behavior — confirm loss decreases over
+   epochs. Add test-set accuracy tracking (not just train loss) to actually see the grokking curve
+   (M1 gate requires observing generalization lag, not just loss convergence).
+2. Verify/confirm MPS device usage — model and tensors should be moved to `mps` device (Phase 1
+   Gantt item #2, still not verified).
+3. Run and confirm grokking curve (**M1 gate**, Gantt Phase 1 item #3) — blocked on #1's accuracy
+   tracking addition. Most time-pressing item, Gantt places this at Jul W4.
+4. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) — still
+   pending, unrelated to code track.
+5. (Very minor, optional) consider upgrading `self.mlp` from a single `nn.Linear` to a proper
+   2-layer MLP block with non-linearity.
+
+---
+
 ## Tools & Preferences
 
 | Tool | Preference |
