@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 from torch import nn
 from torch.optim import AdamW
 
@@ -11,7 +12,12 @@ optimizer = AdamW(model.parameters(), lr=1e-3, weight_decay=1.0)
 print("Optimizer:", optimizer)
 cross_entropy_loss = nn.CrossEntropyLoss()
 
-for epoch in range(5000):
+num_epochs = 20000
+train_acc_history = []
+test_acc_history = []
+loss_history = []
+
+for epoch in range(num_epochs):
     total_correct = 0
     total_samples = 0
     for x, y in data_loader[0]:
@@ -38,5 +44,20 @@ for epoch in range(5000):
         test_total_correct += (predicted_test == y_test).sum().item()
         test_total_samples += len(y_test)
 
-    print(f"Epoch {epoch + 1}: Loss = {loss.item()}, Accuracy = {total_correct / total_samples}")
-    print(f"Test Accuracy = {test_total_correct / test_total_samples}")
+    train_acc_history.append(total_correct / total_samples)
+    test_acc_history.append(test_total_correct / test_total_samples)
+    loss_history.append(loss.item())
+
+    if (epoch + 1) % 100 == 0:
+        print(f"Epoch {epoch + 1}: Loss = {loss_history[-1]}, Train Acc = {train_acc_history[-1]}, Test Acc = {test_acc_history[-1]}")
+
+plt.figure(figsize=(8, 5))
+plt.plot(range(1, num_epochs + 1), train_acc_history, label="Train Accuracy")
+plt.plot(range(1, num_epochs + 1), test_acc_history, label="Test Accuracy")
+plt.xscale("log")
+plt.xlabel("Epoch (log scale)")
+plt.ylabel("Accuracy")
+plt.title("Grokking Curve")
+plt.legend()
+plt.savefig("grokking_curve.png")
+plt.show()
