@@ -8,13 +8,16 @@ class Transformer(nn.Module):
         self.token_embedding = nn.Embedding(vocab_size, d_model)
         self.position_embedding = nn.Embedding(3, d_model)
 
-        self.query = nn.Linear(d_model, d_model)
-        self.key = nn.Linear(d_model, d_model)
-        self.value = nn.Linear(d_model, d_model)
+        self.query = nn.Linear(d_model, d_model, bias=False)
+        self.key = nn.Linear(d_model, d_model, bias=False)
+        self.value = nn.Linear(d_model, d_model, bias=False)
 
-        self.mlp = nn.Linear(d_model, d_model)
+        self.mlp_in = nn.Linear(d_model, 4 * d_model, bias=False)
+        self.mlp_activation = nn.ReLU()
+        self.mlp_out = nn.Linear(4 * d_model, d_model, bias=False)
 
-        self.output_head = nn.Linear(d_model, vocab_size)
+
+        self.output_head = nn.Linear(d_model, vocab_size, bias=False)
 
     def forward(self, x):
         token_vectors = self.token_embedding(x)
@@ -26,8 +29,9 @@ class Transformer(nn.Module):
 
         scores = torch.matmul(query_vector, key_vector.transpose(-2, -1)) / torch.sqrt(torch.tensor(query_vector.size(-1), dtype=torch.float32))
         attention_weights = torch.softmax(scores, dim=-1)
-        attended_values = torch.matmul(attention_weights, value_vector)
-        mlp_output = self.mlp(attended_values)
+        attended_values = combined_vector + torch.matmul(attention_weights, value_vector)
+        mlp_output = attended_values + self.mlp_out(self.mlp_activation(self.mlp_in(attended_values)))
+
 
         logits = self.output_head(mlp_output)
 

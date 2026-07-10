@@ -21,44 +21,54 @@
   },
   "nodes": [
     {
-      "label": "transformer.py",
-      "file_type": "code",
-      "source_file": "src/models/transformer.py",
+      "label": "project_compilation.md",
+      "file_type": "document",
+      "source_file": "src/project_compilation.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "models_transformer",
-      "community": 3,
-      "norm_label": "transformer.py"
+      "id": "src_project_compilation",
+      "community": 4,
+      "norm_label": "project_compilation.md"
     },
     {
-      "label": "Transformer",
-      "file_type": "code",
-      "source_file": "src/models/transformer.py",
-      "source_location": "L5",
+      "label": "Python Project Compilation",
+      "file_type": "document",
+      "source_file": "src/project_compilation.md",
+      "source_location": "L1",
       "_origin": "ast",
-      "id": "models_transformer_transformer",
-      "community": 3,
-      "norm_label": "transformer"
+      "id": "src_project_compilation_python_project_compilation",
+      "community": 4,
+      "norm_label": "python project compilation"
     },
     {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "src/models/transformer.py",
-      "source_location": "L6",
+      "label": "data/modular_arithmetic.py",
+      "file_type": "document",
+      "source_file": "src/project_compilation.md",
+      "source_location": "L9",
       "_origin": "ast",
-      "id": "models_transformer_transformer_init",
-      "community": 3,
-      "norm_label": ".__init__()"
+      "id": "src_project_compilation_data_modular_arithmetic_py",
+      "community": 4,
+      "norm_label": "data/modular_arithmetic.py"
     },
     {
-      "label": ".forward()",
-      "file_type": "code",
-      "source_file": "src/models/transformer.py",
-      "source_location": "L19",
+      "label": "models/transformer.py",
+      "file_type": "document",
+      "source_file": "src/project_compilation.md",
+      "source_location": "L56",
       "_origin": "ast",
-      "id": "models_transformer_transformer_forward",
-      "community": 3,
-      "norm_label": ".forward()"
+      "id": "src_project_compilation_models_transformer_py",
+      "community": 4,
+      "norm_label": "models/transformer.py"
+    },
+    {
+      "label": "train.py",
+      "file_type": "document",
+      "source_file": "src/project_compilation.md",
+      "source_location": "L104",
+      "_origin": "ast",
+      "id": "src_project_compilation_train_py",
+      "community": 4,
+      "norm_label": "train.py"
     },
     {
       "label": "train.py",
@@ -71,54 +81,44 @@
       "norm_label": "train.py"
     },
     {
-      "label": "project_compilation.md",
-      "file_type": "document",
-      "source_file": "src/project_compilation.md",
+      "label": "transformer.py",
+      "file_type": "code",
+      "source_file": "src/models/transformer.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 4,
-      "norm_label": "project_compilation.md",
-      "id": "src_project_compilation"
+      "community": 3,
+      "norm_label": "transformer.py",
+      "id": "models_transformer"
     },
     {
-      "label": "Python Project Compilation",
-      "file_type": "document",
-      "source_file": "src/project_compilation.md",
-      "source_location": "L1",
+      "label": "Transformer",
+      "file_type": "code",
+      "source_file": "src/models/transformer.py",
+      "source_location": "L5",
       "_origin": "ast",
-      "community": 4,
-      "norm_label": "python project compilation",
-      "id": "src_project_compilation_python_project_compilation"
+      "community": 3,
+      "norm_label": "transformer",
+      "id": "models_transformer_transformer"
     },
     {
-      "label": "data/modular_arithmetic.py",
-      "file_type": "document",
-      "source_file": "src/project_compilation.md",
-      "source_location": "L9",
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "src/models/transformer.py",
+      "source_location": "L6",
       "_origin": "ast",
-      "community": 4,
-      "norm_label": "data/modular_arithmetic.py",
-      "id": "src_project_compilation_data_modular_arithmetic_py"
+      "community": 3,
+      "norm_label": ".__init__()",
+      "id": "models_transformer_transformer_init"
     },
     {
-      "label": "models/transformer.py",
-      "file_type": "document",
-      "source_file": "src/project_compilation.md",
-      "source_location": "L56",
+      "label": ".forward()",
+      "file_type": "code",
+      "source_file": "src/models/transformer.py",
+      "source_location": "L19",
       "_origin": "ast",
-      "community": 4,
-      "norm_label": "models/transformer.py",
-      "id": "src_project_compilation_models_transformer_py"
-    },
-    {
-      "label": "train.py",
-      "file_type": "document",
-      "source_file": "src/project_compilation.md",
-      "source_location": "L118",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "train.py",
-      "id": "src_project_compilation_train_py"
+      "community": 3,
+      "norm_label": ".forward()",
+      "id": "models_transformer_transformer_forward"
     },
     {
       "label": "modular_arithmetic.py",
@@ -265,69 +265,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "src/models/transformer.py",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "models_transformer",
-      "target": "models_transformer_transformer"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/train.py",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "src_train",
-      "target": "models_transformer",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/models/transformer.py",
-      "source_location": "L22",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "models_transformer_transformer",
-      "target": "models_transformer_transformer_forward"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/models/transformer.py",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "models_transformer_transformer",
-      "target": "models_transformer_transformer_init"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/train.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_train",
-      "target": "data_dataset"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/train.py",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_train",
-      "target": "data_modular_arithmetic"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "src/project_compilation.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -364,6 +301,69 @@
       "confidence_score": 1.0,
       "source": "src_project_compilation_python_project_compilation",
       "target": "src_project_compilation_train_py"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/train.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_train",
+      "target": "data_dataset"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/train.py",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_train",
+      "target": "data_modular_arithmetic"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/train.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_train",
+      "target": "models_transformer"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/models/transformer.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "models_transformer",
+      "target": "models_transformer_transformer"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/models/transformer.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "models_transformer_transformer",
+      "target": "models_transformer_transformer_forward"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/models/transformer.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "models_transformer_transformer",
+      "target": "models_transformer_transformer_init"
     },
     {
       "relation": "imports_from",
@@ -557,5 +557,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "c9d062e30c8d5863db7d047abaa4399a62e15ef8"
+  "built_at_commit": "04dcf313f7f0db5341d536373e1a6951b87d4fd7"
 }

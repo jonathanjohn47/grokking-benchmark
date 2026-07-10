@@ -1158,6 +1158,190 @@
 
 ---
 
+## Session Summary — July 10, 2026 (train/test accuracy tracking, architecture aligned to Nanda et al., full-batch training)
+
+- **Picked up from:** training loop existed (single-batch → multi-epoch loop from earlier July 10
+  session) but only printed last-batch loss, no accuracy tracking, grokking curve not yet observed.
+- **Train accuracy tracking added to `src/train.py`** (mentor mode, several review/fix cycles):
+  - Concept taught: accuracy = `(predicted == y).sum() / len(y)`, `predicted = logits.argmax(dim=1)`.
+  - Concept taught: accumulator pattern — `total_correct`/`total_samples` must be reset **once per
+    epoch** (outside the inner batch loop) and accumulated with `+=` **inside** the inner loop, then
+    divided **after** the inner loop ends. Several wrong attempts before landing on this (recomputing
+    per-batch instead of accumulating, or moving the calculation outside the loop entirely so it only
+    reflected the last batch) — same "last-batch-only" bug recurred 3 times in different shapes before
+    Jonathan applied the fix correctly.
+- **Test accuracy tracking added**, same accumulator pattern, over `data_loader[1]` (test loader).
+  - **Bug found and fixed:** first attempt copy-pasted `optimizer.zero_grad()` / `loss.backward()` /
+    `optimizer.step()` into the test loop — i.e. **training on the test set**, which would have
+    silently invalidated any train/test generalization gap (test set would just get memorized too).
+    Caught before running; fixed by stripping the test loop down to forward pass + accuracy only, no
+    gradient/optimizer calls.
+- **First real run (100 epochs, then 500 epochs, batch_size=32, plain `Adam` lr=0.001):** train
+  accuracy stuck at ~1% (= random chance for 98 classes) through epoch 100, loss oscillating
+  3.7–4.6 not trending down — diagnosed as "not learning at all," not just "needs more time" (normal
+  behavior would be train accuracy climbing toward ~100% quickly, well before any grokking/test-lag
+  is expected). At 500 epochs, train accuracy had crept to ~9%, confirmed it was **slow but not
+  fundamentally broken** — just needs far more epochs and/or better hyperparameters.
+- **5000-epoch run (still `Adam`, batch_size=32):** train accuracy only reached ~10.7% by epoch 5000
+  — plateaued (barely moved from epoch 500's ~9%), confirming mini-batch `Adam` alone isn't going to
+  get there in reasonable time.
+- **Switched to `AdamW` + `weight_decay=1.0`, still batch_size=32, reran 5000 epochs:** made things
+  *worse* — train accuracy dropped to ~4%, loss stopped decreasing, oscillating 3.7–4.6 again.
+  Diagnosed cause: `weight_decay=1.0` (Nanda et al.'s value) is calibrated for **full-batch** training;
+  on noisy mini-batches (batch_size=32) the aggressive decay fights the noisy gradient signal and
+  destabilizes training instead of regularizing it.
+- **Architecture gap identified and fixed in `src/models/transformer.py`** — Jonathan's original
+  `self.mlp` was a single bare `nn.Linear(d_model, d_model)` with **no non-linearity**, and there were
+  **no residual connections anywhere** in `forward()` (attention output fully replaced its input, MLP
+  output fully replaced its input). Explicitly decided to make architecture match Nanda et al. as
+  closely as possible (project's M1 gate requires reproducing *their* result specifically), which
+  surfaced an important correction: **Nanda et al.'s actual grokking transformer deliberately omits
+  LayerNorm and Linear biases** (simplification for their mechanistic-interpretability weight
+  analysis) — so "match Nanda" and "add LayerNorm" were in tension; Jonathan chose match-Nanda.
+  - **Residual connections added** (Jonathan implemented, Claude reviewed, correct on first attempt):
+    `attended_values = combined_vector + torch.matmul(attention_weights, value_vector)` and
+    `mlp_output = attended_values + self.mlp_out(...)`.
+  - **MLP upgraded to standard 2-layer + activation block** (correct on first attempt):
+    `self.mlp_in = nn.Linear(d_model, 4*d_model)` → `nn.ReLU()` → `self.mlp_out = nn.Linear(4*d_model, d_model)`,
+    replacing the single bare Linear. Taught: two stacked Linear layers with no activation between them
+    mathematically collapse into one Linear layer — the activation is the essential ingredient.
+  - **Biases removed from all `nn.Linear` layers** (`bias=False` on query/key/value/mlp_in/mlp_out/
+    output_head) to match Nanda et al.'s simplified architecture.
+  - **No LayerNorm added** — explicit decision, not an oversight, to preserve fidelity to Nanda et al.
+- **Switched to full-batch training in `src/train.py`** (matches Nanda et al.'s actual training
+  regime, and is the correct pairing for `weight_decay=1.0` — full-batch gives a consistent gradient
+  signal each step, so aggressive decay doesn't fight noise the way it does with mini-batches):
+  `get_dataloaders(97, batch_size=32)` → `get_dataloaders(97, batch_size=int(0.3 * 97 * 97))`
+  (`= 2822`, the actual train-split size, not the full 9409-pair dataset — Jonathan initially
+  proposed `number*number` directly, which was the full dataset size before the 30/70 split, corrected
+  to the train-split-only figure). `get_dataloaders`'s `batch_size` parameter default (`=32`) was also
+  removed (now a required positional/keyword arg, no silent fallback to mini-batch).
+  - **Bug found and fixed during editing:** an intermediate edit accidentally truncated the batch_size
+    expression to `int(0.3)` (`= 0`), which would have broken the DataLoader — caught before running,
+    fixed back to `int(0.3 * 97 * 97)`.
+- **Current final state of `src/models/transformer.py`:**
+  ```python
+  from torch import arange, nn
+  import torch
+
+
+  class Transformer(nn.Module):
+      def __init__(self, vocab_size, d_model):
+          super().__init__()
+          self.token_embedding = nn.Embedding(vocab_size, d_model)
+          self.position_embedding = nn.Embedding(3, d_model)
+
+          self.query = nn.Linear(d_model, d_model, bias=False)
+          self.key = nn.Linear(d_model, d_model, bias=False)
+          self.value = nn.Linear(d_model, d_model, bias=False)
+
+          self.mlp_in = nn.Linear(d_model, 4 * d_model, bias=False)
+          self.mlp_activation = nn.ReLU()
+          self.mlp_out = nn.Linear(4 * d_model, d_model, bias=False)
+
+          self.output_head = nn.Linear(d_model, vocab_size, bias=False)
+
+      def forward(self, x):
+          token_vectors = self.token_embedding(x)
+          position_vectors = self.position_embedding(arange(x.size(1)))
+          combined_vector = token_vectors + position_vectors
+          query_vector = self.query(combined_vector)
+          key_vector = self.key(combined_vector)
+          value_vector = self.value(combined_vector)
+
+          scores = torch.matmul(query_vector, key_vector.transpose(-2, -1)) / torch.sqrt(torch.tensor(query_vector.size(-1), dtype=torch.float32))
+          attention_weights = torch.softmax(scores, dim=-1)
+          attended_values = combined_vector + torch.matmul(attention_weights, value_vector)
+          mlp_output = attended_values + self.mlp_out(self.mlp_activation(self.mlp_in(attended_values)))
+
+          logits = self.output_head(mlp_output)
+
+          return logits
+
+
+  if __name__ == "__main__":
+      model = Transformer(vocab_size=98, d_model=128)
+
+      x = torch.eye(2, 3, dtype=torch.long)
+      model.forward(x)
+  ```
+- **Current final state of `src/train.py`:**
+  ```python
+  from torch import nn
+  from torch.optim import AdamW
+
+  from data.modular_arithmetic import get_dataloaders
+  from models.transformer import Transformer
+
+  data_loader = get_dataloaders(97, batch_size=int(0.3 * 97 * 97))
+  model = Transformer(vocab_size=98, d_model=128)
+  optimizer = AdamW(model.parameters(), lr=1e-3, weight_decay=1.0)
+
+  print("Optimizer:", optimizer)
+  cross_entropy_loss = nn.CrossEntropyLoss()
+
+  for epoch in range(5000):
+      total_correct = 0
+      total_samples = 0
+      for x, y in data_loader[0]:
+          logit = model.forward(x)
+          equal_sign_logit = logit[:, 2, :]
+
+          loss = cross_entropy_loss(equal_sign_logit, y)
+
+          optimizer.zero_grad()
+          loss.backward()
+          optimizer.step()
+
+          predicted = equal_sign_logit.argmax(dim=1)
+          total_correct += (predicted == y).sum().item()
+          total_samples += len(y)
+
+      test_total_correct = 0
+      test_total_samples = 0
+
+      for x_test, y_test in data_loader[1]:
+          logit_test = model.forward(x_test)
+          equal_sign_logit_test = logit_test[:, 2, :]
+          predicted_test = equal_sign_logit_test.argmax(dim=1)
+          test_total_correct += (predicted_test == y_test).sum().item()
+          test_total_samples += len(y_test)
+
+      print(f"Epoch {epoch + 1}: Loss = {loss.item()}, Accuracy = {total_correct / total_samples}")
+      print(f"Test Accuracy = {test_total_correct / test_total_samples}")
+  ```
+- **Not yet done, carried forward:**
+  1. **This exact configuration has not been run yet** — full-batch + AdamW(lr=1e-3, wd=1.0) +
+     Nanda-aligned architecture is the current best attempt at reproducing the grokking curve, but no
+     results observed yet. **This is the immediate next action once the user runs it.**
+  2. MPS device usage still not verified (model/tensors still on CPU/default device) — Gantt Phase 1
+     item #2, unresolved across multiple sessions now.
+  3. `src/data/modular_arithmetic.py`'s `get_dataloaders` default `batch_size=32` was removed (no
+     default now) — any other future caller must pass `batch_size` explicitly. Only current caller
+     (`train.py`) already does.
+  4. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) — still
+     pending, unrelated to code track.
+  5. `.ipynb` mirror files (`src/train.ipynb`, `src/models/transformer.ipynb`,
+     `src/data/modular_arithmetic.ipynb`) appeared as untracked — not discussed this session, noting
+     their existence for the record.
+
+### Still Open / Next Steps (updated — July 10, 2026, end of session)
+
+1. **Immediate next action:** run `src/train.py` with the current full-batch + AdamW(wd=1.0) +
+   Nanda-aligned architecture, observe whether train accuracy rises toward ~100% and whether test
+   accuracy eventually catches up (the actual grok). This is the most complete/faithful attempt so far.
+2. If train accuracy still fails to rise: next suspects are learning rate schedule (Nanda et al. use a
+   linear warmup), or number of epochs (grokking can take many thousands to tens of thousands of
+   steps — with full-batch, 5000 epochs = 5000 steps total, much less than mini-batch's step count at
+   the same epoch count, so may need epoch count increased further).
+3. Verify/confirm MPS device usage — model and tensors should be moved to `mps` device (Gantt Phase 1
+   item #2, still not verified across several sessions).
+4. Run and confirm grokking curve (**M1 gate**, Gantt Phase 1 item #3) — blocked on #1's result.
+5. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) — still
+   pending, unrelated to code track.
+
+---
+
 ## Tools & Preferences
 
 | Tool | Preference |

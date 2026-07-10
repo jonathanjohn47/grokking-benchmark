@@ -15,8 +15,8 @@
     "semantic_hash": ""
   },
   "src/train.py": {
-    "mtime": 1783598236.7977605,
-    "ast_hash": "f87eb8d23a9e62eb74d8b5a69fcb9027",
+    "mtime": 1783638847.8080137,
+    "ast_hash": "ce113ab0a57392ccc5701cfdcbfe297d",
     "semantic_hash": ""
   },
   "requirements.txt": {
@@ -50,8 +50,8 @@
     "semantic_hash": ""
   },
   "src/project_compilation.md": {
-    "mtime": 1783591232.3139389,
-    "ast_hash": "4d93b877b1ce51f141c27f96b14cf3e6",
+    "mtime": 1783638200.3105266,
+    "ast_hash": "d052a7ba74d28131be69674e29ed08fa",
     "semantic_hash": ""
   },
   ".claude/settings.local.json": {
@@ -59,9 +59,24 @@
     "ast_hash": "cca58af8ba28eb68891a62516f3d9da0",
     "semantic_hash": ""
   },
-  "images/image.png": {
+  "images/initial_loss_ln98_explanation.png": {
+    "mtime": 1783636622.9746258,
+    "ast_hash": "28559319fdcff5bbf8c2161328decb49",
+    "semantic_hash": ""
+  },
+  "images/pytorch_training_loop_explained.png": {
+    "mtime": 1783638262.4488795,
+    "ast_hash": "caea885732c8e8f32cd3f8d93db10102",
+    "semantic_hash": ""
+  },
+  "images/transformer_forward_pass_pipeline.png": {
     "mtime": 1783596518.4676964,
     "ast_hash": "627474b6fff39285eba0b572d0f3a81f",
+    "semantic_hash": ""
+  },
+  "images/what_is_a_logit.png": {
+    "mtime": 1783638244.1153793,
+    "ast_hash": "587b26f5d14043ae78114c9031d075b9",
     "semantic_hash": ""
   }
 }
