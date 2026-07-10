@@ -1,12 +1,17 @@
 import matplotlib.pyplot as plt
+import torch
 from torch import nn
 from torch.optim import AdamW
 
 from data.modular_arithmetic import get_dataloaders
 from models.transformer import Transformer
+from predictors.l2_norm import compute_l2_norm
+
+device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+print("Device:", device)
 
 data_loader = get_dataloaders(97, batch_size=int(0.3 * 97 * 97))
-model = Transformer(vocab_size=98, d_model=128)
+model = Transformer(vocab_size=98, d_model=128).to(device)
 optimizer = AdamW(model.parameters(), lr=1e-3, weight_decay=1.0)
 
 print("Optimizer:", optimizer)
@@ -16,11 +21,13 @@ num_epochs = 20000
 train_acc_history = []
 test_acc_history = []
 loss_history = []
+l2_norm_history = []
 
 for epoch in range(num_epochs):
     total_correct = 0
     total_samples = 0
     for x, y in data_loader[0]:
+        x, y = x.to(device), y.to(device)
         logit = model.forward(x)
         equal_sign_logit = logit[:, 2, :]
 
@@ -38,6 +45,7 @@ for epoch in range(num_epochs):
     test_total_samples = 0
         
     for x_test, y_test in data_loader[1]:
+        x_test, y_test = x_test.to(device), y_test.to(device)
         logit_test = model.forward(x_test)
         equal_sign_logit_test = logit_test[:, 2, :]
         predicted_test = equal_sign_logit_test.argmax(dim=1)
@@ -47,9 +55,12 @@ for epoch in range(num_epochs):
     train_acc_history.append(total_correct / total_samples)
     test_acc_history.append(test_total_correct / test_total_samples)
     loss_history.append(loss.item())
-
     if (epoch + 1) % 100 == 0:
         print(f"Epoch {epoch + 1}: Loss = {loss_history[-1]}, Train Acc = {train_acc_history[-1]}, Test Acc = {test_acc_history[-1]}")
+
+    
+    l2_norm = compute_l2_norm(model)
+    l2_norm_history.append(l2_norm)
 
 plt.figure(figsize=(8, 5))
 plt.plot(range(1, num_epochs + 1), train_acc_history, label="Train Accuracy")
@@ -60,4 +71,13 @@ plt.ylabel("Accuracy")
 plt.title("Grokking Curve")
 plt.legend()
 plt.savefig("grokking_curve.png")
+plt.figure(figsize=(8, 5))
+plt.plot(range(1, num_epochs + 1), l2_norm_history, label="L2 Norm")
+plt.xscale("log")
+plt.xlabel("Epoch (log scale)")
+plt.ylabel("L2 Norm")
+plt.title("Weight Norm Over Training")
+plt.legend()
+plt.savefig("l2_norm_curve.png")
+
 plt.show()

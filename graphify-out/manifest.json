@@ -15,8 +15,8 @@
     "semantic_hash": ""
   },
   "src/train.py": {
-    "mtime": 1783644218.2847843,
-    "ast_hash": "a74869b7646ac6d276c26ad7bd65f112",
+    "mtime": 1783645264.9493058,
+    "ast_hash": "e96d9540368f556ec037017c120adff2",
     "semantic_hash": ""
   },
   "requirements.txt": {
@@ -77,6 +77,16 @@
   "images/what_is_a_logit.png": {
     "mtime": 1783638244.1153793,
     "ast_hash": "587b26f5d14043ae78114c9031d075b9",
+    "semantic_hash": ""
+  },
+  "Grokking Curve.png": {
+    "mtime": 1783647559.6319885,
+    "ast_hash": "60cfb62bdeab3af58ddffaeef41d99f7",
+    "semantic_hash": ""
+  },
+  "grokking_curve.png": {
+    "mtime": 1783647484.1398838,
+    "ast_hash": "60cfb62bdeab3af58ddffaeef41d99f7",
     "semantic_hash": ""
   }
 }

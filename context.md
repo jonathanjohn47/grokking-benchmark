@@ -1465,6 +1465,94 @@
 
 ---
 
+## Session Summary — July 10, 2026 (L2 Norm predictor built, MPS device verified, Phase 1 closed)
+
+- **`src/predictors/l2_norm.py` created** (new `src/predictors/` package, first predictor in the
+  9-predictor evaluation order). Scaffolded via a small one-off root-level script
+  `generate_file.py` (same pattern as the earlier `scaffold.py`), which just creates the file if it
+  doesn't already exist.
+  - `compute_l2_norm(model)` implemented (Jonathan wrote it, Claude reviewed 3 attempts):
+    1. First attempt took a single `tensor` and used `dim=-1` — wrong shape (per-row norm, not
+       whole-model norm) and wrong argument type (needed `model`, not one tensor).
+    2. Second attempt: correct accumulator pattern — loop over `model.parameters()`, accumulate
+       `(param ** 2).sum().item()` into `squared_sum`, single `** 0.5` at the end. Same
+       reset-before/accumulate-inside/finalize-after pattern already used for train/test accuracy in
+       `train.py`. Parameter still misleadingly named `tensor` though it's a model.
+    3. Third attempt: renamed parameter `tensor` → `model`. **Correct and final.**
+  - Current state:
+    ```python
+    def compute_l2_norm(model):
+        squared_sum = 0.0
+        for param in model.parameters():
+            squared_sum += (param ** 2).sum().item()
+        l2_norm = squared_sum ** 0.5
+        return l2_norm
+    ```
+- **`src/train.py` extended to track L2 norm over training:** `l2_norm_history = []` initialized
+  alongside the existing three histories (`train_acc_history`, `test_acc_history`, `loss_history`),
+  `compute_l2_norm(model)` called and appended once per epoch (outside the `if (epoch+1) % 100 == 0`
+  print block, so it runs every epoch, not just print epochs — Jonathan initially had this nested
+  under an `if epoch == 0: ... else: ...` branch and had to be told to simplify to match the existing
+  pattern: init once before the loop, plain `.append()` every epoch).
+- **Second plot added:** `l2_norm_curve.png` — L2 norm vs. epoch on the same log-x scale as the
+  grokking curve, saved via a second `plt.figure()` + `plt.savefig()` block before the final
+  `plt.show()`.
+- **Full 20000-epoch run observed (CPU, pre-MPS):** grokking curve reproduced again (train acc → 1.0
+  by ~epoch 800-1000, test acc flat near 0 until ~epoch 2000, sharp climb to ~1.0 by ~epoch 6500,
+  this run reached exact `Test Acc = 1.0` — even cleaner than the M1 run's 99.8% plateau). L2 norm
+  curve: smooth monotonic decay from ~115 (epoch 1) to ~38 (epoch 20000), with a small
+  dip-then-bump wobble (~63→66) around epoch 2000-4000 — right before/during the steep test-accuracy
+  climb. Consistent with the L2-norm-predictor hypothesis (norm shrinks ahead of/during the grok
+  transition), though not yet a formal "lead time" measurement — that requires an actual detection
+  rule (threshold on rate-of-change), flagged as the next real predictor task, not done yet.
+- **False alarm investigated and resolved:** `grokking_curve.png` appeared missing/stale after a run
+  (mtime not matching the new `l2_norm_curve.png`). Root cause was **not** a code bug — Jonathan had
+  accidentally deleted the file after the run and later restored it from trash (confirmed correct
+  mtime matching the same run once restored). A `python3 -c` isolated test with the `Agg` backend
+  confirmed the two-`plt.figure()`/two-`savefig()` pattern itself is correct and not fragile; the
+  earlier suggestion to switch to explicit `fig, ax = plt.subplots()` handles was **not applied** —
+  not needed, `plt.X` global-state calls work fine as originally written.
+- **MPS device support added and verified** (direct implementation by Claude, per Jonathan's explicit
+  request — "not a structural/conceptual change"):
+  - `src/train.py`: `device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")`,
+    `model = Transformer(...).to(device)`, and every batch tensor (`x`/`y` in the train loop,
+    `x_test`/`y_test` in the test loop) moved via `.to(device)` before use.
+  - **Real bug found via smoke test, fixed in `src/models/transformer.py`:** `forward()`'s
+    `arange(x.size(1))` created its position-index tensor on CPU by default even when the model's
+    embeddings were on `mps` — device mismatch (`RuntimeError: Placeholder storage has not been
+    allocated on MPS device!`). Fixed: `arange(x.size(1), device=x.device)`.
+  - **Verified via 2-epoch smoke test** (throwaway `num_epochs` override, run headlessly), then a
+    **full 20000-epoch run on MPS**, confirmed same grokking curve shape (train→1.0 ~epoch 1000, test
+    lag then climb ~epoch 3000-6000) and same L2 norm decay/wobble pattern as the CPU runs — MPS
+    pipeline is now genuinely exercised, not just present in code.
+- **Gantt Phase 1 (`Thesis Gantt - Grokking Predictors Benchmark - Gantt.csv`) is now FULLY CLOSED:**
+  all 3 tasks done — (1) Git repo + env setup, (2) Transformer + MPS pipeline (now verified, not just
+  architecturally present), (3) Reproduce Nanda grokking GATE (closed in the prior session). Phase 1
+  had been sitting at ~2.5/3 (MPS unverified) since the M1 gate session; that gap is now closed.
+- **Draft email to Prof. Rashid prepared** (not yet sent — no email tool authorized this session,
+  Jonathan must send manually) reporting M1 gate closure: architecture/training summary, grokking
+  result, plot attachment (`grokking_curve.png`), and next step (Phase 3, L2 Norm predictor). The
+  previously pending "reply to Prof. Rashid's two questions" item (previous thesis topic + Jammu
+  clarification) was explicitly resolved by Jonathan outside this session ("I have dealt with it") —
+  **dropped from open items, do not resurface.**
+
+### Still Open / Next Steps (updated — July 10, 2026, Phase 1 closed)
+
+1. **Immediate next action:** send the drafted email to Prof. Rashid (M1 gate closure report) — draft
+   exists in this session's conversation, not yet sent.
+2. Continue L2 Norm predictor work: define an actual **detection rule** (e.g. threshold on the norm's
+   epoch-over-epoch rate of decline) and measure **lead time** (epochs between the rule firing and
+   the real test-accuracy jump) — this is what turns the norm curve into an actual "predictor," not
+   just an observed correlation. Ties directly to the later Gantt Phase 4 deliverable ("Leaderboard:
+   AUC + Lead Time").
+3. Once L2 Norm predictor is functionally complete: move to **Dropout** (next in the 9-predictor
+   evaluation order).
+4. (Optional, not blocking) investigate the ~99.8%-not-100% test accuracy plateau seen in the original
+   M1 run (this session's rerun reached exact 100%, so likely just run-to-run variance, not
+   investigated further).
+
+---
+
 ## Tools & Preferences
 
 | Tool | Preference |

@@ -21,7 +21,7 @@ class Transformer(nn.Module):
 
     def forward(self, x):
         token_vectors = self.token_embedding(x)
-        position_vectors = self.position_embedding(arange(x.size(1)))
+        position_vectors = self.position_embedding(arange(x.size(1), device=x.device))
         combined_vector = token_vectors + position_vectors
         query_vector = self.query(combined_vector)
         key_vector = self.key(combined_vector)
