@@ -1553,6 +1553,65 @@
 
 ---
 
+## Session Summary — August 1, 2026 (ipynb ↔ py sync + markdown explanations, Claude direct implementation)
+
+- **User request (explicit direct-implementation authorization):** "First check that every ipynb in
+  the project exactly has the same code as its .py counterpart. If not, modify the ipynb. Do not
+  touch any .py file." Then, in the same session: "Now before every code cell in every ipynb file,
+  give explanation of what that code snippet works. Heading, then a small paragraph explaining what
+  that code snippet does." Both were treated as explicit direct-implementation instructions (specific,
+  mechanical, addressed at Claude directly) rather than routed through an Opencode prompt.
+
+### What was found (ipynb vs. py drift)
+
+- `src/data/modular_arithmetic.ipynb` — one drift: `get_dataloaders` still had a stale
+  `batch_size=32` default; `.py` had already dropped the default (required arg).
+- `src/models/transformer.ipynb` — badly stale: missing `bias=False` on all linear layers, missing
+  residual connections, still had the old single-`nn.Linear` MLP instead of `mlp_in` → `ReLU` →
+  `mlp_out`, and missing `device=x.device` in the position-embedding `arange` call (pre-MPS-fix
+  version).
+- `src/train.ipynb` — very stale: old `Adam` optimizer instead of `AdamW(weight_decay=1.0)`, no
+  `device`/MPS handling, no `l2_norm` tracking/import, no plotting code, only 5000 epochs instead of
+  20000 (pre-M1-gate-closure version).
+
+### What was changed (`.ipynb` files only — no `.py` files touched, verified via `git status`)
+
+1. All three notebooks' code cells were rewritten (via a JSON-editing script, preserving existing
+   cell `id`s where the cell still corresponds) so their concatenated source is content-identical to
+   the current `.py` files (verified programmatically, ignoring only inter-cell blank-line spacing,
+   which is inherent to splitting one file into multiple cells).
+   - `train.ipynb` grew from 7 → 10 code cells to mirror `train.py`'s current structure (added cells
+     for device setup, L2 norm import/tracking already folded into existing cells, and the two
+     `plt.figure`/`savefig` plotting blocks).
+2. A markdown cell (`## Heading` + one explanatory paragraph) was inserted directly before every
+   single code cell in all three notebooks, explaining what that cell does. Final cell counts:
+   `modular_arithmetic.ipynb` 5→10 cells, `transformer.ipynb` 3→6 cells, `train.ipynb` 10→20 cells
+   (alternating markdown/code throughout).
+3. Verified: JSON validity of all three notebooks, code-content match against `.py` files (diff
+   showed only blank-line differences), and correct markdown-before-every-code-cell structure
+   (scripted check, all passed).
+
+### Files Modified
+
+- `src/data/modular_arithmetic.ipynb` — synced `get_dataloaders` signature + added 5 markdown
+  explanation cells.
+- `src/models/transformer.ipynb` — synced `Transformer` class (bias, residuals, MLP block, MPS
+  device fix) + added 3 markdown explanation cells.
+- `src/train.ipynb` — full rebuild to match `train.py` (device, AdamW, L2 norm tracking, plotting,
+  20000 epochs) + added 10 markdown explanation cells.
+- No `.py` files modified this session (explicit constraint honored).
+
+### Current Project State (unchanged from prior session, carried forward)
+
+- Phase 1 (setup, MPS pipeline, M1 gate) is closed.
+- **Immediate next action (still open, unchanged):** define an actual detection rule for the L2 Norm
+  predictor (threshold on the norm's rate of decline) and measure lead time against the real
+  test-accuracy jump — this is what was being discussed before the ipynb-sync request interrupted it.
+- Once L2 Norm predictor is functionally complete: move to **Dropout** (next in the 9-predictor
+  evaluation order).
+
+---
+
 ## Tools & Preferences
 
 | Tool | Preference |
