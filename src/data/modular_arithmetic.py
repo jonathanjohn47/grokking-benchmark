@@ -8,7 +8,6 @@ def generate_pairs(number):
             pairs.append((i, j, (i + j) % number))
     return pairs
 
-
 def get_dataloaders(number, batch_size):
     modular_arithmetic_dataset = ModularArithmeticDataset(number)
     train_size = int(0.3 * len(modular_arithmetic_dataset))

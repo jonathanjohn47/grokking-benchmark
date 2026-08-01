@@ -22,7 +22,7 @@ def should_skip(path: Path):
 
 
 def main():
-    project_path = "/Users/jonathanjohn/Documents/grokking-benchmark/src"
+    project_path = "C:\\Users\\jonat\\StudioProjects\\grokking-benchmark\\src"
 
     root = Path(project_path)
 
@@ -42,7 +42,8 @@ def main():
         print("No Python files found.")
         return
 
-    output_path = root / OUTPUT_FILE
+    # FIX: Use root.parent to save the file in the "grokking-benchmark" folder
+    output_path = root.parent / OUTPUT_FILE
 
     with output_path.open("w", encoding="utf-8") as out:
         out.write(f"# Python Project Compilation\n\n")

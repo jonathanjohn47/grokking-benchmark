@@ -1626,6 +1626,84 @@
 
 ---
 
+## Session Summary — August 2, 2026 (L2 Norm predictor: average-based threshold rule completed, mentoring session)
+
+- **Picked up from:** "immediate next action" was deciding + implementing a threshold rule (fixed vs.
+  average-based) on top of `compute_l2_norm_rate_of_decline`'s output. Jonathan chose **average-based**.
+- **Concept taught: why average-based over fixed threshold.** Rate-of-decline is naturally noisy
+  epoch-to-epoch; a fixed cutoff either false-fires on noise or misses real signal. A running average
+  baseline lets the rule fire only when the current rate spikes *relative to recent normal behavior*
+  (`current > multiplier * running_average`), which is the actual signal expected near the grok
+  transition.
+- **`detect_l2_norm_drop(rate_of_decline, multiplier=2)` built in `src/predictors/l2_norm.py`**
+  (Jonathan wrote all versions, Claude reviewed each pass — no direct implementation by Claude for
+  this function):
+  1. First attempt had a stray invalid character (`l̥`) accidentally on its own line — syntax error,
+     file wouldn't run. Fixed by removing it.
+  2. **Design bug found and fixed: running average originally included the current epoch's own value**
+     before comparing against it (self-dampening — a real spike would inflate its own baseline, making
+     it harder to detect). Explained via the anomaly-detection framing: the baseline ("what's normal")
+     must be built from *prior* epochs only, never the point being tested. Fixed via the standard
+     incremental-mean recursion (`running_average = (running_average * (i-1) + rate[i-1]) / i`),
+     verified correct for `i >= 1` — the average used at step `i` is exactly the mean of
+     `rate_of_decline[0 : i]`, excluding the current point.
+  3. **Edge case found and fixed: `i == 0` had no prior data**, so comparing against `running_average
+     = 0.0` meant the rule would almost always fire immediately (since rate-of-decline is usually
+     positive) — a guaranteed false positive at the very first epoch. Jonathan's first proposed fix
+     (`running_average = rate_of_decline[0]` at `i==0`, i.e. compare the value to itself) was reviewed
+     and shown to be *incidentally* correct for positive values only (`rate[0] > multiplier * rate[0]`
+     is false when `rate[0] > 0` and `multiplier > 1`) but **wrong for negative values**
+     (`-5 > 2 * -5` → `-5 > -10` → `True`, a false fire). Concept taught: `rate_of_decline` **can be
+     negative** — it's `previous_norm - current_norm`, and L2 norm is not monotonically decreasing
+     during training (`AdamW` weight decay pulls it down, but each gradient step can push it back up;
+     the two forces create a noisy/wobbly curve, not a clean descent — ties directly to the
+     "dip-then-bump wobble (~63→66) around epoch 2000-4000" already observed in the July 10 L2 norm
+     curve run). Final fix: `i == 0` now just `continue`s (no comparison at all when there's no prior
+     data to build a baseline from) — correct regardless of sign.
+  - **Current verified state of `detect_l2_norm_drop`:**
+    ```python
+    def detect_l2_norm_drop(rate_of_decline, multiplier=2):
+        if rate_of_decline is None or len(rate_of_decline) == 0:
+            return None
+
+        running_average = 0.0
+        for i in range(len(rate_of_decline)):
+            if i == 0:
+                continue
+            elif i > 0:
+                running_average = (running_average * (i - 1) + rate_of_decline[i - 1]) / i
+            if rate_of_decline[i] > multiplier * running_average:
+                return i
+        return None
+    ```
+  - **Function is now logically complete and correct** (baseline excludes current point, `i == 0`
+    handled safely, negative-rate case handled safely).
+  - **Minor style nitpick flagged, not applied (not urgent):** `elif i > 0` is redundant after an
+    `if i == 0: continue` — a plain `else:` would be equivalent and cleaner. Not changed this session.
+  - Note: `src/predictors/l2_norm.py` also still has an earlier `detect_l2_norm_signal_epoch`
+    function (whole-history `mean + 2*std` threshold, non-causal — uses future data, returns *all*
+    signal-epoch indices as an array) from a prior session. Both functions currently coexist; not
+    reconciled or deduplicated this session.
+- **Session ended here** — Jonathan took a break right after the function was confirmed correct,
+  before wiring it into `train.py`.
+
+### Still Open / Next Steps (updated — August 2, 2026)
+
+1. **Immediate next action:** call `detect_l2_norm_drop` on the real `l2_norm_history` already tracked
+   in `src/train.py`, get the fire epoch, and compare it against the real test-accuracy jump epoch to
+   measure **lead time** (epochs between the rule firing and the actual grok transition). This is what
+   makes L2 Norm a functionally complete "predictor," not just a detection function in isolation.
+2. Once lead time is measured and L2 Norm predictor is functionally complete: move to **Dropout**
+   (next in the 9-predictor evaluation order per `CLAUDE.md`).
+3. (Optional, not urgent) simplify `elif i > 0` → `else` in `detect_l2_norm_drop`.
+4. (Optional, not urgent) decide whether to keep or remove/reconcile the older
+   `detect_l2_norm_signal_epoch` function now that `detect_l2_norm_drop` exists.
+5. (Optional, not blocking, carried forward) verify/confirm MPS device usage end-to-end — already
+   done and verified per July 10 session, no longer actually open, kept here only if re-verification
+   is ever needed.
+
+---
+
 ## Tools & Preferences
 
 | Tool | Preference |
