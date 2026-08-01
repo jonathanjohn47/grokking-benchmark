@@ -1612,6 +1612,20 @@
 
 ---
 
+## Session Summary — August 1, 2026 (L2 Norm predictor: rate-of-decline function built)
+
+- Built `compute_l2_norm_rate_of_decline(l2_norm_history)` in `src/predictors/l2_norm.py` (mentoring
+  session, Jonathan wrote all versions, Claude reviewed). Final version: `np.diff(l2_norm_history) * -1`
+  (added `import numpy as np`), matching the `previous - current` convention. Intermediate versions
+  taught: raw two-epoch diff (too narrow), explicit `for` loop over full history (correct), then
+  `np.diff` as the inbuilt alternative.
+- **Still open / immediate next action:** decide + implement a threshold rule (fixed vs.
+  average-based) on the rate-of-decline output so it "fires" at a specific epoch, then measure lead
+  time vs. the real test-accuracy jump epoch. After that: move to **Dropout** predictor (next in the
+  9-predictor evaluation order).
+
+---
+
 ## Tools & Preferences
 
 | Tool | Preference |
