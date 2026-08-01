@@ -37,8 +37,8 @@ def detect_l2_norm_drop(rate_of_decline, multiplier=2):
     for i in range(len(rate_of_decline)):
         if i == 0:
             continue
-        elif i > 0:
+        else:
             running_average = (running_average * (i - 1) + rate_of_decline[i - 1]) / i
-        if rate_of_decline[i] > multiplier * running_average:
-            return i  
+            if rate_of_decline[i] > multiplier * running_average:
+                return i  
     return None

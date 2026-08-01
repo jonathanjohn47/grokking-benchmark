@@ -1687,6 +1687,34 @@
 - **Session ended here** — Jonathan took a break right after the function was confirmed correct,
   before wiring it into `train.py`.
 
+## Session Summary — August 2, 2026 (regression caught + fixed, style nitpick applied)
+
+- Jonathan suspected a bug in `detect_l2_norm_drop` and asked for a re-check. Found a regression from
+  the committed version: `i == 0` branch had been changed to `return None` instead of `continue` —
+  this made the function exit on the very first loop iteration every time, always returning `None`
+  regardless of the data. Explained the `return` vs. `continue` distinction (exits the whole function
+  vs. skips just the current iteration) and asked Jonathan to fix it back to `continue`. Fixed and
+  verified correct — matches the previously committed, reviewed-correct version.
+- Also applied the previously-flagged optional style nitpick: `elif i > 0:` simplified to `else:`
+  (redundant condition after `if i == 0: continue`), with the fire-check moved inside the `else` block.
+  Functionally identical to the committed version, just cleaner.
+- **Current final state of `detect_l2_norm_drop` in `src/predictors/l2_norm.py`:**
+  ```python
+  def detect_l2_norm_drop(rate_of_decline, multiplier=2):
+      if rate_of_decline is None or len(rate_of_decline) == 0:
+          return None
+
+      running_average = 0.0
+      for i in range(len(rate_of_decline)):
+          if i == 0:
+              continue
+          else:
+              running_average = (running_average * (i - 1) + rate_of_decline[i - 1]) / i
+              if rate_of_decline[i] > multiplier * running_average:
+                  return i
+      return None
+  ```
+
 ### Still Open / Next Steps (updated — August 2, 2026)
 
 1. **Immediate next action:** call `detect_l2_norm_drop` on the real `l2_norm_history` already tracked
