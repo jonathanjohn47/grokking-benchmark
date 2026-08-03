@@ -1732,6 +1732,28 @@
 
 ---
 
+## Session Summary — August 3, 2026 (Phase 2 reset: L2 Norm predictor deleted, starting fresh)
+
+- **User decision:** Jonathan felt conceptually lost on what Phase 2 was about and what the L2 Norm predictor code was doing. Decided to delete all Phase 2 work and start fresh with better conceptual understanding first.
+- **What was deleted:**
+  - `src/predictors/l2_norm.py` (contained `compute_l2_norm()`, `compute_l2_norm_rate_of_decline()`, `detect_l2_norm_drop()`)
+  - All L2 norm tracking from `src/train.py` (removed import, `l2_norm_history` list, compute calls, and plotting code)
+- **Current state:** `src/train.py` back to basics — just train/test accuracy tracking and grokking curve plot (no predictor code). `src/predictors/` folder likely empty or deleted.
+- **Next step:** Before writing any new predictor code, need to establish clear conceptual understanding of:
+  1. **What a grokking predictor is** (what does it predict, when, why)
+  2. **Why we need lead time measurement** (detection epoch vs. actual grok epoch)
+  3. **How L2 Norm specifically works as a predictor** (in plain language, with concrete numbers from the actual grokking curve we already have)
+- **Not yet done, carry forward:** Begin Phase 2 with a teaching/explanation session first, then implement from a place of understanding.
+
+### Still Open / Next Steps (updated — August 3, 2026)
+
+1. **Immediate next action:** establish clear conceptual understanding of Phase 2 before writing any predictor code. Start with: "What is a grokking predictor? What does L2 Norm predict, and why?"
+2. Once concept is solid: re-implement L2 Norm from scratch, starting from first principles (teach → measure → detect → report lead time).
+3. Move to **Dropout** (next in the 9-predictor evaluation order).
+4. (Unchanged, carried forward) Reply to Prof. Rashid's questions — already handled by Jonathan outside this session.
+
+---
+
 ## Tools & Preferences
 
 | Tool | Preference |
