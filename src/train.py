@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import torch
 from torch import nn
@@ -74,5 +76,5 @@ plt.ylabel("Accuracy")
 plt.title("Grokking Curve")
 plt.legend()
 plt.savefig("grokking_curve.png")
-plt.show()
+print("Plot saved to grokking_curve.png")
 
