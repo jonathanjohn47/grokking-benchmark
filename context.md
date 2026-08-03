@@ -1754,6 +1754,28 @@
 
 ---
 
+## Session Summary — August 4, 2026 (Phase 2 restart: L2 norm measurement setup)
+
+- **Started Phase 2 fresh** — Jonathan felt lost on concepts before, decided to restart from scratch.
+- **Conceptual groundwork established (mentoring):** what a grokking predictor is, why we need lead-time measurement, how L2 norm works as a signal (weight magnitudes decay, the decay accelerates before the grok).
+- **`compute_l2_norm(model)` built from scratch** (Jonathan wrote, Claude reviewed): flattens all parameters, concatenates, computes norm via `torch.norm()`.
+  - Bug caught and fixed: `model.parameters()` is an iterator, not a tensor — needs flattening/concatenation first.
+- **L2 norm tracking integrated into `src/train.py`:**
+  - `l2_norm_history` list initialized alongside accuracy/loss histories.
+  - `compute_l2_norm(model)` called and appended every epoch.
+  - L2 norm printed every 100 epochs alongside loss and accuracies.
+- **`src/models/transformer.py` minor cleanup:** attention scale calculation simplified from `torch.sqrt(torch.tensor(...))` to `** 0.5` (functionally identical, cleaner).
+- **Immediate next action (in progress):** run training and observe raw L2 norm values across epochs to understand what the decay pattern looks like, especially around the grok transition.
+
+### Still Open / Next Steps (updated — August 4, 2026)
+
+1. **In progress:** observe L2 norm output during 20000-epoch training run to see concrete decay pattern.
+2. After observation: build a detection rule (threshold on rate of decline) to identify when the signal fires.
+3. Measure lead time (detection epoch vs. actual test-accuracy jump epoch).
+4. Move to **Dropout** predictor (next in the 9-predictor evaluation order).
+
+---
+
 ## Tools & Preferences
 
 | Tool | Preference |

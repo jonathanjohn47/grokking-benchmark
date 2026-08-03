@@ -27,7 +27,7 @@ class Transformer(nn.Module):
         key_vector = self.key(combined_vector)
         value_vector = self.value(combined_vector)
 
-        scores = torch.matmul(query_vector, key_vector.transpose(-2, -1)) / torch.sqrt(torch.tensor(query_vector.size(-1), dtype=torch.float32))
+        scores = torch.matmul(query_vector, key_vector.transpose(-2, -1)) / (query_vector.size(-1) ** 0.5)
         attention_weights = torch.softmax(scores, dim=-1)
         attended_values = combined_vector + torch.matmul(attention_weights, value_vector)
         mlp_output = attended_values + self.mlp_out(self.mlp_activation(self.mlp_in(attended_values)))

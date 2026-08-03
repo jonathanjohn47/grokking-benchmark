@@ -2,9 +2,15 @@ import matplotlib.pyplot as plt
 import torch
 from torch import nn
 from torch.optim import AdamW
+import numpy as np
 
 from data.modular_arithmetic import get_dataloaders
 from models.transformer import Transformer
+
+def compute_l2_norm(model):
+    all_params = torch.cat([p.flatten() for p in model.parameters()])
+    l2_norm = torch.norm(all_params).item()
+    return l2_norm
 
 device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 print("Device:", device)
@@ -20,6 +26,7 @@ num_epochs = 20000
 train_acc_history = []
 test_acc_history = []
 loss_history = []
+l2_norm_history = []
 
 for epoch in range(num_epochs):
     total_correct = 0
@@ -53,8 +60,10 @@ for epoch in range(num_epochs):
     train_acc_history.append(total_correct / total_samples)
     test_acc_history.append(test_total_correct / test_total_samples)
     loss_history.append(loss.item())
+    l2_norm_history.append(compute_l2_norm(model))
     if (epoch + 1) % 100 == 0:
-        print(f"Epoch {epoch + 1}: Loss = {loss_history[-1]}, Train Acc = {train_acc_history[-1]}, Test Acc = {test_acc_history[-1]}")
+        compute_l2 = l2_norm_history[-1]
+        print(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}, Train Accuracy: {train_acc_history[-1]:.4f}, Test Accuracy: {test_acc_history[-1]:.4f}, L2 Norm: {compute_l2:.4f}")
 
 plt.figure(figsize=(8, 5))
 plt.plot(range(1, num_epochs + 1), train_acc_history, label="Train Accuracy")
@@ -66,3 +75,4 @@ plt.title("Grokking Curve")
 plt.legend()
 plt.savefig("grokking_curve.png")
 plt.show()
+
