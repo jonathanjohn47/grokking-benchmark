@@ -84,7 +84,7 @@ class Transformer(nn.Module):
         key_vector = self.key(combined_vector)
         value_vector = self.value(combined_vector)
 
-        scores = torch.matmul(query_vector, key_vector.transpose(-2, -1)) / torch.sqrt(torch.tensor(query_vector.size(-1), dtype=torch.float32))
+        scores = torch.matmul(query_vector, key_vector.transpose(-2, -1)) / (query_vector.size(-1) ** 0.5)
         attention_weights = torch.softmax(scores, dim=-1)
         attended_values = combined_vector + torch.matmul(attention_weights, value_vector)
         mlp_output = attended_values + self.mlp_out(self.mlp_activation(self.mlp_in(attended_values)))
@@ -104,53 +104,71 @@ if __name__ == "__main__":
 
 ---
 
-## predictors\l2_norm.py
+## plot_results.py
 
 ```python
-"""
-L2 Norm Predictor
-
-This module implements the L2 norm predictor.
-"""
 import numpy as np
-# Add your implementation here
-def compute_l2_norm(model):
-    squared_sum = 0.0
-    for param in model.parameters():
-        squared_sum += (param ** 2).sum().item()
-    l2_norm = squared_sum ** 0.5
-    return l2_norm
+import matplotlib.pyplot as plt
+import os
 
+# Look for files in project root (parent of src/)
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+os.chdir(project_root)
 
-def compute_l2_norm_rate_of_decline(l2_norm_history):
-    if len(l2_norm_history) < 2:
-        return None  
+# Load saved training data
+train_acc = np.load("train_acc_history.npy")
+test_acc = np.load("test_acc_history.npy")
+loss = np.load("loss_history.npy")
+l2_norm = np.load("l2_norm_history.npy")
 
-    return np.diff(l2_norm_history) * -1
+num_epochs = len(train_acc)
 
+# Create figure with subplots
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
 
-def detect_l2_norm_signal_epoch(rate_of_decline):
-    if rate_of_decline is None or len(rate_of_decline) == 0:
-        return None  
+# Plot 1: Grokking curve (Accuracy)
+axes[0, 0].plot(range(1, num_epochs + 1), train_acc, label="Train Accuracy", linewidth=2)
+axes[0, 0].plot(range(1, num_epochs + 1), test_acc, label="Test Accuracy", linewidth=2)
+axes[0, 0].set_xscale("log")
+axes[0, 0].set_xlabel("Epoch (log scale)")
+axes[0, 0].set_ylabel("Accuracy")
+axes[0, 0].set_title("Grokking Curve: Accuracy")
+axes[0, 0].legend()
+axes[0, 0].grid(True, alpha=0.3)
 
-    threshold = np.mean(rate_of_decline) + 2 * np.std(rate_of_decline)
-    signal_epochs = np.where(rate_of_decline > threshold)[0]
-    return signal_epochs
+# Plot 2: Loss
+axes[0, 1].plot(range(1, num_epochs + 1), loss, color="red", linewidth=2)
+axes[0, 1].set_xscale("log")
+axes[0, 1].set_xlabel("Epoch (log scale)")
+axes[0, 1].set_ylabel("Loss")
+axes[0, 1].set_title("Training Loss")
+axes[0, 1].grid(True, alpha=0.3)
 
+# Plot 3: L2 Norm
+axes[1, 0].plot(range(1, num_epochs + 1), l2_norm, color="green", linewidth=2)
+axes[1, 0].set_xscale("log")
+axes[1, 0].set_xlabel("Epoch (log scale)")
+axes[1, 0].set_ylabel("L2 Norm")
+axes[1, 0].set_title("Model Weight L2 Norm")
+axes[1, 0].grid(True, alpha=0.3)
 
-def detect_l2_norm_drop(rate_of_decline, multiplier=2):
-    if rate_of_decline is None or len(rate_of_decline) == 0:
-        return None  
+# Plot 4: Train-Test Accuracy Gap
+gap = np.array(train_acc) - np.array(test_acc)
+axes[1, 1].plot(range(1, num_epochs + 1), gap, color="purple", linewidth=2)
+axes[1, 1].set_xscale("log")
+axes[1, 1].set_xlabel("Epoch (log scale)")
+axes[1, 1].set_ylabel("Train Acc - Test Acc")
+axes[1, 1].set_title("Generalization Gap")
+axes[1, 1].grid(True, alpha=0.3)
 
-    running_average = 0.0
-    for i in range(len(rate_of_decline)):
-        if i == 0:
-            continue
-        elif i > 0:
-            running_average = (running_average * (i - 1) + rate_of_decline[i - 1]) / i
-        if rate_of_decline[i] > multiplier * running_average:
-            return i  
-    return None
+plt.tight_layout()
+plt.savefig("grokking_analysis.png", dpi=150, bbox_inches="tight")
+print("✓ Plot saved to grokking_analysis.png")
+print(f"  - Epochs trained: {num_epochs}")
+print(f"  - Final train accuracy: {train_acc[-1]:.4f}")
+print(f"  - Final test accuracy: {test_acc[-1]:.4f}")
+print(f"  - Final loss: {loss[-1]:.6f}")
+print(f"  - Final L2 norm: {l2_norm[-1]:.4f}")
 ```
 
 ---
@@ -158,14 +176,23 @@ def detect_l2_norm_drop(rate_of_decline, multiplier=2):
 ## train.py
 
 ```python
-import matplotlib.pyplot as plt
 import torch
 from torch import nn
 from torch.optim import AdamW
+import numpy as np
+import os
 
 from data.modular_arithmetic import get_dataloaders
 from models.transformer import Transformer
-from predictors.l2_norm import compute_l2_norm
+
+# Save results to project root
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+os.chdir(project_root)
+
+def compute_l2_norm(model):
+    all_params = torch.cat([p.flatten() for p in model.parameters()])
+    l2_norm = torch.norm(all_params).item()
+    return l2_norm
 
 device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 print("Device:", device)
@@ -200,10 +227,10 @@ for epoch in range(num_epochs):
         predicted = equal_sign_logit.argmax(dim=1)
         total_correct += (predicted == y).sum().item()
         total_samples += len(y)
-        
+
     test_total_correct = 0
     test_total_samples = 0
-        
+
     for x_test, y_test in data_loader[1]:
         x_test, y_test = x_test.to(device), y_test.to(device)
         logit_test = model.forward(x_test)
@@ -215,32 +242,20 @@ for epoch in range(num_epochs):
     train_acc_history.append(total_correct / total_samples)
     test_acc_history.append(test_total_correct / test_total_samples)
     loss_history.append(loss.item())
+    l2_norm_history.append(compute_l2_norm(model))
     if (epoch + 1) % 100 == 0:
-        print(f"Epoch {epoch + 1}: Loss = {loss_history[-1]}, Train Acc = {train_acc_history[-1]}, Test Acc = {test_acc_history[-1]}")
+        compute_l2 = l2_norm_history[-1]
+        print(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}, Train Accuracy: {train_acc_history[-1]:.4f}, Test Accuracy: {test_acc_history[-1]:.4f}, L2 Norm: {compute_l2:.4f}")
 
-    
-    l2_norm = compute_l2_norm(model)
-    l2_norm_history.append(l2_norm)
-
-plt.figure(figsize=(8, 5))
-plt.plot(range(1, num_epochs + 1), train_acc_history, label="Train Accuracy")
-plt.plot(range(1, num_epochs + 1), test_acc_history, label="Test Accuracy")
-plt.xscale("log")
-plt.xlabel("Epoch (log scale)")
-plt.ylabel("Accuracy")
-plt.title("Grokking Curve")
-plt.legend()
-plt.savefig("grokking_curve.png")
-plt.figure(figsize=(8, 5))
-plt.plot(range(1, num_epochs + 1), l2_norm_history, label="L2 Norm")
-plt.xscale("log")
-plt.xlabel("Epoch (log scale)")
-plt.ylabel("L2 Norm")
-plt.title("Weight Norm Over Training")
-plt.legend()
-plt.savefig("l2_norm_curve.png")
-
-plt.show()
+np.save("train_acc_history.npy", train_acc_history)
+np.save("test_acc_history.npy", test_acc_history)
+np.save("loss_history.npy", loss_history)
+np.save("l2_norm_history.npy", l2_norm_history)
+print("Training data saved:")
+print("  - train_acc_history.npy")
+print("  - test_acc_history.npy")
+print("  - loss_history.npy")
+print("  - l2_norm_history.npy")
 ```
 
 ---
