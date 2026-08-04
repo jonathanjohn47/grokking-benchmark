@@ -1776,6 +1776,68 @@
 
 ---
 
+## Session Summary — August 4, 2026 (matplotlib Windows DLL fix, numpy-based data saving, separate plotting script)
+
+- **Problem encountered after 20000-epoch training run completed successfully:**
+  - Training finished with excellent results: `Train Accuracy: 1.0000, Test Accuracy: 1.0000, L2 Norm: 37.9642` (epoch 20000).
+  - Post-training plotting code crashed with `ImportError: DLL load failed while importing _backend_agg: An Application Control policy has blocked this file`.
+  - Root cause: Windows security policy (likely AppLocker or Windows Defender SmartScreen) blocking matplotlib's compiled C extension DLL (`_backend_agg.so`), preventing any matplotlib backend from loading.
+
+- **First attempted fix (did not work):**
+  - Added `matplotlib.use('Agg')` before pyplot import and removed `plt.show()`.
+  - Expected: Agg backend would bypass GUI DLL issues.
+  - Actual: Even Agg backend's own compiled DLL was blocked by the security policy — still crashed.
+
+- **Second attempted fix (did not work):**
+  - Tried switching to `matplotlib.use('pdf')` (pure-Python backend).
+  - Still failed — matplotlib was still trying to load the blocked DLL during backend initialization.
+
+- **Final solution (working):**
+  - Removed matplotlib entirely from `src/train.py`.
+  - Replaced plotting code with numpy array saving:
+    ```python
+    np.save("train_acc_history.npy", train_acc_history)
+    np.save("test_acc_history.npy", test_acc_history)
+    np.save("loss_history.npy", loss_history)
+    np.save("l2_norm_history.npy", l2_norm_history)
+    ```
+  - Created new standalone script `src/plot_results.py` that loads `.npy` files and plots them.
+  - `plot_results.py` generates a 4-panel figure:
+    1. Grokking curve (train vs. test accuracy, log-x axis)
+    2. Training loss (log-x axis)
+    3. Model weight L2 norm (log-x axis)
+    4. Generalization gap (train − test accuracy, log-x axis)
+  - **Separation of concerns:** training loop (no matplotlib) runs cleanly, plotting (matplotlib) runs separately after training completes, avoiding the DLL conflict.
+
+- **File path fixes applied to both scripts:**
+  - Both `src/train.py` and `src/plot_results.py` now explicitly change to project root directory before saving/loading `.npy` files.
+  - `train.py`: adds `import os` and `os.chdir(project_root)` after computing project root from script location.
+  - `plot_results.py`: same approach, finds project root and changes directory before attempting to load files.
+  - **Result:** consistent file I/O behavior regardless of where the Python scripts are invoked from.
+
+- **Commits made this session:**
+  1. "Fix matplotlib DLL blocking on Windows: use Agg backend and remove plt.show()" — first attempt fix (partial, incomplete).
+  2. "Remove matplotlib plotting, save training data to numpy arrays" — switched to numpy-based approach.
+  3. "Add plot_results.py: separate plotting script for training data" — created standalone plotter.
+  4. "Fix file paths: save/load .npy files from project root" — corrected path handling for reproducible behavior.
+
+- **Verified working state:**
+  - 20000-epoch training run completed successfully (2026-08-04, visible in conversation).
+  - Post-training `.npy` files saved to project root without DLL errors.
+  - `plot_results.py` can be run anytime after training to generate visualizations.
+
+- **Not yet done / carry forward:**
+  - Actual run of `plot_results.py` to verify the 4-panel figure renders correctly (file created, no test run yet this session).
+  - Continue Phase 2 L2 Norm predictor work with the now-working training/data pipeline.
+
+### Still Open / Next Steps (updated — August 4, 2026, end of session)
+
+1. **Verify `plot_results.py` works:** run the new plotting script to confirm it loads .npy files and generates grokking_analysis.png correctly.
+2. **Resume Phase 2 L2 Norm predictor work:** observe L2 norm decay pattern from the 20000-epoch run, build detection rule (threshold on rate of decline), measure lead time vs. actual grok transition.
+3. Move to **Dropout** predictor (next in the 9-predictor evaluation order).
+
+---
+
 ## Tools & Preferences
 
 | Tool | Preference |
@@ -1783,3 +1845,4 @@
 | Spreadsheets | Google Sheets (never Excel) |
 | Prompts | Opencode prompt format by default |
 | Implementation | Only on explicit request |
+| Plotting | Separate script from training (avoid matplotlib DLL conflicts on Windows) |
