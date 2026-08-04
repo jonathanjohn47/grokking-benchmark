@@ -1,5 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import os
+
+# Look for files in project root (parent of src/)
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+os.chdir(project_root)
 
 # Load saved training data
 train_acc = np.load("train_acc_history.npy")

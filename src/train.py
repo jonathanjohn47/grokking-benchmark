@@ -2,9 +2,14 @@ import torch
 from torch import nn
 from torch.optim import AdamW
 import numpy as np
+import os
 
 from data.modular_arithmetic import get_dataloaders
 from models.transformer import Transformer
+
+# Save results to project root
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+os.chdir(project_root)
 
 def compute_l2_norm(model):
     all_params = torch.cat([p.flatten() for p in model.parameters()])
