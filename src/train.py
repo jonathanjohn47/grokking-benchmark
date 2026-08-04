@@ -1,6 +1,3 @@
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
 import torch
 from torch import nn
 from torch.optim import AdamW
@@ -67,14 +64,13 @@ for epoch in range(num_epochs):
         compute_l2 = l2_norm_history[-1]
         print(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}, Train Accuracy: {train_acc_history[-1]:.4f}, Test Accuracy: {test_acc_history[-1]:.4f}, L2 Norm: {compute_l2:.4f}")
 
-plt.figure(figsize=(8, 5))
-plt.plot(range(1, num_epochs + 1), train_acc_history, label="Train Accuracy")
-plt.plot(range(1, num_epochs + 1), test_acc_history, label="Test Accuracy")
-plt.xscale("log")
-plt.xlabel("Epoch (log scale)")
-plt.ylabel("Accuracy")
-plt.title("Grokking Curve")
-plt.legend()
-plt.savefig("grokking_curve.png")
-print("Plot saved to grokking_curve.png")
+np.save("train_acc_history.npy", train_acc_history)
+np.save("test_acc_history.npy", test_acc_history)
+np.save("loss_history.npy", loss_history)
+np.save("l2_norm_history.npy", l2_norm_history)
+print("Training data saved:")
+print("  - train_acc_history.npy")
+print("  - test_acc_history.npy")
+print("  - loss_history.npy")
+print("  - l2_norm_history.npy")
 
