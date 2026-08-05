@@ -12,6 +12,10 @@ test_acc = np.load("test_acc_history.npy")
 loss = np.load("loss_history.npy")
 l2_norm = np.load("l2_norm_history.npy")
 
+l2_norm_history = np.load("l2_norm_history.npy")
+print("First 20 L2 norms:", l2_norm_history[:20])
+print("Shape:", l2_norm_history.shape)
+
 num_epochs = len(train_acc)
 
 # Create figure with subplots

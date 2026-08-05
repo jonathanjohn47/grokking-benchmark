@@ -1832,9 +1832,60 @@
 
 ### Still Open / Next Steps (updated — August 4, 2026, end of session)
 
-1. **Verify `plot_results.py` works:** run the new plotting script to confirm it loads .npy files and generates grokking_analysis.png correctly.
+1. **Verify `plot_results.py` works:** run the new plotting script to confirm it loads .npy files and generates grokking_analysis.png correctly. ✓ DONE (user confirmed works)
 2. **Resume Phase 2 L2 Norm predictor work:** observe L2 norm decay pattern from the 20000-epoch run, build detection rule (threshold on rate of decline), measure lead time vs. actual grok transition.
 3. Move to **Dropout** predictor (next in the 9-predictor evaluation order).
+
+---
+
+## Session Summary — August 5, 2026 (L2 Norm predictor framework built, debugging detection logic)
+
+- **Phase 2 focus: L2 Norm predictor implementation** — user felt conceptually lost before (August 3 reset), restarted with clear understanding this session.
+- **Conceptual teaching (mentoring mode):**
+  - What L2 norm is: single number measuring combined magnitude of all model weights (`√(w₁² + w₂² + ... + wₙ²)`)
+  - Why it drops during training: `AdamW` with `weight_decay=1.0` actively shrinks weights as regularization
+  - Why it drops *faster* during grokking: model switches from memorization to generalization, uses simpler/smaller weights to describe the pattern
+  - Rate of decline: how much the L2 norm drops from one epoch to the next (e.g., norm 115.22 → 115.10 = drop of 0.12)
+  - Running average threshold rule: fire when current rate spikes above 2× the running average of prior rates (signal of unusual acceleration in weight shrinking)
+
+- **`src/predictors/l2_norm.py` created** with three functions:
+  1. **`compute_l2_norm(model)`** — flattens all model parameters, computes `torch.norm()`, returns single scalar. Uses `torch.cat()` and `torch.norm()` for clean pytorch approach.
+  2. **`compute_l2_norm_rate_of_decline(l2_norm_history)`** — takes list of L2 norms across epochs, returns `np.diff() * -1` to get positive decline rates (how much norm dropped each epoch). Output has N-1 elements for input of N epochs.
+  3. **`detect_l2_norm_drop(rate_of_decline, multiplier=2)`** — implements causal detector using running average (numpy-based):
+     - Builds cumulative sum of rates, then prior average (excludes current point): `prior_average[i] = sum(rate[0:i]) / i`
+     - Computes threshold: `threshold[i] = multiplier × prior_average[i]`
+     - Fires on first epoch where `rate[i] > threshold[i]`, returns epoch number (or `None`)
+     - **Bug fixes applied during development:**
+       - Edge case: epoch 0 has no prior data → filter out with `spike_indices > 0`
+       - Off-by-one in divisor: changed from `np.arange(1, N+1)` to `np.maximum(np.arange(N), 1)` to correctly divide by count of prior elements
+
+- **Integration into `src/train.py`:**
+  - Imported `compute_l2_norm_rate_of_decline`, `detect_l2_norm_drop` from predictors
+  - L2 norm tracking: `compute_l2_norm(model)` called every epoch, appended to `l2_norm_history`
+  - Post-training: compute rate of decline, detect spike, compare to test-accuracy jump epoch
+  - Lead time calculation: `grok_epoch - detection_epoch` (epochs between detection and actual generalization)
+  - **First 20000-epoch run:** detection epoch fired at 0 (edge case bug, now fixed)
+  - **Second 20000-epoch run:** no detection at all ("No detection" returned) — investigating
+
+- **Debug instrumentation added** to diagnose why detector isn't firing:
+  - Print rate of decline stats: min, max, mean, std
+  - Print all spike indices before filtering (to see if any spike detection happens at all)
+  - Print total spike count
+
+- **Hardware / GPU check (exploratory):**
+  - User has NVIDIA GeForce GTX 1650 with CUDA 11.1 installed
+  - `torch.cuda.is_available()` returns `False` despite CUDA installation — PyTorch may not have CUDA support compiled in
+  - Deferred GPU optimization to later phase; focusing on L2 Norm predictor logic first
+
+- **Immediate next action:** run training with `num_epochs=5000` (faster for debugging), observe rate of decline debug stats to diagnose why detector isn't firing. Then decide: is the multiplier=2 threshold too conservative? Is the L2 norm decay too smooth?
+
+### Still Open / Next Steps (updated — August 5, 2026)
+
+1. **Immediate:** run 5000-epoch training, observe debug stats on rate of decline to understand why `detect_l2_norm_drop` returns `None`.
+2. **Hypothesis investigation:** is multiplier=2 too conservative? Should we try multiplier=1.5 or 1.2?
+3. Once detection works: measure actual lead time on full 20000-epoch run.
+4. Move to **Dropout** predictor (next in the 9-predictor evaluation order).
+5. (Optional, deferred) enable CUDA/GPU support for faster training in future phases.
 
 ---
 
