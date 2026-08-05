@@ -1889,6 +1889,39 @@
 
 ---
 
+## Session Summary — August 5, 2026 (L2 Norm detection strategy refined: threshold approach)
+
+- **Problem diagnosed:** previous running-average spike-detection approach (multiplier=2) was not firing because L2 norm decline is smooth/gradual, not spiky. The detector was looking for sudden acceleration, but the signal is a slow, consistent gradient.
+- **Strategy pivot:** switched from "detect spikes in rate of change" to "detect when rate-of-change exceeds a simple absolute threshold" — more robust for smooth signals.
+- **First implementation (threshold=0.05, no skip):**
+  - Function simplified to: `for i, rate in enumerate(rate_of_decline): if rate > 0.05: return i`
+  - **Problem discovered on first run:** fired at epoch 0, which is initialization noise (L2 norm drops dramatically from random start). Not predictive.
+  - Measured lead time was 4917 epochs (detection at epoch 0, actual grok at epoch 4917) — useless.
+- **Root cause:** the very first epoch has an abnormally large L2 norm decline because weights start random and the first gradient step is large. Need to skip early epochs.
+- **Solution implemented:** added `skip_epochs=200` parameter to `detect_l2_norm_drop()`:
+  ```python
+  def detect_l2_norm_drop(rate_of_decline, threshold=0.05, skip_epochs=200):
+      for i, rate in enumerate(rate_of_decline):
+          if i < skip_epochs:
+              continue
+          if rate > threshold:
+              return i
+      return None
+  ```
+  - Updated `train.py` call to pass `skip_epochs=200`.
+  - **Rationale:** skip the initialization phase (epochs 0–200), then fire on first epoch where norm drops > 0.05 during the stable training phase. This should detect the actual acceleration phase leading to grokking.
+- **Not yet run:** 10000-epoch training with the updated skip_epochs=200 version. This is the immediate next action.
+
+### Still Open / Next Steps (updated — August 5, 2026, end of session)
+
+1. **Immediate next action (blocked, pending user resume):** run 10000-epoch training with updated `detect_l2_norm_drop(threshold=0.05, skip_epochs=200)` to see where it fires. Expected: somewhere between epoch 200 and the actual grok epoch (~4917), ideally close to the grok.
+2. Once detection fires at a reasonable epoch: analyze the lead time (detection epoch vs. actual grok epoch). Adjust threshold if needed.
+3. Measure lead time on full 20000-epoch run if needed.
+4. Move to **Dropout** predictor (next in the 9-predictor evaluation order).
+5. (Optional, deferred) enable CUDA/GPU support for faster training in future phases.
+
+---
+
 ## Tools & Preferences
 
 | Tool | Preference |
@@ -1897,3 +1930,4 @@
 | Prompts | Opencode prompt format by default |
 | Implementation | Only on explicit request |
 | Plotting | Separate script from training (avoid matplotlib DLL conflicts on Windows) |
+| L2 Norm detection | Threshold-based (absolute rate > X), skip early epochs to avoid initialization noise |
