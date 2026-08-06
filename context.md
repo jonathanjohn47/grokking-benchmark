@@ -1922,6 +1922,43 @@
 
 ---
 
+## Session Summary — August 6, 2026 (L2 Norm threshold tuning, Python DLL fix, strategy pivot)
+
+- **PyTorch DLL blocking issue (Windows AppLocker policy):** User encountered `OSError: [WinError 4551] An Application Control policy has blocked this file` when running `src/train.py`. Root cause: Windows security policy (AppLocker/Windows Defender) blocking PyTorch's `shm.dll` and other compiled DLLs. Attempted fixes (GUI unblock checkbox, PowerShell `Unblock-File`) did not work. **Solution:** Reinstalled Python from python.org with "Add to PATH" option enabled. Post-reinstall, training ran successfully on CPU.
+
+- **L2 Norm threshold tuning (10000-epoch run):**
+  - Ran training with `threshold=0.012, skip_epochs=200` (from prior analysis suggesting 0.012 should be between pre-grok and grok-window rates).
+  - **Training completed successfully:** Train accuracy 100%, Test accuracy 100%, L2 norm dropped from ~115 to ~41.7 over 10000 epochs.
+  - Detection still fired at epoch 200 (the skip boundary), lead time 3890 epochs (useless for prediction).
+
+- **Critical discovery: L2 norm signal is inverted from expectation.**
+  - Analyzed rate-of-decline statistics with debug script (`debug_detection.py`):
+    - **Epochs 195-210** (memorization phase): rates **0.055-0.059** ← very high decline
+    - **Epochs 4085-4095** (grokking phase): rates **0.0145-0.0146** ← much lower decline
+  - **Finding:** L2 norm decays *faster* during early memorization, *slower* during the actual grok transition.
+  - This is the opposite of the expected signal — the norm drop rate does not spike when grokking happens; it's highest when the model is memorizing.
+  - **Implication:** The current threshold-based approach (detect when rate exceeds X) doesn't work because the highest rates occur during memorization, not during grokking.
+
+- **Files created this session (diagnostic/debug):**
+  - `analyze_threshold.py` — loads .npy files, computes rate-of-decline statistics, suggests thresholds.
+  - `debug_detection.py` — tests multiple threshold values, shows exact rates at each epoch, identifies why detection fires.
+  - Both scripts confirmed L2 norm decline is highest early in training, not at grok time.
+
+- **Strategy pivot decision (joint with Jonathan):** L2 Norm predictor approach is blocked — the signal doesn't have a clear predictive spike before grokking. Rather than spend more time tuning thresholds on an inverted signal, **move forward to the next predictor in the evaluation order: Dropout** (2nd of the 9 predictors per `CLAUDE.md` Predictor Evaluation Order). L2 Norm can be revisited later if needed.
+
+- **Not yet done, carry forward:**
+  1. Begin **Dropout** predictor implementation (immediate next action).
+  2. Investigate whether L2 norm signal inversion is a fundamental property (weights decay faster during memorization across all grokking experiments, not just this one) — could inform future predictor design.
+  3. (Optional, deferred) enable CUDA/GPU support for faster training.
+
+### Still Open / Next Steps (updated — August 6, 2026)
+
+1. **Immediate next action:** begin **Dropout** predictor implementation — first in the remaining predictor evaluation order (L2 Norm attempt is concluded; moving to Dropout).
+2. Investigate L2 norm signal inversion (is it universal across grokking tasks?).
+3. Move to subsequent predictors: **Spectral**, **AGE**, **HTSR Alpha**, **Correlation Traps**, **Weight-PCA**, **Higher-MI**, **Commutator Defect**.
+
+---
+
 ## Tools & Preferences
 
 | Tool | Preference |
@@ -1930,4 +1967,5 @@
 | Prompts | Opencode prompt format by default |
 | Implementation | Only on explicit request |
 | Plotting | Separate script from training (avoid matplotlib DLL conflicts on Windows) |
-| L2 Norm detection | Threshold-based (absolute rate > X), skip early epochs to avoid initialization noise |
+| Python | Windows: must reinstall from python.org if PyTorch DLLs get blocked by AppLocker |
+| L2 Norm detection | Threshold-based approach abandoned — signal is inverted (highest decay during memorization, not grokking) |

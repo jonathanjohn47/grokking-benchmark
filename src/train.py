@@ -82,7 +82,7 @@ print("  - l2_norm_history.npy")
 rate_of_decline = compute_l2_norm_rate_of_decline(l2_norm_history)
 
 # Detect when the rule fires
-detection_epoch = detect_l2_norm_drop(rate_of_decline, threshold=0.05, skip_epochs=200)
+detection_epoch = detect_l2_norm_drop(rate_of_decline, threshold=0.012, skip_epochs=200)
 
 
 # Find when test accuracy actually jumps (crosses 90%)
