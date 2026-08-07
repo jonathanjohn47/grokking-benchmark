@@ -3,7 +3,7 @@ from torch import nn
 from torch.optim import AdamW
 import numpy as np
 import os
-from predictors.l2_norm import compute_l2_norm_rate_of_decline, detect_l2_norm_drop, compute_l2_norm
+from predictors.l2_norm import compute_l2_norm, compute_fast_slow_moving_averages, detect_ma_crossover
 from data.modular_arithmetic import get_dataloaders
 from models.transformer import Transformer
 
@@ -78,40 +78,42 @@ print("  - l2_norm_history.npy")
 
 
 
-# Compute rate of decline
-rate_of_decline = compute_l2_norm_rate_of_decline(l2_norm_history)
+# L2 Norm Predictor: Moving Average Crossover Strategy
+print("\n" + "="*60)
+print("L2 NORM PREDICTOR: Moving Average Crossover")
+print("="*60)
 
-# Detect when the rule fires
-detection_epoch = detect_l2_norm_drop(rate_of_decline, threshold=0.012, skip_epochs=200)
+# Compute fast and slow moving averages on a log-epoch-uniform grid
+# (matches the log-x plot's visual spacing, so the window covers equal
+# visual width everywhere instead of scribbling at high epochs)
+# Fast MA (window=50 grid points): responsive to recent changes
+# Slow MA (window=200 grid points): captures overall trend
+epoch_grid, fast_ma, slow_ma = compute_fast_slow_moving_averages(l2_norm_history, fast_window=50, slow_window=200)
 
+# Detect crossover point: where fast MA crosses above slow MA
+detection_epoch = detect_ma_crossover(epoch_grid, fast_ma, slow_ma, skip_epochs=100)
 
 # Find when test accuracy actually jumps (crosses 90%)
 grok_epoch = np.argmax(np.array(test_acc_history) > 0.9)
 
-# Lead time
+# Save data for plotting
+np.save("epoch_grid.npy", epoch_grid)
+np.save("fast_ma.npy", fast_ma)
+np.save("slow_ma.npy", slow_ma)
+
+# Report results
+print(f"\nDetection Results:")
 if detection_epoch is not None:
     lead_time = grok_epoch - detection_epoch
-    print(f"Detection epoch: {detection_epoch}")
-    print(f"Grok epoch (test acc > 90%): {grok_epoch}")
-    print(f"Lead time: {lead_time} epochs")
+    print(f"  MA Crossover epoch: {detection_epoch:.1f}")
+    print(f"  Grok epoch (test acc > 90%): {grok_epoch}")
+    print(f"  Lead time: {lead_time:.1f} epochs")
 else:
-    print("No detection")
+    print("  No MA crossover detected")
+    print(f"  Grok epoch (test acc > 90%): {grok_epoch}")
 
-# Debug: print rate of decline and threshold
-rate_of_decline_array = np.array(rate_of_decline)
-print(f"\nRate of decline stats:")
-print(f"  Min: {rate_of_decline_array.min():.6f}")
-print(f"  Max: {rate_of_decline_array.max():.6f}")
-print(f"  Mean: {rate_of_decline_array.mean():.6f}")
-print(f"  Std: {rate_of_decline_array.std():.6f}")
-
-# Check a few spike indices before filtering
-cum_sum = np.cumsum(rate_of_decline_array)
-prior_sum = np.concatenate([[0], cum_sum[:-1]])
-divisor = np.maximum(np.arange(len(rate_of_decline_array)), 1)
-prior_average = prior_sum / divisor
-threshold = 2 * prior_average
-
-spike_indices_before_filter = np.where(rate_of_decline_array > threshold)[0]
-print(f"\nSpike indices before filtering: {spike_indices_before_filter[:20]}")  # First 20
-print(f"Total spikes before filtering: {len(spike_indices_before_filter)}")
+# Debug stats
+print(f"\nL2 Norm Stats:")
+print(f"  Min: {np.min(l2_norm_history):.4f}")
+print(f"  Max: {np.max(l2_norm_history):.4f}")
+print(f"  Final: {l2_norm_history[-1]:.4f}")

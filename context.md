@@ -1959,6 +1959,120 @@
 
 ---
 
+## Session Summary — August 7, 2026 (L2 Norm predictor: MA crossover strategy with log-uniform resampling, direct implementation)
+
+- **User request (explicit direct-implementation authorization):** "You do the writing of code for me and let me know when to run" — Jonathan understood the concepts (inflection point / Rolle's theorem framing) but asked Claude to write all code directly this session, running it himself between iterations. All work below is direct implementation by Claude, reviewed/run by Jonathan.
+
+- **Picked up from:** August 6 session ended with L2 Norm strategy pivot decision (abandon threshold-based detection, move to Dropout) after discovering the L2 norm decay-rate signal is inverted (highest decay during memorization, not grokking). Jonathan chose to stay on L2 Norm one more round instead of moving to Dropout.
+
+### Strategy 1: Second-derivative inflection detection (tried, abandoned)
+
+- **Jonathan's insight:** looking at the L2 norm curve, there's a visible "dip-then-recover" wobble right before the grok transition — mathematically, that's a point where the curve's derivative is momentarily flat/changes character (Rolle's theorem framing: find where rate-of-change's rate-of-change crosses zero).
+- **Implemented in `src/predictors/l2_norm.py`:** `compute_acceleration(rate_of_decline)` (second derivative via `np.diff`) and `detect_inflection(acceleration, skip_epochs)` (returns first index where consecutive acceleration values flip sign).
+- **First run (skip_epochs=200):** fired at epoch 200 (the skip boundary itself), lead time 4710 epochs — useless, just catching noise at the skip cutoff, not a real signal.
+- **Jonathan adjusted based on visual inspection of `plot_results.py` output:** the real inflection in the L2 norm curve appeared to happen after 10³ on the log-x plot; requested `skip_epochs` lowered from 200 to 100 "for safety."
+- **Second run (skip_epochs=100):** fired at epoch 100 (again the skip boundary), lead time 5271 epochs — worse, not better. Root cause: raw acceleration has tiny (~±0.002-0.008) but wildly noisy oscillations everywhere, including near the skip boundary, so the very first allowed sign-flip is essentially always noise, not signal.
+- **Conclusion: raw sign-flip detection is not usable** — needs noise reduction before the sign-flip check means anything.
+
+### Strategy 2: Moving-average smoothing before sign-flip (tried, abandoned)
+
+- Jonathan requested: apply a moving average to the L2 norm history first, then re-derive acceleration from the smoothed signal, and plot it.
+- **Added `apply_moving_average(data, window_size=50)`** to `l2_norm.py` using `scipy.ndimage.uniform_filter1d`.
+- Computed once-smoothed acceleration; result still visibly noisy in the plotted output (Jonathan inspected the 6-panel `grokking_analysis.png`).
+- **Jonathan requested a second layer of smoothing** ("I have a feeling it should work at some point, just not yet") — added `acceleration_double_smoothed` (moving average applied twice) and extended `plot_results.py` to an 8-panel figure (raw / once-smoothed / double-smoothed acceleration + an overlay comparison panel).
+- **Result (double-smoothed acceleration plot):** visually clean — showed a clear dip to about -0.0011 around epoch ~50-60, then a small rebound bump around epoch ~120-150, consistent with the memorization→grokking transition Jonathan had spotted by eye. However, Jonathan decided to abandon this exact approach and try a different filter strategy instead of tuning window sizes further — **explicitly requested removal of all moving-average code** at this point (not because it failed outright, but to reset and try MA crossover instead).
+- **All Strategy 2 code removed:** `l2_norm_smoothed`, `acceleration_raw/smoothed/double_smoothed` variables and their `.npy` saves stripped from `train.py`; `plot_results.py` reverted to a simpler 6-panel version (rate of decline + raw acceleration only, no smoothing panels).
+
+### Strategy 3: Moving-average crossover (fast MA vs slow MA) — current approach
+
+- **Jonathan's idea:** instead of chasing zero-crossings in a noisy derivative, use two moving averages of different window sizes directly on the L2 norm itself (not its derivative) — a "fast" (more responsive) and "slow" (trend) MA — and detect the epoch where the fast MA crosses the slow MA. This is a classic crossover-signal pattern (as in technical trading indicators), reframed here as the grokking transition signal.
+- **`compute_fast_slow_moving_averages(l2_norm_history, fast_window, slow_window)`** and **`detect_ma_crossover(fast_ma, slow_ma, skip_epochs)`** added to `l2_norm.py`. Initial version: log-transform L2 norm history (`np.log`) before applying `apply_moving_average` to each of two window sizes, then `np.exp` back to linear space — log-transform was applied because L2 norm decays roughly exponentially, so raw-linear-space MAs would be dominated by the large early-epoch values.
+- Wired into `train.py`: computes `fast_ma`/`slow_ma` (window=50 / window=200) once per full run (post-training, not per-epoch), detects crossover epoch, computes lead time vs. `grok_epoch` (first epoch where test accuracy > 90%), saves `fast_ma.npy`/`slow_ma.npy`.
+- `plot_results.py` extended to a 6-panel figure: grokking curve, loss, **L2 norm with both MAs overlaid**, generalization gap, **MA crossover full view**, **MA difference (fast − slow) with zero-crossing highlighted**.
+- **Bug hit and fixed: `plt.legend()` with no explicit `loc` caused a hang/`KeyboardInterrupt`** during `savefig` (matplotlib's automatic "best position" legend placement algorithm got stuck, visible in the traceback Jonathan pasted — `legend.py`'s `_find_best_position` looping). Fixed by pinning `loc="upper right"` explicitly on all legends in the affected panels — auto-placement should be avoided in this project's matplotlib setup going forward.
+- **First full run + plot (10000 epochs):** L2 norm + both MAs plotted correctly, but the **MA difference panel was still visibly noisy/jagged toward the high-epoch end of the log-x plot**, prompting Jonathan's next request (smooth the difference plot too — implemented as a first pass, `uniform_filter1d(ma_diff, size=30)`, plotted raw+smoothed together with green/red fill regions above/below zero).
+
+### Root-cause fix: MA windows must be uniform in log-epoch space, not linear-epoch space
+
+- **Jonathan caught the real bug:** "Did you factor in the log factor before implementing moving averages? Obviously these graphs will scribble towards the end." Correct diagnosis — since the plot's x-axis is `log10(epoch)`, a fixed `window_size` counted in **linear epoch indices** covers a huge *visual* span near epoch 1 (over-smoothing early data) and a tiny sliver near epoch 10000 (leaving late data effectively unsmoothed → "scribble"). The earlier `size=30` smoothing pass on `ma_diff` was a band-aid over this same root problem, not a real fix.
+- **Correct fix implemented (direct rewrite of `l2_norm.py`):**
+  1. **`resample_to_log_uniform_grid(data, num_points=None)`** — new function. Builds `log_epochs = log10(1..N)`, creates a `linspace` grid uniform in that log space, and uses `np.interp` to resample the input data onto it. Returns `(epoch_grid, resampled_data)` where `epoch_grid = 10**log_grid` (i.e., real epoch values, but non-uniformly spaced in linear terms — dense near epoch 1, sparse near epoch N — matching the visual density on a log-x plot).
+  2. **`compute_fast_slow_moving_averages` rewritten**: log-transforms L2 norm values (handles the y-axis's exponential-decay scaling, as before) → resamples onto the log-uniform grid via step 1 → applies `apply_moving_average` (now on the log-uniform-grid data, so `window_size` corresponds to a constant *proportional* epoch-width everywhere, not a constant *index-count*) → exponentiates back. **Signature changed**: now returns `(epoch_grid, fast_ma, slow_ma)` instead of just `(fast_ma, slow_ma)`.
+  3. **`detect_ma_crossover` rewritten** to accept `epoch_grid` and search/compare along it; `skip_epochs` is now a real epoch value (not an array index) since the grid is non-uniformly spaced in epoch terms. Returns the real epoch (float, interpolated) of the crossover.
+- **`train.py` updated** to unpack the 3-tuple, pass `epoch_grid` into `detect_ma_crossover`, and save `epoch_grid.npy` alongside `fast_ma.npy`/`slow_ma.npy`. Detection-epoch and lead-time prints now use `.1f` formatting since the crossover epoch is a float (interpolated grid position), not an integer index.
+- **`plot_results.py` updated**: loads `epoch_grid.npy`; all `fast_ma`/`slow_ma`/`ma_diff` plots now use `epoch_grid` as the x-axis (not `range(1, num_epochs+1)`) — critical, since plotting against linear indices would silently undo the log-uniform resampling. The earlier `uniform_filter1d(ma_diff, size=30)` band-aid smoothing was **removed** — no longer needed since `fast_ma`/`slow_ma` are already correctly smoothed on the log-uniform grid; `ma_diff = fast_ma - slow_ma` is plotted directly.
+- **Not yet run with this fix — this is the immediate next action.** Jonathan has not yet executed `train.py` with the corrected log-uniform-grid MA crossover code; no results/lead-time observed yet for this version.
+
+### Current final state of `src/predictors/l2_norm.py` (relevant new functions)
+
+```python
+def resample_to_log_uniform_grid(data, num_points=None):
+    data = np.array(data)
+    num_epochs = len(data)
+    epochs = np.arange(1, num_epochs + 1)
+    log_epochs = np.log10(epochs)
+    if num_points is None:
+        num_points = num_epochs
+    log_grid = np.linspace(log_epochs[0], log_epochs[-1], num_points)
+    resampled = np.interp(log_grid, log_epochs, data)
+    epoch_grid = 10 ** log_grid
+    return epoch_grid, resampled
+
+
+def compute_fast_slow_moving_averages(l2_norm_history, fast_window=50, slow_window=200, num_points=None):
+    l2_norm_history = np.array(l2_norm_history)
+    log_l2_norm = np.log(l2_norm_history)
+    epoch_grid, log_l2_norm_resampled = resample_to_log_uniform_grid(log_l2_norm, num_points=num_points)
+    fast_ma_log = apply_moving_average(log_l2_norm_resampled, window_size=fast_window)
+    slow_ma_log = apply_moving_average(log_l2_norm_resampled, window_size=slow_window)
+    fast_ma = np.exp(fast_ma_log)
+    slow_ma = np.exp(slow_ma_log)
+    return epoch_grid, fast_ma, slow_ma
+
+
+def detect_ma_crossover(epoch_grid, fast_ma, slow_ma, skip_epochs=100):
+    if len(fast_ma) != len(slow_ma):
+        return None
+    for i in range(len(fast_ma) - 1):
+        if epoch_grid[i] < skip_epochs:
+            continue
+        if fast_ma[i] <= slow_ma[i] and fast_ma[i + 1] > slow_ma[i + 1]:
+            return epoch_grid[i + 1]
+    return None
+```
+
+- **Note:** `l2_norm.py` also still contains the earlier, now-unused `detect_l2_norm_drop` (threshold-based, abandoned Aug 6), `compute_acceleration`/`detect_inflection` (Strategy 1, abandoned this session), and `apply_moving_average` (still used internally by the crossover functions). Not cleaned up/removed — coexist in the file, only the MA-crossover path is currently wired into `train.py`.
+
+### Files Modified This Session
+
+- `src/predictors/l2_norm.py` — added/rewrote `compute_acceleration`, `detect_inflection`, `apply_moving_average`, `resample_to_log_uniform_grid`, `compute_fast_slow_moving_averages` (rewritten twice — once for log-value transform only, then again for log-uniform-grid resampling), `detect_ma_crossover` (rewritten to work on the grid).
+- `src/train.py` — swapped detection strategy three times this session (inflection → double-smoothed inflection → MA crossover → log-uniform MA crossover); final state uses `compute_fast_slow_moving_averages` + `detect_ma_crossover` with `epoch_grid`, saves `epoch_grid.npy`/`fast_ma.npy`/`slow_ma.npy`.
+- `src/plot_results.py` — grew from 4-panel → 8-panel (Strategy 2) → back to simplified 6-panel (Strategy 3, log-uniform version); legend `loc="upper right"` pinned explicitly everywhere after the auto-placement hang; `fast_ma`/`slow_ma`/`ma_diff` now plotted against `epoch_grid`.
+
+### Current Project State
+
+- Phase 1 (setup, MPS pipeline, M1 gate) remains closed.
+- **Phase 2, L2 Norm predictor: still open, three detection strategies attempted this session** (raw inflection, smoothed inflection, MA crossover) — the MA crossover with log-uniform resampling is the current best candidate but **has not been run yet**.
+- **Immediate next action:** Jonathan runs `python src/train.py` then `python src/plot_results.py` with the corrected log-uniform-grid code; report the MA-crossover detection epoch, lead time, and whether the plotted MA-difference panel looks clean (no more early-over-smoothing or late-scribble) across the full log-x range.
+- If this crossover approach also fails to produce a usable lead time: per the Aug 6 decision already on record, the fallback is to move on to **Dropout** (next in the 9-predictor evaluation order).
+
+### Follow-up (same session): log-uniform MA crossover run + result analysis
+
+- **Log-uniform-grid version was run (10000 epochs):** `Train Acc = 1.0000, Test Acc = 1.0000, L2 Norm = 45.2108` (final). Detection results: **MA Crossover epoch: 621.0**, **Grok epoch (test acc > 90%): 5738**, **Lead time: 5117.0 epochs**.
+- **Jonathan's hypothesis (to verify before editing code further):** the correct signal to detect is simply the **first** zero-crossing of the MA difference (`fast_ma - slow_ma`).
+- **Claude inspected `grokking_analysis.png` directly (image read, not just numbers) to check this hypothesis.** Findings from the "MA Difference (Crossover at Zero)" panel:
+  - **Epoch 1–~100:** flat at ~0 — both MAs still identical/stabilizing, no real signal yet.
+  - **Epoch ~100–700:** tiny wiggles barely off zero (amplitude ~0.01–0.05) — **this is where the detected crossover at epoch 621 lives.** Diagnosed as numerical noise in a flat region, not a real signal.
+  - **Epoch ~3000–5000:** a single **large, unambiguous spike** to about +0.6 in the MA difference — by far the dominant feature in the whole plot.
+  - **Epoch ~4000–10000:** wide oscillations (±0.3) — the MA difference reacting to the sharp late-training L2 norm crash, and matches the "dip-then-bump-then-crash" wobble in the L2 Norm panel around epoch 2000–4000 that was first flagged as suspicious back in the July 10, 2026 session (original L2 norm curve observation).
+- **Conclusion: Jonathan's "first crossing" hypothesis is not quite right.** The *first* crossing (621) is noise from a flat/quiet region; the *real* signal is the large-magnitude crossing/spike around epoch 3000–5000, which sits much closer to the actual grok epoch (5738) and would give a smaller, more meaningful lead time (roughly 1000–2000 epochs instead of 5117) if detected instead.
+- **Decision point raised, not yet resolved:** need a detection rule that distinguishes the one large, meaningful crossing from the many tiny noise crossings earlier in training. Two candidate approaches proposed to Jonathan (not yet chosen/implemented):
+  1. Require a **minimum magnitude swing** before/after the crossing before counting it as a detection (filters out small-amplitude noise crossings).
+  2. Find the crossing **closest to where `|fast_ma - slow_ma|` reaches its peak** (directly targets the biggest event rather than filtering by threshold).
+- **Not yet implemented — waiting on Jonathan's choice of (1) vs (2) before editing `detect_ma_crossover` in `src/predictors/l2_norm.py`.** This is the immediate next action.
+
+---
+
 ## Tools & Preferences
 
 | Tool | Preference |
@@ -1969,3 +2083,5 @@
 | Plotting | Separate script from training (avoid matplotlib DLL conflicts on Windows) |
 | Python | Windows: must reinstall from python.org if PyTorch DLLs get blocked by AppLocker |
 | L2 Norm detection | Threshold-based approach abandoned — signal is inverted (highest decay during memorization, not grokking) |
+| Matplotlib legends | Always pass explicit `loc=` (e.g. `"upper right"`) — auto-placement (`plt.legend()` with no `loc`) has hung/`KeyboardInterrupt`'d during `savefig` in this project |
+| Log-x plots + moving averages | Must resample onto a grid uniform in `log10(epoch)` before smoothing/MA — a fixed window in linear epoch index over/under-smooths depending on position on a log-x plot |
