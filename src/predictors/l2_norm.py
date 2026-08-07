@@ -137,3 +137,59 @@ def detect_ma_crossover(epoch_grid, fast_ma, slow_ma, skip_epochs=100):
 
     return None
 
+
+def compute_ma_of_slow_ma(slow_ma, fast_window=20):
+    """
+    Apply a second, faster-window moving average on top of the already-smoothed
+    slow_ma. Since slow_ma has already filtered out raw L2 norm noise, this
+    reveals slow_ma's OWN turning points cleanly — the difference between the
+    two tracks how sharply slow_ma is currently bending.
+    Returns (fast_ma_of_slow_ma, diff) where diff = fast_ma_of_slow_ma - slow_ma.
+    """
+    fast_ma_of_slow_ma = apply_moving_average(slow_ma, window_size=fast_window)
+    diff = fast_ma_of_slow_ma - slow_ma
+    return fast_ma_of_slow_ma, diff
+
+
+def compute_noise_floor(diff, epoch_grid, quiet_epoch_cutoff=90):
+    """
+    Estimate the normal noise level of the MA-of-MA difference from the quiet
+    early-training region (before any real dynamics begin), so later spikes
+    can be judged against what "flat" actually looks like for this run.
+    """
+    quiet_mask = epoch_grid < quiet_epoch_cutoff
+    return np.std(diff[quiet_mask])
+
+
+def detect_ma_of_ma_trigger(epoch_grid, diff, noise_floor, threshold_multiplier=10, skip_epochs=100):
+    """
+    Fire on the first epoch (after skip_epochs) where diff climbs past
+    threshold_multiplier x noise_floor — the rising edge of a real signal.
+    Causal: only needs the noise floor (known early) and points seen so far,
+    unlike picking the curve's peak, which requires seeing the whole future.
+    Returns the real epoch (float) of the trigger, or None.
+    """
+    threshold = threshold_multiplier * noise_floor
+    for i in range(len(diff)):
+        if epoch_grid[i] < skip_epochs:
+            continue
+        if diff[i] > threshold:
+            return epoch_grid[i]
+    return None
+
+
+def detect_ma_of_ma_zero_crossing(epoch_grid, diff, skip_epochs=100):
+    """
+    Fire on the first epoch (after skip_epochs) where diff crosses from
+    positive to negative (the first "green -> red" zero crossing).
+    Confirmed on two separate training runs to land in a consistent,
+    unambiguous spot even though the crossing's magnitude is weak.
+    Returns the real epoch (float) of the crossing, or None.
+    """
+    for i in range(len(diff) - 1):
+        if epoch_grid[i] < skip_epochs:
+            continue
+        if diff[i] >= 0 and diff[i + 1] < 0:
+            return epoch_grid[i + 1]
+    return None
+

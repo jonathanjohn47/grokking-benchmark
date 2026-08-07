@@ -4,122 +4,137 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import os
 
+from predictors.l2_norm import compute_noise_floor, detect_ma_of_ma_zero_crossing
+
 # Look for files in project root (parent of src/)
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(project_root)
 
-# Load saved training data
+# Load data already computed and saved by train.py — no re-run needed.
+epoch_grid = np.load("epoch_grid.npy")
+slow_ma = np.load("slow_ma.npy")
+fast_ma_of_slow_ma = np.load("fast_ma_of_slow_ma.npy")
+diff = np.load("ma_of_ma_diff.npy")
 train_acc = np.load("train_acc_history.npy")
 test_acc = np.load("test_acc_history.npy")
-loss = np.load("loss_history.npy")
-l2_norm = np.load("l2_norm_history.npy")
-
-# Load MA crossover data (if available)
-# epoch_grid is uniform in log10(epoch) — always plot fast_ma/slow_ma against
-# epoch_grid, never against range(1, num_epochs+1), otherwise the log-uniform
-# resampling that fixed the smoothing is undone.
-try:
-    epoch_grid = np.load("epoch_grid.npy")
-    fast_ma = np.load("fast_ma.npy")
-    slow_ma = np.load("slow_ma.npy")
-    has_ma_data = True
-except FileNotFoundError:
-    has_ma_data = False
-    print("Warning: MA data not found, plotting without it")
-
-l2_norm_history = np.load("l2_norm_history.npy")
-print("First 20 L2 norms:", l2_norm_history[:20])
-print("Shape:", l2_norm_history.shape)
-
 num_epochs = len(train_acc)
 
-# Create figure with subplots (3x2 if MA data available, else 2x2)
-if has_ma_data:
-    fig, axes = plt.subplots(3, 2, figsize=(14, 12))
-else:
-    fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+SKIP_EPOCHS = 100
+QUIET_EPOCH_CUTOFF = 90
 
-# Plot 1: Grokking curve (Accuracy)
-axes[0, 0].plot(range(1, num_epochs + 1), train_acc, label="Train Accuracy", linewidth=2)
-axes[0, 0].plot(range(1, num_epochs + 1), test_acc, label="Test Accuracy", linewidth=2)
-axes[0, 0].set_xscale("log")
-axes[0, 0].set_xlabel("Epoch (log scale)")
-axes[0, 0].set_ylabel("Accuracy")
-axes[0, 0].set_title("Grokking Curve: Accuracy")
-axes[0, 0].legend()
-axes[0, 0].grid(True, alpha=0.3)
+# Noise floor printed for context only — the trigger itself is a plain zero
+# crossing now, not a magnitude threshold.
+noise_floor = compute_noise_floor(diff, epoch_grid, quiet_epoch_cutoff=QUIET_EPOCH_CUTOFF)
+trigger_epoch = detect_ma_of_ma_zero_crossing(epoch_grid, diff, skip_epochs=SKIP_EPOCHS)
 
-# Plot 2: Loss
-axes[0, 1].plot(range(1, num_epochs + 1), loss, color="red", linewidth=2)
-axes[0, 1].set_xscale("log")
-axes[0, 1].set_xlabel("Epoch (log scale)")
-axes[0, 1].set_ylabel("Loss")
-axes[0, 1].set_title("Training Loss")
-axes[0, 1].grid(True, alpha=0.3)
+# Plot 1: Slow MA vs. Fast MA of Slow MA, with the trigger point marked
+fig, ax = plt.subplots(figsize=(12, 7))
 
-# Plot 3: L2 Norm (Raw + Moving Averages)
-# fast_ma/slow_ma are plotted against epoch_grid (log-uniform), NOT
-# range(1, num_epochs+1), because they were computed on the log-uniform grid.
-if has_ma_data:
-    axes[1, 0].plot(range(1, num_epochs + 1), l2_norm, color="lightgreen", linewidth=1, alpha=0.5, label="Raw")
-    axes[1, 0].plot(epoch_grid, fast_ma, color="orange", linewidth=2, label="Fast MA (w=50)")
-    axes[1, 0].plot(epoch_grid, slow_ma, color="purple", linewidth=2.5, label="Slow MA (w=200)")
-    axes[1, 0].set_xscale("log")
-    axes[1, 0].set_xlabel("Epoch (log scale)")
-    axes[1, 0].set_ylabel("L2 Norm")
-    axes[1, 0].set_title("L2 Norm: Raw + Moving Averages (Crossover Strategy)")
-    axes[1, 0].legend(loc="upper right")
-    axes[1, 0].grid(True, alpha=0.3)
-else:
-    axes[1, 0].plot(range(1, num_epochs + 1), l2_norm, color="green", linewidth=2)
-    axes[1, 0].set_xscale("log")
-    axes[1, 0].set_xlabel("Epoch (log scale)")
-    axes[1, 0].set_ylabel("L2 Norm")
-    axes[1, 0].set_title("Model Weight L2 Norm")
-    axes[1, 0].grid(True, alpha=0.3)
+ax.plot(epoch_grid, slow_ma, color="purple", linewidth=3.5, label="Slow MA (w=200)")
+ax.plot(epoch_grid, fast_ma_of_slow_ma, color="orange", linewidth=3.5, label="Fast MA of Slow MA (w=20)")
 
-# Plot 4: Train-Test Accuracy Gap
-gap = np.array(train_acc) - np.array(test_acc)
-axes[1, 1].plot(range(1, num_epochs + 1), gap, color="purple", linewidth=2)
-axes[1, 1].set_xscale("log")
-axes[1, 1].set_xlabel("Epoch (log scale)")
-axes[1, 1].set_ylabel("Train Acc - Test Acc")
-axes[1, 1].set_title("Generalization Gap")
-axes[1, 1].grid(True, alpha=0.3)
+if trigger_epoch is not None:
+    trigger_idx = np.argmin(np.abs(epoch_grid - trigger_epoch))
+    ax.axvline(x=trigger_epoch, color="red", linestyle="--", linewidth=2)
+    ax.scatter(trigger_epoch, slow_ma[trigger_idx], color="red", zorder=5, s=150, marker="*",
+               label=f"Trigger (epoch {trigger_epoch:.0f})")
 
-# Plot 5 & 6: MA Crossover Details (if data available)
-# Both plotted against epoch_grid — already log-uniform, no extra smoothing needed.
-if has_ma_data:
-    # Plot 5: Fast vs Slow MA
-    ax5 = axes[2, 0]
-    ax5.plot(epoch_grid, fast_ma, color="orange", linewidth=2.5, label="Fast MA (w=50)")
-    ax5.plot(epoch_grid, slow_ma, color="purple", linewidth=2.5, label="Slow MA (w=200)")
-    ax5.set_xscale("log")
-    ax5.set_xlabel("Epoch (log scale)")
-    ax5.set_ylabel("L2 Norm")
-    ax5.set_title("Moving Average Crossover (Full View)")
-    ax5.legend()
-    ax5.grid(True, alpha=0.3)
-
-    # Plot 6: Difference (Fast MA - Slow MA) to visualize crossover
-    ax6 = axes[2, 1]
-    ma_diff = fast_ma - slow_ma
-
-    ax6.plot(epoch_grid, ma_diff, color="darkred", linewidth=2.5)
-    ax6.axhline(y=0, color="black", linestyle="--", linewidth=1)
-    ax6.fill_between(epoch_grid, 0, ma_diff, where=(ma_diff > 0), alpha=0.2, color="green")
-    ax6.fill_between(epoch_grid, 0, ma_diff, where=(ma_diff <= 0), alpha=0.2, color="red")
-    ax6.set_xscale("log")
-    ax6.set_xlabel("Epoch (log scale)")
-    ax6.set_ylabel("Fast MA - Slow MA")
-    ax6.set_title("MA Difference (Crossover at Zero)")
-    ax6.grid(True, alpha=0.3)
+ax.set_xscale("log")
+ax.set_xlabel("Epoch (log scale)", fontsize=12)
+ax.set_ylabel("L2 Norm", fontsize=12)
+ax.set_title("Slow MA vs. Fast MA of Slow MA — Zero-Crossing Trigger", fontsize=13)
+ax.legend(loc="upper right", fontsize=11)
+ax.grid(True, alpha=0.3)
 
 plt.tight_layout()
-plt.savefig("grokking_analysis.png", dpi=150, bbox_inches="tight")
-print("[OK] Plot saved to grokking_analysis.png")
-print(f"  - Epochs trained: {num_epochs}")
-print(f"  - Final train accuracy: {train_acc[-1]:.4f}")
-print(f"  - Final test accuracy: {test_acc[-1]:.4f}")
-print(f"  - Final loss: {loss[-1]:.6f}")
-print(f"  - Final L2 norm: {l2_norm[-1]:.4f}")
+plt.savefig("ma_of_slow_ma_crossover.png", dpi=150, bbox_inches="tight")
+print("[OK] Plot saved to ma_of_slow_ma_crossover.png")
+
+# Plot 2: The difference curve itself, with the zero-crossing trigger marked
+fig2, ax2 = plt.subplots(figsize=(12, 7))
+
+ax2.plot(epoch_grid, diff, color="darkred", linewidth=3.5)
+ax2.axhline(y=0, color="black", linestyle="--", linewidth=1)
+ax2.fill_between(epoch_grid, 0, diff, where=(diff > 0), alpha=0.2, color="green")
+ax2.fill_between(epoch_grid, 0, diff, where=(diff <= 0), alpha=0.2, color="red")
+
+if trigger_epoch is not None:
+    trigger_idx = np.argmin(np.abs(epoch_grid - trigger_epoch))
+    ax2.axvline(x=trigger_epoch, color="red", linestyle="--", linewidth=2)
+    ax2.scatter(trigger_epoch, diff[trigger_idx], color="red", zorder=5, s=150, marker="*",
+                label=f"Trigger (epoch {trigger_epoch:.0f})")
+
+ax2.set_xscale("log")
+ax2.set_xlabel("Epoch (log scale)", fontsize=12)
+ax2.set_ylabel("Fast MA of Slow MA − Slow MA", fontsize=12)
+ax2.set_title("Difference: Fast MA of Slow MA minus Slow MA — Zero-Crossing Trigger", fontsize=13)
+ax2.legend(loc="upper right", fontsize=11)
+ax2.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.savefig("ma_of_slow_ma_diff.png", dpi=150, bbox_inches="tight")
+print("[OK] Plot saved to ma_of_slow_ma_diff.png")
+
+# Plot 3: Same difference curve as Plot 2, but on a LINEAR x-axis instead of log.
+fig3, ax3 = plt.subplots(figsize=(12, 7))
+
+ax3.plot(epoch_grid, diff, color="darkred", linewidth=3.5)
+ax3.axhline(y=0, color="black", linestyle="--", linewidth=1)
+ax3.fill_between(epoch_grid, 0, diff, where=(diff > 0), alpha=0.2, color="green")
+ax3.fill_between(epoch_grid, 0, diff, where=(diff <= 0), alpha=0.2, color="red")
+
+if trigger_epoch is not None:
+    trigger_idx = np.argmin(np.abs(epoch_grid - trigger_epoch))
+    ax3.axvline(x=trigger_epoch, color="red", linestyle="--", linewidth=2)
+    ax3.scatter(trigger_epoch, diff[trigger_idx], color="red", zorder=5, s=150, marker="*",
+                label=f"Trigger (epoch {trigger_epoch:.0f})")
+
+ax3.set_xlabel("Epoch (linear scale)", fontsize=12)
+ax3.set_ylabel("Fast MA of Slow MA − Slow MA", fontsize=12)
+ax3.set_title("Difference: Fast MA of Slow MA minus Slow MA — Linear Scale", fontsize=13)
+ax3.legend(loc="upper right", fontsize=11)
+ax3.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.savefig("ma_of_slow_ma_diff_linear.png", dpi=150, bbox_inches="tight")
+print("[OK] Plot saved to ma_of_slow_ma_diff_linear.png")
+
+# Plot 4: Difference curve (linear x-axis) overlaid on the grokking curve
+# (train/test accuracy). Different scales (accuracy 0-1 vs. diff ~0.00-0.02),
+# so accuracy uses the left y-axis and the diff uses a twin right y-axis.
+grok_epoch = int(np.argmax(test_acc > 0.9))
+
+fig4, ax4 = plt.subplots(figsize=(12, 7))
+
+ax4.plot(range(1, num_epochs + 1), train_acc, color="steelblue", linewidth=2.5, label="Train Accuracy")
+ax4.plot(range(1, num_epochs + 1), test_acc, color="seagreen", linewidth=2.5, label="Test Accuracy")
+ax4.set_xlabel("Epoch (linear scale)", fontsize=12)
+ax4.set_ylabel("Accuracy", fontsize=12)
+ax4.set_ylim(-0.05, 1.05)
+
+ax4b = ax4.twinx()
+ax4b.plot(epoch_grid, diff, color="darkred", linewidth=3, label="Fast MA of Slow MA − Slow MA", alpha=0.85)
+ax4b.axhline(y=0, color="black", linestyle="--", linewidth=1)
+ax4b.set_ylabel("MA-of-MA Difference", fontsize=12)
+
+ax4.axvline(x=grok_epoch, color="seagreen", linestyle=":", linewidth=2, alpha=0.7)
+if trigger_epoch is not None:
+    ax4.axvline(x=trigger_epoch, color="red", linestyle="--", linewidth=2)
+    ax4b.scatter(trigger_epoch, diff[np.argmin(np.abs(epoch_grid - trigger_epoch))],
+                 color="red", zorder=5, s=150, marker="*", label=f"Trigger (epoch {trigger_epoch:.0f})")
+
+ax4.set_title(f"MA-of-MA Difference vs. Grokking Curve (Linear Scale) — Grok epoch {grok_epoch}", fontsize=13)
+lines4, labels4 = ax4.get_legend_handles_labels()
+lines4b, labels4b = ax4b.get_legend_handles_labels()
+ax4.legend(lines4 + lines4b, labels4 + labels4b, loc="center right", fontsize=10)
+ax4.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.savefig("ma_of_ma_diff_vs_grokking_linear.png", dpi=150, bbox_inches="tight")
+print("[OK] Plot saved to ma_of_ma_diff_vs_grokking_linear.png")
+
+print(f"\nNoise floor (context only): {noise_floor:.6f}")
+if trigger_epoch is not None:
+    print(f"Trigger epoch (first zero-crossing): {trigger_epoch:.1f}")
+else:
+    print("No zero-crossing detected")

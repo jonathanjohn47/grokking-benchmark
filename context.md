@@ -2073,6 +2073,166 @@ def detect_ma_crossover(epoch_grid, fast_ma, slow_ma, skip_epochs=100):
 
 ---
 
+## Session Summary — August 7, 2026 (MA-of-MA threshold trigger strategy, direct implementation)
+
+- **Picked up from:** the open decision point above (crossing-magnitude filter vs. peak-proximity filter for `detect_ma_crossover`). Jonathan explored this visually instead by asking Claude to plot a **second-order moving average** — a fast-window MA applied on top of `slow_ma` itself (not on the raw L2 norm) — to see turning points in `slow_ma` more cleanly. This became a new, separate strategy rather than a fix to `detect_ma_crossover`.
+
+- **Exploratory plotting (direct implementation, in `src/plot_results.py`, iterated live with Jonathan reviewing each figure):**
+  1. First version: `plot_results.py` rewritten to load only `epoch_grid.npy`/`slow_ma.npy`, compute `fast_ma_of_slow_ma = apply_moving_average(slow_ma, window_size=20)`, and plot both curves boldly (linewidth 3.5, purple vs. orange) with all sign-flip crossovers marked. Saved to `ma_of_slow_ma_crossover.png` (new filename, doesn't overwrite the old 6-panel `grokking_analysis.png`). Found 3 crossovers: epoch 1.0 (edge artifact), **2007.8**, **3397.5**.
+  2. Second version: added a separate difference plot (`fast_ma_of_slow_ma - slow_ma`), saved to `ma_of_slow_ma_diff.png` — green/red fill above/below zero, crossover lines marked.
+  3. **Jonathan's hypothesis (visual, from the clean diff plot): the *first* zero-crossing (epoch ~2007.8) should be the trigger point**, since the plot "is so neat and clean, no confusion." Claude checked this against the data before agreeing (same pattern as the earlier "first crossing" hypothesis on the original fast_ma/slow_ma pair, which had already been disproven this same session — see below) and found:
+     - Noise floor (std of diff in quiet region, epoch < 90): **0.00054**.
+     - The dip after the first crossing only reaches **-0.0033** (~6x noise floor) — weak.
+     - A much larger peak exists later at **epoch 5633.5**, magnitude **0.0244** (~45x noise floor) — dominant.
+     - Lead time if using first crossing: grok_epoch (5739) − 2007.8 = **3731 epochs (37% of the whole 10000-epoch run)** — too early/imprecise to be a useful trigger.
+     - Lead time if using the late peak: 5739 − 5633.5 = **~105 epochs (1.1% of the run)** — tight, meaningful.
+  4. **Conclusion jointly reached:** first-crossing hypothesis rejected again (second time this session, same lesson as the original fast_ma/slow_ma investigation). The big late peak is the real signal, but using "the peak" directly as a trigger is **not causal** — it requires seeing the whole future curve to know a given point is the maximum. Resolved by using a **threshold-based trigger on the rising edge** instead: fire the first time `diff` exceeds `threshold_multiplier x noise_floor` (chosen so it's strong enough to reject the ~6x-noise early wobble but low enough to catch the ~45x-noise real event on its way up, before the peak itself).
+
+- **Final implementation (direct, authorized: "modify the whole code to implement this strategy"):**
+  - **`src/predictors/l2_norm.py`** — three new functions added (after `detect_ma_crossover`):
+    - `compute_ma_of_slow_ma(slow_ma, fast_window=20)` → `(fast_ma_of_slow_ma, diff)`, where `diff = fast_ma_of_slow_ma - slow_ma`.
+    - `compute_noise_floor(diff, epoch_grid, quiet_epoch_cutoff=90)` → `np.std` of `diff` restricted to `epoch_grid < quiet_epoch_cutoff` (the quiet pre-dynamics region).
+    - `detect_ma_of_ma_trigger(epoch_grid, diff, noise_floor, threshold_multiplier=10, skip_epochs=100)` → first epoch (real epoch value, float) where `diff > threshold_multiplier * noise_floor`, or `None`. Causal by design — only needs the noise floor (established early) and points seen so far, unlike peak-picking.
+  - **`src/train.py`** — import line expanded to also bring in the three new functions. New block added after the existing MA-crossover reporting section: computes `fast_ma_of_slow_ma`/`ma_of_ma_diff` from the already-computed `slow_ma`, computes `noise_floor`, detects `trigger_epoch` (multiplier=10, skip_epochs=100, quiet_epoch_cutoff=90), saves `fast_ma_of_slow_ma.npy` and `ma_of_ma_diff.npy`, prints noise floor / threshold / trigger epoch / lead time vs. `grok_epoch`.
+  - **`src/plot_results.py`** — rewritten again to load the newly saved `fast_ma_of_slow_ma.npy`/`ma_of_ma_diff.npy` from `train.py` (instead of recomputing them inline, now that `train.py` owns that computation) and re-derive `noise_floor`/`threshold`/`trigger_epoch` via the same `l2_norm.py` functions for consistency. Two plots regenerated: `ma_of_slow_ma_crossover.png` (slow_ma vs. fast-MA-of-slow_ma, red star marking the trigger epoch) and `ma_of_slow_ma_diff.png` (the difference curve, with the threshold line and trigger star marked).
+  - All three files verified to parse correctly (`ast.parse`, since `py_compile` hit a Windows `__pycache__` permission error unrelated to the code itself — pre-existing environment quirk, not a new issue).
+
+- **Not yet run with this new strategy — this is the immediate next action.** Jonathan has not yet re-run `python src/train.py` with the new MA-of-MA threshold trigger code; no results/lead-time observed yet for this version. Old `.npy` files in the project root (`fast_ma.npy`, `slow_ma.npy`, `epoch_grid.npy`, etc.) are from the prior MA-crossover run and will be overwritten by the next `train.py` run; `fast_ma_of_slow_ma.npy`/`ma_of_ma_diff.npy` do not exist yet until that run happens.
+
+### Current final state of new `src/predictors/l2_norm.py` functions (this session)
+
+```python
+def compute_ma_of_slow_ma(slow_ma, fast_window=20):
+    fast_ma_of_slow_ma = apply_moving_average(slow_ma, window_size=fast_window)
+    diff = fast_ma_of_slow_ma - slow_ma
+    return fast_ma_of_slow_ma, diff
+
+
+def compute_noise_floor(diff, epoch_grid, quiet_epoch_cutoff=90):
+    quiet_mask = epoch_grid < quiet_epoch_cutoff
+    return np.std(diff[quiet_mask])
+
+
+def detect_ma_of_ma_trigger(epoch_grid, diff, noise_floor, threshold_multiplier=10, skip_epochs=100):
+    threshold = threshold_multiplier * noise_floor
+    for i in range(len(diff)):
+        if epoch_grid[i] < skip_epochs:
+            continue
+        if diff[i] > threshold:
+            return epoch_grid[i]
+    return None
+```
+
+### Still Open / Next Steps (superseded — see next session below for what actually happened)
+
+1. ~~Jonathan runs `python src/train.py`... report noise floor, threshold, trigger epoch, lead time.~~ — done, see below. Threshold strategy did **not** hold up on a second run.
+2. ~~Tune `threshold_multiplier`~~ — superseded, strategy changed instead of tuned (see below).
+3. Once L2 Norm predictor's lead time is considered acceptable and stable: move to **Dropout** (next in the 9-predictor evaluation order per `CLAUDE.md`). Still the eventual next step.
+4. `detect_l2_norm_drop`, `compute_acceleration`/`detect_inflection`, `detect_ma_crossover`, and now also `detect_ma_of_ma_trigger` (threshold version, abandoned this session) all still coexist unused/partially-used in `l2_norm.py` — not cleaned up, flagged for later reconciliation.
+
+---
+
+## Session Summary — August 7, 2026 (MA-of-MA threshold trigger abandoned; zero-crossing trigger adopted instead)
+
+- **Picked up from:** the MA-of-MA threshold-trigger strategy built earlier this same day (multiplier=10, `fast_window=20`), not yet run.
+
+- **Jonathan ran `python src/train.py` (fresh 10000-epoch run — training is stochastic, so this run's numbers differ from the prior run's):**
+  - Final: Train Acc 1.0000, Test Acc 1.0000, L2 Norm 50.4495.
+  - **Grok epoch (test acc > 90%) this run: 4806** (previous run: 5739 — confirms grok epoch varies run to run, not a fixed number).
+  - Old `detect_ma_crossover` (original fast_ma/slow_ma pair): fired at epoch 355.7, lead time 4450.3 — still not useful, consistent with it being abandoned earlier.
+  - **New threshold trigger (10x noise floor) fired at epoch 204.8 — lead time 4601.2 epochs. This is worse than the previous run's peak-based estimate, not better.**
+
+- **Root cause diagnosed (Claude inspected the actual saved arrays, not just the plot):**
+  - Noise floor this run: 0.00064 (close to the prior run's 0.00054 — consistent).
+  - Threshold (10x) = 0.0064.
+  - This run has **two early humps that both exceed 10x noise floor**: epoch 325 (12.8x) and epoch 930 (19x) — both fire *before* the real event. Previous run's early wobble only reached ~6x, so 10x happened to work there by luck, not because it was a principled cutoff. **Conclusion: a fixed threshold multiplier is not robust across runs** — the size of early-training noise humps varies run to run, so no single multiplier reliably separates "early noise" from "the real signal" without risking either false-firing (too low) or missing weak-but-real runs (too high).
+  - The real peak this run: epoch 4764, magnitude 0.0217 (33.9x noise floor) — **only 42 epochs before grok (4806)**, i.e. 0.4% of the run. Still by far the strongest and closest signal in the data, same pattern as the previous run's peak (epoch 5633.5, 105-epoch lead).
+
+- **Jonathan's counter-proposal:** since the threshold approach broke, revert to the **first zero-crossing** of the MA-of-MA difference (green→red, i.e. first time `diff` goes negative) as the trigger — noting that this crossing has now appeared in a "clean," well-defined spot on **two separate runs** (epoch 2007.8 in the first run, epoch 1688.6 in this run), even though its magnitude is weak.
+
+- **Claude checked this against the current run's actual numbers before agreeing** (found via direct inspection of `ma_of_ma_diff.npy`, not the plot):
+  - First zero-crossing (this run): epoch 1688.6. Lead time to grok (4806): **3117 epochs (31.2% of the run)**.
+  - Trough depth in that dip: -0.0025, only **3.9x noise floor** — weak, same order of magnitude as the first run's 6x trough.
+  - **This reproduces the exact same weakness flagged earlier this session** (too early, too close to noise) — the zero-crossing hypothesis does not actually out-perform the threshold approach on raw lead-time/strength metrics; it's just *more consistent in where it lands*, which is a different (and real) virtue from being *accurate*.
+  - Claude's counter-suggestion (raise `threshold_multiplier` to ~20–25x, which would clear both this run's early humps (12.8x, 19x) and the first run's wobble (6x) while still catching both runs' real peaks (34x, 45x)) was **not accepted** — Jonathan explicitly chose reproducibility/cleanliness of the crossing over magnitude/lead-time tightness.
+
+- **Decision (Jonathan's explicit call, implemented directly on request — "Let's agree on my plan and you change the code to detect that first crossing"):** switch the active L2 Norm predictor trigger from the threshold-based rule to the **first zero-crossing** of the MA-of-MA difference. Rationale on record: consistency of location across runs (2007.8 and 1688.6, both in a similar early-training window) outweighs the fact that the signal is quantitatively weak (~4-6x noise floor) and has a large, imprecise lead time (~31-37% of the run). This is a deliberate trade-off choice, not a resolved "best" answer — flagged for revisiting once more runs are available to check whether the crossing keeps landing in a consistent relative position (e.g. as a % of total run length or relative to some other milestone) across seeds/hyperparameters.
+
+- **Implementation (direct, authorized):**
+  - **`src/predictors/l2_norm.py`** — new function added after `detect_ma_of_ma_trigger` (which is now unused but kept in the file per this project's established pattern of not deleting abandoned detection strategies):
+    ```python
+    def detect_ma_of_ma_zero_crossing(epoch_grid, diff, skip_epochs=100):
+        for i in range(len(diff) - 1):
+            if epoch_grid[i] < skip_epochs:
+                continue
+            if diff[i] >= 0 and diff[i + 1] < 0:
+                return epoch_grid[i + 1]
+        return None
+    ```
+  - **`src/train.py`** — import swapped from `detect_ma_of_ma_trigger` to `detect_ma_of_ma_zero_crossing`; the detection block now calls the zero-crossing function instead of the threshold function. `noise_floor` is still computed and printed (context/debugging only — no longer drives the trigger decision). Section header renamed "MA of Slow MA — Zero-Crossing Trigger."
+  - **`src/plot_results.py`** — import and detection call swapped the same way; both plots (`ma_of_slow_ma_crossover.png`, `ma_of_slow_ma_diff.png`) now mark the zero-crossing trigger point instead of a threshold line/rising-edge point. Titles updated to say "Zero-Crossing Trigger."
+  - All three files verified with `ast.parse` (again avoiding the pre-existing Windows `__pycache__` permission issue with `py_compile`). New `detect_ma_of_ma_zero_crossing` sanity-checked directly against this run's already-saved `epoch_grid.npy`/`ma_of_ma_diff.npy` — confirmed it returns 1688.58, matching the manually-computed value above.
+
+- **Not yet re-run with this exact code change — this is the immediate next action.** The `.npy` files on disk right now are still from the run that used the threshold-trigger version (grok epoch 4806, described above); Jonathan has not yet re-run `train.py` with the zero-crossing version wired in as the active strategy (should reproduce the same 1688.6 trigger epoch on the *existing* saved data if re-plotted, but a fresh `train.py` run will use a new random init and may shift both the grok epoch and the crossing epoch again).
+
+### Still Open / Next Steps (superseded — see next session below for the 3rd run's actual result)
+
+1. ~~Jonathan runs `python src/train.py`... report trigger epoch, grok epoch, lead time~~ — done, see below. **Zero-crossing trigger failed on this 3rd run** (fired after grokking, not before).
+2. Open question about acceptable lead time — moot for now, since the zero-crossing rule produced a negative lead time this run (see below), a more fundamental failure than "too large."
+3. Move to **Dropout** — still the eventual next step, not yet reached.
+4. Unused detection strategies in `l2_norm.py` — unchanged, still flagged for later cleanup.
+
+---
+
+## Session Summary — August 7, 2026 (zero-crossing trigger fails on 3rd run; plateau investigation; trigger criteria formalized; linear/overlay plots added)
+
+- **Picked up from:** the zero-crossing trigger implementation from the immediately preceding session, not yet run.
+
+- **Jonathan ran `python src/train.py` (3rd fresh run) and `python src/plot_results.py`:**
+  - Final: Train Acc 1.0000, **Test Acc 0.9954** (not 1.0 — see plateau investigation below), L2 Norm 42.7174.
+  - **Grok epoch (test acc > 90%) this run: 3760** (runs so far: 5739, 4806, 3760 — grok epoch keeps moving earlier, confirms it's not a fixed number).
+  - Old `detect_ma_crossover`: fired at epoch 483.8, lead time 3276.2 — still not useful (consistent with prior abandonment).
+  - **New zero-crossing trigger fired at epoch 5643.8 — lead time -1883.8 epochs.** Negative: the trigger fired ~1884 epochs *after* the model had already grokked, not before. **This is a hard failure, not just a weak signal** — confirmed by direct inspection of `test_acc_history.npy`: test accuracy at epoch 5644 was already 99.54% (the plateau value), while at the actual grok epoch (3760) it was only 89.98%.
+
+- **Test accuracy plateau investigated (Jonathan asked "why didn't 1.0 come, you made the changes"):**
+  - Checked last 20+ epochs of `test_acc_history.npy`/`train_acc_history.npy`/`loss_history.npy`: test accuracy locks at **exactly 0.99544557** from ~epoch 5500 onward with zero variation through epoch 10000; train accuracy is a perfect 1.0; loss is frozen near 8.3e-5 (barely moving). **Not a "still training" situation — the model has converged to a stable, imperfect fixed point.**
+  - `0.99544557 × 6587 (test set size) = 6557.0` exactly → **30 out of 6587 test examples are permanently, consistently wrong**, unchanged for 4500+ epochs.
+  - **Root cause (Claude inspected `src/models/transformer.py` directly to check):** attention mechanism is correctly implemented (Q/K/V, softmax, weighted sum, residual, MLP with residual, output head) — not a bug. But the architecture is genuinely minimal: **single attention head, single layer, no LayerNorm** (Nanda et al.'s original setup typically includes LayerNorm), combined with a fairly aggressive `weight_decay=1.0`. This combination can leave a small, stable set of "hard" input pairs unresolved even after full convergence.
+  - **Confirmed this was not caused by this session's edits** — `transformer.py` and the training loop in `train.py` were not touched by any of the detection-strategy work; only post-training analysis/plotting code was modified.
+  - **Not investigated further this session** (which specific `(a,b)` pairs fail, whether it's reproducible across runs) — flagged as an open, optional side-investigation, separate from the main predictor work.
+
+- **Trigger criteria formalized (Jonathan asked directly: "what is the criteria that you will accept any given point to be a trigger?"):** Claude stated three explicit criteria, now on record as the standard for judging any future detection rule:
+  1. **Must always precede grokking, never follow it** (lead time must stay positive across runs — non-negotiable for something to be called a predictor).
+  2. **The gap to the actual grok epoch must stay small and consistent as a proportion of the run, across different runs** — not "lands near the same absolute epoch," but "tracks wherever grokking actually happens, even as that moves."
+  3. **Must be clearly above the noise floor**, not indistinguishable from baseline fluctuation.
+  - **Evidence presented that zero-crossing fails criterion #2, using the ratio (crossing epoch / grok epoch) across all 3 runs:** run 1 = 0.350, run 2 = 0.351 (looked consistent — this is what convinced Jonathan originally), run 3 = **1.501** (crossing landed *after* grok entirely). Conclusion: the crossing sits at a roughly fixed absolute epoch regardless of when grokking happens — it was never actually tracking the grok event, runs 1-2's consistency was coincidental (both had late grok epochs).
+  - **Contrasted with the peak-based candidate (peak epoch of the MA-of-MA diff vs. grok epoch), checked the same way across all 3 runs:** gap-as-%-of-run = 1.05% (run 1), 0.42% (run 2), **0.18% (run 3)** — always before, always tight, actually got *more* precise on the run where zero-crossing failed hardest. Recommended by Claude as the better-evidenced candidate; **not yet adopted — Jonathan's position at session end: "my theory should work in some configuration that I've not discovered yet," wants to continue investigating zero-crossing variants rather than switch to peak-based yet.** This is the open disagreement carried into the next session.
+
+- **Low-pass filter question (Jonathan asked, explicitly framed as "just asking," not a change request):** Claude explained that `slow_ma`/`fast_ma_of_slow_ma` already constitute two layers of low-pass filtering (moving averages), the diff curve is already visually smooth (not noisy), and the run-3 failure is a *timing* problem (the dip's position doesn't move with the grok epoch), not a *smoothness* problem — so an additional low-pass filter (e.g. `scipy.signal.butter`) would not fix the observed failure. No code changed as a result of this exchange (informational only, per Jonathan's framing).
+
+- **Plotting extended (direct implementation, `src/plot_results.py`), two more plots added:**
+  1. **Plot 3 — `ma_of_slow_ma_diff_linear.png`:** identical to the existing diff plot but with a **linear** x-axis instead of log (Jonathan's explicit request: "show this graph in linear scale"). Noted for Jonathan: since `epoch_grid` is uniform in *log*-epoch space, a linear x-axis compresses early epochs into a thin sliver and stretches the visual detail toward the high-epoch end.
+  2. **Plot 4 — `ma_of_ma_diff_vs_grokking_linear.png`:** overlays the MA-of-MA diff curve against the grokking curve (train/test accuracy) on a shared **linear** epoch axis, using a twin y-axis (accuracy 0-1 on the left, diff ~0-0.02 on the right, since the scales are incompatible on one axis). Grok epoch marked with a green dotted vertical line, trigger epoch marked with a red dashed line + star. Script now also loads `train_acc_history.npy`/`test_acc_history.npy` (previously only loaded MA-related arrays).
+  - All changes verified by actually running `plot_results.py` (not just written) — output files confirmed generated without error.
+
+### Current final state of relevant files (this session's end)
+
+- **`src/predictors/l2_norm.py`:** `detect_ma_of_ma_zero_crossing` is the currently-active trigger function (called from both `train.py` and `plot_results.py`). `detect_ma_of_ma_trigger` (threshold-based) is unused but retained.
+- **`src/train.py`:** L2 Norm predictor section calls `compute_ma_of_slow_ma` → `compute_noise_floor` (context/print only) → `detect_ma_of_ma_zero_crossing` (the actual trigger decision). Saves `fast_ma_of_slow_ma.npy`, `ma_of_ma_diff.npy` alongside the existing `epoch_grid.npy`/`fast_ma.npy`/`slow_ma.npy`.
+- **`src/plot_results.py`:** now produces 4 output images per run: `ma_of_slow_ma_crossover.png` (log-x, slow_ma vs. fast-MA-of-slow_ma), `ma_of_slow_ma_diff.png` (log-x, diff curve), `ma_of_slow_ma_diff_linear.png` (linear-x, diff curve), `ma_of_ma_diff_vs_grokking_linear.png` (linear-x, diff curve overlaid on train/test accuracy).
+- **`src/models/transformer.py`:** unchanged this session, confirmed complete (single-head attention + MLP + residuals, no LayerNorm) — this is the architecture behind the 99.54% plateau, not a bug.
+
+### Still Open / Next Steps (updated — August 7, 2026, session close, "continue tomorrow")
+
+1. **Central unresolved disagreement, explicitly carried forward:** Jonathan believes the zero-crossing idea "should work in some configuration not yet discovered" and wants to keep investigating it; Claude's evidence (3-run ratio comparison above) currently favors the peak-based candidate instead. Not resolved — pick this back up first next session.
+2. If continuing to test zero-crossing variants: consider what "configuration" could mean — e.g. different `fast_window` for `compute_ma_of_slow_ma` (currently 20), a different `skip_epochs`, or restricting to a crossing within some expected relative-position window rather than the literal first one. None of these have been tried yet.
+3. If/when Jonathan is ready to consider the peak-based alternative: the 3-run gap-as-%-of-run evidence (1.05%, 0.42%, 0.18%) is already on record above — would need a *causal* (non-hindsight) version, same issue flagged in the threshold-trigger session (a live rule can't know "the peak" without seeing the future; would need e.g. a rising-edge-past-a-tuned-threshold rule, revisiting the earlier abandoned approach with a better-tuned multiplier).
+4. Optional side-investigation (not urgent, flagged only): which specific ~30 `(a,b)` pairs the model permanently fails on, and whether that set is stable/reproducible across runs — could reveal an architectural pattern (single-head attention, no LayerNorm limitation) worth noting for the thesis write-up later.
+5. Once L2 Norm predictor is functionally complete (by whatever bar is eventually agreed): move to **Dropout** (next in the 9-predictor evaluation order per `CLAUDE.md`).
+6. `l2_norm.py` still carries multiple unused/abandoned detection strategies (`detect_l2_norm_drop`, `detect_inflection`, `detect_ma_crossover`, `detect_ma_of_ma_trigger`) alongside the currently-active `detect_ma_of_ma_zero_crossing` — not cleaned up, flagged for later reconciliation once the predictor is finalized.
+
+---
+
 ## Tools & Preferences
 
 | Tool | Preference |

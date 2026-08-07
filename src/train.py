@@ -3,7 +3,14 @@ from torch import nn
 from torch.optim import AdamW
 import numpy as np
 import os
-from predictors.l2_norm import compute_l2_norm, compute_fast_slow_moving_averages, detect_ma_crossover
+from predictors.l2_norm import (
+    compute_l2_norm,
+    compute_fast_slow_moving_averages,
+    detect_ma_crossover,
+    compute_ma_of_slow_ma,
+    compute_noise_floor,
+    detect_ma_of_ma_zero_crossing,
+)
 from data.modular_arithmetic import get_dataloaders
 from models.transformer import Transformer
 
@@ -117,3 +124,37 @@ print(f"\nL2 Norm Stats:")
 print(f"  Min: {np.min(l2_norm_history):.4f}")
 print(f"  Max: {np.max(l2_norm_history):.4f}")
 print(f"  Final: {l2_norm_history[-1]:.4f}")
+
+
+# L2 Norm Predictor: MA-of-MA Zero-Crossing Trigger Strategy
+print("\n" + "="*60)
+print("L2 NORM PREDICTOR: MA of Slow MA — Zero-Crossing Trigger")
+print("="*60)
+
+# Apply a second, faster-window MA on top of slow_ma itself. slow_ma has
+# already filtered out raw L2 norm noise, so this reveals slow_ma's own
+# turning points cleanly instead of chasing noise in the raw signal.
+fast_ma_of_slow_ma, ma_of_ma_diff = compute_ma_of_slow_ma(slow_ma, fast_window=20)
+
+# Noise floor: how big this difference is during the quiet early-training
+# region, before any real dynamics begin — printed for context only, no
+# longer used to decide the trigger (see detect_ma_of_ma_zero_crossing).
+noise_floor = compute_noise_floor(ma_of_ma_diff, epoch_grid, quiet_epoch_cutoff=90)
+
+# Trigger: first epoch (after skip_epochs) where the difference crosses from
+# positive to negative. Confirmed on two runs to land in a consistent,
+# unambiguous spot even though the crossing itself is weak in magnitude.
+trigger_epoch = detect_ma_of_ma_zero_crossing(epoch_grid, ma_of_ma_diff, skip_epochs=100)
+
+np.save("fast_ma_of_slow_ma.npy", fast_ma_of_slow_ma)
+np.save("ma_of_ma_diff.npy", ma_of_ma_diff)
+
+print(f"\nNoise floor: {noise_floor:.6f}")
+if trigger_epoch is not None:
+    trigger_lead_time = grok_epoch - trigger_epoch
+    print(f"  Trigger epoch (first zero-crossing): {trigger_epoch:.1f}")
+    print(f"  Grok epoch (test acc > 90%): {grok_epoch}")
+    print(f"  Lead time: {trigger_lead_time:.1f} epochs")
+else:
+    print("  No trigger detected")
+    print(f"  Grok epoch (test acc > 90%): {grok_epoch}")
