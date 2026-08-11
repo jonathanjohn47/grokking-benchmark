@@ -19,6 +19,9 @@ class Transformer(nn.Module):
 
         self.output_head = nn.Linear(d_model, vocab_size, bias=False)
 
+        self.dropout1 = nn.Dropout(0.0)
+        self.dropout2 = nn.Dropout(0.0)
+
     def forward(self, x):
         token_vectors = self.token_embedding(x)
         position_vectors = self.position_embedding(arange(x.size(1), device=x.device))
@@ -29,8 +32,8 @@ class Transformer(nn.Module):
 
         scores = torch.matmul(query_vector, key_vector.transpose(-2, -1)) / (query_vector.size(-1) ** 0.5)
         attention_weights = torch.softmax(scores, dim=-1)
-        attended_values = combined_vector + torch.matmul(attention_weights, value_vector)
-        mlp_output = attended_values + self.mlp_out(self.mlp_activation(self.mlp_in(attended_values)))
+        attention_values = combined_vector + self.dropout1(torch.matmul(attention_weights, value_vector))
+        mlp_output = attention_values + self.dropout2(self.mlp_out(self.mlp_activation(self.mlp_in(attention_values))))
 
 
         logits = self.output_head(mlp_output)

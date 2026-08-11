@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Edit",
+      "Write",
+      "Bash(git *)",
+      "Bash(python *)",
+      "Bash(python -m jupyter *)",
+      "Bash(chmod u+w .git/FETCH_HEAD)",
+      "Read(//tmp/**)",
+      "Bash(gh auth *)",
+      "Bash(gh repo *)",
+      "Bash(env)",
+      "Bash(rm src/predictors/dropout.py && git checkout -- src/models/transformer.py && git status)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\jonat\\StudioProjects\\grokking-benchmark\\src\\predictors"
+    ]
+  },
+  "additionalDirectories": [
+    "c:\\Users\\jonat\\StudioProjects\\grokking-benchmark\\src\\predictors"
+  ]
+}

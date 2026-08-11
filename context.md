@@ -2343,6 +2343,69 @@ if __name__ == "__main__":
 
 ---
 
+## Session Summary — August 11, 2026 (Dropout predictor attempt #2 — `compute_accuracy` done, `compute_dropout_gap` has a known open bug)
+
+- **Picked up from:** the Aug 11 reset — `dropout1`/`dropout2` (`nn.Dropout(0.0)`, default no-op) were re-added to `src/models/transformer.py` at the start of this session, restoring the state from before the deletion. `src/predictors/dropout.py` was rebuilt from an empty file.
+- **`compute_accuracy(model, data_loader)` written and reviewed — correct, no open issues:**
+  ```python
+  import torch
+
+
+  def compute_accuracy(model, data_loader):
+      device = next(model.parameters()).device
+      total_correct = 0
+      total_samples = 0
+      for x, y in data_loader:
+          x, y = x.to(device), y.to(device)
+          with torch.no_grad():
+              logit = model.forward(x)
+          equal_sign_logit = logit[:, 2, :]
+          predicted = equal_sign_logit.argmax(dim=1)
+          total_correct += (predicted == y).sum().item()
+          total_samples += len(y)
+      return total_correct / total_samples if total_samples > 0 else 0.0
+  ```
+  - Does not force `.eval()`/`.train()` internally — measures accuracy in whatever mode the model already is in, as intended (mode is the caller's responsibility).
+  - `logit[:, 2, :]` correctly picks the `"="` position (sequence is `[a, b, "="]`, index 2).
+  - Two minor style notes given, not applied (not urgent): `model.forward(x)` could be `model(x)`; the hardcoded `2` assumes sequence length 3 (matches existing project pattern of hardcoded constants, e.g. `97` in `get_tensor`).
+- **`compute_dropout_gap(model, data_loader, dropout_rate)` written — has an unresolved bug, not yet fixed:**
+  ```python
+  def compute_dropout_gap(model, data_loader, dropout_rate):
+      """
+      Compute the accuracy gap between training and evaluation modes of the model.
+      This is done by comparing the accuracy with dropout enabled (training mode)
+      and dropout disabled (evaluation mode).
+      """
+      # Set model to training mode to enable dropout
+      model.train()
+      train_accuracy = compute_accuracy(model, data_loader)
+
+      # Set model to evaluation mode to disable dropout
+      model.eval()
+      eval_accuracy = compute_accuracy(model, data_loader)
+
+      # Calculate the gap
+      dropout_gap = train_accuracy - eval_accuracy
+
+      return dropout_gap, train_accuracy, eval_accuracy
+  ```
+  - **Bug (flagged, not fixed):** `dropout_rate` parameter is never used. `model.dropout1.p`/`model.dropout2.p` are never set inside this function, so they stay at their default `0.0` (set in `transformer.py`). Since dropout with `p=0.0` is a no-op in both `.train()` and `.eval()` mode, `train_accuracy` and `eval_accuracy` will always come out nearly identical, and `dropout_gap` will always be close to `0` regardless of what `dropout_rate` is passed — the function does not actually stress-test the model yet.
+  - **Fix explained but not applied (Jonathan's explicit call — see below):** before measuring the dropout-stressed accuracy, set `model.dropout1.p = dropout_rate` and `model.dropout2.p = dropout_rate`, then reset both back to `0.0` before returning.
+- **Jonathan reported confusion** ("I am not able to grasp anything that is happening in the dropout section") after seeing this bug explained. Claude re-explained dropout from basics: what dropout does (randomly zeroes vector entries), why it exists (forces the model to spread knowledge across paths, more robust), why it is relevant to grokking (grokked models should be robust to dropout since knowledge is spread out; memorizing models should collapse), and the two independent controls (`p` = how much to drop, train/eval mode = master on/off switch — both must be set for dropout to actually do anything). Jonathan explicitly deferred deeper understanding to a later session ("I will understand it later") rather than continuing the explanation now.
+- **User instruction this session:** commit all current changes as-is (including the known `compute_dropout_gap` bug) and update `context.md` before committing. **The bug is intentionally being committed unfixed** — this is a deliberate checkpoint of work-in-progress, not a claim that the function is correct. Do not describe `compute_dropout_gap` as working until the `dropout_rate` fix is actually applied and verified.
+- **Git note:** at commit time, `git status` also showed large, session-unrelated changes already present in the working tree in `CLAUDE.md` (636 lines, formatting: `-` bullets changed to `*`) and `project_compilation.md` (484 lines) — origin unknown, not made by Claude this session. Flagged to Jonathan before committing; **Jonathan chose to commit everything together in one commit.** Worth noting for later: `CLAUDE.md` is listed in `.gitignore` but is still tracked in git history from before the ignore rule was added, so `.gitignore` does not stop it from showing as modified.
+
+### Still Open / Next Steps (updated — August 11, 2026, this session)
+
+1. **Immediate next action, next session:** fix `compute_dropout_gap` — set `model.dropout1.p = dropout_rate` / `model.dropout2.p = dropout_rate` before the `.train()` accuracy measurement, and reset both to `0.0` before returning. Re-explain/re-confirm the dropout concept first if Jonathan is still unclear, per his own request to revisit it later.
+2. After the fix: verify by testing with a high `dropout_rate` (e.g. `0.9`) on a trained model — the dropout-stressed accuracy should visibly drop. If it does not, the fix did not work.
+3. Wire the predictor into `train.py`, same pattern as L2 Norm. Not started.
+4. L2 Norm predictor remains unresolved/set aside (zero-crossing vs. peak-based) — unchanged, not being worked on.
+5. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) — still pending, unrelated to code track, carried forward many sessions.
+6. Investigate the unexplained `CLAUDE.md`/`project_compilation.md` changes committed this session (formatting-only in `CLAUDE.md`, larger content change in `project_compilation.md`) — origin not identified, flagged only, not blocking.
+
+---
+
 ## Tools & Preferences
 
 | Tool | Preference |
