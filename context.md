@@ -2233,6 +2233,116 @@ def detect_ma_of_ma_trigger(epoch_grid, diff, noise_floor, threshold_multiplier=
 
 ---
 
+## Session Summary — August 10–11, 2026 (L2 Norm set aside; Dropout predictor started; transformer.py dropout wiring)
+
+- **Picked up from:** the Aug 7 session close — central disagreement over L2 Norm's zero-crossing vs. peak-based detection was left unresolved, flagged to "pick this back up first."
+- **Decision (Jonathan's explicit call):** leave the L2 Norm predictor unresolved/set aside (not deleted, not further tuned) and move on to **Dropout**, next in the 9-predictor evaluation order per `CLAUDE.md`. Rationale: the thesis needs breadth across all 9 predictors under one protocol more than a fully polished L2 Norm. `src/predictors/l2_norm.py` is untouched — all strategies still present, nothing deleted.
+- **Dropout predictor definition sourced from the Obsidian vault** (`C:\Users\jonat\Documents\Obsidian Vaults\Grokking-Master-Thesis`, specifically `02 - Concepts/Margin and Robustness/05 - The Dropout Robustness Predictor.md` and `01 - Learning Path/11 - Predicting Grokking/13 - Predictor 9 Dropout Robustness.md`): apply dropout at a fixed rate `p` to all activations **at evaluation time (not training)**, measure the accuracy gap vs. clean accuracy. Grokked models barely drop (redundant attention-head circuits absorb the perturbation); memorizing models collapse. Signal = the gap shrinking, expected before the test-accuracy jump. **Note:** the vault labels this "Predictor #9" internally — a different numbering scheme from `CLAUDE.md`'s implementation order (#2) — not a conflict, just two separate numbering conventions to keep straight for the thesis write-up.
+- **Design decision (mentor-guided, Jonathan implemented):** `transformer.py` needs `nn.Dropout` layers added at **default `p=0.0`** so normal training remains a mathematical no-op — this preserves comparability with the already-collected L2 Norm results (no architecture-driven change to training/grok dynamics). The Dropout predictor's future measurement code will temporarily set `.p` to a real value and force `.train()` mode (wrapped in `torch.no_grad()`) just for the robustness measurement, then reset back to `p=0` / `.eval()`.
+- **Debugging cycle (Jonathan implemented each attempt, Claude reviewed — same debugging-by-doing style as prior sessions):**
+  1. First attempt: `dropout1`/`dropout2` added correctly in `__init__` (`p=0.0`), but `forward()` added a **new line after** the existing residual lines instead of editing them in place — `mlp_output = dropout1(attended_values) + dropout2(mlp_output)` double-counted `attended_values` (present both directly via `dropout1` and again inside `mlp_output` via `dropout2`'s input). This broke the `p=0` no-op guarantee even before dropout was ever turned on.
+  2. Second attempt: the attention line was fixed correctly (`dropout1` wraps only `torch.matmul(...)` inside the residual add), but the MLP line's fix was done by **adding a brand-new line** instead of editing in place — this duplicated the entire MLP computation (once with `dropout2`, once without), running `mlp_in`/`mlp_out` twice per forward pass.
+  3. Third attempt: the duplicate line was removed, but the surviving MLP line reverted to the **unwrapped original** — `self.dropout2` defined in `__init__` but never called anywhere in `forward()`, effectively dead code.
+  4. Fourth attempt: **correct.** `self.dropout2` now wraps `self.mlp_out(...)` inside the residual add, matching `self.dropout1`'s pattern on the attention branch. Verified by walking through the math at `p=0`: both branches reduce to the exact original formulas (`attention_values` == old `attended_values`, `mlp_output` == old `mlp_output`), confirming zero behavioral change to existing training dynamics.
+- **Not yet run:** Jonathan has not yet executed `python src/models/transformer.py` to confirm the file runs clean post-edit — recommended as the immediate next action, still pending at session's end.
+- **Clarification given:** Jonathan asked directly whether the L2 Norm code had been deleted/replaced by the Dropout work. Confirmed no — `git status` showed only `transformer.py` modified, `l2_norm.py` untouched on disk. `transformer.py` is the *shared model architecture* used by all 9 predictors, a separate concern from any individual predictor's detection logic.
+
+### Current verified state of `src/models/transformer.py`
+
+```python
+from torch import arange, nn
+import torch
+
+
+class Transformer(nn.Module):
+    def __init__(self, vocab_size, d_model):
+        super().__init__()
+        self.token_embedding = nn.Embedding(vocab_size, d_model)
+        self.position_embedding = nn.Embedding(3, d_model)
+
+        self.query = nn.Linear(d_model, d_model, bias=False)
+        self.key = nn.Linear(d_model, d_model, bias=False)
+        self.value = nn.Linear(d_model, d_model, bias=False)
+
+        self.mlp_in = nn.Linear(d_model, 4 * d_model, bias=False)
+        self.mlp_activation = nn.ReLU()
+        self.mlp_out = nn.Linear(4 * d_model, d_model, bias=False)
+
+        self.output_head = nn.Linear(d_model, vocab_size, bias=False)
+
+        self.dropout1 = nn.Dropout(p=0.0)
+        self.dropout2 = nn.Dropout(p=0.0)
+
+    def forward(self, x):
+        token_vectors = self.token_embedding(x)
+        position_vectors = self.position_embedding(arange(x.size(1), device=x.device))
+        combined_vector = token_vectors + position_vectors
+        query_vector = self.query(combined_vector)
+        key_vector = self.key(combined_vector)
+        value_vector = self.value(combined_vector)
+
+        scores = torch.matmul(query_vector, key_vector.transpose(-2, -1)) / (query_vector.size(-1) ** 0.5)
+        attention_weights = torch.softmax(scores, dim=-1)
+        attention_values = combined_vector + self.dropout1(torch.matmul(attention_weights, value_vector))
+        mlp_output = attention_values + self.dropout2(self.mlp_out(self.mlp_activation(self.mlp_in(attention_values))))
+
+        logits = self.output_head(mlp_output)
+
+        return logits
+
+
+if __name__ == "__main__":
+    model = Transformer(vocab_size=98, d_model=128)
+
+    x = torch.eye(2, 3, dtype=torch.long)
+    model.forward(x)
+```
+
+### Still Open / Next Steps (superseded — see next session below, dropout work reverted)
+
+1. ~~Run `python src/models/transformer.py` to confirm clean execution post dropout-wiring~~ — done, see below. Ran clean, no errors.
+2. ~~Write `src/predictors/dropout.py`~~ — attempted, then fully reverted this same session (see below). Not carried forward as-is.
+3. Wire the new predictor into `train.py` — not reached, moot until predictor is rebuilt.
+4. L2 Norm predictor remains unresolved/set aside (zero-crossing vs. peak-based) — not being actively worked on, flagged in case revisited later.
+5. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) — still pending, unrelated to code track, carried forward many sessions.
+
+---
+
+## Session Summary — August 11, 2026 (Dropout predictor attempt #1 — reverted, restarting fresh)
+
+- **Picked up from:** immediate next action was running `python src/models/transformer.py` to confirm the dropout wiring (from the Aug 10–11 session) executes clean. Jonathan ran it — **no errors, confirmed working.**
+- **Started `src/predictors/dropout.py`** (mentor mode — Jonathan wrote each version, Claude reviewed, same style as always):
+  1. **`compute_accuracy(model, data_loader)` written first.** Went through a debugging cycle:
+     - Missing `import torch` (would fail on `torch.no_grad()`).
+     - Wrong auto-import: `from torch.mtia import device` — `mtia` is an unrelated PyTorch backend (Meta's own accelerator), picked up by editor autocomplete purely because the word "device" matched. Not connected to MPS/CPU at all. Removed.
+     - `device` undefined after removing that import — fixed by deriving it directly from the model: `device = next(model.parameters()).device` (no import needed, works for any device the model is already on).
+     - **Design bug flagged and fixed:** function started with `model.eval()` inside it. Since `nn.Dropout` only drops in `.train()` mode, a hardcoded `.eval()` inside a function meant to be reused for the dropout-stressed check would silently turn dropout off every time, no matter what `p` was set to. Removed — `compute_accuracy` now just measures accuracy in whatever mode the model already is in; mode-setting is left to the caller. This part ended up correct and stable.
+  2. **`compute_dropout_gap(model, data_loader, dropout_rate=0.3)` written next.** Correctly saved/restored original `dropout1.p`/`dropout2.p`, correctly computed `accuracy_without_dropout - accuracy_with_dropout` as the gap. **Bug found, not yet fixed:** the function set `p = dropout_rate` for the "with dropout" measurement but never called `model.train()` first — if the model was already in `.eval()` mode when this function runs (likely, since it runs after training), dropout would not activate even with `p = 0.3`, making the gap falsely small. Flagged, fix explained, **not applied before the session changed direction.**
+- **Jonathan got confused at this point** ("mere kuchh samajh nhi aa rha hai kya ho rha hai" — "I don't understand what is happening") and asked to delete everything dropout-related and start over, rather than keep patching the confusing state.
+- **Direct action taken (authorized — user asked to use judgement on exact scope after an unnecessary clarifying question annoyed him):**
+  - `src/predictors/dropout.py` **deleted** (it was untracked/never committed — nothing lost from git history, just removed from disk).
+  - `src/models/transformer.py` **reverted via `git checkout --`** to its last committed state — this removes the `dropout1`/`dropout2` layers (`nn.Dropout(p=0.0)`) and the two `forward()` lines that wrapped the attention/MLP residual branches in them. `transformer.py` is now back to the exact version it was before the Aug 10–11 session's dropout wiring — single-head attention, MLP, no LayerNorm, no dropout at all.
+  - Verified via `git status`: working tree now shows no changes to either file (both back to clean/original state).
+- **Important for continuity:** this is a clean, explicit reset, not a silent loss. Nothing was committed to git during the deleted work, so nothing is "hidden" or recoverable-but-forgotten — it simply does not exist anymore, by Jonathan's own choice, to reduce confusion and restart with a clearer head next session.
+
+### Current verified state (after revert)
+
+- `src/models/transformer.py`: **no dropout layers** — identical to the version before the Aug 10–11 session (token + position embedding, single-head Q/K/V attention, residual, MLP with residual, no LayerNorm, output head).
+- `src/predictors/dropout.py`: **does not exist.**
+- `src/predictors/l2_norm.py`: unchanged, still set aside as before.
+
+### Still Open / Next Steps (updated — August 11, 2026, session close)
+
+1. **Immediate next action, next session:** restart the Dropout predictor from zero. Re-add `dropout1`/`dropout2` (`nn.Dropout(p=0.0)`, default no-op) to `transformer.py`, same reasoning as before (keeps training dynamics identical to the L2 Norm run for comparability).
+2. Rebuild `src/predictors/dropout.py` from scratch:
+   - `compute_accuracy(model, data_loader)` — no forced `.eval()`/`.train()` inside, just measures accuracy in the model's current mode (this exact function worked correctly last time — safe to redo the same way, faster this time).
+   - A measurement function that explicitly does: `model.eval()` → clean accuracy → set `p = dropout_rate`, `model.train()` → stressed accuracy → restore `p = 0.0`, `model.eval()` → return the gap. **Remember the specific bug from this session: forgetting `model.train()` before the stressed measurement makes the gap falsely small, since dropout silently does nothing in eval mode regardless of `p`.**
+3. Wire the predictor into `train.py`, same pattern as L2 Norm. Not started.
+4. L2 Norm predictor remains unresolved/set aside (zero-crossing vs. peak-based) — unchanged, not being worked on.
+5. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) — still pending, unrelated to code track, carried forward many sessions.
+
+---
+
 ## Tools & Preferences
 
 | Tool | Preference |
