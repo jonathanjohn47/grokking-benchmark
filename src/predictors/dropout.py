@@ -17,20 +17,14 @@ def compute_accuracy(model, data_loader):
 
 
 def compute_dropout_gap(model, data_loader, dropout_rate):
-    """
-    Compute the accuracy gap between training and evaluation modes of the model.
-    This is done by comparing the accuracy with dropout enabled (training mode)
-    and dropout disabled (evaluation mode).
-    """
-    # Set model to training mode to enable dropout
     model.train()
+    model.dropout1.p = dropout_rate
+    model.dropout2.p = dropout_rate
     train_accuracy = compute_accuracy(model, data_loader)
 
-    # Set model to evaluation mode to disable dropout
     model.eval()
+    model.dropout1.p = 0.0
+    model.dropout2.p = 0.0
     eval_accuracy = compute_accuracy(model, data_loader)
 
-    # Calculate the gap
-    dropout_gap = train_accuracy - eval_accuracy
-
-    return dropout_gap, train_accuracy, eval_accuracy
+    return train_accuracy - eval_accuracy, train_accuracy, eval_accuracy

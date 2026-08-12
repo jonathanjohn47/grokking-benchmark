@@ -2406,6 +2406,53 @@ if __name__ == "__main__":
 
 ---
 
+## Session Summary — August 12, 2026 (context.md catch-up + commit)
+
+### What was found (this session, on read of `context.md` + direct file check)
+
+- `context.md`'s last entry said `compute_dropout_gap` in `src/predictors/dropout.py` still had the unfixed `dropout_rate` bug. On checking the actual file, **the fix was already applied** (not by this session — found already present in the working tree, uncommitted):
+  ```python
+  def compute_dropout_gap(model, data_loader, dropout_rate):
+      model.train()
+      model.dropout1.p = dropout_rate
+      model.dropout2.p = dropout_rate
+      train_accuracy = compute_accuracy(model, data_loader)
+
+      model.eval()
+      model.dropout1.p = 0.0
+      model.dropout2.p = 0.0
+      eval_accuracy = compute_accuracy(model, data_loader)
+
+      return train_accuracy - eval_accuracy, train_accuracy, eval_accuracy
+  ```
+  Both `dropout1.p`/`dropout2.p` are now set to `dropout_rate` before the `.train()` accuracy measurement, and reset to `0.0` before the `.eval()` accuracy measurement — matches the fix that was planned at the end of the last session. **Not yet verified by an actual run** (e.g. with `dropout_rate=0.9` on a trained model) — this is still the open verification step, carried forward.
+- `src/predictors/dropout.py` is **still not wired into `src/train.py`** — checked directly, no reference to the dropout predictor in `train.py` yet.
+- `git status` at session start also showed several files not previously recorded in `context.md`:
+  - `CLAUDE.md` — heavily rewritten (722 lines changed). This is the large, mandatory-workflow version of `CLAUDE.md` now in effect (`context.md`-first rule, `indian-english` skill requirement, teacher-first mentoring rules, Opencode prompt defaults, etc.) — this explains the size of the diff; it is an intentional project-rules rewrite, not an accidental change.
+  - `project_compilation.md` — 35 lines added.
+  - New untracked files: `dropout_gap_infographic.png`, `dropout_gap_infographic_philosophy.md`, `compile_python_files_to_pdf.py`, `images/transformer_residuals_before_dropout.png`, `images/transformer_shapes_through_layers.png`, `.claude/skills/`.
+  - Origin of these files not investigated in detail this session (outside the scope of "commit what is here") — flagged only.
+
+### User instruction this session
+
+- Jonathan asked directly: **commit all current changes and update `context.md` first.** Following `CLAUDE.md` Section 10/11 (update `context.md` before every requested commit), this entry was written first, then the commit was made.
+
+### Files Modified (this commit)
+
+- `context.md` — this session summary added.
+- `CLAUDE.md`, `project_compilation.md`, `src/predictors/dropout.py` — already modified in the working tree before this session started (see above); committed as-is, un-investigated further, per direct instruction to commit everything.
+- New files added to git: `dropout_gap_infographic.png`, `dropout_gap_infographic_philosophy.md`, `compile_python_files_to_pdf.py`, `images/transformer_residuals_before_dropout.png`, `images/transformer_shapes_through_layers.png`, `.claude/skills/` (contents as present at commit time).
+
+### Still Open / Next Steps (updated — August 12, 2026)
+
+1. **Immediate next action, next session:** verify the `compute_dropout_gap` fix by actually running it — use a trained model, pass a high `dropout_rate` (e.g. `0.9`), and confirm the dropout-stressed accuracy visibly drops compared to clean accuracy. This has not been run yet; the fix is only confirmed correct by reading the code, not by execution.
+2. After verification: wire the Dropout predictor into `src/train.py`, following the same pattern used for L2 Norm. Not started.
+3. L2 Norm predictor remains unresolved/set aside (zero-crossing vs. peak-based detection) — unchanged, not being worked on.
+4. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) — still pending, unrelated to code track, carried forward many sessions.
+5. Origin/purpose of `dropout_gap_infographic.png`, `dropout_gap_infographic_philosophy.md`, `compile_python_files_to_pdf.py`, and the two new files in `images/` not yet discussed — flagged only, not blocking.
+
+---
+
 ## Tools & Preferences
 
 | Tool | Preference |
