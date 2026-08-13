@@ -12,10 +12,14 @@
       "Bash(gh auth *)",
       "Bash(gh repo *)",
       "Bash(env)",
-      "Bash(rm src/predictors/dropout.py && git checkout -- src/models/transformer.py && git status)"
+      "Bash(rm src/predictors/dropout.py && git checkout -- src/models/transformer.py && git status)",
+      "Bash(git add *)",
+      "Bash(tasklist)",
+      "Bash(rm -f /c/Users/jonat/StudioProjects/grokking-benchmark/.git/index.lock && git status)"
     ],
     "additionalDirectories": [
-      "C:\\Users\\jonat\\StudioProjects\\grokking-benchmark\\src\\predictors"
+      "C:\\Users\\jonat\\StudioProjects\\grokking-benchmark\\src\\predictors",
+      "C:\\Users\\jonat\\StudioProjects\\grokking-benchmark\\.git"
     ]
   },
   "additionalDirectories": [

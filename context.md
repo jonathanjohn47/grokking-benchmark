@@ -1,10 +1,103 @@
+# 2. MANDATORY COMMUNICATION SKILL — `indian-english`
+
+Claude has access to a skill named:
+
+```text
+indian-english
+```
+
+This skill is **mandatory for every user-facing response**.
+
+The user is **Indian** and explicitly prefers **Indian English**.
+
+## Required behaviour
+
+Before generating **any** user-facing response, Claude MUST:
+
+1. Load/apply the `indian-english` skill.
+2. Follow the communication rules defined inside that skill.
+3. Write the response using the Indian English style defined by the skill.
+4. Check the response before sending it to make sure the skill has actually been applied.
+
+Claude must **not merely mention the skill**.
+
+Claude must **not assume that because the skill is available it has already been applied**.
+
+Claude must actually use the skill's instructions when composing the response.
+
+This applies to:
+
+- Normal replies
+- Technical explanations
+- Questions
+- Code explanations
+- Error explanations
+- Project discussions
+- Teaching
+- Mentoring
+- Opencode prompts
+- Documentation
+- Comments
+- Examples
+- Academic explanations
+- Thesis discussions
+- Implementation guidance
+- Rewrites
+- Summaries
+- Any other user-facing communication
+
+## Communication priority
+
+For communication style, `indian-english` is the authoritative skill.
+
+Do not duplicate or override its style rules elsewhere in this file unless a project-specific requirement is necessary.
+
+Do not replace the skill with generic "simple English".
+
+Do not use "simple English" as a substitute for Indian English.
+
+Do not default to:
+
+- American English
+- American conversational patterns
+- American corporate language
+- British English
+- Generic AI-assistant language
+
+The target is specifically:
+
+> **Natural Indian English used by an Indian teacher, mentor, engineer, or colleague speaking to an Indian user.**
+
+## Mandatory pre-send check
+
+Before sending every response, Claude must internally check:
+
+> **"Have I actually applied the `indian-english` skill to this response?"**
+
+Then check:
+
+> **"Does this response sound naturally Indian rather than American or generic AI English?"**
+
+If not, revise the response before sending it.
+
+The skill must be applied even when:
+
+- The user asks a very short question.
+- The response is only a few sentences.
+- The response is highly technical.
+- The response is an Opencode prompt.
+- The response is a project status update.
+- The user does not explicitly mention Indian English.
+
+**No exceptions unless the user explicitly requests a different communication style.**
+
 # Session Summary — Thesis Gantt Chart & Setup
 
 ## Identity & Context
 
 - **Name:** Jonathan John
 - **Programme:** M.Sc. Artificial Intelligence, IU Internationale Hochschule (2nd thesis attempt)
-- **Thesis Title:** *A Unified Benchmark of Grokking Predictors in Neural Networks*
+- **Thesis Title:** _A Unified Benchmark of Grokking Predictors in Neural Networks_
 - **Subtitle:** A head-to-head empirical comparison of 9 published grokking predictors under a unified benchmark protocol
 - **Supervisor:** Prof. Dr.-Ing. Sheikh Faisal Rashid (AI, Berlin campus)
 - **Official Start Date:** June 22, 2026
@@ -17,8 +110,8 @@
 - Use the existing **4-predictor baseline** as a starting point, then extend to **9 predictors**
 - Prepare a complete **thesis timeline (Gantt chart)** with deliverables and milestones
 - Two open questions from Prof. Rashid:
-    1. What was the **previous thesis topic**? (2nd topic must be different)
-    2. Have I **moved to Jammu**? (noted in signature)
+  1. What was the **previous thesis topic**? (2nd topic must be different)
+  2. Have I **moved to Jammu**? (noted in signature)
 
 ---
 
@@ -52,7 +145,7 @@
   - `if __name__ == "__main__":` block added for manual testing (`ModularArithmeticDataset(number=10)`,
     prints `len(dataset)`).
 - **Debugging exercise (intentional):** Jonathan first wrote the class without `__init__` and without
-  inheriting `Dataset`, then deliberately ran it *without* `__init__` to observe the resulting error
+  inheriting `Dataset`, then deliberately ran it _without_ `__init__` to observe the resulting error
   firsthand (learning exercise, not a mistake to fix silently) — confirmed missing `self.pairs`
   causes an `AttributeError` (not an empty list, which is a distinct case he initially guessed).
   This was mentoring-mode teaching, not direct implementation by Claude.
@@ -161,7 +254,7 @@
   the last session resolved this session:
   1. **Train/test split ratio (0.3) confirmed correct** — checked against the attached Obsidian
      vault (`Grokking Master Thesis`). Both `03 - Literature/Grokking: Generalisation Beyond
-     Overfitting on Small Algorithmic Datasets.md` ("Training split | ~30% train, ~70% test") and
+Overfitting on Small Algorithmic Datasets.md` ("Training split | ~30% train, ~70% test") and
      the thesis's own `05 - Thesis/Experimental Designs Used in Literature.md` factorial design
      table document 30%/70% as the standard split for grokking experiments (small train fraction
      is intentional — it's what causes the memorize-first-generalize-later dynamic). **Not a bug,
@@ -180,6 +273,7 @@
   itself never returns anything; the object holds the list as an attribute. This is why the old
   variable name `pairs` was misleading (it held a `Dataset` object, not a list).
 - **Current state of `src/data/modular_arithmetic.py` (verified correct, no open issues):**
+
   ```python
   from torch.utils.data import Dataset, DataLoader, random_split
 
@@ -213,6 +307,7 @@
       def __getitem__(self, idx):
           return self.pairs[idx]
   ```
+
 - **Data pipeline is now considered fully done and closed out.** Next up per the project plan is
   `src/models/transformer.py`.
 
@@ -233,7 +328,7 @@
 ## Jonathan's Learning Style Notes (carried forward)
 
 - Learning Python while implementing — explain concepts before code; he writes the code himself, Claude only guides when stuck
-- Prefers to understand the *purpose* of each function/concept before writing it
+- Prefers to understand the _purpose_ of each function/concept before writing it
 - Explains in Hindi/Hinglish when confused — respond in kind
 - Very literal thinker — direct logical explanation works better than analogies
 - Asks "why does this even exist?" / "agar ye naa karu to kya hoga?" — always answer the negative case directly
@@ -254,9 +349,9 @@
       vault, `shuffle=True` on train loader only, variable renamed (`modular_arithmetic_dataset`,
       snake_case), `Dataset` inheritance restored. **Data pipeline closed out, no open issues.**
 - [~] `src/models/transformer.py` — **in progress**: token embedding + position embedding done and
-      verified; `forward()` implemented (adds token + position vectors). Query/Key/Value `nn.Linear`
-      layers built in `__init__` (July 8, later session) — not yet used in `forward()`. Wiring Q/K/V
-      into actual attention computation is the **current next action**, then MLP → output head.
+  verified; `forward()` implemented (adds token + position vectors). Query/Key/Value `nn.Linear`
+  layers built in `__init__` (July 8, later session) — not yet used in `forward()`. Wiring Q/K/V
+  into actual attention computation is the **current next action**, then MLP → output head.
 - [x] Write training loop in `src/train.py`
 - [x] Reproduce canonical Nanda et al. grokking (**M1 gate — CLOSED July 10, 2026**, see log-scale
       grokking curve session summary below)
@@ -274,7 +369,7 @@
   2. **Combined token sequence** (Nanda et al. original approach) — build `[a, b, "="]` as one
      sequence, pass through transformer attention, predict from the "=" position.
   - Either way, raw tuple `(a, b, target)` from `__getitem__` must be converted to tensors — the
-    *shape* of that conversion depends on which design is picked (separate scalars vs. one sequence
+    _shape_ of that conversion depends on which design is picked (separate scalars vs. one sequence
     tensor `[a, b]`).
 - **Concept taught: what a tensor is.** PyTorch's multi-dim array type — needed for gradient tracking
   and fast math (list/tuple can't do this). Scalar (`tensor(5)`, dim 0) → vector (`tensor([3,5])`,
@@ -383,6 +478,7 @@
   Jonathan's side, not something Claude changed. **This was not re-fixed before session end.**
 - **Current actual state of `src/data/modular_arithmetic.py` at session close (verify before
   resuming):**
+
   ```python
   from torch import long, tensor
   from torch.utils.data import Dataset, DataLoader, random_split
@@ -425,12 +521,15 @@
   if __name__ == "__main__":
       print(tensor([5, 3, 8, 97]))
   ```
+
   **This is broken — `target` is not returned.** The correct `__getitem__` (confirmed working in
   attempt 3 above) is:
+
   ```python
   def __getitem__(self, idx):
       return (self.get_tensor(self.pairs[idx]), self.pairs[idx][2])
   ```
+
 - **Also noted, unrelated/minor:** `from torch import long, tensor` — `long` is imported but unused
   anywhere in the file currently. Not flagged as urgent, just noting for later cleanup.
 - **`if __name__ == "__main__":` block** currently just does `print(tensor([5, 3, 8, 97]))` — a
@@ -442,7 +541,7 @@
 
 1. **Immediate next action (blocker carried over, unresolved):** re-apply the fix to `__getitem__`
    in `src/data/modular_arithmetic.py` — it must return `(self.get_tensor(self.pairs[idx]),
-   self.pairs[idx][2])`, not just `self.get_tensor(self.pairs[idx])`. Verify this sticks before
+self.pairs[idx][2])`, not just `self.get_tensor(self.pairs[idx])`. Verify this sticks before
    moving on.
 2. Optional minor cleanup once fixed: avoid double-indexing `self.pairs[idx]` (store in a local
    `item` variable); remove unused `long` import if still unused.
@@ -491,7 +590,7 @@
   - `pd.DataFrame(model.token_embedding.weight.detach().numpy())` used — `.detach()` needed before
     `.numpy()` because the tensor is still attached to the autograd graph.
   - **Environment flake (unresolved, not a code bug):** running the script via plain `python
-    src/models/transformer.py` intermittently raised `KeyboardInterrupt` partway through pandas'
+src/models/transformer.py` intermittently raised `KeyboardInterrupt` partway through pandas'
     internal import chain (different internal file each time), with no keyboard input from Jonathan
     and no editor "Run" button involved (ruled out by testing directly in a plain terminal). Root
     cause not identified. It self-resolved on a later run (completed in ~0s). **Flag for
@@ -503,6 +602,7 @@
     `d_model` numbers representing each token's vector. Row/column count matches the
     `nn.Embedding` matrix shape exactly.
 - **Current verified state of `src/models/transformer.py`:**
+
   ```python
   import pandas as pd
 
@@ -523,6 +623,7 @@
       dataframe = pd.DataFrame(model.token_embedding.weight.detach().numpy())
       print(dataframe)
   ```
+
   - **Minor cleanup flagged, not urgent:** `print(self.token_embedding.weight)` currently sits
     inside `__init__`, so it fires on every instantiation — fine for now during exploration, but
     should likely move out (or be removed) once `transformer.py` is a real model used by the
@@ -533,7 +634,7 @@
 ### Still Open / Next Steps (updated — July 8, 2026)
 
 1. **Immediate next action:** add **position embedding** to `Transformer.__init__` (token embedding
-   alone doesn't tell the model *where* in the sequence `a`, `b`, `"="` are).
+   alone doesn't tell the model _where_ in the sequence `a`, `b`, `"="` are).
 2. After position embedding: attention → MLP → output head → `forward()` to complete
    `transformer.py`.
 3. Write training loop in `src/train.py` (not started).
@@ -572,12 +673,14 @@
       position_vectors = self.position_embedding(arange(x.size(1)))
       return token_vectors + position_vectors
   ```
+
   - Jonathan generalized the position lookup to `arange(x.size(1))` instead of hardcoding `arange(3)`
     — correct for batched input `(batch_size, seq_len)` shape (as `DataLoader` will provide). Flagged
     (not urgent) that `x.size(1)` assumes 2D input; would break on an unbatched 1D tensor.
   - Leftover dead code (`position = self.position_embedding(arange(3))` inside `__init__`, unused)
     was identified and removed by Jonathan.
 - **Current verified state of `src/models/transformer.py`:**
+
   ```python
   import pandas as pd
 
@@ -601,6 +704,7 @@
   if __name__ == "__main__":
       model = Transformer(vocab_size=97, d_model=128)
   ```
+
   - **Not yet fixed, carried forward:** `from torch import arange, nn` imports `arange` directly but
     `torch.arange` was used earlier in the session (now resolved — current code consistently uses
     bare `arange`). `vocab_size=97` in `__main__` is still hardcoded and technically should be `98`
@@ -658,6 +762,7 @@
   ```
   Confirmed correct (persistent, registered submodules, no more per-call recreation bug).
 - **Current verified state of `src/models/transformer.py`:**
+
   ```python
   import pandas as pd
 
@@ -686,6 +791,7 @@
   if __name__ == "__main__":
       model = Transformer(vocab_size=2, d_model=5)
   ```
+
 - **Not yet done, carried forward:**
   1. `print(self.query.weight)` still sits in `__init__` — was only for verification, should be
      removed (not urgent, flagged for cleanup).
@@ -759,6 +865,7 @@
      Decision recorded: **use `model.forward(x)` explicitly for now**, revisit `model(x)` convention
      understanding later without blocking progress.
 - **Current verified state of `src/models/transformer.py`:**
+
   ```python
   import pandas as pd
 
@@ -802,8 +909,10 @@
       x = torch.tensor([[0, 1, 0], [1, 0, 1]])
       model.forward(x)
   ```
+
   **Note:** the 3 dummy test methods and the `reverse` experiment were reverted — not present in
   this final state.
+
 - **Not yet done, carried forward:**
   1. Debug `print(...)` statements (4 in `__init__`/`forward` combined) still present — cleanup
      before training loop.
@@ -890,6 +999,7 @@
   sum) → MLP → output head → `forward()` returns `logits`. This closes out the long-running "build
   `transformer.py`" task that spanned several sessions (July 8, multiple sub-sessions).
 - **Current verified state of `src/models/transformer.py`:**
+
   ```python
   import pandas as pd
 
@@ -939,6 +1049,7 @@
       print(x)
       model.forward(x)
   ```
+
 - **Not yet done, carried forward (all flagged, none urgent/blocking):**
   1. Debug `print("Logits shape:", ...)` still sits inside `forward()` — fine during construction,
      should be removed/moved once used by the real training loop.
@@ -1024,15 +1135,16 @@
 - **Bugs found and fixed across several attempts (Jonathan wrote, Claude caught each one):**
   1. `data_loader[0][0]` — tried indexing the `DataLoader` itself (see concept #1 above). Root cause:
      `get_dataloaders` returns a **tuple** `(train_loader, test_loader)`, so `data_loader[0]` (tuple
-     indexing) is valid, but the *inner* `DataLoader` object is not further indexable.
+     indexing) is valid, but the _inner_ `DataLoader` object is not further indexable.
   2. Called `next(iter(data_loader[0]))` **multiple separate times** (once for `x`, once for `y`,
      and once again to feed `model.forward`) — since `train_loader` has `shuffle=True`, each
      `iter()` call produces a **different random batch**, so `x`/`y`/`logit` ended up mismatched
-     (label leakage's opposite problem: label *misalignment*). Fixed by calling `iter()`/`next()`
+     (label leakage's opposite problem: label _misalignment_). Fixed by calling `iter()`/`next()`
      **exactly once**, storing the batch, then unpacking: `x, y = next(iter(data_loader[0]))`.
   3. Passed the whole `(x, y)` tuple into `model.forward(...)` instead of just `x` — caught before
      it was run (would have failed inside `token_embedding`, which expects a tensor not a tuple).
 - **Current correct state of `src/train.py`:**
+
   ```python
   from torch import nn
 
@@ -1053,13 +1165,14 @@
 
   print(loss)
   ```
+
 - **Verified run output:** `equal_sign_logit.shape` → `torch.Size([32, 98])` (correct: batch_size,
   vocab_size). `loss` → `tensor(4.5240, grad_fn=<NllLossBackward0>)`. Confirmed this is the expected
   baseline: `ln(98) ≈ 4.585` is the theoretical loss for a uniformly random 98-class guess, and an
   untrained model should sit right around there. `grad_fn=<NllLossBackward0>` confirms gradient
   tracking is wired correctly through the whole model.
 - **Gantt chart check (Jonathan asked, referencing `Thesis Gantt - Grokking Predictors Benchmark -
-  Gantt.csv` at project root):** Phase 1 ("Setup") has 3 tasks — (1) Git repo + env setup: done,
+Gantt.csv` at project root):** Phase 1 ("Setup") has 3 tasks — (1) Git repo + env setup: done,
   (2) Transformer + task generators / "Working PyTorch MPS pipeline": architecture done, but MPS
   device usage **not yet verified** (model has only been run on CPU/default tensors so far, never
   explicitly moved to `mps`), (3) **Reproduce Nanda grokking (GATE)**: not done — this is the M1
@@ -1089,13 +1202,14 @@
   over from July 9 (single-batch loss check → full multi-epoch training):
   - Added `from torch.optim import Adam`; `optimizer = Adam(model.parameters(), lr=0.001)`.
   - Replaced the single `next(iter(...))` batch check with a nested loop: `for epoch in range(100):
-    for x, y in data_loader[0]:` — iterates all train batches per epoch, not just one.
+for x, y in data_loader[0]:` — iterates all train batches per epoch, not just one.
   - Per batch: `logit = model.forward(x)` → `equal_sign_logit = logit[:, 2, :]` → `loss =
-    cross_entropy_loss(equal_sign_logit, y)` → `optimizer.zero_grad()` → `loss.backward()` →
+cross_entropy_loss(equal_sign_logit, y)` → `optimizer.zero_grad()` → `loss.backward()` →
     `optimizer.step()`.
   - `print(f"Epoch {epoch + 1}: Loss = {loss.item()}")` at the end of each epoch (reports last
     batch's loss, not an averaged epoch loss — acceptable for now, not flagged as a bug).
   - **Current state of `src/train.py`:**
+
     ```python
     from torch import nn
     from torch.optim import Adam
@@ -1123,6 +1237,7 @@
 
         print(f"Epoch {epoch + 1}: Loss = {loss.item()}")
     ```
+
 - **`src/models/transformer.py` cleaned up:** all intermediate debug `print()` statements (shapes/
   values of token_vectors, position_vectors, combined_vector, query/key/value_vector, scores,
   attention_weights, attended_values, mlp_output, logits) removed from `forward()`. Also dropped
@@ -1187,7 +1302,7 @@
   — plateaued (barely moved from epoch 500's ~9%), confirming mini-batch `Adam` alone isn't going to
   get there in reasonable time.
 - **Switched to `AdamW` + `weight_decay=1.0`, still batch_size=32, reran 5000 epochs:** made things
-  *worse* — train accuracy dropped to ~4%, loss stopped decreasing, oscillating 3.7–4.6 again.
+  _worse_ — train accuracy dropped to ~4%, loss stopped decreasing, oscillating 3.7–4.6 again.
   Diagnosed cause: `weight_decay=1.0` (Nanda et al.'s value) is calibrated for **full-batch** training;
   on noisy mini-batches (batch_size=32) the aggressive decay fights the noisy gradient signal and
   destabilizes training instead of regularizing it.
@@ -1195,7 +1310,7 @@
   `self.mlp` was a single bare `nn.Linear(d_model, d_model)` with **no non-linearity**, and there were
   **no residual connections anywhere** in `forward()` (attention output fully replaced its input, MLP
   output fully replaced its input). Explicitly decided to make architecture match Nanda et al. as
-  closely as possible (project's M1 gate requires reproducing *their* result specifically), which
+  closely as possible (project's M1 gate requires reproducing _their_ result specifically), which
   surfaced an important correction: **Nanda et al.'s actual grokking transformer deliberately omits
   LayerNorm and Linear biases** (simplification for their mechanistic-interpretability weight
   analysis) — so "match Nanda" and "add LayerNorm" were in tension; Jonathan chose match-Nanda.
@@ -1221,6 +1336,7 @@
     expression to `int(0.3)` (`= 0`), which would have broken the DataLoader — caught before running,
     fixed back to `int(0.3 * 97 * 97)`.
 - **Current final state of `src/models/transformer.py`:**
+
   ```python
   from torch import arange, nn
   import torch
@@ -1266,7 +1382,9 @@
       x = torch.eye(2, 3, dtype=torch.long)
       model.forward(x)
   ```
+
 - **Current final state of `src/train.py`:**
+
   ```python
   from torch import nn
   from torch.optim import AdamW
@@ -1311,6 +1429,7 @@
       print(f"Epoch {epoch + 1}: Loss = {loss.item()}, Accuracy = {total_correct / total_samples}")
       print(f"Test Accuracy = {test_total_correct / test_total_samples}")
   ```
+
 - **Not yet done, carried forward:**
   1. **This exact configuration has not been run yet** — full-batch + AdamW(lr=1e-3, wd=1.0) +
      Nanda-aligned architecture is the current best attempt at reproducing the grokking curve, but no
@@ -1362,6 +1481,7 @@
   - After the training loop: `matplotlib` plot of train vs. test accuracy vs. `epoch` on a **log-x
     axis**, saved to `grokking_curve.png` (also `plt.show()`).
   - **Current full state of `src/train.py`:**
+
     ```python
     import matplotlib.pyplot as plt
     from torch import nn
@@ -1427,6 +1547,7 @@
     plt.savefig("grokking_curve.png")
     plt.show()
     ```
+
 - **Full 20000-epoch run completed and observed. Result: classic grokking curve confirmed, matching
   Nanda et al. exactly:**
   - Train accuracy rises smoothly, reaches 100% around epoch ~800 (pure memorization phase).
@@ -1436,7 +1557,7 @@
     (would look like a gradual ramp on a linear x-axis, which is what caused the "not grokking, just
     gradual" confusion earlier this session before the diagnosis above).
   - Final state (epoch ~16900–18100, printed sample): `Train Acc = 1.0`, `Test Acc =
-    0.9980264156672233` (not exactly 100% — a small number of test pairs remain consistently
+0.9980264156672233` (not exactly 100% — a small number of test pairs remain consistently
     misclassified; not investigated further, not blocking).
   - Plot saved as `Grokking Curve.png` at project root (visually confirmed by Jonathan and Claude:
     train curve rises first ~epoch 10¹–10³, test curve stays flat near 0 until ~10³, then sharp climb
@@ -1520,7 +1641,7 @@
   - **Real bug found via smoke test, fixed in `src/models/transformer.py`:** `forward()`'s
     `arange(x.size(1))` created its position-index tensor on CPU by default even when the model's
     embeddings were on `mps` — device mismatch (`RuntimeError: Placeholder storage has not been
-    allocated on MPS device!`). Fixed: `arange(x.size(1), device=x.device)`.
+allocated on MPS device!`). Fixed: `arange(x.size(1), device=x.device)`.
   - **Verified via 2-epoch smoke test** (throwaway `num_epochs` override, run headlessly), then a
     **full 20000-epoch run on MPS**, confirmed same grokking curve shape (train→1.0 ~epoch 1000, test
     lag then climb ~epoch 3000-6000) and same L2 norm decay/wobble pattern as the CPU runs — MPS
@@ -1632,7 +1753,7 @@
   average-based) on top of `compute_l2_norm_rate_of_decline`'s output. Jonathan chose **average-based**.
 - **Concept taught: why average-based over fixed threshold.** Rate-of-decline is naturally noisy
   epoch-to-epoch; a fixed cutoff either false-fires on noise or misses real signal. A running average
-  baseline lets the rule fire only when the current rate spikes *relative to recent normal behavior*
+  baseline lets the rule fire only when the current rate spikes _relative to recent normal behavior_
   (`current > multiplier * running_average`), which is the actual signal expected near the grok
   transition.
 - **`detect_l2_norm_drop(rate_of_decline, multiplier=2)` built in `src/predictors/l2_norm.py`**
@@ -1643,15 +1764,15 @@
   2. **Design bug found and fixed: running average originally included the current epoch's own value**
      before comparing against it (self-dampening — a real spike would inflate its own baseline, making
      it harder to detect). Explained via the anomaly-detection framing: the baseline ("what's normal")
-     must be built from *prior* epochs only, never the point being tested. Fixed via the standard
+     must be built from _prior_ epochs only, never the point being tested. Fixed via the standard
      incremental-mean recursion (`running_average = (running_average * (i-1) + rate[i-1]) / i`),
      verified correct for `i >= 1` — the average used at step `i` is exactly the mean of
      `rate_of_decline[0 : i]`, excluding the current point.
   3. **Edge case found and fixed: `i == 0` had no prior data**, so comparing against `running_average
-     = 0.0` meant the rule would almost always fire immediately (since rate-of-decline is usually
+= 0.0` meant the rule would almost always fire immediately (since rate-of-decline is usually
      positive) — a guaranteed false positive at the very first epoch. Jonathan's first proposed fix
      (`running_average = rate_of_decline[0]` at `i==0`, i.e. compare the value to itself) was reviewed
-     and shown to be *incidentally* correct for positive values only (`rate[0] > multiplier * rate[0]`
+     and shown to be _incidentally_ correct for positive values only (`rate[0] > multiplier * rate[0]`
      is false when `rate[0] > 0` and `multiplier > 1`) but **wrong for negative values**
      (`-5 > 2 * -5` → `-5 > -10` → `True`, a false fire). Concept taught: `rate_of_decline` **can be
      negative** — it's `previous_norm - current_norm`, and L2 norm is not monotonically decreasing
@@ -1661,6 +1782,7 @@
      curve run). Final fix: `i == 0` now just `continue`s (no comparison at all when there's no prior
      data to build a baseline from) — correct regardless of sign.
   - **Current verified state of `detect_l2_norm_drop`:**
+
     ```python
     def detect_l2_norm_drop(rate_of_decline, multiplier=2):
         if rate_of_decline is None or len(rate_of_decline) == 0:
@@ -1676,14 +1798,16 @@
                 return i
         return None
     ```
+
   - **Function is now logically complete and correct** (baseline excludes current point, `i == 0`
     handled safely, negative-rate case handled safely).
   - **Minor style nitpick flagged, not applied (not urgent):** `elif i > 0` is redundant after an
     `if i == 0: continue` — a plain `else:` would be equivalent and cleaner. Not changed this session.
   - Note: `src/predictors/l2_norm.py` also still has an earlier `detect_l2_norm_signal_epoch`
-    function (whole-history `mean + 2*std` threshold, non-causal — uses future data, returns *all*
+    function (whole-history `mean + 2*std` threshold, non-causal — uses future data, returns _all_
     signal-epoch indices as an array) from a prior session. Both functions currently coexist; not
     reconciled or deduplicated this session.
+
 - **Session ended here** — Jonathan took a break right after the function was confirmed correct,
   before wiring it into `train.py`.
 
@@ -1699,6 +1823,7 @@
   (redundant condition after `if i == 0: continue`), with the fire-check moved inside the `else` block.
   Functionally identical to the committed version, just cleaner.
 - **Current final state of `detect_l2_norm_drop` in `src/predictors/l2_norm.py`:**
+
   ```python
   def detect_l2_norm_drop(rate_of_decline, multiplier=2):
       if rate_of_decline is None or len(rate_of_decline) == 0:
@@ -1844,7 +1969,7 @@
 - **Conceptual teaching (mentoring mode):**
   - What L2 norm is: single number measuring combined magnitude of all model weights (`√(w₁² + w₂² + ... + wₙ²)`)
   - Why it drops during training: `AdamW` with `weight_decay=1.0` actively shrinks weights as regularization
-  - Why it drops *faster* during grokking: model switches from memorization to generalization, uses simpler/smaller weights to describe the pattern
+  - Why it drops _faster_ during grokking: model switches from memorization to generalization, uses simpler/smaller weights to describe the pattern
   - Rate of decline: how much the L2 norm drops from one epoch to the next (e.g., norm 115.22 → 115.10 = drop of 0.12)
   - Running average threshold rule: fire when current rate spikes above 2× the running average of prior rates (signal of unusual acceleration in weight shrinking)
 
@@ -1908,6 +2033,7 @@
               return i
       return None
   ```
+
   - Updated `train.py` call to pass `skip_epochs=200`.
   - **Rationale:** skip the initialization phase (epochs 0–200), then fire on first epoch where norm drops > 0.05 during the stable training phase. This should detect the actual acceleration phase leading to grokking.
 - **Not yet run:** 10000-epoch training with the updated skip_epochs=200 version. This is the immediate next action.
@@ -1935,7 +2061,7 @@
   - Analyzed rate-of-decline statistics with debug script (`debug_detection.py`):
     - **Epochs 195-210** (memorization phase): rates **0.055-0.059** ← very high decline
     - **Epochs 4085-4095** (grokking phase): rates **0.0145-0.0146** ← much lower decline
-  - **Finding:** L2 norm decays *faster* during early memorization, *slower* during the actual grok transition.
+  - **Finding:** L2 norm decays _faster_ during early memorization, _slower_ during the actual grok transition.
   - This is the opposite of the expected signal — the norm drop rate does not spike when grokking happens; it's highest when the model is memorizing.
   - **Implication:** The current threshold-based approach (detect when rate exceeds X) doesn't work because the highest rates occur during memorization, not during grokking.
 
@@ -1994,10 +2120,10 @@
 
 ### Root-cause fix: MA windows must be uniform in log-epoch space, not linear-epoch space
 
-- **Jonathan caught the real bug:** "Did you factor in the log factor before implementing moving averages? Obviously these graphs will scribble towards the end." Correct diagnosis — since the plot's x-axis is `log10(epoch)`, a fixed `window_size` counted in **linear epoch indices** covers a huge *visual* span near epoch 1 (over-smoothing early data) and a tiny sliver near epoch 10000 (leaving late data effectively unsmoothed → "scribble"). The earlier `size=30` smoothing pass on `ma_diff` was a band-aid over this same root problem, not a real fix.
+- **Jonathan caught the real bug:** "Did you factor in the log factor before implementing moving averages? Obviously these graphs will scribble towards the end." Correct diagnosis — since the plot's x-axis is `log10(epoch)`, a fixed `window_size` counted in **linear epoch indices** covers a huge _visual_ span near epoch 1 (over-smoothing early data) and a tiny sliver near epoch 10000 (leaving late data effectively unsmoothed → "scribble"). The earlier `size=30` smoothing pass on `ma_diff` was a band-aid over this same root problem, not a real fix.
 - **Correct fix implemented (direct rewrite of `l2_norm.py`):**
   1. **`resample_to_log_uniform_grid(data, num_points=None)`** — new function. Builds `log_epochs = log10(1..N)`, creates a `linspace` grid uniform in that log space, and uses `np.interp` to resample the input data onto it. Returns `(epoch_grid, resampled_data)` where `epoch_grid = 10**log_grid` (i.e., real epoch values, but non-uniformly spaced in linear terms — dense near epoch 1, sparse near epoch N — matching the visual density on a log-x plot).
-  2. **`compute_fast_slow_moving_averages` rewritten**: log-transforms L2 norm values (handles the y-axis's exponential-decay scaling, as before) → resamples onto the log-uniform grid via step 1 → applies `apply_moving_average` (now on the log-uniform-grid data, so `window_size` corresponds to a constant *proportional* epoch-width everywhere, not a constant *index-count*) → exponentiates back. **Signature changed**: now returns `(epoch_grid, fast_ma, slow_ma)` instead of just `(fast_ma, slow_ma)`.
+  2. **`compute_fast_slow_moving_averages` rewritten**: log-transforms L2 norm values (handles the y-axis's exponential-decay scaling, as before) → resamples onto the log-uniform grid via step 1 → applies `apply_moving_average` (now on the log-uniform-grid data, so `window_size` corresponds to a constant _proportional_ epoch-width everywhere, not a constant _index-count_) → exponentiates back. **Signature changed**: now returns `(epoch_grid, fast_ma, slow_ma)` instead of just `(fast_ma, slow_ma)`.
   3. **`detect_ma_crossover` rewritten** to accept `epoch_grid` and search/compare along it; `skip_epochs` is now a real epoch value (not an array index) since the grid is non-uniformly spaced in epoch terms. Returns the real epoch (float, interpolated) of the crossover.
 - **`train.py` updated** to unpack the 3-tuple, pass `epoch_grid` into `detect_ma_crossover`, and save `epoch_grid.npy` alongside `fast_ma.npy`/`slow_ma.npy`. Detection-epoch and lead-time prints now use `.1f` formatting since the crossover epoch is a float (interpolated grid position), not an integer index.
 - **`plot_results.py` updated**: loads `epoch_grid.npy`; all `fast_ma`/`slow_ma`/`ma_diff` plots now use `epoch_grid` as the x-axis (not `range(1, num_epochs+1)`) — critical, since plotting against linear indices would silently undo the log-uniform resampling. The earlier `uniform_filter1d(ma_diff, size=30)` band-aid smoothing was **removed** — no longer needed since `fast_ma`/`slow_ma` are already correctly smoothed on the log-uniform grid; `ma_diff = fast_ma - slow_ma` is plotted directly.
@@ -2065,7 +2191,7 @@ def detect_ma_crossover(epoch_grid, fast_ma, slow_ma, skip_epochs=100):
   - **Epoch ~100–700:** tiny wiggles barely off zero (amplitude ~0.01–0.05) — **this is where the detected crossover at epoch 621 lives.** Diagnosed as numerical noise in a flat region, not a real signal.
   - **Epoch ~3000–5000:** a single **large, unambiguous spike** to about +0.6 in the MA difference — by far the dominant feature in the whole plot.
   - **Epoch ~4000–10000:** wide oscillations (±0.3) — the MA difference reacting to the sharp late-training L2 norm crash, and matches the "dip-then-bump-then-crash" wobble in the L2 Norm panel around epoch 2000–4000 that was first flagged as suspicious back in the July 10, 2026 session (original L2 norm curve observation).
-- **Conclusion: Jonathan's "first crossing" hypothesis is not quite right.** The *first* crossing (621) is noise from a flat/quiet region; the *real* signal is the large-magnitude crossing/spike around epoch 3000–5000, which sits much closer to the actual grok epoch (5738) and would give a smaller, more meaningful lead time (roughly 1000–2000 epochs instead of 5117) if detected instead.
+- **Conclusion: Jonathan's "first crossing" hypothesis is not quite right.** The _first_ crossing (621) is noise from a flat/quiet region; the _real_ signal is the large-magnitude crossing/spike around epoch 3000–5000, which sits much closer to the actual grok epoch (5738) and would give a smaller, more meaningful lead time (roughly 1000–2000 epochs instead of 5117) if detected instead.
 - **Decision point raised, not yet resolved:** need a detection rule that distinguishes the one large, meaningful crossing from the many tiny noise crossings earlier in training. Two candidate approaches proposed to Jonathan (not yet chosen/implemented):
   1. Require a **minimum magnitude swing** before/after the crossing before counting it as a detection (filters out small-amplitude noise crossings).
   2. Find the crossing **closest to where `|fast_ma - slow_ma|` reaches its peak** (directly targets the biggest event rather than filtering by threshold).
@@ -2080,7 +2206,7 @@ def detect_ma_crossover(epoch_grid, fast_ma, slow_ma, skip_epochs=100):
 - **Exploratory plotting (direct implementation, in `src/plot_results.py`, iterated live with Jonathan reviewing each figure):**
   1. First version: `plot_results.py` rewritten to load only `epoch_grid.npy`/`slow_ma.npy`, compute `fast_ma_of_slow_ma = apply_moving_average(slow_ma, window_size=20)`, and plot both curves boldly (linewidth 3.5, purple vs. orange) with all sign-flip crossovers marked. Saved to `ma_of_slow_ma_crossover.png` (new filename, doesn't overwrite the old 6-panel `grokking_analysis.png`). Found 3 crossovers: epoch 1.0 (edge artifact), **2007.8**, **3397.5**.
   2. Second version: added a separate difference plot (`fast_ma_of_slow_ma - slow_ma`), saved to `ma_of_slow_ma_diff.png` — green/red fill above/below zero, crossover lines marked.
-  3. **Jonathan's hypothesis (visual, from the clean diff plot): the *first* zero-crossing (epoch ~2007.8) should be the trigger point**, since the plot "is so neat and clean, no confusion." Claude checked this against the data before agreeing (same pattern as the earlier "first crossing" hypothesis on the original fast_ma/slow_ma pair, which had already been disproven this same session — see below) and found:
+  3. **Jonathan's hypothesis (visual, from the clean diff plot): the _first_ zero-crossing (epoch ~2007.8) should be the trigger point**, since the plot "is so neat and clean, no confusion." Claude checked this against the data before agreeing (same pattern as the earlier "first crossing" hypothesis on the original fast_ma/slow_ma pair, which had already been disproven this same session — see below) and found:
      - Noise floor (std of diff in quiet region, epoch < 90): **0.00054**.
      - The dip after the first crossing only reaches **-0.0033** (~6x noise floor) — weak.
      - A much larger peak exists later at **epoch 5633.5**, magnitude **0.0244** (~45x noise floor) — dominant.
@@ -2145,7 +2271,7 @@ def detect_ma_of_ma_trigger(epoch_grid, diff, noise_floor, threshold_multiplier=
 - **Root cause diagnosed (Claude inspected the actual saved arrays, not just the plot):**
   - Noise floor this run: 0.00064 (close to the prior run's 0.00054 — consistent).
   - Threshold (10x) = 0.0064.
-  - This run has **two early humps that both exceed 10x noise floor**: epoch 325 (12.8x) and epoch 930 (19x) — both fire *before* the real event. Previous run's early wobble only reached ~6x, so 10x happened to work there by luck, not because it was a principled cutoff. **Conclusion: a fixed threshold multiplier is not robust across runs** — the size of early-training noise humps varies run to run, so no single multiplier reliably separates "early noise" from "the real signal" without risking either false-firing (too low) or missing weak-but-real runs (too high).
+  - This run has **two early humps that both exceed 10x noise floor**: epoch 325 (12.8x) and epoch 930 (19x) — both fire _before_ the real event. Previous run's early wobble only reached ~6x, so 10x happened to work there by luck, not because it was a principled cutoff. **Conclusion: a fixed threshold multiplier is not robust across runs** — the size of early-training noise humps varies run to run, so no single multiplier reliably separates "early noise" from "the real signal" without risking either false-firing (too low) or missing weak-but-real runs (too high).
   - The real peak this run: epoch 4764, magnitude 0.0217 (33.9x noise floor) — **only 42 epochs before grok (4806)**, i.e. 0.4% of the run. Still by far the strongest and closest signal in the data, same pattern as the previous run's peak (epoch 5633.5, 105-epoch lead).
 
 - **Jonathan's counter-proposal:** since the threshold approach broke, revert to the **first zero-crossing** of the MA-of-MA difference (green→red, i.e. first time `diff` goes negative) as the trigger — noting that this crossing has now appeared in a "clean," well-defined spot on **two separate runs** (epoch 2007.8 in the first run, epoch 1688.6 in this run), even though its magnitude is weak.
@@ -2153,7 +2279,7 @@ def detect_ma_of_ma_trigger(epoch_grid, diff, noise_floor, threshold_multiplier=
 - **Claude checked this against the current run's actual numbers before agreeing** (found via direct inspection of `ma_of_ma_diff.npy`, not the plot):
   - First zero-crossing (this run): epoch 1688.6. Lead time to grok (4806): **3117 epochs (31.2% of the run)**.
   - Trough depth in that dip: -0.0025, only **3.9x noise floor** — weak, same order of magnitude as the first run's 6x trough.
-  - **This reproduces the exact same weakness flagged earlier this session** (too early, too close to noise) — the zero-crossing hypothesis does not actually out-perform the threshold approach on raw lead-time/strength metrics; it's just *more consistent in where it lands*, which is a different (and real) virtue from being *accurate*.
+  - **This reproduces the exact same weakness flagged earlier this session** (too early, too close to noise) — the zero-crossing hypothesis does not actually out-perform the threshold approach on raw lead-time/strength metrics; it's just _more consistent in where it lands_, which is a different (and real) virtue from being _accurate_.
   - Claude's counter-suggestion (raise `threshold_multiplier` to ~20–25x, which would clear both this run's early humps (12.8x, 19x) and the first run's wobble (6x) while still catching both runs' real peaks (34x, 45x)) was **not accepted** — Jonathan explicitly chose reproducibility/cleanliness of the crossing over magnitude/lead-time tightness.
 
 - **Decision (Jonathan's explicit call, implemented directly on request — "Let's agree on my plan and you change the code to detect that first crossing"):** switch the active L2 Norm predictor trigger from the threshold-based rule to the **first zero-crossing** of the MA-of-MA difference. Rationale on record: consistency of location across runs (2007.8 and 1688.6, both in a similar early-training window) outweighs the fact that the signal is quantitatively weak (~4-6x noise floor) and has a large, imprecise lead time (~31-37% of the run). This is a deliberate trade-off choice, not a resolved "best" answer — flagged for revisiting once more runs are available to check whether the crossing keeps landing in a consistent relative position (e.g. as a % of total run length or relative to some other milestone) across seeds/hyperparameters.
@@ -2173,7 +2299,7 @@ def detect_ma_of_ma_trigger(epoch_grid, diff, noise_floor, threshold_multiplier=
   - **`src/plot_results.py`** — import and detection call swapped the same way; both plots (`ma_of_slow_ma_crossover.png`, `ma_of_slow_ma_diff.png`) now mark the zero-crossing trigger point instead of a threshold line/rising-edge point. Titles updated to say "Zero-Crossing Trigger."
   - All three files verified with `ast.parse` (again avoiding the pre-existing Windows `__pycache__` permission issue with `py_compile`). New `detect_ma_of_ma_zero_crossing` sanity-checked directly against this run's already-saved `epoch_grid.npy`/`ma_of_ma_diff.npy` — confirmed it returns 1688.58, matching the manually-computed value above.
 
-- **Not yet re-run with this exact code change — this is the immediate next action.** The `.npy` files on disk right now are still from the run that used the threshold-trigger version (grok epoch 4806, described above); Jonathan has not yet re-run `train.py` with the zero-crossing version wired in as the active strategy (should reproduce the same 1688.6 trigger epoch on the *existing* saved data if re-plotted, but a fresh `train.py` run will use a new random init and may shift both the grok epoch and the crossing epoch again).
+- **Not yet re-run with this exact code change — this is the immediate next action.** The `.npy` files on disk right now are still from the run that used the threshold-trigger version (grok epoch 4806, described above); Jonathan has not yet re-run `train.py` with the zero-crossing version wired in as the active strategy (should reproduce the same 1688.6 trigger epoch on the _existing_ saved data if re-plotted, but a fresh `train.py` run will use a new random init and may shift both the grok epoch and the crossing epoch again).
 
 ### Still Open / Next Steps (superseded — see next session below for the 3rd run's actual result)
 
@@ -2192,7 +2318,7 @@ def detect_ma_of_ma_trigger(epoch_grid, diff, noise_floor, threshold_multiplier=
   - Final: Train Acc 1.0000, **Test Acc 0.9954** (not 1.0 — see plateau investigation below), L2 Norm 42.7174.
   - **Grok epoch (test acc > 90%) this run: 3760** (runs so far: 5739, 4806, 3760 — grok epoch keeps moving earlier, confirms it's not a fixed number).
   - Old `detect_ma_crossover`: fired at epoch 483.8, lead time 3276.2 — still not useful (consistent with prior abandonment).
-  - **New zero-crossing trigger fired at epoch 5643.8 — lead time -1883.8 epochs.** Negative: the trigger fired ~1884 epochs *after* the model had already grokked, not before. **This is a hard failure, not just a weak signal** — confirmed by direct inspection of `test_acc_history.npy`: test accuracy at epoch 5644 was already 99.54% (the plateau value), while at the actual grok epoch (3760) it was only 89.98%.
+  - **New zero-crossing trigger fired at epoch 5643.8 — lead time -1883.8 epochs.** Negative: the trigger fired ~1884 epochs _after_ the model had already grokked, not before. **This is a hard failure, not just a weak signal** — confirmed by direct inspection of `test_acc_history.npy`: test accuracy at epoch 5644 was already 99.54% (the plateau value), while at the actual grok epoch (3760) it was only 89.98%.
 
 - **Test accuracy plateau investigated (Jonathan asked "why didn't 1.0 come, you made the changes"):**
   - Checked last 20+ epochs of `test_acc_history.npy`/`train_acc_history.npy`/`loss_history.npy`: test accuracy locks at **exactly 0.99544557** from ~epoch 5500 onward with zero variation through epoch 10000; train accuracy is a perfect 1.0; loss is frozen near 8.3e-5 (barely moving). **Not a "still training" situation — the model has converged to a stable, imperfect fixed point.**
@@ -2205,13 +2331,13 @@ def detect_ma_of_ma_trigger(epoch_grid, diff, noise_floor, threshold_multiplier=
   1. **Must always precede grokking, never follow it** (lead time must stay positive across runs — non-negotiable for something to be called a predictor).
   2. **The gap to the actual grok epoch must stay small and consistent as a proportion of the run, across different runs** — not "lands near the same absolute epoch," but "tracks wherever grokking actually happens, even as that moves."
   3. **Must be clearly above the noise floor**, not indistinguishable from baseline fluctuation.
-  - **Evidence presented that zero-crossing fails criterion #2, using the ratio (crossing epoch / grok epoch) across all 3 runs:** run 1 = 0.350, run 2 = 0.351 (looked consistent — this is what convinced Jonathan originally), run 3 = **1.501** (crossing landed *after* grok entirely). Conclusion: the crossing sits at a roughly fixed absolute epoch regardless of when grokking happens — it was never actually tracking the grok event, runs 1-2's consistency was coincidental (both had late grok epochs).
-  - **Contrasted with the peak-based candidate (peak epoch of the MA-of-MA diff vs. grok epoch), checked the same way across all 3 runs:** gap-as-%-of-run = 1.05% (run 1), 0.42% (run 2), **0.18% (run 3)** — always before, always tight, actually got *more* precise on the run where zero-crossing failed hardest. Recommended by Claude as the better-evidenced candidate; **not yet adopted — Jonathan's position at session end: "my theory should work in some configuration that I've not discovered yet," wants to continue investigating zero-crossing variants rather than switch to peak-based yet.** This is the open disagreement carried into the next session.
+  - **Evidence presented that zero-crossing fails criterion #2, using the ratio (crossing epoch / grok epoch) across all 3 runs:** run 1 = 0.350, run 2 = 0.351 (looked consistent — this is what convinced Jonathan originally), run 3 = **1.501** (crossing landed _after_ grok entirely). Conclusion: the crossing sits at a roughly fixed absolute epoch regardless of when grokking happens — it was never actually tracking the grok event, runs 1-2's consistency was coincidental (both had late grok epochs).
+  - **Contrasted with the peak-based candidate (peak epoch of the MA-of-MA diff vs. grok epoch), checked the same way across all 3 runs:** gap-as-%-of-run = 1.05% (run 1), 0.42% (run 2), **0.18% (run 3)** — always before, always tight, actually got _more_ precise on the run where zero-crossing failed hardest. Recommended by Claude as the better-evidenced candidate; **not yet adopted — Jonathan's position at session end: "my theory should work in some configuration that I've not discovered yet," wants to continue investigating zero-crossing variants rather than switch to peak-based yet.** This is the open disagreement carried into the next session.
 
-- **Low-pass filter question (Jonathan asked, explicitly framed as "just asking," not a change request):** Claude explained that `slow_ma`/`fast_ma_of_slow_ma` already constitute two layers of low-pass filtering (moving averages), the diff curve is already visually smooth (not noisy), and the run-3 failure is a *timing* problem (the dip's position doesn't move with the grok epoch), not a *smoothness* problem — so an additional low-pass filter (e.g. `scipy.signal.butter`) would not fix the observed failure. No code changed as a result of this exchange (informational only, per Jonathan's framing).
+- **Low-pass filter question (Jonathan asked, explicitly framed as "just asking," not a change request):** Claude explained that `slow_ma`/`fast_ma_of_slow_ma` already constitute two layers of low-pass filtering (moving averages), the diff curve is already visually smooth (not noisy), and the run-3 failure is a _timing_ problem (the dip's position doesn't move with the grok epoch), not a _smoothness_ problem — so an additional low-pass filter (e.g. `scipy.signal.butter`) would not fix the observed failure. No code changed as a result of this exchange (informational only, per Jonathan's framing).
 
 - **Plotting extended (direct implementation, `src/plot_results.py`), two more plots added:**
-  1. **Plot 3 — `ma_of_slow_ma_diff_linear.png`:** identical to the existing diff plot but with a **linear** x-axis instead of log (Jonathan's explicit request: "show this graph in linear scale"). Noted for Jonathan: since `epoch_grid` is uniform in *log*-epoch space, a linear x-axis compresses early epochs into a thin sliver and stretches the visual detail toward the high-epoch end.
+  1. **Plot 3 — `ma_of_slow_ma_diff_linear.png`:** identical to the existing diff plot but with a **linear** x-axis instead of log (Jonathan's explicit request: "show this graph in linear scale"). Noted for Jonathan: since `epoch_grid` is uniform in _log_-epoch space, a linear x-axis compresses early epochs into a thin sliver and stretches the visual detail toward the high-epoch end.
   2. **Plot 4 — `ma_of_ma_diff_vs_grokking_linear.png`:** overlays the MA-of-MA diff curve against the grokking curve (train/test accuracy) on a shared **linear** epoch axis, using a twin y-axis (accuracy 0-1 on the left, diff ~0-0.02 on the right, since the scales are incompatible on one axis). Grok epoch marked with a green dotted vertical line, trigger epoch marked with a red dashed line + star. Script now also loads `train_acc_history.npy`/`test_acc_history.npy` (previously only loaded MA-related arrays).
   - All changes verified by actually running `plot_results.py` (not just written) — output files confirmed generated without error.
 
@@ -2226,7 +2352,7 @@ def detect_ma_of_ma_trigger(epoch_grid, diff, noise_floor, threshold_multiplier=
 
 1. **Central unresolved disagreement, explicitly carried forward:** Jonathan believes the zero-crossing idea "should work in some configuration not yet discovered" and wants to keep investigating it; Claude's evidence (3-run ratio comparison above) currently favors the peak-based candidate instead. Not resolved — pick this back up first next session.
 2. If continuing to test zero-crossing variants: consider what "configuration" could mean — e.g. different `fast_window` for `compute_ma_of_slow_ma` (currently 20), a different `skip_epochs`, or restricting to a crossing within some expected relative-position window rather than the literal first one. None of these have been tried yet.
-3. If/when Jonathan is ready to consider the peak-based alternative: the 3-run gap-as-%-of-run evidence (1.05%, 0.42%, 0.18%) is already on record above — would need a *causal* (non-hindsight) version, same issue flagged in the threshold-trigger session (a live rule can't know "the peak" without seeing the future; would need e.g. a rising-edge-past-a-tuned-threshold rule, revisiting the earlier abandoned approach with a better-tuned multiplier).
+3. If/when Jonathan is ready to consider the peak-based alternative: the 3-run gap-as-%-of-run evidence (1.05%, 0.42%, 0.18%) is already on record above — would need a _causal_ (non-hindsight) version, same issue flagged in the threshold-trigger session (a live rule can't know "the peak" without seeing the future; would need e.g. a rising-edge-past-a-tuned-threshold rule, revisiting the earlier abandoned approach with a better-tuned multiplier).
 4. Optional side-investigation (not urgent, flagged only): which specific ~30 `(a,b)` pairs the model permanently fails on, and whether that set is stable/reproducible across runs — could reveal an architectural pattern (single-head attention, no LayerNorm limitation) worth noting for the thesis write-up later.
 5. Once L2 Norm predictor is functionally complete (by whatever bar is eventually agreed): move to **Dropout** (next in the 9-predictor evaluation order per `CLAUDE.md`).
 6. `l2_norm.py` still carries multiple unused/abandoned detection strategies (`detect_l2_norm_drop`, `detect_inflection`, `detect_ma_crossover`, `detect_ma_of_ma_trigger`) alongside the currently-active `detect_ma_of_ma_zero_crossing` — not cleaned up, flagged for later reconciliation once the predictor is finalized.
@@ -2245,7 +2371,7 @@ def detect_ma_of_ma_trigger(epoch_grid, diff, noise_floor, threshold_multiplier=
   3. Third attempt: the duplicate line was removed, but the surviving MLP line reverted to the **unwrapped original** — `self.dropout2` defined in `__init__` but never called anywhere in `forward()`, effectively dead code.
   4. Fourth attempt: **correct.** `self.dropout2` now wraps `self.mlp_out(...)` inside the residual add, matching `self.dropout1`'s pattern on the attention branch. Verified by walking through the math at `p=0`: both branches reduce to the exact original formulas (`attention_values` == old `attended_values`, `mlp_output` == old `mlp_output`), confirming zero behavioral change to existing training dynamics.
 - **Not yet run:** Jonathan has not yet executed `python src/models/transformer.py` to confirm the file runs clean post-edit — recommended as the immediate next action, still pending at session's end.
-- **Clarification given:** Jonathan asked directly whether the L2 Norm code had been deleted/replaced by the Dropout work. Confirmed no — `git status` showed only `transformer.py` modified, `l2_norm.py` untouched on disk. `transformer.py` is the *shared model architecture* used by all 9 predictors, a separate concern from any individual predictor's detection logic.
+- **Clarification given:** Jonathan asked directly whether the L2 Norm code had been deleted/replaced by the Dropout work. Confirmed no — `git status` showed only `transformer.py` modified, `l2_norm.py` untouched on disk. `transformer.py` is the _shared model architecture_ used by all 9 predictors, a separate concern from any individual predictor's detection logic.
 
 ### Current verified state of `src/models/transformer.py`
 
@@ -2347,6 +2473,7 @@ if __name__ == "__main__":
 
 - **Picked up from:** the Aug 11 reset — `dropout1`/`dropout2` (`nn.Dropout(0.0)`, default no-op) were re-added to `src/models/transformer.py` at the start of this session, restoring the state from before the deletion. `src/predictors/dropout.py` was rebuilt from an empty file.
 - **`compute_accuracy(model, data_loader)` written and reviewed — correct, no open issues:**
+
   ```python
   import torch
 
@@ -2365,10 +2492,13 @@ if __name__ == "__main__":
           total_samples += len(y)
       return total_correct / total_samples if total_samples > 0 else 0.0
   ```
+
   - Does not force `.eval()`/`.train()` internally — measures accuracy in whatever mode the model already is in, as intended (mode is the caller's responsibility).
   - `logit[:, 2, :]` correctly picks the `"="` position (sequence is `[a, b, "="]`, index 2).
   - Two minor style notes given, not applied (not urgent): `model.forward(x)` could be `model(x)`; the hardcoded `2` assumes sequence length 3 (matches existing project pattern of hardcoded constants, e.g. `97` in `get_tensor`).
+
 - **`compute_dropout_gap(model, data_loader, dropout_rate)` written — has an unresolved bug, not yet fixed:**
+
   ```python
   def compute_dropout_gap(model, data_loader, dropout_rate):
       """
@@ -2389,8 +2519,10 @@ if __name__ == "__main__":
 
       return dropout_gap, train_accuracy, eval_accuracy
   ```
+
   - **Bug (flagged, not fixed):** `dropout_rate` parameter is never used. `model.dropout1.p`/`model.dropout2.p` are never set inside this function, so they stay at their default `0.0` (set in `transformer.py`). Since dropout with `p=0.0` is a no-op in both `.train()` and `.eval()` mode, `train_accuracy` and `eval_accuracy` will always come out nearly identical, and `dropout_gap` will always be close to `0` regardless of what `dropout_rate` is passed — the function does not actually stress-test the model yet.
   - **Fix explained but not applied (Jonathan's explicit call — see below):** before measuring the dropout-stressed accuracy, set `model.dropout1.p = dropout_rate` and `model.dropout2.p = dropout_rate`, then reset both back to `0.0` before returning.
+
 - **Jonathan reported confusion** ("I am not able to grasp anything that is happening in the dropout section") after seeing this bug explained. Claude re-explained dropout from basics: what dropout does (randomly zeroes vector entries), why it exists (forces the model to spread knowledge across paths, more robust), why it is relevant to grokking (grokked models should be robust to dropout since knowledge is spread out; memorizing models should collapse), and the two independent controls (`p` = how much to drop, train/eval mode = master on/off switch — both must be set for dropout to actually do anything). Jonathan explicitly deferred deeper understanding to a later session ("I will understand it later") rather than continuing the explanation now.
 - **User instruction this session:** commit all current changes as-is (including the known `compute_dropout_gap` bug) and update `context.md` before committing. **The bug is intentionally being committed unfixed** — this is a deliberate checkpoint of work-in-progress, not a claim that the function is correct. Do not describe `compute_dropout_gap` as working until the `dropout_rate` fix is actually applied and verified.
 - **Git note:** at commit time, `git status` also showed large, session-unrelated changes already present in the working tree in `CLAUDE.md` (636 lines, formatting: `-` bullets changed to `*`) and `project_compilation.md` (484 lines) — origin unknown, not made by Claude this session. Flagged to Jonathan before committing; **Jonathan chose to commit everything together in one commit.** Worth noting for later: `CLAUDE.md` is listed in `.gitignore` but is still tracked in git history from before the ignore rule was added, so `.gitignore` does not stop it from showing as modified.
@@ -2411,6 +2543,7 @@ if __name__ == "__main__":
 ### What was found (this session, on read of `context.md` + direct file check)
 
 - `context.md`'s last entry said `compute_dropout_gap` in `src/predictors/dropout.py` still had the unfixed `dropout_rate` bug. On checking the actual file, **the fix was already applied** (not by this session — found already present in the working tree, uncommitted):
+
   ```python
   def compute_dropout_gap(model, data_loader, dropout_rate):
       model.train()
@@ -2425,7 +2558,9 @@ if __name__ == "__main__":
 
       return train_accuracy - eval_accuracy, train_accuracy, eval_accuracy
   ```
+
   Both `dropout1.p`/`dropout2.p` are now set to `dropout_rate` before the `.train()` accuracy measurement, and reset to `0.0` before the `.eval()` accuracy measurement — matches the fix that was planned at the end of the last session. **Not yet verified by an actual run** (e.g. with `dropout_rate=0.9` on a trained model) — this is still the open verification step, carried forward.
+
 - `src/predictors/dropout.py` is **still not wired into `src/train.py`** — checked directly, no reference to the dropout predictor in `train.py` yet.
 - `git status` at session start also showed several files not previously recorded in `context.md`:
   - `CLAUDE.md` — heavily rewritten (722 lines changed). This is the large, mandatory-workflow version of `CLAUDE.md` now in effect (`context.md`-first rule, `indian-english` skill requirement, teacher-first mentoring rules, Opencode prompt defaults, etc.) — this explains the size of the diff; it is an intentional project-rules rewrite, not an accidental change.
@@ -2453,15 +2588,81 @@ if __name__ == "__main__":
 
 ---
 
+## Session Summary — August 13, 2026 (Dropout predictor wired into train.py; commit)
+
+### What was found (this session, on read of `context.md` + direct file check)
+
+- `src/train.py` already had `from predictors.dropout import compute_dropout_gap` imported and a new
+  block at the end of the file calling `compute_dropout_gap(model, data_loader[1], dropout_rate=0.9)`,
+  printing the gap along with `train_acc`/`eval_acc`. This completes the "wire the predictor into
+  `train.py`" action that was still pending at the end of the Aug 12 session. **Not written by Claude
+  in this conversation** — found already present in the working tree at session start, same pattern
+  as the previous session's unexplained pre-existing edits.
+- All of `fast_ma.npy`, `slow_ma.npy`, `fast_ma_of_slow_ma.npy`, `l2_norm_history.npy`,
+  `loss_history.npy`, `ma_of_ma_diff.npy`, `train_acc_history.npy`, `test_acc_history.npy`, plus the
+  four L2 Norm plot PNGs, had changed on disk (different byte sizes from the last commit) — consistent
+  with `train.py` having been re-run end-to-end with the new dropout block included. **The actual
+  printed numbers (this run's grok epoch, dropout gap value) were not captured or verified this
+  session** — no log was read, this is inferred only from the changed files, not confirmed by
+  execution.
+- `CLAUDE.md` Section 2 (the mandatory `indian-english` communication instructions) was further
+  condensed compared to the version already in git history — the long bullet list of applicable
+  contexts and the repeated "must not merely assume" phrasing was trimmed to a shorter version.
+  Found already present in the working tree, origin not discussed this session.
+- `compile_python_files_to_pdf.py`: the PDF header's path computation changed from
+  `file_path.relative_to(Path.cwd())` (would raise `ValueError` if `file_path` wasn't already relative
+  to the current working directory) to `file_path.resolve().relative_to(Path.cwd().resolve())` wrapped
+  in `try/except ValueError` with a fallback to the raw path — makes the script tolerant of being run
+  from a different working directory. The untracked `python_files_compiled.pdf` in the project root is
+  this script's output (the compiled source-code PDF).
+- No new bugs found or fixed this session; no teaching took place. Session was limited to inspecting
+  the current working-tree state and preparing the commit, per Jonathan's direct instruction.
+
+### User instruction this session
+
+- Jonathan asked directly: **commit all changes.** Following `CLAUDE.md` Section 10/11 (update
+  `context.md` before every requested commit), this entry was written first, then the commit was made.
+
+### Files Modified (this commit)
+
+- `context.md` — this session summary added.
+- `CLAUDE.md`, `compile_python_files_to_pdf.py`, `src/train.py` — already modified in the working tree
+  before this session started (see above); committed as-is, un-investigated further.
+- `fast_ma.npy`, `fast_ma_of_slow_ma.npy`, `l2_norm_history.npy`, `loss_history.npy`,
+  `ma_of_ma_diff.npy`, `slow_ma.npy`, `test_acc_history.npy`, `train_acc_history.npy` — regenerated
+  data arrays from a `train.py` re-run.
+- `ma_of_ma_diff_vs_grokking_linear.png`, `ma_of_slow_ma_crossover.png`, `ma_of_slow_ma_diff.png`,
+  `ma_of_slow_ma_diff_linear.png` — regenerated plots from the same re-run.
+- `python_files_compiled.pdf` (new, was untracked) — compiled PDF output of
+  `compile_python_files_to_pdf.py`, added to git this commit.
+
+### Still Open / Next Steps (updated — August 13, 2026)
+
+1. **Verify the dropout gap check numerically** — this session only confirmed the code is wired in,
+   not that it produces a meaningful result. Run `train.py` (or read a saved console log) and confirm
+   that at `dropout_rate=0.9`, `eval_acc` (no dropout) stays high while `train_acc` (dropout enabled)
+   drops — the expected signature of a grokked model being robust to dropout.
+2. The dropout gap result is currently **only printed to the console, not saved to disk** — unlike the
+   L2 Norm predictor, there is no `.npy`/plot output for it yet. Decide whether to persist it for
+   later cross-predictor comparison. Not started.
+3. L2 Norm predictor remains parked (zero-crossing vs. peak-based detection) — unchanged, not being
+   worked on.
+4. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) — still
+   pending, unrelated to code track, carried forward many sessions.
+5. Origin of the `CLAUDE.md` Section 2 condensation and the `compile_python_files_to_pdf.py`
+   path-resolution fix not discussed with Jonathan this session — flagged only, not blocking.
+
+---
+
 ## Tools & Preferences
 
-| Tool | Preference |
-|---|---|
-| Spreadsheets | Google Sheets (never Excel) |
-| Prompts | Opencode prompt format by default |
-| Implementation | Only on explicit request |
-| Plotting | Separate script from training (avoid matplotlib DLL conflicts on Windows) |
-| Python | Windows: must reinstall from python.org if PyTorch DLLs get blocked by AppLocker |
-| L2 Norm detection | Threshold-based approach abandoned — signal is inverted (highest decay during memorization, not grokking) |
-| Matplotlib legends | Always pass explicit `loc=` (e.g. `"upper right"`) — auto-placement (`plt.legend()` with no `loc`) has hung/`KeyboardInterrupt`'d during `savefig` in this project |
+| Tool                          | Preference                                                                                                                                                              |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Spreadsheets                  | Google Sheets (never Excel)                                                                                                                                             |
+| Prompts                       | Opencode prompt format by default                                                                                                                                       |
+| Implementation                | Only on explicit request                                                                                                                                                |
+| Plotting                      | Separate script from training (avoid matplotlib DLL conflicts on Windows)                                                                                               |
+| Python                        | Windows: must reinstall from python.org if PyTorch DLLs get blocked by AppLocker                                                                                        |
+| L2 Norm detection             | Threshold-based approach abandoned — signal is inverted (highest decay during memorization, not grokking)                                                               |
+| Matplotlib legends            | Always pass explicit `loc=` (e.g. `"upper right"`) — auto-placement (`plt.legend()` with no `loc`) has hung/`KeyboardInterrupt`'d during `savefig` in this project      |
 | Log-x plots + moving averages | Must resample onto a grid uniform in `log10(epoch)` before smoothing/MA — a fixed window in linear epoch index over/under-smooths depending on position on a log-x plot |

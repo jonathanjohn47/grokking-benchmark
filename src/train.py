@@ -13,6 +13,7 @@ from predictors.l2_norm import (
 )
 from data.modular_arithmetic import get_dataloaders
 from models.transformer import Transformer
+from predictors.dropout import compute_dropout_gap
 
 # Save results to project root
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -158,3 +159,11 @@ if trigger_epoch is not None:
 else:
     print("  No trigger detected")
     print(f"  Grok epoch (test acc > 90%): {grok_epoch}")
+
+
+
+gap, train_acc, eval_acc = compute_dropout_gap(model, data_loader[1], dropout_rate=0.9)
+print(f"\nDropout Gap Check (rate=0.9):")
+print(f"  Accuracy with dropout (train mode, p=0.9): {train_acc:.4f}")
+print(f"  Accuracy without dropout (eval mode, p=0.0): {eval_acc:.4f}")
+print(f"  Gap: {gap:.4f}")

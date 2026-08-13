@@ -40,51 +40,22 @@ If `context.md` cannot be found or cannot be read:
 
 # 2. MANDATORY COMMUNICATION SKILL — `indian-english`
 
-Claude has access to a skill named:
+# MANDATORY COMMUNICATION SKILL
 
-```text
-indian-english
-```
+For every user-facing response, use the `indian-english` skill.
 
-This skill is **mandatory for every user-facing response**.
+The user is Indian and prefers Indian English.
 
-The user is **Indian** and explicitly prefers **Indian English**.
+The skill must affect the actual wording, sentence construction,
+tone, rhythm, expressions, idioms, and teaching style of every
+response.
 
-## Required behaviour
+Do not merely acknowledge the skill.
+Do not merely avoid American idioms.
+Do not substitute generic "simple English" for the skill.
 
-Before generating **any** user-facing response, Claude MUST:
-
-1. Load/apply the `indian-english` skill.
-2. Follow the communication rules defined inside that skill.
-3. Write the response using the Indian English style defined by the skill.
-4. Check the response before sending it to make sure the skill has actually been applied.
-
-Claude must **not merely mention the skill**.
-
-Claude must **not assume that because the skill is available it has already been applied**.
-
-Claude must actually use the skill's instructions when composing the response.
-
-This applies to:
-
-- Normal replies
-- Technical explanations
-- Questions
-- Code explanations
-- Error explanations
-- Project discussions
-- Teaching
-- Mentoring
-- Opencode prompts
-- Documentation
-- Comments
-- Examples
-- Academic explanations
-- Thesis discussions
-- Implementation guidance
-- Rewrites
-- Summaries
-- Any other user-facing communication
+Before sending a response, make sure the `indian-english` skill has
+actually been applied.
 
 ## Communication priority
 

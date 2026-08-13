@@ -71,7 +71,14 @@ def compile_python_files_to_pdf(src_root, output_file):
     c.setFont(font_name, font_size)
 
     for file_path in files:
-        header = f"File: {file_path.relative_to(Path.cwd())}"
+        # Resolve both paths to absolute before computing relative path
+        try:
+            rel_path = file_path.resolve().relative_to(Path.cwd().resolve())
+        except ValueError:
+            rel_path = file_path
+
+        header = f"File: {rel_path}"
+
         if y_position - line_height * 2 < margin:
             c.showPage()
             c.setFont(font_name, font_size)
