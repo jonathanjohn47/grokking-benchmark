@@ -2426,6 +2426,13 @@ if __name__ == "__main__":
 
 ### Still Open / Next Steps (superseded — see next session below, dropout work reverted)
 
+> **Forward-pointer, added August 17, 2026 (accuracy audit session):** this "reverted, rebuild from
+> scratch" state is **historical only** — it describes this one August 11 session and nothing after
+> it. The predictor was rebuilt the same day (attempt #2, below), fixed on August 12, wired into
+> `src/train.py` on August 13, and extended to per-epoch tracking + PDF reporting on August 17. As of
+> today, `src/predictors/dropout.py` exists, is correct, and is actively used every epoch of training.
+> Do not read this section in isolation as the current project state.
+
 1. ~~Run `python src/models/transformer.py` to confirm clean execution post dropout-wiring~~ — done, see below. Ran clean, no errors.
 2. ~~Write `src/predictors/dropout.py`~~ — attempted, then fully reverted this same session (see below). Not carried forward as-is.
 3. Wire the new predictor into `train.py` — not reached, moot until predictor is rebuilt.
@@ -2743,6 +2750,94 @@ if __name__ == "__main__":
    pending, unrelated to code track, carried forward many sessions.
 5. Once Dropout predictor is considered functionally complete: move to **Spectral**, next in the
    9-predictor evaluation order per `CLAUDE.md`.
+
+---
+
+## Session Summary — August 17, 2026 (context.md accuracy audit against live codebase, no code changes)
+
+### Why this session happened
+
+Jonathan asked directly for `context.md` to be checked against the **actual current codebase**, not
+assumed correct, because he suspected the file might still be claiming the Dropout predictor was
+deleted and needed rebuilding from scratch. Per the standing rule "the actual codebase is the source
+of truth," every relevant file was read fresh from disk before touching `context.md`.
+
+### Files inspected directly (this session)
+
+- `src/models/transformer.py`
+- `src/predictors/dropout.py`
+- `src/predictors/l2_norm.py`
+- `src/train.py`
+- `src/plot_results.py`
+- `git log --oneline` and `git status` (to check the working tree against the last commit)
+
+### Finding: the suspected discrepancy does not exist in the file's current/terminal state
+
+The claim "Dropout predictor deleted/reverted, rebuild from scratch" **is present in `context.md`**,
+but only inside the **August 11, 2026 ("attempt #1 — reverted")** session entry, describing that one
+moment in the project's history. It was never the file's final word on the matter:
+
+- **August 11 (attempt #2, same day):** `dropout1`/`dropout2` re-added to `transformer.py`,
+  `src/predictors/dropout.py` rebuilt from an empty file, `compute_accuracy` completed correctly.
+- **August 12:** the `compute_dropout_gap` bug (missing `dropout_rate` wiring) found already fixed in
+  the working tree; committed.
+- **August 13:** `src/predictors/dropout.py` confirmed wired into `src/train.py`
+  (`compute_dropout_gap(model, data_loader[1], dropout_rate=0.9)`), committed.
+- **August 17 (earlier session today):** Dropout Gap tracking moved to every epoch (not every 100th),
+  `training_report.pdf` generation added, committed as `88fe65e`.
+
+That "superseded" section (now line-annotated with a forward-pointer, see above) was already labelled
+as historical in its own header — but did not explicitly say *where* to look for the resolution, which
+is what made it easy to misread in isolation. That gap is now fixed with an explicit forward-pointer
+rather than by deleting or rewriting the historical record itself, per `CLAUDE.md`'s rule to never
+describe changed/superseded work as if it never happened.
+
+### Verification against the live files (this session, read fresh, not assumed)
+
+- **`src/models/transformer.py`** — confirmed: token embedding, position embedding, single-head Q/K/V
+  attention (`self.query`/`self.key`/`self.value`, each one `nn.Linear(d_model, d_model, bias=False)`),
+  residual around attention, MLP block (`mlp_in` → ReLU → `mlp_out`), residual around MLP, no
+  LayerNorm, `self.dropout1 = nn.Dropout(0.0)` and `self.dropout2 = nn.Dropout(0.0)`, both already
+  wired inside the two residual branches in `forward()`. Matches the code block already on record in
+  today's earlier session exactly — **no drift**.
+- **`src/predictors/dropout.py`** — confirmed both functions exist and are correct:
+  `compute_accuracy(model, data_loader)` (mode-agnostic, reads whatever mode the model is already in)
+  and `compute_dropout_gap(model, data_loader, dropout_rate)` (sets `dropout1.p`/`dropout2.p` to
+  `dropout_rate` in `.train()` mode, measures, resets both to `0.0` in `.eval()` mode, measures again,
+  returns `train_accuracy - eval_accuracy` plus both raw accuracies). Matches the August 12 fixed
+  version byte-for-byte — **no drift, and definitely not deleted**.
+- **`src/train.py`** — confirmed `from predictors.dropout import compute_dropout_gap` is present, and
+  the main training loop calls `compute_dropout_gap(model, data_loader[1], dropout_rate=0.9)`
+  unconditionally every epoch, appends to four separate history lists, restores `model.train()`
+  afterward (since the predictor call leaves the model in `.eval()` mode), saves all four arrays as
+  `.npy` files, and generates a 4-graph + paginated-table `training_report.pdf` at the end. Matches
+  the earlier-today session entry exactly — **no drift**.
+- **`src/predictors/l2_norm.py`** and **`src/plot_results.py`** — both confirmed unchanged since the
+  August 7 session's last-documented state (zero-crossing trigger active, four plots generated). No
+  drift found in either file.
+- **`git log`/`git status`** — `HEAD` is `88fe65e` ("Track Dropout Gap every epoch, add PDF training
+  report, update context.md"), and the working tree is clean except for `python_files_compiled.pdf`
+  (a regenerated binary from `compile_python_files_to_pdf.py`, unrelated to any predictor or model
+  code). Confirms the last commit's `context.md` update already matched the code at commit time, and
+  nothing has drifted since.
+
+### Conclusion
+
+No source file needed correction. `context.md` itself needed one small clarity fix (the forward-pointer
+added to the August 11 "reverted" entry above) so a future reader — human or another Claude session —
+cannot mistake one historical checkpoint for the current state. The Dropout predictor is complete,
+correct, and in active use; it is not pending a rebuild.
+
+### Still Open / Next Steps (unchanged by this audit)
+
+1. L2 Norm predictor remains parked (zero-crossing vs. peak-based detection) — unchanged, not being
+   worked on.
+2. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) — still
+   pending, unrelated to code track, carried forward many sessions.
+3. Once Dropout predictor is considered functionally complete: move to **Spectral**, next in the
+   9-predictor evaluation order per `CLAUDE.md`. (This audit found the predictor functionally
+   complete and in use — Jonathan should confirm explicitly before the project moves on, since
+   "functionally complete" is his call, not an automatic conclusion from this audit.)
 
 ---
 
