@@ -2654,6 +2654,98 @@ if __name__ == "__main__":
 
 ---
 
+## Session Summary — August 17, 2026 (per-epoch Dropout Gap tracking + PDF report; commit)
+
+### What was found (this session, on read of `context.md` + direct file check)
+
+- An Opencode prompt file, `opencode_prompt_epoch_recording_pdf_report.md`, is present in the project
+  root (untracked). It asks for two things in `src/train.py`: (a) move the console print statement so
+  it fires every epoch instead of only every 100th, while explicitly keeping the Dropout Gap
+  **computation** itself at every-100th-epoch cadence (stated reason: it costs two full passes over
+  the test set, so recomputing it every epoch "would slow training down a great deal for very little
+  benefit"); and (b) add a `training_report.pdf` generated automatically at the end of training, using
+  the same `matplotlib.use('Agg')` workaround already proven in `src/plot_results.py`.
+- **`src/train.py` as it now stands on disk does more than that prompt asked for.** `dropout_gap_epochs`,
+  `dropout_gap_history`, `dropout_train_acc_history`, `dropout_eval_acc_history` are now appended
+  **every epoch**, not every 100th — `compute_dropout_gap(...)` (two full test-set passes: one in
+  `.train()` mode with `p=0.9`, one in `.eval()` mode with `p=0.0`) now runs unconditionally inside the
+  main loop, with an in-code comment acknowledging the slowdown directly ("Jonathan has since asked for
+  full per-epoch resolution here as well ... This will make each epoch noticeably slower than before").
+  **This directly contradicts the opencode prompt's explicit Constraint #1** ("Do not change the
+  Dropout Gap computation cadence — it must remain every 100th epoch"). Not written by Claude in this
+  conversation — found already present in the working tree at session start, same pattern as the
+  Aug 12/13 sessions' pre-existing edits. **Flagging this only, not silently treating the prompt's
+  100-epoch constraint as still in force** — if Jonathan wants the every-100th cadence restored, that
+  is a deliberate revert, not a bug fix, since the current code runs and produces a full report.
+- A `model.train()` call was added right after the per-epoch dropout-gap block, needed because
+  `compute_dropout_gap` leaves the model in `.eval()` mode with `p` reset to `0.0` when it returns —
+  without this line, every epoch after the first would silently train with the model still in eval
+  mode. This part is a genuine, necessary fix given the every-epoch cadence, not a stray edit.
+- **PDF report generation added** at the end of `src/train.py`, following the `opencode_prompt`'s
+  requested pattern (`matplotlib.use('Agg')` before `import pyplot`, `PdfPages`) but going beyond it —
+  the PDF now has: (1) grokking curve (train vs. test accuracy, log-x), (2) loss curve (log-x), (3) L2
+  norm curve with the MA-crossover detection epoch marked if found, (4) Dropout Gap curve — plus a
+  **new numeric-table section** (not requested in the prompt) that lists every epoch's Loss/Train
+  Acc/Test Acc/L2 Norm/Dropout Gap as a paginated table (45 rows/page) across as many extra PDF pages
+  as `num_epochs` requires. Because dropout gap is now tracked every epoch, `dropout_gap_history[i]`
+  lines up directly with every other per-epoch array with no `N/A` gaps — the prompt's guidance for
+  handling a still-empty `dropout_gap_history[-1]` on early epochs is moot under the code as it
+  actually stands now.
+- `.claude/settings.local.json` gained one more allowlisted permission: `"Bash(git status *)"`.
+- All 8 `.npy` history files (`fast_ma`, `fast_ma_of_slow_ma`, `l2_norm_history`, `loss_history`,
+  `ma_of_ma_diff`, `slow_ma`, `test_acc_history`, `train_acc_history`) plus `python_files_compiled.pdf`
+  changed on disk (byte-different from the last commit), and 4 new untracked `.npy` files exist
+  (`dropout_gap_epochs`, `dropout_gap_history`, `dropout_train_acc_history`, `dropout_eval_acc_history`)
+  — all consistent with a full `train.py` re-run under the new every-epoch dropout-gap code. The actual
+  printed numbers from that run (final grok epoch, final dropout gap value) were not read/verified this
+  session — inferred only from changed file timestamps/sizes, same as the Aug 13 session's note.
+  `training_report.pdf` itself is new/untracked — the PDF artifact from this run.
+- No teaching took place this session; scope was strictly "commit what's on disk," per direct
+  instruction, same as the Aug 12/13 sessions.
+
+### User instruction this session
+
+- Jonathan asked directly: **commit all changes**, and separately, **update `context.md` and commit
+  all changes** (two back-to-back instructions, same intent). Following `CLAUDE.md` Section 10/11
+  (update `context.md` before every requested commit), this entry was written first, then the commit
+  follows.
+
+### Files Modified (this commit)
+
+- `context.md` — this session summary added.
+- `.claude/settings.local.json`, `src/train.py` — already modified in the working tree before this
+  session started (see above); committed as-is, un-investigated further beyond what's documented here.
+- `fast_ma.npy`, `fast_ma_of_slow_ma.npy`, `l2_norm_history.npy`, `loss_history.npy`,
+  `ma_of_ma_diff.npy`, `slow_ma.npy`, `test_acc_history.npy`, `train_acc_history.npy`,
+  `python_files_compiled.pdf` — regenerated from a `train.py` re-run / a `compile_python_files_to_pdf.py`
+  re-run.
+- New files added to git: `dropout_gap_epochs.npy`, `dropout_gap_history.npy`,
+  `dropout_train_acc_history.npy`, `dropout_eval_acc_history.npy` (per-epoch Dropout predictor arrays,
+  first time these are persisted to disk instead of only printed), `training_report.pdf` (new combined
+  PDF report), `opencode_prompt_epoch_recording_pdf_report.md` (the Opencode prompt that shaped this
+  session's `train.py` changes, kept for the record).
+
+### Still Open / Next Steps (updated — August 17, 2026)
+
+1. **Central open question, flag to Jonathan first next session:** the every-100th-epoch cadence for
+   Dropout Gap computation, explicitly required by `opencode_prompt_epoch_recording_pdf_report.md`'s
+   Constraint #1, is **not** what's running — it now computes every epoch. Decide whether this was an
+   intentional decision made outside this conversation (the in-code comment claims so) or should be
+   reverted to every-100th for training-speed reasons. Either way, `context.md` should reflect whichever
+   is actually true going forward — not assumed.
+2. Verify the current run's actual numbers (grok epoch, final Dropout Gap, whether `eval_acc` stays
+   high while `train_acc` [dropout-stressed] drops as expected) by actually opening
+   `training_report.pdf` or reading a saved console log — not yet done, same open item carried from
+   Aug 13.
+3. L2 Norm predictor remains parked (zero-crossing vs. peak-based detection) — unchanged, not being
+   worked on.
+4. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) — still
+   pending, unrelated to code track, carried forward many sessions.
+5. Once Dropout predictor is considered functionally complete: move to **Spectral**, next in the
+   9-predictor evaluation order per `CLAUDE.md`.
+
+---
+
 ## Tools & Preferences
 
 | Tool                          | Preference                                                                                                                                                              |
