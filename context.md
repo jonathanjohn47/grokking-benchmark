@@ -2841,6 +2841,139 @@ correct, and in active use; it is not pending a rebuild.
 
 ---
 
+## Session Summary — August 17, 2026 (Shadow LayerNorm experiment — closed, negative result)
+
+- **Picked up from:** the LayerNorm side-experiment set up over several turns this session —
+  `src/models/model_shadow_with_layernorm.py` (shadow copy with Post-LN `ln1`/`ln2`, `transformer.py`
+  untouched), `src/train_shadow_layernorm.py` (separate runner, seeded `torch.manual_seed(1337)`,
+  saves `shadow_ln_*.npy`, does not touch `train.py` or its output files), and
+  `src/plot_shadow_layernorm.py` (separate plotting script, overlays shadow vs. original test
+  accuracy, marks the known 99.5446% plateau as a reference line).
+- **Jonathan ran the shadow model himself** (10000 epochs, same `AdamW(lr=1e-3, weight_decay=1.0)`,
+  same 30/70 split) and shared the resulting `shadow_ln_grokking_curve.png` plot plus his own written
+  analysis.
+- **Result: LayerNorm did NOT cleanly fix the plateau — it made training unstable instead.**
+  - Original (no LayerNorm, orange dotted line in the plot): smooth grokking around epoch 3000–5000,
+    settles into the known stable 99.5446% plateau (6557/6587 correct, 30 pairs permanently wrong).
+  - Shadow (with LayerNorm, blue train / green test lines): train accuracy repeatedly collapses back
+    down to 0.1–0.4 at multiple points (roughly epochs 500, 800, 1000, 1500, 2000, 2500, 4000, 7000),
+    with matching vertical drops in test accuracy. It never settles into a stable plateau the way the
+    original does — it keeps re-collapsing and re-recovering instead.
+- **Root cause identified (Jonathan's own analysis, technically sound):** `weight_decay=1.0` in the
+  shared `AdamW` optimizer is being applied uniformly to every parameter, including the new
+  `LayerNorm` gain (`weight`) and bias (`bias`) parameters. Standard practice is to exclude
+  LayerNorm's own gain/bias from weight decay entirely (`weight_decay=0` for those specific
+  parameters) — decaying them toward zero fights against what LayerNorm is supposed to do, and at
+  `wd=1.0` (already unusually high, kept intentionally high in this project to match Nanda et al.'s
+  own setup) this is severe enough to destabilize training, producing the repeated collapses seen in
+  the plot.
+- **Decision — final, not to be revisited without a deliberate reason:** LayerNorm will **not** be
+  adopted in the main architecture (`src/models/transformer.py`). Fixing the instability would require
+  a real hyperparameter re-tuning pass (excluding LN params from weight decay, possibly lower `lr`,
+  warmup, Pre-LN vs. Post-LN placement, gradient clipping) — and changing any of those would shift
+  grokking timing and epoch counts, making the planned like-for-like comparison across all 9
+  predictors unfair. **The 99.5446% plateau stays documented as a stable, reproducible side-finding
+  for the thesis write-up — not a bug, and not something the project is trying to eliminate.**
+- **What this experiment is good for:** it is now positive evidence, not just a shrug, for *why* the
+  project deliberately keeps the minimal no-LayerNorm architecture. Jonathan drafted his own viva
+  answer for this, which is accurate and can be reused as-is: naive LayerNorm addition (in an isolated
+  shadow file, original untouched) caused repeated training collapse under the existing
+  `weight_decay=1.0`, rather than resolving the plateau; fixing it would need a hyperparameter
+  re-tuning pass that would break fair comparison across predictors, so the minimal no-LayerNorm setup
+  was kept for the benchmark.
+- **Scope note:** this was investigated entirely in shadow files. `src/models/transformer.py`,
+  `src/train.py`, and all of their existing output files (`train_acc_history.npy`,
+  `test_acc_history.npy`, etc., used by the L2 Norm and Dropout predictors) were never touched or
+  overwritten at any point in this experiment.
+
+### Files Modified / Added (this session)
+
+- `src/models/model_shadow_with_layernorm.py` (new) — shadow copy of `transformer.py` with Post-LN
+  `ln1`/`ln2` added, `ln_final` present but inactive (`USE_FINAL_LN = False`), existing
+  `dropout1`/`dropout2` (`p=0.0`) left untouched. `transformer.py` itself was not modified.
+- `src/train_shadow_layernorm.py` (new) — standalone runner for the shadow model only, seeded
+  (`torch.manual_seed(1337)`), saves `shadow_ln_train_acc_history.npy`,
+  `shadow_ln_test_acc_history.npy`, `shadow_ln_loss_history.npy`. Does not touch `train.py`.
+  `train.py` itself has no seed set — so this was not yet a strict same-seed comparison against the
+  original run.
+- `src/plot_shadow_layernorm.py` (new) — standalone plot for the shadow run, overlays the original
+  `test_acc_history.npy` if present, marks the 99.5446% plateau as a reference line, saves
+  `shadow_ln_grokking_curve.png`.
+- `opencode_prompt_shadow_model_layernorm.md` (project root, new) — the Opencode-prompt draft written
+  before Jonathan asked for direct implementation instead; kept for the record, not executed via
+  Opencode.
+
+### Still Open / Next Steps (updated — August 17, 2026, this session)
+
+1. LayerNorm investigation is **closed** — no further shadow-LayerNorm work planned unless Jonathan
+   explicitly decides to revisit it with a full hyperparameter re-tune later (out of scope for now).
+2. The three new shadow/runner/plot files can stay uncommitted until Jonathan is ready — he has not
+   yet asked for a commit this session.
+3. L2 Norm predictor remains parked (zero-crossing vs. peak-based detection) — unchanged, not being
+   worked on.
+4. Dropout predictor: per the Aug 17 (earlier session) audit, functionally complete and in active use
+   — Jonathan should confirm explicitly before the project formally moves to **Spectral**, next in the
+   9-predictor evaluation order.
+5. Reply to Prof. Rashid's two open questions (previous thesis topic + Jammu clarification) — still
+   pending, unrelated to code track, carried forward many sessions.
+
+---
+
+## Session Summary — August 17, 2026 (Shadow LayerNorm experiment — commit)
+
+### What was found (this session, on `git status` at commit time)
+
+- `shadow_ln_grokking_curve.png`, `shadow_ln_train_acc_history.npy`, `shadow_ln_test_acc_history.npy`,
+  `shadow_ln_loss_history.npy` are now present on disk — confirms Jonathan actually ran
+  `train_shadow_layernorm.py` followed by `plot_shadow_layernorm.py` on his machine, and the plot he
+  shared (and the analysis recorded in the entry above) reflects a real executed run, not just a
+  planned one.
+- Two changes were present in the working tree that were **not** made in this conversation, flagged
+  before committing, same practice as the Aug 11–13 sessions:
+  1. `src/predictors/dropout.py` — one line only, a single trailing space added after
+     `total_correct += (predicted == y).sum().item()`. Functionally a no-op (whitespace only), not a
+     logic change. Origin unknown (likely an editor auto-format on Jonathan's machine).
+  2. `opencode_prompt_epoch_recording_pdf_report.md` — deleted from the working tree. This file was
+     part of commit `88fe65e` (the per-epoch Dropout Gap / PDF report session). Its removal was not
+     performed in this conversation; noting the deletion here so it is not mistaken for data loss if
+     asked about later — it can be recovered from git history (`88fe65e`) if ever needed again.
+- `L2_Norm_Predictor_Notes.md` and `table_raw.txt` remain untracked, unrelated to this session's work
+  (present since earlier in this conversation already); included in this commit per the direct
+  instruction to commit all changes, origin/purpose not discussed.
+
+### User instruction this session
+
+- Jonathan asked directly: **update `context.md` and commit all changes.** Following `CLAUDE.md`
+  Section 10/11, this entry was written first, then the commit follows.
+
+### Files Modified (this commit)
+
+- `context.md` — this session's summaries added (Shadow LayerNorm experiment result + this commit
+  entry).
+- `src/models/model_shadow_with_layernorm.py`, `src/train_shadow_layernorm.py`,
+  `src/plot_shadow_layernorm.py` (new) — the shadow-model side experiment, closed as a negative
+  result (see entry above).
+- `shadow_ln_grokking_curve.png`, `shadow_ln_train_acc_history.npy`, `shadow_ln_test_acc_history.npy`,
+  `shadow_ln_loss_history.npy` (new) — output artifacts from Jonathan's actual run.
+- `opencode_prompt_shadow_model_layernorm.md` (new, project root) — the Opencode-prompt draft written
+  before direct implementation was requested instead; kept for the record.
+- `src/predictors/dropout.py` (whitespace only), `opencode_prompt_epoch_recording_pdf_report.md`
+  (deleted) — already present in the working tree before this session, committed as-is per direct
+  instruction, not investigated further.
+- `L2_Norm_Predictor_Notes.md`, `table_raw.txt` — pre-existing untracked files, committed as-is per
+  direct instruction, origin/purpose not discussed this session.
+
+### Still Open / Next Steps (updated — August 17, 2026, this commit)
+
+1. LayerNorm investigation is closed (see entry above) — no further work planned unless Jonathan
+   explicitly revisits it later with a full hyperparameter re-tune.
+2. L2 Norm predictor remains parked (zero-crossing vs. peak-based detection) — unchanged.
+3. Dropout predictor: functionally complete and in active use — Jonathan should confirm explicitly
+   before the project formally moves to **Spectral**, next in the 9-predictor evaluation order.
+4. Reply to Prof. Rashid's two open questions — still pending, unrelated to code track.
+
+---
+
 ## Tools & Preferences
 
 | Tool                          | Preference                                                                                                                                                              |

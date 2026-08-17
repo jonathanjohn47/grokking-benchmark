@@ -1,0 +1,62 @@
+from torch import arange, nn
+import torch
+
+# SHADOW - LayerNorm added, original had no norm
+USE_FINAL_LN = False
+
+
+class Transformer(nn.Module):
+    def __init__(self, vocab_size, d_model):
+        super().__init__()
+        self.token_embedding = nn.Embedding(vocab_size, d_model)
+        self.position_embedding = nn.Embedding(3, d_model)
+
+        self.query = nn.Linear(d_model, d_model, bias=False)
+        self.key = nn.Linear(d_model, d_model, bias=False)
+        self.value = nn.Linear(d_model, d_model, bias=False)
+
+        self.mlp_in = nn.Linear(d_model, 4 * d_model, bias=False)
+        self.mlp_activation = nn.ReLU()
+        self.mlp_out = nn.Linear(4 * d_model, d_model, bias=False)
+
+        self.output_head = nn.Linear(d_model, vocab_size, bias=False)
+
+        self.dropout1 = nn.Dropout(0.0)
+        self.dropout2 = nn.Dropout(0.0)
+
+        self.ln1 = nn.LayerNorm(d_model)  # SHADOW - LayerNorm added, original had no norm
+        self.ln2 = nn.LayerNorm(d_model)  # SHADOW - LayerNorm added, original had no norm
+        self.ln_final = nn.LayerNorm(d_model)  # SHADOW - LayerNorm added, original had no norm
+
+    def forward(self, x):
+        token_vectors = self.token_embedding(x)
+        position_vectors = self.position_embedding(arange(x.size(1), device=x.device))
+        combined_vector = token_vectors + position_vectors
+        query_vector = self.query(combined_vector)
+        key_vector = self.key(combined_vector)
+        value_vector = self.value(combined_vector)
+
+        scores = torch.matmul(query_vector, key_vector.transpose(-2, -1)) / (query_vector.size(-1) ** 0.5)
+        attention_weights = torch.softmax(scores, dim=-1)
+        attention_values = combined_vector + self.dropout1(torch.matmul(attention_weights, value_vector))
+        attention_values = self.ln1(attention_values)  # SHADOW - LayerNorm added, original had no norm
+        mlp_output = attention_values + self.dropout2(self.mlp_out(self.mlp_activation(self.mlp_in(attention_values))))
+        mlp_output = self.ln2(mlp_output)  # SHADOW - LayerNorm added, original had no norm
+
+        if USE_FINAL_LN:
+            mlp_output = self.ln_final(mlp_output)  # SHADOW - LayerNorm added, original had no norm
+
+        logits = self.output_head(mlp_output)
+
+        return logits
+
+
+if __name__ == "__main__":
+    model = Transformer(vocab_size=98, d_model=128)
+
+    x = torch.eye(2, 3, dtype=torch.long)
+    model.forward(x)
+
+    # Quick 100 epoch sanity check - should not crash
+    # Should reach >90% test acc and ideally break the 99.5446% plateau
+    pass

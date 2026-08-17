@@ -18,7 +18,9 @@
       "Bash(rm -f /c/Users/jonat/StudioProjects/grokking-benchmark/.git/index.lock && git status)",
       "Bash(git commit -m ' *)",
       "Bash(rm -f /c/Users/jonat/StudioProjects/grokking-benchmark/.git/HEAD.lock)",
-      "Bash(git status *)"
+      "Bash(git status *)",
+      "Bash(Start-Sleep -Milliseconds 500)",
+      "Bash(rm -f .git/index.lock)"
     ],
     "additionalDirectories": [
       "C:\\Users\\jonat\\StudioProjects\\grokking-benchmark\\src\\predictors",

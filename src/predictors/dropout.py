@@ -11,7 +11,7 @@ def compute_accuracy(model, data_loader):
             logit = model.forward(x)
         equal_sign_logit = logit[:, 2, :]
         predicted = equal_sign_logit.argmax(dim=1)
-        total_correct += (predicted == y).sum().item()
+        total_correct += (predicted == y).sum().item() 
         total_samples += len(y)
     return total_correct / total_samples if total_samples > 0 else 0.0
 
