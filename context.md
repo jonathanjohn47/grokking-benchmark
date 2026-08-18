@@ -2986,3 +2986,136 @@ correct, and in active use; it is not pending a rebuild.
 | L2 Norm detection             | Threshold-based approach abandoned — signal is inverted (highest decay during memorization, not grokking)                                                               |
 | Matplotlib legends            | Always pass explicit `loc=` (e.g. `"upper right"`) — auto-placement (`plt.legend()` with no `loc`) has hung/`KeyboardInterrupt`'d during `savefig` in this project      |
 | Log-x plots + moving averages | Must resample onto a grid uniform in `log10(epoch)` before smoothing/MA — a fixed window in linear epoch index over/under-smooths depending on position on a log-x plot |
+
+---
+
+## Session Summary — August 18, 2026 (Dropout sweep discussion, Nanda-vs-Power fidelity check, 4-head variant built)
+
+### Picked up from
+
+- Previous session (Aug 17) closed with the Shadow LayerNorm investigation parked, and the Dropout
+  predictor recorded as functionally complete and in active use at a single fixed stress-test rate
+  (`dropout_rate=0.9`, hardcoded in `train.py`'s per-epoch `compute_dropout_gap(...)` call).
+
+### Discussion 1 — dropout rate sweep (concept only, not yet implemented)
+
+- Jonathan raised, correctly, that quoting the Dropout Gap only at `dropout_rate=0.9` is not enough
+  to defend as a scientific result — a single point cannot show whether the gap-widens-near-grokking
+  pattern is real or just an artefact of that one chosen rate.
+- **Clarified and agreed:** in this project, dropout is used purely as a **stress-test measurement**
+  on an already-trained model (`compute_dropout_gap` temporarily sets `dropout1.p`/`dropout2.p`,
+  measures, resets to `0.0`) — not as a training-time regulariser. A sweep of this stress-test rate
+  (e.g. 0.1, 0.3, 0.5, 0.7, 0.9) needs no retraining, only repeated calls to `compute_dropout_gap` at
+  different rates on the same trained model. **Not yet implemented — still the next concrete task.**
+- Jonathan separately asked whether dropout should also be added **into training itself**, for the
+  sake of the experiment's goal. **Decision: no, not as part of the shared model.** Reasoning: the
+  9-predictor benchmark needs one common training protocol across all predictors; `transformer.py` is
+  the shared model file used by every predictor, and changing it would shift training dynamics
+  (grok epoch, memorization curve) for all of them, not just Dropout — this is exactly the same
+  failure mode already seen in the Shadow LayerNorm experiment, where adding a learnable
+  normalisation layer under `weight_decay=1.0` destabilised training for thousands of epochs (see
+  entry above, and [[shadow_layernorm_experiment_result]] in Claude's project memory). If this
+  question is revisited later, the correct pattern is a separate shadow model + shadow train script,
+  same as `model_shadow_with_layernorm.py`/`train_shadow_layernorm.py`, never merged into the shared
+  `transformer.py`.
+
+### Discussion 2 — fidelity check against Nanda et al. and Power et al.
+
+- Jonathan asked directly whether the project's experimental setup strictly follows Nanda et al.'s
+  paper, or has diverged. Checked `context.md` history plus a fresh web fetch of the actual Nanda et
+  al. paper (arXiv 2301.05217) to verify exact numbers rather than relying on memory.
+- **Confirmed matches to Nanda et al. 2023:** AdamW, lr=0.001, weight_decay=1.0, full-batch gradient
+  descent, 30%/70% train/test split, no LayerNorm, `d_model=128`, MLP hidden size 512 (`4×d_model`).
+- **Confirmed this project actually borrows its modulus from a different paper:** `p=97` is Power et
+  al.'s number ("Grokking: Generalization Beyond Overfitting on Small Algorithmic Datasets"), not
+  Nanda et al.'s, who used `p=113`. `CLAUDE.md`'s M1 gate wording ("reproduce Nanda et al.'s grokking
+  experiment on `(a+b) mod 97`") is therefore imprecise — it conflates the two source papers. Flagged
+  for correction in the thesis's Experimental Setup section, not in `CLAUDE.md` itself.
+- **Single-head attention — checked specifically, no documented reason found.** Re-read `context.md`
+  looking for why `transformer.py` uses one Query/Key/Value block instead of Nanda et al.'s 4 heads.
+  Finding: the single-head block was built early, before Nanda's paper was even the reference point.
+  The July 10, 2026 "align to Nanda" session explicitly fixed LayerNorm, biases, residuals, and MLP
+  shape against Nanda et al., but never touched or discussed head count — it simply carried over
+  unexamined. A web search for literature specifically justifying single-head sufficiency for
+  grokking on modular addition did not turn up a directly supporting paper either. **This is an
+  unexamined leftover, not a reasoned architectural decision** — recorded plainly so it is not later
+  mis-described as deliberate.
+- Both findings (full Nanda-vs-Power breakdown, and the single-head gap) are also saved in Claude's
+  own project memory (separate from this file) as `nanda_vs_power_experimental_setup_comparison.md`,
+  for continuity across Claude sessions specifically; this `context.md` entry is the project's own
+  record of the same finding.
+
+### Action taken — 4-head architecture variant built (direct implementation, no Opencode prompt)
+
+- Jonathan explicitly asked for direct implementation this session ("do it yourself, no opencode
+  prompt"), per `CLAUDE.md` Section 12's override condition — so the following was implemented
+  directly rather than handed off as a prompt.
+- **Goal:** give the single-head-vs-Nanda's-4-head question actual empirical backing, by creating a
+  second, parallel version of the model and training loop with 4 attention heads (matching Nanda et
+  al. exactly: `d_model=128`, `num_heads=4`, head dimension `128/4=32`), **without touching or
+  deleting anything in the existing single-head setup.**
+- **New files created (all new, nothing existing modified):**
+  1. `src/models/transformer_four_head.py` — new `TransformerFourHead` class. Identical to the
+     original `Transformer` in every respect except attention: adds `split_into_heads`/
+     `combine_heads` helpers to reshape `(batch, seq, d_model)` into
+     `(batch, num_heads, seq, head_dim)` and back, and scales attention scores by `head_dim ** 0.5`
+     (not `d_model ** 0.5`, since each head now attends independently). Same embeddings, same MLP
+     (4× expansion + ReLU), no LayerNorm, no `nn.Linear` biases, same `dropout1`/`dropout2` hooks
+     the Dropout predictor depends on.
+  2. `src/train_four_head.py` — full copy of `train.py`'s training loop, importing
+     `TransformerFourHead` instead of `Transformer`. Same task (`p=97`), same optimiser, same
+     per-epoch L2 Norm + Dropout Gap tracking, same PDF report generation.
+     `src/predictors/l2_norm.py` and `src/predictors/dropout.py` needed **no changes at all** — both
+     already operate generically on `model.parameters()` / `model.dropout1`/`model.dropout2`. Adds
+     `torch.manual_seed(1337)` (same practice as `train_shadow_layernorm.py`) for repeatability; note
+     `train.py` itself still has no seed, so a strict apples-to-apples run later would need the same
+     seed added to `train.py` temporarily.
+  3. `src/plot_results_four_head.py` — matching plot script for the 4-head variant's saved arrays.
+  4. `runs/README.md` (new folder, `runs/`) — documents that the original single-head model's outputs
+     stay exactly where they already are (project root, unchanged), while the 4-head variant's
+     outputs land in `runs/four_head/` once `train_four_head.py` is run. This folder split was
+     requested explicitly by Jonathan ("organize the folders likewise so it is easy for me to
+     navigate") — a deliberate departure from the flat `shadow_ln_`-prefix pattern used for the
+     LayerNorm side-experiment, since the project root was judged too cluttered already.
+- **Validation performed this session (torch itself was not available to actually execute a training
+  run from Claude's side):**
+  - All three new `.py` files checked clean with `python -m py_compile` — no syntax errors.
+  - The `split_into_heads`/`combine_heads` reshape logic was independently verified with a numpy
+    simulation of the exact same shape operations (`view`/`permute`/`reshape` behave identically in
+    numpy and PyTorch for this purpose) — confirmed `(batch=2, seq=3, d_model=128)` splits correctly
+    into `(2, 4, 3, 32)`, attention math produces `(2, 4, 3, 3)` scores and `(2, 4, 3, 32)` output, and
+    `combine_heads(split_into_heads(x))` reconstructs `x` exactly (`np.allclose` true).
+  - **Not yet done:** an actual training run of `train_four_head.py` on Jonathan's machine — this is
+    needed before any claim can be made about whether grokking occurs, and at what epoch, on the
+    4-head model. Per `CLAUDE.md`'s validation rule, this was stated explicitly to Jonathan rather
+    than assumed.
+
+### Files Modified (this session)
+
+- **New:** `src/models/transformer_four_head.py`, `src/train_four_head.py`,
+  `src/plot_results_four_head.py`, `runs/README.md` (and the new `runs/` folder itself).
+- **Unchanged, explicitly verified via file listing after writing the new files:**
+  `src/models/transformer.py`, `src/train.py`, `src/plot_results.py`, `src/predictors/l2_norm.py`,
+  `src/predictors/dropout.py`, and every existing root-level `.npy`/`.png`/`.pdf` output.
+- `context.md` — this session's summary added (this entry).
+
+### Still Open / Next Steps (updated — August 18, 2026, this session)
+
+1. **Run `train_four_head.py` on Jonathan's machine** — immediate next action. Once complete, run
+   `plot_results_four_head.py`, then compare the 4-head model's grok epoch and final test accuracy
+   plateau against the original single-head run's known numbers.
+2. **Dropout stress-test rate sweep** — still not implemented. Once the 4-head run above is done,
+   sweep `compute_dropout_gap`'s `dropout_rate` across several values (e.g. 0.1–0.9) on a trained
+   model, for both the single-head and 4-head variants, instead of quoting only `rate=0.9`.
+3. Training-time dropout (as a regulariser, not a stress test) — explicitly parked, not started. If
+   revisited, must be a separate shadow model, never merged into the shared `transformer.py`.
+4. L2 Norm predictor remains parked (zero-crossing vs. peak-based detection) — unchanged.
+5. Dropout predictor (single-head, `rate=0.9` only): functionally complete and in active use —
+   Jonathan should confirm explicitly before the project formally moves to **Spectral**, next in the
+   9-predictor evaluation order. The rate-sweep work above (Item 2) is additional depth on top of
+   this, not a blocker for moving on, unless Jonathan decides otherwise.
+6. Thesis Experimental Setup section should state precisely which choices come from Nanda et al.,
+   which come from Power et al., and that single-head attention was an unexamined simplification
+   until the 4-head comparison run (Item 1) gives it actual evidence either way.
+7. Reply to Prof. Rashid's two open questions — still pending, unrelated to code track, carried
+   forward many sessions.
