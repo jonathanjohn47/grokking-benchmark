@@ -3119,3 +3119,200 @@ correct, and in active use; it is not pending a rebuild.
    until the 4-head comparison run (Item 1) gives it actual evidence either way.
 7. Reply to Prof. Rashid's two open questions — still pending, unrelated to code track, carried
    forward many sessions.
+
+---
+
+## Session Summary — August 18, 2026 (PNG cleanup, 4-head first result analysed, plots completed, multi-run infrastructure added)
+
+### Picked up from
+
+- Previous session closed with the 4-head variant (`transformer_four_head.py`, `train_four_head.py`,
+  `plot_results_four_head.py`, `runs/four_head/`) freshly created and validated by syntax check + a
+  numpy shape simulation, but not yet actually run on Jonathan's machine.
+
+### Action 1 — old plotted PNGs cleared out (moved, not deleted)
+
+- Jonathan asked to delete all plotted graphs/results to start fresh. Clarified scope via a direct
+  question first, since Claude cannot actually delete files on Jonathan's machine from this session —
+  only move them. Jonathan narrowed the request to "only png files that contain graphs and results,
+  project-wide."
+- **Moved into a new `_to_delete/` folder in the project root** (Jonathan must delete this folder
+  himself when ready — nothing was permanently erased): `Grokking Curve.png`, `grokking_curve.png`,
+  `grokking_analysis.png`, `l2_norm_curve.png`, `ma_of_ma_diff_vs_grokking_linear.png`,
+  `ma_of_slow_ma_crossover.png`, `ma_of_slow_ma_diff.png`, `ma_of_slow_ma_diff_linear.png`,
+  `shadow_ln_grokking_curve.png` — 9 files, all matplotlib-generated result plots.
+- **Deliberately left untouched, flagged to Jonathan:** `dropout_gap_infographic.png` (a designed
+  infographic tied to `dropout_gap_infographic_philosophy.md`'s "Gate Ledger" design philosophy, not a
+  plotted data result) and the six teaching/concept-explanation images inside `images/`
+  (`what_is_a_logit.png`, `pytorch_training_loop_explained.png`, etc.) — none of these are experiment
+  output graphs.
+- `.npy` data, PDF reports, and `context.md` were not touched — only PNGs, exactly as scoped.
+
+### Action 2 — where the 4 heads live in the code (teaching, no code change)
+
+- Jonathan asked where the 4 attention heads actually appear in `transformer_four_head.py`. Walked
+  through `split_into_heads`/`combine_heads`, the `head_dim = d_model // num_heads` line, and the
+  `self.head_dim ** 0.5` scaling change vs. the original single-head file's `d_model ** 0.5` — no code
+  changed, teaching only.
+- Follow-up: asked what the *mechanical* difference is (separate from results). Explained: no new
+  parameters are added (Q/K/V linear layers are the same size in both files), the same total
+  attention-related compute (`seq_len × seq_len × d_model` overall) is reorganised into 4 independent
+  narrower attention computations instead of 1 wide one, and the scaling constant changes from
+  `√128` to `√32` because each head's dot product now sums over only 32 dimensions.
+
+### Action 3 — first real 4-head training run: no grokking at 10,000 epochs
+
+- Jonathan ran `train_four_head.py` (10,000 epochs at the time) and shared the console output. Result:
+  Train Accuracy 1.0000, Test Accuracy 0.0076 (below random chance ≈0.0102) — **no grokking observed**.
+  L2 Norm still monotonically falling at the last epoch (Max 114.93 → Final/Min 66.28, no plateau
+  yet). Dropout Gap negligible (0.0008), consistent with no generalisation having occurred yet.
+- Flagged a genuine code quirk in the L2 Norm predictor's console output: `grok_epoch =
+  np.argmax(test_acc_history > 0.9)` returns `0` (not `None`) when the condition is never true
+  anywhere in the run — this produced misleading negative "lead time" values (`-110.7`, `-1623.0`)
+  in this run's output, which must not be read as real predictor detections. Not yet fixed in
+  `train_four_head.py` itself (offered to Jonathan, not yet requested); **was fixed in
+  `plot_results_four_head.py`** in the same session (checks `(test_acc > 0.9).any()` before treating
+  `grok_epoch` as real).
+- Jonathan asked whether, sticking strictly to Nanda et al., he should run 40,000 epochs to actually
+  see grokking. Verified via a fresh web fetch of the paper (arXiv 2301.05217): Nanda et al.'s own
+  three-phase breakdown is memorisation (~epoch 0-1.4k), circuit formation (~1.4k-9.4k), cleanup where
+  test accuracy visibly jumps (~9.4k-14k, centred near epoch 10,000), inside their full 40,000-epoch
+  budget. **Recommendation given: yes, extend to 40,000 epochs** — the 10,000-epoch figure used so
+  far in this project was carried over from what worked for the single-head model, never verified
+  against Nanda et al.'s own (4-head) setup, and the current run's numbers (perfect train accuracy,
+  L2 norm still falling, test accuracy still flat) give no evidence against continuing further.
+  **Jonathan acted on this and changed `num_epochs` to `40000` in `train_four_head.py` himself,
+  independently, between sessions** (found via `diff` when re-staging the file — not a change made in
+  this conversation).
+- This finding (first 4-head run, no grok at 10k, recommendation to extend, the argmax quirk) was
+  saved to Claude's project memory as `four_head_variant_no_grok_at_10k.md`, separate from this file.
+
+### Action 4 — L2 Norm plot was missing as a standalone file; all 8 plots completed
+
+- Jonathan asked where the L2 plot for the 4-head model was, noting the graphs were "not complete."
+  Root cause: `plot_results_four_head.py` only ever produced the 4 moving-average-analysis plots
+  (`ma_of_slow_ma_crossover.png`, `ma_of_slow_ma_diff.png`, `ma_of_slow_ma_diff_linear.png`,
+  `ma_of_ma_diff_vs_grokking_linear.png`) — the plain L2 norm curve, grokking curve, loss curve, and
+  Dropout Gap curve existed only as pages inside `training_report.pdf`, never as their own PNGs.
+- **Fixed:** `plot_results_four_head.py` extended to also save `grokking_curve.png`, `loss_curve.png`,
+  `l2_norm_curve.png` (with the MA-crossover epoch marked, same as the PDF), and
+  `dropout_gap_curve.png` — 8 plots total per run. Also fixed the grok-epoch-marker line on the
+  overlay plot (Plot 4) to only draw when the model actually grokked, not unconditionally. Validated
+  with `py_compile` and a numpy-based reshape check (this was before the multi-run rewrite below).
+
+### Action 5 — multi-run infrastructure: per-run numbered folders + cross-run comparison plots
+
+- Jonathan asked to run this experiment multiple times, save every run's results separately (not
+  overwritten), and have the plotting script show all previous runs together. Reasoning: grokking is
+  stochastic (already established from the L2 Norm predictor's 3-run history), so a real comparison
+  needs several independent runs kept side by side.
+- **`train_four_head.py` rewritten:** now saves into `runs/four_head/run_<N>/`, auto-numbered by
+  scanning existing `run_*` folders and picking the next integer (`get_next_run_number`). A migration
+  helper (`migrate_legacy_flat_run`) checks for old flat-saved results directly in `runs/four_head/`
+  (from before this change) and moves them into `run_1/` automatically, so the pre-existing 10k-epoch
+  run's files are not silently lost or overwritten by numbering logic. `num_epochs = 40000` (Jonathan's
+  own change) was preserved exactly.
+- **`plot_results_four_head.py` rewritten:** discovers every `run_<N>` folder, regenerates that run's
+  own 8 plots inside its own folder, then builds 4 NEW comparison plots directly under
+  `runs/four_head/` — `comparison_grokking_curve.png`, `comparison_loss_curve.png`,
+  `comparison_l2_norm_curve.png`, `comparison_dropout_gap_curve.png` — overlaying every discovered
+  run with a distinct colour and a "Run N (X epochs)" legend entry. Same migration helper included so
+  the plotting script alone can also recover an old flat run.
+- **Validated end-to-end before delivery** (not just syntax-checked): built a fake project directory
+  with a stub `torch` module (real `torch` unavailable in Claude's cloud sandbox) and two sets of
+  fabricated `.npy` arrays — one run that never crosses 90% test accuracy, one that grokks partway
+  through — and ran the actual `plot_results_four_head.py` against them. Confirmed correct behaviour
+  for: a "did not grok" run, a "grokked" run, the legacy-flat-file migration (flat files correctly
+  moved into `run_1/` and picked up), and `get_next_run_number`'s edge cases (empty folder → 1,
+  existing `run_1`/`run_2`/`run_5` with a gap → 6, non-run junk entries ignored, nonexistent path → 1).
+- **Important timing caveat, explicitly told to Jonathan:** if his 40,000-epoch run was already in
+  progress using the pre-update script (loaded into memory before this change reached his machine), it
+  will still finish saving into the old flat `runs/four_head/` location and will overwrite the
+  10,000-epoch run's files there — the migration will fold whatever is left into `run_1/` afterwards,
+  but the original 10k run's exact numbers only survive in `context.md` and Claude's project memory,
+  not necessarily as a separate folder on disk.
+
+### Files Modified (this session)
+
+- **Moved (not deleted):** 9 root-level PNGs → `_to_delete/` (new folder, project root).
+- **Modified:** `src/train_four_head.py` (run-numbering + migration logic added; `num_epochs=40000`
+  preserved from Jonathan's own edit), `src/plot_results_four_head.py` (rewritten twice this session —
+  first to add the missing 4 standalone plots, then again to become multi-run aware with per-run +
+  comparison plots).
+- **Unchanged:** `src/train.py`, `src/plot_results.py`, `src/models/transformer.py`,
+  `src/predictors/l2_norm.py`, `src/predictors/dropout.py`, `src/models/transformer_four_head.py`.
+- Claude's project memory: `four_head_variant_no_grok_at_10k.md` created then updated twice (first
+  with the 10k-epoch result + recommendation, later with the multi-run infrastructure note and the
+  timing caveat).
+- `context.md` — this session's summary added (this entry).
+
+### Still Open / Next Steps (updated — August 18, 2026, this session)
+
+1. **Jonathan's 40,000-epoch 4-head run** — in progress or pending on his machine as of this session;
+   result not yet known. Once it finishes, run the new `plot_results_four_head.py` to get both the
+   per-run plots and the cross-run comparison plots.
+2. Once at least 2-3 four-head runs exist, compare grok epoch (if any), final L2 norm, and final
+   Dropout Gap across runs the same way the L2 Norm predictor's 3-run consistency check was done —
+   folded into `four_head_variant_no_grok_at_10k.md` / [[nanda_vs_power_experimental_setup_comparison]]
+   once resolved.
+3. Dropout stress-test rate sweep (e.g. 0.1–0.9, on a trained model, for both single-head and 4-head)
+   — still not implemented, carried forward from the Aug 18 (earlier session) discussion.
+4. Training-time dropout (as a regulariser, not a stress test) — still explicitly parked.
+5. The same "`grok_epoch` prints as 0 when there was no grokking" fix applied to
+   `plot_results_four_head.py` has NOT yet been applied to `train_four_head.py`'s own console output —
+   offered to Jonathan, not yet requested.
+6. L2 Norm predictor (single-head) remains parked (zero-crossing vs. peak-based detection) — unchanged.
+7. Dropout predictor (single-head, `rate=0.9` only): functionally complete and in active use —
+   Jonathan should confirm explicitly before the project formally moves to **Spectral**, next in the
+   9-predictor evaluation order.
+8. Thesis Experimental Setup section should state precisely which choices come from Nanda et al.,
+   which from Power et al., and report the 4-head comparison result (once known) for the
+   single-head-was-an-unexamined-simplification question.
+9. Reply to Prof. Rashid's two open questions — still pending, unrelated to code track, carried
+   forward many sessions.
+
+---
+
+## Session Summary — August 19, 2026 (cleanup and multi-run infrastructure commit)
+
+### Picked up from
+
+- Previous session (Aug 18) ended with the 4-head multi-run infrastructure freshly rewritten: per-run
+  numbered folders (`runs/four_head/run_<N>/`), legacy-flat-file migration support, and cross-run
+  comparison plots. Jonathan's 40,000-epoch 4-head run was in progress.
+
+### Action taken — commit all changes
+
+- Jonathan requested: **commit all changes** (direct instruction).
+- **What was staged and committed:**
+  1. **Deleted PNG result files** (moved to `_to_delete/` folder): 9 old plots from earlier runs:
+     `Grokking Curve.png`, `grokking_curve.png`, `grokking_analysis.png`, `l2_norm_curve.png`,
+     `ma_of_ma_diff_vs_grokking_linear.png`, `ma_of_slow_ma_crossover.png`, `ma_of_slow_ma_diff.png`,
+     `ma_of_slow_ma_diff_linear.png`, `shadow_ln_grokking_curve.png` — all moved into a new
+     `_to_delete/` folder per Jonathan's April 18 request to clear out old result plots. The folder
+     itself was added to git (not `.gitignore`'d), so the move is tracked.
+  2. **Modified:** `src/train_four_head.py` (run-numbering logic + legacy-flat-file migration;
+     `num_epochs=40000` preserved from Jonathan's own earlier edit between sessions).
+  3. **Modified:** `src/plot_results_four_head.py` (rewritten twice in Aug 18: first to add 4 missing
+     standalone plots, second to add multi-run infrastructure and comparison plots).
+  4. **New directory:** `runs/` folder with `runs/README.md` (explains the 4-head variant's folder
+     structure separate from the root).
+  5. **Updated:** `context.md` (this entry).
+- **What was NOT modified:** `src/train.py`, `src/plot_results.py`, `src/models/transformer.py`,
+  `src/predictors/l2_norm.py`, `src/predictors/dropout.py`, `src/models/transformer_four_head.py`,
+  or any of the single-head model's existing `.npy`/`.pdf` output files.
+
+### Still Open / Next Steps (updated — August 19, 2026)
+
+1. **Jonathan's 40,000-epoch 4-head run** — assuming it finished on his machine (or will finish soon),
+   run the updated `plot_results_four_head.py` to generate per-run and comparison plots in the
+   `runs/four_head/` folder structure.
+2. Once at least 2-3 four-head runs exist, analyse grok epoch (if any), final L2 norm, final Dropout
+   Gap across runs for consistency.
+3. Dropout stress-test rate sweep (e.g. 0.1–0.9, on trained models, both single-head and 4-head) —
+   still not implemented.
+4. Training-time dropout (as a regulariser) — still explicitly parked.
+5. L2 Norm predictor (single-head) remains parked (zero-crossing vs. peak-based detection).
+6. Dropout predictor (single-head, `rate=0.9` only): functionally complete — Jonathan should confirm
+   before formally moving to **Spectral**, next predictor in the 9-predictor order.
+7. Reply to Prof. Rashid's two open questions — still pending, unrelated to code track.

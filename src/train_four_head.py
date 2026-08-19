@@ -3,6 +3,7 @@ from torch import nn
 from torch.optim import AdamW
 import numpy as np
 import os
+import re
 from predictors.l2_norm import (
     compute_l2_norm,
     compute_fast_slow_moving_averages,
@@ -28,18 +29,82 @@ from predictors.dropout import compute_dropout_gap
 # both predictors work on any model that exposes .parameters() and
 # .dropout1/.dropout2, which this model does too).
 #
-# Outputs are saved under runs/four_head/ (created if it does not exist
-# yet), NOT in the project root, so they never overwrite train.py's own
-# train_acc_history.npy / l2_norm_history.npy / dropout_gap_history.npy /
-# etc., which belong to the original single-head run.
+# Outputs are saved under runs/four_head/run_<N>/ (created if it does not
+# exist yet), NOT in the project root, so they never overwrite train.py's
+# own train_acc_history.npy / l2_norm_history.npy / dropout_gap_history.npy
+# / etc., which belong to the original single-head run.
+#
+# RUN NUMBERING: every time this script is run, it saves into a NEW
+# numbered subfolder (run_1, run_2, run_3, ...) instead of overwriting the
+# previous run's results. This is needed because grokking is stochastic —
+# the grok epoch moves with the random seed — so a real comparison needs
+# several independent runs kept side by side, not one run's numbers
+# overwritten by the next. plot_results_four_head.py reads every run_<N>
+# folder it finds and plots them together for comparison.
 # ======================================================================
+
+LEGACY_FILENAMES = [
+    "train_acc_history.npy", "test_acc_history.npy", "loss_history.npy",
+    "l2_norm_history.npy", "dropout_gap_epochs.npy", "dropout_gap_history.npy",
+    "dropout_train_acc_history.npy", "dropout_eval_acc_history.npy",
+    "epoch_grid.npy", "fast_ma.npy", "slow_ma.npy", "fast_ma_of_slow_ma.npy",
+    "ma_of_ma_diff.npy", "training_report.pdf",
+    "ma_of_slow_ma_crossover.png", "ma_of_slow_ma_diff.png",
+    "ma_of_slow_ma_diff_linear.png", "ma_of_ma_diff_vs_grokking_linear.png",
+    "grokking_curve.png", "loss_curve.png", "l2_norm_curve.png", "dropout_gap_curve.png",
+]
+
+
+def migrate_legacy_flat_run(four_head_dir):
+    """
+    Earlier versions of this script saved directly into runs/four_head/
+    instead of runs/four_head/run_<N>/. If such files are found here, and
+    run_1/ does not exist yet, move them into run_1/ so they are counted
+    as the first run instead of silently sitting outside the new
+    numbering scheme (and instead of being silently overwritten by this
+    run, which is what would have happened before this change).
+    """
+    run_1_dir = os.path.join(four_head_dir, "run_1")
+    if os.path.isdir(run_1_dir):
+        return
+    legacy_present = any(
+        os.path.isfile(os.path.join(four_head_dir, name)) for name in LEGACY_FILENAMES
+    )
+    if not legacy_present:
+        return
+    os.makedirs(run_1_dir, exist_ok=True)
+    for name in LEGACY_FILENAMES:
+        src = os.path.join(four_head_dir, name)
+        if os.path.isfile(src):
+            os.rename(src, os.path.join(run_1_dir, name))
+    print("[MIGRATION] Found results saved directly in runs/four_head/ by an earlier "
+          "version of this script — moved them into runs/four_head/run_1/ so they are "
+          "counted as Run 1 instead of being overwritten.")
+
+
+def get_next_run_number(four_head_dir):
+    if not os.path.isdir(four_head_dir):
+        return 1
+    existing_numbers = []
+    for name in os.listdir(four_head_dir):
+        match = re.fullmatch(r"run_(\d+)", name)
+        if match and os.path.isdir(os.path.join(four_head_dir, name)):
+            existing_numbers.append(int(match.group(1)))
+    return max(existing_numbers, default=0) + 1
+
 
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(project_root)
 
-output_dir = os.path.join(project_root, "runs", "four_head")
+four_head_dir = os.path.join(project_root, "runs", "four_head")
+migrate_legacy_flat_run(four_head_dir)
+run_number = get_next_run_number(four_head_dir)
+
+output_dir = os.path.join(four_head_dir, f"run_{run_number}")
 os.makedirs(output_dir, exist_ok=True)
 os.chdir(output_dir)
+
+print(f"This is Run {run_number}. All outputs will be saved to runs/four_head/run_{run_number}/")
 
 # Fixed seed, so this run can later be repeated with the same starting
 # weights and the same train/test split — same practice already used in
@@ -60,7 +125,7 @@ print("Model: TransformerFourHead (num_heads=4, matches Nanda et al.)")
 print("Optimizer:", optimizer)
 cross_entropy_loss = nn.CrossEntropyLoss()
 
-num_epochs = 10000
+num_epochs = 40000
 train_acc_history = []
 test_acc_history = []
 loss_history = []
@@ -130,7 +195,7 @@ np.save("dropout_gap_epochs.npy", dropout_gap_epochs)
 np.save("dropout_gap_history.npy", dropout_gap_history)
 np.save("dropout_train_acc_history.npy", dropout_train_acc_history)
 np.save("dropout_eval_acc_history.npy", dropout_eval_acc_history)
-print("Training data saved (runs/four_head/):")
+print(f"Training data saved (runs/four_head/run_{run_number}/):")
 print("  - train_acc_history.npy")
 print("  - test_acc_history.npy")
 print("  - loss_history.npy")
@@ -311,4 +376,4 @@ with PdfPages("training_report.pdf") as pdf:
         pdf.savefig(fig_table)
         plt.close(fig_table)
 
-print(f"[OK] PDF report saved to runs/four_head/training_report.pdf ({4 + num_table_pages} pages: 4 graphs + {num_table_pages} table pages)")
+print(f"[OK] PDF report saved to runs/four_head/run_{run_number}/training_report.pdf ({4 + num_table_pages} pages: 4 graphs + {num_table_pages} table pages)")
