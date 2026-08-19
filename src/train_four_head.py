@@ -106,13 +106,15 @@ os.chdir(output_dir)
 
 print(f"This is Run {run_number}. All outputs will be saved to runs/four_head/run_{run_number}/")
 
-# Fixed seed, so this run can later be repeated with the same starting
-# weights and the same train/test split — same practice already used in
-# src/train_shadow_layernorm.py for this project's other side-experiment.
-# NOTE: the original train.py does not set a seed. If you want a strict
-# apples-to-apples comparison against a specific single-head run, add
-# this same line to train.py temporarily before that run too.
-torch.manual_seed(1337)
+# NEW random seed on every run, instead of a fixed one. torch.seed() picks
+# a fresh, non-deterministic seed itself and also returns the exact number
+# it used, so we can both use it and record it in the same step. This is
+# needed because grokking is stochastic (grok epoch moves with the seed —
+# see the L2 Norm predictor's 3-run history) and the thesis needs several
+# genuinely independent 4-head runs, not the same run repeated.
+seed = torch.seed()
+print(f"Seed: {seed}")
+np.save("seed.npy", seed)
 
 device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 print("Device:", device)
@@ -337,43 +339,4 @@ with PdfPages("training_report.pdf") as pdf:
     pdf.savefig(fig4)
     plt.close(fig4)
 
-    rows_per_page = 45
-    table_columns = ["Epoch", "Loss", "Train Acc", "Test Acc", "L2 Norm", "Dropout Gap"]
-
-    table_rows = []
-    for i in range(num_epochs):
-        table_rows.append([
-            str(i + 1),
-            f"{loss_history[i]:.4f}",
-            f"{train_acc_history[i]:.4f}",
-            f"{test_acc_history[i]:.4f}",
-            f"{l2_norm_history[i]:.4f}",
-            f"{dropout_gap_history[i]:.4f}",
-        ])
-
-    num_table_pages = (len(table_rows) + rows_per_page - 1) // rows_per_page
-
-    for page_idx in range(num_table_pages):
-        start = page_idx * rows_per_page
-        end = start + rows_per_page
-        page_rows = table_rows[start:end]
-
-        fig_table, ax_table = plt.subplots(figsize=(8.5, 11))
-        ax_table.axis("off")
-        ax_table.set_title(
-            f"Per-Epoch Results, 4-head model (page {page_idx + 1} of {num_table_pages})",
-            fontsize=12, pad=20
-        )
-        table = ax_table.table(
-            cellText=page_rows,
-            colLabels=table_columns,
-            loc="center",
-            cellLoc="center",
-        )
-        table.auto_set_font_size(False)
-        table.set_fontsize(8)
-        table.scale(1, 1.3)
-        pdf.savefig(fig_table)
-        plt.close(fig_table)
-
-print(f"[OK] PDF report saved to runs/four_head/run_{run_number}/training_report.pdf ({4 + num_table_pages} pages: 4 graphs + {num_table_pages} table pages)")
+print(f"[OK] PDF report saved to runs/four_head/run_{run_number}/training_report.pdf (4 pages: 4 graphs)")

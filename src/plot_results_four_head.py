@@ -85,14 +85,20 @@ def discover_run_dirs(base_dir):
 
 
 def load_run_data(run_dir):
-    data = {}
-    for key, filename in [
+    required_files = [
         ("train_acc", "train_acc_history.npy"), ("test_acc", "test_acc_history.npy"),
         ("loss", "loss_history.npy"), ("l2_norm", "l2_norm_history.npy"),
         ("dropout_gap_epochs", "dropout_gap_epochs.npy"), ("dropout_gap", "dropout_gap_history.npy"),
         ("epoch_grid", "epoch_grid.npy"), ("fast_ma", "fast_ma.npy"), ("slow_ma", "slow_ma.npy"),
         ("fast_ma_of_slow_ma", "fast_ma_of_slow_ma.npy"), ("ma_of_ma_diff", "ma_of_ma_diff.npy"),
-    ]:
+    ]
+
+    for _, filename in required_files:
+        if not os.path.exists(os.path.join(run_dir, filename)):
+            return None
+
+    data = {}
+    for key, filename in required_files:
         data[key] = np.load(os.path.join(run_dir, filename))
     data["num_epochs"] = len(data["train_acc"])
     return data
@@ -359,6 +365,9 @@ else:
     summaries = []
     for run_number, run_dir in run_dirs:
         data = load_run_data(run_dir)
+        if data is None:
+            print(f"  Skipping Run {run_number} (incomplete or empty)")
+            continue
         all_runs_data.append((run_number, data))
         summaries.append(plot_single_run(run_number, run_dir, data))
 

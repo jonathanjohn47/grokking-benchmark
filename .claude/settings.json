@@ -3,7 +3,10 @@
     "allow": [
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(python -m py_compile \"src/train_four_head.py\" \"src/train.py\")",
+      "Bash(python -m py_compile \"src/plot_results_four_head.py\")",
+      "Bash(python src/plot_results_four_head.py)"
     ]
   }
 }
