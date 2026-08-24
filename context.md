@@ -3599,3 +3599,216 @@ correct, and in active use; it is not pending a rebuild.
 3. Formal commitment on whether L2 Norm is fully closed for this project.
 4. Continue with predictor evaluation sequence per the 9-predictor order.
 5. Thesis documentation: record L2 Norm findings and current Dropout Gap issue.
+
+---
+
+## Session Summary — August 24, 2026 (Dropout Gap multi-rate sweep implemented on the single-head model — Jonathan wrote the code, Claude taught and reviewed; run not yet executed)
+
+### Picked up from
+
+- `context.md` was last updated August 22, 2026. The most recent "Still Open" list from that date
+  listed the Dropout stress-test rate sweep (0.1–0.9) as still not implemented, and separately, an
+  earlier August 22 session had flagged the strongly negative Dropout Gap seen in the four-head runs
+  (around −0.97) as a "Critical Problem" possibly needing debugging. This session resolves that
+  question: it is **not a bug**. At `dropout_rate=0.9`, ninety percent of the values inside the
+  attention and MLP blocks are zeroed, so accuracy collapses to near-random regardless of whether the
+  model has grokked — a single harsh rate cannot show whether the gap-narrows-near-grokking pattern is
+  real, which is exactly why the rate sweep (this session's work) was needed.
+
+### Action — Dropout rate sweep implemented
+
+- Jonathan explicitly asked this session to be taught the logic and to write the code himself, rather
+  than receiving an Opencode prompt or direct implementation ("guide me how to write code for the
+  sweep and I'll write it myself"). Per `CLAUDE.md`'s teacher-first role, Claude explained the goal,
+  gave a flowchart of the required logic, and reviewed each piece Jonathan wrote afterward, without
+  writing the implementation itself.
+- **New function**, `compute_dropout_gap_multi_rate(model, data_loader, dropout_rates)`, added to
+  `src/predictors/dropout.py`, below the existing `compute_dropout_gap()` (left completely unchanged).
+  It computes the clean (no-dropout) accuracy exactly once per call, then measures accuracy at every
+  rate in `dropout_rates`, returning a dict keyed by rate, each holding `"train_accuracy"`,
+  `"eval_accuracy"`, `"dropout_gap"`, and `"clean_accuracy"`.
+- **`src/train.py` updated:** five rates `[0.1, 0.3, 0.5, 0.7, 0.9]` defined near the top; the per-epoch
+  block now calls the new multi-rate function once (replacing the old single-rate call) and records
+  each rate's gap into `dropout_gap_history_by_rate` (a dict of per-epoch lists, one list per rate).
+  Rate 0.9's slice is copied into the pre-existing single-rate arrays (`dropout_gap_history`,
+  `dropout_train_acc_history`, `dropout_eval_acc_history`) for backward compatibility, without
+  recomputing it a second time. After training, the multi-rate history is saved as
+  `dropout_gap_by_rate.npy` (shape `(5, num_epochs)`) and `dropout_rates.npy`, alongside the original
+  single-rate `.npy` files, which are still produced exactly as before. Page 4 of `training_report.pdf`
+  now plots all five rate curves together with a legend, instead of only the rate=0.9 curve. The
+  end-of-run "Final Dropout Gap Check" print block now loops over all five rates.
+
+### Bugs found during review, and fixed by Jonathan
+
+1. First draft of `compute_dropout_gap_multi_rate()` recomputed the clean accuracy inside the loop,
+   once per rate — defeating the entire purpose of the function (avoiding repeated identical passes
+   over the test set). Fixed: clean accuracy is now computed once, before the loop, and reused for
+   every rate.
+2. First draft of the `train.py` integration read `results[0.9]["train_acc"]` /
+   `results[0.9]["eval_acc"]`, but the dictionary actually uses the full key names
+   `"train_accuracy"` / `"eval_accuracy"` — would have crashed with `KeyError` at epoch 1 of a real
+   run. Fixed.
+3. A `.format(...)` call was attached to the wrong `print(...)` string (one with no `{}` placeholder
+   in it), while the string that did contain a `{}` was left as a plain, unformatted string — this
+   produced no error, but silently never showed the array's shape in the console output. Fixed by
+   rewriting both lines as f-strings, matching the style already used elsewhere in the file.
+- All three fixes were caught by Claude reading the file after each edit, not by any automated tool.
+  The final version was verified with `python -m py_compile src/predictors/dropout.py src/train.py`,
+  run directly on Jonathan's machine via the device bridge — passed with no errors. **The full
+  10,000-epoch training run itself has not yet been executed** — only the code has been written and
+  syntax-checked so far.
+
+### Discussion — epoch budget for this run
+
+- Jonathan asked whether this run also needs 40,000 epochs, as the four-head L2 Norm runs did.
+  Clarified: 40,000 epochs applies only to `train_four_head.py` (the four-head model, which groks late,
+  roughly epoch 18,000–30,000). Today's changes are in `src/train.py`, the single-head model, which
+  groks much earlier (epoch 3,760–5,739 across the three single-head runs from the original L2 Norm
+  work) — so the existing `num_epochs = 10000` in that file is unchanged and sufficient, leaving
+  several thousand epochs of post-grok data to examine. `train_four_head.py` was **not** touched this
+  session; porting the same multi-rate sweep there, with `num_epochs = 40000`, remains a possible
+  future task if Jonathan wants the sweep on the four-head model too.
+
+### Files Modified (this session)
+
+- `src/predictors/dropout.py` — added `compute_dropout_gap_multi_rate()`; `compute_dropout_gap()` and
+  `compute_accuracy()` unchanged.
+- `src/train.py` — import changed to `compute_dropout_gap_multi_rate`; per-epoch loop, `.npy` saving
+  block, end-of-run summary print block, and PDF Page 4 plotting block all updated for the five-rate
+  sweep. No other section of this file changed.
+- **Not modified:** `src/train_four_head.py`, `src/models/transformer.py`,
+  `src/models/transformer_four_head.py`, `src/predictors/l2_norm.py`, and all existing single-head and
+  four-head output files.
+- `context.md` — this entry.
+
+### Still Open / Next Steps (updated — August 24, 2026)
+
+1. **Run the actual 10,000-epoch single-head training** (`src/train.py`) on Jonathan's machine —
+   immediate next action; everything so far has been written and syntax-checked, but never executed.
+2. Once that run completes, check `dropout_gap_by_rate.npy` against the same three criteria used to
+   judge L2 Norm (always predictive, never postdictive; tight and consistent gap; clearly above the
+   noise floor) at each of the five rates, to reach a formal verdict on the Dropout predictor.
+3. If Jonathan wants the same five-rate sweep on the four-head model, port the same changes into
+   `src/train_four_head.py` (with `num_epochs = 40000`) — not started.
+4. `src/generate_l2_report.py`'s epoch-axis bug (see August 22 entries above) is still not patched in
+   place in the live pipeline — carried forward.
+5. Formal move to **Spectral** (next predictor in the 9-predictor evaluation order) — still not
+   started; held behind Items 1 and 2 above, per Jonathan's own methodological standard that a single
+   untested rate is not enough to close Dropout.
+6. Reply to Prof. Rashid's two older open questions — still pending, carried forward many sessions.
+
+---
+
+## Session Summary — August 24, 2026 (Training report PDF analysed; conceptual challenges of Dropout Gap prediction explained; key challenges documented)
+
+### Picked up from
+
+- Jonathan asked: "What can we infer from this result?" (referring to `training_report.pdf`).
+- Followed up with: "Why is it difficult to predict grokking with Dropout gap?"
+- Both questions were answered in detail with conceptual explanation and thesis-relevant findings.
+
+### Action 1 — four-graph training report analysed for meaning
+
+Walked through what each page of `training_report.pdf` shows and what to look for:
+
+1. **Grokking Curve (Train vs. Test Accuracy, log-x scale):**
+   - Train accuracy rises quickly to 1.0 by epoch ~800–1000 (memorization phase).
+   - Test accuracy stays flat near 0% during memorization lag.
+   - Sharp jump occurs around epoch 3000–5000 (grokking event — the model discovers the pattern).
+   - This sharp jump is the phenomenon all 9 predictors are trying to detect before it happens.
+
+2. **Loss Curve (Training Loss, log-x scale):**
+   - Steep descent initially as the model memorizes training pairs.
+   - Plateaus at low value once memorization is complete.
+   - Loss does NOT predict the grokking event — it stays flat throughout the generalization lag.
+   - This is why loss alone is insufficient for predicting grokking.
+
+3. **L2 Norm Curve (Weight Magnitude Over Time, log-x scale):**
+   - Starts high (100–120) with randomly initialized weights.
+   - Decreases smoothly over time as weights organize during training.
+   - May show small wobbles (dip-then-rise pattern) around the time grokking happens.
+   - Theory: during memorization, model uses large/brittle weights; during generalization, uses smaller/compressed weights.
+   - L2 norm should drop before or during grok jump if it is a reliable predictor.
+   - **Open question (flagged in context.md):** the zero-crossing trigger on MA-of-MA difference fired before grokking in some runs, but after grokking in others — signal is unreliable.
+
+4. **Dropout Gap Curve (Robustness to Dropout, every epoch, log-x scale):**
+   - Measures accuracy loss when dropout is applied (at `dropout_rate=0.9` per the current setup).
+   - Large gap during memorization: model collapses completely under dropout (fragile, concentrated knowledge).
+   - Gap should shrink as grokking approaches: generalized model is robust because knowledge is spread across paths.
+   - Minimum gap after grokking: robust model barely drops accuracy even under heavy dropout.
+   - Dropout gap should ideally shrink _before_ the test-accuracy jump, signaling "generalization is coming."
+
+**Consolidated inference:** examining all four curves together tells whether the model grokked (sharp test-acc jump), which predictors detected real signals vs. noise (L2 Norm and Dropout Gap curves should show clear changes before or during the grok jump), and whether the predictor signals are reproducible across runs (since grokking epoch varies stochastically).
+
+### Action 2 — detailed analysis of why Dropout Gap prediction is difficult
+
+Explained five fundamental challenges that make Dropout Gap unreliable as a grokking predictor in its current form:
+
+1. **Dropout Gap is Indirect Measurement:**
+   - The theory sounds clear: robustness reflects generalization, so gap should shrink near grokking.
+   - In reality, robustness and generalization are not identical.
+   - A model can be robust to dropout while still memorizing (if memorized patterns spread across many weights).
+   - A model can be fragile to dropout but about to generalize (if it is at the boundary of circuit formation).
+   - Dropout gap measures a proxy, not generalization directly — it is correlated, not causal.
+
+2. **Single Dropout Rate (0.9 only) Cannot Show a Pattern:**
+   - Current implementation measures gap only at `dropout_rate=0.9` (90% of activations zeroed).
+   - A single data point cannot demonstrate a trend or pattern.
+   - Cannot determine: is the signal real at other rates? Does it hold at `p=0.3` or `p=0.5`?
+   - If gap narrows at `p=0.9`, would the same narrowing appear at `p=0.1`?
+   - **Resolution (in progress):** multi-rate sweep (0.1, 0.3, 0.5, 0.7, 0.9) was just implemented in Aug 24 earlier session — now awaiting actual run to validate the pattern across rates.
+
+3. **Computational Cost Prevents Thorough Exploration:**
+   - Computing dropout gap is expensive: two full passes over the test set per epoch.
+   - One pass with `dropout_rate=0.9`, `model.train()` mode (stressed accuracy).
+   - One pass with `dropout_rate=0.0`, `model.eval()` mode (clean accuracy).
+   - This means 20,000 extra full-dataset passes per 10,000-epoch run just to track dropout gap.
+   - To sweep five rates requires 5×2 = 10 passes per epoch — becomes prohibitively slow.
+   - High cost limits exploratory work needed to find the right rate and detection rule.
+
+4. **Signal Might Not Scale Consistently Across Stochastic Runs:**
+   - Grokking epoch varies across runs (e.g., 5739, 4806, 3760 epochs in single-head model).
+   - Key unresolved question: does dropout gap curve scale proportionally with these different timings?
+   - Example: if one run grokks at epoch 5739, does gap start shrinking ~epoch 4500-5500?
+   - If another run grokks at epoch 3760, does gap start shrinking ~epoch 3000-3500 (proportionally)?
+   - Or does gap shrink at the same absolute epoch in all runs regardless of actual grok timing?
+   - If the answer is "absolute epoch" (not proportional), a fixed rule like "trigger at epoch 2000" fails on runs where grokking happens early.
+   - Not yet checked systematically.
+
+5. **Stochastic Noise in Accuracy Measurement:**
+   - Even the clean and stressed accuracies themselves have noise.
+   - Test set is fixed (6587 examples), but small random fluctuations in which examples the model classifies correctly can cause the gap to jitter up and down.
+   - Jitter masks the true underlying trend, making detection rules harder to formalize.
+
+**Consolidated verdict:** Dropout Gap theory is sound, but empirical validation is incomplete. To actually use it as a reliable predictor, the five-rate sweep (now in progress) is a necessary first step, followed by multi-seed consistency analysis and formalisation of the detection rule.
+
+### Key Findings Documented for Thesis
+
+1. **Grokking is reproducible and observable** — the sharp test-accuracy jump is real and appears consistently across different runs (though at different epochs).
+
+2. **Loss and train accuracy alone do not predict grokking** — both plateau well before grokking happens, offering no signal about when generalization will occur.
+
+3. **L2 Norm predictor is formally closed (negative result)** — five detection strategies were tested on single-head and four-head models; none met the 3-criteria protocol (always precedes grokking, tight/consistent gap, clearly above noise).
+
+4. **Dropout Gap is still under investigation** — single-rate (0.9) measurement does not provide enough evidence; multi-rate sweep (0.1–0.9) is needed to determine whether the gap-narrowing pattern is real or an artifact of the chosen rate. This session explains exactly why a single rate is insufficient.
+
+5. **The 9-predictor benchmark methodology is sound** — testing multiple predictor candidates under one protocol, across multiple seeds and architectures, reveals which signals are robust and which are noise. The Dropout Gap case study illustrates this clearly.
+
+### Files Modified (this session)
+
+- `context.md` — this entry added, documenting the analysis and the five fundamental challenges.
+- **No source code modified** — this was a conceptual explanation and teaching session, not implementation.
+
+### Still Open / Next Steps (updated — August 24, 2026, this session)
+
+1. **Run `src/train.py` with the multi-rate Dropout sweep** (implemented in Aug 24 earlier session) — immediate next action. Once complete, analyse the five rates' dropout gap curves against the same 3-criteria protocol used for L2 Norm.
+
+2. **Reach a formal verdict on the Dropout predictor** by checking all five rates against criteria: always predictive (precedes grokking), tight and consistent across runs, clearly above noise floor.
+
+3. **If Dropout passes validation**, port the same five-rate sweep into `src/train_four_head.py` (with `num_epochs=40000`) for consistency.
+
+4. **L2 Norm pipeline fix** — `src/generate_l2_report.py` still has the epoch-axis bug (uses `epoch_grid.npy` instead of real epoch indices); correct version exists as `generate_l2_report_corrected.py` at project root. Decide whether to patch the live pipeline or leave it.
+
+5. **Formal move to Spectral predictor** (next in the 9-predictor evaluation order) — held pending completion of Dropout validation above.
+
+6. Reply to Prof. Rashid's two older open questions — still pending, unrelated to this work track, carried forward many sessions.

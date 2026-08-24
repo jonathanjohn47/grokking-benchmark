@@ -13,7 +13,7 @@ from predictors.l2_norm import (
 )
 from data.modular_arithmetic import get_dataloaders
 from models.transformer import Transformer
-from predictors.dropout import compute_dropout_gap
+from predictors.dropout import compute_dropout_gap_multi_rate
 
 # Save results to project root
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -40,6 +40,8 @@ dropout_gap_epochs = []
 dropout_gap_history = []
 dropout_train_acc_history = []
 dropout_eval_acc_history = []
+dropout_rates = [0.1, 0.3, 0.5, 0.7, 0.9]
+dropout_gap_history_by_rate = {rate: [] for rate in dropout_rates}
 
 for epoch in range(num_epochs):
     total_correct = 0
@@ -81,9 +83,20 @@ for epoch in range(num_epochs):
     # asked for full per-epoch resolution here as well, so this block now
     # runs unconditionally. This will make each epoch noticeably slower than
     # before, since two extra passes over the test set now happen every time.
-    dropout_gap, dropout_train_acc, dropout_eval_acc = compute_dropout_gap(
-        model, data_loader[1], dropout_rate=0.9
+    # Now tracking multi-rate dropout gaps across five rates: [0.1, 0.3, 0.5, 0.7, 0.9]
+    results = compute_dropout_gap_multi_rate(
+        model, data_loader[1], dropout_rates
     )
+
+    for rate in dropout_rates:
+        dropout_gap_history_by_rate[rate].append(
+            results[rate]["dropout_gap"]
+        )
+
+    # Maintain backward compatibility with single-rate record (rate=0.9)
+    dropout_gap = results[0.9]["dropout_gap"]
+    dropout_train_acc = results[0.9]["train_accuracy"]
+    dropout_eval_acc = results[0.9]["eval_accuracy"]
     dropout_gap_epochs.append(epoch + 1)
     dropout_gap_history.append(dropout_gap)
     dropout_train_acc_history.append(dropout_train_acc)
@@ -104,6 +117,14 @@ np.save("dropout_gap_epochs.npy", dropout_gap_epochs)
 np.save("dropout_gap_history.npy", dropout_gap_history)
 np.save("dropout_train_acc_history.npy", dropout_train_acc_history)
 np.save("dropout_eval_acc_history.npy", dropout_eval_acc_history)
+
+# Save multi-rate dropout gap history as 2-D array
+dropout_gap_by_rate = np.array(
+    [dropout_gap_history_by_rate[rate] for rate in dropout_rates]
+)
+np.save("dropout_gap_by_rate.npy", dropout_gap_by_rate)
+np.save("dropout_rates.npy", np.array(dropout_rates))
+
 print("Training data saved:")
 print("  - train_acc_history.npy")
 print("  - test_acc_history.npy")
@@ -113,6 +134,8 @@ print("  - dropout_gap_epochs.npy")
 print("  - dropout_gap_history.npy")
 print("  - dropout_train_acc_history.npy")
 print("  - dropout_eval_acc_history.npy")
+print(f"  - dropout_gap_by_rate.npy (shape: {dropout_gap_by_rate.shape})")
+print(f"  - dropout_rates.npy (rates: {dropout_rates})")
 
 
 
@@ -198,10 +221,9 @@ else:
 print("\n" + "="*60)
 print("DROPOUT PREDICTOR: Gap tracked every epoch")
 print("="*60)
-print(f"\nFinal Dropout Gap Check (rate=0.9, epoch {dropout_gap_epochs[-1]}):")
-print(f"  Accuracy with dropout (train mode, p=0.9): {dropout_train_acc_history[-1]:.4f}")
-print(f"  Accuracy without dropout (eval mode, p=0.0): {dropout_eval_acc_history[-1]:.4f}")
-print(f"  Gap: {dropout_gap_history[-1]:.4f}")
+for rate in dropout_rates:
+    print(f"\nFinal Dropout Gap Check (rate={rate}, epoch {dropout_gap_epochs[-1]}):")
+    print(f"  Gap: {dropout_gap_history_by_rate[rate][-1]:.4f}")
 
 
 # ======================================================================
@@ -269,12 +291,19 @@ with PdfPages("training_report.pdf") as pdf:
     # Page 4: Dropout Gap — now recorded at every epoch, same resolution as
     # the other three plots, so it uses the same log-x style for consistency.
     fig4, ax4 = plt.subplots(figsize=(12, 7))
-    ax4.plot(dropout_gap_epochs, dropout_gap_history, color="crimson", linewidth=2)
+    for rate in dropout_rates:
+        ax4.plot(
+            dropout_gap_epochs,
+            dropout_gap_history_by_rate[rate],
+            linewidth=2,
+            label=f"rate={rate}"
+        )
     ax4.set_xscale("log")
     ax4.set_xlabel("Epoch (log scale)")
     ax4.set_ylabel("Dropout Gap")
     ax4.set_title("Dropout Gap")
     ax4.grid(True, alpha=0.3)
+    ax4.legend()
     pdf.savefig(fig4)
     plt.close(fig4)
 
