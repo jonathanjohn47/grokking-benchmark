@@ -14,7 +14,7 @@ from predictors.l2_norm import (
 )
 from data.modular_arithmetic import get_dataloaders
 from models.transformer_four_head import TransformerFourHead
-from predictors.dropout import compute_dropout_gap
+from predictors.dropout import compute_dropout_gap, compute_dropout_gap_multi_rate
 
 # ======================================================================
 # 4-HEAD VARIANT of train.py.
@@ -136,6 +136,8 @@ dropout_gap_epochs = []
 dropout_gap_history = []
 dropout_train_acc_history = []
 dropout_eval_acc_history = []
+dropout_rates = [0.1, 0.3, 0.5, 0.7, 0.9]
+dropout_gap_history_by_rate = {rate: [] for rate in dropout_rates}
 
 for epoch in range(num_epochs):
     total_correct = 0
@@ -171,23 +173,26 @@ for epoch in range(num_epochs):
     loss_history.append(loss.item())
     l2_norm_history.append(compute_l2_norm(model))
 
-    # Dropout Gap Predictor: same per-epoch measurement as train.py,
-    # reusing compute_dropout_gap unchanged — it only needs model.dropout1
-    # / model.dropout2, which this 4-head model also has.
-    dropout_gap, dropout_train_acc, dropout_eval_acc = compute_dropout_gap(
-        model, data_loader[1], dropout_rate=0.9
-    )
+    # Dropout Gap Predictor: Multi-rate sweep across 5 rates (0.1, 0.3, 0.5, 0.7, 0.9)
+    # to determine if the gap-narrowing pattern is robust across rates or rate-dependent.
+    results = compute_dropout_gap_multi_rate(model, data_loader[1], dropout_rates)
+
+    # Store results for each rate
+    for rate in dropout_rates:
+        dropout_gap_history_by_rate[rate].append(results[rate]["dropout_gap"])
+
+    # Also keep the p=0.9 results in the single-rate arrays for compatibility
     dropout_gap_epochs.append(epoch + 1)
-    dropout_gap_history.append(dropout_gap)
-    dropout_train_acc_history.append(dropout_train_acc)
-    dropout_eval_acc_history.append(dropout_eval_acc)
+    dropout_gap_history.append(results[0.9]["dropout_gap"])
+    dropout_train_acc_history.append(results[0.9]["train_accuracy"])
+    dropout_eval_acc_history.append(results[0.9]["eval_accuracy"])
 
     # compute_dropout_gap() leaves the model in eval() mode with p reset
     # to 0.0. Training must resume in train() mode, so we restore it here
     # before the next epoch's training pass begins.
     model.train()
 
-    print(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}, Train Accuracy: {train_acc_history[-1]:.4f}, Test Accuracy: {test_acc_history[-1]:.4f}, L2 Norm: {l2_norm_history[-1]:.4f}, Dropout Gap: {dropout_gap:.4f}")
+    print(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}, Train Accuracy: {train_acc_history[-1]:.4f}, Test Accuracy: {test_acc_history[-1]:.4f}, L2 Norm: {l2_norm_history[-1]:.4f}, Dropout Gap (p=0.9): {results[0.9]['dropout_gap']:.4f}")
 
 np.save("train_acc_history.npy", train_acc_history)
 np.save("test_acc_history.npy", test_acc_history)
@@ -197,6 +202,14 @@ np.save("dropout_gap_epochs.npy", dropout_gap_epochs)
 np.save("dropout_gap_history.npy", dropout_gap_history)
 np.save("dropout_train_acc_history.npy", dropout_train_acc_history)
 np.save("dropout_eval_acc_history.npy", dropout_eval_acc_history)
+
+# Save multi-rate dropout gap history as 2-D array
+dropout_gap_by_rate = np.array(
+    [dropout_gap_history_by_rate[rate] for rate in dropout_rates]
+)
+np.save("dropout_gap_by_rate.npy", dropout_gap_by_rate)
+np.save("dropout_rates.npy", np.array(dropout_rates))
+
 print(f"Training data saved (results/four_head/run_{run_number}/):")
 print("  - train_acc_history.npy")
 print("  - test_acc_history.npy")
