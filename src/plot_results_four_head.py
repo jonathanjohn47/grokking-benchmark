@@ -11,7 +11,7 @@ from predictors.l2_norm import compute_noise_floor, detect_ma_of_ma_zero_crossin
 # 4-HEAD VARIANT of plot_results.py — now MULTI-RUN aware.
 #
 # train_four_head.py saves every run into its own numbered subfolder,
-# runs/four_head/run_1/, runs/four_head/run_2/, and so on (see that
+# results/four_head/run_1/, results/four_head/run_2/, and so on (see that
 # file's RUN NUMBERING comment for why — grokking is stochastic, so a
 # real comparison needs several independent runs kept side by side, not
 # one run's numbers overwritten by the next).
@@ -19,7 +19,7 @@ from predictors.l2_norm import compute_noise_floor, detect_ma_of_ma_zero_crossin
 # This script does two things:
 #   1. For every run_<N> folder it finds, regenerates that run's own 8
 #      plots (same as before), saved inside that run's own folder.
-#   2. Builds 4 NEW comparison plots at the runs/four_head/ level,
+#   2. Builds 4 NEW comparison plots at the results/four_head/ level,
 #      overlaying every run's grokking curve / loss curve / L2 norm
 #      curve / Dropout Gap curve together, so all previous runs can be
 #      read on one chart instead of opening each run's folder one by one.
@@ -65,8 +65,8 @@ def migrate_legacy_flat_run(base_dir):
         src = os.path.join(base_dir, name)
         if os.path.isfile(src):
             os.rename(src, os.path.join(run_1_dir, name))
-    print("[MIGRATION] Found results saved directly in runs/four_head/ by an earlier "
-          "version of these scripts — moved them into runs/four_head/run_1/ so they "
+    print("[MIGRATION] Found results saved directly in results/four_head/ by an earlier "
+          "version of these scripts — moved them into results/four_head/run_1/ so they "
           "are counted as Run 1.")
 
 
@@ -105,7 +105,7 @@ def load_run_data(run_dir):
 
 
 def plot_single_run(run_number, run_dir, data):
-    """Recreates this run's own 8 plots, saved inside runs/four_head/run_<N>/ itself."""
+    """Recreates this run's own 8 plots, saved inside results/four_head/run_<N>/ itself."""
     epoch_grid = data["epoch_grid"]
     fast_ma = data["fast_ma"]
     slow_ma = data["slow_ma"]
@@ -130,7 +130,7 @@ def plot_single_run(run_number, run_dir, data):
         path = os.path.join(run_dir, filename)
         fig.savefig(path, dpi=150, bbox_inches="tight")
         plt.close(fig)
-        print(f"[OK] Run {run_number}: plot saved to runs/four_head/run_{run_number}/{filename}")
+        print(f"[OK] Run {run_number}: plot saved to results/four_head/run_{run_number}/{filename}")
 
     # Plot 1: Slow MA vs. Fast MA of Slow MA
     fig, ax = plt.subplots(figsize=(12, 7))
@@ -274,7 +274,7 @@ def plot_single_run(run_number, run_dir, data):
 
 def plot_comparison(all_runs_data, out_dir):
     """Builds 4 plots overlaying every discovered run together, saved
-    directly in runs/four_head/ (not inside any single run's folder),
+    directly in results/four_head/ (not inside any single run's folder),
     so all previous runs can be read on one chart."""
 
     def color_for(i):
@@ -300,7 +300,7 @@ def plot_comparison(all_runs_data, out_dir):
     plt.tight_layout()
     plt.savefig(os.path.join(out_dir, "comparison_grokking_curve.png"), dpi=150, bbox_inches="tight")
     plt.close(fig)
-    print("[OK] Comparison plot saved to runs/four_head/comparison_grokking_curve.png")
+    print("[OK] Comparison plot saved to results/four_head/comparison_grokking_curve.png")
 
     # Comparison Plot B: Loss across all runs
     fig, ax = plt.subplots(figsize=(12, 7))
@@ -317,7 +317,7 @@ def plot_comparison(all_runs_data, out_dir):
     plt.tight_layout()
     plt.savefig(os.path.join(out_dir, "comparison_loss_curve.png"), dpi=150, bbox_inches="tight")
     plt.close(fig)
-    print("[OK] Comparison plot saved to runs/four_head/comparison_loss_curve.png")
+    print("[OK] Comparison plot saved to results/four_head/comparison_loss_curve.png")
 
     # Comparison Plot C: L2 Norm across all runs
     fig, ax = plt.subplots(figsize=(12, 7))
@@ -334,7 +334,7 @@ def plot_comparison(all_runs_data, out_dir):
     plt.tight_layout()
     plt.savefig(os.path.join(out_dir, "comparison_l2_norm_curve.png"), dpi=150, bbox_inches="tight")
     plt.close(fig)
-    print("[OK] Comparison plot saved to runs/four_head/comparison_l2_norm_curve.png")
+    print("[OK] Comparison plot saved to results/four_head/comparison_l2_norm_curve.png")
 
     # Comparison Plot D: Dropout Gap across all runs
     fig, ax = plt.subplots(figsize=(12, 7))
@@ -350,14 +350,14 @@ def plot_comparison(all_runs_data, out_dir):
     plt.tight_layout()
     plt.savefig(os.path.join(out_dir, "comparison_dropout_gap_curve.png"), dpi=150, bbox_inches="tight")
     plt.close(fig)
-    print("[OK] Comparison plot saved to runs/four_head/comparison_dropout_gap_curve.png")
+    print("[OK] Comparison plot saved to results/four_head/comparison_dropout_gap_curve.png")
 
 
 migrate_legacy_flat_run(four_head_dir)
 run_dirs = discover_run_dirs(four_head_dir)
 
 if not run_dirs:
-    print(f"No runs found under runs/four_head/. Run train_four_head.py at least once first.")
+    print(f"No runs found under results/four_head/. Run train_four_head.py at least once first.")
 else:
     print(f"Found {len(run_dirs)} run(s): {', '.join(f'Run {n}' for n, _ in run_dirs)}\n")
 
@@ -383,8 +383,8 @@ else:
               f"final L2 norm = {s['final_l2_norm']:.4f}, "
               f"final dropout gap = {s['final_dropout_gap']:.4f}")
 
-    print(f"\n[OK] Per-run plots saved inside each runs/four_head/run_<N>/ folder.")
-    print(f"[OK] 4 comparison plots saved directly in runs/four_head/:")
+    print(f"\n[OK] Per-run plots saved inside each results/four_head/run_<N>/ folder.")
+    print(f"[OK] 4 comparison plots saved directly in results/four_head/:")
     print("  - comparison_grokking_curve.png")
     print("  - comparison_loss_curve.png")
     print("  - comparison_l2_norm_curve.png")

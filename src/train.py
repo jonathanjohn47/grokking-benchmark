@@ -15,9 +15,17 @@ from data.modular_arithmetic import get_dataloaders
 from models.transformer import Transformer
 from predictors.dropout import compute_dropout_gap_multi_rate
 
-# Save results to project root
+# Set up results directory paths
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-os.chdir(project_root)
+results_base = os.path.join(project_root, "results", "single_head")
+training_dir = os.path.join(results_base, "training")
+l2_norm_dir = os.path.join(results_base, "l2_norm")
+dropout_dir = os.path.join(results_base, "dropout")
+reports_dir = os.path.join(results_base, "reports")
+
+# Create directories if they don't exist
+for dir_path in [training_dir, l2_norm_dir, dropout_dir, reports_dir]:
+    os.makedirs(dir_path, exist_ok=True)
 
 
 
@@ -109,21 +117,26 @@ for epoch in range(num_epochs):
 
     print(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}, Train Accuracy: {train_acc_history[-1]:.4f}, Test Accuracy: {test_acc_history[-1]:.4f}, L2 Norm: {l2_norm_history[-1]:.4f}, Dropout Gap: {dropout_gap:.4f}")
 
-np.save("train_acc_history.npy", train_acc_history)
-np.save("test_acc_history.npy", test_acc_history)
-np.save("loss_history.npy", loss_history)
-np.save("l2_norm_history.npy", l2_norm_history)
-np.save("dropout_gap_epochs.npy", dropout_gap_epochs)
-np.save("dropout_gap_history.npy", dropout_gap_history)
-np.save("dropout_train_acc_history.npy", dropout_train_acc_history)
-np.save("dropout_eval_acc_history.npy", dropout_eval_acc_history)
+# Save training data
+np.save(os.path.join(training_dir, "train_acc_history.npy"), train_acc_history)
+np.save(os.path.join(training_dir, "test_acc_history.npy"), test_acc_history)
+np.save(os.path.join(training_dir, "loss_history.npy"), loss_history)
+
+# Save L2 norm data
+np.save(os.path.join(l2_norm_dir, "l2_norm_history.npy"), l2_norm_history)
+
+# Save dropout data
+np.save(os.path.join(dropout_dir, "dropout_gap_epochs.npy"), dropout_gap_epochs)
+np.save(os.path.join(dropout_dir, "dropout_gap_history.npy"), dropout_gap_history)
+np.save(os.path.join(dropout_dir, "dropout_train_acc_history.npy"), dropout_train_acc_history)
+np.save(os.path.join(dropout_dir, "dropout_eval_acc_history.npy"), dropout_eval_acc_history)
 
 # Save multi-rate dropout gap history as 2-D array
 dropout_gap_by_rate = np.array(
     [dropout_gap_history_by_rate[rate] for rate in dropout_rates]
 )
-np.save("dropout_gap_by_rate.npy", dropout_gap_by_rate)
-np.save("dropout_rates.npy", np.array(dropout_rates))
+np.save(os.path.join(dropout_dir, "dropout_gap_by_rate.npy"), dropout_gap_by_rate)
+np.save(os.path.join(dropout_dir, "dropout_rates.npy"), np.array(dropout_rates))
 
 print("Training data saved:")
 print("  - train_acc_history.npy")
@@ -158,9 +171,9 @@ detection_epoch = detect_ma_crossover(epoch_grid, fast_ma, slow_ma, skip_epochs=
 grok_epoch = np.argmax(np.array(test_acc_history) > 0.9)
 
 # Save data for plotting
-np.save("epoch_grid.npy", epoch_grid)
-np.save("fast_ma.npy", fast_ma)
-np.save("slow_ma.npy", slow_ma)
+np.save(os.path.join(l2_norm_dir, "epoch_grid.npy"), epoch_grid)
+np.save(os.path.join(l2_norm_dir, "fast_ma.npy"), fast_ma)
+np.save(os.path.join(l2_norm_dir, "slow_ma.npy"), slow_ma)
 
 # Report results
 print(f"\nDetection Results:")
@@ -200,8 +213,8 @@ noise_floor = compute_noise_floor(ma_of_ma_diff, epoch_grid, quiet_epoch_cutoff=
 # unambiguous spot even though the crossing itself is weak in magnitude.
 trigger_epoch = detect_ma_of_ma_zero_crossing(epoch_grid, ma_of_ma_diff, skip_epochs=100)
 
-np.save("fast_ma_of_slow_ma.npy", fast_ma_of_slow_ma)
-np.save("ma_of_ma_diff.npy", ma_of_ma_diff)
+np.save(os.path.join(l2_norm_dir, "fast_ma_of_slow_ma.npy"), fast_ma_of_slow_ma)
+np.save(os.path.join(l2_norm_dir, "ma_of_ma_diff.npy"), ma_of_ma_diff)
 
 print(f"\nNoise floor: {noise_floor:.6f}")
 if trigger_epoch is not None:
@@ -245,7 +258,7 @@ print("="*60)
 
 epochs_axis = range(1, num_epochs + 1)
 
-with PdfPages("training_report.pdf") as pdf:
+with PdfPages(os.path.join(reports_dir, "training_report.pdf")) as pdf:
 
     # Page 1: Grokking curve — Train vs. Test accuracy
     fig1, ax1 = plt.subplots(figsize=(12, 7))
@@ -307,4 +320,4 @@ with PdfPages("training_report.pdf") as pdf:
     pdf.savefig(fig4)
     plt.close(fig4)
 
-print(f"[OK] PDF report saved to training_report.pdf (4 pages: 4 graphs)")
+print(f"[OK] PDF report saved to results/single_head/reports/training_report.pdf (4 pages: 4 graphs)")

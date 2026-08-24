@@ -3699,6 +3699,129 @@ correct, and in active use; it is not pending a rebuild.
 
 ---
 
+## Session Summary — August 24, 2026 (Complete file reorganization by predictor; navigation guide created)
+
+### Picked up from
+
+- Jonathan requested: "I want you to arrange files, so that all the results are easy to navigate and they reflect the predictor they have been created from. If that requires renaming the files, do that too."
+
+### Action taken — comprehensive file reorganization
+
+**Goal:** Move results from scattered project-root `.npy` files and `runs/` directory into a clear predictor-organized structure that mirrors the 9-predictor evaluation order.
+
+**Structure created:**
+
+```
+results/
+├── single_head/
+│   ├── training/           (grokking curve, loss, train/test accuracy)
+│   ├── l2_norm/            (L2 Norm predictor: history, moving averages, plots)
+│   ├── dropout/            (Dropout predictor: single-rate and multi-rate results)
+│   └── reports/            (PDF summary reports)
+├── four_head/
+│   ├── run_1/              (independent 40,000-epoch run)
+│   ├── run_2/
+│   ├── run_3/
+│   ├── comparisons/        (cross-run overlay plots)
+│   └── reports/            (four-head specific summaries)
+├── experiments/
+│   └── shadow_layernorm/   (LayerNorm experiment, negative result)
+└── README.md               (comprehensive navigation guide)
+```
+
+### Files moved
+
+1. **Single-head training (→ `results/single_head/training/`):**
+   - `train_acc_history.npy`, `test_acc_history.npy`, `loss_history.npy`
+   - `training_report.pdf`
+
+2. **Single-head L2 Norm (→ `results/single_head/l2_norm/`):**
+   - `l2_norm_history.npy`, `fast_ma.npy`, `slow_ma.npy`, `fast_ma_of_slow_ma.npy`, `ma_of_ma_diff.npy`, `epoch_grid.npy`
+   - L2 Norm predictor plots: `ma_of_slow_ma_crossover.png`, `ma_of_slow_ma_diff.png`, `ma_of_slow_ma_diff_linear.png`, `ma_of_ma_diff_vs_grokking_linear.png`
+   - Acceleration analysis: `acceleration_raw.npy`, `acceleration_smoothed.npy`, `acceleration_double_smoothed.npy`
+
+3. **Single-head Dropout (→ `results/single_head/dropout/`):**
+   - Single-rate: `dropout_gap_history.npy`, `dropout_train_acc_history.npy`, `dropout_eval_acc_history.npy`, `dropout_gap_epochs.npy`
+   - Multi-rate: `dropout_gap_by_rate.npy`, `dropout_rates.npy`
+   - Infographic: `dropout_gap_infographic.png`
+
+4. **Single-head reports (→ `results/single_head/reports/`):**
+   - `L2_Norm_Comprehensive_Report.pdf`, `L2_Norm_Comprehensive_Report_CORRECTED.pdf`, `L2_Norm_Predictor_Report.pdf`
+
+5. **Four-head results (→ `results/four_head/run_N/`):**
+   - Each of the 3 runs reorganized into per-run subdirectories with the same predictor structure
+   - Comparison plots moved to `results/four_head/comparisons/`
+   - Four-head reports to `results/four_head/reports/`
+
+6. **Shadow LayerNorm (→ `results/experiments/shadow_layernorm/`):**
+   - `shadow_ln_train_acc_history.npy`, `shadow_ln_test_acc_history.npy`, `shadow_ln_loss_history.npy`, `shadow_ln_grokking_curve.png`
+
+### Scripts updated
+
+1. **`src/train.py`:**
+   - Now creates directories `results/single_head/{training,l2_norm,dropout,reports}/` at startup
+   - All `.npy` saves reference appropriate subdirectory paths
+   - PDF report saved to `results/single_head/reports/training_report.pdf`
+
+2. **`src/plot_results.py`:**
+   - Loads `.npy` files from `results/single_head/{training,l2_norm}/`
+   - Saves all 4 L2 Norm plots to `results/single_head/l2_norm/`
+
+3. **`src/train_four_head.py`:**
+   - Path references updated from `runs/four_head/run_N/` to `results/four_head/run_N/`
+
+4. **`src/plot_results_four_head.py`:**
+   - Path references updated to `results/four_head/`
+
+### Navigation guide created
+
+**`results/README.md`** — Comprehensive documentation including:
+- Visual directory tree with descriptions
+- Detailed explanation of each subdirectory's contents
+- File naming conventions and what each `.npy` file contains
+- How to reproduce plots and run new training
+- Code examples for accessing raw data programmatically
+- Key findings from L2 Norm and Dropout predictor investigations
+- Predictor evaluation progress (L2 Norm closed negative, Dropout under investigation)
+
+### Cleanup
+
+- Old `runs/` directory removed (all files migrated to `results/`)
+- Project root now contains only utility PDFs (`combined_output.pdf`, `python_files_compiled.pdf`)
+- Old plots collected in `_to_delete/` folder (user to delete manually when ready)
+- All Python scripts verified to compile without syntax errors
+
+### Files Modified (this session)
+
+- `src/train.py` — paths updated for results/single_head/
+- `src/plot_results.py` — paths updated for results/single_head/
+- `src/train_four_head.py` — paths updated for results/four_head/
+- `src/plot_results_four_head.py` — paths updated for results/four_head/
+- `results/README.md` — new navigation guide
+- All result `.npy` and `.png` files — moved from project root and runs/ to results/
+- `runs/` directory — removed (all contents migrated to results/)
+
+### Key Benefit
+
+Results are now organized hierarchically by:
+1. **Architecture** (single-head vs. four-head vs. experiments)
+2. **Predictor** (training, L2 Norm, Dropout, reports)
+3. **Run** (for stochastic four-head: run_1, run_2, run_3)
+
+This makes it trivial to:
+- Find all L2 Norm results together
+- Find all Dropout results together
+- Compare single-head vs. four-head within each predictor
+- Access raw data programmatically with clear, discoverable paths
+
+### Still Open / Next Steps (updated — August 24, 2026, this session)
+
+1. **Run new training:** Next time `src/train.py` or `src/train_four_head.py` runs, files will automatically save to the new organized structure.
+2. **Reproduce plots:** Run `src/plot_results.py` or `src/plot_results_four_head.py` — output files will save to results/ subdirectories.
+3. All previously-noted open items remain unchanged (Dropout multi-rate validation, L2 Norm pipeline fix, move to Spectral predictor, etc.).
+
+---
+
 ## Session Summary — August 24, 2026 (Training report PDF analysed; conceptual challenges of Dropout Gap prediction explained; key challenges documented)
 
 ### Picked up from

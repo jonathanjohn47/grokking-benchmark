@@ -29,7 +29,7 @@ from predictors.dropout import compute_dropout_gap
 # both predictors work on any model that exposes .parameters() and
 # .dropout1/.dropout2, which this model does too).
 #
-# Outputs are saved under runs/four_head/run_<N>/ (created if it does not
+# Outputs are saved under results/four_head/run_<N>/ (created if it does not
 # exist yet), NOT in the project root, so they never overwrite train.py's
 # own train_acc_history.npy / l2_norm_history.npy / dropout_gap_history.npy
 # / etc., which belong to the original single-head run.
@@ -57,8 +57,8 @@ LEGACY_FILENAMES = [
 
 def migrate_legacy_flat_run(four_head_dir):
     """
-    Earlier versions of this script saved directly into runs/four_head/
-    instead of runs/four_head/run_<N>/. If such files are found here, and
+    Earlier versions of this script saved directly into results/four_head/
+    instead of results/four_head/run_<N>/. If such files are found here, and
     run_1/ does not exist yet, move them into run_1/ so they are counted
     as the first run instead of silently sitting outside the new
     numbering scheme (and instead of being silently overwritten by this
@@ -77,8 +77,8 @@ def migrate_legacy_flat_run(four_head_dir):
         src = os.path.join(four_head_dir, name)
         if os.path.isfile(src):
             os.rename(src, os.path.join(run_1_dir, name))
-    print("[MIGRATION] Found results saved directly in runs/four_head/ by an earlier "
-          "version of this script — moved them into runs/four_head/run_1/ so they are "
+    print("[MIGRATION] Found results saved directly in results/four_head/ by an earlier "
+          "version of this script — moved them into results/four_head/run_1/ so they are "
           "counted as Run 1 instead of being overwritten.")
 
 
@@ -104,7 +104,7 @@ output_dir = os.path.join(four_head_dir, f"run_{run_number}")
 os.makedirs(output_dir, exist_ok=True)
 os.chdir(output_dir)
 
-print(f"This is Run {run_number}. All outputs will be saved to runs/four_head/run_{run_number}/")
+print(f"This is Run {run_number}. All outputs will be saved to results/four_head/run_{run_number}/")
 
 # NEW random seed on every run, instead of a fixed one. torch.seed() picks
 # a fresh, non-deterministic seed itself and also returns the exact number
@@ -197,7 +197,7 @@ np.save("dropout_gap_epochs.npy", dropout_gap_epochs)
 np.save("dropout_gap_history.npy", dropout_gap_history)
 np.save("dropout_train_acc_history.npy", dropout_train_acc_history)
 np.save("dropout_eval_acc_history.npy", dropout_eval_acc_history)
-print(f"Training data saved (runs/four_head/run_{run_number}/):")
+print(f"Training data saved (results/four_head/run_{run_number}/):")
 print("  - train_acc_history.npy")
 print("  - test_acc_history.npy")
 print("  - loss_history.npy")
@@ -339,4 +339,4 @@ with PdfPages("training_report.pdf") as pdf:
     pdf.savefig(fig4)
     plt.close(fig4)
 
-print(f"[OK] PDF report saved to runs/four_head/run_{run_number}/training_report.pdf (4 pages: 4 graphs)")
+print(f"[OK] PDF report saved to results/four_head/run_{run_number}/training_report.pdf (4 pages: 4 graphs)")

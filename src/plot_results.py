@@ -6,17 +6,19 @@ import os
 
 from predictors.l2_norm import compute_noise_floor, detect_ma_of_ma_zero_crossing
 
-# Look for files in project root (parent of src/)
+# Set up results directory paths
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-os.chdir(project_root)
+results_base = os.path.join(project_root, "results", "single_head")
+training_dir = os.path.join(results_base, "training")
+l2_norm_dir = os.path.join(results_base, "l2_norm")
 
 # Load data already computed and saved by train.py — no re-run needed.
-epoch_grid = np.load("epoch_grid.npy")
-slow_ma = np.load("slow_ma.npy")
-fast_ma_of_slow_ma = np.load("fast_ma_of_slow_ma.npy")
-diff = np.load("ma_of_ma_diff.npy")
-train_acc = np.load("train_acc_history.npy")
-test_acc = np.load("test_acc_history.npy")
+epoch_grid = np.load(os.path.join(l2_norm_dir, "epoch_grid.npy"))
+slow_ma = np.load(os.path.join(l2_norm_dir, "slow_ma.npy"))
+fast_ma_of_slow_ma = np.load(os.path.join(l2_norm_dir, "fast_ma_of_slow_ma.npy"))
+diff = np.load(os.path.join(l2_norm_dir, "ma_of_ma_diff.npy"))
+train_acc = np.load(os.path.join(training_dir, "train_acc_history.npy"))
+test_acc = np.load(os.path.join(training_dir, "test_acc_history.npy"))
 num_epochs = len(train_acc)
 
 SKIP_EPOCHS = 100
@@ -47,7 +49,7 @@ ax.legend(loc="upper right", fontsize=11)
 ax.grid(True, alpha=0.3)
 
 plt.tight_layout()
-plt.savefig("ma_of_slow_ma_crossover.png", dpi=150, bbox_inches="tight")
+plt.savefig(os.path.join(l2_norm_dir, "ma_of_slow_ma_crossover.png"), dpi=150, bbox_inches="tight")
 print("[OK] Plot saved to ma_of_slow_ma_crossover.png")
 
 # Plot 2: The difference curve itself, with the zero-crossing trigger marked
@@ -72,7 +74,7 @@ ax2.legend(loc="upper right", fontsize=11)
 ax2.grid(True, alpha=0.3)
 
 plt.tight_layout()
-plt.savefig("ma_of_slow_ma_diff.png", dpi=150, bbox_inches="tight")
+plt.savefig(os.path.join(l2_norm_dir, "ma_of_slow_ma_diff.png"), dpi=150, bbox_inches="tight")
 print("[OK] Plot saved to ma_of_slow_ma_diff.png")
 
 # Plot 3: Same difference curve as Plot 2, but on a LINEAR x-axis instead of log.
@@ -96,7 +98,7 @@ ax3.legend(loc="upper right", fontsize=11)
 ax3.grid(True, alpha=0.3)
 
 plt.tight_layout()
-plt.savefig("ma_of_slow_ma_diff_linear.png", dpi=150, bbox_inches="tight")
+plt.savefig(os.path.join(l2_norm_dir, "ma_of_slow_ma_diff_linear.png"), dpi=150, bbox_inches="tight")
 print("[OK] Plot saved to ma_of_slow_ma_diff_linear.png")
 
 # Plot 4: Difference curve (linear x-axis) overlaid on the grokking curve
@@ -130,7 +132,7 @@ ax4.legend(lines4 + lines4b, labels4 + labels4b, loc="center right", fontsize=10
 ax4.grid(True, alpha=0.3)
 
 plt.tight_layout()
-plt.savefig("ma_of_ma_diff_vs_grokking_linear.png", dpi=150, bbox_inches="tight")
+plt.savefig(os.path.join(l2_norm_dir, "ma_of_ma_diff_vs_grokking_linear.png"), dpi=150, bbox_inches="tight")
 print("[OK] Plot saved to ma_of_ma_diff_vs_grokking_linear.png")
 
 print(f"\nNoise floor (context only): {noise_floor:.6f}")
