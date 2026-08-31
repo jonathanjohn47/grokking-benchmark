@@ -2843,6 +2843,10 @@ correct, and in active use; it is not pending a rebuild.
 
 ## Session Summary — August 17, 2026 (Shadow LayerNorm experiment — closed, negative result)
 
+### Origin of the LayerNorm idea
+
+**Key context:** This project's architecture is deliberately minimal and **does NOT include LayerNorm** (single-head attention, single layer, no normalization). However, **Nanda et al.'s original paper does include LayerNorm** in their reference architecture. When the test-accuracy plateau phenomenon was discovered (99.5446% instead of 100%, meaning 30 input pairs permanently fail to generalize even after full convergence), the hypothesis emerged: "If we add LayerNorm back, matching what Nanda actually uses, might that fix the plateau?" This led to the shadow experiment below — to test whether LayerNorm could resolve the hard-pair issue. As documented below, it did not; instead it destabilized training under the existing hyperparameters.
+
 - **Picked up from:** the LayerNorm side-experiment set up over several turns this session —
   `src/models/model_shadow_with_layernorm.py` (shadow copy with Post-LN `ln1`/`ln2`, `transformer.py`
   untouched), `src/train_shadow_layernorm.py` (separate runner, seeded `torch.manual_seed(1337)`,
