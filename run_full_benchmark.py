@@ -7,6 +7,12 @@ single script.
 Stage 1: Four-head baseline training (3 independent runs, different seeds)
 Stage 2: Analysis — comparison charts + PDF report across the runs
 
+RESUMABLE: this script can be stopped at any point (Ctrl-C, crash, machine
+sleep) and re-run. Finished runs are detected and kept, a half-built run
+folder from the interrupted attempt is cleared, and the analysis step is
+regenerated only when a new run was actually produced. Nothing already
+computed is computed again.
+
 Single-head is no longer part of this pipeline. The four-head model is the
 faithful Nanda et al. architecture (d_model=128, 4 attention heads), so the
 benchmark stands on that alone. The single-head code has been moved to
@@ -15,6 +21,7 @@ needs it. See context.md for the reasoning.
 """
 
 import re
+import shutil
 import subprocess
 import sys
 import numpy as np
@@ -31,22 +38,77 @@ from pathlib import Path
 
 TARGET_FOUR_HEAD_RUNS = 3
 
+FOUR_HEAD_BASE = Path("runs/four_head")
 
-def completed_four_head_runs():
-    """Count run_N/ dirs under runs/four_head/ that have finished training."""
-    base = Path("runs/four_head")
-    if not base.is_dir():
-        return 0
-    count = 0
-    for d in base.iterdir():
-        if (d.is_dir() and re.fullmatch(r"run_\d+", d.name)
-                and (d / "training" / "train_acc_history.npy").exists()):
-            count += 1
-    return count
+# A run_N/ folder counts as "finished" only when every one of these is on
+# disk. train_four_head.py writes them all right at the end (after all
+# epochs), and reports/training_report.pdf is the very last artifact, so
+# its presence means the run truly completed. Anything less = the run was
+# interrupted (Ctrl-C, crash, machine sleep, ...) and must be redone.
+REQUIRED_RUN_FILES = [
+    "training/train_acc_history.npy",
+    "training/test_acc_history.npy",
+    "training/loss_history.npy",
+    "l2_norm/l2_norm_history.npy",
+    "dropout/dropout_gap_epochs.npy",
+    "dropout/dropout_gap_by_rate.npy",
+    "dropout/dropout_rates.npy",
+    "reports/training_report.pdf",
+]
+
+ANALYSIS_OUTPUTS = [
+    "01_grokking_curves.png",
+    "02_l2_norm_comparison.png",
+    "03_dropout_gap_comparison.png",
+    "benchmark_report.pdf",
+]
+
+
+def _run_dirs():
+    """All run_<N> dirs under runs/four_head/, sorted by number."""
+    if not FOUR_HEAD_BASE.is_dir():
+        return []
+    dirs = [d for d in FOUR_HEAD_BASE.iterdir()
+            if d.is_dir() and re.fullmatch(r"run_\d+", d.name)]
+    return sorted(dirs, key=lambda d: int(d.name[4:]))
+
+
+def _run_is_complete(run_dir):
+    return all((run_dir / rel).exists() for rel in REQUIRED_RUN_FILES)
+
+
+def prepare_four_head_dir():
+    """Make runs/four_head/ safe to resume into, and return how many runs
+    are already fully finished.
+
+    A stopped run leaves a half-built run_N/ folder (usually just seed.npy
+    plus empty sub-folders — training does not checkpoint mid-way, so there
+    is nothing worth keeping there). Such folders are deleted here so that:
+      * they are never miscounted as a finished run, and
+      * train_four_head.py's own run-numbering picks the right next number
+        instead of skipping over the dead folder.
+
+    Finished runs are produced strictly in order and the pipeline aborts on
+    any failure, so after this cleanup the surviving run_N/ folders are a
+    contiguous 1..k and the next run is k+1.
+    """
+    complete = 0
+    for d in _run_dirs():
+        if _run_is_complete(d):
+            complete += 1
+        else:
+            print(f"  ↻ clearing incomplete run folder (interrupted / did not finish): {d}")
+            shutil.rmtree(d)
+    return complete
+
+
+def _analysis_outputs_present():
+    return (Path("benchmark_analysis").is_dir()
+            and all((Path("benchmark_analysis") / f).exists() for f in ANALYSIS_OUTPUTS))
 
 
 def run_four_head(run_num):
-    """Run one four-head training session."""
+    """Run one four-head training session, then verify it really finished."""
     print("\n" + "="*70)
     print(f"STAGE 1.{run_num}: Four-Head Baseline Training (Run {run_num})")
     print("="*70)
@@ -57,10 +119,16 @@ def run_four_head(run_num):
     result = subprocess.run([sys.executable, "src/train_four_head.py"], cwd=".")
 
     if result.returncode != 0:
-        print(f"\n❌ Four-head run {run_num} FAILED")
+        print(f"\n❌ Four-head run {run_num} FAILED (exit code {result.returncode})")
         return False
 
-    print(f"\n✓ Four-head run {run_num} complete")
+    produced = _run_dirs()[-1] if _run_dirs() else None
+    if produced is None or not _run_is_complete(produced):
+        print(f"\n❌ Four-head run {run_num}: process exited cleanly but its output "
+              f"folder is incomplete ({produced}). Treating as a failed run.")
+        return False
+
+    print(f"\n✓ Four-head run {run_num} complete ({produced.name})")
     return True
 
 
@@ -361,35 +429,45 @@ def main():
     print("Expected time: depends on hardware")
     print("="*70)
 
-    print("\nResuming: four-head runs that already finished are kept, not re-run.")
+    print("\nResume mode: finished runs are kept, interrupted run folders are")
+    print("cleared, and analysis is only redone when something new was produced.")
 
-    # Stage 1: Four-head — top up to TARGET_FOUR_HEAD_RUNS, keeping finished runs.
-    # train_four_head.py picks its own next run_N, so we just invoke it the
-    # remaining number of times.
-    already_done = completed_four_head_runs()
-    if already_done:
+    # Stage 1: Four-head — resume up to TARGET_FOUR_HEAD_RUNS.
+    already_done = prepare_four_head_dir()
+    if already_done >= TARGET_FOUR_HEAD_RUNS:
         print("\n" + "="*70)
-        print(f"STAGE 1: {already_done} four-head run(s) already complete — keeping them")
+        print(f"STAGE 1: all {TARGET_FOUR_HEAD_RUNS} four-head runs already complete — nothing to train")
+        print("="*70)
+    elif already_done:
+        print("\n" + "="*70)
+        print(f"STAGE 1: {already_done} run(s) complete — resuming from run {already_done + 1}")
         print("="*70)
 
+    newly_run = 0
     for run_num in range(already_done + 1, TARGET_FOUR_HEAD_RUNS + 1):
         if not run_four_head(run_num):
             print("\n" + "="*70)
-            print(f"PIPELINE ABORTED: Four-head run {run_num} failed")
+            print(f"PIPELINE STOPPED at run {run_num}. Re-run this script to resume "
+                  f"from here — completed runs will not be repeated.")
             print("="*70)
             sys.exit(1)
+        newly_run += 1
 
-    # Stage 2: Analysis
+    # Stage 2: Analysis — skip if nothing new and the charts already exist.
     print("\n" + "="*70)
     print("STAGE 2: Analysis & Visualization")
     print("="*70)
 
-    analyzer = BenchmarkAnalyzer()
-    if not analyzer.run():
-        print("\n" + "="*70)
-        print("PIPELINE WARNING: Analysis failed (training results still saved)")
-        print("="*70)
-        sys.exit(1)
+    if newly_run == 0 and _analysis_outputs_present():
+        print("Nothing new since last run and benchmark_analysis/ is already "
+              "populated — skipping analysis regeneration.")
+    else:
+        analyzer = BenchmarkAnalyzer()
+        if not analyzer.run():
+            print("\n" + "="*70)
+            print("PIPELINE WARNING: Analysis failed (training results still saved)")
+            print("="*70)
+            sys.exit(1)
 
     # Success
     print("\n" + "="*70)

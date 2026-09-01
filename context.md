@@ -5067,3 +5067,53 @@ Suggested command before re-running:
 - `src/plot_results_four_head.py` — subdir layout + dropout sweep + empty-runs guard.
 - `src/generate_l2_report.py` — rewritten: current layout, dropout sweep, computed narrative.
 - `context.md` — this addendum.
+
+---
+
+## Addendum 2 — same day: run_full_benchmark.py made fully resumable
+
+Jonathan asked that `python run_full_benchmark.py` always continue from
+where the previous execution stopped — whether it was Ctrl-C'd, crashed,
+or the machine slept — and never recompute anything already produced.
+Change is contained to `run_full_benchmark.py`.
+
+### How resume now works
+
+- `REQUIRED_RUN_FILES` — the 8 files a finished `run_N/` must have
+  (training x3, l2_norm, dropout x3, and `reports/training_report.pdf` as
+  the last-written sentinel). `_run_is_complete(run_dir)` checks all 8.
+- `prepare_four_head_dir()` runs at startup: counts complete runs and
+  **deletes any incomplete `run_N/` folder** (an interrupted run leaves
+  only `seed.npy` + empty subdirs — training does not checkpoint mid-way,
+  so nothing there is worth keeping). This also stops
+  `train_four_head.py`'s `get_next_run_number()` from skipping over a dead
+  folder, so surviving runs stay a contiguous `run_1..k`.
+- `run_four_head()` now also verifies, after the child process exits 0,
+  that the newest `run_N/` folder is actually complete — guards against a
+  process that exits cleanly without finishing.
+- Stage 2 analysis: regenerated only if a new run was produced this
+  invocation OR `benchmark_analysis/` is missing one of its 4 outputs
+  (`_analysis_outputs_present()` / `ANALYSIS_OUTPUTS`). If nothing new and
+  the charts exist, it is skipped.
+- On a mid-pipeline stop the script prints "re-run to resume from here"
+  and `sys.exit(1)`.
+
+### Assumption (documented in the code)
+
+Finished runs are produced strictly in order and the pipeline aborts on
+any failure, so the only ever-incomplete folder is the highest-numbered
+one (the one that was running when stopped). After cleanup the complete
+folders are `run_1..k` and the next run is `k+1`. Manual meddling with the
+folders can break this; not handled.
+
+### Tested
+
+5-case smoke test (no real training, `subprocess.run` + `BenchmarkAnalyzer`
+stubbed): stub-folder deletion, completeness check, analysis-present
+detection, `main()` resuming only the missing run + regenerating analysis,
+and `main()` with everything already done doing zero work.
+
+### Files Modified (addendum 2)
+
+- `run_full_benchmark.py` — resumable Stage 1 + conditional Stage 2.
+- `context.md` — this addendum.
