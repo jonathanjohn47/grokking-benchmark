@@ -5210,3 +5210,12 @@ files byte-compile.
 - `run_full_benchmark.py` — Stage 2 calls the master report; skip-condition
   extended.
 - `context.md` — this summary.
+
+### Commits
+
+- `35fbe0b` — Add master report: consolidated plots PDF + full numeric-dump PDF
+- (follow-up) — regenerated `graphify-out/` so the knowledge graph includes
+  `src/generate_master_report.py`; no code change.
+
+State: benchmark still running (first four-head run in progress). No code
+work pending. Next data point is that run's output + the master report.

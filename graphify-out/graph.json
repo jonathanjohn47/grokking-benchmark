@@ -301,6 +301,156 @@
       "norm_label": "execute full analysis."
     },
     {
+      "label": "generate_master_report.py",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_generate_master_report",
+      "community": 22,
+      "norm_label": "generate_master_report.py"
+    },
+    {
+      "label": "_run_numbers()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L60",
+      "_origin": "ast",
+      "id": "src_generate_master_report_run_numbers",
+      "community": 22,
+      "norm_label": "_run_numbers()"
+    },
+    {
+      "label": "_opt()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L71",
+      "_origin": "ast",
+      "id": "src_generate_master_report_opt",
+      "community": 22,
+      "norm_label": "_opt()"
+    },
+    {
+      "label": "load_run()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L75",
+      "_origin": "ast",
+      "id": "src_generate_master_report_load_run",
+      "community": 22,
+      "norm_label": "load_run()"
+    },
+    {
+      "label": "grok_epoch()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L119",
+      "_origin": "ast",
+      "id": "src_generate_master_report_grok_epoch",
+      "community": 22,
+      "norm_label": "grok_epoch()"
+    },
+    {
+      "label": "_grok_vline()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L128",
+      "_origin": "ast",
+      "id": "src_generate_master_report_grok_vline",
+      "community": 22,
+      "norm_label": "_grok_vline()"
+    },
+    {
+      "label": "build_plots_pdf()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L134",
+      "_origin": "ast",
+      "id": "src_generate_master_report_build_plots_pdf",
+      "community": 22,
+      "norm_label": "build_plots_pdf()"
+    },
+    {
+      "label": "_comparison_pages()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L265",
+      "_origin": "ast",
+      "id": "src_generate_master_report_comparison_pages",
+      "community": 22,
+      "norm_label": "_comparison_pages()"
+    },
+    {
+      "label": "_series_stats()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L360",
+      "_origin": "ast",
+      "id": "src_generate_master_report_series_stats",
+      "community": 22,
+      "norm_label": "_series_stats()"
+    },
+    {
+      "label": "_text_page()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L366",
+      "_origin": "ast",
+      "id": "src_generate_master_report_text_page",
+      "community": 22,
+      "norm_label": "_text_page()"
+    },
+    {
+      "label": "_dump_table()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L372",
+      "_origin": "ast",
+      "id": "src_generate_master_report_dump_table",
+      "community": 22,
+      "norm_label": "_dump_table()"
+    },
+    {
+      "label": "build_data_pdf()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L382",
+      "_origin": "ast",
+      "id": "src_generate_master_report_build_data_pdf",
+      "community": 22,
+      "norm_label": "build_data_pdf()"
+    },
+    {
+      "label": "write_csvs()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L487",
+      "_origin": "ast",
+      "id": "src_generate_master_report_write_csvs",
+      "community": 22,
+      "norm_label": "write_csvs()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L542",
+      "_origin": "ast",
+      "id": "src_generate_master_report_main",
+      "community": 22,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Master report generator for the four-head grokking benchmark.  Reads every COMPL",
+      "file_type": "rationale",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_generate_master_report_rationale_1",
+      "community": 22,
+      "norm_label": "master report generator for the four-head grokking benchmark.  reads every compl"
+    },
+    {
       "label": "generate_l2_report.py",
       "file_type": "code",
       "source_file": "src/generate_l2_report.py",
@@ -556,7 +706,7 @@
       "source_file": "src/train_four_head.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
+      "community": 11,
       "norm_label": "train_four_head.py",
       "id": "src_train_four_head"
     },
@@ -566,7 +716,7 @@
       "source_file": "src/train_four_head.py",
       "source_location": "L59",
       "_origin": "ast",
-      "community": 0,
+      "community": 11,
       "norm_label": "migrate_legacy_flat_run()",
       "id": "src_train_four_head_migrate_legacy_flat_run"
     },
@@ -576,7 +726,7 @@
       "source_file": "src/train_four_head.py",
       "source_location": "L86",
       "_origin": "ast",
-      "community": 0,
+      "community": 11,
       "norm_label": "get_next_run_number()",
       "id": "src_train_four_head_get_next_run_number"
     },
@@ -586,7 +736,7 @@
       "source_file": "src/train_four_head.py",
       "source_location": "L60",
       "_origin": "ast",
-      "community": 0,
+      "community": 11,
       "norm_label": "earlier versions of this script saved directly into results/four_head/     inste",
       "id": "src_train_four_head_rationale_60"
     },
@@ -1316,7 +1466,7 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 7,
+      "community": 23,
       "norm_label": "collage_images.py",
       "id": "tools_collage_images"
     },
@@ -1326,7 +1476,7 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 7,
+      "community": 23,
       "norm_label": "get_images()",
       "id": "tools_collage_images_get_images"
     },
@@ -1336,7 +1486,7 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 7,
+      "community": 23,
       "norm_label": "horizontal_collage()",
       "id": "tools_collage_images_horizontal_collage"
     },
@@ -1346,7 +1496,7 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 7,
+      "community": 23,
       "norm_label": "vertical_collage()",
       "id": "tools_collage_images_vertical_collage"
     },
@@ -1356,7 +1506,7 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L64",
       "_origin": "ast",
-      "community": 7,
+      "community": 23,
       "norm_label": "main()",
       "id": "tools_collage_images_main"
     },
@@ -1676,7 +1826,7 @@
       "source_file": "tools/md_to_image.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 22,
+      "community": 7,
       "norm_label": "md_to_image.py",
       "id": "tools_md_to_image"
     },
@@ -1686,7 +1836,7 @@
       "source_file": "tools/md_to_image.py",
       "source_location": "L45",
       "_origin": "ast",
-      "community": 22,
+      "community": 7,
       "norm_label": "load_font()",
       "id": "tools_md_to_image_load_font"
     },
@@ -1696,7 +1846,7 @@
       "source_file": "tools/md_to_image.py",
       "source_location": "L57",
       "_origin": "ast",
-      "community": 22,
+      "community": 7,
       "norm_label": "chars_per_line()",
       "id": "tools_md_to_image_chars_per_line"
     },
@@ -1706,7 +1856,7 @@
       "source_file": "tools/md_to_image.py",
       "source_location": "L72",
       "_origin": "ast",
-      "community": 22,
+      "community": 7,
       "norm_label": "wrap_markdown()",
       "id": "tools_md_to_image_wrap_markdown"
     },
@@ -1716,7 +1866,7 @@
       "source_file": "tools/md_to_image.py",
       "source_location": "L97",
       "_origin": "ast",
-      "community": 22,
+      "community": 7,
       "norm_label": "render_page()",
       "id": "tools_md_to_image_render_page"
     },
@@ -1726,7 +1876,7 @@
       "source_file": "tools/md_to_image.py",
       "source_location": "L113",
       "_origin": "ast",
-      "community": 22,
+      "community": 7,
       "norm_label": "main()",
       "id": "tools_md_to_image_main"
     },
@@ -1998,9 +2148,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L105",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark",
-      "target": "run_full_benchmark_analysis_outputs_present",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_analysis_outputs_present"
     },
     {
       "relation": "contains",
@@ -2028,9 +2178,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L80",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark",
-      "target": "run_full_benchmark_prepare_four_head_dir",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_prepare_four_head_dir"
     },
     {
       "relation": "contains",
@@ -2038,9 +2188,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L67",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark",
-      "target": "run_full_benchmark_run_dirs",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_run_dirs"
     },
     {
       "relation": "contains",
@@ -2058,9 +2208,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L76",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark",
-      "target": "run_full_benchmark_run_is_complete",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_run_is_complete"
     },
     {
       "relation": "calls",
@@ -2069,9 +2219,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L96",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark_prepare_four_head_dir",
-      "target": "run_full_benchmark_run_dirs",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_run_dirs"
     },
     {
       "relation": "rationale_for",
@@ -2079,9 +2229,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L68",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark_rationale_68",
-      "target": "run_full_benchmark_run_dirs",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_run_dirs"
     },
     {
       "relation": "calls",
@@ -2090,9 +2240,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L125",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark_run_four_head",
-      "target": "run_full_benchmark_run_dirs",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_run_dirs"
     },
     {
       "relation": "calls",
@@ -2101,9 +2251,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L97",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark_prepare_four_head_dir",
-      "target": "run_full_benchmark_run_is_complete",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_run_is_complete"
     },
     {
       "relation": "calls",
@@ -2112,9 +2262,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L126",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark_run_four_head",
-      "target": "run_full_benchmark_run_is_complete",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_run_is_complete"
     },
     {
       "relation": "calls",
@@ -2123,9 +2273,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L436",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark_main",
-      "target": "run_full_benchmark_prepare_four_head_dir",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_prepare_four_head_dir"
     },
     {
       "relation": "rationale_for",
@@ -2133,9 +2283,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L81",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark_rationale_81",
-      "target": "run_full_benchmark_prepare_four_head_dir",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_prepare_four_head_dir"
     },
     {
       "relation": "calls",
@@ -2144,9 +2294,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L461",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark_main",
-      "target": "run_full_benchmark_analysis_outputs_present",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_analysis_outputs_present"
     },
     {
       "relation": "calls",
@@ -2165,9 +2315,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L111",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark_rationale_111",
-      "target": "run_full_benchmark_run_four_head",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_run_four_head"
     },
     {
       "relation": "calls",
@@ -2298,9 +2448,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L148",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark_rationale_148",
-      "target": "run_full_benchmark_benchmarkanalyzer_load_four_head_runs",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_benchmarkanalyzer_load_four_head_runs"
     },
     {
       "relation": "calls",
@@ -2319,9 +2469,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L176",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark_rationale_176",
-      "target": "run_full_benchmark_benchmarkanalyzer_run_keys",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_benchmarkanalyzer_run_keys"
     },
     {
       "relation": "calls",
@@ -2351,9 +2501,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L181",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark_rationale_181",
-      "target": "run_full_benchmark_benchmarkanalyzer_grok_epoch",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_benchmarkanalyzer_grok_epoch"
     },
     {
       "relation": "calls",
@@ -2372,9 +2522,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L185",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark_rationale_185",
-      "target": "run_full_benchmark_benchmarkanalyzer_generate_grokking_curves",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_benchmarkanalyzer_generate_grokking_curves"
     },
     {
       "relation": "calls",
@@ -2393,9 +2543,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L219",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark_rationale_219",
-      "target": "run_full_benchmark_benchmarkanalyzer_generate_l2_norm_comparison",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_benchmarkanalyzer_generate_l2_norm_comparison"
     },
     {
       "relation": "calls",
@@ -2414,9 +2564,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L247",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark_rationale_247",
-      "target": "run_full_benchmark_benchmarkanalyzer_generate_dropout_comparison",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_benchmarkanalyzer_generate_dropout_comparison"
     },
     {
       "relation": "calls",
@@ -2435,9 +2585,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L283",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark_rationale_283",
-      "target": "run_full_benchmark_benchmarkanalyzer_generate_run_consistency_report",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_benchmarkanalyzer_generate_run_consistency_report"
     },
     {
       "relation": "calls",
@@ -2456,8 +2606,302 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L388",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark_rationale_388",
-      "target": "run_full_benchmark_benchmarkanalyzer_run",
+      "target": "run_full_benchmark_benchmarkanalyzer_run"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "src_generate_master_report",
+      "target": "predictors_l2_norm",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L382",
+      "weight": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_build_data_pdf",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L134",
+      "weight": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_build_plots_pdf",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L265",
+      "weight": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_comparison_pages",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L372",
+      "weight": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_dump_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L119",
+      "weight": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_grok_epoch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L128",
+      "weight": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_grok_vline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_load_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L542",
+      "weight": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_opt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_run_numbers",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L360",
+      "weight": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_series_stats",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L366",
+      "weight": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_text_page",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L487",
+      "weight": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_write_csvs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "src_generate_master_report_rationale_1",
+      "target": "src_generate_master_report",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L543",
+      "weight": 1.0,
+      "source": "src_generate_master_report_main",
+      "target": "src_generate_master_report_run_numbers",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L82",
+      "weight": 1.0,
+      "source": "src_generate_master_report_load_run",
+      "target": "src_generate_master_report_opt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L105",
+      "weight": 1.0,
+      "source": "src_generate_master_report_load_run",
+      "target": "src_generate_master_report_grok_epoch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L550",
+      "weight": 1.0,
+      "source": "src_generate_master_report_main",
+      "target": "src_generate_master_report_load_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L146",
+      "weight": 1.0,
+      "source": "src_generate_master_report_build_plots_pdf",
+      "target": "src_generate_master_report_grok_vline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L272",
+      "weight": 1.0,
+      "source": "src_generate_master_report_comparison_pages",
+      "target": "src_generate_master_report_grok_vline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L260",
+      "weight": 1.0,
+      "source": "src_generate_master_report_build_plots_pdf",
+      "target": "src_generate_master_report_comparison_pages",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L553",
+      "weight": 1.0,
+      "source": "src_generate_master_report_main",
+      "target": "src_generate_master_report_build_plots_pdf",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L404",
+      "weight": 1.0,
+      "source": "src_generate_master_report_build_data_pdf",
+      "target": "src_generate_master_report_series_stats",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L393",
+      "weight": 1.0,
+      "source": "src_generate_master_report_build_data_pdf",
+      "target": "src_generate_master_report_text_page",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L442",
+      "weight": 1.0,
+      "source": "src_generate_master_report_build_data_pdf",
+      "target": "src_generate_master_report_dump_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L557",
+      "weight": 1.0,
+      "source": "src_generate_master_report_main",
+      "target": "src_generate_master_report_build_data_pdf",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L561",
+      "weight": 1.0,
+      "source": "src_generate_master_report_main",
+      "target": "src_generate_master_report_write_csvs",
       "confidence_score": 1.0
     },
     {
@@ -4385,5 +4829,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "d603f77ac0173833d7b24f6cd6ec6be57bae8655"
+  "built_at_commit": "35fbe0b76482e3e6d75b8a99c60d1f887e91bc0b"
 }
