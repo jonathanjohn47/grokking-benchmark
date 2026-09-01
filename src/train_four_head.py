@@ -14,7 +14,7 @@ from predictors.l2_norm import (
 )
 from data.modular_arithmetic import get_dataloaders
 from models.transformer_four_head import TransformerFourHead
-from predictors.dropout import compute_dropout_gap, compute_dropout_gap_multi_rate
+from predictors.dropout import compute_dropout_gap_multi_rate
 from unified_measurements import PredictorMeasurements
 
 # ======================================================================
@@ -137,11 +137,10 @@ test_acc_history = []
 loss_history = []
 l2_norm_history = []
 dropout_gap_epochs = []
-dropout_gap_history = []
-dropout_train_acc_history = []
-dropout_eval_acc_history = []
 dropout_rates = [0.1, 0.3, 0.5, 0.7, 0.9]
 dropout_gap_history_by_rate = {rate: [] for rate in dropout_rates}
+dropout_train_acc_by_rate = {rate: [] for rate in dropout_rates}
+dropout_eval_acc_by_rate = {rate: [] for rate in dropout_rates}
 
 for epoch in range(num_epochs):
     total_correct = 0
@@ -177,26 +176,24 @@ for epoch in range(num_epochs):
     loss_history.append(loss.item())
     l2_norm_history.append(compute_l2_norm(model))
 
-    # Dropout Gap Predictor: Multi-rate sweep across 5 rates (0.1, 0.3, 0.5, 0.7, 0.9)
-    # to determine if the gap-narrowing pattern is robust across rates or rate-dependent.
+    # Dropout Gap Predictor: full multi-rate sweep across all 5 rates
+    # (0.1, 0.3, 0.5, 0.7, 0.9). There is no single "primary" rate — every
+    # rate is stored, and the analysis works on the whole sweep.
     results = compute_dropout_gap_multi_rate(model, data_loader[1], dropout_rates)
 
-    # Store results for each rate
+    dropout_gap_epochs.append(epoch + 1)
     for rate in dropout_rates:
         dropout_gap_history_by_rate[rate].append(results[rate]["dropout_gap"])
+        dropout_train_acc_by_rate[rate].append(results[rate]["train_accuracy"])
+        dropout_eval_acc_by_rate[rate].append(results[rate]["eval_accuracy"])
 
-    # Also keep the p=0.9 results in the single-rate arrays for compatibility
-    dropout_gap_epochs.append(epoch + 1)
-    dropout_gap_history.append(results[0.9]["dropout_gap"])
-    dropout_train_acc_history.append(results[0.9]["train_accuracy"])
-    dropout_eval_acc_history.append(results[0.9]["eval_accuracy"])
-
-    # compute_dropout_gap() leaves the model in eval() mode with p reset
-    # to 0.0. Training must resume in train() mode, so we restore it here
+    # compute_dropout_gap_multi_rate() leaves the model in eval() mode with p
+    # reset to 0.0. Training must resume in train() mode, so we restore it here
     # before the next epoch's training pass begins.
     model.train()
 
-    print(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}, Train Accuracy: {train_acc_history[-1]:.4f}, Test Accuracy: {test_acc_history[-1]:.4f}, L2 Norm: {l2_norm_history[-1]:.4f}, Dropout Gap (p=0.9): {results[0.9]['dropout_gap']:.4f}")
+    gap_summary = ", ".join(f"p{rate}={results[rate]['dropout_gap']:+.3f}" for rate in dropout_rates)
+    print(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}, Train Accuracy: {train_acc_history[-1]:.4f}, Test Accuracy: {test_acc_history[-1]:.4f}, L2 Norm: {l2_norm_history[-1]:.4f}, Dropout Gap sweep: {gap_summary}")
 
 # Save all measurements using unified system
 measurements.save_training_data(train_acc_history, test_acc_history, loss_history)
@@ -261,15 +258,16 @@ measurements.save_l2_norm_data(
 print("\n" + "="*60)
 print("DROPOUT PREDICTOR (4-head model): Gap tracked every epoch")
 print("="*60)
-print(f"\nFinal Dropout Gap Check (rate=0.9, epoch {dropout_gap_epochs[-1]}):")
-print(f"  Accuracy with dropout (train mode, p=0.9): {dropout_train_acc_history[-1]:.4f}")
-print(f"  Accuracy without dropout (eval mode, p=0.0): {dropout_eval_acc_history[-1]:.4f}")
-print(f"  Gap: {dropout_gap_history[-1]:.4f}")
+print(f"\nFinal Dropout Gap sweep (epoch {dropout_gap_epochs[-1]}):")
+for rate in dropout_rates:
+    print(f"  rate={rate}: gap={dropout_gap_history_by_rate[rate][-1]:+.4f}  "
+          f"(train p={rate}: {dropout_train_acc_by_rate[rate][-1]:.4f}, "
+          f"clean p=0.0: {dropout_eval_acc_by_rate[rate][-1]:.4f})")
 
-# Save all Dropout measurements
+# Save all Dropout measurements — full sweep, no single-rate record
 measurements.save_dropout_data(
-    dropout_gap_epochs, dropout_gap_history, dropout_gap_history_by_rate,
-    dropout_train_acc_history, dropout_eval_acc_history, dropout_rates
+    dropout_gap_epochs, dropout_gap_history_by_rate,
+    dropout_train_acc_by_rate, dropout_eval_acc_by_rate, dropout_rates
 )
 
 

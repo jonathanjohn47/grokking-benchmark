@@ -4920,6 +4920,94 @@ break four-head or the predictors.
 
 - `run_full_benchmark.py` — rewritten, four-head only.
 - `src/train_four_head.py` — line 312 SyntaxError fix.
-- `context.md` — this session summary (gitignored, not in the commit).
+- `context.md` — this session summary (tracked file, committed).
 - `archive/single_head/` — new folder holding the archived single-head code
   and pilot result, plus a README.
+
+---
+
+## Session Summary — September 2, 2026 (Dropout predictor: multi-rate sweep only, no hardcoded p=0.9)
+
+### Decision
+
+Jonathan wants the Dropout predictor to be a full multi-rate sweep and
+nothing else. Every hardcoded single-value dropout gap (p=0.9) in the live
+benchmark path was removed. The only valid dropout result now is the sweep
+over all rates `[0.1, 0.3, 0.5, 0.7, 0.9]`.
+
+### What changed (live benchmark path)
+
+- **`src/predictors/dropout.py`** — deleted `compute_dropout_gap(model,
+  data_loader, dropout_rate)` (the single-rate function). Only
+  `compute_dropout_gap_multi_rate(model, data_loader, dropout_rates)` remains.
+  `compute_accuracy` unchanged.
+- **`src/train_four_head.py`**
+  - Dropped `from predictors.dropout import compute_dropout_gap`.
+  - Removed the single-rate lists `dropout_gap_history`,
+    `dropout_train_acc_history`, `dropout_eval_acc_history` and every
+    `results[0.9]` reference.
+  - Now keeps per-rate dicts for all three quantities:
+    `dropout_gap_history_by_rate`, `dropout_train_acc_by_rate`,
+    `dropout_eval_acc_by_rate` (`{rate: [per-epoch]}`). `dropout_gap_epochs`
+    kept (shared epoch axis).
+  - Per-epoch console line prints the whole sweep
+    (`Dropout Gap sweep: p0.1=+.. p0.3=+.. ...`). Final dropout section
+    prints every rate's gap + train/clean accuracy.
+- **`src/unified_measurements.py`** — `save_dropout_data()` signature is now
+  `(dropout_gap_epochs, dropout_gap_history_by_rate, dropout_train_acc_by_rate,
+  dropout_eval_acc_by_rate, dropout_rates)`. It NO LONGER writes
+  `dropout_gap_history.npy`, `dropout_train_acc_history.npy`,
+  `dropout_eval_acc_history.npy`. It writes:
+  `dropout_gap_epochs.npy`, `dropout_rates.npy`, `dropout_gap_by_rate.npy`,
+  `dropout_train_acc_by_rate.npy`, `dropout_eval_acc_by_rate.npy` — each
+  by-rate array shaped `[rate_index, epoch_index]`, rate_index following
+  `dropout_rates.npy`. `generate_dropout_visualizations` and
+  `generate_combined_report` were already multi-rate; unchanged in behaviour.
+- **`run_full_benchmark.py`** — `BenchmarkAnalyzer.load_four_head_runs()` now
+  loads `dropout_gap_by_rate` + `dropout_rates` (no more
+  `dropout_gap_history.npy`). `generate_dropout_comparison()` rewritten:
+  one subplot per four-head run, all 5 rate curves in each. Added
+  `run_keys()` helper.
+
+### Per-run dropout files after this change
+
+`runs/four_head/run_N/dropout/`:
+`dropout_gap_epochs.npy`, `dropout_rates.npy`, `dropout_gap_by_rate.npy`,
+`dropout_train_acc_by_rate.npy`, `dropout_eval_acc_by_rate.npy`,
+`dropout_gap_curve.png`.
+
+### Tested
+
+Synthetic smoke test (no training): `PredictorMeasurements.save_dropout_data`
+→ files written, `dropout_gap_history.npy` absent, `dropout_gap_by_rate.npy`
+shape `(5, E)`; then `BenchmarkAnalyzer` loaded the run and produced all 4
+charts + `benchmark_report.pdf`. All four touched files + both legacy plot
+scripts byte-compile.
+
+### NOT changed / still open
+
+- **`src/plot_results_four_head.py`** and **`src/generate_l2_report.py`** still
+  reference `dropout_gap_history.npy` (p=0.9). Left untouched because:
+  (a) neither is called by `run_full_benchmark.py` — they are manual tools;
+  (b) both are ALREADY stale — they read flat `run_dir/*.npy` while the
+  current layout is `run_dir/dropout/*.npy` etc., so they do not run against
+  current output regardless. Converting them (directory layout + sweep) is a
+  separate cleanup, not yet done. Raised with Jonathan; pending his call.
+- `LEGACY_FILENAMES` lists in `train_four_head.py` /
+  `plot_results_four_head.py` still name the old flat single-rate files —
+  they only matter for migrating pre-historic flat runs and were left as-is.
+- Archived single-head code under `archive/single_head/` not touched.
+
+### Files Modified
+
+- `src/predictors/dropout.py` — removed `compute_dropout_gap`.
+- `src/train_four_head.py` — sweep-only dropout collection + prints.
+- `src/unified_measurements.py` — `save_dropout_data` sweep-only.
+- `run_full_benchmark.py` — analyzer loads/plots the sweep.
+- `context.md` — this summary.
+
+### Next
+
+Unchanged: Jonathan re-runs `python run_full_benchmark.py` (3 four-head runs
++ analysis), then validates L2 Norm & Dropout against the 3-criteria
+protocol, then Spectral.

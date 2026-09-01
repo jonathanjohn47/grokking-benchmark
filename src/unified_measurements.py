@@ -69,22 +69,25 @@ class PredictorMeasurements:
 
     # ========== DROPOUT MEASUREMENTS ==========
 
-    def save_dropout_data(self, dropout_gap_epochs, dropout_gap_history, dropout_gap_history_by_rate,
-                         dropout_train_acc_history, dropout_eval_acc_history, dropout_rates):
-        """Save all Dropout measurements."""
+    def save_dropout_data(self, dropout_gap_epochs, dropout_gap_history_by_rate,
+                         dropout_train_acc_by_rate, dropout_eval_acc_by_rate, dropout_rates):
+        """Save all Dropout measurements — full multi-rate sweep only.
 
-        # Single-rate (p=0.9) for backward compatibility
+        There is no single-rate (p=0.9) record any more. Every array is
+        indexed [rate_index, epoch_index], with rate_index following the
+        order of dropout_rates.npy.
+        """
+
         np.save(os.path.join(self.dropout_dir, "dropout_gap_epochs.npy"), dropout_gap_epochs)
-        np.save(os.path.join(self.dropout_dir, "dropout_gap_history.npy"), dropout_gap_history)
-        np.save(os.path.join(self.dropout_dir, "dropout_train_acc_history.npy"), dropout_train_acc_history)
-        np.save(os.path.join(self.dropout_dir, "dropout_eval_acc_history.npy"), dropout_eval_acc_history)
-
-        # Multi-rate sweep
-        dropout_gap_by_rate = np.array(
-            [dropout_gap_history_by_rate[rate] for rate in dropout_rates]
-        )
-        np.save(os.path.join(self.dropout_dir, "dropout_gap_by_rate.npy"), dropout_gap_by_rate)
         np.save(os.path.join(self.dropout_dir, "dropout_rates.npy"), np.array(dropout_rates))
+
+        gap_by_rate = np.array([dropout_gap_history_by_rate[r] for r in dropout_rates])
+        train_acc_by_rate = np.array([dropout_train_acc_by_rate[r] for r in dropout_rates])
+        eval_acc_by_rate = np.array([dropout_eval_acc_by_rate[r] for r in dropout_rates])
+
+        np.save(os.path.join(self.dropout_dir, "dropout_gap_by_rate.npy"), gap_by_rate)
+        np.save(os.path.join(self.dropout_dir, "dropout_train_acc_by_rate.npy"), train_acc_by_rate)
+        np.save(os.path.join(self.dropout_dir, "dropout_eval_acc_by_rate.npy"), eval_acc_by_rate)
 
     # ========== VISUALIZATION GENERATION ==========
 

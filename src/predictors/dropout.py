@@ -16,18 +16,10 @@ def compute_accuracy(model, data_loader):
     return total_correct / total_samples if total_samples > 0 else 0.0
 
 
-def compute_dropout_gap(model, data_loader, dropout_rate):
-    model.train()
-    model.dropout1.p = dropout_rate
-    model.dropout2.p = dropout_rate
-    train_accuracy = compute_accuracy(model, data_loader)
+# NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate)
+# has been removed. The Dropout predictor is now a full multi-rate sweep only —
+# no hardcoded p=0.9 anywhere. Use compute_dropout_gap_multi_rate.
 
-    model.eval()
-    model.dropout1.p = 0.0
-    model.dropout2.p = 0.0
-    eval_accuracy = compute_accuracy(model, data_loader)
-
-    return train_accuracy - eval_accuracy, train_accuracy, eval_accuracy
 
 def compute_dropout_gap_multi_rate(model, data_loader, dropout_rates):
     # Step 1: START (inputs: model, data_loader, dropout_rates)

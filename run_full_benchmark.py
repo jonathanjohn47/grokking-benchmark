@@ -96,8 +96,8 @@ class BenchmarkAnalyzer:
                 "loss": np.load(training_dir / "loss_history.npy"),
                 "l2_norm": np.load(l2_norm_dir / "l2_norm_history.npy"),
                 "dropout_gap_epochs": np.load(dropout_dir / "dropout_gap_epochs.npy"),
-                "dropout_gap": np.load(dropout_dir / "dropout_gap_history.npy"),
                 "dropout_gap_by_rate": np.load(dropout_dir / "dropout_gap_by_rate.npy"),
+                "dropout_rates": np.load(dropout_dir / "dropout_rates.npy"),
             }
 
             print(f"  ✓ Loaded run {run_num} (epochs: {len(self.results[f'four_head_run_{run_num}']['train_acc'])})")
@@ -176,26 +176,35 @@ class BenchmarkAnalyzer:
         print("  ✓ Saved: 02_l2_norm_comparison.png")
 
     def generate_dropout_comparison(self):
-        """Overlay Dropout gap curves (p=0.9) across the four-head runs."""
-        print("Generating Dropout gap comparison...")
+        """Dropout gap: full multi-rate sweep, one panel per four-head run.
 
-        fig, ax = plt.subplots(figsize=(10, 6))
+        dropout_gap_by_rate is indexed [rate_index, epoch_index], with
+        rate_index following dropout_rates.
+        """
+        print("Generating Dropout gap sweep comparison...")
 
-        for i, run_num in enumerate([1, 2, 3]):
-            key = f"four_head_run_{run_num}"
-            if key not in self.results:
-                continue
+        keys = self.run_keys()
+        n = len(keys)
+        fig, axes = plt.subplots(1, n, figsize=(6 * n, 5), squeeze=False)
+
+        for col, key in enumerate(keys):
             data = self.results[key]
-            ax.plot(data["dropout_gap_epochs"], data["dropout_gap"],
-                    label=f"Run {run_num}", color=self.run_colors[i], linewidth=2, alpha=0.85)
+            epochs = data["dropout_gap_epochs"]
+            rates = data["dropout_rates"]
+            gap_by_rate = data["dropout_gap_by_rate"]
+            ax = axes[0][col]
+            for r_idx, rate in enumerate(rates):
+                ax.plot(epochs, gap_by_rate[r_idx], linewidth=1.8, alpha=0.9,
+                        label=f"p={rate:g}")
+            ax.axhline(y=0, color="black", linewidth=0.6, alpha=0.5)
+            ax.set_xscale("log")
+            ax.set_xlabel("Epoch (log scale)")
+            ax.set_ylabel("Dropout Gap")
+            ax.set_title(f"{key.replace('four_head_', '').replace('_', ' ').title()} — rate sweep")
+            ax.legend(fontsize=8)
+            ax.grid(True, alpha=0.3)
 
-        ax.set_xscale("log")
-        ax.set_xlabel("Epoch (log scale)")
-        ax.set_ylabel("Dropout Gap (p=0.9)")
-        ax.set_title("Four-Head Dropout Gap Comparison")
-        ax.legend()
-        ax.grid(True, alpha=0.3)
-
+        fig.suptitle("Four-Head Dropout Gap: Multi-Rate Sweep", fontsize=13)
         plt.tight_layout()
         plt.savefig(self.output_dir / "03_dropout_gap_comparison.png", dpi=150, bbox_inches='tight')
         plt.close(fig)
