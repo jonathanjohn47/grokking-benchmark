@@ -4188,3 +4188,32 @@ Once the four baseline predictors (Dropout, Spectral, AGE, HTSR Alpha) are compl
 4. **Low priority (carry forward):**
    - Reply to Prof. Rashid's open questions
    - Delete `_to_delete/` folder when ready
+
+---
+
+## Thesis Motivation
+
+### Why This Research Matters
+
+The grokking phenomenon is real and well-documented, but the published literature is fragmented:
+
+- Different papers use different experimental settings (moduli, seeds, hyperparameters)
+- Multiple grokking predictors have been proposed (L2 Norm, Dropout, Spectral, AGE, HTSR Alpha, and more)
+- **No one has tested these predictors fairly against each other under standardized conditions**
+
+This fragmentation creates uncertainty: Which predictors actually work? Which are robust across conditions? Which are artifacts of specific experimental choices?
+
+### The Thesis Contribution
+
+This thesis builds a **unified empirical benchmark** that:
+
+1. **Tests predictors fairly** — all nine candidates under one common protocol, same hyperparameters, same random seeds
+2. **Reveals robustness** — shows which predictors are reliable and which are fragile or condition-dependent
+3. **Establishes ground truth** — provides a reference benchmark that future grokking research can build upon
+4. **Validates claims rigorously** — replaces scattered published results with systematic empirical evidence
+
+### Core Philosophy
+
+Rather than just using or implementing predictors, the work is about **validating scientific claims empirically**. That is proper science: testing whether published results hold up when examined carefully, and building reliable foundations before adding complexity.
+
+The benchmark becomes a tool for the research community—a way to evaluate new grokking predictors fairly against known baselines.
