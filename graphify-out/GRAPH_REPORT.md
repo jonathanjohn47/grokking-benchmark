@@ -1,16 +1,16 @@
 # Graph Report - grokking-benchmark  (2026-09-01)
 
 ## Corpus Check
-- 38 files · ~396,459 words
+- 41 files · ~398,296 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 111 nodes · 118 edges · 19 communities (15 shown, 4 thin omitted)
-- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.8)
+- 163 nodes · 181 edges · 22 communities (18 shown, 4 thin omitted)
+- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `706d11c8`
+- Built from commit: `b1ecdc70`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -29,18 +29,21 @@
 - [[_COMMUNITY_Community 12|Community 12]]
 - [[_COMMUNITY_Community 13|Community 13]]
 - [[_COMMUNITY_Community 15|Community 15]]
+- [[_COMMUNITY_Community 19|Community 19]]
+- [[_COMMUNITY_Community 20|Community 20]]
+- [[_COMMUNITY_Community 21|Community 21]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `L2 Norm Predictor — Easy Notes for Revision and Viva` - 11 edges
-2. `Directory Structure` - 7 edges
-3. `Python Project Compilation` - 7 edges
-4. `ModularArithmeticDataset` - 7 edges
-5. `main()` - 5 edges
-6. `extract_metrics()` - 5 edges
-7. `ModularArithmeticDataset` - 5 edges
-8. `Python Project Compilation` - 4 edges
-9. `compile_python_files_to_pdf()` - 4 edges
-10. `load_run_data()` - 4 edges
+1. `PredictorMeasurements` - 11 edges
+2. `L2 Norm Predictor — Easy Notes for Revision and Viva` - 11 edges
+3. `BenchmarkAnalyzer` - 10 edges
+4. `Directory Structure` - 7 edges
+5. `Python Project Compilation` - 7 edges
+6. `ModularArithmeticDataset` - 7 edges
+7. `main()` - 5 edges
+8. `extract_metrics()` - 5 edges
+9. `ModularArithmeticDataset` - 5 edges
+10. `main()` - 4 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `main()` --calls--> `Path`  [INFERRED]
@@ -58,11 +61,11 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (19 total, 4 thin omitted)
+## Communities (22 total, 4 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.18
-Nodes (6): get_dataloaders(), ModularArithmeticDataset, generate_pairs(), get_dataloaders(), ModularArithmeticDataset, Dataset
+Cohesion: 0.11
+Nodes (9): get_dataloaders(), ModularArithmeticDataset, generate_pairs(), get_dataloaders(), ModularArithmeticDataset, Dataset, L2 Norm Predictor  This module implements the L2 norm predictor., migrate_legacy_flat_run() (+1 more)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.23
@@ -100,6 +103,18 @@ Nodes (4): data/modular_arithmetic.py, models/transformer.py, Python Project Com
 Cohesion: 0.70
 Nodes (4): get_images(), horizontal_collage(), main(), vertical_collage()
 
+### Community 19 - "Community 19"
+Cohesion: 0.10
+Nodes (11): PredictorMeasurements, Unified measurement collection for L2 Norm and Dropout predictors. Ensures consi, Collects and saves all measurements for both predictors., Generate standalone Dropout visualization graphs., Generate combined PDF report with all measurements., Create subdirectories for each predictor., Apply simple moving average smoothing., Save core training metrics. (+3 more)
+
+### Community 20 - "Community 20"
+Cohesion: 0.15
+Nodes (9): BenchmarkAnalyzer, Compare L2 Norm curves., Compare Dropout gap curves., Generate PDF report with run consistency metrics., Load single-head baseline results., Execute full analysis., Load all four-head runs., Find grokking epoch (test acc > 90%). (+1 more)
+
+### Community 21 - "Community 21"
+Cohesion: 0.36
+Nodes (7): cleanup_results(), main(), Remove existing results to start fresh., Run single-head baseline training., Run one four-head training session., run_four_head(), run_single_head()
+
 ## Knowledge Gaps
 - **30 isolated node(s):** `Core Project Files`, `Source Code`, `Experiments & Results`, `Tools & Utilities`, `Documentation` (+25 more)
   These have ≤1 connection - possible missing edges or undocumented components.
@@ -109,10 +124,10 @@ Nodes (4): get_images(), horizontal_collage(), main(), vertical_collage()
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Path` connect `Community 7` to `Community 9`, `Community 11`?**
-  _High betweenness centrality (0.022) - this node is a cross-community bridge._
-- **Why does `main()` connect `Community 9` to `Community 7`?**
-  _High betweenness centrality (0.012) - this node is a cross-community bridge._
-- **Are the 4 inferred relationships involving `Path` (e.g. with `main()` and `compile_python_files_to_pdf()`) actually correct?**
-  _`Path` has 4 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Core Project Files`, `Source Code`, `Experiments & Results` to the rest of the system?**
-  _38 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _High betweenness centrality (0.010) - this node is a cross-community bridge._
+- **What connects `Load single-head baseline results.`, `Load all four-head runs.`, `Find grokking epoch (test acc > 90%).` to the rest of the system?**
+  _60 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `Community 0` be split into smaller, more focused modules?**
+  _Cohesion score 0.11462450592885376 - nodes in this community are weakly interconnected._
+- **Should `Community 19` be split into smaller, more focused modules?**
+  _Cohesion score 0.10476190476190476 - nodes in this community are weakly interconnected._

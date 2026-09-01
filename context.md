@@ -4398,6 +4398,74 @@ Then validate predictors & proceed to Spectral.
 
 ---
 
+## Session Summary — September 2, 2026 (Clean slate, ready to run experiments)
+
+### Cleanup & Preparation
+
+**All previous results deleted:**
+- Removed: `results/single_head/` (all data)
+- Removed: `results/four_head/` (all 3 runs)
+- Removed: `results/experiments/` (shadow layernorm experiments)
+- Removed: `benchmark_analysis/` (old analysis)
+- Kept: `results/README.md` (documentation)
+
+**Script cleanup:**
+- Removed redundant cleanup function from `run_full_benchmark.py`
+- Script now only: runs single-head → runs four-head x3 → reports progress
+
+### Current State
+
+**Code ready:**
+- `src/train.py` — single-head training with unified measurements
+- `src/train_four_head.py` — four-head training (3 runs, independent seeds)
+- `src/unified_measurements.py` — measurement collection + visualization
+- `run_full_benchmark.py` — orchestration script (no cleanup)
+- `analyze_benchmark_results.py` — comparison charts + PDF report
+
+**All measurements implemented:**
+- L2 Norm: raw, smoothed, MAs, acceleration, visualizations ✓
+- Dropout: single-rate + multi-rate, visualizations ✓
+- Reports: 4-page PDF with all graphs ✓
+
+**Ready to run:**
+```bash
+cd /Users/jonathanjohn/Documents/grokking-benchmark && python run_full_benchmark.py && python analyze_benchmark_results.py
+```
+
+Execution flow:
+1. Clean slate (results already deleted)
+2. Run single-head training (1x, ~15 min)
+3. Run four-head run_1 (40K epochs, ~40 min)
+4. Run four-head run_2 (40K epochs, ~40 min)
+5. Run four-head run_3 (40K epochs, ~40 min)
+6. Generate comparison charts + PDF report (~1 min)
+
+Total time: ~2-2.5 hours
+
+### Files Modified
+
+- `run_full_benchmark.py`: removed cleanup function (32 lines deleted)
+
+### Commit
+
+- `61e487d`: Remove cleanup function from run_full_benchmark.py
+
+### Next
+
+User to execute:
+```bash
+python run_full_benchmark.py && python analyze_benchmark_results.py
+```
+
+After completion:
+1. Review charts in `benchmark_analysis/`
+2. Check run consistency (grokking epoch variance)
+3. Validate predictors against 3-criteria protocol
+4. Update context.md with results
+5. Proceed to Spectral predictor
+
+---
+
 ## FULL SESSION SUMMARY — September 1, 2026 (Complete refactor + pipeline setup)
 
 ### Overview

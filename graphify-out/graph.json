@@ -21,14 +21,544 @@
   },
   "nodes": [
     {
+      "label": "analyze_benchmark_results.py",
+      "file_type": "code",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "analyze_benchmark_results",
+      "community": 20,
+      "norm_label": "analyze_benchmark_results.py"
+    },
+    {
+      "label": "BenchmarkAnalyzer",
+      "file_type": "code",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "analyze_benchmark_results_benchmarkanalyzer",
+      "community": 20,
+      "norm_label": "benchmarkanalyzer"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "analyze_benchmark_results_benchmarkanalyzer_init",
+      "community": 20,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": ".load_single_head()",
+      "file_type": "code",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "analyze_benchmark_results_benchmarkanalyzer_load_single_head",
+      "community": 20,
+      "norm_label": ".load_single_head()"
+    },
+    {
+      "label": ".load_four_head_runs()",
+      "file_type": "code",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L50",
+      "_origin": "ast",
+      "id": "analyze_benchmark_results_benchmarkanalyzer_load_four_head_runs",
+      "community": 20,
+      "norm_label": ".load_four_head_runs()"
+    },
+    {
+      "label": ".grok_epoch()",
+      "file_type": "code",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L78",
+      "_origin": "ast",
+      "id": "analyze_benchmark_results_benchmarkanalyzer_grok_epoch",
+      "community": 20,
+      "norm_label": ".grok_epoch()"
+    },
+    {
+      "label": ".generate_grokking_curves()",
+      "file_type": "code",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L82",
+      "_origin": "ast",
+      "id": "analyze_benchmark_results_benchmarkanalyzer_generate_grokking_curves",
+      "community": 20,
+      "norm_label": ".generate_grokking_curves()"
+    },
+    {
+      "label": ".generate_l2_norm_comparison()",
+      "file_type": "code",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L129",
+      "_origin": "ast",
+      "id": "analyze_benchmark_results_benchmarkanalyzer_generate_l2_norm_comparison",
+      "community": 20,
+      "norm_label": ".generate_l2_norm_comparison()"
+    },
+    {
+      "label": ".generate_dropout_comparison()",
+      "file_type": "code",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L171",
+      "_origin": "ast",
+      "id": "analyze_benchmark_results_benchmarkanalyzer_generate_dropout_comparison",
+      "community": 20,
+      "norm_label": ".generate_dropout_comparison()"
+    },
+    {
+      "label": ".generate_run_consistency_report()",
+      "file_type": "code",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L212",
+      "_origin": "ast",
+      "id": "analyze_benchmark_results_benchmarkanalyzer_generate_run_consistency_report",
+      "community": 20,
+      "norm_label": ".generate_run_consistency_report()"
+    },
+    {
+      "label": ".run()",
+      "file_type": "code",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L324",
+      "_origin": "ast",
+      "id": "analyze_benchmark_results_benchmarkanalyzer_run",
+      "community": 20,
+      "norm_label": ".run()"
+    },
+    {
+      "label": "Load single-head baseline results.",
+      "file_type": "rationale",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "analyze_benchmark_results_rationale_26",
+      "community": 20,
+      "norm_label": "load single-head baseline results."
+    },
+    {
+      "label": "Load all four-head runs.",
+      "file_type": "rationale",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L51",
+      "_origin": "ast",
+      "id": "analyze_benchmark_results_rationale_51",
+      "community": 20,
+      "norm_label": "load all four-head runs."
+    },
+    {
+      "label": "Find grokking epoch (test acc > 90%).",
+      "file_type": "rationale",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L79",
+      "_origin": "ast",
+      "id": "analyze_benchmark_results_rationale_79",
+      "community": 20,
+      "norm_label": "find grokking epoch (test acc > 90%)."
+    },
+    {
+      "label": "Compare grokking curves across all runs.",
+      "file_type": "rationale",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L83",
+      "_origin": "ast",
+      "id": "analyze_benchmark_results_rationale_83",
+      "community": 20,
+      "norm_label": "compare grokking curves across all runs."
+    },
+    {
+      "label": "Compare L2 Norm curves.",
+      "file_type": "rationale",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L130",
+      "_origin": "ast",
+      "id": "analyze_benchmark_results_rationale_130",
+      "community": 20,
+      "norm_label": "compare l2 norm curves."
+    },
+    {
+      "label": "Compare Dropout gap curves.",
+      "file_type": "rationale",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L172",
+      "_origin": "ast",
+      "id": "analyze_benchmark_results_rationale_172",
+      "community": 20,
+      "norm_label": "compare dropout gap curves."
+    },
+    {
+      "label": "Generate PDF report with run consistency metrics.",
+      "file_type": "rationale",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L213",
+      "_origin": "ast",
+      "id": "analyze_benchmark_results_rationale_213",
+      "community": 20,
+      "norm_label": "generate pdf report with run consistency metrics."
+    },
+    {
+      "label": "Execute full analysis.",
+      "file_type": "rationale",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L325",
+      "_origin": "ast",
+      "id": "analyze_benchmark_results_rationale_325",
+      "community": 20,
+      "norm_label": "execute full analysis."
+    },
+    {
+      "label": "run_full_benchmark.py",
+      "file_type": "code",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "run_full_benchmark",
+      "community": 21,
+      "norm_label": "run_full_benchmark.py"
+    },
+    {
+      "label": "cleanup_results()",
+      "file_type": "code",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "run_full_benchmark_cleanup_results",
+      "community": 21,
+      "norm_label": "cleanup_results()"
+    },
+    {
+      "label": "run_single_head()",
+      "file_type": "code",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L42",
+      "_origin": "ast",
+      "id": "run_full_benchmark_run_single_head",
+      "community": 21,
+      "norm_label": "run_single_head()"
+    },
+    {
+      "label": "run_four_head()",
+      "file_type": "code",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L61",
+      "_origin": "ast",
+      "id": "run_full_benchmark_run_four_head",
+      "community": 21,
+      "norm_label": "run_four_head()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L80",
+      "_origin": "ast",
+      "id": "run_full_benchmark_main",
+      "community": 21,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Remove existing results to start fresh.",
+      "file_type": "rationale",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "run_full_benchmark_rationale_16",
+      "community": 21,
+      "norm_label": "remove existing results to start fresh."
+    },
+    {
+      "label": "Run single-head baseline training.",
+      "file_type": "rationale",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "run_full_benchmark_rationale_43",
+      "community": 21,
+      "norm_label": "run single-head baseline training."
+    },
+    {
+      "label": "Run one four-head training session.",
+      "file_type": "rationale",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L62",
+      "_origin": "ast",
+      "id": "run_full_benchmark_rationale_62",
+      "community": 21,
+      "norm_label": "run one four-head training session."
+    },
+    {
+      "label": "train.py",
+      "file_type": "code",
+      "source_file": "src/train.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "train.py",
+      "id": "src_train"
+    },
+    {
+      "label": "train_four_head.py",
+      "file_type": "code",
+      "source_file": "src/train_four_head.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "train_four_head.py",
+      "id": "src_train_four_head"
+    },
+    {
+      "label": "migrate_legacy_flat_run()",
+      "file_type": "code",
+      "source_file": "src/train_four_head.py",
+      "source_location": "L59",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "migrate_legacy_flat_run()",
+      "id": "src_train_four_head_migrate_legacy_flat_run"
+    },
+    {
+      "label": "get_next_run_number()",
+      "file_type": "code",
+      "source_file": "src/train_four_head.py",
+      "source_location": "L86",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "get_next_run_number()",
+      "id": "src_train_four_head_get_next_run_number"
+    },
+    {
+      "label": "Earlier versions of this script saved directly into results/four_head/     inste",
+      "file_type": "rationale",
+      "source_file": "src/train_four_head.py",
+      "source_location": "L60",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "earlier versions of this script saved directly into results/four_head/     inste",
+      "id": "src_train_four_head_rationale_60"
+    },
+    {
+      "label": "unified_measurements.py",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 19,
+      "norm_label": "unified_measurements.py",
+      "id": "src_unified_measurements"
+    },
+    {
+      "label": "PredictorMeasurements",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L14",
+      "_origin": "ast",
+      "community": 19,
+      "norm_label": "predictormeasurements",
+      "id": "src_unified_measurements_predictormeasurements"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L17",
+      "_origin": "ast",
+      "community": 19,
+      "norm_label": ".__init__()",
+      "id": "src_unified_measurements_predictormeasurements_init"
+    },
+    {
+      "label": ".create_subdirs()",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L22",
+      "_origin": "ast",
+      "community": 19,
+      "norm_label": ".create_subdirs()",
+      "id": "src_unified_measurements_predictormeasurements_create_subdirs"
+    },
+    {
+      "label": ".save_training_data()",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L32",
+      "_origin": "ast",
+      "community": 19,
+      "norm_label": ".save_training_data()",
+      "id": "src_unified_measurements_predictormeasurements_save_training_data"
+    },
+    {
+      "label": ".save_l2_norm_data()",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L40",
+      "_origin": "ast",
+      "community": 19,
+      "norm_label": ".save_l2_norm_data()",
+      "id": "src_unified_measurements_predictormeasurements_save_l2_norm_data"
+    },
+    {
+      "label": ".save_dropout_data()",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L72",
+      "_origin": "ast",
+      "community": 19,
+      "norm_label": ".save_dropout_data()",
+      "id": "src_unified_measurements_predictormeasurements_save_dropout_data"
+    },
+    {
+      "label": ".generate_l2_norm_visualizations()",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L91",
+      "_origin": "ast",
+      "community": 19,
+      "norm_label": ".generate_l2_norm_visualizations()",
+      "id": "src_unified_measurements_predictormeasurements_generate_l2_norm_visualizations"
+    },
+    {
+      "label": ".generate_dropout_visualizations()",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L170",
+      "_origin": "ast",
+      "community": 19,
+      "norm_label": ".generate_dropout_visualizations()",
+      "id": "src_unified_measurements_predictormeasurements_generate_dropout_visualizations"
+    },
+    {
+      "label": ".generate_combined_report()",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L194",
+      "_origin": "ast",
+      "community": 19,
+      "norm_label": ".generate_combined_report()",
+      "id": "src_unified_measurements_predictormeasurements_generate_combined_report"
+    },
+    {
+      "label": "._smooth_signal()",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L274",
+      "_origin": "ast",
+      "community": 19,
+      "norm_label": "._smooth_signal()",
+      "id": "src_unified_measurements_predictormeasurements_smooth_signal"
+    },
+    {
+      "label": "Unified measurement collection for L2 Norm and Dropout predictors. Ensures consi",
+      "file_type": "rationale",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 19,
+      "norm_label": "unified measurement collection for l2 norm and dropout predictors. ensures consi",
+      "id": "src_unified_measurements_rationale_1"
+    },
+    {
+      "label": "Collects and saves all measurements for both predictors.",
+      "file_type": "rationale",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L15",
+      "_origin": "ast",
+      "community": 19,
+      "norm_label": "collects and saves all measurements for both predictors.",
+      "id": "src_unified_measurements_rationale_15"
+    },
+    {
+      "label": "Create subdirectories for each predictor.",
+      "file_type": "rationale",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "community": 19,
+      "norm_label": "create subdirectories for each predictor.",
+      "id": "src_unified_measurements_rationale_23"
+    },
+    {
+      "label": "Save core training metrics.",
+      "file_type": "rationale",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L33",
+      "_origin": "ast",
+      "community": 19,
+      "norm_label": "save core training metrics.",
+      "id": "src_unified_measurements_rationale_33"
+    },
+    {
+      "label": "Save all L2 Norm measurements.",
+      "file_type": "rationale",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L42",
+      "_origin": "ast",
+      "community": 19,
+      "norm_label": "save all l2 norm measurements.",
+      "id": "src_unified_measurements_rationale_42"
+    },
+    {
+      "label": "Save all Dropout measurements.",
+      "file_type": "rationale",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L74",
+      "_origin": "ast",
+      "community": 19,
+      "norm_label": "save all dropout measurements.",
+      "id": "src_unified_measurements_rationale_74"
+    },
+    {
+      "label": "Generate standalone L2 Norm visualization graphs.",
+      "file_type": "rationale",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L94",
+      "_origin": "ast",
+      "community": 19,
+      "norm_label": "generate standalone l2 norm visualization graphs.",
+      "id": "src_unified_measurements_rationale_94"
+    },
+    {
+      "label": "Generate standalone Dropout visualization graphs.",
+      "file_type": "rationale",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L172",
+      "_origin": "ast",
+      "community": 19,
+      "norm_label": "generate standalone dropout visualization graphs.",
+      "id": "src_unified_measurements_rationale_172"
+    },
+    {
+      "label": "Generate combined PDF report with all measurements.",
+      "file_type": "rationale",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L197",
+      "_origin": "ast",
+      "community": 19,
+      "norm_label": "generate combined pdf report with all measurements.",
+      "id": "src_unified_measurements_rationale_197"
+    },
+    {
+      "label": "Apply simple moving average smoothing.",
+      "file_type": "rationale",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L275",
+      "_origin": "ast",
+      "community": 19,
+      "norm_label": "apply simple moving average smoothing.",
+      "id": "src_unified_measurements_rationale_275"
+    },
+    {
       "label": "README.md",
       "file_type": "document",
       "source_file": "README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "readme",
       "community": 6,
-      "norm_label": "readme.md"
+      "norm_label": "readme.md",
+      "id": "readme"
     },
     {
       "label": "Grokking Predictors Benchmark",
@@ -36,9 +566,9 @@
       "source_file": "README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "readme_grokking_predictors_benchmark",
       "community": 6,
-      "norm_label": "grokking predictors benchmark"
+      "norm_label": "grokking predictors benchmark",
+      "id": "readme_grokking_predictors_benchmark"
     },
     {
       "label": "Directory Structure",
@@ -46,9 +576,9 @@
       "source_file": "README.md",
       "source_location": "L9",
       "_origin": "ast",
-      "id": "readme_directory_structure",
       "community": 6,
-      "norm_label": "directory structure"
+      "norm_label": "directory structure",
+      "id": "readme_directory_structure"
     },
     {
       "label": "Core Project Files",
@@ -56,9 +586,9 @@
       "source_file": "README.md",
       "source_location": "L11",
       "_origin": "ast",
-      "id": "readme_core_project_files",
       "community": 6,
-      "norm_label": "core project files"
+      "norm_label": "core project files",
+      "id": "readme_core_project_files"
     },
     {
       "label": "Source Code",
@@ -66,9 +596,9 @@
       "source_file": "README.md",
       "source_location": "L17",
       "_origin": "ast",
-      "id": "readme_source_code",
       "community": 6,
-      "norm_label": "source code"
+      "norm_label": "source code",
+      "id": "readme_source_code"
     },
     {
       "label": "Experiments & Results",
@@ -76,9 +606,9 @@
       "source_file": "README.md",
       "source_location": "L25",
       "_origin": "ast",
-      "id": "readme_experiments_results",
       "community": 6,
-      "norm_label": "experiments & results"
+      "norm_label": "experiments & results",
+      "id": "readme_experiments_results"
     },
     {
       "label": "Tools & Utilities",
@@ -86,9 +616,9 @@
       "source_file": "README.md",
       "source_location": "L32",
       "_origin": "ast",
-      "id": "readme_tools_utilities",
       "community": 6,
-      "norm_label": "tools & utilities"
+      "norm_label": "tools & utilities",
+      "id": "readme_tools_utilities"
     },
     {
       "label": "Documentation",
@@ -96,9 +626,9 @@
       "source_file": "README.md",
       "source_location": "L40",
       "_origin": "ast",
-      "id": "readme_documentation",
       "community": 6,
-      "norm_label": "documentation"
+      "norm_label": "documentation",
+      "id": "readme_documentation"
     },
     {
       "label": "Other",
@@ -106,9 +636,9 @@
       "source_file": "README.md",
       "source_location": "L48",
       "_origin": "ast",
-      "id": "readme_other",
       "community": 6,
-      "norm_label": "other"
+      "norm_label": "other",
+      "id": "readme_other"
     },
     {
       "label": "Quick Reference",
@@ -116,9 +646,9 @@
       "source_file": "README.md",
       "source_location": "L56",
       "_origin": "ast",
-      "id": "readme_quick_reference",
       "community": 6,
-      "norm_label": "quick reference"
+      "norm_label": "quick reference",
+      "id": "readme_quick_reference"
     },
     {
       "label": "L2_Norm_Predictor_Notes.md",
@@ -126,9 +656,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "docs_l2_norm_predictor_notes",
       "community": 2,
-      "norm_label": "l2_norm_predictor_notes.md"
+      "norm_label": "l2_norm_predictor_notes.md",
+      "id": "docs_l2_norm_predictor_notes"
     },
     {
       "label": "L2 Norm Predictor \u2014 Easy Notes for Revision and Viva",
@@ -136,9 +666,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "docs_l2_norm_predictor_notes_l2_norm_predictor_easy_notes_for_revision_and_viva",
       "community": 2,
-      "norm_label": "l2 norm predictor \u2014 easy notes for revision and viva"
+      "norm_label": "l2 norm predictor \u2014 easy notes for revision and viva",
+      "id": "docs_l2_norm_predictor_notes_l2_norm_predictor_easy_notes_for_revision_and_viva"
     },
     {
       "label": "1. What This Report Is About, in One Line",
@@ -146,9 +676,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L7",
       "_origin": "ast",
-      "id": "docs_l2_norm_predictor_notes_1_what_this_report_is_about_in_one_line",
       "community": 2,
-      "norm_label": "1. what this report is about, in one line"
+      "norm_label": "1. what this report is about, in one line",
+      "id": "docs_l2_norm_predictor_notes_1_what_this_report_is_about_in_one_line"
     },
     {
       "label": "2. Objective \u2014 In Simple Words",
@@ -156,9 +686,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L15",
       "_origin": "ast",
-      "id": "docs_l2_norm_predictor_notes_2_objective_in_simple_words",
       "community": 2,
-      "norm_label": "2. objective \u2014 in simple words"
+      "norm_label": "2. objective \u2014 in simple words",
+      "id": "docs_l2_norm_predictor_notes_2_objective_in_simple_words"
     },
     {
       "label": "3. Experimental Setup \u2014 Table",
@@ -166,9 +696,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L29",
       "_origin": "ast",
-      "id": "docs_l2_norm_predictor_notes_3_experimental_setup_table",
       "community": 2,
-      "norm_label": "3. experimental setup \u2014 table"
+      "norm_label": "3. experimental setup \u2014 table",
+      "id": "docs_l2_norm_predictor_notes_3_experimental_setup_table"
     },
     {
       "label": "4. Five Detection Strategies Tried, in Order",
@@ -176,9 +706,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L45",
       "_origin": "ast",
-      "id": "docs_l2_norm_predictor_notes_4_five_detection_strategies_tried_in_order",
       "community": 2,
-      "norm_label": "4. five detection strategies tried, in order"
+      "norm_label": "4. five detection strategies tried, in order",
+      "id": "docs_l2_norm_predictor_notes_4_five_detection_strategies_tried_in_order"
     },
     {
       "label": "5. Three Formal Criteria for Judging Any Trigger",
@@ -186,9 +716,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L60",
       "_origin": "ast",
-      "id": "docs_l2_norm_predictor_notes_5_three_formal_criteria_for_judging_any_trigger",
       "community": 2,
-      "norm_label": "5. three formal criteria for judging any trigger"
+      "norm_label": "5. three formal criteria for judging any trigger",
+      "id": "docs_l2_norm_predictor_notes_5_three_formal_criteria_for_judging_any_trigger"
     },
     {
       "label": "6. Cross-Run Evidence \u2014 What the Numbers Actually Mean",
@@ -196,9 +726,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L75",
       "_origin": "ast",
-      "id": "docs_l2_norm_predictor_notes_6_cross_run_evidence_what_the_numbers_actually_mean",
       "community": 2,
-      "norm_label": "6. cross-run evidence \u2014 what the numbers actually mean"
+      "norm_label": "6. cross-run evidence \u2014 what the numbers actually mean",
+      "id": "docs_l2_norm_predictor_notes_6_cross_run_evidence_what_the_numbers_actually_mean"
     },
     {
       "label": "7. Side Finding \u2014 Test Accuracy Plateau in Run 3",
@@ -206,9 +736,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L103",
       "_origin": "ast",
-      "id": "docs_l2_norm_predictor_notes_7_side_finding_test_accuracy_plateau_in_run_3",
       "community": 2,
-      "norm_label": "7. side finding \u2014 test accuracy plateau in run 3"
+      "norm_label": "7. side finding \u2014 test accuracy plateau in run 3",
+      "id": "docs_l2_norm_predictor_notes_7_side_finding_test_accuracy_plateau_in_run_3"
     },
     {
       "label": "8. Conclusion and Recommendation",
@@ -216,9 +746,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L118",
       "_origin": "ast",
-      "id": "docs_l2_norm_predictor_notes_8_conclusion_and_recommendation",
       "community": 2,
-      "norm_label": "8. conclusion and recommendation"
+      "norm_label": "8. conclusion and recommendation",
+      "id": "docs_l2_norm_predictor_notes_8_conclusion_and_recommendation"
     },
     {
       "label": "9. Important Terms to Remember (Quick Glossary)",
@@ -226,9 +756,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L132",
       "_origin": "ast",
-      "id": "docs_l2_norm_predictor_notes_9_important_terms_to_remember_quick_glossary",
       "community": 2,
-      "norm_label": "9. important terms to remember (quick glossary)"
+      "norm_label": "9. important terms to remember (quick glossary)",
+      "id": "docs_l2_norm_predictor_notes_9_important_terms_to_remember_quick_glossary"
     },
     {
       "label": "10. Likely Viva Questions and Model Answers",
@@ -236,9 +766,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L145",
       "_origin": "ast",
-      "id": "docs_l2_norm_predictor_notes_10_likely_viva_questions_and_model_answers",
       "community": 2,
-      "norm_label": "10. likely viva questions and model answers"
+      "norm_label": "10. likely viva questions and model answers",
+      "id": "docs_l2_norm_predictor_notes_10_likely_viva_questions_and_model_answers"
     },
     {
       "label": "dropout_gap_infographic_philosophy.md",
@@ -246,9 +776,9 @@
       "source_file": "docs/dropout_gap_infographic_philosophy.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "docs_dropout_gap_infographic_philosophy",
       "community": 13,
-      "norm_label": "dropout_gap_infographic_philosophy.md"
+      "norm_label": "dropout_gap_infographic_philosophy.md",
+      "id": "docs_dropout_gap_infographic_philosophy"
     },
     {
       "label": "Design Philosophy: \"Gate Ledger\"",
@@ -256,9 +786,9 @@
       "source_file": "docs/dropout_gap_infographic_philosophy.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "docs_dropout_gap_infographic_philosophy_design_philosophy_gate_ledger",
       "community": 13,
-      "norm_label": "design philosophy: \"gate ledger\""
+      "norm_label": "design philosophy: \"gate ledger\"",
+      "id": "docs_dropout_gap_infographic_philosophy_design_philosophy_gate_ledger"
     },
     {
       "label": "project_compilation.md",
@@ -266,9 +796,9 @@
       "source_file": "docs/project_compilation.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "docs_project_compilation",
       "community": 8,
-      "norm_label": "project_compilation.md"
+      "norm_label": "project_compilation.md",
+      "id": "docs_project_compilation"
     },
     {
       "label": "Python Project Compilation",
@@ -276,9 +806,9 @@
       "source_file": "docs/project_compilation.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "docs_project_compilation_python_project_compilation",
       "community": 8,
-      "norm_label": "python project compilation"
+      "norm_label": "python project compilation",
+      "id": "docs_project_compilation_python_project_compilation"
     },
     {
       "label": "data\\modular_arithmetic.py",
@@ -286,9 +816,9 @@
       "source_file": "docs/project_compilation.md",
       "source_location": "L9",
       "_origin": "ast",
-      "id": "docs_project_compilation_data_modular_arithmetic_py",
       "community": 8,
-      "norm_label": "data\\modular_arithmetic.py"
+      "norm_label": "data\\modular_arithmetic.py",
+      "id": "docs_project_compilation_data_modular_arithmetic_py"
     },
     {
       "label": "models\\transformer.py",
@@ -296,9 +826,9 @@
       "source_file": "docs/project_compilation.md",
       "source_location": "L55",
       "_origin": "ast",
-      "id": "docs_project_compilation_models_transformer_py",
       "community": 8,
-      "norm_label": "models\\transformer.py"
+      "norm_label": "models\\transformer.py",
+      "id": "docs_project_compilation_models_transformer_py"
     },
     {
       "label": "plot_results.py",
@@ -306,9 +836,9 @@
       "source_file": "docs/project_compilation.md",
       "source_location": "L110",
       "_origin": "ast",
-      "id": "docs_project_compilation_plot_results_py",
       "community": 8,
-      "norm_label": "plot_results.py"
+      "norm_label": "plot_results.py",
+      "id": "docs_project_compilation_plot_results_py"
     },
     {
       "label": "predictors\\dropout.py",
@@ -316,9 +846,9 @@
       "source_file": "docs/project_compilation.md",
       "source_location": "L257",
       "_origin": "ast",
-      "id": "docs_project_compilation_predictors_dropout_py",
       "community": 8,
-      "norm_label": "predictors\\dropout.py"
+      "norm_label": "predictors\\dropout.py",
+      "id": "docs_project_compilation_predictors_dropout_py"
     },
     {
       "label": "predictors\\l2_norm.py",
@@ -326,9 +856,9 @@
       "source_file": "docs/project_compilation.md",
       "source_location": "L300",
       "_origin": "ast",
-      "id": "docs_project_compilation_predictors_l2_norm_py",
       "community": 8,
-      "norm_label": "predictors\\l2_norm.py"
+      "norm_label": "predictors\\l2_norm.py",
+      "id": "docs_project_compilation_predictors_l2_norm_py"
     },
     {
       "label": "train.py",
@@ -336,9 +866,9 @@
       "source_file": "docs/project_compilation.md",
       "source_location": "L501",
       "_origin": "ast",
-      "id": "docs_project_compilation_train_py",
       "community": 8,
-      "norm_label": "train.py"
+      "norm_label": "train.py",
+      "id": "docs_project_compilation_train_py"
     },
     {
       "label": "project_compilation_src.md",
@@ -346,9 +876,9 @@
       "source_file": "docs/project_compilation_src.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "docs_project_compilation_src",
       "community": 10,
-      "norm_label": "project_compilation_src.md"
+      "norm_label": "project_compilation_src.md",
+      "id": "docs_project_compilation_src"
     },
     {
       "label": "Python Project Compilation",
@@ -356,9 +886,9 @@
       "source_file": "docs/project_compilation_src.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "docs_project_compilation_src_python_project_compilation",
       "community": 10,
-      "norm_label": "python project compilation"
+      "norm_label": "python project compilation",
+      "id": "docs_project_compilation_src_python_project_compilation"
     },
     {
       "label": "data/modular_arithmetic.py",
@@ -366,9 +896,9 @@
       "source_file": "docs/project_compilation_src.md",
       "source_location": "L9",
       "_origin": "ast",
-      "id": "docs_project_compilation_src_data_modular_arithmetic_py",
       "community": 10,
-      "norm_label": "data/modular_arithmetic.py"
+      "norm_label": "data/modular_arithmetic.py",
+      "id": "docs_project_compilation_src_data_modular_arithmetic_py"
     },
     {
       "label": "models/transformer.py",
@@ -376,9 +906,9 @@
       "source_file": "docs/project_compilation_src.md",
       "source_location": "L56",
       "_origin": "ast",
-      "id": "docs_project_compilation_src_models_transformer_py",
       "community": 10,
-      "norm_label": "models/transformer.py"
+      "norm_label": "models/transformer.py",
+      "id": "docs_project_compilation_src_models_transformer_py"
     },
     {
       "label": "train.py",
@@ -386,9 +916,9 @@
       "source_file": "docs/project_compilation_src.md",
       "source_location": "L104",
       "_origin": "ast",
-      "id": "docs_project_compilation_src_train_py",
       "community": 10,
-      "norm_label": "train.py"
+      "norm_label": "train.py",
+      "id": "docs_project_compilation_src_train_py"
     },
     {
       "label": "analyze_threshold.py",
@@ -396,9 +926,9 @@
       "source_file": "tools/analyze_threshold.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "tools_analyze_threshold",
       "community": 16,
-      "norm_label": "analyze_threshold.py"
+      "norm_label": "analyze_threshold.py",
+      "id": "tools_analyze_threshold"
     },
     {
       "label": "collage_images.py",
@@ -406,9 +936,9 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "tools_collage_images",
       "community": 11,
-      "norm_label": "collage_images.py"
+      "norm_label": "collage_images.py",
+      "id": "tools_collage_images"
     },
     {
       "label": "get_images()",
@@ -416,9 +946,9 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L22",
       "_origin": "ast",
-      "id": "tools_collage_images_get_images",
       "community": 11,
-      "norm_label": "get_images()"
+      "norm_label": "get_images()",
+      "id": "tools_collage_images_get_images"
     },
     {
       "label": "horizontal_collage()",
@@ -426,9 +956,9 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L30",
       "_origin": "ast",
-      "id": "tools_collage_images_horizontal_collage",
       "community": 11,
-      "norm_label": "horizontal_collage()"
+      "norm_label": "horizontal_collage()",
+      "id": "tools_collage_images_horizontal_collage"
     },
     {
       "label": "vertical_collage()",
@@ -436,9 +966,9 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L47",
       "_origin": "ast",
-      "id": "tools_collage_images_vertical_collage",
       "community": 11,
-      "norm_label": "vertical_collage()"
+      "norm_label": "vertical_collage()",
+      "id": "tools_collage_images_vertical_collage"
     },
     {
       "label": "main()",
@@ -446,9 +976,9 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L64",
       "_origin": "ast",
-      "id": "tools_collage_images_main",
       "community": 11,
-      "norm_label": "main()"
+      "norm_label": "main()",
+      "id": "tools_collage_images_main"
     },
     {
       "label": "compile_images_to_pdf.py",
@@ -456,9 +986,9 @@
       "source_file": "tools/compile_images_to_pdf.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "tools_compile_images_to_pdf",
       "community": 14,
-      "norm_label": "compile_images_to_pdf.py"
+      "norm_label": "compile_images_to_pdf.py",
+      "id": "tools_compile_images_to_pdf"
     },
     {
       "label": "combine_images_to_pdf()",
@@ -466,9 +996,9 @@
       "source_file": "tools/compile_images_to_pdf.py",
       "source_location": "L4",
       "_origin": "ast",
-      "id": "tools_compile_images_to_pdf_combine_images_to_pdf",
       "community": 14,
-      "norm_label": "combine_images_to_pdf()"
+      "norm_label": "combine_images_to_pdf()",
+      "id": "tools_compile_images_to_pdf_combine_images_to_pdf"
     },
     {
       "label": "compile_python_files.py",
@@ -476,9 +1006,9 @@
       "source_file": "tools/compile_python_files.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "tools_compile_python_files",
       "community": 7,
-      "norm_label": "compile_python_files.py"
+      "norm_label": "compile_python_files.py",
+      "id": "tools_compile_python_files"
     },
     {
       "label": "should_skip()",
@@ -486,9 +1016,9 @@
       "source_file": "tools/compile_python_files.py",
       "source_location": "L20",
       "_origin": "ast",
-      "id": "tools_compile_python_files_should_skip",
       "community": 7,
-      "norm_label": "should_skip()"
+      "norm_label": "should_skip()",
+      "id": "tools_compile_python_files_should_skip"
     },
     {
       "label": "Path",
@@ -496,9 +1026,9 @@
       "source_file": "tools/compile_python_files.py",
       "source_location": "L20",
       "_origin": "ast",
-      "id": "path",
       "community": 7,
-      "norm_label": "path"
+      "norm_label": "path",
+      "id": "path"
     },
     {
       "label": "main()",
@@ -506,9 +1036,9 @@
       "source_file": "tools/compile_python_files.py",
       "source_location": "L24",
       "_origin": "ast",
-      "id": "tools_compile_python_files_main",
       "community": 7,
-      "norm_label": "main()"
+      "norm_label": "main()",
+      "id": "tools_compile_python_files_main"
     },
     {
       "label": "compile_python_files_to_pdf.py",
@@ -516,9 +1046,9 @@
       "source_file": "tools/compile_python_files_to_pdf.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "tools_compile_python_files_to_pdf",
       "community": 7,
-      "norm_label": "compile_python_files_to_pdf.py"
+      "norm_label": "compile_python_files_to_pdf.py",
+      "id": "tools_compile_python_files_to_pdf"
     },
     {
       "label": "gather_python_files()",
@@ -526,9 +1056,9 @@
       "source_file": "tools/compile_python_files_to_pdf.py",
       "source_location": "L13",
       "_origin": "ast",
-      "id": "tools_compile_python_files_to_pdf_gather_python_files",
       "community": 7,
-      "norm_label": "gather_python_files()"
+      "norm_label": "gather_python_files()",
+      "id": "tools_compile_python_files_to_pdf_gather_python_files"
     },
     {
       "label": "wrap_text()",
@@ -536,9 +1066,9 @@
       "source_file": "tools/compile_python_files_to_pdf.py",
       "source_location": "L20",
       "_origin": "ast",
-      "id": "tools_compile_python_files_to_pdf_wrap_text",
       "community": 7,
-      "norm_label": "wrap_text()"
+      "norm_label": "wrap_text()",
+      "id": "tools_compile_python_files_to_pdf_wrap_text"
     },
     {
       "label": "compile_python_files_to_pdf()",
@@ -546,9 +1076,9 @@
       "source_file": "tools/compile_python_files_to_pdf.py",
       "source_location": "L56",
       "_origin": "ast",
-      "id": "tools_compile_python_files_to_pdf_compile_python_files_to_pdf",
       "community": 7,
-      "norm_label": "compile_python_files_to_pdf()"
+      "norm_label": "compile_python_files_to_pdf()",
+      "id": "tools_compile_python_files_to_pdf_compile_python_files_to_pdf"
     },
     {
       "label": "parse_arguments()",
@@ -556,9 +1086,9 @@
       "source_file": "tools/compile_python_files_to_pdf.py",
       "source_location": "L108",
       "_origin": "ast",
-      "id": "tools_compile_python_files_to_pdf_parse_arguments",
       "community": 7,
-      "norm_label": "parse_arguments()"
+      "norm_label": "parse_arguments()",
+      "id": "tools_compile_python_files_to_pdf_parse_arguments"
     },
     {
       "label": "debug_detection.py",
@@ -566,9 +1096,9 @@
       "source_file": "tools/debug_detection.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "tools_debug_detection",
       "community": 17,
-      "norm_label": "debug_detection.py"
+      "norm_label": "debug_detection.py",
+      "id": "tools_debug_detection"
     },
     {
       "label": "generate_file.py",
@@ -576,9 +1106,9 @@
       "source_file": "tools/generate_file.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "tools_generate_file",
       "community": 18,
-      "norm_label": "generate_file.py"
+      "norm_label": "generate_file.py",
+      "id": "tools_generate_file"
     },
     {
       "label": "generate_l2_report_corrected.py",
@@ -586,9 +1116,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "tools_generate_l2_report_corrected",
       "community": 1,
-      "norm_label": "generate_l2_report_corrected.py"
+      "norm_label": "generate_l2_report_corrected.py",
+      "id": "tools_generate_l2_report_corrected"
     },
     {
       "label": "load_run_data()",
@@ -596,9 +1126,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L34",
       "_origin": "ast",
-      "id": "tools_generate_l2_report_corrected_load_run_data",
       "community": 1,
-      "norm_label": "load_run_data()"
+      "norm_label": "load_run_data()",
+      "id": "tools_generate_l2_report_corrected_load_run_data"
     },
     {
       "label": "find_grok_epoch()",
@@ -606,9 +1136,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L54",
       "_origin": "ast",
-      "id": "tools_generate_l2_report_corrected_find_grok_epoch",
       "community": 1,
-      "norm_label": "find_grok_epoch()"
+      "norm_label": "find_grok_epoch()",
+      "id": "tools_generate_l2_report_corrected_find_grok_epoch"
     },
     {
       "label": "find_trough_epoch()",
@@ -616,9 +1146,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L62",
       "_origin": "ast",
-      "id": "tools_generate_l2_report_corrected_find_trough_epoch",
       "community": 1,
-      "norm_label": "find_trough_epoch()"
+      "norm_label": "find_trough_epoch()",
+      "id": "tools_generate_l2_report_corrected_find_trough_epoch"
     },
     {
       "label": "extract_metrics()",
@@ -626,9 +1156,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L73",
       "_origin": "ast",
-      "id": "tools_generate_l2_report_corrected_extract_metrics",
       "community": 1,
-      "norm_label": "extract_metrics()"
+      "norm_label": "extract_metrics()",
+      "id": "tools_generate_l2_report_corrected_extract_metrics"
     },
     {
       "label": "create_report()",
@@ -636,9 +1166,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L137",
       "_origin": "ast",
-      "id": "tools_generate_l2_report_corrected_create_report",
       "community": 1,
-      "norm_label": "create_report()"
+      "norm_label": "create_report()",
+      "id": "tools_generate_l2_report_corrected_create_report"
     },
     {
       "label": "main()",
@@ -646,9 +1176,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L578",
       "_origin": "ast",
-      "id": "tools_generate_l2_report_corrected_main",
       "community": 1,
-      "norm_label": "main()"
+      "norm_label": "main()",
+      "id": "tools_generate_l2_report_corrected_main"
     },
     {
       "label": "Professional L2 Norm Analysis Report for Four-Head Transformer -- CORRECTED VERS",
@@ -656,9 +1186,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "tools_generate_l2_report_corrected_rationale_1",
       "community": 1,
-      "norm_label": "professional l2 norm analysis report for four-head transformer -- corrected vers"
+      "norm_label": "professional l2 norm analysis report for four-head transformer -- corrected vers",
+      "id": "tools_generate_l2_report_corrected_rationale_1"
     },
     {
       "label": "Load all data from a run. epoch_grid.npy is deliberately NOT loaded --     it is",
@@ -666,9 +1196,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L35",
       "_origin": "ast",
-      "id": "tools_generate_l2_report_corrected_rationale_35",
       "community": 1,
-      "norm_label": "load all data from a run. epoch_grid.npy is deliberately not loaded --     it is"
+      "norm_label": "load all data from a run. epoch_grid.npy is deliberately not loaded --     it is",
+      "id": "tools_generate_l2_report_corrected_rationale_35"
     },
     {
       "label": "Find exact epoch when test accuracy exceeds threshold.",
@@ -676,9 +1206,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L55",
       "_origin": "ast",
-      "id": "tools_generate_l2_report_corrected_rationale_55",
       "community": 1,
-      "norm_label": "find exact epoch when test accuracy exceeds threshold."
+      "norm_label": "find exact epoch when test accuracy exceeds threshold.",
+      "id": "tools_generate_l2_report_corrected_rationale_55"
     },
     {
       "label": "Find the L2-norm trough (local minimum) before the given search end     index, s",
@@ -686,9 +1216,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L63",
       "_origin": "ast",
-      "id": "tools_generate_l2_report_corrected_rationale_63",
       "community": 1,
-      "norm_label": "find the l2-norm trough (local minimum) before the given search end     index, s"
+      "norm_label": "find the l2-norm trough (local minimum) before the given search end     index, s",
+      "id": "tools_generate_l2_report_corrected_rationale_63"
     },
     {
       "label": "Extract all key metrics from run data.",
@@ -696,9 +1226,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L74",
       "_origin": "ast",
-      "id": "tools_generate_l2_report_corrected_rationale_74",
       "community": 1,
-      "norm_label": "extract all key metrics from run data."
+      "norm_label": "extract all key metrics from run data.",
+      "id": "tools_generate_l2_report_corrected_rationale_74"
     },
     {
       "label": "Create professional PDF report.",
@@ -706,9 +1236,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L138",
       "_origin": "ast",
-      "id": "tools_generate_l2_report_corrected_rationale_138",
       "community": 1,
-      "norm_label": "create professional pdf report."
+      "norm_label": "create professional pdf report.",
+      "id": "tools_generate_l2_report_corrected_rationale_138"
     },
     {
       "label": "inherticance_example.py",
@@ -716,9 +1246,9 @@
       "source_file": "tools/inherticance_example.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "tools_inherticance_example",
       "community": 12,
-      "norm_label": "inherticance_example.py"
+      "norm_label": "inherticance_example.py",
+      "id": "tools_inherticance_example"
     },
     {
       "label": "Parent",
@@ -726,9 +1256,9 @@
       "source_file": "tools/inherticance_example.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "tools_inherticance_example_parent",
       "community": 12,
-      "norm_label": "parent"
+      "norm_label": "parent",
+      "id": "tools_inherticance_example_parent"
     },
     {
       "label": ".__init__()",
@@ -736,9 +1266,9 @@
       "source_file": "tools/inherticance_example.py",
       "source_location": "L2",
       "_origin": "ast",
-      "id": "tools_inherticance_example_parent_init",
       "community": 12,
-      "norm_label": ".__init__()"
+      "norm_label": ".__init__()",
+      "id": "tools_inherticance_example_parent_init"
     },
     {
       "label": "Child",
@@ -746,9 +1276,9 @@
       "source_file": "tools/inherticance_example.py",
       "source_location": "L8",
       "_origin": "ast",
-      "id": "tools_inherticance_example_child",
       "community": 12,
-      "norm_label": "child"
+      "norm_label": "child",
+      "id": "tools_inherticance_example_child"
     },
     {
       "label": ".__init__()",
@@ -756,9 +1286,9 @@
       "source_file": "tools/inherticance_example.py",
       "source_location": "L9",
       "_origin": "ast",
-      "id": "tools_inherticance_example_child_init",
       "community": 12,
-      "norm_label": ".__init__()"
+      "norm_label": ".__init__()",
+      "id": "tools_inherticance_example_child_init"
     },
     {
       "label": "md_to_image.py",
@@ -766,9 +1296,9 @@
       "source_file": "tools/md_to_image.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "tools_md_to_image",
       "community": 9,
-      "norm_label": "md_to_image.py"
+      "norm_label": "md_to_image.py",
+      "id": "tools_md_to_image"
     },
     {
       "label": "load_font()",
@@ -776,9 +1306,9 @@
       "source_file": "tools/md_to_image.py",
       "source_location": "L45",
       "_origin": "ast",
-      "id": "tools_md_to_image_load_font",
       "community": 9,
-      "norm_label": "load_font()"
+      "norm_label": "load_font()",
+      "id": "tools_md_to_image_load_font"
     },
     {
       "label": "chars_per_line()",
@@ -786,9 +1316,9 @@
       "source_file": "tools/md_to_image.py",
       "source_location": "L57",
       "_origin": "ast",
-      "id": "tools_md_to_image_chars_per_line",
       "community": 9,
-      "norm_label": "chars_per_line()"
+      "norm_label": "chars_per_line()",
+      "id": "tools_md_to_image_chars_per_line"
     },
     {
       "label": "wrap_markdown()",
@@ -796,9 +1326,9 @@
       "source_file": "tools/md_to_image.py",
       "source_location": "L72",
       "_origin": "ast",
-      "id": "tools_md_to_image_wrap_markdown",
       "community": 9,
-      "norm_label": "wrap_markdown()"
+      "norm_label": "wrap_markdown()",
+      "id": "tools_md_to_image_wrap_markdown"
     },
     {
       "label": "render_page()",
@@ -806,9 +1336,9 @@
       "source_file": "tools/md_to_image.py",
       "source_location": "L97",
       "_origin": "ast",
-      "id": "tools_md_to_image_render_page",
       "community": 9,
-      "norm_label": "render_page()"
+      "norm_label": "render_page()",
+      "id": "tools_md_to_image_render_page"
     },
     {
       "label": "main()",
@@ -816,9 +1346,9 @@
       "source_file": "tools/md_to_image.py",
       "source_location": "L113",
       "_origin": "ast",
-      "id": "tools_md_to_image_main",
       "community": 9,
-      "norm_label": "main()"
+      "norm_label": "main()",
+      "id": "tools_md_to_image_main"
     },
     {
       "label": "scaffold.py",
@@ -826,9 +1356,9 @@
       "source_file": "tools/scaffold.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "tools_scaffold",
       "community": 15,
-      "norm_label": "scaffold.py"
+      "norm_label": "scaffold.py",
+      "id": "tools_scaffold"
     },
     {
       "label": "Scaffold script \u2014 creates the src/ folder structure for the grokking benchmark r",
@@ -836,9 +1366,9 @@
       "source_file": "tools/scaffold.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "tools_scaffold_rationale_1",
       "community": 15,
-      "norm_label": "scaffold script \u2014 creates the src/ folder structure for the grokking benchmark r"
+      "norm_label": "scaffold script \u2014 creates the src/ folder structure for the grokking benchmark r",
+      "id": "tools_scaffold_rationale_1"
     },
     {
       "label": "generate_file.py",
@@ -896,7 +1426,7 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 3,
+      "community": 0,
       "norm_label": "l2_norm.py",
       "id": "predictors_l2_norm"
     },
@@ -906,7 +1436,7 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 3,
+      "community": 0,
       "norm_label": "compute_l2_norm()",
       "id": "predictors_l2_norm_compute_l2_norm"
     },
@@ -916,19 +1446,9 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 3,
+      "community": 0,
       "norm_label": "l2 norm predictor  this module implements the l2 norm predictor.",
       "id": "predictors_l2_norm_rationale_1"
-    },
-    {
-      "label": "train.py",
-      "file_type": "code",
-      "source_file": "src/train.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 3,
-      "norm_label": "train.py",
-      "id": "src_train"
     },
     {
       "label": "modular_arithmetic.py",
@@ -1135,12 +1655,701 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results",
+      "target": "analyze_benchmark_results_benchmarkanalyzer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L171",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_benchmarkanalyzer",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_dropout_comparison",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L82",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_benchmarkanalyzer",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_grokking_curves",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L129",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_benchmarkanalyzer",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_l2_norm_comparison",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L212",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_benchmarkanalyzer",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_run_consistency_report",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L78",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_benchmarkanalyzer",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_grok_epoch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_benchmarkanalyzer",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_benchmarkanalyzer",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_load_four_head_runs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_benchmarkanalyzer",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_load_single_head",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L324",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_benchmarkanalyzer",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L330",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_benchmarkanalyzer_run",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_load_single_head",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_rationale_26",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_load_single_head",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L335",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_benchmarkanalyzer_run",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_load_four_head_runs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_rationale_51",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_load_four_head_runs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L91",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_benchmarkanalyzer_generate_grokking_curves",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_grok_epoch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L226",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_benchmarkanalyzer_generate_run_consistency_report",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_grok_epoch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_rationale_79",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_grok_epoch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L340",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_benchmarkanalyzer_run",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_grokking_curves",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L83",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_rationale_83",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_grokking_curves",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L341",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_benchmarkanalyzer_run",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_l2_norm_comparison",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L130",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_rationale_130",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_l2_norm_comparison",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L342",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_benchmarkanalyzer_run",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_dropout_comparison",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L172",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_rationale_172",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_dropout_comparison",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L343",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_benchmarkanalyzer_run",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_run_consistency_report",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L213",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_rationale_213",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_run_consistency_report",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analyze_benchmark_results.py",
+      "source_location": "L325",
+      "weight": 1.0,
+      "source": "analyze_benchmark_results_rationale_325",
+      "target": "analyze_benchmark_results_benchmarkanalyzer_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "run_full_benchmark",
+      "target": "run_full_benchmark_cleanup_results",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "run_full_benchmark",
+      "target": "run_full_benchmark_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "run_full_benchmark",
+      "target": "run_full_benchmark_run_four_head",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "run_full_benchmark",
+      "target": "run_full_benchmark_run_single_head",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L94",
+      "weight": 1.0,
+      "source": "run_full_benchmark_main",
+      "target": "run_full_benchmark_cleanup_results",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "run_full_benchmark_rationale_16",
+      "target": "run_full_benchmark_cleanup_results",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L97",
+      "weight": 1.0,
+      "source": "run_full_benchmark_main",
+      "target": "run_full_benchmark_run_single_head",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "run_full_benchmark_rationale_43",
+      "target": "run_full_benchmark_run_single_head",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L105",
+      "weight": 1.0,
+      "source": "run_full_benchmark_main",
+      "target": "run_full_benchmark_run_four_head",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "run_full_benchmark_rationale_62",
+      "target": "run_full_benchmark_run_four_head",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/train.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_train",
+      "target": "data_dataset"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/train.py",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_train",
+      "target": "data_modular_arithmetic"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/train.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_train",
+      "target": "models_transformer"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/train.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_train",
+      "target": "predictors_l2_norm"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/train_four_head.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_train_four_head",
+      "target": "data_modular_arithmetic"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/train_four_head.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_train_four_head",
+      "target": "predictors_l2_norm"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/train_four_head.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_train_four_head",
+      "target": "src_train_four_head_get_next_run_number"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/train_four_head.py",
+      "source_location": "L59",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_train_four_head",
+      "target": "src_train_four_head_migrate_legacy_flat_run"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/train_four_head.py",
+      "source_location": "L60",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_train_four_head_rationale_60",
+      "target": "src_train_four_head_migrate_legacy_flat_run"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements",
+      "target": "src_unified_measurements_predictormeasurements"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_rationale_1",
+      "target": "src_unified_measurements"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements",
+      "target": "src_unified_measurements_predictormeasurements_create_subdirs"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L194",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements",
+      "target": "src_unified_measurements_predictormeasurements_generate_combined_report"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L170",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements",
+      "target": "src_unified_measurements_predictormeasurements_generate_dropout_visualizations"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L91",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements",
+      "target": "src_unified_measurements_predictormeasurements_generate_l2_norm_visualizations"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements",
+      "target": "src_unified_measurements_predictormeasurements_init"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L72",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements",
+      "target": "src_unified_measurements_predictormeasurements_save_dropout_data"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements",
+      "target": "src_unified_measurements_predictormeasurements_save_l2_norm_data"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements",
+      "target": "src_unified_measurements_predictormeasurements_save_training_data"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L274",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements",
+      "target": "src_unified_measurements_predictormeasurements_smooth_signal"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_rationale_15",
+      "target": "src_unified_measurements_predictormeasurements"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements_init",
+      "target": "src_unified_measurements_predictormeasurements_create_subdirs"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_rationale_23",
+      "target": "src_unified_measurements_predictormeasurements_create_subdirs"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_rationale_33",
+      "target": "src_unified_measurements_predictormeasurements_save_training_data"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L48",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements_save_l2_norm_data",
+      "target": "src_unified_measurements_predictormeasurements_smooth_signal"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L42",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_rationale_42",
+      "target": "src_unified_measurements_predictormeasurements_save_l2_norm_data"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L74",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_rationale_74",
+      "target": "src_unified_measurements_predictormeasurements_save_dropout_data"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L94",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_rationale_94",
+      "target": "src_unified_measurements_predictormeasurements_generate_l2_norm_visualizations"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L172",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_rationale_172",
+      "target": "src_unified_measurements_predictormeasurements_generate_dropout_visualizations"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L197",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_rationale_197",
+      "target": "src_unified_measurements_predictormeasurements_generate_combined_report"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L275",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_rationale_275",
+      "target": "src_unified_measurements_predictormeasurements_smooth_signal"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme",
-      "target": "readme_grokking_predictors_benchmark",
-      "confidence_score": 1.0
+      "target": "readme_grokking_predictors_benchmark"
     },
     {
       "relation": "contains",
@@ -1148,9 +2357,9 @@
       "source_file": "README.md",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_grokking_predictors_benchmark",
-      "target": "readme_directory_structure",
-      "confidence_score": 1.0
+      "target": "readme_directory_structure"
     },
     {
       "relation": "contains",
@@ -1158,9 +2367,9 @@
       "source_file": "README.md",
       "source_location": "L56",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_grokking_predictors_benchmark",
-      "target": "readme_quick_reference",
-      "confidence_score": 1.0
+      "target": "readme_quick_reference"
     },
     {
       "relation": "contains",
@@ -1168,9 +2377,9 @@
       "source_file": "README.md",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_directory_structure",
-      "target": "readme_core_project_files",
-      "confidence_score": 1.0
+      "target": "readme_core_project_files"
     },
     {
       "relation": "contains",
@@ -1178,9 +2387,9 @@
       "source_file": "README.md",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_directory_structure",
-      "target": "readme_documentation",
-      "confidence_score": 1.0
+      "target": "readme_documentation"
     },
     {
       "relation": "contains",
@@ -1188,9 +2397,9 @@
       "source_file": "README.md",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_directory_structure",
-      "target": "readme_experiments_results",
-      "confidence_score": 1.0
+      "target": "readme_experiments_results"
     },
     {
       "relation": "contains",
@@ -1198,9 +2407,9 @@
       "source_file": "README.md",
       "source_location": "L48",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_directory_structure",
-      "target": "readme_other",
-      "confidence_score": 1.0
+      "target": "readme_other"
     },
     {
       "relation": "contains",
@@ -1208,9 +2417,9 @@
       "source_file": "README.md",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_directory_structure",
-      "target": "readme_source_code",
-      "confidence_score": 1.0
+      "target": "readme_source_code"
     },
     {
       "relation": "contains",
@@ -1218,9 +2427,9 @@
       "source_file": "README.md",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_directory_structure",
-      "target": "readme_tools_utilities",
-      "confidence_score": 1.0
+      "target": "readme_tools_utilities"
     },
     {
       "relation": "contains",
@@ -1228,9 +2437,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_l2_norm_predictor_notes",
-      "target": "docs_l2_norm_predictor_notes_l2_norm_predictor_easy_notes_for_revision_and_viva",
-      "confidence_score": 1.0
+      "target": "docs_l2_norm_predictor_notes_l2_norm_predictor_easy_notes_for_revision_and_viva"
     },
     {
       "relation": "contains",
@@ -1238,9 +2447,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L145",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_l2_norm_predictor_notes_l2_norm_predictor_easy_notes_for_revision_and_viva",
-      "target": "docs_l2_norm_predictor_notes_10_likely_viva_questions_and_model_answers",
-      "confidence_score": 1.0
+      "target": "docs_l2_norm_predictor_notes_10_likely_viva_questions_and_model_answers"
     },
     {
       "relation": "contains",
@@ -1248,9 +2457,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_l2_norm_predictor_notes_l2_norm_predictor_easy_notes_for_revision_and_viva",
-      "target": "docs_l2_norm_predictor_notes_1_what_this_report_is_about_in_one_line",
-      "confidence_score": 1.0
+      "target": "docs_l2_norm_predictor_notes_1_what_this_report_is_about_in_one_line"
     },
     {
       "relation": "contains",
@@ -1258,9 +2467,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_l2_norm_predictor_notes_l2_norm_predictor_easy_notes_for_revision_and_viva",
-      "target": "docs_l2_norm_predictor_notes_2_objective_in_simple_words",
-      "confidence_score": 1.0
+      "target": "docs_l2_norm_predictor_notes_2_objective_in_simple_words"
     },
     {
       "relation": "contains",
@@ -1268,9 +2477,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_l2_norm_predictor_notes_l2_norm_predictor_easy_notes_for_revision_and_viva",
-      "target": "docs_l2_norm_predictor_notes_3_experimental_setup_table",
-      "confidence_score": 1.0
+      "target": "docs_l2_norm_predictor_notes_3_experimental_setup_table"
     },
     {
       "relation": "contains",
@@ -1278,9 +2487,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L45",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_l2_norm_predictor_notes_l2_norm_predictor_easy_notes_for_revision_and_viva",
-      "target": "docs_l2_norm_predictor_notes_4_five_detection_strategies_tried_in_order",
-      "confidence_score": 1.0
+      "target": "docs_l2_norm_predictor_notes_4_five_detection_strategies_tried_in_order"
     },
     {
       "relation": "contains",
@@ -1288,9 +2497,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L60",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_l2_norm_predictor_notes_l2_norm_predictor_easy_notes_for_revision_and_viva",
-      "target": "docs_l2_norm_predictor_notes_5_three_formal_criteria_for_judging_any_trigger",
-      "confidence_score": 1.0
+      "target": "docs_l2_norm_predictor_notes_5_three_formal_criteria_for_judging_any_trigger"
     },
     {
       "relation": "contains",
@@ -1298,9 +2507,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_l2_norm_predictor_notes_l2_norm_predictor_easy_notes_for_revision_and_viva",
-      "target": "docs_l2_norm_predictor_notes_6_cross_run_evidence_what_the_numbers_actually_mean",
-      "confidence_score": 1.0
+      "target": "docs_l2_norm_predictor_notes_6_cross_run_evidence_what_the_numbers_actually_mean"
     },
     {
       "relation": "contains",
@@ -1308,9 +2517,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L103",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_l2_norm_predictor_notes_l2_norm_predictor_easy_notes_for_revision_and_viva",
-      "target": "docs_l2_norm_predictor_notes_7_side_finding_test_accuracy_plateau_in_run_3",
-      "confidence_score": 1.0
+      "target": "docs_l2_norm_predictor_notes_7_side_finding_test_accuracy_plateau_in_run_3"
     },
     {
       "relation": "contains",
@@ -1318,9 +2527,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L118",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_l2_norm_predictor_notes_l2_norm_predictor_easy_notes_for_revision_and_viva",
-      "target": "docs_l2_norm_predictor_notes_8_conclusion_and_recommendation",
-      "confidence_score": 1.0
+      "target": "docs_l2_norm_predictor_notes_8_conclusion_and_recommendation"
     },
     {
       "relation": "contains",
@@ -1328,9 +2537,9 @@
       "source_file": "docs/L2_Norm_Predictor_Notes.md",
       "source_location": "L132",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_l2_norm_predictor_notes_l2_norm_predictor_easy_notes_for_revision_and_viva",
-      "target": "docs_l2_norm_predictor_notes_9_important_terms_to_remember_quick_glossary",
-      "confidence_score": 1.0
+      "target": "docs_l2_norm_predictor_notes_9_important_terms_to_remember_quick_glossary"
     },
     {
       "relation": "contains",
@@ -1338,9 +2547,9 @@
       "source_file": "docs/dropout_gap_infographic_philosophy.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_dropout_gap_infographic_philosophy",
-      "target": "docs_dropout_gap_infographic_philosophy_design_philosophy_gate_ledger",
-      "confidence_score": 1.0
+      "target": "docs_dropout_gap_infographic_philosophy_design_philosophy_gate_ledger"
     },
     {
       "relation": "contains",
@@ -1348,9 +2557,9 @@
       "source_file": "docs/project_compilation.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_compilation",
-      "target": "docs_project_compilation_python_project_compilation",
-      "confidence_score": 1.0
+      "target": "docs_project_compilation_python_project_compilation"
     },
     {
       "relation": "contains",
@@ -1358,9 +2567,9 @@
       "source_file": "docs/project_compilation.md",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_compilation_python_project_compilation",
-      "target": "docs_project_compilation_data_modular_arithmetic_py",
-      "confidence_score": 1.0
+      "target": "docs_project_compilation_data_modular_arithmetic_py"
     },
     {
       "relation": "contains",
@@ -1368,9 +2577,9 @@
       "source_file": "docs/project_compilation.md",
       "source_location": "L55",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_compilation_python_project_compilation",
-      "target": "docs_project_compilation_models_transformer_py",
-      "confidence_score": 1.0
+      "target": "docs_project_compilation_models_transformer_py"
     },
     {
       "relation": "contains",
@@ -1378,9 +2587,9 @@
       "source_file": "docs/project_compilation.md",
       "source_location": "L110",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_compilation_python_project_compilation",
-      "target": "docs_project_compilation_plot_results_py",
-      "confidence_score": 1.0
+      "target": "docs_project_compilation_plot_results_py"
     },
     {
       "relation": "contains",
@@ -1388,9 +2597,9 @@
       "source_file": "docs/project_compilation.md",
       "source_location": "L257",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_compilation_python_project_compilation",
-      "target": "docs_project_compilation_predictors_dropout_py",
-      "confidence_score": 1.0
+      "target": "docs_project_compilation_predictors_dropout_py"
     },
     {
       "relation": "contains",
@@ -1398,9 +2607,9 @@
       "source_file": "docs/project_compilation.md",
       "source_location": "L300",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_compilation_python_project_compilation",
-      "target": "docs_project_compilation_predictors_l2_norm_py",
-      "confidence_score": 1.0
+      "target": "docs_project_compilation_predictors_l2_norm_py"
     },
     {
       "relation": "contains",
@@ -1408,9 +2617,9 @@
       "source_file": "docs/project_compilation.md",
       "source_location": "L501",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_compilation_python_project_compilation",
-      "target": "docs_project_compilation_train_py",
-      "confidence_score": 1.0
+      "target": "docs_project_compilation_train_py"
     },
     {
       "relation": "contains",
@@ -1418,9 +2627,9 @@
       "source_file": "docs/project_compilation_src.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_compilation_src",
-      "target": "docs_project_compilation_src_python_project_compilation",
-      "confidence_score": 1.0
+      "target": "docs_project_compilation_src_python_project_compilation"
     },
     {
       "relation": "contains",
@@ -1428,9 +2637,9 @@
       "source_file": "docs/project_compilation_src.md",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_compilation_src_python_project_compilation",
-      "target": "docs_project_compilation_src_data_modular_arithmetic_py",
-      "confidence_score": 1.0
+      "target": "docs_project_compilation_src_data_modular_arithmetic_py"
     },
     {
       "relation": "contains",
@@ -1438,9 +2647,9 @@
       "source_file": "docs/project_compilation_src.md",
       "source_location": "L56",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_compilation_src_python_project_compilation",
-      "target": "docs_project_compilation_src_models_transformer_py",
-      "confidence_score": 1.0
+      "target": "docs_project_compilation_src_models_transformer_py"
     },
     {
       "relation": "contains",
@@ -1448,9 +2657,9 @@
       "source_file": "docs/project_compilation_src.md",
       "source_location": "L104",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_compilation_src_python_project_compilation",
-      "target": "docs_project_compilation_src_train_py",
-      "confidence_score": 1.0
+      "target": "docs_project_compilation_src_train_py"
     },
     {
       "relation": "contains",
@@ -1458,9 +2667,9 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_collage_images",
-      "target": "tools_collage_images_get_images",
-      "confidence_score": 1.0
+      "target": "tools_collage_images_get_images"
     },
     {
       "relation": "contains",
@@ -1468,9 +2677,9 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_collage_images",
-      "target": "tools_collage_images_horizontal_collage",
-      "confidence_score": 1.0
+      "target": "tools_collage_images_horizontal_collage"
     },
     {
       "relation": "contains",
@@ -1478,9 +2687,9 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L64",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_collage_images",
-      "target": "tools_collage_images_main",
-      "confidence_score": 1.0
+      "target": "tools_collage_images_main"
     },
     {
       "relation": "contains",
@@ -1488,9 +2697,9 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_collage_images",
-      "target": "tools_collage_images_vertical_collage",
-      "confidence_score": 1.0
+      "target": "tools_collage_images_vertical_collage"
     },
     {
       "relation": "calls",
@@ -1499,9 +2708,9 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L80",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_collage_images_main",
-      "target": "tools_collage_images_get_images",
-      "confidence_score": 1.0
+      "target": "tools_collage_images_get_images"
     },
     {
       "relation": "calls",
@@ -1510,9 +2719,9 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L109",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_collage_images_main",
-      "target": "tools_collage_images_horizontal_collage",
-      "confidence_score": 1.0
+      "target": "tools_collage_images_horizontal_collage"
     },
     {
       "relation": "calls",
@@ -1521,9 +2730,9 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L111",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_collage_images_main",
-      "target": "tools_collage_images_vertical_collage",
-      "confidence_score": 1.0
+      "target": "tools_collage_images_vertical_collage"
     },
     {
       "relation": "calls",
@@ -1542,9 +2751,9 @@
       "source_file": "tools/compile_images_to_pdf.py",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_compile_images_to_pdf",
-      "target": "tools_compile_images_to_pdf_combine_images_to_pdf",
-      "confidence_score": 1.0
+      "target": "tools_compile_images_to_pdf_combine_images_to_pdf"
     },
     {
       "relation": "contains",
@@ -1552,9 +2761,9 @@
       "source_file": "tools/compile_python_files.py",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_compile_python_files",
-      "target": "tools_compile_python_files_main",
-      "confidence_score": 1.0
+      "target": "tools_compile_python_files_main"
     },
     {
       "relation": "contains",
@@ -1562,9 +2771,9 @@
       "source_file": "tools/compile_python_files.py",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_compile_python_files",
-      "target": "tools_compile_python_files_should_skip",
-      "confidence_score": 1.0
+      "target": "tools_compile_python_files_should_skip"
     },
     {
       "relation": "calls",
@@ -1573,9 +2782,9 @@
       "source_file": "tools/compile_python_files.py",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_compile_python_files_main",
-      "target": "tools_compile_python_files_should_skip",
-      "confidence_score": 1.0
+      "target": "tools_compile_python_files_should_skip"
     },
     {
       "relation": "references",
@@ -1584,9 +2793,9 @@
       "source_file": "tools/compile_python_files.py",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_compile_python_files_should_skip",
-      "target": "path",
-      "confidence_score": 1.0
+      "target": "path"
     },
     {
       "relation": "calls",
@@ -1595,9 +2804,9 @@
       "source_file": "tools/compile_python_files.py",
       "source_location": "L27",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_compile_python_files_main",
-      "target": "path",
-      "confidence_score": 1.0
+      "target": "path"
     },
     {
       "relation": "calls",
@@ -1638,9 +2847,9 @@
       "source_file": "tools/compile_python_files_to_pdf.py",
       "source_location": "L56",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_compile_python_files_to_pdf",
-      "target": "tools_compile_python_files_to_pdf_compile_python_files_to_pdf",
-      "confidence_score": 1.0
+      "target": "tools_compile_python_files_to_pdf_compile_python_files_to_pdf"
     },
     {
       "relation": "contains",
@@ -1648,9 +2857,9 @@
       "source_file": "tools/compile_python_files_to_pdf.py",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_compile_python_files_to_pdf",
-      "target": "tools_compile_python_files_to_pdf_gather_python_files",
-      "confidence_score": 1.0
+      "target": "tools_compile_python_files_to_pdf_gather_python_files"
     },
     {
       "relation": "contains",
@@ -1658,9 +2867,9 @@
       "source_file": "tools/compile_python_files_to_pdf.py",
       "source_location": "L108",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_compile_python_files_to_pdf",
-      "target": "tools_compile_python_files_to_pdf_parse_arguments",
-      "confidence_score": 1.0
+      "target": "tools_compile_python_files_to_pdf_parse_arguments"
     },
     {
       "relation": "contains",
@@ -1668,9 +2877,9 @@
       "source_file": "tools/compile_python_files_to_pdf.py",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_compile_python_files_to_pdf",
-      "target": "tools_compile_python_files_to_pdf_wrap_text",
-      "confidence_score": 1.0
+      "target": "tools_compile_python_files_to_pdf_wrap_text"
     },
     {
       "relation": "calls",
@@ -1679,9 +2888,9 @@
       "source_file": "tools/compile_python_files_to_pdf.py",
       "source_location": "L57",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_compile_python_files_to_pdf_compile_python_files_to_pdf",
-      "target": "tools_compile_python_files_to_pdf_gather_python_files",
-      "confidence_score": 1.0
+      "target": "tools_compile_python_files_to_pdf_gather_python_files"
     },
     {
       "relation": "calls",
@@ -1690,9 +2899,9 @@
       "source_file": "tools/compile_python_files_to_pdf.py",
       "source_location": "L93",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_compile_python_files_to_pdf_compile_python_files_to_pdf",
-      "target": "tools_compile_python_files_to_pdf_wrap_text",
-      "confidence_score": 1.0
+      "target": "tools_compile_python_files_to_pdf_wrap_text"
     },
     {
       "relation": "contains",
@@ -1700,9 +2909,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L137",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_generate_l2_report_corrected",
-      "target": "tools_generate_l2_report_corrected_create_report",
-      "confidence_score": 1.0
+      "target": "tools_generate_l2_report_corrected_create_report"
     },
     {
       "relation": "contains",
@@ -1710,9 +2919,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L73",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_generate_l2_report_corrected",
-      "target": "tools_generate_l2_report_corrected_extract_metrics",
-      "confidence_score": 1.0
+      "target": "tools_generate_l2_report_corrected_extract_metrics"
     },
     {
       "relation": "contains",
@@ -1720,9 +2929,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L54",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_generate_l2_report_corrected",
-      "target": "tools_generate_l2_report_corrected_find_grok_epoch",
-      "confidence_score": 1.0
+      "target": "tools_generate_l2_report_corrected_find_grok_epoch"
     },
     {
       "relation": "contains",
@@ -1730,9 +2939,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L62",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_generate_l2_report_corrected",
-      "target": "tools_generate_l2_report_corrected_find_trough_epoch",
-      "confidence_score": 1.0
+      "target": "tools_generate_l2_report_corrected_find_trough_epoch"
     },
     {
       "relation": "contains",
@@ -1740,9 +2949,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_generate_l2_report_corrected",
-      "target": "tools_generate_l2_report_corrected_load_run_data",
-      "confidence_score": 1.0
+      "target": "tools_generate_l2_report_corrected_load_run_data"
     },
     {
       "relation": "contains",
@@ -1750,9 +2959,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L578",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_generate_l2_report_corrected",
-      "target": "tools_generate_l2_report_corrected_main",
-      "confidence_score": 1.0
+      "target": "tools_generate_l2_report_corrected_main"
     },
     {
       "relation": "rationale_for",
@@ -1760,9 +2969,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_generate_l2_report_corrected_rationale_1",
-      "target": "tools_generate_l2_report_corrected",
-      "confidence_score": 1.0
+      "target": "tools_generate_l2_report_corrected"
     },
     {
       "relation": "calls",
@@ -1771,9 +2980,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L141",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_generate_l2_report_corrected_create_report",
-      "target": "tools_generate_l2_report_corrected_load_run_data",
-      "confidence_score": 1.0
+      "target": "tools_generate_l2_report_corrected_load_run_data"
     },
     {
       "relation": "calls",
@@ -1782,9 +2991,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L583",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_generate_l2_report_corrected_main",
-      "target": "tools_generate_l2_report_corrected_load_run_data",
-      "confidence_score": 1.0
+      "target": "tools_generate_l2_report_corrected_load_run_data"
     },
     {
       "relation": "rationale_for",
@@ -1792,9 +3001,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_generate_l2_report_corrected_rationale_35",
-      "target": "tools_generate_l2_report_corrected_load_run_data",
-      "confidence_score": 1.0
+      "target": "tools_generate_l2_report_corrected_load_run_data"
     },
     {
       "relation": "calls",
@@ -1803,9 +3012,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L82",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_generate_l2_report_corrected_extract_metrics",
-      "target": "tools_generate_l2_report_corrected_find_grok_epoch",
-      "confidence_score": 1.0
+      "target": "tools_generate_l2_report_corrected_find_grok_epoch"
     },
     {
       "relation": "rationale_for",
@@ -1813,9 +3022,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L55",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_generate_l2_report_corrected_rationale_55",
-      "target": "tools_generate_l2_report_corrected_find_grok_epoch",
-      "confidence_score": 1.0
+      "target": "tools_generate_l2_report_corrected_find_grok_epoch"
     },
     {
       "relation": "calls",
@@ -1824,9 +3033,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L126",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_generate_l2_report_corrected_extract_metrics",
-      "target": "tools_generate_l2_report_corrected_find_trough_epoch",
-      "confidence_score": 1.0
+      "target": "tools_generate_l2_report_corrected_find_trough_epoch"
     },
     {
       "relation": "rationale_for",
@@ -1834,9 +3043,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L63",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_generate_l2_report_corrected_rationale_63",
-      "target": "tools_generate_l2_report_corrected_find_trough_epoch",
-      "confidence_score": 1.0
+      "target": "tools_generate_l2_report_corrected_find_trough_epoch"
     },
     {
       "relation": "calls",
@@ -1845,9 +3054,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L585",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_generate_l2_report_corrected_main",
-      "target": "tools_generate_l2_report_corrected_extract_metrics",
-      "confidence_score": 1.0
+      "target": "tools_generate_l2_report_corrected_extract_metrics"
     },
     {
       "relation": "rationale_for",
@@ -1855,9 +3064,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L74",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_generate_l2_report_corrected_rationale_74",
-      "target": "tools_generate_l2_report_corrected_extract_metrics",
-      "confidence_score": 1.0
+      "target": "tools_generate_l2_report_corrected_extract_metrics"
     },
     {
       "relation": "calls",
@@ -1866,9 +3075,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L596",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_generate_l2_report_corrected_main",
-      "target": "tools_generate_l2_report_corrected_create_report",
-      "confidence_score": 1.0
+      "target": "tools_generate_l2_report_corrected_create_report"
     },
     {
       "relation": "rationale_for",
@@ -1876,9 +3085,9 @@
       "source_file": "tools/generate_l2_report_corrected.py",
       "source_location": "L138",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_generate_l2_report_corrected_rationale_138",
-      "target": "tools_generate_l2_report_corrected_create_report",
-      "confidence_score": 1.0
+      "target": "tools_generate_l2_report_corrected_create_report"
     },
     {
       "relation": "contains",
@@ -1886,9 +3095,9 @@
       "source_file": "tools/inherticance_example.py",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_inherticance_example",
-      "target": "tools_inherticance_example_child",
-      "confidence_score": 1.0
+      "target": "tools_inherticance_example_child"
     },
     {
       "relation": "contains",
@@ -1896,9 +3105,9 @@
       "source_file": "tools/inherticance_example.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_inherticance_example",
-      "target": "tools_inherticance_example_parent",
-      "confidence_score": 1.0
+      "target": "tools_inherticance_example_parent"
     },
     {
       "relation": "inherits",
@@ -1906,9 +3115,9 @@
       "source_file": "tools/inherticance_example.py",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_inherticance_example_child",
-      "target": "tools_inherticance_example_parent",
-      "confidence_score": 1.0
+      "target": "tools_inherticance_example_parent"
     },
     {
       "relation": "method",
@@ -1916,9 +3125,9 @@
       "source_file": "tools/inherticance_example.py",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_inherticance_example_parent",
-      "target": "tools_inherticance_example_parent_init",
-      "confidence_score": 1.0
+      "target": "tools_inherticance_example_parent_init"
     },
     {
       "relation": "method",
@@ -1926,9 +3135,9 @@
       "source_file": "tools/inherticance_example.py",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_inherticance_example_child",
-      "target": "tools_inherticance_example_child_init",
-      "confidence_score": 1.0
+      "target": "tools_inherticance_example_child_init"
     },
     {
       "relation": "contains",
@@ -1936,9 +3145,9 @@
       "source_file": "tools/md_to_image.py",
       "source_location": "L57",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_md_to_image",
-      "target": "tools_md_to_image_chars_per_line",
-      "confidence_score": 1.0
+      "target": "tools_md_to_image_chars_per_line"
     },
     {
       "relation": "contains",
@@ -1946,9 +3155,9 @@
       "source_file": "tools/md_to_image.py",
       "source_location": "L45",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_md_to_image",
-      "target": "tools_md_to_image_load_font",
-      "confidence_score": 1.0
+      "target": "tools_md_to_image_load_font"
     },
     {
       "relation": "contains",
@@ -1956,9 +3165,9 @@
       "source_file": "tools/md_to_image.py",
       "source_location": "L113",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_md_to_image",
-      "target": "tools_md_to_image_main",
-      "confidence_score": 1.0
+      "target": "tools_md_to_image_main"
     },
     {
       "relation": "contains",
@@ -1966,9 +3175,9 @@
       "source_file": "tools/md_to_image.py",
       "source_location": "L97",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_md_to_image",
-      "target": "tools_md_to_image_render_page",
-      "confidence_score": 1.0
+      "target": "tools_md_to_image_render_page"
     },
     {
       "relation": "contains",
@@ -1976,9 +3185,9 @@
       "source_file": "tools/md_to_image.py",
       "source_location": "L72",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_md_to_image",
-      "target": "tools_md_to_image_wrap_markdown",
-      "confidence_score": 1.0
+      "target": "tools_md_to_image_wrap_markdown"
     },
     {
       "relation": "calls",
@@ -1987,9 +3196,9 @@
       "source_file": "tools/md_to_image.py",
       "source_location": "L142",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_md_to_image_main",
-      "target": "tools_md_to_image_wrap_markdown",
-      "confidence_score": 1.0
+      "target": "tools_md_to_image_wrap_markdown"
     },
     {
       "relation": "calls",
@@ -1998,9 +3207,9 @@
       "source_file": "tools/md_to_image.py",
       "source_location": "L155",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_md_to_image_main",
-      "target": "tools_md_to_image_render_page",
-      "confidence_score": 1.0
+      "target": "tools_md_to_image_render_page"
     },
     {
       "relation": "rationale_for",
@@ -2008,9 +3217,9 @@
       "source_file": "tools/scaffold.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_scaffold_rationale_1",
-      "target": "tools_scaffold",
-      "confidence_score": 1.0
+      "target": "tools_scaffold"
     },
     {
       "relation": "contains",
@@ -2021,17 +3230,6 @@
       "confidence_score": 1.0,
       "source": "models_transformer",
       "target": "models_transformer_transformer"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/train.py",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_train",
-      "target": "models_transformer"
     },
     {
       "relation": "method",
@@ -2072,39 +3270,6 @@
       "confidence_score": 1.0,
       "source": "predictors_l2_norm_rationale_1",
       "target": "predictors_l2_norm"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/train.py",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_train",
-      "target": "predictors_l2_norm"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/train.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_train",
-      "target": "data_dataset"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/train.py",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_train",
-      "target": "data_modular_arithmetic"
     },
     {
       "relation": "imports_from",
@@ -2359,5 +3524,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "706d11c8896874c5b0f7f1814905121722bb2f85"
+  "built_at_commit": "b1ecdc707b5d069b45fb98a22daae212b6cd214d"
 }

@@ -26,7 +26,10 @@
       "Bash(mv -v markPhase1Task1Complete.gs table_raw.txt docs/)",
       "Bash(mv -v \"Thesis Gantt - Grokking Predictors Benchmark - Gantt.csv\" docs/)",
       "Bash(git commit *)",
-      "Bash(xargs basename -a)"
+      "Bash(xargs basename -a)",
+      "Bash(python run_full_benchmark.py)",
+      "Bash(pkill -f \"python run_full_benchmark.py\")",
+      "Bash(git commit -m 'Remove cleanup function from run_full_benchmark.py *)"
     ],
     "additionalDirectories": [
       "C:\\Users\\jonat\\StudioProjects\\grokking-benchmark\\src\\predictors",

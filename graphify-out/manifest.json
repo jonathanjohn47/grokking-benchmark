@@ -15,8 +15,8 @@
     "semantic_hash": ""
   },
   "src/train.py": {
-    "mtime": 1788236728.8517358,
-    "ast_hash": "013dbd2254a608d8a5507355fb2322e4",
+    "mtime": 1788286855.5405972,
+    "ast_hash": "fee87f8462476a5296587080f3048e6a",
     "semantic_hash": ""
   },
   "requirements.txt": {
@@ -25,8 +25,8 @@
     "semantic_hash": ""
   },
   ".claude/settings.local.json": {
-    "mtime": 1788247267.4835398,
-    "ast_hash": "0ded4f888b87ba66bd51fa4f07e6cd15",
+    "mtime": 1788285690.9639332,
+    "ast_hash": "099336b89630fbd0dcf1afb2dba4f3d8",
     "semantic_hash": ""
   },
   "images/initial_loss_ln98_explanation.png": {
@@ -120,8 +120,8 @@
     "semantic_hash": ""
   },
   "src/train_four_head.py": {
-    "mtime": 1788236728.8518977,
-    "ast_hash": "caf9fbb0afae152bcd8e2a5bde613b38",
+    "mtime": 1788286923.543897,
+    "ast_hash": "a234ffe39b1283d5fc02f01a11da3d72",
     "semantic_hash": ""
   },
   "src/train_shadow_layernorm.py": {
@@ -417,6 +417,21 @@
   "results/single_head/dropout/dropout_gap_infographic.png": {
     "mtime": 1788236728.841432,
     "ast_hash": "80fdaa911e426f120cf44a6370fd6a5e",
+    "semantic_hash": ""
+  },
+  "src/unified_measurements.py": {
+    "mtime": 1788286792.617473,
+    "ast_hash": "d50522e72f18d1fd8dfd7b84c22e06c7",
+    "semantic_hash": ""
+  },
+  "analyze_benchmark_results.py": {
+    "mtime": 1788287224.6291814,
+    "ast_hash": "c73920822f7b9916f7a57a9be40ce07a",
+    "semantic_hash": ""
+  },
+  "run_full_benchmark.py": {
+    "mtime": 1788287184.9429796,
+    "ast_hash": "493b5f85882b2091701cfdda9506b391",
     "semantic_hash": ""
   }
 }
