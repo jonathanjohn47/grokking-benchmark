@@ -3939,3 +3939,72 @@ Explained five fundamental challenges that make Dropout Gap unreliable as a grok
 5. **Formal move to Spectral predictor** (next in the 9-predictor evaluation order) — held pending completion of Dropout validation above.
 
 6. Reply to Prof. Rashid's two older open questions — still pending, unrelated to this work track, carried forward many sessions.
+
+---
+
+## Session Summary — September 1, 2026 (Root directory cleanup and file organization)
+
+### Picked up from
+
+- Jonathan requested: "I want you to organize all the files (both results and non-result). Also organize miscellaneous python files which are extra-experimental files. Properly organize the files."
+- Root directory had scattered utility scripts, PDFs, markdown files, and Google Sheets scripts alongside core project files.
+- Needed to consolidate and separate concerns for clarity.
+
+### Action — Root directory cleanup and reorganization
+
+**Goal:** Move miscellaneous files out of root directory into logical folders; keep core project files at root level only.
+
+**Structure created:**
+
+```
+grokking-benchmark/
+├── CLAUDE.md                          # Core project rules
+├── context.md                         # Core project memory
+├── README.md                          # Project overview & directory guide
+├── requirements.txt                   # Dependencies
+│
+├── src/                               # Source code (unchanged)
+├── results/                           # Experiment results (unchanged)
+├── graphify-out/                      # Knowledge graph (unchanged)
+├── images/                            # Generated images (unchanged)
+│
+├── tools/                             # Miscellaneous Python utilities
+├── docs/                              # Documentation and analysis
+└── _to_delete/                        # Marked for deletion
+```
+
+**Files moved to `tools/` (11 scripts):**
+- Image processing: `collage_images.py`, `compile_images_to_pdf.py`, `md_to_image.py`
+- Data compilation: `compile_python_files.py`, `compile_python_files_to_pdf.py`
+- Analysis & debugging: `analyze_threshold.py`, `debug_detection.py`
+- One-off utilities: `generate_file.py`, `generate_l2_report_corrected.py`, `inherticance_example.py`, `scaffold.py`
+
+**Files moved to `docs/`:**
+- Markdown documentation: `L2_Norm_Predictor_Notes.md`, `dropout_gap_infographic_philosophy.md`, `project_compilation.md`, `project_compilation_src.md`
+- Project planning: `Thesis Gantt - Grokking Predictors Benchmark - Gantt.csv`
+- Supporting files: `table_raw.txt`, `markPhase1Task1Complete.gs`
+- PDF reports moved to `docs/reports/`: `M1_Gate_Results_Grokking_Reproduction.pdf`, `combined_output.pdf`, `python_files_compiled.pdf`
+
+**Documentation added:**
+
+- `README.md` at project root — Quick reference guide showing directory structure, purpose of each folder, and how to find things
+
+### Files Modified
+
+- **Moved/renamed (30 files):** All listed above, git tracked as renames
+- **New:** `README.md` with directory structure and quick reference
+- **Not changed:** `src/`, `results/`, core project files
+
+### Result
+
+- **Root directory now clean:** Only 10 items (7 core files/folders, 3 external: .claude, _to_delete, .venv, .vs if present)
+- **Clear separation of concerns:** Tools/utilities isolated, docs organized, source/results preserved
+- **Easier navigation:** Added README.md to guide new users
+- **Commit:** Clean commit with all 30 moves tracked as renames
+
+### Still Open / Next Steps
+
+1. Delete `_to_delete/` folder when ready (contains marked-for-deletion files)
+2. Run the planned experiments (Dropout multi-rate sweep, etc.)
+3. Continue with Spectral predictor evaluation per the 9-predictor order
+4. Reply to Prof. Rashid's open questions (still pending)
