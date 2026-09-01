@@ -4191,6 +4191,113 @@ Once the four baseline predictors (Dropout, Spectral, AGE, HTSR Alpha) are compl
 
 ---
 
+## Session Summary — September 1, 2026 (Unified measurement collection refactor)
+
+### Problem Identified
+
+Previous session analysis revealed gaps in measurements across predictors:
+- **L2 Norm:** Missing smoothed L2 norm, acceleration derivatives, standalone visualizations in single-head
+- **Dropout:** Multi-rate sweep data saved but visualization graphs missing for both single-head and four-head
+- **Inconsistency:** Single-head and four-head had different measurement completeness
+- **Risk:** Examiners would catch these gaps in thesis submission
+
+### Solution: Unified Measurement System
+
+Created `src/unified_measurements.py` — centralized measurement collection class with complete implementations for both predictors.
+
+**Features:**
+1. **Complete L2 Norm measurements:**
+   - Raw L2 norm history
+   - Smoothed L2 norm (low-pass filtered)
+   - Fast & slow moving averages (log-epoch grid)
+   - Fast MA of slow MA (double smoothing)
+   - MA-of-MA differential
+   - Acceleration derivatives (raw, smoothed, double-smoothed)
+
+2. **Complete Dropout measurements:**
+   - Single-rate gap (p=0.9) for backward compatibility
+   - Multi-rate sweep (all 5 rates: 0.1, 0.3, 0.5, 0.7, 0.9)
+   - Train accuracy with dropout
+   - Eval accuracy without dropout
+
+3. **Standalone visualizations generated for each predictor:**
+   - L2 Norm: curve, MA crossover detection, MA-of-MA differential (log + linear)
+   - Dropout: multi-rate sweep overlay (all 5 rates on one plot)
+
+4. **Combined PDF report** with 4 pages:
+   - Page 1: Grokking curve (train vs test accuracy)
+   - Page 2: Loss curve
+   - Page 3: L2 Norm + moving averages
+   - Page 4: Dropout gap (multi-rate)
+
+### Refactored Scripts
+
+**src/train.py (single-head):**
+- Now imports & uses `PredictorMeasurements` class
+- Calls `measurements.save_training_data()` after training
+- Calls `measurements.save_l2_norm_data()` after L2 Norm computation
+- Calls `measurements.save_dropout_data()` after dropout computation
+- Generates all standalone visualizations + combined report
+- Output structure: `results/single_head/{training,l2_norm,dropout,reports}/`
+
+**src/train_four_head.py (four-head, multi-run):**
+- Identical measurement approach as single-head
+- Runs numbered: run_1, run_2, run_3, etc. (independent seeds)
+- Output structure: `runs/four_head/run_N/{training,l2_norm,dropout,reports}/`
+- Runs can execute in parallel (each independent, different output directory)
+
+### Gap Filling
+
+**L2 Norm gaps now filled:**
+- ✓ Smoothed L2 norm (both versions)
+- ✓ Acceleration derivatives (both versions)
+- ✓ Standalone visualization graphs (both versions)
+- ✓ All MA computations saved (both versions)
+
+**Dropout gaps now filled:**
+- ✓ Multi-rate sweep data saved (both versions)
+- ✓ Multi-rate visualization graphs generated (both versions)
+- ✓ Single-rate data still available for backward compatibility
+
+**Consistency achieved:**
+- ✓ Single-head and four-head collect identical measurements
+- ✓ Same visualization generation logic for both
+- ✓ Same output organization for both
+
+### Files Modified
+
+- `src/unified_measurements.py` — NEW, 278 lines
+- `src/train.py` — Refactored to use unified system
+- `src/train_four_head.py` — Refactored to use unified system
+
+### Next Actions
+
+1. **Run single-head training:** `python src/train.py`
+   - Will generate complete measurements + visualizations + report
+
+2. **Run four-head training (3 times):**
+   - `python src/train_four_head.py` (run_1)
+   - `python src/train_four_head.py` (run_2)
+   - `python src/train_four_head.py` (run_3)
+   - Runs execute in parallel (different seeds, different output dirs)
+
+3. **Validate both predictors** against 3-criteria protocol:
+   - Always predictive (precedes grokking in all runs)
+   - Tight & consistent (low variance across 3 runs)
+   - Above noise floor (signal > random variation)
+
+4. **Proceed to Spectral predictor** (next in evaluation order)
+
+### Key Insight
+
+Unified measurements approach means:
+- Any new predictor added follows same pattern
+- Single-head baseline and four-head baseline collect same data
+- Examiners will find complete, consistent measurements across all predictors
+- No more "gap" issues when comparing predictors
+
+---
+
 ## Thesis Motivation
 
 ### Why This Research Matters
