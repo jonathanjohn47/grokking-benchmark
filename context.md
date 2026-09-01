@@ -4521,6 +4521,70 @@ Pipeline: single-head training → four-head run_1 → four-head run_2 → four-
 
 ---
 
+## Session Summary — September 2, 2026 (Training now runs on MPS, earlier it was CPU)
+
+### Observation
+
+Jonathan noticed the console output has changed. Earlier, during this benchmark
+work, training was running on plain CPU. Now the same scripts are picking up the
+Apple Silicon GPU and running on the `mps` device.
+
+Console confirmation from Jonathan's machine:
+
+```
+Device: mps
+Optimizer: AdamW (
+    ...
+    lr: 0.001
+    weight_decay: 1.0
+    decoupled_weight_decay: True
+)
+```
+
+### What changed
+
+- **Runtime device only.** Training is now executing on `mps` instead of CPU.
+- No code change was needed for this. Both `src/train.py` (line 28) and
+  `src/train_four_head.py` (line 123) already had the device-selection line
+  `device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")`
+  from the July 10 MPS session. Earlier the CPU fallback was being taken (MPS not
+  available in that run environment); now `torch.backends.mps.is_available()`
+  returns True, so the `mps` branch is used and every batch tensor is moved with
+  `.to(device)` as before.
+
+### What did NOT change
+
+- No predictor code changed.
+- No training hyperparameters changed — still AdamW, `lr=0.001`,
+  `weight_decay=1.0`, decoupled weight decay.
+- No change to the benchmark pipeline or output paths.
+- The transformer architecture (`transformer.py`) is untouched.
+
+### Why it matters
+
+- All benchmark runs from this point onward are on `mps`. Earlier scratch/CPU
+  runs and MPS runs have already been checked for the same grokking-curve shape
+  and L2-norm pattern back in the July 10 session, so numerical behaviour is
+  expected to match; MPS is simply faster.
+- When comparing timing or run logs, remember: results produced before this point
+  in the current benchmark cycle may have been CPU runs, results after are MPS
+  runs.
+
+### Files Modified
+
+- `context.md` — this session summary added. No source files changed.
+
+### Next
+
+Unchanged from previous session:
+
+1. Run `python run_full_benchmark.py` (single-head + 4-head x3 + analysis)
+2. Review `benchmark_analysis/` charts and PDF report
+3. Validate L2 Norm & Dropout against 3-criteria protocol
+4. Proceed to Spectral predictor
+
+---
+
 ## FULL SESSION SUMMARY — September 1, 2026 (Complete refactor + pipeline setup)
 
 ### Overview

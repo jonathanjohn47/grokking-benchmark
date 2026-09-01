@@ -21,196 +21,6 @@
   },
   "nodes": [
     {
-      "label": "analyze_benchmark_results.py",
-      "file_type": "code",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "analyze_benchmark_results",
-      "community": 20,
-      "norm_label": "analyze_benchmark_results.py"
-    },
-    {
-      "label": "BenchmarkAnalyzer",
-      "file_type": "code",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L17",
-      "_origin": "ast",
-      "id": "analyze_benchmark_results_benchmarkanalyzer",
-      "community": 20,
-      "norm_label": "benchmarkanalyzer"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L18",
-      "_origin": "ast",
-      "id": "analyze_benchmark_results_benchmarkanalyzer_init",
-      "community": 20,
-      "norm_label": ".__init__()"
-    },
-    {
-      "label": ".load_single_head()",
-      "file_type": "code",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L25",
-      "_origin": "ast",
-      "id": "analyze_benchmark_results_benchmarkanalyzer_load_single_head",
-      "community": 20,
-      "norm_label": ".load_single_head()"
-    },
-    {
-      "label": ".load_four_head_runs()",
-      "file_type": "code",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L50",
-      "_origin": "ast",
-      "id": "analyze_benchmark_results_benchmarkanalyzer_load_four_head_runs",
-      "community": 20,
-      "norm_label": ".load_four_head_runs()"
-    },
-    {
-      "label": ".grok_epoch()",
-      "file_type": "code",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L78",
-      "_origin": "ast",
-      "id": "analyze_benchmark_results_benchmarkanalyzer_grok_epoch",
-      "community": 20,
-      "norm_label": ".grok_epoch()"
-    },
-    {
-      "label": ".generate_grokking_curves()",
-      "file_type": "code",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L82",
-      "_origin": "ast",
-      "id": "analyze_benchmark_results_benchmarkanalyzer_generate_grokking_curves",
-      "community": 20,
-      "norm_label": ".generate_grokking_curves()"
-    },
-    {
-      "label": ".generate_l2_norm_comparison()",
-      "file_type": "code",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L129",
-      "_origin": "ast",
-      "id": "analyze_benchmark_results_benchmarkanalyzer_generate_l2_norm_comparison",
-      "community": 20,
-      "norm_label": ".generate_l2_norm_comparison()"
-    },
-    {
-      "label": ".generate_dropout_comparison()",
-      "file_type": "code",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L171",
-      "_origin": "ast",
-      "id": "analyze_benchmark_results_benchmarkanalyzer_generate_dropout_comparison",
-      "community": 20,
-      "norm_label": ".generate_dropout_comparison()"
-    },
-    {
-      "label": ".generate_run_consistency_report()",
-      "file_type": "code",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L212",
-      "_origin": "ast",
-      "id": "analyze_benchmark_results_benchmarkanalyzer_generate_run_consistency_report",
-      "community": 20,
-      "norm_label": ".generate_run_consistency_report()"
-    },
-    {
-      "label": ".run()",
-      "file_type": "code",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L324",
-      "_origin": "ast",
-      "id": "analyze_benchmark_results_benchmarkanalyzer_run",
-      "community": 20,
-      "norm_label": ".run()"
-    },
-    {
-      "label": "Load single-head baseline results.",
-      "file_type": "rationale",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L26",
-      "_origin": "ast",
-      "id": "analyze_benchmark_results_rationale_26",
-      "community": 20,
-      "norm_label": "load single-head baseline results."
-    },
-    {
-      "label": "Load all four-head runs.",
-      "file_type": "rationale",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L51",
-      "_origin": "ast",
-      "id": "analyze_benchmark_results_rationale_51",
-      "community": 20,
-      "norm_label": "load all four-head runs."
-    },
-    {
-      "label": "Find grokking epoch (test acc > 90%).",
-      "file_type": "rationale",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L79",
-      "_origin": "ast",
-      "id": "analyze_benchmark_results_rationale_79",
-      "community": 20,
-      "norm_label": "find grokking epoch (test acc > 90%)."
-    },
-    {
-      "label": "Compare grokking curves across all runs.",
-      "file_type": "rationale",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L83",
-      "_origin": "ast",
-      "id": "analyze_benchmark_results_rationale_83",
-      "community": 20,
-      "norm_label": "compare grokking curves across all runs."
-    },
-    {
-      "label": "Compare L2 Norm curves.",
-      "file_type": "rationale",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L130",
-      "_origin": "ast",
-      "id": "analyze_benchmark_results_rationale_130",
-      "community": 20,
-      "norm_label": "compare l2 norm curves."
-    },
-    {
-      "label": "Compare Dropout gap curves.",
-      "file_type": "rationale",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L172",
-      "_origin": "ast",
-      "id": "analyze_benchmark_results_rationale_172",
-      "community": 20,
-      "norm_label": "compare dropout gap curves."
-    },
-    {
-      "label": "Generate PDF report with run consistency metrics.",
-      "file_type": "rationale",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L213",
-      "_origin": "ast",
-      "id": "analyze_benchmark_results_rationale_213",
-      "community": 20,
-      "norm_label": "generate pdf report with run consistency metrics."
-    },
-    {
-      "label": "Execute full analysis.",
-      "file_type": "rationale",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L325",
-      "_origin": "ast",
-      "id": "analyze_benchmark_results_rationale_325",
-      "community": 20,
-      "norm_label": "execute full analysis."
-    },
-    {
       "label": "run_full_benchmark.py",
       "file_type": "code",
       "source_file": "run_full_benchmark.py",
@@ -221,20 +31,10 @@
       "norm_label": "run_full_benchmark.py"
     },
     {
-      "label": "cleanup_results()",
-      "file_type": "code",
-      "source_file": "run_full_benchmark.py",
-      "source_location": "L15",
-      "_origin": "ast",
-      "id": "run_full_benchmark_cleanup_results",
-      "community": 21,
-      "norm_label": "cleanup_results()"
-    },
-    {
       "label": "run_single_head()",
       "file_type": "code",
       "source_file": "run_full_benchmark.py",
-      "source_location": "L42",
+      "source_location": "L25",
       "_origin": "ast",
       "id": "run_full_benchmark_run_single_head",
       "community": 21,
@@ -244,39 +44,129 @@
       "label": "run_four_head()",
       "file_type": "code",
       "source_file": "run_full_benchmark.py",
-      "source_location": "L61",
+      "source_location": "L44",
       "_origin": "ast",
       "id": "run_full_benchmark_run_four_head",
       "community": 21,
       "norm_label": "run_four_head()"
     },
     {
+      "label": "BenchmarkAnalyzer",
+      "file_type": "code",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L67",
+      "_origin": "ast",
+      "id": "run_full_benchmark_benchmarkanalyzer",
+      "community": 21,
+      "norm_label": "benchmarkanalyzer"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L68",
+      "_origin": "ast",
+      "id": "run_full_benchmark_benchmarkanalyzer_init",
+      "community": 21,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": ".load_single_head()",
+      "file_type": "code",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L75",
+      "_origin": "ast",
+      "id": "run_full_benchmark_benchmarkanalyzer_load_single_head",
+      "community": 21,
+      "norm_label": ".load_single_head()"
+    },
+    {
+      "label": ".load_four_head_runs()",
+      "file_type": "code",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L100",
+      "_origin": "ast",
+      "id": "run_full_benchmark_benchmarkanalyzer_load_four_head_runs",
+      "community": 21,
+      "norm_label": ".load_four_head_runs()"
+    },
+    {
+      "label": ".grok_epoch()",
+      "file_type": "code",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L128",
+      "_origin": "ast",
+      "id": "run_full_benchmark_benchmarkanalyzer_grok_epoch",
+      "community": 21,
+      "norm_label": ".grok_epoch()"
+    },
+    {
+      "label": ".generate_grokking_curves()",
+      "file_type": "code",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L132",
+      "_origin": "ast",
+      "id": "run_full_benchmark_benchmarkanalyzer_generate_grokking_curves",
+      "community": 21,
+      "norm_label": ".generate_grokking_curves()"
+    },
+    {
+      "label": ".generate_l2_norm_comparison()",
+      "file_type": "code",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L179",
+      "_origin": "ast",
+      "id": "run_full_benchmark_benchmarkanalyzer_generate_l2_norm_comparison",
+      "community": 21,
+      "norm_label": ".generate_l2_norm_comparison()"
+    },
+    {
+      "label": ".generate_dropout_comparison()",
+      "file_type": "code",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L221",
+      "_origin": "ast",
+      "id": "run_full_benchmark_benchmarkanalyzer_generate_dropout_comparison",
+      "community": 21,
+      "norm_label": ".generate_dropout_comparison()"
+    },
+    {
+      "label": ".generate_run_consistency_report()",
+      "file_type": "code",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L262",
+      "_origin": "ast",
+      "id": "run_full_benchmark_benchmarkanalyzer_generate_run_consistency_report",
+      "community": 21,
+      "norm_label": ".generate_run_consistency_report()"
+    },
+    {
+      "label": ".run()",
+      "file_type": "code",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L374",
+      "_origin": "ast",
+      "id": "run_full_benchmark_benchmarkanalyzer_run",
+      "community": 21,
+      "norm_label": ".run()"
+    },
+    {
       "label": "main()",
       "file_type": "code",
       "source_file": "run_full_benchmark.py",
-      "source_location": "L80",
+      "source_location": "L411",
       "_origin": "ast",
       "id": "run_full_benchmark_main",
       "community": 21,
       "norm_label": "main()"
     },
     {
-      "label": "Remove existing results to start fresh.",
-      "file_type": "rationale",
-      "source_file": "run_full_benchmark.py",
-      "source_location": "L16",
-      "_origin": "ast",
-      "id": "run_full_benchmark_rationale_16",
-      "community": 21,
-      "norm_label": "remove existing results to start fresh."
-    },
-    {
       "label": "Run single-head baseline training.",
       "file_type": "rationale",
       "source_file": "run_full_benchmark.py",
-      "source_location": "L43",
+      "source_location": "L26",
       "_origin": "ast",
-      "id": "run_full_benchmark_rationale_43",
+      "id": "run_full_benchmark_rationale_26",
       "community": 21,
       "norm_label": "run single-head baseline training."
     },
@@ -284,11 +174,91 @@
       "label": "Run one four-head training session.",
       "file_type": "rationale",
       "source_file": "run_full_benchmark.py",
-      "source_location": "L62",
+      "source_location": "L45",
       "_origin": "ast",
-      "id": "run_full_benchmark_rationale_62",
+      "id": "run_full_benchmark_rationale_45",
       "community": 21,
       "norm_label": "run one four-head training session."
+    },
+    {
+      "label": "Load single-head baseline results.",
+      "file_type": "rationale",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L76",
+      "_origin": "ast",
+      "id": "run_full_benchmark_rationale_76",
+      "community": 21,
+      "norm_label": "load single-head baseline results."
+    },
+    {
+      "label": "Load all four-head runs.",
+      "file_type": "rationale",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L101",
+      "_origin": "ast",
+      "id": "run_full_benchmark_rationale_101",
+      "community": 21,
+      "norm_label": "load all four-head runs."
+    },
+    {
+      "label": "Find grokking epoch (test acc > 90%).",
+      "file_type": "rationale",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L129",
+      "_origin": "ast",
+      "id": "run_full_benchmark_rationale_129",
+      "community": 21,
+      "norm_label": "find grokking epoch (test acc > 90%)."
+    },
+    {
+      "label": "Compare grokking curves across all runs.",
+      "file_type": "rationale",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L133",
+      "_origin": "ast",
+      "id": "run_full_benchmark_rationale_133",
+      "community": 21,
+      "norm_label": "compare grokking curves across all runs."
+    },
+    {
+      "label": "Compare L2 Norm curves.",
+      "file_type": "rationale",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L180",
+      "_origin": "ast",
+      "id": "run_full_benchmark_rationale_180",
+      "community": 21,
+      "norm_label": "compare l2 norm curves."
+    },
+    {
+      "label": "Compare Dropout gap curves.",
+      "file_type": "rationale",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L222",
+      "_origin": "ast",
+      "id": "run_full_benchmark_rationale_222",
+      "community": 21,
+      "norm_label": "compare dropout gap curves."
+    },
+    {
+      "label": "Generate PDF report with run consistency metrics.",
+      "file_type": "rationale",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L263",
+      "_origin": "ast",
+      "id": "run_full_benchmark_rationale_263",
+      "community": 21,
+      "norm_label": "generate pdf report with run consistency metrics."
+    },
+    {
+      "label": "Execute full analysis.",
+      "file_type": "rationale",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L375",
+      "_origin": "ast",
+      "id": "run_full_benchmark_rationale_375",
+      "community": 21,
+      "norm_label": "execute full analysis."
     },
     {
       "label": "train.py",
@@ -1386,7 +1356,7 @@
       "source_file": "src/models/transformer.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 3,
+      "community": 0,
       "norm_label": "transformer.py",
       "id": "models_transformer"
     },
@@ -1396,7 +1366,7 @@
       "source_file": "src/models/transformer.py",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 3,
+      "community": 0,
       "norm_label": "transformer",
       "id": "models_transformer_transformer"
     },
@@ -1406,7 +1376,7 @@
       "source_file": "src/models/transformer.py",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 3,
+      "community": 0,
       "norm_label": ".__init__()",
       "id": "models_transformer_transformer_init"
     },
@@ -1416,7 +1386,7 @@
       "source_file": "src/models/transformer.py",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 3,
+      "community": 0,
       "norm_label": ".forward()",
       "id": "models_transformer_transformer_forward"
     },
@@ -1655,279 +1625,11 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L17",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results",
-      "target": "analyze_benchmark_results_benchmarkanalyzer",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L171",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_benchmarkanalyzer",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_dropout_comparison",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L82",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_benchmarkanalyzer",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_grokking_curves",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L129",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_benchmarkanalyzer",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_l2_norm_comparison",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L212",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_benchmarkanalyzer",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_run_consistency_report",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L78",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_benchmarkanalyzer",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_grok_epoch",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L18",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_benchmarkanalyzer",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_init",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L50",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_benchmarkanalyzer",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_load_four_head_runs",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L25",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_benchmarkanalyzer",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_load_single_head",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L324",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_benchmarkanalyzer",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_run",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L330",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_benchmarkanalyzer_run",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_load_single_head",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L26",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_rationale_26",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_load_single_head",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L335",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_benchmarkanalyzer_run",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_load_four_head_runs",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L51",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_rationale_51",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_load_four_head_runs",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L91",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_benchmarkanalyzer_generate_grokking_curves",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_grok_epoch",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L226",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_benchmarkanalyzer_generate_run_consistency_report",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_grok_epoch",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L79",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_rationale_79",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_grok_epoch",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L340",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_benchmarkanalyzer_run",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_grokking_curves",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L83",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_rationale_83",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_grokking_curves",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L341",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_benchmarkanalyzer_run",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_l2_norm_comparison",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L130",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_rationale_130",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_l2_norm_comparison",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L342",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_benchmarkanalyzer_run",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_dropout_comparison",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L172",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_rationale_172",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_dropout_comparison",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L343",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_benchmarkanalyzer_run",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_run_consistency_report",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L213",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_rationale_213",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_generate_run_consistency_report",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analyze_benchmark_results.py",
-      "source_location": "L325",
-      "weight": 1.0,
-      "source": "analyze_benchmark_results_rationale_325",
-      "target": "analyze_benchmark_results_benchmarkanalyzer_run",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "run_full_benchmark.py",
-      "source_location": "L15",
+      "source_location": "L67",
       "weight": 1.0,
       "source": "run_full_benchmark",
-      "target": "run_full_benchmark_cleanup_results",
+      "target": "run_full_benchmark_benchmarkanalyzer",
       "confidence_score": 1.0
     },
     {
@@ -1936,9 +1638,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L80",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark",
-      "target": "run_full_benchmark_main",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_main"
     },
     {
       "relation": "contains",
@@ -1946,9 +1648,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L61",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark",
-      "target": "run_full_benchmark_run_four_head",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_run_four_head"
     },
     {
       "relation": "contains",
@@ -1956,30 +1658,9 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L42",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark",
-      "target": "run_full_benchmark_run_single_head",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "run_full_benchmark.py",
-      "source_location": "L94",
-      "weight": 1.0,
-      "source": "run_full_benchmark_main",
-      "target": "run_full_benchmark_cleanup_results",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "run_full_benchmark.py",
-      "source_location": "L16",
-      "weight": 1.0,
-      "source": "run_full_benchmark_rationale_16",
-      "target": "run_full_benchmark_cleanup_results",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_run_single_head"
     },
     {
       "relation": "calls",
@@ -1988,18 +1669,29 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L97",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark_main",
-      "target": "run_full_benchmark_run_single_head",
-      "confidence_score": 1.0
+      "target": "run_full_benchmark_run_single_head"
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "run_full_benchmark.py",
-      "source_location": "L43",
+      "source_location": "L26",
       "weight": 1.0,
-      "source": "run_full_benchmark_rationale_43",
+      "source": "run_full_benchmark_rationale_26",
       "target": "run_full_benchmark_run_single_head",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "run_full_benchmark_run_single_head",
+      "target": "run_full_benchmark_benchmarkanalyzer_run",
       "confidence_score": 1.0
     },
     {
@@ -2009,18 +1701,309 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L105",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_full_benchmark_main",
+      "target": "run_full_benchmark_run_four_head"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "run_full_benchmark_rationale_45",
       "target": "run_full_benchmark_run_four_head",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "run_full_benchmark_run_four_head",
+      "target": "run_full_benchmark_benchmarkanalyzer_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L221",
+      "weight": 1.0,
+      "source": "run_full_benchmark_benchmarkanalyzer",
+      "target": "run_full_benchmark_benchmarkanalyzer_generate_dropout_comparison",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L132",
+      "weight": 1.0,
+      "source": "run_full_benchmark_benchmarkanalyzer",
+      "target": "run_full_benchmark_benchmarkanalyzer_generate_grokking_curves",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L179",
+      "weight": 1.0,
+      "source": "run_full_benchmark_benchmarkanalyzer",
+      "target": "run_full_benchmark_benchmarkanalyzer_generate_l2_norm_comparison",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L262",
+      "weight": 1.0,
+      "source": "run_full_benchmark_benchmarkanalyzer",
+      "target": "run_full_benchmark_benchmarkanalyzer_generate_run_consistency_report",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L128",
+      "weight": 1.0,
+      "source": "run_full_benchmark_benchmarkanalyzer",
+      "target": "run_full_benchmark_benchmarkanalyzer_grok_epoch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "run_full_benchmark_benchmarkanalyzer",
+      "target": "run_full_benchmark_benchmarkanalyzer_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L100",
+      "weight": 1.0,
+      "source": "run_full_benchmark_benchmarkanalyzer",
+      "target": "run_full_benchmark_benchmarkanalyzer_load_four_head_runs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "source": "run_full_benchmark_benchmarkanalyzer",
+      "target": "run_full_benchmark_benchmarkanalyzer_load_single_head",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L374",
+      "weight": 1.0,
+      "source": "run_full_benchmark_benchmarkanalyzer",
+      "target": "run_full_benchmark_benchmarkanalyzer_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L443",
+      "weight": 1.0,
+      "source": "run_full_benchmark_main",
+      "target": "run_full_benchmark_benchmarkanalyzer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L380",
+      "weight": 1.0,
+      "source": "run_full_benchmark_benchmarkanalyzer_run",
+      "target": "run_full_benchmark_benchmarkanalyzer_load_single_head",
       "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "run_full_benchmark.py",
-      "source_location": "L62",
+      "source_location": "L76",
       "weight": 1.0,
-      "source": "run_full_benchmark_rationale_62",
-      "target": "run_full_benchmark_run_four_head",
+      "source": "run_full_benchmark_rationale_76",
+      "target": "run_full_benchmark_benchmarkanalyzer_load_single_head",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L384",
+      "weight": 1.0,
+      "source": "run_full_benchmark_benchmarkanalyzer_run",
+      "target": "run_full_benchmark_benchmarkanalyzer_load_four_head_runs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L101",
+      "weight": 1.0,
+      "source": "run_full_benchmark_rationale_101",
+      "target": "run_full_benchmark_benchmarkanalyzer_load_four_head_runs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L141",
+      "weight": 1.0,
+      "source": "run_full_benchmark_benchmarkanalyzer_generate_grokking_curves",
+      "target": "run_full_benchmark_benchmarkanalyzer_grok_epoch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L276",
+      "weight": 1.0,
+      "source": "run_full_benchmark_benchmarkanalyzer_generate_run_consistency_report",
+      "target": "run_full_benchmark_benchmarkanalyzer_grok_epoch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L129",
+      "weight": 1.0,
+      "source": "run_full_benchmark_rationale_129",
+      "target": "run_full_benchmark_benchmarkanalyzer_grok_epoch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L388",
+      "weight": 1.0,
+      "source": "run_full_benchmark_benchmarkanalyzer_run",
+      "target": "run_full_benchmark_benchmarkanalyzer_generate_grokking_curves",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L133",
+      "weight": 1.0,
+      "source": "run_full_benchmark_rationale_133",
+      "target": "run_full_benchmark_benchmarkanalyzer_generate_grokking_curves",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L389",
+      "weight": 1.0,
+      "source": "run_full_benchmark_benchmarkanalyzer_run",
+      "target": "run_full_benchmark_benchmarkanalyzer_generate_l2_norm_comparison",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L180",
+      "weight": 1.0,
+      "source": "run_full_benchmark_rationale_180",
+      "target": "run_full_benchmark_benchmarkanalyzer_generate_l2_norm_comparison",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L390",
+      "weight": 1.0,
+      "source": "run_full_benchmark_benchmarkanalyzer_run",
+      "target": "run_full_benchmark_benchmarkanalyzer_generate_dropout_comparison",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L222",
+      "weight": 1.0,
+      "source": "run_full_benchmark_rationale_222",
+      "target": "run_full_benchmark_benchmarkanalyzer_generate_dropout_comparison",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L391",
+      "weight": 1.0,
+      "source": "run_full_benchmark_benchmarkanalyzer_run",
+      "target": "run_full_benchmark_benchmarkanalyzer_generate_run_consistency_report",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L263",
+      "weight": 1.0,
+      "source": "run_full_benchmark_rationale_263",
+      "target": "run_full_benchmark_benchmarkanalyzer_generate_run_consistency_report",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L444",
+      "weight": 1.0,
+      "source": "run_full_benchmark_main",
+      "target": "run_full_benchmark_benchmarkanalyzer_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "run_full_benchmark.py",
+      "source_location": "L375",
+      "weight": 1.0,
+      "source": "run_full_benchmark_rationale_375",
+      "target": "run_full_benchmark_benchmarkanalyzer_run",
       "confidence_score": 1.0
     },
     {
@@ -3524,5 +3507,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "b1ecdc707b5d069b45fb98a22daae212b6cd214d"
+  "built_at_commit": "696f2fd5a73d259f59e2869fd812ed9b3470ce5e"
 }

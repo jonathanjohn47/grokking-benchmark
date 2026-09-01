@@ -1,16 +1,16 @@
-# Graph Report - grokking-benchmark  (2026-09-01)
+# Graph Report - grokking-benchmark  (2026-09-02)
 
 ## Corpus Check
-- 41 files · ~398,296 words
+- 40 files · ~360,964 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 163 nodes · 181 edges · 22 communities (18 shown, 4 thin omitted)
+- 160 nodes · 182 edges · 20 communities (17 shown, 3 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b1ecdc70`
+- Built from commit: `696f2fd5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -18,7 +18,6 @@
 - [[_COMMUNITY_Community 0|Community 0]]
 - [[_COMMUNITY_Community 1|Community 1]]
 - [[_COMMUNITY_Community 2|Community 2]]
-- [[_COMMUNITY_Community 3|Community 3]]
 - [[_COMMUNITY_Community 4|Community 4]]
 - [[_COMMUNITY_Community 6|Community 6]]
 - [[_COMMUNITY_Community 7|Community 7]]
@@ -30,20 +29,19 @@
 - [[_COMMUNITY_Community 13|Community 13]]
 - [[_COMMUNITY_Community 15|Community 15]]
 - [[_COMMUNITY_Community 19|Community 19]]
-- [[_COMMUNITY_Community 20|Community 20]]
 - [[_COMMUNITY_Community 21|Community 21]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `PredictorMeasurements` - 11 edges
-2. `L2 Norm Predictor — Easy Notes for Revision and Viva` - 11 edges
-3. `BenchmarkAnalyzer` - 10 edges
+1. `BenchmarkAnalyzer` - 11 edges
+2. `PredictorMeasurements` - 11 edges
+3. `L2 Norm Predictor — Easy Notes for Revision and Viva` - 11 edges
 4. `Directory Structure` - 7 edges
 5. `Python Project Compilation` - 7 edges
 6. `ModularArithmeticDataset` - 7 edges
 7. `main()` - 5 edges
-8. `extract_metrics()` - 5 edges
-9. `ModularArithmeticDataset` - 5 edges
-10. `main()` - 4 edges
+8. `main()` - 5 edges
+9. `extract_metrics()` - 5 edges
+10. `ModularArithmeticDataset` - 5 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `main()` --calls--> `Path`  [INFERRED]
@@ -61,11 +59,11 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (22 total, 4 thin omitted)
+## Communities (20 total, 3 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.11
-Nodes (9): get_dataloaders(), ModularArithmeticDataset, generate_pairs(), get_dataloaders(), ModularArithmeticDataset, Dataset, L2 Norm Predictor  This module implements the L2 norm predictor., migrate_legacy_flat_run() (+1 more)
+Cohesion: 0.09
+Nodes (10): get_dataloaders(), ModularArithmeticDataset, generate_pairs(), get_dataloaders(), ModularArithmeticDataset, Dataset, Transformer, L2 Norm Predictor  This module implements the L2 norm predictor. (+2 more)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.23
@@ -107,27 +105,25 @@ Nodes (4): get_images(), horizontal_collage(), main(), vertical_collage()
 Cohesion: 0.10
 Nodes (11): PredictorMeasurements, Unified measurement collection for L2 Norm and Dropout predictors. Ensures consi, Collects and saves all measurements for both predictors., Generate standalone Dropout visualization graphs., Generate combined PDF report with all measurements., Create subdirectories for each predictor., Apply simple moving average smoothing., Save core training metrics. (+3 more)
 
-### Community 20 - "Community 20"
-Cohesion: 0.15
-Nodes (9): BenchmarkAnalyzer, Compare L2 Norm curves., Compare Dropout gap curves., Generate PDF report with run consistency metrics., Load single-head baseline results., Execute full analysis., Load all four-head runs., Find grokking epoch (test acc > 90%). (+1 more)
-
 ### Community 21 - "Community 21"
-Cohesion: 0.36
-Nodes (7): cleanup_results(), main(), Remove existing results to start fresh., Run single-head baseline training., Run one four-head training session., run_four_head(), run_single_head()
+Cohesion: 0.13
+Nodes (14): BenchmarkAnalyzer, main(), Load all four-head runs., Find grokking epoch (test acc > 90%)., Compare grokking curves across all runs., Compare L2 Norm curves., Compare Dropout gap curves., Run single-head baseline training. (+6 more)
 
 ## Knowledge Gaps
 - **30 isolated node(s):** `Core Project Files`, `Source Code`, `Experiments & Results`, `Tools & Utilities`, `Documentation` (+25 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Path` connect `Community 7` to `Community 9`, `Community 11`?**
-  _High betweenness centrality (0.010) - this node is a cross-community bridge._
-- **What connects `Load single-head baseline results.`, `Load all four-head runs.`, `Find grokking epoch (test acc > 90%).` to the rest of the system?**
-  _60 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _High betweenness centrality (0.011) - this node is a cross-community bridge._
+- **What connects `Run single-head baseline training.`, `Run one four-head training session.`, `Load single-head baseline results.` to the rest of the system?**
+  _59 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.11462450592885376 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.09401709401709402 - nodes in this community are weakly interconnected._
 - **Should `Community 19` be split into smaller, more focused modules?**
   _Cohesion score 0.10476190476190476 - nodes in this community are weakly interconnected._
+- **Should `Community 21` be split into smaller, more focused modules?**
+  _Cohesion score 0.13405797101449277 - nodes in this community are weakly interconnected._

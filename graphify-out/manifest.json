@@ -25,8 +25,8 @@
     "semantic_hash": ""
   },
   ".claude/settings.local.json": {
-    "mtime": 1788285690.9639332,
-    "ast_hash": "099336b89630fbd0dcf1afb2dba4f3d8",
+    "mtime": 1788288097.7080894,
+    "ast_hash": "8dd429ea48678ff0da55cb401a399a16",
     "semantic_hash": ""
   },
   "images/initial_loss_ln98_explanation.png": {
@@ -239,46 +239,6 @@
     "ast_hash": "29aed68533febd8ab6a0f57b28761a78",
     "semantic_hash": ""
   },
-  "results/four_head/reports/L2_Norm_Four_Head_Analysis.pdf": {
-    "mtime": 1788236728.810788,
-    "ast_hash": "f791acad2765a876d011f1753a373437",
-    "semantic_hash": ""
-  },
-  "results/four_head/run_1/reports/training_report.pdf": {
-    "mtime": 1788236728.8196,
-    "ast_hash": "17c0d7fe1cdfd45b166fa5dd48dc068b",
-    "semantic_hash": ""
-  },
-  "results/four_head/run_2/reports/training_report.pdf": {
-    "mtime": 1788236728.8297138,
-    "ast_hash": "64abf237b3a761b0319eb5af36fbfee6",
-    "semantic_hash": ""
-  },
-  "results/four_head/run_3/reports/training_report.pdf": {
-    "mtime": 1788236728.8384457,
-    "ast_hash": "4a8ddd081d593e0eab58e606df3222d1",
-    "semantic_hash": ""
-  },
-  "results/single_head/reports/L2_Norm_Comprehensive_Report.pdf": {
-    "mtime": 1788236728.846657,
-    "ast_hash": "7571106d33455e2b04a0cf809f817bdc",
-    "semantic_hash": ""
-  },
-  "results/single_head/reports/L2_Norm_Comprehensive_Report_CORRECTED.pdf": {
-    "mtime": 1788236728.8470361,
-    "ast_hash": "8157eb24598e4beebfc5d45fd93eb723",
-    "semantic_hash": ""
-  },
-  "results/single_head/reports/L2_Norm_Predictor_Report.pdf": {
-    "mtime": 1788236728.848038,
-    "ast_hash": "5c15e246600c6ee7efc4d66dbb5c1034",
-    "semantic_hash": ""
-  },
-  "results/single_head/training/training_report.pdf": {
-    "mtime": 1788236728.848769,
-    "ast_hash": "aea140d524653f5c7b61410b5ee9208f",
-    "semantic_hash": ""
-  },
   "_to_delete/Grokking Curve.png": {
     "mtime": 1788236728.7861056,
     "ast_hash": "60cfb62bdeab3af58ddffaeef41d99f7",
@@ -334,104 +294,14 @@
     "ast_hash": "92fb47e6b07b7f874d2f3d7ecf970373",
     "semantic_hash": ""
   },
-  "results/four_head/run_1/dropout/dropout_gap_curve.png": {
-    "mtime": 1788236728.8112547,
-    "ast_hash": "ac1402c3421e9edcb8259c5a3eff2930",
-    "semantic_hash": ""
-  },
-  "results/four_head/run_1/l2_norm/l2_norm_curve.png": {
-    "mtime": 1788236728.8156953,
-    "ast_hash": "e854464be03c96fceb58c8620a2e2378",
-    "semantic_hash": ""
-  },
-  "results/four_head/run_1/l2_norm/ma_of_ma_diff_vs_grokking_linear.png": {
-    "mtime": 1788236728.8176608,
-    "ast_hash": "8b803e84dd2a7d31b5c4f67566c16436",
-    "semantic_hash": ""
-  },
-  "results/four_head/run_1/l2_norm/ma_of_slow_ma_crossover.png": {
-    "mtime": 1788236728.8179772,
-    "ast_hash": "526fb36d1176d4f46030d6ba45fea018",
-    "semantic_hash": ""
-  },
-  "results/four_head/run_1/l2_norm/ma_of_slow_ma_diff.png": {
-    "mtime": 1788236728.818219,
-    "ast_hash": "e20fa0620995119e04d254e08fddf6f0",
-    "semantic_hash": ""
-  },
-  "results/four_head/run_1/l2_norm/ma_of_slow_ma_diff_linear.png": {
-    "mtime": 1788236728.81847,
-    "ast_hash": "9698e39cb9104eb783ce6b5736ad8d3d",
-    "semantic_hash": ""
-  },
-  "results/four_head/run_1/training/grokking_curve.png": {
-    "mtime": 1788236728.819983,
-    "ast_hash": "3235bc8b2ed42d1b685535395aa30681",
-    "semantic_hash": ""
-  },
-  "results/four_head/run_1/training/loss_curve.png": {
-    "mtime": 1788236728.8201947,
-    "ast_hash": "eb8d3b4d51097234ce6dad9281fce00e",
-    "semantic_hash": ""
-  },
-  "results/four_head/run_2/dropout/dropout_gap_curve.png": {
-    "mtime": 1788236728.8217797,
-    "ast_hash": "924cd53c6959961a284d696dbbd57ad8",
-    "semantic_hash": ""
-  },
-  "results/four_head/run_2/l2_norm/l2_norm_curve.png": {
-    "mtime": 1788236728.8258696,
-    "ast_hash": "633e27872629a739bb089fe3c22bde6f",
-    "semantic_hash": ""
-  },
-  "results/four_head/run_2/l2_norm/ma_of_ma_diff_vs_grokking_linear.png": {
-    "mtime": 1788236728.8277209,
-    "ast_hash": "aa4532209479083cca445ca799b369fa",
-    "semantic_hash": ""
-  },
-  "results/four_head/run_2/l2_norm/ma_of_slow_ma_crossover.png": {
-    "mtime": 1788236728.8280146,
-    "ast_hash": "4709940373aaf1767c7af0bba3568893",
-    "semantic_hash": ""
-  },
-  "results/four_head/run_2/l2_norm/ma_of_slow_ma_diff.png": {
-    "mtime": 1788236728.8282526,
-    "ast_hash": "318a97541ebd2cfa79ee89fc47261929",
-    "semantic_hash": ""
-  },
-  "results/four_head/run_2/l2_norm/ma_of_slow_ma_diff_linear.png": {
-    "mtime": 1788236728.8285398,
-    "ast_hash": "902ffe3bac9d614711b73bc07abda221",
-    "semantic_hash": ""
-  },
-  "results/four_head/run_2/training/grokking_curve.png": {
-    "mtime": 1788236728.8300707,
-    "ast_hash": "d55883e8145aa9529ec7982ae132a2b0",
-    "semantic_hash": ""
-  },
-  "results/four_head/run_2/training/loss_curve.png": {
-    "mtime": 1788236728.8302538,
-    "ast_hash": "1917e830a2868ba9f0cc30fb9ed6442e",
-    "semantic_hash": ""
-  },
-  "results/single_head/dropout/dropout_gap_infographic.png": {
-    "mtime": 1788236728.841432,
-    "ast_hash": "80fdaa911e426f120cf44a6370fd6a5e",
-    "semantic_hash": ""
-  },
   "src/unified_measurements.py": {
     "mtime": 1788286792.617473,
     "ast_hash": "d50522e72f18d1fd8dfd7b84c22e06c7",
     "semantic_hash": ""
   },
-  "analyze_benchmark_results.py": {
-    "mtime": 1788287224.6291814,
-    "ast_hash": "c73920822f7b9916f7a57a9be40ce07a",
-    "semantic_hash": ""
-  },
   "run_full_benchmark.py": {
-    "mtime": 1788287184.9429796,
-    "ast_hash": "493b5f85882b2091701cfdda9506b391",
+    "mtime": 1788288072.5232587,
+    "ast_hash": "6dc80eac31518007cbb3617b3e297b80",
     "semantic_hash": ""
   }
 }
