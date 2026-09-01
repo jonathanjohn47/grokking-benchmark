@@ -9,35 +9,6 @@ Cleans previous results before starting.
 import subprocess
 import sys
 import os
-import shutil
-from pathlib import Path
-
-def cleanup_results():
-    """Remove existing results to start fresh."""
-    print("\n" + "="*70)
-    print("CLEANUP: Removing previous results")
-    print("="*70)
-
-    results_dir = Path("results/single_head")
-    runs_dir = Path("runs/four_head")
-
-    removed = []
-
-    if results_dir.exists():
-        shutil.rmtree(results_dir)
-        removed.append(str(results_dir))
-        print(f"  ✓ Removed {results_dir}")
-
-    if runs_dir.exists():
-        shutil.rmtree(runs_dir)
-        removed.append(str(runs_dir))
-        print(f"  ✓ Removed {runs_dir}")
-
-    if removed:
-        print(f"\nCleaned {len(removed)} directories. Starting fresh.\n")
-    else:
-        print("\nNo previous results found. Starting fresh.\n")
-
 
 def run_single_head():
     """Run single-head baseline training."""
@@ -89,9 +60,6 @@ def main():
     print("\nTotal runs: 4 (1 single-head + 3 four-head)")
     print("Expected time: ~30-60 minutes depending on hardware")
     print("="*70)
-
-    # Stage 0: Cleanup
-    cleanup_results()
 
     # Stage 1: Single-head
     if not run_single_head():
