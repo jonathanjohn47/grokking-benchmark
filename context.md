@@ -4092,6 +4092,27 @@ Professor asked: "Why 3 runs per predictor?" Original answer was unsatisfying (a
 
 - `context.md` — this entry (no code changes)
 
+### Choice of Prime Modulus: P = 97 (not 113)
+
+**Literature basis:**
+- Power et al. (2022): P = 97 (division mod 97 in key examples)
+- Nanda et al. (2023): P = 113 (mechanistic interpretability work)
+
+**Why 97, not 113:**
+
+Different primes change grokking behavior:
+- Grokking timing shifts
+- Gap dynamics differ
+- Predictor thresholds change
+- Phase transitions move
+
+**Critical reason:** Switching to P = 113 breaks reproducibility against Power et al.'s published grokking curves and benchmarks. Thesis validates predictors against canonical grokking phenomenon as published. Using different prime makes results incomparable to literature baselines.
+
+Nanda chose P = 113 for mechanistic work (different goal). We chose P = 97 to stay aligned with original grokking definition and allow direct validation.
+
 ### Status
 
-✅ Methodology question resolved and defensible. Ready for professor discussion.
+✅ Methodology questions resolved:
+- 3-run protocol: justified by Power et al. standard
+- P = 97 choice: reproducibility against published curves
+- Ready for professor discussion.
