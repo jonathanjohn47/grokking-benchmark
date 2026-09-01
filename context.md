@@ -5117,3 +5117,25 @@ and `main()` with everything already done doing zero work.
 
 - `run_full_benchmark.py` — resumable Stage 1 + conditional Stage 2.
 - `context.md` — this addendum.
+
+---
+
+## End-of-session state — September 2, 2026
+
+Commits this session (on top of `77b01d5 Graphify`):
+
+- `07979af` — consolidate benchmark on four-head; archive single-head
+- `025aa8a` — Dropout predictor: multi-rate sweep only, drop hardcoded p=0.9
+- `a2eb335` — legacy plot scripts: drop p=0.9, use sweep + current dir layout
+- `d603f77` — run_full_benchmark.py: resume from where the last run stopped
+- (this commit) — context.md + regenerated graphify-out
+
+Working tree verified clean before the first real run: `runs/four_head/`
+empty, `benchmark_analysis/` absent, no stray root PDFs/PNGs,
+`results/` holds only `README.md`, single-head is under `archive/`.
+
+Jonathan is about to run `python run_full_benchmark.py` for the first full
+four-head benchmark (3 seeded runs, 40000 epochs each, L2 Norm + full
+dropout rate sweep every epoch, then analysis into `benchmark_analysis/`).
+
+Nothing pending in code. Next data point is that run's output.

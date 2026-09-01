@@ -9,16 +9,6 @@
     "ast_hash": "f999f00cb044dc9e5c5515780c6fbbbc",
     "semantic_hash": ""
   },
-  "src/models/transformer.py": {
-    "mtime": 1788236728.8498902,
-    "ast_hash": "ab8e1d25661732dac33978a27a30b3cb",
-    "semantic_hash": ""
-  },
-  "src/train.py": {
-    "mtime": 1788286855.5405972,
-    "ast_hash": "fee87f8462476a5296587080f3048e6a",
-    "semantic_hash": ""
-  },
   "requirements.txt": {
     "mtime": 1782217698.4460037,
     "ast_hash": "8200c752c6779728099a0daad8611534",
@@ -85,8 +75,8 @@
     "semantic_hash": ""
   },
   "src/generate_l2_report.py": {
-    "mtime": 1788236728.8495026,
-    "ast_hash": "73fe3837cc218d7f02b98ede87f980e3",
+    "mtime": 1788296390.72712,
+    "ast_hash": "7d353590a242bc7b8a8535dba44634b3",
     "semantic_hash": ""
   },
   "src/models/model_shadow_with_layernorm.py": {
@@ -99,14 +89,9 @@
     "ast_hash": "1e6e1688f6d98fa3a685b4801478f426",
     "semantic_hash": ""
   },
-  "src/plot_results.py": {
-    "mtime": 1788236728.850206,
-    "ast_hash": "b5ccaa76fb3123effc654478a12c82e7",
-    "semantic_hash": ""
-  },
   "src/plot_results_four_head.py": {
-    "mtime": 1788236728.8503485,
-    "ast_hash": "85309538c102596bcd4b6b491c449fe9",
+    "mtime": 1788296535.1030061,
+    "ast_hash": "4d744f5bea7f175517997afc819ffcc2",
     "semantic_hash": ""
   },
   "src/plot_shadow_layernorm.py": {
@@ -115,13 +100,13 @@
     "semantic_hash": ""
   },
   "src/predictors/dropout.py": {
-    "mtime": 1788236728.8505297,
-    "ast_hash": "cb48e6bbe9de38309b03ed8cd439dacd",
+    "mtime": 1788295641.1289897,
+    "ast_hash": "07ca8737b33caed681d15158887defba",
     "semantic_hash": ""
   },
   "src/train_four_head.py": {
-    "mtime": 1788286923.543897,
-    "ast_hash": "a234ffe39b1283d5fc02f01a11da3d72",
+    "mtime": 1788295698.5391183,
+    "ast_hash": "3c9127ea4990ad8098dc3a4dbdfdf807",
     "semantic_hash": ""
   },
   "src/train_shadow_layernorm.py": {
@@ -295,13 +280,63 @@
     "semantic_hash": ""
   },
   "src/unified_measurements.py": {
-    "mtime": 1788286792.617473,
-    "ast_hash": "d50522e72f18d1fd8dfd7b84c22e06c7",
+    "mtime": 1788295654.7501113,
+    "ast_hash": "c8731bae963d6853ad4e5e7e2df91619",
     "semantic_hash": ""
   },
   "run_full_benchmark.py": {
-    "mtime": 1788288072.5232587,
-    "ast_hash": "6dc80eac31518007cbb3617b3e297b80",
+    "mtime": 1788297042.2482162,
+    "ast_hash": "03f3e2e590ad0c3a4dbb7ac14525b430",
+    "semantic_hash": ""
+  },
+  "archive/single_head/models/transformer.py": {
+    "mtime": 1788236728.8498902,
+    "ast_hash": "ab8e1d25661732dac33978a27a30b3cb",
+    "semantic_hash": ""
+  },
+  "archive/single_head/plot_results.py": {
+    "mtime": 1788236728.850206,
+    "ast_hash": "b5ccaa76fb3123effc654478a12c82e7",
+    "semantic_hash": ""
+  },
+  "archive/single_head/train.py": {
+    "mtime": 1788286855.5405972,
+    "ast_hash": "fee87f8462476a5296587080f3048e6a",
+    "semantic_hash": ""
+  },
+  "archive/single_head/README.md": {
+    "mtime": 1788295124.019897,
+    "ast_hash": "f03e5c9ff03512cb3599e22887764480",
+    "semantic_hash": ""
+  },
+  "archive/single_head/results/reports/training_report.pdf": {
+    "mtime": 1788293770.4119132,
+    "ast_hash": "7a0f91bc1cb253a0a2310b4f2c317825",
+    "semantic_hash": ""
+  },
+  "archive/single_head/results/dropout/dropout_gap_curve.png": {
+    "mtime": 1788293770.0423446,
+    "ast_hash": "430e1cc63f9e256b441d0fe3ab50fcee",
+    "semantic_hash": ""
+  },
+  "archive/single_head/results/l2_norm/l2_norm_curve.png": {
+    "mtime": 1788293769.404876,
+    "ast_hash": "c9d2524a286b3d5a40be3cf97a2862e9",
+    "semantic_hash": ""
+  },
+  "archive/single_head/results/l2_norm/ma_of_ma_diff.png": {
+    "mtime": 1788293769.7150943,
+    "ast_hash": "8e28a5d685ce845442413c267d5923a1",
+    "semantic_hash": ""
+  },
+  "archive/single_head/results/l2_norm/ma_of_ma_diff_linear.png": {
+    "mtime": 1788293769.8291996,
+    "ast_hash": "e920540a300263d715d2a9a015450b3a",
+    "semantic_hash": ""
+  },
+  "archive/single_head/results/l2_norm/ma_of_slow_ma_crossover.png": {
+    "mtime": 1788293769.559326,
+    "ast_hash": "0e1b6159d1b0ee7f7e435c9c95870098",
     "semantic_hash": ""
   }
 }
