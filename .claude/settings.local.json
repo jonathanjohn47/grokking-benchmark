@@ -24,7 +24,8 @@
       "Bash(mkdir -p tools docs/reports)",
       "Bash(grep -E '\\\\.\\(py|pdf|md\\)$')",
       "Bash(mv -v markPhase1Task1Complete.gs table_raw.txt docs/)",
-      "Bash(mv -v \"Thesis Gantt - Grokking Predictors Benchmark - Gantt.csv\" docs/)"
+      "Bash(mv -v \"Thesis Gantt - Grokking Predictors Benchmark - Gantt.csv\" docs/)",
+      "Bash(git commit *)"
     ],
     "additionalDirectories": [
       "C:\\Users\\jonat\\StudioProjects\\grokking-benchmark\\src\\predictors",
