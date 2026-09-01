@@ -15,6 +15,7 @@ from predictors.l2_norm import (
 from data.modular_arithmetic import get_dataloaders
 from models.transformer_four_head import TransformerFourHead
 from predictors.dropout import compute_dropout_gap, compute_dropout_gap_multi_rate
+from unified_measurements import PredictorMeasurements
 
 # ======================================================================
 # 4-HEAD VARIANT of train.py.
@@ -104,7 +105,10 @@ output_dir = os.path.join(four_head_dir, f"run_{run_number}")
 os.makedirs(output_dir, exist_ok=True)
 os.chdir(output_dir)
 
-print(f"This is Run {run_number}. All outputs will be saved to results/four_head/run_{run_number}/")
+# Initialize unified measurements system
+measurements = PredictorMeasurements(output_dir, model_type="four_head")
+
+print(f"This is Run {run_number}. All outputs will be saved to runs/four_head/run_{run_number}/")
 
 # NEW random seed on every run, instead of a fixed one. torch.seed() picks
 # a fresh, non-deterministic seed itself and also returns the exact number
@@ -194,31 +198,10 @@ for epoch in range(num_epochs):
 
     print(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}, Train Accuracy: {train_acc_history[-1]:.4f}, Test Accuracy: {test_acc_history[-1]:.4f}, L2 Norm: {l2_norm_history[-1]:.4f}, Dropout Gap (p=0.9): {results[0.9]['dropout_gap']:.4f}")
 
-np.save("train_acc_history.npy", train_acc_history)
-np.save("test_acc_history.npy", test_acc_history)
-np.save("loss_history.npy", loss_history)
-np.save("l2_norm_history.npy", l2_norm_history)
-np.save("dropout_gap_epochs.npy", dropout_gap_epochs)
-np.save("dropout_gap_history.npy", dropout_gap_history)
-np.save("dropout_train_acc_history.npy", dropout_train_acc_history)
-np.save("dropout_eval_acc_history.npy", dropout_eval_acc_history)
+# Save all measurements using unified system
+measurements.save_training_data(train_acc_history, test_acc_history, loss_history)
 
-# Save multi-rate dropout gap history as 2-D array
-dropout_gap_by_rate = np.array(
-    [dropout_gap_history_by_rate[rate] for rate in dropout_rates]
-)
-np.save("dropout_gap_by_rate.npy", dropout_gap_by_rate)
-np.save("dropout_rates.npy", np.array(dropout_rates))
-
-print(f"Training data saved (results/four_head/run_{run_number}/):")
-print("  - train_acc_history.npy")
-print("  - test_acc_history.npy")
-print("  - loss_history.npy")
-print("  - l2_norm_history.npy")
-print("  - dropout_gap_epochs.npy")
-print("  - dropout_gap_history.npy")
-print("  - dropout_train_acc_history.npy")
-print("  - dropout_eval_acc_history.npy")
+grok_epoch = np.argmax(np.array(test_acc_history) > 0.9)
 
 
 
@@ -230,12 +213,6 @@ print("="*60)
 epoch_grid, fast_ma, slow_ma = compute_fast_slow_moving_averages(l2_norm_history, fast_window=50, slow_window=200)
 
 detection_epoch = detect_ma_crossover(epoch_grid, fast_ma, slow_ma, skip_epochs=100)
-
-grok_epoch = np.argmax(np.array(test_acc_history) > 0.9)
-
-np.save("epoch_grid.npy", epoch_grid)
-np.save("fast_ma.npy", fast_ma)
-np.save("slow_ma.npy", slow_ma)
 
 print(f"\nDetection Results:")
 if detection_epoch is not None:
@@ -264,9 +241,6 @@ noise_floor = compute_noise_floor(ma_of_ma_diff, epoch_grid, quiet_epoch_cutoff=
 
 trigger_epoch = detect_ma_of_ma_zero_crossing(epoch_grid, ma_of_ma_diff, skip_epochs=100)
 
-np.save("fast_ma_of_slow_ma.npy", fast_ma_of_slow_ma)
-np.save("ma_of_ma_diff.npy", ma_of_ma_diff)
-
 print(f"\nNoise floor: {noise_floor:.6f}")
 if trigger_epoch is not None:
     trigger_lead_time = grok_epoch - trigger_epoch
@@ -277,10 +251,13 @@ else:
     print("  No trigger detected")
     print(f"  Grok epoch (test acc > 90%): {grok_epoch}")
 
+# Save all L2 Norm measurements
+measurements.save_l2_norm_data(
+    l2_norm_history, epoch_grid, fast_ma, slow_ma,
+    fast_ma_of_slow_ma, ma_of_ma_diff, detection_epoch
+)
 
-
-# Dropout Predictor: gap tracked at every epoch during training (see loop
-# above). We simply report the last tracked value here.
+# Dropout Predictor: gap tracked at every epoch during training
 print("\n" + "="*60)
 print("DROPOUT PREDICTOR (4-head model): Gap tracked every epoch")
 print("="*60)
@@ -289,67 +266,51 @@ print(f"  Accuracy with dropout (train mode, p=0.9): {dropout_train_acc_history[
 print(f"  Accuracy without dropout (eval mode, p=0.0): {dropout_eval_acc_history[-1]:.4f}")
 print(f"  Gap: {dropout_gap_history[-1]:.4f}")
 
+# Save all Dropout measurements
+measurements.save_dropout_data(
+    dropout_gap_epochs, dropout_gap_history, dropout_gap_history_by_rate,
+    dropout_train_acc_history, dropout_eval_acc_history, dropout_rates
+)
+
 
 # ======================================================================
-# PDF REPORT GENERATION
+# VISUALIZATION & REPORT GENERATION
 # ======================================================================
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_pdf import PdfPages
-
 print("\n" + "="*60)
-print("PDF REPORT GENERATION (4-head model)")
+print("VISUALIZATION & REPORT GENERATION (4-head model)")
 print("="*60)
 
-epochs_axis = range(1, num_epochs + 1)
+# Generate standalone L2 Norm visualizations
+measurements.generate_l2_norm_visualizations(
+    l2_norm_history, epoch_grid, fast_ma, slow_ma,
+    fast_ma_of_slow_ma, ma_of_ma_diff, test_acc_history,
+    grok_epoch, detection_epoch, trigger_epoch
+)
+print("[OK] L2 Norm visualizations saved to runs/four_head/run_{}/l2_norm/".format(run_number))
 
-with PdfPages("training_report.pdf") as pdf:
+# Generate standalone Dropout visualizations
+measurements.generate_dropout_visualizations(
+    dropout_gap_epochs, dropout_gap_history_by_rate,
+    dropout_rates, test_acc_history, grok_epoch
+)
+print("[OK] Dropout visualizations saved to runs/four_head/run_{}/dropout/".format(run_number))
 
-    fig1, ax1 = plt.subplots(figsize=(12, 7))
-    ax1.plot(epochs_axis, train_acc_history, label="Train Accuracy", color="steelblue", linewidth=2)
-    ax1.plot(epochs_axis, test_acc_history, label="Test Accuracy", color="seagreen", linewidth=2)
-    ax1.set_xscale("log")
-    ax1.set_xlabel("Epoch (log scale)")
-    ax1.set_ylabel("Accuracy")
-    ax1.set_title("Grokking Curve (4-head model): Train vs. Test Accuracy")
-    ax1.legend(loc="center right")
-    ax1.grid(True, alpha=0.3)
-    pdf.savefig(fig1)
-    plt.close(fig1)
+# Generate combined PDF report
+report_path = measurements.generate_combined_report(
+    train_acc_history, test_acc_history, loss_history, l2_norm_history,
+    dropout_gap_epochs, dropout_gap_history_by_rate, dropout_rates,
+    epoch_grid, fast_ma, slow_ma, grok_epoch, detection_epoch
+)
+print(f"[OK] PDF report saved to {report_path} (4 pages: all measurements)")
 
-    fig2, ax2 = plt.subplots(figsize=(12, 7))
-    ax2.plot(epochs_axis, loss_history, color="darkorange", linewidth=2)
-    ax2.set_xscale("log")
-    ax2.set_xlabel("Epoch (log scale)")
-    ax2.set_ylabel("Loss")
-    ax2.set_title("Training Loss (4-head model)")
-    ax2.grid(True, alpha=0.3)
-    pdf.savefig(fig2)
-    plt.close(fig2)
-
-    fig3, ax3 = plt.subplots(figsize=(12, 7))
-    ax3.plot(epochs_axis, l2_norm_history, color="purple", linewidth=2, label="L2 Norm")
-    if detection_epoch is not None:
-        ax3.axvline(x=detection_epoch, color="red", linestyle="--", linewidth=2,
-                    label=f"MA Crossover (epoch {detection_epoch:.0f})")
-    ax3.set_xscale("log")
-    ax3.set_xlabel("Epoch (log scale)")
-    ax3.set_ylabel("L2 Norm")
-    ax3.set_title("L2 Norm of Model Weights (4-head model)")
-    ax3.legend(loc="upper right")
-    ax3.grid(True, alpha=0.3)
-    pdf.savefig(fig3)
-    plt.close(fig3)
-
-    fig4, ax4 = plt.subplots(figsize=(12, 7))
-    ax4.plot(dropout_gap_epochs, dropout_gap_history, color="crimson", linewidth=2)
-    ax4.set_xscale("log")
-    ax4.set_xlabel("Epoch (log scale)")
-    ax4.set_ylabel("Dropout Gap")
-    ax4.set_title("Dropout Gap (4-head model)")
-    ax4.grid(True, alpha=0.3)
-    pdf.savefig(fig4)
-    plt.close(fig4)
-
-print(f"[OK] PDF report saved to results/four_head/run_{run_number}/training_report.pdf (4 pages: 4 graphs)")
+print("\n" + "="*60)
+print("RUN {} COMPLETE".format(run_number))
+print("="*60)
+print(f"Grok epoch: {grok_epoch}")
+print(f"L2 Norm MA crossover: {detection_epoch if detection_epoch else 'Not detected'}")
+print(f"L2 Norm MA-of-MA trigger: {trigger_epoch if trigger_epoch else 'Not detected'}")
+print(f"\nAll measurements saved to runs/four_head/run_{}/".format(run_number))
+print(f"  - training/ : raw training data")
+print(f"  - l2_norm/ : L2 norm measurements + visualizations")
+print(f"  - dropout/ : dropout measurements + visualizations")
+print(f"  - reports/ : combined PDF report")
