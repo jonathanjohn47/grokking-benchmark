@@ -20,11 +20,16 @@
       "Bash(rm -f /c/Users/jonat/StudioProjects/grokking-benchmark/.git/HEAD.lock)",
       "Bash(git status *)",
       "Bash(Start-Sleep -Milliseconds 500)",
-      "Bash(rm -f .git/index.lock)"
+      "Bash(rm -f .git/index.lock)",
+      "Bash(mkdir -p tools docs/reports)",
+      "Bash(grep -E '\\\\.\\(py|pdf|md\\)$')",
+      "Bash(mv -v markPhase1Task1Complete.gs table_raw.txt docs/)",
+      "Bash(mv -v \"Thesis Gantt - Grokking Predictors Benchmark - Gantt.csv\" docs/)"
     ],
     "additionalDirectories": [
       "C:\\Users\\jonat\\StudioProjects\\grokking-benchmark\\src\\predictors",
-      "C:\\Users\\jonat\\StudioProjects\\grokking-benchmark\\.git"
+      "C:\\Users\\jonat\\StudioProjects\\grokking-benchmark\\.git",
+      "/Users/jonathanjohn/Documents/grokking-benchmark"
     ]
   },
   "additionalDirectories": [

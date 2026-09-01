@@ -1,16 +1,16 @@
 # Graph Report - grokking-benchmark  (2026-07-10)
 
 ## Corpus Check
-- 10 files · ~212,033 words
+- 12 files · ~215,009 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 25 nodes · 29 edges · 5 communities (2 shown, 3 thin omitted)
+- 29 nodes · 32 edges · 6 communities (3 shown, 3 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c74812f7`
+- Built from commit: `65e217c0`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -25,13 +25,13 @@
 1. `ModularArithmeticDataset` - 7 edges
 2. `ModularArithmeticDataset` - 5 edges
 3. `Python Project Compilation` - 4 edges
-4. `generate_pairs()` - 3 edges
-5. `Transformer` - 3 edges
+4. `Transformer` - 3 edges
+5. `generate_pairs()` - 3 edges
 6. `get_dataloaders()` - 2 edges
 7. `get_dataloaders()` - 2 edges
-8. `data/modular_arithmetic.py` - 1 edges
-9. `models/transformer.py` - 1 edges
-10. `train.py` - 1 edges
+8. `L2 Norm Predictor  This module implements the L2 norm predictor.` - 1 edges
+9. `data/modular_arithmetic.py` - 1 edges
+10. `models/transformer.py` - 1 edges
 
 ## Surprising Connections (you probably didn't know these)
 - None detected - all connections are within the same source files.
@@ -42,7 +42,7 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (5 total, 3 thin omitted)
+## Communities (6 total, 3 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.38
@@ -61,8 +61,8 @@ Nodes (4): data/modular_arithmetic.py, models/transformer.py, Python Project Com
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `ModularArithmeticDataset` connect `Community 0` to `Community 1`?**
-  _High betweenness centrality (0.253) - this node is a cross-community bridge._
+  _High betweenness centrality (0.220) - this node is a cross-community bridge._
 - **Why does `ModularArithmeticDataset` connect `Community 2` to `Community 1`?**
-  _High betweenness centrality (0.146) - this node is a cross-community bridge._
-- **What connects `data/modular_arithmetic.py`, `models/transformer.py`, `train.py` to the rest of the system?**
-  _3 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _High betweenness centrality (0.127) - this node is a cross-community bridge._
+- **What connects `L2 Norm Predictor  This module implements the L2 norm predictor.`, `data/modular_arithmetic.py`, `models/transformer.py` to the rest of the system?**
+  _4 weakly-connected nodes found - possible documentation gaps or missing edges._

@@ -10,13 +10,13 @@
     "semantic_hash": ""
   },
   "src/models/transformer.py": {
-    "mtime": 1783643799.6875155,
-    "ast_hash": "298496b24d7cb0064adc8d761594ebf4",
+    "mtime": 1783651294.3300838,
+    "ast_hash": "716cb2644f070997e75a357f571084e4",
     "semantic_hash": ""
   },
   "src/train.py": {
-    "mtime": 1783645264.9493058,
-    "ast_hash": "e96d9540368f556ec037017c120adff2",
+    "mtime": 1783651235.978468,
+    "ast_hash": "e97958e9f164a5f60658cc4dbfa16d72",
     "semantic_hash": ""
   },
   "requirements.txt": {
@@ -55,8 +55,8 @@
     "semantic_hash": ""
   },
   ".claude/settings.local.json": {
-    "mtime": 1783596592.035149,
-    "ast_hash": "cca58af8ba28eb68891a62516f3d9da0",
+    "mtime": 1783651378.091927,
+    "ast_hash": "9eda935fa603413f76ba93916560b06d",
     "semantic_hash": ""
   },
   "images/initial_loss_ln98_explanation.png": {
@@ -85,8 +85,23 @@
     "semantic_hash": ""
   },
   "grokking_curve.png": {
-    "mtime": 1783647484.1398838,
-    "ast_hash": "60cfb62bdeab3af58ddffaeef41d99f7",
+    "mtime": 1783653752.7810485,
+    "ast_hash": "a2e04b2c04c85091f126163200767bfe",
+    "semantic_hash": ""
+  },
+  "generate_file.py": {
+    "mtime": 1783647898.8546257,
+    "ast_hash": "12a5b09db315dc4901647b28203c90eb",
+    "semantic_hash": ""
+  },
+  "src/predictors/l2_norm.py": {
+    "mtime": 1783648137.0351865,
+    "ast_hash": "cc5f2cfab48d54ca12c14d46d65fa308",
+    "semantic_hash": ""
+  },
+  "l2_norm_curve.png": {
+    "mtime": 1783653752.8526015,
+    "ast_hash": "ee2df2f4bd3c9ef243f2dc695f618caf",
     "semantic_hash": ""
   }
 }
