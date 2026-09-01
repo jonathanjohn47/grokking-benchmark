@@ -458,7 +458,10 @@ def main():
     print("STAGE 2: Analysis & Visualization")
     print("="*70)
 
-    if newly_run == 0 and _analysis_outputs_present():
+    master_pdfs_present = (Path("benchmark_analysis/master_plots.pdf").exists()
+                           and Path("benchmark_analysis/master_data.pdf").exists())
+
+    if newly_run == 0 and _analysis_outputs_present() and master_pdfs_present:
         print("Nothing new since last run and benchmark_analysis/ is already "
               "populated — skipping analysis regeneration.")
     else:
@@ -469,6 +472,14 @@ def main():
             print("="*70)
             sys.exit(1)
 
+        # Master report: one consolidated plots PDF + one full numeric-dump
+        # PDF + CSVs, for handing to another analysis tool.
+        print("\nBuilding master report (all plots + full numeric dump)...")
+        mr = subprocess.run([sys.executable, "src/generate_master_report.py"], cwd=".")
+        if mr.returncode != 0:
+            print("PIPELINE WARNING: master report generation failed "
+                  "(other analysis outputs still saved)")
+
     # Success
     print("\n" + "="*70)
     print("✓ FOUR-HEAD BENCHMARK PIPELINE COMPLETE")
@@ -476,8 +487,12 @@ def main():
     print("\nTraining results saved to:")
     for run_num in range(1, TARGET_FOUR_HEAD_RUNS + 1):
         print(f"  - runs/four_head/run_{run_num}/")
-    print("\nAnalysis saved to:")
-    print("  - benchmark_analysis/ : comparison charts + PDF report")
+    print("\nAnalysis saved to benchmark_analysis/ :")
+    print("  - 01_grokking_curves.png / 02_l2_norm_comparison.png / 03_dropout_gap_comparison.png")
+    print("  - benchmark_report.pdf   : 3-page consistency report")
+    print("  - master_plots.pdf       : every plot, per run + cross-run")
+    print("  - master_data.pdf        : full literal per-epoch numeric dump")
+    print("  - data/*.csv             : same numbers as CSV")
     print("="*70 + "\n")
 
 

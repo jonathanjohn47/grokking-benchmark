@@ -5139,3 +5139,74 @@ four-head benchmark (3 seeded runs, 40000 epochs each, L2 Norm + full
 dropout rate sweep every epoch, then analysis into `benchmark_analysis/`).
 
 Nothing pending in code. Next data point is that run's output.
+
+---
+
+## Session Summary — September 2, 2026 (Master report: consolidated plots PDF + full numeric-dump PDF)
+
+### Request
+
+While the first four-head benchmark was running, Jonathan asked for:
+1. one PDF with all the plots for all results, and
+2. a second PDF with, literally, every number produced so far — to feed to
+   another AI module for analysis.
+
+He explicitly chose the **full literal per-epoch dump** option for PDF 2
+(over a structured summary), knowing it is large.
+
+### New file: `src/generate_master_report.py`
+
+Standalone (`python src/generate_master_report.py`). Discovers every
+COMPLETE `runs/four_head/run_<N>/` (same 8-file check as the pipeline) and
+writes into `benchmark_analysis/`:
+
+- **`master_plots.pdf`** — per run: grokking curve, loss, L2 norm (raw +
+  smoothed), fast/slow MA, MA-of-MA differential (log + linear, with
+  computed zero-crossing trigger + noise floor), L2 acceleration
+  (raw/smoothed/double), dropout gap sweep (5 rates), dropout train-acc per
+  rate vs clean acc, final gap vs rate. Then cross-run comparison pages
+  (test acc / loss / L2 overlays, grok-epoch bar with mean±std, dropout
+  sweep small-multiples, final-gap-vs-rate, MA-of-MA overlay).
+- **`master_data.pdf`** — summary pages (config, per-run scalar-series
+  stats, detection epochs, per-rate dropout stats, MA-grid stats), then a
+  literal dump: Table A (epoch, train_acc, test_acc, loss, l2_norm,
+  l2_smoothed), Table B (per epoch: gap + train_acc for each of the 5
+  rates + clean_acc), Table C (L2 acceleration per epoch), Table D (L2
+  moving-average grid). Monospace, ~110 rows/page. For 3×40000-epoch runs
+  this is on the order of a few thousand pages and tens of MB — expected,
+  that is the "full dump" choice.
+- **`benchmark_analysis/data/*.csv`** — same numbers as CSV
+  (`run_N_timeseries.csv`, `run_N_l2_ma_grid.csv`, `summary.csv`). Added as
+  the machine-friendly form; better than the giant PDF for feeding to
+  another tool.
+
+Nothing in the report is hardcoded — every figure/number is computed from
+the loaded runs. Detection signals (MA crossover, MA-of-MA zero-crossing,
+noise floor) are recomputed via `predictors.l2_norm`.
+
+### `run_full_benchmark.py`
+
+Stage 2 now shells out to `src/generate_master_report.py` after the normal
+`BenchmarkAnalyzer` step. The "skip Stage 2" condition also checks that
+`master_plots.pdf` + `master_data.pdf` exist, so a run that produced the
+old analysis outputs but not the master PDFs will regenerate on the next
+invocation. A master-report failure is a warning, not a pipeline abort.
+
+Note: the benchmark process that is currently running was started before
+this change, so it will finish on the old Stage 2. After it completes,
+either run `python src/generate_master_report.py` directly, or re-run
+`python run_full_benchmark.py` (it will skip training, see the master PDFs
+missing, and build them).
+
+### Tested
+
+Synthetic 2-run smoke test (250 epochs): both PDFs + all CSVs produced
+non-empty; timeseries CSV row/column counts verified. All four touched/new
+files byte-compile.
+
+### Files Modified
+
+- `src/generate_master_report.py` — new.
+- `run_full_benchmark.py` — Stage 2 calls the master report; skip-condition
+  extended.
+- `context.md` — this summary.
