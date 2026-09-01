@@ -4116,3 +4116,75 @@ Nanda chose P = 113 for mechanistic work (different goal). We chose P = 97 to st
 - 3-run protocol: justified by Power et al. standard
 - P = 97 choice: reproducibility against published curves
 - Ready for professor discussion.
+
+---
+
+## Session Summary — September 1, 2026 (Professor feedback: L2 Norm reliability and baseline strategy)
+
+### Context
+
+Jonathan met with professor to discuss the L2 Norm predictor results and overall strategy going forward.
+
+### Findings from Discussion
+
+**1. L2 Norm behaviour is not reliable in this setup**
+
+- Nanda et al. paper shows L2 Norm working well
+- In Jonathan's setup, L2 Norm does not perform consistently
+- This is **not** normal behaviour and needs investigation
+- However, this investigation should be **postponed** until after the four baseline predictors are completed
+
+**2. Strategy: First four predictors as baseline**
+
+The professor recommended:
+- Focus on completing the first **four predictors** (Dropout, Spectral, AGE, HTSR Alpha) without diversion
+- These four will serve as the **baseline** for all future experiments
+- Build extended experiments and analysis **upon this baseline**
+- Reason: Having a stable, validated baseline is essential before adding complexity or investigating anomalies like L2 Norm
+
+### Decision: Defer L2 Norm investigation
+
+**Current status of L2 Norm:**
+- Code exists: `src/predictors/l2_norm.py`
+- Results exist: `results/` contains L2 Norm data from earlier runs
+- Known issue: Inconsistent/unreliable behaviour compared to Nanda paper
+- **Action:** Mark as **deferred**. Return to L2 Norm investigation only after four-predictor baseline is complete and validated.
+
+**Why defer:**
+- Prevents mid-project pivoting
+- Keeps focus on completing baseline predictors
+- L2 Norm investigation requires deep debugging; better done with stable baseline already in place
+- Follows the principle: establish baseline → build upon it → investigate edge cases
+
+### Strategy: Baseline-first experiment design
+
+Once the four baseline predictors (Dropout, Spectral, AGE, HTSR Alpha) are complete and validated:
+- They become the foundation for all extended experiments
+- Future work (predictors 5–9, L2 Norm investigation, parameter sweeps, etc.) builds on top of this baseline
+- This ensures reproducibility and clear dependency tracking
+
+### Files Modified
+
+- `context.md` — this entry (no source code changes)
+
+### Still Open / Next Steps
+
+1. **Complete the four-predictor baseline (immediate priority):**
+   - Run four-head Dropout multi-rate sweep (code ready, awaiting execution)
+   - Validate four-head + single-head Dropout results
+   - Proceed to Spectral predictor (next in order)
+   - Complete AGE and HTSR Alpha
+
+2. **Once baseline is complete:**
+   - Validate all four predictors against grokking phenomenon
+   - Document baseline results formally
+   - Set up this baseline as the reference for all future experiments
+
+3. **After baseline validation:**
+   - Investigate L2 Norm reliability issue (now deferred)
+   - Implement remaining predictors (5–9) using baseline as reference
+   - Run extended experiments building on the baseline
+
+4. **Low priority (carry forward):**
+   - Reply to Prof. Rashid's open questions
+   - Delete `_to_delete/` folder when ready
