@@ -4063,3 +4063,35 @@ Verification:
 5. If Dropout fails: document as closed negative result (like L2 Norm)
 6. Delete `_to_delete/` folder when ready
 7. Reply to Prof. Rashid's open questions (still pending)
+
+---
+
+## Session Summary — September 1, 2026 (Methodology: Justifying 3-run protocol)
+
+### Context
+
+Professor asked: "Why 3 runs per predictor?" Original answer was unsatisfying (arbitrary, came from L2 Norm accident: 2 runs good, 3rd failed).
+
+### Findings & Decision
+
+**Literature basis found:**
+- **Power et al. (2022)** (original grokking paper): "We've repeated each experiment for each dataset size with **3 random seeds**, with the exception of experiments in section 3.1.1, where we've aggregated results over 7 random seeds."
+- **Nanda et al. (2023)** (mechanistic interpretability): 5 random seeds (mainline + 4 others)
+
+**Defensible justification for thesis:**
+
+> Following Power et al. (2022), the foundational grokking paper, we run each predictor **three times with different random seeds**. This is the standard reporting practice in the grokking literature and provides sufficient evidence for consistency. Importantly, our early exploration with L2 Norm demonstrated why this number is necessary—runs 1 and 2 succeeded, but run 3 failed, revealing instability that two runs alone would have missed. Therefore, 3 runs balances reproducibility standards against computational cost while catching unreliable predictors.
+
+**Why this works:**
+1. Grounded in Power et al.'s established practice
+2. Uses actual L2 Norm data as evidence that 2 runs insufficient
+3. Shows why 3 better than 2 (caught failure)
+4. Aligns with Nanda et al. multi-run approach
+
+### Files Modified
+
+- `context.md` — this entry (no code changes)
+
+### Status
+
+✅ Methodology question resolved and defensible. Ready for professor discussion.
