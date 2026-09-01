@@ -4811,3 +4811,115 @@ This thesis builds a **unified empirical benchmark** that:
 Rather than just using or implementing predictors, the work is about **validating scientific claims empirically**. That is proper science: testing whether published results hold up when examined carefully, and building reliable foundations before adding complexity.
 
 The benchmark becomes a tool for the research community—a way to evaluate new grokking predictors fairly against known baselines.
+
+---
+
+## Session Summary — September 2, 2026 (Consolidate on four-head; archive single-head; four-head-only pipeline)
+
+### Overview
+
+Jonathan decided to drop single-head as a benchmark arm and run the whole
+benchmark on the four-head model only, with 3 seeded runs per predictor. The
+single-head code and its one pilot result were archived (moved, not deleted).
+`run_full_benchmark.py` was rewritten to be four-head-only. After this commit,
+Jonathan will re-run the four-head experiment from scratch and record the
+results.
+
+### Why (justification for single-head removal)
+
+- The four-head model (`d_model=128`, 4 attention heads) is the faithful
+  Nanda et al. architecture. Single-head was Jonathan's earlier from-scratch
+  variant that nobody in the predictor literature uses. For a "unified
+  benchmark" meant as a community reference, the canonical substrate is the
+  right one.
+- The thesis question is about *predictor* behaviour, not head-count
+  sensitivity. A second full model arm multiplies benchmark cost across all 9
+  predictors for little scientific return.
+- The single-head vs four-head comparison was confounded anyway
+  (`num_epochs` 10000 vs 40000, no seeding vs recorded seed, 1 run vs 3 runs),
+  so it was not a valid controlled comparison.
+- Professor feedback already on record: build one solid baseline first, defer
+  the single-head L2-Norm anomaly.
+- Single-head has NO scientific justification as a designed benchmark
+  condition. Honest framing for the viva: it was a harness/pipeline
+  validation step on the way to the faithful Nanda reproduction. It should
+  appear (if at all) only in a methodology paragraph or a clearly-labelled
+  "pilot / not part of the protocol" appendix.
+
+### What changed
+
+- **`run_full_benchmark.py` — fully rewritten, four-head only.**
+  - Removed Stage 1 (single-head training), `run_single_head()`,
+    `single_head_done()`.
+  - Stages renumbered: Stage 1 = four-head training (3 seeded runs, top-up /
+    crash-resume via `completed_four_head_runs()`), Stage 2 = analysis.
+  - `BenchmarkAnalyzer` reworked: removed `load_single_head()` and every
+    `self.results["single_head"]` branch. Charts are now single-panel
+    overlays of the 3 four-head runs. PDF report page 1 shows per-run grok
+    epoch + mean±std line; page 2 loss curves; page 3 consistency stats text
+    (single-head line removed).
+- **`src/train_four_head.py:312` — SyntaxError fixed** (earlier this session).
+  Was `print(f"...run_{}/".format(run_number))` — an f-string with an empty
+  `{}`, which fails at parse time. Now `print(f"...run_{run_number}/")`.
+
+### Files archived (moved with `git mv` / `mv`, NOT deleted)
+
+Single-head code and pilot result now live under `archive/single_head/`:
+
+- `src/train.py`                     → `archive/single_head/train.py`
+- `src/models/transformer.py`        → `archive/single_head/models/transformer.py`
+- `src/plot_results.py`              → `archive/single_head/plot_results.py`
+- `results/single_head/`             → `archive/single_head/results/`
+- `archive/single_head/README.md`    → new, explains why + how to restore
+
+Import check before moving: `src/models/transformer.py` was imported ONLY by
+`src/train.py` (nothing else — predictors operate on `model.parameters()`,
+the shadow-layernorm model is a standalone class). So archiving it does not
+break four-head or the predictors.
+
+### NOT changed / NOT touched
+
+- `src/train_four_head.py` — the training logic (only the line 312 print fix).
+- `src/models/transformer_four_head.py`, `src/plot_results_four_head.py`,
+  `src/analysis_l2_norm_four_head.py`, `src/generate_l2_report.py`.
+- Shared code: `src/data/modular_arithmetic.py`, `src/predictors/l2_norm.py`,
+  `src/predictors/dropout.py`, `src/unified_measurements.py`.
+- LayerNorm shadow side-experiment (`src/train_shadow_layernorm.py`,
+  `src/models/model_shadow_with_layernorm.py`, `src/plot_shadow_layernorm.py`)
+  — unrelated, left in place.
+- The single-head *code itself* is untouched — it is only relocated. It can be
+  brought back if a later robustness check needs it.
+
+### Current State
+
+- `runs/four_head/` is empty. Next `python run_full_benchmark.py` will do
+  four-head run_1, run_2, run_3 from scratch, then analysis.
+- `run_full_benchmark.py` and `src/train_four_head.py` byte-compile clean.
+- Jonathan has stopped the previously running process and will re-run once
+  this commit lands.
+
+### Open / postponed
+
+- Single-head L2-Norm reliability anomaly — still open, still postponed.
+  Archiving the code does not close it.
+- Whether to keep single-head as an optional end-of-line robustness check
+  (architecture-change test) — not decided; code is preserved for that option.
+- Robustness axis for the thesis (vary modulus p, vary train fraction, more
+  seeds) — noted as a better axis than head count; not started.
+- Number of seeded runs per predictor: currently 3 (`TARGET_FOUR_HEAD_RUNS`).
+  5 would give a steadier std; left at 3 for now.
+
+### Next
+
+1. Jonathan runs `python run_full_benchmark.py` (3 four-head runs + analysis).
+2. Review `benchmark_analysis/` charts + `benchmark_report.pdf`.
+3. Validate L2 Norm & Dropout against the 3-criteria protocol.
+4. Proceed to the Spectral predictor.
+
+### Files Modified
+
+- `run_full_benchmark.py` — rewritten, four-head only.
+- `src/train_four_head.py` — line 312 SyntaxError fix.
+- `context.md` — this session summary (gitignored, not in the commit).
+- `archive/single_head/` — new folder holding the archived single-head code
+  and pilot result, plus a README.
