@@ -4466,6 +4466,61 @@ After completion:
 
 ---
 
+## Session Summary — September 2, 2026 (Merged pipeline into single script)
+
+### Request
+
+Jonathan asked to merge `run_full_benchmark.py` and `analyze_benchmark_results.py` into one script, so the entire pipeline runs with a single command.
+
+### Change
+
+**`run_full_benchmark.py` now contains everything:**
+- Stage 1: Single-head training (calls `src/train.py`)
+- Stage 2: Four-head training, 3 runs (calls `src/train_four_head.py`)
+- Stage 3: Analysis (formerly `BenchmarkAnalyzer` class from `analyze_benchmark_results.py`) — loads all results, generates comparison charts, builds PDF report
+
+**Deleted:** `analyze_benchmark_results.py` (folded into `run_full_benchmark.py`)
+
+**New usage (single command):**
+```bash
+python run_full_benchmark.py
+```
+
+No more need to run two separate commands. Training and analysis happen in one continuous execution — if training succeeds, analysis runs automatically right after.
+
+### Verification
+
+- `python -m py_compile run_full_benchmark.py` — syntax OK
+- Script logic unchanged, only reorganized: same 3 stages, same output paths, same chart generation
+
+### Files Modified
+
+- `run_full_benchmark.py` — merged (now ~420 lines, contains training orchestration + `BenchmarkAnalyzer` class + main pipeline)
+- `analyze_benchmark_results.py` — deleted
+
+### Commit
+
+- `696f2fd`: Merge run_full_benchmark.py and analyze_benchmark_results.py into one script
+
+### Current Ready State
+
+**Single command to run entire benchmark:**
+```bash
+cd /Users/jonathanjohn/Documents/grokking-benchmark
+python run_full_benchmark.py
+```
+
+Pipeline: single-head training → four-head run_1 → four-head run_2 → four-head run_3 → analysis & charts. All previous results already cleared (see prior session). Ready for fresh execution.
+
+### Next
+
+1. Run `python run_full_benchmark.py` (single-head + 4-head x3 + analysis, ~1-2 hrs)
+2. Review `benchmark_analysis/` charts and PDF report
+3. Validate L2 Norm & Dropout against 3-criteria protocol
+4. Proceed to Spectral predictor
+
+---
+
 ## FULL SESSION SUMMARY — September 1, 2026 (Complete refactor + pipeline setup)
 
 ### Overview

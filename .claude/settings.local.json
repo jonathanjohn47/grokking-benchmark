@@ -29,7 +29,8 @@
       "Bash(xargs basename -a)",
       "Bash(python run_full_benchmark.py)",
       "Bash(pkill -f \"python run_full_benchmark.py\")",
-      "Bash(git commit -m 'Remove cleanup function from run_full_benchmark.py *)"
+      "Bash(git commit -m 'Remove cleanup function from run_full_benchmark.py *)",
+      "Bash(python -m py_compile run_full_benchmark.py)"
     ],
     "additionalDirectories": [
       "C:\\Users\\jonat\\StudioProjects\\grokking-benchmark\\src\\predictors",
