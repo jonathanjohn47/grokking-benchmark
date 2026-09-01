@@ -4298,6 +4298,106 @@ Unified measurements approach means:
 
 ---
 
+## Session Summary — September 1, 2026 (Full benchmark orchestration & analysis)
+
+### Problem
+
+Manual experiment execution is error-prone and slow. Need:
+1. Clean slate before running experiments (remove old results)
+2. Sequential execution of all runs (single-head + four-head x3)
+3. Automatic comparison & visualization of results
+
+### Solution: Two New Scripts
+
+**1. run_full_benchmark.py (orchestration)**
+
+Automated full experimental pipeline:
+- Cleans all previous results (fresh start)
+- Runs single-head baseline training (1 run)
+- Runs four-head training (3 independent runs)
+- Each run generates complete measurements + visualizations + report
+
+Usage:
+```bash
+python run_full_benchmark.py
+```
+
+Output structure after completion:
+```
+results/single_head/{training,l2_norm,dropout,reports}/
+runs/four_head/run_1/{training,l2_norm,dropout,reports}/
+runs/four_head/run_2/{training,l2_norm,dropout,reports}/
+runs/four_head/run_3/{training,l2_norm,dropout,reports}/
+```
+
+**2. analyze_benchmark_results.py (analysis & visualization)**
+
+Loads and compares all run results, generates charts:
+
+Charts generated:
+- `01_grokking_curves.png`: single-head vs four-head grokking curves side-by-side
+- `02_l2_norm_comparison.png`: L2 Norm progression across all runs
+- `03_dropout_gap_comparison.png`: Dropout gap curves comparison
+- `benchmark_report.pdf`: 3-page analysis report
+  - Page 1: Grokking epoch bar chart (single-head + 3 runs)
+  - Page 2: Loss curves comparison (log-log scale)
+  - Page 3: Run consistency statistics & next steps
+
+Usage:
+```bash
+python analyze_benchmark_results.py
+```
+
+Output directory: `benchmark_analysis/`
+
+### Files Created
+
+- `run_full_benchmark.py` — 155 lines, orchestration + cleanup
+- `analyze_benchmark_results.py` — 338 lines, analysis + visualization
+
+### Workflow
+
+**Step 1: Run full benchmark**
+```bash
+python run_full_benchmark.py   # ~30-60 min, generates all measurements
+```
+
+**Step 2: Analyze results**
+```bash
+python analyze_benchmark_results.py  # ~1 min, generates charts & report
+```
+
+**Step 3: Review visualizations**
+- Open `benchmark_analysis/` folder
+- Review PNG charts and PDF report
+- Check run consistency (grokking epoch variance)
+- Assess predictor reliability
+
+**Step 4: Formal validation**
+- Validate both L2 Norm & Dropout against 3-criteria protocol:
+  1. Always predictive (precedes grokking in all runs)
+  2. Tight & consistent (low variance across runs)
+  3. Above noise floor (signal > random variation)
+
+### Advantages
+
+1. **Reproducibility**: Clean slate before each run
+2. **Automation**: Single command executes 4 training runs
+3. **Completeness**: All measurements collected automatically
+4. **Visibility**: Charts + report show run consistency immediately
+5. **Error handling**: Pipeline stops and reports if any run fails
+
+### Next
+
+```bash
+python run_full_benchmark.py      # Execute full pipeline
+python analyze_benchmark_results.py # Generate comparison charts
+```
+
+Then validate predictors & proceed to Spectral.
+
+---
+
 ## Thesis Motivation
 
 ### Why This Research Matters
