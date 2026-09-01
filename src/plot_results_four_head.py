@@ -85,21 +85,27 @@ def discover_run_dirs(base_dir):
 
 
 def load_run_data(run_dir):
+    # unified_measurements.PredictorMeasurements writes into per-predictor
+    # subfolders: training/, l2_norm/, dropout/. Each entry below is
+    # (key, relative_path).
     required_files = [
-        ("train_acc", "train_acc_history.npy"), ("test_acc", "test_acc_history.npy"),
-        ("loss", "loss_history.npy"), ("l2_norm", "l2_norm_history.npy"),
-        ("dropout_gap_epochs", "dropout_gap_epochs.npy"), ("dropout_gap", "dropout_gap_history.npy"),
-        ("epoch_grid", "epoch_grid.npy"), ("fast_ma", "fast_ma.npy"), ("slow_ma", "slow_ma.npy"),
-        ("fast_ma_of_slow_ma", "fast_ma_of_slow_ma.npy"), ("ma_of_ma_diff", "ma_of_ma_diff.npy"),
+        ("train_acc", "training/train_acc_history.npy"), ("test_acc", "training/test_acc_history.npy"),
+        ("loss", "training/loss_history.npy"), ("l2_norm", "l2_norm/l2_norm_history.npy"),
+        ("epoch_grid", "l2_norm/epoch_grid.npy"), ("fast_ma", "l2_norm/fast_ma.npy"),
+        ("slow_ma", "l2_norm/slow_ma.npy"), ("fast_ma_of_slow_ma", "l2_norm/fast_ma_of_slow_ma.npy"),
+        ("ma_of_ma_diff", "l2_norm/ma_of_ma_diff.npy"),
+        ("dropout_gap_epochs", "dropout/dropout_gap_epochs.npy"),
+        ("dropout_gap_by_rate", "dropout/dropout_gap_by_rate.npy"),
+        ("dropout_rates", "dropout/dropout_rates.npy"),
     ]
 
-    for _, filename in required_files:
-        if not os.path.exists(os.path.join(run_dir, filename)):
+    for _, rel in required_files:
+        if not os.path.exists(os.path.join(run_dir, rel)):
             return None
 
     data = {}
-    for key, filename in required_files:
-        data[key] = np.load(os.path.join(run_dir, filename))
+    for key, rel in required_files:
+        data[key] = np.load(os.path.join(run_dir, rel))
     data["num_epochs"] = len(data["train_acc"])
     return data
 
@@ -116,7 +122,8 @@ def plot_single_run(run_number, run_dir, data):
     loss_history = data["loss"]
     l2_norm_history = data["l2_norm"]
     dropout_gap_epochs = data["dropout_gap_epochs"]
-    dropout_gap_history = data["dropout_gap"]
+    dropout_gap_by_rate = data["dropout_gap_by_rate"]   # shape [rate, epoch]
+    dropout_rates = data["dropout_rates"]
     num_epochs = data["num_epochs"]
     epochs_axis = range(1, num_epochs + 1)
 
@@ -254,21 +261,28 @@ def plot_single_run(run_number, run_dir, data):
     plt.tight_layout()
     save(fig7, "l2_norm_curve.png")
 
-    # Plot 8: Dropout Gap curve
+    # Plot 8: Dropout Gap — full multi-rate sweep
     fig8, ax8 = plt.subplots(figsize=(12, 7))
-    ax8.plot(dropout_gap_epochs, dropout_gap_history, color="crimson", linewidth=2)
+    for r_idx, rate in enumerate(dropout_rates):
+        ax8.plot(dropout_gap_epochs, dropout_gap_by_rate[r_idx], linewidth=2,
+                 label=f"p={rate:g}")
+    ax8.axhline(y=0, color="black", linewidth=0.6, alpha=0.5)
     ax8.set_xscale("log")
     ax8.set_xlabel("Epoch (log scale)")
     ax8.set_ylabel("Dropout Gap")
-    ax8.set_title(f"4-head model, Run {run_number}: Dropout Gap")
+    ax8.set_title(f"4-head model, Run {run_number}: Dropout Gap — Multi-Rate Sweep")
+    ax8.legend()
     ax8.grid(True, alpha=0.3)
     plt.tight_layout()
     save(fig8, "dropout_gap_curve.png")
 
+    final_gap_by_rate = {float(rate): float(dropout_gap_by_rate[r_idx][-1])
+                         for r_idx, rate in enumerate(dropout_rates)}
     return {
         "run_number": run_number, "num_epochs": num_epochs, "grokked": grokked,
         "grok_epoch": grok_epoch, "final_test_acc": float(test_acc[-1]),
-        "final_l2_norm": float(l2_norm_history[-1]), "final_dropout_gap": float(dropout_gap_history[-1]),
+        "final_l2_norm": float(l2_norm_history[-1]),
+        "final_dropout_gap_by_rate": final_gap_by_rate,
     }
 
 
@@ -276,6 +290,10 @@ def plot_comparison(all_runs_data, out_dir):
     """Builds 4 plots overlaying every discovered run together, saved
     directly in results/four_head/ (not inside any single run's folder),
     so all previous runs can be read on one chart."""
+
+    if not all_runs_data:
+        print("[SKIP] No complete runs to compare — comparison plots not generated.")
+        return
 
     def color_for(i):
         return RUN_COLORS[i % len(RUN_COLORS)]
@@ -336,17 +354,24 @@ def plot_comparison(all_runs_data, out_dir):
     plt.close(fig)
     print("[OK] Comparison plot saved to results/four_head/comparison_l2_norm_curve.png")
 
-    # Comparison Plot D: Dropout Gap across all runs
-    fig, ax = plt.subplots(figsize=(12, 7))
+    # Comparison Plot D: Dropout Gap sweep — one panel per run, all rates
+    n = len(all_runs_data)
+    fig, axes = plt.subplots(1, n, figsize=(6 * n, 5), squeeze=False)
     for i, (run_number, data) in enumerate(all_runs_data):
-        ax.plot(data["dropout_gap_epochs"], data["dropout_gap"], color=color_for(i), linewidth=2,
-                label=f"Run {run_number} ({data['num_epochs']} epochs)")
-    ax.set_xscale("log")
-    ax.set_xlabel("Epoch (log scale)", fontsize=12)
-    ax.set_ylabel("Dropout Gap", fontsize=12)
-    ax.set_title("4-head model: Dropout Gap Across All Runs", fontsize=13)
-    ax.legend(loc="upper right", fontsize=10)
-    ax.grid(True, alpha=0.3)
+        ax = axes[0][i]
+        rates = data["dropout_rates"]
+        gap_by_rate = data["dropout_gap_by_rate"]
+        for r_idx, rate in enumerate(rates):
+            ax.plot(data["dropout_gap_epochs"], gap_by_rate[r_idx], linewidth=1.8,
+                    alpha=0.9, label=f"p={rate:g}")
+        ax.axhline(y=0, color="black", linewidth=0.6, alpha=0.5)
+        ax.set_xscale("log")
+        ax.set_xlabel("Epoch (log scale)", fontsize=11)
+        ax.set_ylabel("Dropout Gap", fontsize=11)
+        ax.set_title(f"Run {run_number} ({data['num_epochs']} epochs)", fontsize=12)
+        ax.legend(fontsize=8)
+        ax.grid(True, alpha=0.3)
+    fig.suptitle("4-head model: Dropout Gap Multi-Rate Sweep Across All Runs", fontsize=13)
     plt.tight_layout()
     plt.savefig(os.path.join(out_dir, "comparison_dropout_gap_curve.png"), dpi=150, bbox_inches="tight")
     plt.close(fig)
@@ -378,10 +403,12 @@ else:
     print("=" * 60)
     for s in summaries:
         grok_text = f"grokked at epoch {s['grok_epoch']}" if s["grokked"] else "did NOT grok"
+        gap_text = ", ".join(f"p{rate:g}={gap:+.4f}"
+                             for rate, gap in sorted(s["final_dropout_gap_by_rate"].items()))
         print(f"  Run {s['run_number']} ({s['num_epochs']} epochs): {grok_text}, "
               f"final test acc = {s['final_test_acc']:.4f}, "
-              f"final L2 norm = {s['final_l2_norm']:.4f}, "
-              f"final dropout gap = {s['final_dropout_gap']:.4f}")
+              f"final L2 norm = {s['final_l2_norm']:.4f}")
+        print(f"      final dropout gap sweep: {gap_text}")
 
     print(f"\n[OK] Per-run plots saved inside each results/four_head/run_<N>/ folder.")
     print(f"[OK] 4 comparison plots saved directly in results/four_head/:")

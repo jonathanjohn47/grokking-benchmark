@@ -5011,3 +5011,59 @@ scripts byte-compile.
 Unchanged: Jonathan re-runs `python run_full_benchmark.py` (3 four-head runs
 + analysis), then validates L2 Norm & Dropout against the 3-criteria
 protocol, then Spectral.
+
+---
+
+## Addendum — same day: two legacy plot scripts brought up to date (sweep + current layout)
+
+Jonathan asked for the p=0.9 hardcoding gone from EVERYWHERE, not just the
+pipeline. The two standalone manual tools were fixed:
+
+- **`src/plot_results_four_head.py`**
+  - `load_run_data()` now reads the per-predictor subdir layout
+    (`training/`, `l2_norm/`, `dropout/`) instead of the old flat
+    `run_dir/*.npy`.
+  - Loads `dropout_gap_by_rate.npy` + `dropout_rates.npy` (no
+    `dropout_gap_history.npy`).
+  - Per-run "Plot 8" and the cross-run comparison plot now show all 5 rate
+    curves (comparison is one panel per run).
+  - `plot_single_run()` returns `final_dropout_gap_by_rate` (dict) instead
+    of a single `final_dropout_gap`.
+  - Added a guard: `plot_comparison([])` now returns early with a message
+    instead of crashing on `plt.subplots(1, 0)`.
+- **`src/generate_l2_report.py`** — rewritten. Reads the current subdir
+  layout; dropout handled as the full sweep throughout (Table 3 is a
+  run x rate matrix; page 6 is per-run rate-sweep panels; conclusions page
+  reports sign/trend per rate). All the previously HARDCODED narrative
+  numbers (grok epochs "149, 2815, 671", dropout "-0.97 to -0.98", "rate=0.9",
+  "dropout predictor is buggy") were removed — every number on the page is
+  now computed from the loaded runs. Also fixed a latent axis bug (raw
+  per-epoch histories were being plotted against the shorter MA
+  `epoch_grid`); raw histories now use `np.arange`.
+
+Both scripts smoke-tested against synthetic 2-run data in the current
+layout: `generate_l2_report` produces its PDF; `plot_results_four_head`
+produces per-run + comparison plots. All six touched files byte-compile.
+
+### Housekeeping needed (blocked from doing it automatically)
+
+`runs/` is gitignored, so none of this is in git, but the working tree has
+leftover junk that should be cleared before the fresh benchmark run:
+
+- `runs/four_head/run_1/` — contains only `seed.npy` + empty subdirs. This
+  is the run Jonathan Ctrl-C'd earlier. If left in place,
+  `get_next_run_number()` will skip it and the fresh runs become run_2 /
+  run_3 / run_4 instead of run_1..3.
+- `runs/four_head/comparison_grokking_curve.png`,
+  `comparison_l2_norm_curve.png`, `comparison_loss_curve.png` — written into
+  the real folder by a smoke-test run of `plot_results_four_head.py` (the
+  script resolves its output dir from `__file__`, not CWD).
+
+Suggested command before re-running:
+`rm -rf runs/four_head/run_1 runs/four_head/comparison_*.png`
+
+### Files Modified (addendum)
+
+- `src/plot_results_four_head.py` — subdir layout + dropout sweep + empty-runs guard.
+- `src/generate_l2_report.py` — rewritten: current layout, dropout sweep, computed narrative.
+- `context.md` — this addendum.
