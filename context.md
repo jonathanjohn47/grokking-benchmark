@@ -4008,3 +4008,58 @@ grokking-benchmark/
 2. Run the planned experiments (Dropout multi-rate sweep, etc.)
 3. Continue with Spectral predictor evaluation per the 9-predictor order
 4. Reply to Prof. Rashid's open questions (still pending)
+
+---
+
+## Session Summary — September 1, 2026 (Dropout multi-rate sweep executed on single-head; four-head sweep code ready but not run)
+
+### Picked up from
+
+- Previous session (Sep 1 morning) reorganized project files and updated context.md
+- **Actual work status:** Single-head dropout multi-rate sweep was executed (files timestamped Sep 1, 09:55), but this fact was not documented in context.md
+- Four-head code changes were committed earlier (commit 4cad470) but not yet executed
+
+### Action 1 — Single-head dropout multi-rate sweep: CONFIRMED EXECUTED
+
+Verified via filesystem inspection:
+- `results/single_head/dropout/dropout_gap_by_rate.npy` exists, last modified Sep 1 09:55
+- `results/single_head/dropout/dropout_rates.npy` exists, same timestamp
+- All five rate curves (0.1, 0.3, 0.5, 0.7, 0.9) computed and saved
+
+Shape: `dropout_gap_by_rate` = (5, num_epochs) per the Aug 24 implementation plan.
+
+### Action 2 — Four-head dropout multi-rate sweep: CODE READY, NOT YET RUN
+
+Code added to `src/train_four_head.py` (commit 4cad470):
+- Lines 139–211 implement multi-rate sweep (5 rates, same as single-head)
+- `compute_dropout_gap_multi_rate()` imported and called per epoch
+- Results saved as `dropout_gap_by_rate.npy` and `dropout_rates.npy`
+- **Status:** Code complete, syntax verified, but no actual training runs executed yet
+
+Verification:
+- `grep -n "dropout_gap_by_rate"` on train_four_head.py returns 4 hits (lines 210, 207, etc.)
+- Checked `results/four_head/run_*/dropout/` — no `dropout_gap_by_rate.npy` files found
+- Four-head runs still contain only single-rate results (0.9) from earlier sessions
+
+### Why This Matters (Session Context)
+
+- **Single-head:** Ready for formal 3-criteria protocol validation across all five rates
+- **Four-head:** Next immediate action is to execute three independent 40,000-epoch runs to collect multi-rate data
+- **Predictor evaluation:** Cannot close Dropout predictor until both single-head AND four-head multi-rate data is collected and validated
+
+### Files Modified (this session)
+
+- `context.md` — this entry (no source code or results changes)
+
+### Still Open / Next Steps (updated — September 1, 2026, evening)
+
+1. **IMMEDIATE:** Run `src/train_four_head.py` three times (run_4, run_5, run_6 or equivalent) with 40,000 epochs each to collect multi-rate Dropout data on four-head transformer
+2. Once four-head runs complete, validate both single-head and four-head multi-rate results against 3 criteria:
+   - Always predictive (gap narrowing precedes grokking at all 5 rates)
+   - Tight and consistent gap across runs
+   - Clearly above noise floor
+3. Formal Dropout predictor verdict: pass or fail based on combined single-head + four-head data
+4. If Dropout passes: move to Spectral predictor (next in 9-predictor evaluation order)
+5. If Dropout fails: document as closed negative result (like L2 Norm)
+6. Delete `_to_delete/` folder when ready
+7. Reply to Prof. Rashid's open questions (still pending)
