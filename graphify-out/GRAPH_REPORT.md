@@ -5,12 +5,12 @@
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 411 nodes · 470 edges · 41 communities (35 shown, 6 thin omitted)
+- 411 nodes · 471 edges · 40 communities (34 shown, 6 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d3a816b3`
+- Built from commit: `fcc69087`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -42,9 +42,9 @@
 - [[_COMMUNITY_Community 28|Community 28]]
 - [[_COMMUNITY_Community 29|Community 29]]
 - [[_COMMUNITY_Community 30|Community 30]]
-- [[_COMMUNITY_Community 31|Community 31]]
 - [[_COMMUNITY_Community 32|Community 32]]
 - [[_COMMUNITY_Community 33|Community 33]]
+- [[_COMMUNITY_Community 34|Community 34]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `Indian English Communication Skill` - 16 edges
@@ -76,7 +76,7 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (41 total, 6 thin omitted)
+## Communities (40 total, 6 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.16
@@ -175,7 +175,7 @@ Cohesion: 0.29
 Nodes (6): How to run, nanda_l2_p113 — L2-Norm predictor on (a + b) mod 113, Outputs, The four deliberate differences from `src/`, What this is, Why `p = 113`, `betas = (0.9, 0.98)`, and the small init
 
 ## Knowledge Gaps
-- **103 isolated node(s):** `Purpose`, `1. Non-negotiable rule`, `2. What Indian English means here`, `3. Do not confuse Indian English with simple English`, `4. Preferred Indian teaching voice` (+98 more)
+- **103 isolated node(s):** `What this is`, `The four deliberate differences from `src/``, `Why `p = 113`, `betas = (0.9, 0.98)`, and the small init`, `How to run`, `Outputs` (+98 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **6 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -188,7 +188,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
 - **Why does `BenchmarkAnalyzer` connect `Community 21` to `Community 7`?**
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
-- **What connects `Measurement collection for the L2 Norm predictor only.  This is a trimmed copy o`, `Collects and saves all measurements for the L2 Norm predictor.`, `Create subdirectories for the predictor outputs.` to the rest of the system?**
+- **What connects `What this is`, `The four deliberate differences from `src/``, `Why `p = 113`, `betas = (0.9, 0.98)`, and the small init` to the rest of the system?**
   _178 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 4` be split into smaller, more focused modules?**
   _Cohesion score 0.09420289855072464 - nodes in this community are weakly interconnected._
