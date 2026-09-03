@@ -20,7 +20,7 @@ from measurements import PredictorMeasurements
 # nanda_l2_p113 — L2-Norm-only training run on (a + b) mod 113.
 #
 # This is a trimmed copy of src/train_four_head.py. It is a fully faithful
-# Nanda et al. replication. Three deliberate differences from the main
+# Nanda et al. replication. Four deliberate differences from the main
 # experiment in src/:
 #
 #   1. MODULUS = 113 (Nanda's mainline prime), not 97.
@@ -28,6 +28,11 @@ from measurements import PredictorMeasurements
 #   3. AdamW betas = (0.9, 0.98) — the value Nanda et al. and Power et al.
 #      both use — instead of PyTorch's default (0.9, 0.999). See
 #      context.md, Sep 3 2026 session, item 9.2.
+#   4. Weight init: TransformerFourHead now draws every matrix (embeddings
+#      included) from N(0, 0.8/sqrt(d_model)) — the TransformerLens scheme
+#      Nanda uses — instead of PyTorch's defaults. This removes the large
+#      early L2 collapse (a weight-decay transient on the oversized N(0,1)
+#      embedding table, not a grokking feature). See the model file.
 #
 # Everything else matches src/train_four_head.py: same architecture
 # (TransformerFourHead, 4 heads, d_model=128), same lr=1e-3,

@@ -5,12 +5,24 @@ import torch
 # 4-HEAD VARIANT — matches Nanda et al.'s actual architecture
 # (d_model=128, 4 attention heads, head dimension = 128/4 = 32 each).
 #
-# This is a byte-for-byte copy of src/models/transformer_four_head.py.
-# It lives here so the nanda_l2_p113/ experiment is fully self-contained
-# and does not import anything from src/. The ONLY change from the src/
-# copy is the vocab_size number in the __main__ demo (98 -> 114), because
-# this experiment runs on p = 113 (113 number tokens 0..112 + one "="
-# token with id 113).
+# This started as a copy of src/models/transformer_four_head.py. It lives
+# here so the nanda_l2_p113/ experiment is fully self-contained and does
+# not import anything from src/.
+#
+# Two changes from the src/ copy:
+#
+#   1. The __main__ demo vocab_size is 114 (p = 113: number tokens 0..112
+#      plus one "=" token with id 113).
+#
+#   2. WEIGHT INITIALISATION. src/ uses PyTorch defaults — nn.Embedding is
+#      N(0, 1) (std = 1, very large; the token-embedding table alone is
+#      ~94% of the starting weight norm) and nn.Linear is Kaiming-uniform.
+#      Nanda et al. use TransformerLens, which initialises EVERY matrix
+#      (embeddings included) as N(0, std) with std = 0.8 / sqrt(d_model)
+#      (~0.0707 for d_model = 128). _init_weights() below applies that
+#      scheme to every parameter, so this experiment starts from small
+#      random weights like Nanda's — the model then has to grow its
+#      weights to memorise, instead of collapsing an oversized init.
 #
 # Architecture is otherwise identical to the main experiment: same token +
 # position embedding, same MLP (4x expansion + ReLU), no LayerNorm, no
@@ -21,11 +33,16 @@ import torch
 
 
 class TransformerFourHead(nn.Module):
-    def __init__(self, vocab_size, d_model, num_heads=4):
+    def __init__(self, vocab_size, d_model, num_heads=4, init_std=None):
         super().__init__()
         assert d_model % num_heads == 0, "d_model must be divisible by num_heads"
         self.num_heads = num_heads
         self.head_dim = d_model // num_heads
+
+        # TransformerLens / Nanda init scale: N(0, 0.8 / sqrt(d_model)).
+        if init_std is None:
+            init_std = 0.8 / (d_model ** 0.5)
+        self.init_std = init_std
 
         self.token_embedding = nn.Embedding(vocab_size, d_model)
         self.position_embedding = nn.Embedding(3, d_model)
@@ -42,6 +59,20 @@ class TransformerFourHead(nn.Module):
 
         self.dropout1 = nn.Dropout(0.0)
         self.dropout2 = nn.Dropout(0.0)
+
+        self._init_weights()
+
+    def _init_weights(self):
+        # Match Nanda et al. / TransformerLens: every weight matrix,
+        # embeddings included, drawn from N(0, init_std). PyTorch's own
+        # defaults (nn.Embedding = N(0, 1), nn.Linear = Kaiming-uniform)
+        # would otherwise make the token-embedding table ~94% of the
+        # starting weight norm and force a large early collapse under
+        # weight decay that has nothing to do with grokking.
+        for module in [self.token_embedding, self.position_embedding,
+                       self.query, self.key, self.value,
+                       self.mlp_in, self.mlp_out, self.output_head]:
+            nn.init.normal_(module.weight, mean=0.0, std=self.init_std)
 
     def split_into_heads(self, x):
         # x: (batch_size, seq_len, d_model) -> (batch_size, num_heads, seq_len, head_dim)

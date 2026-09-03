@@ -13,13 +13,14 @@ L2-Norm predictor and pointed at the prime Nanda uses.
 
 Nothing here imports from `src/`. The folder is standalone.
 
-## The three deliberate differences from `src/`
+## The four deliberate differences from `src/`
 
 | | Main experiment (`src/`) | This folder |
 |---|---|---|
 | Prime `p` | 97 | **113** (Nanda's mainline prime) |
 | Predictors | L2-Norm + Dropout multi-rate sweep | **L2-Norm only** — no Dropout code, imports, or files |
 | AdamW `betas` | `(0.9, 0.999)` (PyTorch default) | **`(0.9, 0.98)`** (Nanda et al. / Power et al.) |
+| Weight init | PyTorch defaults (`nn.Embedding` = `N(0, 1)`, `nn.Linear` = Kaiming-uniform) | **`N(0, 0.8 / sqrt(d_model))`** on every matrix, embeddings included (TransformerLens / Nanda) |
 
 Everything else is identical: `TransformerFourHead` (4 heads, `d_model=128`,
 `d_mlp=512`, ReLU MLP, no LayerNorm, no Linear biases), AdamW `lr=1e-3`
@@ -31,7 +32,7 @@ fresh `torch.seed()` per run, the same L2-Norm predictor code and windows
 For `p = 113`, number tokens are `0..112` and the `=` token id is `113`, so
 `vocab_size = 114`.
 
-## Why `p = 113` and `betas = (0.9, 0.98)`
+## Why `p = 113`, `betas = (0.9, 0.98)`, and the small init
 
 - `p = 113` is the prime in Nanda's mainline experiment. Nanda's Figure 7
   (`Literature/nanda_figures/`) — the only weight-norm panel in the whole
@@ -42,6 +43,15 @@ For `p = 113`, number tokens are `0..112` and the `=` token id is `113`, so
   Per `context.md` (Sep 3, 2026 session, item 9.2) this is expected to shrink
   the slingshot-type weight-norm spike seen at the grok transition in the
   `p = 97` runs, which came from `beta2 = 0.999` on the long low-loss plateau.
+- **Small init** (`std = 0.8 / sqrt(d_model)` ≈ 0.0707 for `d_model = 128`) is
+  the TransformerLens scheme Nanda uses. With PyTorch's default `nn.Embedding`
+  init (`N(0, 1)`) the token-embedding table is ~94% of the starting weight
+  norm, and `weight_decay = 1.0` crushes it in the first ~2000 epochs — a
+  large early collapse in the L2 curve that has nothing to do with grokking
+  and is absent from Nanda's Figure 7. Sum of squared weights at init drops
+  from ≈ 15,500 (PyTorch defaults) to ≈ 1,050 with this change; Nanda's
+  Figure 7 curve starts at ≈ 1,800. The model then has to *grow* its weights
+  to memorise, matching Nanda's memorisation-phase rise.
 
 ## How to run
 

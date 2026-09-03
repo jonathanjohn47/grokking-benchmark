@@ -555,8 +555,8 @@
     "semantic_hash": ""
   },
   "nanda_l2_p113/models/transformer_four_head.py": {
-    "mtime": 1788446794.7152708,
-    "ast_hash": "bc6820e1b12dd50df5c7db63b2ea5883",
+    "mtime": 1788460460.97635,
+    "ast_hash": "265e94d20ff9f66022bcd259c1c7c87a",
     "semantic_hash": ""
   },
   "nanda_l2_p113/predictors/__init__.py": {
@@ -575,13 +575,28 @@
     "semantic_hash": ""
   },
   "nanda_l2_p113/train.py": {
-    "mtime": 1788446879.3517776,
-    "ast_hash": "93e270a59ba262f38d84e037c15c06e5",
+    "mtime": 1788460507.780923,
+    "ast_hash": "3cd43d73d1aedb9992076a66075c11eb",
     "semantic_hash": ""
   },
   "nanda_l2_p113/README.md": {
-    "mtime": 1788446954.3947327,
-    "ast_hash": "7aa8a28c60e37770d5d2d3ec11f9f385",
+    "mtime": 1788460495.294113,
+    "ast_hash": "d3282cc0f44dafcf8e45bbe2a01186d2",
+    "semantic_hash": ""
+  },
+  "nanda_l2_p113/benchmark_analysis/benchmark_report.pdf": {
+    "mtime": 1788474616.9476383,
+    "ast_hash": "055cf30271cb34586cb88bd0779c41f5",
+    "semantic_hash": ""
+  },
+  "nanda_l2_p113/benchmark_analysis/01_grokking_curves.png": {
+    "mtime": 1788474616.3517516,
+    "ast_hash": "d579131370d33b8594a0dccc85a92204",
+    "semantic_hash": ""
+  },
+  "nanda_l2_p113/benchmark_analysis/02_l2_norm_comparison.png": {
+    "mtime": 1788474616.6625917,
+    "ast_hash": "7dd8801a1d1184e2ce125305225888a7",
     "semantic_hash": ""
   }
 }

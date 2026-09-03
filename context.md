@@ -5751,3 +5751,168 @@ evaluated yet.
    pre-grok weight-norm spike.
 3. Still open, unchanged: main `src/` experiment's p and betas decisions;
    L2 Norm & Dropout 3-criteria validation; then Spectral.
+
+---
+
+## Session Summary — September 3-4, 2026 (`nanda_l2_p113`: small-init alignment + first full 3-run result; curve now matches Nanda Figure 7, predictor still fails as a trigger)
+
+Continuation of the same working session. Direct implementation throughout
+(Jonathan's standing permission for this task). `src/` and
+`archive/single_head/` untouched — all work is inside `nanda_l2_p113/`.
+
+### 1. Teaching interlude — why L2 norm was ever proposed as a grokking predictor
+
+Recorded for the thesis background. The rationale:
+
+- Grokking has a long gap between train-perfect and test-perfect. Question:
+  what internal scalar moves during that gap?
+- Learning-theory intuition: memorising solutions need large, sharp weights;
+  generalising solutions are smoother and need smaller weights. So a falling
+  weight norm on the plateau = drift from memorisation toward generalisation.
+- Weight decay: grokking barely happens without it; it acts directly on the
+  weight norm. Nanda: "each phase of grokking corresponded to an inflection
+  point in the ℓ2-norm of the weights"; weight decay drives grokking.
+- Liu et al. (2022) "Towards Understanding Grokking" / "Omnigrok" — a
+  "Goldilocks zone" of weight norm where generalisation lives; training from
+  large init travels down into it, grokking = arrival. Norm = a
+  distance-to-target coordinate → a predictor.
+- Practical appeal: one scalar, cheap every epoch, no val data, no labels,
+  architecture-agnostic — the ideal shape of a "progress measure".
+- The catch (already on record): Nanda uses it only descriptively and says
+  timing cannot be predicted ex ante. The benchmark's 3-criteria protocol
+  asks a strictly harder question than any published positive result.
+
+### 2. Code change — 4th deliberate difference from `src/`: weight init
+
+`nanda_l2_p113/models/transformer_four_head.py`:
+
+- Added `_init_weights()` and an `init_std=None` constructor arg.
+- Every weight matrix — `token_embedding`, `position_embedding`,
+  `query`/`key`/`value`, `mlp_in`/`mlp_out`, `output_head` — is now drawn
+  from `N(0, init_std)` with `init_std = 0.8 / sqrt(d_model)` (≈ 0.0707 for
+  `d_model = 128`). This is the TransformerLens / Nanda scheme.
+- `src/` uses PyTorch defaults: `nn.Embedding` = `N(0, 1)` (std 1, huge —
+  the token-embedding table alone was ~94% of the starting weight norm),
+  `nn.Linear` = Kaiming-uniform.
+- Verified at init (seed 0): Σw² **15,475 → 1,051**, L2 **124 → 32.4**,
+  token-embedding share **94% → 7%**, per-matrix std ≈ 0.0707, loss at init
+  ≈ 4.75 ≈ ln(114) (near-uniform output, correct for a small init). All
+  files byte-compile; forward + backward pass checked.
+- `README.md`, the model header comment, and `train.py`'s header comment
+  updated: the folder now has **four** deliberate differences from `src/`
+  (p=113, L2-only, betas=(0.9,0.98), small init).
+
+### 3. run_1 (old big init) discarded
+
+The earlier run_1 was trained before the init change. `nanda_l2_p113/runs/`
+was deleted entirely (`rm -rf`) so the whole experiment restarts clean on the
+new init. (Resume logic would otherwise have kept the stale run_1 and mixed
+init schemes across runs.)
+
+### 4. First full 3-run benchmark on the aligned setup
+
+`python nanda_l2_p113/run_benchmark.py` — 3 seeded runs, 40000 epochs each,
+then analysis. All under `nanda_l2_p113/runs/run_{1,2,3}/` (gitignored, disk
+only). Analysis written to `nanda_l2_p113/benchmark_analysis/`
+(`01_grokking_curves.png`, `02_l2_norm_comparison.png`,
+`benchmark_report.pdf`) — this folder IS committed.
+
+**Grok timing (test acc > 0.9):**
+
+| run | grok epoch | L2 MA-crossover detection epoch |
+|-----|-----------|----------------------------------|
+| run_1 | 8,857 | 128.4 |
+| run_2 | 7,541 | 112.2 |
+| run_3 | 11,106 | 104.4 |
+| mean  | **9,168 ± 1,472** | **115.0 ± 10.0** |
+
+All 3 grokked cleanly (train acc 1.0 by epoch ~200, final train/test 1.0/1.0).
+Grok mean ~9,200 now sits just inside Nanda's p=113 range (~10k–14k), slightly
+early — vs ~23,600 before the init fix.
+
+**Weight-norm curve — now reproduces Nanda Figure 7 shape:**
+
+1. flat at L2 ≈ 32 until ~epoch 30 (the small init)
+2. **rises** during memorisation to a peak ≈ 68–70 at epoch ~1,040 (all 3
+   runs) — model grows its weights to memorise, like Nanda
+3. declines through circuit formation
+4. **drops** through the grok transition to a floor ≈ 34–36; the drop lands
+   at each run's own grok epoch (run_2 ~7.5k first, run_1 ~9k, run_3 ~11k)
+5. flat floor after
+
+Early-collapse transient **gone**: fraction of total L2 drop done by epoch
+2,000 = 0.20 / 0.24 / 0.29 (was 0.74 with the old init). The norm is *rising*
+through epoch 2,000 now. Per-matrix init std confirms this is the init fix.
+No slingshot spike (betas fix holds).
+
+Peak / min / final L2 per run: run_1 32.4 / 29.2 (@32,218) / 39.8 ·
+run_2 32.3 / 32.2 (@8) / 35.5 · run_3 32.3 / 32.2 (@7) / 34.4.
+
+### 5. Two remaining differences from Nanda
+
+- **Circuit-formation region is bumpy**, not the smooth decline Nanda shows —
+  oscillations between epoch ~2k and ~6k in all 3 runs (see
+  `02_l2_norm_comparison.png`). Likely a full-batch + `weight_decay=1.0` +
+  betas interaction.
+- **run_1 went unstable AFTER grokking** — test accuracy oscillates between
+  ~0.5 and 1.0, and L2 norm oscillates ~29–40, for the rest of training
+  (epoch ~13k → 40k). It ends at 1.0 but does not hold it steadily. Runs 2
+  and 3 are clean and flat post-grok. Looks like a limit cycle from
+  full-batch GD at near-zero loss with strong weight decay. Not yet
+  diagnosed.
+
+### 6. The L2-Norm PREDICTOR still fails as an ex-ante trigger
+
+Even though the *curve* now matches Nanda descriptively, the *detector as
+coded* does not work:
+
+- MA-crossover fires at epoch ~104–128 (mean **115 ± 10**), i.e. ~**80×
+  earlier** than grok (~9,168).
+- Reason: `detect_ma_crossover` fires on the first time the fast MA rises
+  above the slow MA — and with the small init that now happens during the
+  **memorisation-phase rise** (norm climbing 32 → 70 in the first ~1,000
+  epochs), not at the pre-grok cleanup drop. The detector latches onto the
+  wrong feature.
+- MA-of-MA zero-crossing trigger is computed in `train.py` but **not saved
+  per-run** (only `detection_epoch.npy` = MA-crossover is persisted); its
+  value for these 3 runs was not captured.
+
+**Conclusion for the viva:**
+- Setup: with all four alignments the experiment faithfully reproduces
+  Nanda's descriptive p=113 weight-norm curve (rise → decline → cleanup drop
+  at grokking → floor), grok timing consistent across seeds and in Nanda's
+  ballpark.
+- Predictor: the L2-Norm predictor as implemented still fails as a forward
+  trigger — it points at the memorisation rise, not the transition. This
+  agrees with Nanda's own statement that grok timing cannot be predicted ex
+  ante. Legitimate negative benchmark row.
+
+### 7. Files Modified / Added
+
+- **Modified:** `nanda_l2_p113/models/transformer_four_head.py` (small init),
+  `nanda_l2_p113/train.py` (header comment: 4 differences),
+  `nanda_l2_p113/README.md` (4 differences table + "why small init"),
+  `context.md` (this entry).
+- **Added:** `nanda_l2_p113/benchmark_analysis/`
+  (`01_grokking_curves.png`, `02_l2_norm_comparison.png`,
+  `benchmark_report.pdf`) — committed.
+- **Regenerated:** `graphify-out/`.
+- `nanda_l2_p113/runs/run_{1,2,3}/` on disk only (gitignored).
+
+### 8. Next
+
+1. **Redesign the L2-Norm trigger** to fire on the post-peak decline / the
+   drop through grok, not the first MA crossover — that is the only feature
+   that is genuinely pre-grok in this (now Nanda-faithful) curve.
+2. Decide what to do about **run_1's post-grok instability** — more seeds
+   (5 instead of 3), or document it as a known full-batch limit-cycle
+   artefact.
+3. Persist the MA-of-MA trigger epoch per run (add to
+   `measurements.save_l2_norm_data`), so both L2 detection strategies are on
+   record.
+4. Optionally overlay `02_l2_norm_comparison.png` directly on
+   `Literature/nanda_figures/nanda_ssw_clean.png` for the thesis figure
+   (square the project curve first — project plots L2 = √Σw², Nanda plots
+   Σw²).
+5. Unchanged: main `src/` experiment's p and betas decisions; L2 Norm &
+   Dropout 3-criteria validation on the four-head data; then Spectral.
