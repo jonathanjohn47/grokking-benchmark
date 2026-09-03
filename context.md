@@ -5288,3 +5288,322 @@ the 3-criteria protocol), not a new finding, not a bug, not solved.
    data (this is the step that will actually answer the "is 250x-early
    detection expected" question).
 3. Then move to Spectral, per the fixed predictor evaluation order.
+
+---
+
+## Session Summary — September 3, 2026 (Nanda paper read in full; L2-norm behaviour vs Nanda diagnosed; Literature folder built; setup-fidelity audit)
+
+This was a long analysis/reading session. No source code changed. New
+files added under `Literature/`. `context.md` updated (this entry).
+Everything committed at Jonathan's request.
+
+### 1. Nanda et al. paper obtained and read completely
+
+- Jonathan added the paper to the repo. It now lives at
+  `Literature/Nanda et al.pdf` — Nanda, Chan, Lieberum, Smith, Steinhardt
+  (2023), *Progress measures for grokking via mechanistic
+  interpretability*, ICLR 2023, arXiv:2301.05217v3. 35 pages.
+- Full text was extracted (via `pypdf` in `.venv`) and read: Sections 3,
+  5.1–5.3, Conclusion, Appendices A, C.2, D.1.
+
+### 2. CORRECTION on record — Nanda does NOT use LayerNorm
+
+- **`context.md` has repeatedly stated (July 10 session, Aug 17 Shadow
+  LayerNorm session, and elsewhere) that "Nanda et al.'s original paper
+  includes LayerNorm." This is FACTUALLY WRONG.**
+- Nanda, Section 3, page 3, verbatim: *"In our mainline experiment, we
+  take P = 113 and use a one-layer ReLU transformer, token embeddings
+  with d = 128, learned positional embeddings, 4 attention heads of
+  dimension d/4 = 32, and n = 512 hidden units in the MLP. **We did not
+  use LayerNorm** or tie our embed/unembed matrices."* Appendix A
+  confirms: no biases in embedding, attention, or unembedding either
+  (MLP keeps `b_in`/`b_out`).
+- Consequence: the project's deliberate **no-LayerNorm design MATCHES
+  Nanda**, it does not deviate from it. The Shadow LayerNorm
+  side-experiment (Aug 17) was chasing a difference that does not exist.
+  That experiment's negative result still stands; only its stated
+  motivation ("match Nanda by adding LN back") was based on a misreading.
+- The TransformerLens `HookedTransformer` used in Nanda's public Colab
+  *can* carry LayerNorm but is configured with `normalization_type=None`
+  for this paper, so the paper text holds even against the code.
+
+### 3. Nanda does NOT use the L2 norm as a predictor
+
+- Nanda's two progress measures are **restricted loss** and **excluded
+  loss** (from the reverse-engineered Fourier-multiplication circuit).
+  Alongside them he tracks the **Gini coefficient** of Fourier components
+  and the **sum of squared weights** (the L2 norm), purely descriptively.
+- On the weight norm specifically (Section 5.3, Figure 7 bottom-right
+  panel "Total Sum of Squared Weights"): it "decreases smoothly during
+  circuit formation and more sharply during cleanup"; "each phase of
+  grokking corresponded to an inflection point in the ℓ2-norm of the
+  weights"; used only as evidence that **weight decay drives grokking**.
+  The sharp drop is **concurrent with** the test-accuracy jump (cleanup
+  = grokking), not before it.
+- Nanda's Conclusion, verbatim: *"we lack a general notion of criticality
+  that would allow us to predict when the phase transition will happen ex
+  ante."*
+- **Therefore there is no "Nanda L2-norm predictor" for this project to
+  reproduce or fail to reproduce.** The benchmark's 3-criteria protocol
+  asks a strictly harder question of the signal than Nanda ever asked.
+  The L2-Norm closed-negative verdict is not in tension with any
+  published positive result. Framing for the viva: record it as a
+  legitimate negative benchmark row.
+- Whose "L2-norm predictor" is it, if not Nanda's? The weight-norm-as-
+  controlling-quantity line is **Liu et al.** — *"Towards Understanding
+  Grokking"* (2022) and *"Omnigrok"* (2022) — the "Goldilocks zone" of
+  weight norm. NOT in the current `Literature/` set; should be added.
+
+### 4. Nanda Figure 7 extracted from the PDF
+
+- The paper's figures are vector graphics (Plotly), not embedded rasters,
+  so they were rendered from the PDF page at 400–500 DPI with `pymupdf`.
+- Saved under `Literature/nanda_figures/`:
+  `page08_full.png`, `nanda_fig7_all4panels.png`,
+  `nanda_fig7_sum_of_squared_weights.png`,
+  `nanda_fig7_sum_of_squared_weights_wide.png`, `nanda_ssw_clean.png`.
+- **Figure 7, bottom-right, is the ONLY weight-norm graph in the entire
+  paper.** Appendix Figures 18/19 give per-seed *restricted loss* and
+  *Gini*, but not the weight norm. So all "Nanda L2 curve" comparison
+  rests on this single mainline (p=113, 1 seed) panel.
+- Shape of Nanda's curve: starts ~1800, **rises** to a peak ~3600 during
+  memorisation (0–~1k), gentle near-linear decline through circuit
+  formation (~1.4k–9.4k, ~3000→~2100), **sharp monotone drop during
+  cleanup (~9.4k–14k, ~2100→~1000) which is grokking**, then flat at
+  ~1000.
+
+### 5. Project L2-norm curve characterised against Nanda (four-head runs 1–3)
+
+Comparison figure: `Literature/nanda_figures/comparison_l2_nanda_vs_project.png`.
+
+- Project runs are extremely consistent with each other. `compute_l2_norm`
+  = `torch.norm` over **all** parameters (√Σw²); Nanda plots Σw². For the
+  comparison the project curve was squared so the quantity matches.
+- Project curve shape: starts Σw² ≈ 13,300 (L2 ≈ 115), **collapses
+  immediately** — ~65% of the entire drop is done by epoch 2,000 (train
+  acc hits 99% at epoch ~240–420). Then a **~20,000-epoch flat plateau**
+  (Σw² ≈ 3,000–3,800, barely moves). Grok (test acc ≥ 0.95) at epoch
+  ~24,700–26,100.
+
+- **CORRECTION to a claim made earlier in this same session.** It was
+  first stated that the project L2 curve is "flat, with no feature at
+  grokking." That was WRONG — an artefact of sampling only the value
+  exactly at the grok epoch. Full-resolution data shows **all three runs
+  have a large, consistent weight-norm SPIKE 1–2k epochs before grok**:
+  Σw² roughly doubles (plateau ~3,000 → peak ~5,300–6,500), then crashes
+  back down through the grok epoch and continues declining to the ~1,450
+  floor.
+  - spike peak epoch / grok95 epoch: run_1 = 0.93 (pk 23,451 / grok
+    25,331), run_2 = 0.97 (pk 23,977 / grok 24,741), run_3 = 0.93 (pk
+    24,204 / grok 26,092).
+
+- **Contrast Nanda vs project:**
+  | | Nanda 2023 (p=113) | This project (p=97) |
+  |---|---|---|
+  | memorisation phase | norm **rises** to a peak | ~65% of total drop already gone by epoch 2,000 |
+  | circuit-formation phase | gentle steady decline | dead-flat plateau, ~20k epochs |
+  | at the grok transition | **monotone sharp DROP** (weight-decay cleanup) | **SPIKE UP ~2×, then collapse** (slingshot-type, Thilak et al. 2022) |
+  | after grok | flat floor | keeps declining slowly to the floor |
+  | common ground | big early drop + low final plateau, weight-decay-driven | same |
+
+- The L2-Norm predictor fires at **~epoch 100** (memorisation-phase
+  collapse) and **completely ignores the pre-grok spike at ~epoch
+  23–24k**, which is the one strong, seed-consistent, genuinely pre-grok
+  weight-norm feature in the whole curve. If L2 norm is ever to work as a
+  predictor in *this* setup, that slingshot spike is what a detector
+  should target — not the early decay.
+
+### 6. WHY the L2 behaviour differs — root causes identified
+
+Two separate differences, two separate causes.
+
+**Difference 1 (project collapses early / Nanda rises early) — INITIALISATION.**
+- Per-module Σw² at init for a fresh `TransformerFourHead` (seed 0):
+  | module | Σw² | % of total |
+  |---|---|---|
+  | `token_embedding` (98×128) | 12,659.2 | **94.3%** |
+  | `position_embedding` (3×128) | 387.8 | 2.9% |
+  | query / key / value (128×128 each) | ~42 each | ~0.3% each |
+  | `mlp_in` (512×128) | 171.0 | 1.3% |
+  | `mlp_out` (128×512) | 42.8 | 0.3% |
+  | `output_head` (98×128) | 32.6 | 0.2% |
+  | **TOTAL** | **13,420.3** | (L2 = 115.85) |
+- The project's L2 norm at init **is** the token-embedding table (94%).
+  PyTorch's `nn.Embedding` default init is `N(0, 1)` — very large.
+  Nanda / TransformerLens initialises every matrix (embeddings included)
+  with a small scaled init, so his total starts ~1,800 and the network
+  must **grow** its weights to memorise (hence the rise to ~3,600).
+- `weight_decay = 1.0` (strong, decoupled AdamW) immediately crushes the
+  oversized `N(0,1)` embedding down to task scale: Σw² falls ~13,400 →
+  ~3,500 by epoch 2,000, and that drop of ~10,000 is essentially the
+  entire token embedding (12,659). So the "huge early collapse" is an
+  **init-plus-weight-decay transient in the embedding table** — nothing
+  to do with grokking or circuit formation. Strip it and the remaining
+  curve (~3,500 → ~1,450 floor) is comparable in scale to Nanda's
+  (~3,600 → ~1,000), except for difference 2.
+
+**Difference 2 (project spikes at grok / Nanda drops smoothly) — `beta2` + prime.**
+- `betas`: Nanda and Power both use AdamW `(0.9, 0.98)`. The project's
+  `src/train_four_head.py` uses PyTorch default `(0.9, 0.999)`.
+  `beta2 = 0.999` gives Adam's second-moment estimate a ~1,000-step
+  memory vs ~50 for `0.98`. On the project's ~20,000-epoch near-zero-loss
+  plateau the second moment goes stale, so a later slightly-larger
+  gradient produces a huge effective step — the classic **slingshot
+  mechanism** (Thilak et al. 2022). That is the spike.
+- Prime: p = 97 vs 113. Nanda Appendix C.2.2 — smaller primes sit closer
+  to the edge of the grokking regime at fixed weight decay (p = 53 would
+  not grok at λ = 1; needed λ = 5). p = 97 groks later (~25k vs
+  ~10–14k) and more violently, and the long plateau gives Adam more time
+  to enter the stale-`beta2` regime.
+- **NOT the cause:** LayerNorm (both setups have none — see item 2),
+  head count (both 4 heads), MLP biases (present in Nanda, absent here,
+  but far too small to matter).
+
+### 7. Full Nanda-vs-project setup-fidelity audit
+
+Checked the paper against `src/models/transformer_four_head.py`,
+`src/train_four_head.py`, `src/data/modular_arithmetic.py`.
+
+**Differences (ranked by importance for the L2-norm question):**
+| # | Item | Nanda mainline | This project | Note |
+|---|---|---|---|---|
+| 1 | Prime `p` | 113 | **97** | shifts memorisation/generalisation balance; p=97 untested by Nanda (he did 53, 109, 113, 401) |
+| 2 | Weight init | TransformerLens scaled (small) | PyTorch defaults — `Embedding` = `N(0,1)`, `Linear` = Kaiming-uniform | dominant cause of the early-collapse difference |
+| 3 | Optimiser `betas` | `(0.9, 0.98)` | `(0.9, 0.999)` (PyTorch default) | dominant cause of the slingshot spike; one-line fix |
+| 4 | MLP biases | `b_in`, `b_out` present | `bias=False` everywhere | minor |
+| 5 | Output vocab | 113 (clean) | 98 (token 97 = `=` folded in, never a label) | one unused output row |
+| 6 | Seeds | 5 | 3 (Power et al. norm) | fewer consistency checks |
+| 7 | Hardware | CUDA | MPS / CPU | numerical only |
+
+**Matches (substrate is a faithful Nanda four-head model):** 1-layer
+transformer, 4 heads, `head_dim=32`, `d_model=128`, `d_mlp=512`, ReLU
+MLP, **no LayerNorm**, untied embed/unembed, learned positional
+embeddings, `"a b ="` sequence, logits read at `=` position,
+cross-entropy on the answer token, AdamW `lr=1e-3` `weight_decay=1.0`
+(decoupled), full-batch gradient descent, 30% random train split, 40,000
+epochs, no biases in attention/embedding/unembedding, residual
+connections around attention and MLP.
+
+### 8. Literature folder created and organised
+
+- Jonathan added 25 related-literature PDFs to the repo root. All were
+  moved into a new `Literature/` folder (root is now clean of loose
+  PDFs).
+- `Paper et al.pdf` (a download-placeholder name) was identified as
+  Power, Burda, Edwards, Babuschkin, Misra (2022), *Grokking:
+  Generalization Beyond Overfitting on Small Algorithmic Datasets*
+  (arXiv:2201.02177) and **renamed** accordingly. No other file renamed.
+- `Literature/README.md` — index created, papers grouped into 8 themes
+  (grokking-direct; heavy-tailed self-regularisation; neural collapse;
+  generalisation dynamics / double descent; kernel / mean-field theory;
+  scaling laws / representations; robustness / margins / shortcut
+  learning; other), with a per-paper note and predictor linkage where
+  known.
+- **Duplicate flagged:** `J. Rocks - Memorizing without overfitting ...
+  [2020].pdf` and `PhysRevResearch.4.013201.pdf` are the arXiv preprint
+  and the published (Phys. Rev. Research 4, 013201, 2022) version of the
+  same Rocks & Mehta paper. Keep one.
+- Jonathan separately generated
+  `Literature/exhaustive_literature_extraction_report.md` — a long
+  structured brief covering 21 distinct papers (the 25 PDFs collapse to
+  21 after duplicates/merged versions).
+
+### 9. Which experimental setup to adopt — analysis of the whole Literature set
+
+- Read the full extraction brief. **Only two papers in the entire set
+  contain a modular-arithmetic transformer setup that could be adopted:
+  Power et al. (2022) and Nanda et al. (2023).** A third grokking paper
+  (Pomarico et al. 2025, Paper 8) runs on Matrix Product State tensor
+  networks on Fashion-MNIST — a different model family, not portable.
+- Every other paper is a **predictor source or an analysis lens**, not a
+  runnable setup: Martin & Mahoney (3) → HTSR Alpha; Canatar (1) →
+  Spectral; Pomarico (8) → Higher-MI; Xu (13) / Papyan (20) / Fang (6) /
+  Mixon (7) → neural-collapse lenses (AGE / Weight-PCA); Sokolić (11) →
+  Jacobian spectral norm; the rest (Rocks, Advani, Spigler, Mei ×2,
+  Bahri, Zhang, Li, Biroli, Geirhos, Jiang) are double-descent / scaling
+  / mean-field theory or unrelated-substrate experiments.
+- **Power vs Nanda:** Power's setup is 2-layer, minibatch, LR-warmup, and
+  is contaminated by the slingshot mechanism in 2-layer runs. Nanda's is
+  1-layer, full-batch, no warmup, clean — the fewest moving parts and the
+  substrate the grokking-predictor literature standardised on.
+- **Recommendation on record: stay on the Nanda architecture. Do NOT
+  shift setups.** Nothing in the literature is a better substrate for a
+  weight-space predictor benchmark.
+- **Two alignments recommended:**
+  1. Fix `betas` to `(0.9, 0.98)` in `src/train_four_head.py` — matches
+     both Power and Nanda; one-line change; also expected to shrink the
+     slingshot spike. Do this regardless of the prime decision.
+  2. **Prime decision — OPEN, Jonathan's call.** Recommended: switch to
+     **p = 113** to make the setup a faithful Nanda replication, so the
+     weight-norm curve can be overlaid directly on Nanda's Figure 7 and
+     the L2-norm question becomes cleanly answerable. Cost: loses direct
+     comparability with Power's published p=97 curves; requires a fresh
+     re-baseline of the four-head runs. Alternative: keep **p = 97** for
+     continuity with existing runs and Power. Not yet decided.
+
+### 10. Recommended next experiments (to close the L2-norm question)
+
+1. **Per-module weight-norm curves over training** (not just the total) —
+   confirm the early collapse is `token_embedding` and the pre-grok spike
+   is in the attention/MLP weights.
+2. **Re-run with `betas = (0.9, 0.98)`** — check whether the slingshot
+   spike shrinks or disappears.
+3. **Re-run at p = 113** — check whether the total curve then matches
+   Nanda's Figure 7 shape (rise during memorisation, smooth decline,
+   sharp drop at cleanup).
+
+### 11. Professor-facing summary (what to tell the supervisor)
+
+- "Nanda shows weight-norm decay as a *descriptive* correlate of the
+  cleanup phase, not a validated predictor, and states explicitly that
+  grokking timing cannot be predicted ex ante. Our 3-criteria protocol is
+  stricter than anything the paper claims for this signal."
+- "Our setup already matches Nanda's architecture, LayerNorm included
+  (both have none — our earlier note was wrong). The meaningful
+  deviations are the prime (97 vs 113), the weight initialisation
+  (PyTorch defaults vs TransformerLens scaled init), and the Adam betas
+  (0.9/0.999 vs 0.9/0.98)."
+- "The L2 curve differs from Nanda's for two concrete, mostly-fixable
+  reasons: (1) a PyTorch `N(0,1)` embedding init that weight decay
+  crushes in the first ~2k epochs — 94% of our initial weight norm is the
+  token embedding; (2) a slingshot-type spike at the grok transition
+  driven by `beta2=0.999` on a long flat plateau. Per your advice the
+  deep fix waits until the four-predictor baseline is in place."
+
+### Files Modified / Added (this session)
+
+- `context.md` — this entry.
+- `.gitignore` — added `safemytrip-13b58-firebase-adminsdk-fbsvc-74587cebc1.json`
+  (see Security note below).
+- `Literature/` — NEW folder:
+  - 25 literature PDFs moved from repo root (one renamed:
+    `Paper et al.pdf` → `Alethea Power - Grokking Generalization beyond
+    overfitting on small algorithmic datasets [2022].pdf`).
+  - `Literature/README.md` — NEW, thematic index.
+  - `Literature/exhaustive_literature_extraction_report.md` — added by
+    Jonathan (21-paper structured brief).
+  - `Literature/nanda_figures/` — NEW: Figure 7 crops extracted from the
+    Nanda PDF + `comparison_l2_nanda_vs_project.png`.
+- No source code (`src/`) changed. No experiment re-run.
+
+### Security note (NOT committed)
+
+- `safemytrip-13b58-firebase-adminsdk-fbsvc-74587cebc1.json` was found
+  untracked at the repo root. It is a **Firebase admin SDK private key**,
+  unrelated to this thesis project. It was **deliberately excluded from
+  the commit** and added to `.gitignore`. It should be **removed from the
+  working tree and the key rotated in the Firebase console** if it has
+  ever been pushed anywhere. `CLAUDE.md` also bars Firebase credentials
+  from this project.
+
+### Next
+
+1. Jonathan decides p = 97 vs p = 113 (item 9.2). That decision gates
+   whether the next run is a fresh re-baseline or a continuation.
+2. Apply the `betas = (0.9, 0.98)` fix to `src/train_four_head.py`.
+3. Run the three diagnostic experiments in item 10.
+4. Add Liu et al. (2022) "Towards Understanding Grokking" and "Omnigrok"
+   to `Literature/` — the actual source for weight-norm-as-predictor.
+5. Resolve the Rocks / PhysRevResearch duplicate in `Literature/`.
+6. Unchanged from before: L2 Norm & Dropout 3-criteria validation on the
+   four-head data, then Spectral.

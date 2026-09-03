@@ -343,5 +343,25 @@
     "mtime": 1788297736.3671222,
     "ast_hash": "34711408990aa4a7a116cc2a5892f5e0",
     "semantic_hash": ""
+  },
+  "benchmark_analysis/benchmark_report.pdf": {
+    "mtime": 1788363242.1494906,
+    "ast_hash": "cd100663dedadf46eca24073565a14e7",
+    "semantic_hash": ""
+  },
+  "benchmark_analysis/01_grokking_curves.png": {
+    "mtime": 1788363240.7918549,
+    "ast_hash": "a34a3e7b5bec2569dc266467a5d84fdb",
+    "semantic_hash": ""
+  },
+  "benchmark_analysis/02_l2_norm_comparison.png": {
+    "mtime": 1788363241.0429668,
+    "ast_hash": "df62b502d2207b2130eb213afb6d33d4",
+    "semantic_hash": ""
+  },
+  "benchmark_analysis/03_dropout_gap_comparison.png": {
+    "mtime": 1788363241.7215884,
+    "ast_hash": "d7489cbd78c213062dd1a8569a307096",
+    "semantic_hash": ""
   }
 }
