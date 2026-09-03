@@ -5607,3 +5607,147 @@ connections around attention and MLP.
 5. Resolve the Rocks / PhysRevResearch duplicate in `Literature/`.
 6. Unchanged from before: L2 Norm & Dropout 3-criteria validation on the
    four-head data, then Spectral.
+
+---
+
+## Session Summary — September 3, 2026 (New folder `nanda_l2_p113/`: L2-Norm-only secondary experiment on (a+b) mod 113)
+
+### Request
+
+Jonathan asked for a secondary, self-contained version of the experiment in a
+separate folder, containing only the L2-Norm predictor, on `(a + b) mod 113`
+instead of `mod 97` — a faithful Nanda replication. First he was given an
+Opencode prompt; he then said he wanted the code written directly, so Claude
+implemented it directly (explicit permission on record for this task). While
+building, Jonathan also said the alternative experiment should use
+`betas = (0.9, 0.98)`, so that was folded in as a third deliberate difference.
+
+### What was built — new folder `nanda_l2_p113/` at repo root
+
+Self-contained. Imports nothing from `src/`. Layout:
+
+```
+nanda_l2_p113/
+  __init__.py, README.md
+  train.py                      L2-only training loop, (a+b) mod 113
+  run_benchmark.py              3 seeded runs + cross-run analysis (resumable)
+  measurements.py               PredictorMeasurements — L2 + training only
+  data/__init__.py, data/modular_arithmetic.py
+  models/__init__.py, models/transformer_four_head.py
+  predictors/__init__.py, predictors/l2_norm.py
+```
+
+### The three deliberate differences from the main `src/` experiment
+
+1. **Prime `p = 113`** (Nanda's mainline prime), not 97.
+   - `train.py` defines `MODULUS = 113` and uses it everywhere:
+     `get_dataloaders(MODULUS, batch_size=int(0.3*MODULUS*MODULUS))`,
+     `TransformerFourHead(vocab_size=MODULUS + 1, ...)` → `vocab_size = 114`.
+   - `data/modular_arithmetic.py`: the `=` token id was hardcoded `97` in the
+     `src/` copy (`sequence = [item[0], item[1], 97]`). Here it is
+     parametrised — `ModularArithmeticDataset.__init__` stores `self.number`
+     and `get_tensor` uses `self.number`. With `number = 113` the `=` token id
+     is `113` (numbers are `0..112`, `=` is `113`), matching the main
+     experiment's convention.
+   - `models/transformer_four_head.py` is a byte-for-byte copy; only the
+     `__main__` demo number changed (`vocab_size=98` → `114`). The class
+     already took `vocab_size` as an argument, nothing else hardcoded.
+2. **L2-Norm predictor only.** No Dropout anywhere.
+   - `train.py`: no `predictors.dropout` import, no `dropout_*` lists, no
+     per-epoch `compute_dropout_gap_multi_rate` call, no `model.train()`
+     restore (that line only existed in `src/` because the dropout sweep left
+     the model in `eval()` — with no sweep the model stays in `train()` the
+     whole loop, and the `nn.Dropout(0.0)` hooks make train/eval identical
+     anyway), no dropout prints, no dropout save/visualisation.
+   - `measurements.py`: `PredictorMeasurements` with the Dropout members
+     stripped — no `dropout_dir`, no `save_dropout_data`, no
+     `generate_dropout_visualizations`; `generate_combined_report` now takes
+     only training + L2 args and writes a 3-page PDF (grokking curve, loss,
+     L2 norm + MAs) — no Dropout page 4.
+   - `run_benchmark.py`: `BenchmarkAnalyzer` reduced to L2-only —
+     `load_runs` (no dropout npy loads), `generate_grokking_curves`,
+     `generate_l2_norm_comparison`, `generate_run_consistency_report`. No
+     `generate_dropout_comparison`. `REQUIRED_RUN_FILES` is the L2 + training
+     + `reports/training_report.pdf` sentinel set. It does **not** shell out
+     to `src/generate_master_report.py` (that tool is Dropout-aware and
+     belongs to the main experiment). Resume / top-up / incomplete-folder
+     cleanup logic kept. Paths resolved from `__file__` so it runs from
+     anywhere.
+3. **AdamW `betas = (0.9, 0.98)`** instead of PyTorch's default `(0.9, 0.999)`.
+   - `train.py`:
+     `AdamW(model.parameters(), lr=1e-3, weight_decay=1.0, betas=(0.9, 0.98))`.
+   - This is the value Nanda et al. and Power et al. both use. Per this
+     session's earlier item 9.2 it is expected to shrink the slingshot-type
+     weight-norm spike seen at the grok transition in the p=97 runs. Applied
+     ONLY inside this new folder. **The main experiment's betas decision
+     (`src/train_four_head.py`) is still OPEN — not changed.**
+
+### What did NOT change
+
+- `src/` and `run_full_benchmark.py` — untouched. The main four-head
+  experiment (p=97, L2 + Dropout, betas default) is exactly as it was.
+- `archive/single_head/` — untouched. (Jonathan had this open in the IDE; it
+  was NOT the base for the new folder — the four-head experiment was, per his
+  answer to the clarifying question.)
+- Architecture, `lr=1e-3`, `weight_decay=1.0`, `num_epochs=40000`, full-batch
+  on the 30/70 split, fresh `torch.seed()` per run, all L2 predictor windows
+  (`fast=50`, `slow=200`, MA-of-MA `fast=20`, `skip_epochs=100`, noise-floor
+  `quiet_epoch_cutoff=90`), 3 seeded runs — all identical to `src/`.
+- `.gitignore` — not edited. `nanda_l2_p113/runs/` is already covered by the
+  repo-wide `runs/` rule.
+
+### Validation done (before Jonathan's own run)
+
+- All 8 `.py` files byte-compile.
+- `grep` for `dropout` / `97` / `98` inside the folder → only design-comment
+  hits, no live code.
+- Smoke check: `get_dataloaders(113)` → `(batch, 3)` tensors, 3rd position
+  always token `113`, labels `≤ 112`; model forward → `(batch, 3, 114)`
+  logits; `compute_l2_norm` → float (~122 at init). Train split 3830 / 12769,
+  batch formula = 3830 (full-batch).
+- `run_benchmark.py` imports without launching training; no
+  `generate_dropout_comparison` method.
+
+### First real run (Jonathan ran `python nanda_l2_p113/train.py` — run_1)
+
+Saved to `nanda_l2_p113/runs/run_1/` (`runs/` gitignored, on disk only):
+`seed.npy`, `training/{train_acc,test_acc,loss}_history.npy`,
+`l2_norm/*` (raw + smoothed L2, MAs, MA-of-MA, acceleration ×3, detection
+epoch, 4 PNGs), `reports/training_report.pdf` (3 pages).
+
+run_1 numbers:
+- Grok epoch (test acc > 0.9): **23624**
+- L2 Norm MA-crossover detection epoch: **101.73**
+- L2 Norm MA-of-MA zero-crossing trigger epoch: **1762.56**
+- L2 norm: min 35.44, max 124.40, final 35.45 (√Σw²; contrast the p=97 runs
+  which start Σw² ≈ 13,300 i.e. L2 ≈ 115)
+
+**Observation, not yet a finding:** run_1 grokked at ~23.6k, still close to the
+p=97 runs (~25k), NOT the ~10–14k Nanda reports for p=113. Whether
+`betas=(0.9,0.98)` + p=113 changes the weight-norm curve shape (the point of
+the whole folder) needs runs 2 and 3 and the overlay on Nanda Figure 7. Not
+evaluated yet.
+
+### Files Modified / Added
+
+- **Added:** everything under `nanda_l2_p113/` (11 tracked files:
+  `__init__.py` ×4, `README.md`, `train.py`, `run_benchmark.py`,
+  `measurements.py`, `data/modular_arithmetic.py`,
+  `models/transformer_four_head.py`, `predictors/l2_norm.py`).
+- **Modified:** `context.md` (this entry).
+- **Regenerated:** `graphify-out/` (`graphify update .`, no LLM/API — now
+  410 nodes / 468 edges / 41 communities, includes `nanda_l2_p113/`).
+- A throwaway `OPENCODE_PROMPT_nanda_l2_p113.md` was created earlier this
+  session and then deleted once Jonathan asked for direct implementation.
+- `nanda_l2_p113/runs/run_1/` exists on disk (gitignored, not committed).
+
+### Next
+
+1. Jonathan runs `python nanda_l2_p113/run_benchmark.py` to finish runs 2 & 3
+   and produce `nanda_l2_p113/benchmark_analysis/` (grokking-curve overlay,
+   L2 cross-run overlay, 3-page `benchmark_report.pdf`).
+2. Overlay the 3 p=113 L2-norm curves on Nanda Figure 7
+   (`Literature/nanda_figures/`); check whether `betas=(0.9,0.98)` shrank the
+   pre-grok weight-norm spike.
+3. Still open, unchanged: main `src/` experiment's p and betas decisions;
+   L2 Norm & Dropout 3-criteria validation; then Spectral.

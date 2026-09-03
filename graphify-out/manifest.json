@@ -363,5 +363,225 @@
     "mtime": 1788363241.7215884,
     "ast_hash": "d7489cbd78c213062dd1a8569a307096",
     "semantic_hash": ""
+  },
+  "Literature/README.md": {
+    "mtime": 1788436750.1797779,
+    "ast_hash": "68b3ee9238f4b4ba70c2ec11df21bbf1",
+    "semantic_hash": ""
+  },
+  "Literature/exhaustive_literature_extraction_report.md": {
+    "mtime": 1788437919.4784946,
+    "ast_hash": "7f3272c150afc189855153277260e11a",
+    "semantic_hash": ""
+  },
+  "Literature/Abdulkadir Canatar - Spectral bias and task-model alignment explain generalization in kernel regression and infinitely wide ne.pdf": {
+    "mtime": 1788436569.6994758,
+    "ast_hash": "0f1749b518b25efaec888e8d6df1f29f",
+    "semantic_hash": ""
+  },
+  "Literature/Alethea Power - Grokking Generalization beyond overfitting on small algorithmic datasets [2022].pdf": {
+    "mtime": 1788436642.0081117,
+    "ast_hash": "3390f82d86710b7783ed8de3f048eec5",
+    "semantic_hash": ""
+  },
+  "Literature/Charles H. Martin - Predicting trends in the quality of state-of-the-art neural networks without access to training or testing.pdf": {
+    "mtime": 1788436569.7160504,
+    "ast_hash": "63b378b71ffa73d0823792cd15e5ae8a",
+    "semantic_hash": ""
+  },
+  "Literature/Chiyuan Zhang - Understanding deep learning (still) requires rethinking generalization [2021].pdf": {
+    "mtime": 1788436569.730401,
+    "ast_hash": "2c21806953e5ed65211e0fae8fc5a5e7",
+    "semantic_hash": ""
+  },
+  "Literature/Chunheng Jiang - Network properties determine neural network performance [2024].pdf": {
+    "mtime": 1788436569.7437499,
+    "ast_hash": "705e03b26b6f81e386617e850cf3d33e",
+    "semantic_hash": ""
+  },
+  "Literature/Cong Fang - Exploring deep neural networks via layer-peeled model Minority collapse in imbalanced training [2021].pdf": {
+    "mtime": 1788436569.756047,
+    "ast_hash": "cb18f8980910a1662ca7406156997528",
+    "semantic_hash": ""
+  },
+  "Literature/Convex_Formulation_of_Overparameterized_Deep_Neural_Networks.pdf": {
+    "mtime": 1788436569.7688022,
+    "ast_hash": "879d3e52816c6f9945bffad74c41a4c1",
+    "semantic_hash": ""
+  },
+  "Literature/D. Mixon - Neural collapse with unconstrained features [2020].pdf": {
+    "mtime": 1788436569.779265,
+    "ast_hash": "a4fda3929e875d95745569ec04a3569a",
+    "semantic_hash": ""
+  },
+  "Literature/Domenico Pomarico - Transfer Entropy and O-Information to Detect Grokking in Tensor Network Multi-Class Classification Problem.pdf": {
+    "mtime": 1788436569.7908213,
+    "ast_hash": "3ab83d7e860627031d59ebb27e14381a",
+    "semantic_hash": ""
+  },
+  "Literature/Giulio Biroli - Dynamical regimes of diffusion models [2024].pdf": {
+    "mtime": 1788436569.802779,
+    "ast_hash": "a74d78ba3862aab42988dee46c7342c6",
+    "semantic_hash": ""
+  },
+  "Literature/J. Rocks - Memorizing without overfitting Bias, variance, and interpolation in overparameterized models [2020].pdf": {
+    "mtime": 1788436569.8150165,
+    "ast_hash": "4f21c0943faef1e15278f12a547893a4",
+    "semantic_hash": ""
+  },
+  "Literature/Jean Barbier - Optimal errors and phase transitions in high-dimensional generalized linear models [2017].pdf": {
+    "mtime": 1788436569.8245246,
+    "ast_hash": "6972a942bcf2d77ebf5d27d0a05fd368",
+    "semantic_hash": ""
+  },
+  "Literature/Jure Sokoli\u0107 - Robust Large Margin Deep Neural Networks [2016].pdf": {
+    "mtime": 1788436569.835921,
+    "ast_hash": "15a1a49d39ec34820df667c0b4906736",
+    "semantic_hash": ""
+  },
+  "Literature/Madhu S. Advani - High-dimensional dynamics of generalization error in neural networks [2017].pdf": {
+    "mtime": 1788436569.8481796,
+    "ast_hash": "2f81c51bcd5c3aebc98eb1202d725465",
+    "semantic_hash": ""
+  },
+  "Literature/Mengjia Xu - Dynamics in Deep Classifiers Trained with the Square Loss Normalization, Low Rank, Neural Collapse, and Generaliz.pdf": {
+    "mtime": 1788436569.8619075,
+    "ast_hash": "4b8cfcd1ed366573dbcd489b739021de",
+    "semantic_hash": ""
+  },
+  "Literature/Nanda et al.pdf": {
+    "mtime": 1788435621.3314304,
+    "ast_hash": "c46ffc8571e58b68c7ed9d1ad6d29371",
+    "semantic_hash": ""
+  },
+  "Literature/P. Baldi - Temporal Evolution of Generalization during Learning in Linear Networks [1991].pdf": {
+    "mtime": 1788436569.8899305,
+    "ast_hash": "76f2b2ee6f1b35732403bcebd0bd6c33",
+    "semantic_hash": ""
+  },
+  "Literature/PhysRevResearch.4.013201.pdf": {
+    "mtime": 1788436569.911005,
+    "ast_hash": "3c4bc4635a20e2c53c110392354ec9e1",
+    "semantic_hash": ""
+  },
+  "Literature/Qianyi Li - Representations and generalization in artificial and brain neural networks [2024].pdf": {
+    "mtime": 1788436569.9379077,
+    "ast_hash": "694e59ab2b6d4a45ac190a8ccfb32546",
+    "semantic_hash": ""
+  },
+  "Literature/Robert Geirhos - Shortcut learning in deep neural networks [2020].pdf": {
+    "mtime": 1788436569.9523425,
+    "ast_hash": "5df4db1b791c4559cfc7c9e19690af8d",
+    "semantic_hash": ""
+  },
+  "Literature/S. Spigler - A jamming transition from under- to over-parametrization affects generalization in deep learning [2018].pdf": {
+    "mtime": 1788436569.9642282,
+    "ast_hash": "57920a9b0807452b03f0253ba8582942",
+    "semantic_hash": ""
+  },
+  "Literature/Song Mei - A mean field view of the landscape of two-layer neural networks [2018].pdf": {
+    "mtime": 1788436569.9840193,
+    "ast_hash": "ff96a121b61e0e93e16ea33a58999495",
+    "semantic_hash": ""
+  },
+  "Literature/Song Mei - The Generalization Error of Random Features Regression Precise Asymptotics and the Double Descent Curve [2019].pdf": {
+    "mtime": 1788436569.9964538,
+    "ast_hash": "a2929cf64b35fc13fb9d0372716b6d85",
+    "semantic_hash": ""
+  },
+  "Literature/Vardan Papyan - Prevalence of neural collapse during the terminal phase of deep learning training [2020].pdf": {
+    "mtime": 1788436570.0094085,
+    "ast_hash": "519360e70de94694334d792eecab46da",
+    "semantic_hash": ""
+  },
+  "Literature/Yasaman Bahri - Explaining neural scaling laws [2021].pdf": {
+    "mtime": 1788436570.0214412,
+    "ast_hash": "0f9da070b24f49deeec17e7f7841e707",
+    "semantic_hash": ""
+  },
+  "Literature/nanda_figures/comparison_l2_nanda_vs_project.png": {
+    "mtime": 1788441889.692416,
+    "ast_hash": "e40a89b323df0df18ef9206d5fcff29b",
+    "semantic_hash": ""
+  },
+  "Literature/nanda_figures/nanda_fig7_all4panels.png": {
+    "mtime": 1788441627.2151046,
+    "ast_hash": "01e1d9f0c3b4d63be9dc9b4f29e5cb96",
+    "semantic_hash": ""
+  },
+  "Literature/nanda_figures/nanda_fig7_sum_of_squared_weights.png": {
+    "mtime": 1788441627.230218,
+    "ast_hash": "8f91b910bddaaae462dd3ff98d608a2a",
+    "semantic_hash": ""
+  },
+  "Literature/nanda_figures/nanda_fig7_sum_of_squared_weights_wide.png": {
+    "mtime": 1788441627.2496893,
+    "ast_hash": "475495bd7459f712e9215d33b092a6a1",
+    "semantic_hash": ""
+  },
+  "Literature/nanda_figures/nanda_ssw_clean.png": {
+    "mtime": 1788441889.1580443,
+    "ast_hash": "7e8f70993163af41d75cbab7e946893c",
+    "semantic_hash": ""
+  },
+  "Literature/nanda_figures/page08_full.png": {
+    "mtime": 1788441603.8711524,
+    "ast_hash": "8bbeb01fa264362fdcf38e437ac11d20",
+    "semantic_hash": ""
+  },
+  "nanda_l2_p113/__init__.py": {
+    "mtime": 1788446774.8460038,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "nanda_l2_p113/data/__init__.py": {
+    "mtime": 1788446774.8461,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "nanda_l2_p113/data/modular_arithmetic.py": {
+    "mtime": 1788446804.5375414,
+    "ast_hash": "d47cddea91a2e30fd2d327b8c51d8443",
+    "semantic_hash": ""
+  },
+  "nanda_l2_p113/measurements.py": {
+    "mtime": 1788446844.3579319,
+    "ast_hash": "d254f1105d4de1a2c31104aae224b397",
+    "semantic_hash": ""
+  },
+  "nanda_l2_p113/models/__init__.py": {
+    "mtime": 1788446774.8461723,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "nanda_l2_p113/models/transformer_four_head.py": {
+    "mtime": 1788446794.7152708,
+    "ast_hash": "bc6820e1b12dd50df5c7db63b2ea5883",
+    "semantic_hash": ""
+  },
+  "nanda_l2_p113/predictors/__init__.py": {
+    "mtime": 1788446774.8462408,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "nanda_l2_p113/predictors/l2_norm.py": {
+    "mtime": 1788446777.4650195,
+    "ast_hash": "cefb17b190b43d6d7034ca83bc999780",
+    "semantic_hash": ""
+  },
+  "nanda_l2_p113/run_benchmark.py": {
+    "mtime": 1788446936.7413025,
+    "ast_hash": "e259f56ac7d0ae65d12d80ef1dda6e1c",
+    "semantic_hash": ""
+  },
+  "nanda_l2_p113/train.py": {
+    "mtime": 1788446879.3517776,
+    "ast_hash": "93e270a59ba262f38d84e037c15c06e5",
+    "semantic_hash": ""
+  },
+  "nanda_l2_p113/README.md": {
+    "mtime": 1788446954.3947327,
+    "ast_hash": "7aa8a28c60e37770d5d2d3ec11f9f385",
+    "semantic_hash": ""
   }
 }
