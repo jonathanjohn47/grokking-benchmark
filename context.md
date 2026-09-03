@@ -5219,3 +5219,72 @@ files byte-compile.
 
 State: benchmark still running (first four-head run in progress). No code
 work pending. Next data point is that run's output + the master report.
+
+---
+
+## Session Summary — September 3, 2026 (First four-head benchmark: results in)
+
+### Request
+
+Jonathan reported the first full four-head benchmark (`python
+run_full_benchmark.py`, 3 seeded runs, 40000 epochs each) finished and
+results are printed. Asked to update `context.md` and commit.
+
+### What was investigated (no code changed this session)
+
+Verified all three `runs/four_head/run_{1,2,3}/` folders are complete (all
+8 `REQUIRED_RUN_FILES` present, including `reports/training_report.pdf`).
+`benchmark_analysis/` was produced with the **old-style** Stage 2 outputs
+only: `01_grokking_curves.png`, `02_l2_norm_comparison.png`,
+`03_dropout_gap_comparison.png`, `benchmark_report.pdf`. As already flagged
+in the prior addendum, this run's process started before the master-report
+change landed, so `master_plots.pdf`, `master_data.pdf`, and
+`benchmark_analysis/data/*.csv` were **not** generated. This is a known,
+postponed gap — not a bug — and the earlier note's remedy still applies:
+run `python src/generate_master_report.py` directly, or re-run
+`python run_full_benchmark.py` (it will skip training since all 3 runs are
+complete, see the master files missing, and build only those).
+
+### Raw numbers pulled for the record (read-only, from the `.npy` files)
+
+| run | final test acc | final train acc | epoch test_acc first ≥ 0.95 | L2-norm predictor detection epoch |
+|-----|-----------------|-------------------|-------------------------------|-------------------------------------|
+| run_1 | 1.0000 | 1.0000 | 25331 | 102.17 |
+| run_2 | 1.0000 | 1.0000 | 24741 | 100.29 |
+| run_3 | 1.0000 | 1.0000 | 26092 | 102.14 |
+
+All 3 runs grokked cleanly (train and test accuracy both reach 1.0). Dropout
+gap sweep (`dropout_rates = [0.1, 0.3, 0.5, 0.7, 0.9]`) ran every epoch as
+designed; gap magnitude increases with rate and grows more negative through
+training in all 3 runs (qualitatively consistent across seeds).
+
+**Open question, not yet resolved:** the L2-norm predictor's detection
+epoch (~100–102) is roughly 250x earlier than the epoch where test accuracy
+actually crosses 0.95 (~24700–26100). Whether this is expected behaviour of
+the L2-norm predictor (an early leading indicator, which is the whole point
+of a "predictor") or a mismatch that needs the 3-criteria validation
+protocol to interpret properly is **not evaluated yet** — this is exactly
+the pending validation step already on record (L2 Norm & Dropout against
+the 3-criteria protocol), not a new finding, not a bug, not solved.
+
+### Files Modified
+
+- `context.md` — this summary.
+- No source files changed this session.
+
+### Git
+
+- `benchmark_analysis/{01_grokking_curves.png, 02_l2_norm_comparison.png,
+  03_dropout_gap_comparison.png, benchmark_report.pdf}` — new, from the
+  completed run — committed this session.
+- `runs/` stays gitignored, as before; the three run folders live only on
+  disk.
+
+### Next
+
+1. Optionally generate the master report (`master_plots.pdf`,
+   `master_data.pdf`, CSVs) — postponed, not done this session, see above.
+2. Validate L2 Norm & Dropout against the 3-criteria protocol using this
+   data (this is the step that will actually answer the "is 250x-early
+   detection expected" question).
+3. Then move to Spectral, per the fixed predictor evaluation order.
