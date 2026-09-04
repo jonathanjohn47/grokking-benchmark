@@ -1,16 +1,137 @@
+import json
 import os
 
 from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
-from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer
+from reportlab.platypus import PageBreak, Paragraph, SimpleDocTemplate, Spacer
+
+# Where the full 5-seed Nanda-Unified re-baseline results live. Relative to
+# the current working directory, same convention run_nanda_benchmark.py
+# uses for its --output_dir default. Not present until that benchmark has
+# actually been run (results/ is gitignored, disk only).
+RESULTS_JSON_PATH = os.path.join("results", "nanda_unified", "aggregate.json")
+
+
+def _escape_line(line):
+    """Escape a plain-text line for ReportLab's Paragraph XML/HTML parser,
+    convert tabs, and preserve leading spaces via &nbsp;."""
+    escaped = (
+        line.replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace(" ", "&nbsp;")
+        .rstrip("\n")
+    )
+    return escaped.replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;")
+
+
+def add_text_lines(story, lines, style):
+    """Append plain-text lines to the story as Paragraphs (or blank
+    Spacers), using the same escaping as the source-code dump."""
+    for line in lines:
+        escaped_line = _escape_line(line)
+        if not escaped_line.strip():
+            story.append(Spacer(1, 4))
+        else:
+            story.append(Paragraph(escaped_line, style))
+
+
+def _fmt_epoch(value):
+    return "None" if value is None else f"{value:.2f}"
+
+
+def _seed_result_lines(seed):
+    """Format one seed's summary dict (matching results/nanda_unified/
+    seed_*/summary.json / aggregate.json's "seeds" entries) into plain-text
+    lines, mirroring the console table in run_nanda_benchmark.py's
+    aggregate()."""
+    lp = seed["l2_predictor"]
+    gaps = seed["dropout_final_gap_by_rate"]
+    lc = seed["limit_cycle_check"]
+    w = lp["windows"]
+
+    lines = [
+        f"seed {seed['seed']}  (modulus={seed['modulus']}  epochs={seed['epochs']}  "
+        f"wall_time={seed['wall_time_sec']}s)",
+        f"  grok_epoch                    : {seed['grok_epoch']}",
+        f"  final_train_acc               : {seed['final_train_acc']:.4f}",
+        f"  final_test_acc                : {seed['final_test_acc']:.4f}",
+        f"  l2_norm   init -> final        : "
+        f"{seed['l2_norm_init']:.4f} -> {seed['l2_norm_final']:.4f}",
+        f"  sum_w2    init -> final        : "
+        f"{seed['sum_w2_init']:.3f} -> {seed['sum_w2_final']:.3f}",
+        f"  token_embedding_share (init)  : {seed['token_embedding_share_init']:.4f}",
+        "  L2 predictor:",
+        f"    MA-crossover epoch           : {_fmt_epoch(lp['ma_crossover_epoch'])}",
+        f"    MA-of-MA zero-crossing epoch : {_fmt_epoch(lp['ma_of_ma_zero_crossing_epoch'])}",
+        f"    noise_floor                  : {lp['noise_floor']:.6f}",
+        f"    windows: fast={w['fast']} slow={w['slow']} "
+        f"ma_of_ma_fast={w['ma_of_ma_fast']} skip_epochs={w['skip_epochs']} "
+        f"quiet_epoch_cutoff={w['quiet_epoch_cutoff']}",
+        "  Dropout gap by rate:",
+        "    " + "  ".join(f"p{r}={gaps[r]:+.4f}" for r in gaps),
+    ]
+    if lc.get("applicable"):
+        label = "LIMIT CYCLE" if lc["limit_cycle"] else "stable"
+        lines.append(
+            f"  Limit-cycle check             : {label}  "
+            f"window_start={lc['window_start_epoch']}  "
+            f"post_grok_min={lc['post_grok_min']:.4f}  "
+            f"post_grok_std={lc['post_grok_std']:.4f}  "
+            f"post_grok_final={lc['post_grok_final']:.4f}  "
+            f"dips<0.9={lc['epochs_below_0.9_post_grok']}"
+        )
+    else:
+        lines.append(f"  Limit-cycle check             : n/a ({lc.get('reason', 'n/a')})")
+    return lines
+
+
+def add_results_section(story, header_style, results_style):
+    """Append a RESULTS section built from results/nanda_unified/
+    aggregate.json (the full 5-seed Nanda-Unified benchmark output). Skips
+    cleanly with a note if the file does not exist yet (benchmark not run,
+    or results/ not present on this machine)."""
+    story.append(PageBreak())
+    story.append(Paragraph(f"=== RESULTS: {RESULTS_JSON_PATH} ===", header_style))
+    story.append(Spacer(1, 5))
+
+    if not os.path.isfile(RESULTS_JSON_PATH):
+        print(f"No results found at {RESULTS_JSON_PATH} - skipping results section body.")
+        add_text_lines(
+            story,
+            [f"(not found - run run_nanda_benchmark.py first to produce {RESULTS_JSON_PATH})"],
+            results_style,
+        )
+        return
+
+    print(f"Processing results: {RESULTS_JSON_PATH}")
+    with open(RESULTS_JSON_PATH, "r", encoding="utf-8") as handle:
+        agg = json.load(handle)
+
+    summary_lines = [
+        f"n_seeds          : {agg['n_seeds']}",
+        f"epochs           : {agg['epochs']}",
+        f"grok_epoch_mean  : {agg['grok_epoch_mean']}",
+        f"grok_epoch_std   : {agg['grok_epoch_std']}",
+        f"grok_epochs      : {agg['grok_epochs']}",
+        f"n_limit_cycle    : {agg['n_limit_cycle']} / {agg['n_seeds']}",
+    ]
+    add_text_lines(story, summary_lines, results_style)
+    story.append(Spacer(1, 10))
+
+    for seed in agg["seeds"]:
+        add_text_lines(story, _seed_result_lines(seed), results_style)
+        story.append(Spacer(1, 10))
 
 
 def compile_py_to_pdf(output_filename="combined_code.pdf"):
     """
     Find all Python (.py) files in the current project directory,
     excluding virtual environments and cache/build directories,
-    and compile their source code into a single PDF.
+    compile their source code into a single PDF, then append the full
+    Nanda-Unified benchmark results (results/nanda_unified/aggregate.json,
+    complete per-seed numbers) as a final RESULTS section.
     """
 
     doc = SimpleDocTemplate(
@@ -36,7 +157,7 @@ def compile_py_to_pdf(output_filename="combined_code.pdf"):
         spaceBefore=0,
     )
 
-    # Style used for file names
+    # Style used for file names / section headers
     header_style = ParagraphStyle(
         "HeaderStyle",
         parent=styles["Heading2"],
@@ -45,6 +166,19 @@ def compile_py_to_pdf(output_filename="combined_code.pdf"):
         leading=14,
         spaceBefore=15,
         spaceAfter=5,
+    )
+
+    # Style used for the results section (same monospace as code, slightly
+    # larger so the numbers are easy to read on their own).
+    results_style = ParagraphStyle(
+        "ResultsStyle",
+        parent=styles["Normal"],
+        fontName="Courier",
+        fontSize=9,
+        leading=11,
+        alignment=TA_LEFT,
+        spaceAfter=0,
+        spaceBefore=0,
     )
 
     story = []
@@ -116,38 +250,13 @@ def compile_py_to_pdf(output_filename="combined_code.pdf"):
                 continue
 
             # Add every line of source code
-            for line in lines:
-
-                # Escape characters that have special meaning in
-                # ReportLab's Paragraph XML/HTML parser.
-                escaped_line = (
-                    line.replace("&", "&amp;")
-                    .replace("<", "&lt;")
-                    .replace(">", "&gt;")
-                    .replace(" ", "&nbsp;")
-                    .rstrip("\n")
-                )
-
-                # Convert tabs to four spaces
-                escaped_line = escaped_line.replace(
-                    "\t",
-                    "&nbsp;&nbsp;&nbsp;&nbsp;",
-                )
-
-                # Preserve blank lines
-                if not escaped_line.strip():
-                    story.append(Spacer(1, 4))
-
-                else:
-                    story.append(
-                        Paragraph(
-                            escaped_line,
-                            code_style,
-                        )
-                    )
+            add_text_lines(story, lines, code_style)
 
             # Space between Python files
             story.append(Spacer(1, 15))
+
+    # Append the full benchmark results (complete numbers) as a final section
+    add_results_section(story, header_style, results_style)
 
     # Generate the PDF
     doc.build(story)

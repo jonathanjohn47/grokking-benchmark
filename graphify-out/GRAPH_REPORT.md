@@ -1,7 +1,7 @@
 # Graph Report - grokking-benchmark  (2026-09-04)
 
 ## Corpus Check
-- 71 files · ~479,588 words
+- 71 files · ~479,664 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ab1b7418`
+- Built from commit: `b0cafb7c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 

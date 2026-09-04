@@ -6441,3 +6441,107 @@ option is still open, offered again below). Direct implementation
    still unbuilt; 5-seed limit-cycle diagnostic is now effectively done
    by this run (0/5 flagged) — can likely be marked resolved rather than
    open, pending Jonathan's confirmation.
+
+---
+
+## Session Summary — September 4, 2026 (`run_nanda_benchmark.py`'s console table explicitly reverted; full per-seed results moved into `make_pdf.py` instead, as a new RESULTS section built from `aggregate.json`)
+
+### 1. `run_nanda_benchmark.py` — the per-seed table added last session was REVERTED
+
+This is an explicit undo, not a bug fix and not an abandonment of the
+idea — Jonathan asked to revert after the previous session's commit
+(`b0cafb7`) had already landed it. `run_nanda_benchmark.py` was restored
+with `git checkout ab1b741 -- run_nanda_benchmark.py`, i.e. back to
+exactly the state after the "add per-1000-epoch wall-clock timing"
+commit — `aggregate()` is back to its three short one-line-per-seed
+loops (L2-Norm signals, dropout gaps, limit-cycle), no full per-seed
+block. Verified: `py_compile` OK, `git diff HEAD --stat` showed the
+expected mirror-image diff (23 insertions / 40 deletions — i.e. the
+previous session's 40-insertion/23-deletion change, undone).
+
+**Nothing else in `run_nanda_benchmark.py` changed** — `train_one_seed`,
+`load_config`, `main`, resume logic, `aggregate.json`'s on-disk schema:
+all exactly as they were before the previous session's edit and after
+this revert. `results/nanda_unified/` on disk (gitignored) is untouched
+by this revert either way — it only ever affected console printing.
+
+### 2. The same "full numbers" request was instead implemented in `make_pdf.py`
+
+Jonathan then asked for the analogous thing in `make_pdf.py` — "also
+include the corresponding results with all its numbers." Clarified via
+question: **append a RESULTS section at the end of the PDF**, built from
+`results/nanda_unified/aggregate.json` (not: also dump raw `.json`
+result files file-by-file alongside the `.py` source dump — that option
+was offered and not chosen). Direct implementation.
+
+`make_pdf.py` (previously: walks the repo, dumps every `.py` file's
+source into one PDF via ReportLab — a Jonathan-authored dev utility, not
+part of the benchmark pipeline) gained:
+
+- `RESULTS_JSON_PATH = "results/nanda_unified/aggregate.json"` (relative
+  to cwd, same convention as `run_nanda_benchmark.py --output_dir`'s
+  default).
+- `_escape_line` / `add_text_lines` — the paragraph-escaping logic that
+  used to be inline in the source-code loop is now a shared helper, used
+  both for `.py` source lines and for the new results lines (no
+  behaviour change to the code-dump path — same escaping, same output).
+- `_fmt_epoch`, `_seed_result_lines` — format one seed's summary dict
+  (same shape as `results/nanda_unified/seed_*/summary.json` and
+  `aggregate.json`'s `"seeds"` entries) into the same plain-text lines
+  the reverted `run_nanda_benchmark.py` table used: grok_epoch,
+  final_train_acc, final_test_acc, l2_norm init→final, sum_w2
+  init→final, token_embedding_share_init, L2 predictor block
+  (MA-crossover epoch, MA-of-MA zero-crossing epoch — both 2dp,
+  None-safe — noise_floor at 6dp, window params), dropout gap sweep
+  (4dp), limit-cycle stats.
+- `add_results_section` — appends a `PageBreak()`, a
+  `"=== RESULTS: results/nanda_unified/aggregate.json ==="` header, the
+  aggregate-level numbers (n_seeds, epochs, grok_epoch_mean/std,
+  grok_epochs list, n_limit_cycle), then every seed's block. **Missing
+  file handled gracefully** — if `aggregate.json` doesn't exist (e.g. on
+  a machine that hasn't run the benchmark), it prints a note in the PDF
+  and a console message instead of crashing.
+- `compile_py_to_pdf` calls `add_results_section(...)` once, after the
+  `os.walk` code-dump loop, before `doc.build(story)`. A new
+  `results_style` (Courier 9pt, slightly larger than the 8pt code style)
+  is used for it.
+- Everything else in `make_pdf.py` — the code-dump walk, excluded dirs,
+  `header_style`/`code_style`, the "skip make_pdf.py itself" rule — is
+  unchanged.
+
+### Verification done
+
+- `py_compile make_pdf.py` → OK.
+- Ran `python make_pdf.py` for real (not a scratch smoke test — this
+  tool's only output is the PDF itself) → walked the whole repo (139
+  pages total), found `results/nanda_unified/aggregate.json`, printed
+  `Processing results: ...`, built `combined_code.pdf` successfully.
+- Read the PDF back with `pypdf` (`PdfReader`, last 2 pages,
+  `extract_text()`): confirmed the RESULTS section header, aggregate
+  summary line, and all 5 seeds' full blocks are present with numbers
+  matching `results/nanda_unified/aggregate.json` exactly (e.g. seed 4
+  grok_epoch 25505, MA-crossover 143.98, dips<0.9=20 — all checked
+  against the raw JSON).
+- `combined_code.pdf` itself is gitignored (already covered by the
+  `.gitignore` entry added when `make_pdf.py` was first added) — the
+  test-run artefact in the repo root is expected output, not a leftover
+  to clean up.
+
+### Files Modified / Added
+
+- Modified: `run_nanda_benchmark.py` (reverted to `ab1b741` — see §1),
+  `make_pdf.py` (RESULTS section — see §2), `context.md` (this entry).
+- `combined_code.pdf` regenerated on disk (gitignored, not committed).
+
+### Next
+
+1. Unchanged from the previous entry: explain the seed-4 grok-epoch
+   outlier (25505); optionally add the correlation-stats (Pearson/
+   Spearman between MA-of-MA zero-crossing epoch and grok epoch) that
+   was offered twice now and not yet chosen either time; write up the
+   L2-Norm predictor's 3-criteria result for the thesis.
+2. Predictors 3–9 (Spectral next, per the CLAUDE.md order) still unbuilt.
+3. If Jonathan wants the per-seed table back in `run_nanda_benchmark.py`
+   itself (console, live during a run) as well as in the PDF (static,
+   after the fact), that is a separate ask — not assumed from this
+   session.
