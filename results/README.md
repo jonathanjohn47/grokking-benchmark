@@ -105,9 +105,9 @@ Investigation of LayerNorm addition (negative result, not adopted):
 
 Results are being collected for all 9 grokking predictors in this order:
 
-1. ✅ **L2 Norm** — Formally closed (negative result)
-2. 🔄 **Dropout** — Under investigation (multi-rate sweep in progress)
-3. ⏳ Spectral
+1. ✅ **L2 Norm** — Formally closed (negative result: not a valid causal predictor)
+2. ✅ **Dropout** — Formally closed (kept only as a post-hoc characterization metric, not evaluated/pursued as a live causal predictor — see Key Findings below)
+3. 🔄 **Spectral** — next up
 4. ⏳ AGE (Adaptive Grokking Epoch)
 5. ⏳ HTSR Alpha
 6. ⏳ Correlation Traps
@@ -154,10 +154,10 @@ Results are being collected for all 9 grokking predictors in this order:
 
 - **L2 Norm predictor:** Formally evaluated on both single-head and four-head models. Five detection strategies tested, none met the validation criteria (must always precede grokking, show tight consistent gap, be clearly above noise floor).
 
-- **Dropout predictor:** Single-rate (p=0.9) shows promise but insufficient to prove robustness of the signal. Multi-rate sweep (0.1–0.9) is underway to determine if gap-narrowing is real or rate-dependent artifact.
+- **Dropout predictor:** Formally closed as a live/causal grokking predictor (decision recorded September 4, 2026). The current Nanda-Unified pipeline (`run_nanda_benchmark.py`) deliberately measures the Dropout Gap as a single post-training, multi-rate (0.1–0.9) sweep on the final, already-grokked model only — no per-epoch trajectory is collected under this pipeline. Because there is no trigger epoch to test, Dropout was never evaluated against the same 3 criteria used to close L2 Norm (always predictive, tight/consistent gap, above noise floor), and will not be, going forward. Jonathan's explicit call: stay faithful to the Nanda et al. architecture/protocol rather than backport the older, now-archived single-head per-epoch multi-rate tracking that would be needed to test Dropout as a live predictor. Dropout Gap is retained in the benchmark purely as a post-hoc generalization-fragility characterization of the final model (how much accuracy degrades under unit ablation, across rates) — not pursued further as a predictor. The project now formally moves to the Spectral predictor, next in the 9-predictor evaluation order.
 
 - **Four-head baseline:** Both single-head and four-head models grok to perfect accuracy, validating that single-head simplification does not fundamentally change grokking behavior for this task.
 
 ## Last Updated
 
-August 24, 2026 — Results reorganized from project root into predictor-based structure with separate single-head and four-head variants.
+September 4, 2026 — Dropout predictor formally closed (post-hoc characterization only, not a live predictor); project moving to Spectral. (Previous update: August 24, 2026 — results reorganized into predictor-based structure with separate single-head and four-head variants.)

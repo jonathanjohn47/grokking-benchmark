@@ -6822,3 +6822,155 @@ for rejecting L2 Norm. Answered with a correction:
   3-criteria result for the thesis (this entry plus the previous
   session's discussion together cover most of the needed narrative).
 - Predictors 3–9 (Spectral next, per the CLAUDE.md order) still unbuilt.
+
+---
+
+## Session Summary — September 4, 2026 (Dropout predictor formally closed as a post-hoc characterization metric, not a live predictor — decision recorded, no code changed; project moving to Spectral)
+
+### 1. Decision — Dropout will NOT be evaluated as a live/causal predictor
+
+Following the discussion of the Dropout predictor's status (previous
+entry in this file), Jonathan was given two options: (a) port the older,
+archived single-head per-epoch multi-rate dropout tracking onto the
+current Nanda-Unified four-head model so the "does the gap narrow near
+grokking" hypothesis could actually be tested against L2 Norm's 3
+criteria, or (b) declare Dropout Gap a post-hoc characterization metric
+only, and move on. Jonathan chose **option (b) explicitly**, on the
+grounds that he wants to stay faithful to the Nanda et al. paper's setup
+throughout this thesis, and does not want to reintroduce the archived
+single-head architecture for this purpose.
+
+### 2. What this decision means going forward
+
+- The Dropout Gap multi-rate sweep already implemented in
+  `run_nanda_benchmark.py` (`compute_dropout_gap_multi_rate`, run once
+  post-training at rates 0.1/0.3/0.5/0.7/0.9, per seed) is **kept as-is**
+  — no code changes made or needed. It remains useful as a description
+  of how fragile the final, fully-grokked model is to unit ablation at
+  different rates (all 5 seeds show the expected dose-response shape:
+  gap near 0 at p=0.1, worsening smoothly to near -1 at p=0.9, with some
+  seed-to-seed variation at the middle rates, e.g. seed 1 noticeably more
+  fragile than seed 2 at p=0.3).
+- Dropout is **not** and **will not be** tested against the 3 causal-
+  predictor criteria (always predictive, tight/consistent gap as a
+  proportion of run length, clearly above noise floor) that were used to
+  formally close L2 Norm negative, because those criteria require a
+  per-epoch trigger epoch, and the current pipeline deliberately does not
+  collect a per-epoch Dropout Gap trajectory (see the September 4
+  `run_nanda_benchmark.py` design-notes entry earlier in this file:
+  "Dropout is a single post-training measurement, not per-epoch").
+- No further work is planned on Dropout as a predictor. It is considered
+  **formally closed** for the purposes of the 9-predictor benchmark, in
+  the same sense L2 Norm is closed — except the reason is scope
+  (deliberately not tested as causal) rather than a negative result
+  (tested and failed).
+
+### 3. Files Modified
+
+- `results/README.md` — "Predictor Evaluation Order" list: Dropout
+  changed from "🔄 Under investigation" to "✅ Formally closed (kept only
+  as a post-hoc characterization metric...)"; "Key Findings" Dropout
+  bullet rewritten to record this decision and its rationale; "Last
+  Updated" line updated to September 4, 2026.
+- `context.md` — this entry.
+- No source, results, or predictor code touched.
+
+### Next
+
+1. **Move to Spectral, predictor 3 of 9.** Per the literature mapping
+   already on record in this file (see the "Which experimental setup to
+   adopt" entry), Spectral is based on Canatar, Bordelon & Pehlevan
+   (2021, *Nature Communications*), "Spectral bias and task-model
+   alignment explain generalization in kernel regression and infinitely
+   wide neural networks" — a statistical-mechanics theory of kernel
+   regression generalization error, built from three ingredients: the
+   kernel's eigenvalue spectrum ("spectral bias" — eigenmodes with larger
+   eigenvalues are learned faster/first), "task-model alignment" (how
+   much of the target function's power falls on the leading eigenmodes),
+   and label noise. This is a fundamentally different kind of predictor
+   than L2 Norm or Dropout: those are simple scalars read directly off
+   the trained weights; Spectral, taken literally from Canatar's theory,
+   requires the eigenspectrum of a kernel (e.g. the empirical Neural
+   Tangent Kernel of the transformer) and a target-alignment coefficient
+   computed against that eigenbasis — not yet defined as a concrete,
+   per-epoch-computable signal for this project's transformer.
+2. **Open design question, not yet resolved, needs Jonathan's decision
+   before implementation starts:** what exactly "Spectral" should
+   compute in this codebase. Candidates to weigh: (a) the literal
+   empirical-NTK eigenspectrum + task-model-alignment coefficient from
+   Canatar's paper — theoretically faithful, but computing an NTK
+   Jacobian-Jacobian Gram matrix for this transformer at every epoch
+   (or even periodically) is computationally heavy, so a subsampled
+   batch and a reduced epoch cadence (e.g. every N epochs, not every
+   epoch) would likely be required; (b) a cheaper proxy such as the
+   singular-value spectrum of individual weight matrices — but this
+   risks overlapping with predictor 5, HTSR Alpha (Martin & Mahoney),
+   which is specifically about power-law fits to weight-matrix spectral
+   density, so Spectral and HTSR Alpha need a clear, non-overlapping
+   definition if a weight-spectrum-based proxy is used for Spectral.
+   This scoping decision should be made explicitly before any
+   `src/predictors/spectral.py` code is written, the same way L2 Norm's
+   and Dropout's exact formulas were pinned down before implementation.
+3. Once the Spectral signal definition is agreed, per `CLAUDE.md`
+   Section 6 (default action: generate an Opencode implementation
+   prompt for development tasks, not direct implementation, unless
+   Jonathan explicitly says otherwise), the next concrete deliverable is
+   an Opencode prompt for building and wiring in the Spectral predictor,
+   following the same pattern `run_nanda_benchmark.py` already uses for
+   L2 Norm and Dropout.
+
+---
+
+## Session Summary — September 4, 2026 (Supplementary: computed correlation stats for the L2-Norm "why it fails" discussion — new number, not previously on record)
+
+### 1. New finding — final L2-norm/Σw² vs grok-epoch correlation sign-flips on seed 4 alone
+
+While answering the same "why can't L2 Norm be used as a predictor"
+question (separate session from the one logged immediately above this
+entry — same topic, different angle: this one computed actual Pearson r
+instead of eyeballing the scatter plot), also checked `l2_norm_final`
+and `sum_w2_final` (not just the two trigger-epoch signals) against
+`grok_epoch` across the 5 `nanda_unified` seeds, using `numpy.corrcoef`
+directly on `aggregate.json`'s values:
+
+- All 5 seeds: `grok_epoch` vs `l2_norm_final` → **r = −0.55**;
+  vs `sum_w2_final` → **r = −0.55**.
+- Dropping seed 4 only (n=4): `grok_epoch` vs `l2_norm_final` →
+  **r = +0.96**; vs `sum_w2_final` → **r = +0.96**.
+
+Cause: seed 4 has the latest grok epoch (25505, by far) but the
+*lowest* `l2_norm_final` (32.65) and lowest `sum_w2_final` (1066.14) of
+all 5 seeds — backwards from the strong positive relationship the other
+four seeds show on their own. One seed flips the sign of the whole-
+sample correlation. Also checked the two trigger-epoch signals'
+dynamic range against grok epoch's: MA-crossover spans 101–144
+(35.7% of its mean) while grok epoch spans 7721–25505 (127.1% of its
+mean) — the trigger signal has roughly 1/4 the relative spread of the
+thing it would need to track, independent of the sign-flip issue.
+
+This is additional quantitative support for the same verdict already on
+record (L2 Norm fails as a live predictor) — not a contradiction of it,
+and not yet reconciled line-by-line with the other session's entry
+above (which used the trigger-epoch signals and the scatter/overlay
+plots rather than `l2_norm_final`/`sum_w2_final` and computed Pearson
+r). Both should be read together for the thesis writeup rather than
+either alone.
+
+### Files Modified
+
+- `context.md` (this entry) only. No source, results, or predictor code
+  touched — correlation numbers computed in a throwaway Python snippet,
+  not saved anywhere on disk.
+
+### Next
+
+- Reconcile this entry with the "Discussion: why L2 Norm cannot be used"
+  entry above into one single write-up for the thesis's L2-Norm
+  3-criteria section — both were produced independently and cover
+  overlapping but not identical ground.
+- Unchanged: explain the seed-4 grok-epoch outlier (25505) — now doubly
+  relevant, since it is also the seed solely responsible for the
+  correlation sign-flip above.
+- Predictors 3–9 (Spectral next, per the CLAUDE.md order) still unbuilt;
+  Spectral's exact signal definition is still an open design question
+  per the entry above.
