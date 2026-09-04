@@ -7,6 +7,57 @@ def compute_l2_norm(model):
     l2_norm = torch.norm(all_params).item()
     return l2_norm
 
+
+def compute_sum_of_squared_weights(model):
+    """
+    Sum of squared weights over ALL parameters (sum w^2). This is the exact
+    quantity Nanda et al. plot in Figure 7 ("Total Sum of Squared Weights").
+    Note compute_l2_norm(model) == sqrt(compute_sum_of_squared_weights(model));
+    both are logged so the Nanda-Unified weight-norm curve can be compared
+    to the paper directly without re-squaring.
+    """
+    total = 0.0
+    for p in model.parameters():
+        total += torch.sum(p.detach() ** 2).item()
+    return total
+
+
+# Which top-level module names roll up into which reported group. Used by
+# compute_per_module_sum_of_squared_weights(). Groups follow
+# configs/nanda_unified.yaml -> logging.weight_norm_per_module_sum_w2.
+PER_MODULE_GROUPS = {
+    "token_embedding": ["token_embedding"],
+    "position_embedding": ["position_embedding"],
+    "attention_qkv": ["query", "key", "value"],
+    "mlp": ["mlp_in", "mlp_out"],
+    "output_head": ["output_head"],
+}
+
+
+def compute_per_module_sum_of_squared_weights(model):
+    """
+    Sum w^2 split by module group (token_embedding, position_embedding,
+    attention_qkv, mlp, output_head). Lets the weight-space predictors see
+    WHERE the weight norm moves — e.g. confirm the early transient (if any)
+    is the embedding table and a pre-grok bump is in attention/MLP.
+
+    Returns a dict {group_name: sum_w2}. Any parameter whose top-level name
+    is not in PER_MODULE_GROUPS is ignored (there are none in the current
+    model, but this keeps the function safe against future modules).
+    """
+    prefix_to_group = {}
+    for group, prefixes in PER_MODULE_GROUPS.items():
+        for prefix in prefixes:
+            prefix_to_group[prefix] = group
+
+    out = {group: 0.0 for group in PER_MODULE_GROUPS}
+    for name, p in model.named_parameters():
+        top_level = name.split(".")[0]
+        group = prefix_to_group.get(top_level)
+        if group is not None:
+            out[group] += torch.sum(p.detach() ** 2).item()
+    return out
+
 def compute_l2_norm_rate_of_decline(l2_norm_history):
     return np.diff(l2_norm_history) *-1
 

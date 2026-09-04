@@ -12,21 +12,40 @@ import torch
 # already used in this project for the LayerNorm side-experiment
 # (see src/models/model_shadow_with_layernorm.py).
 #
-# Everything else is kept identical to the original design, so that the
-# ONLY architectural difference between the two models is the number of
-# attention heads: same token + position embedding, same MLP (4x
-# expansion + ReLU), no LayerNorm, no Linear biases, same dropout1/
-# dropout2 hooks (used by predictors/dropout.py's stress-test), same
-# output head.
+# This is the SHARED model architecture for the Nanda-Unified benchmark
+# protocol (configs/nanda_unified.yaml). It is used by training, every
+# predictor, and evaluation — it is not owned by any one predictor.
+#
+# Design: 1-layer, 4-head, same token + position embedding, MLP (4x
+# expansion + ReLU), NO LayerNorm, learned positional embeddings,
+# untied embed/unembed, same dropout1/dropout2 hooks (used by
+# predictors/dropout.py's stress-test), same output head.
+#
+# Two Nanda-alignment details baked in here:
+#   1. WEIGHT INIT. Every weight matrix — embeddings included — is drawn
+#      from N(0, init_std) with init_std = 0.8 / sqrt(d_model) (~0.0707
+#      for d_model=128). This is the TransformerLens / Nanda scheme.
+#      PyTorch defaults (nn.Embedding = N(0,1), nn.Linear =
+#      Kaiming-uniform) would otherwise make the token-embedding table
+#      ~94% of the starting weight norm and force a large early collapse
+#      under weight decay that has nothing to do with grokking.
+#   2. MLP BIASES. query/key/value and the output head have NO bias
+#      (Nanda: no biases in attention or unembedding), but the MLP keeps
+#      b_in / b_out (Nanda keeps them). MLP biases are zero-initialised.
 # ======================================================================
 
 
 class TransformerFourHead(nn.Module):
-    def __init__(self, vocab_size, d_model, num_heads=4):
+    def __init__(self, vocab_size, d_model, num_heads=4, init_std=None):
         super().__init__()
         assert d_model % num_heads == 0, "d_model must be divisible by num_heads"
         self.num_heads = num_heads
         self.head_dim = d_model // num_heads
+
+        # TransformerLens / Nanda init scale: N(0, 0.8 / sqrt(d_model)).
+        if init_std is None:
+            init_std = 0.8 / (d_model ** 0.5)
+        self.init_std = init_std
 
         self.token_embedding = nn.Embedding(vocab_size, d_model)
         self.position_embedding = nn.Embedding(3, d_model)
@@ -35,14 +54,28 @@ class TransformerFourHead(nn.Module):
         self.key = nn.Linear(d_model, d_model, bias=False)
         self.value = nn.Linear(d_model, d_model, bias=False)
 
-        self.mlp_in = nn.Linear(d_model, 4 * d_model, bias=False)
+        self.mlp_in = nn.Linear(d_model, 4 * d_model, bias=True)
         self.mlp_activation = nn.ReLU()
-        self.mlp_out = nn.Linear(4 * d_model, d_model, bias=False)
+        self.mlp_out = nn.Linear(4 * d_model, d_model, bias=True)
 
         self.output_head = nn.Linear(d_model, vocab_size, bias=False)
 
         self.dropout1 = nn.Dropout(0.0)
         self.dropout2 = nn.Dropout(0.0)
+
+        self._init_weights()
+
+    def _init_weights(self):
+        # Match Nanda et al. / TransformerLens: every weight matrix,
+        # embeddings included, drawn from N(0, init_std). MLP biases start
+        # at zero.
+        for module in [self.token_embedding, self.position_embedding,
+                       self.query, self.key, self.value,
+                       self.mlp_in, self.mlp_out, self.output_head]:
+            nn.init.normal_(module.weight, mean=0.0, std=self.init_std)
+        for module in [self.mlp_in, self.mlp_out]:
+            if module.bias is not None:
+                nn.init.zeros_(module.bias)
 
     def split_into_heads(self, x):
         # x: (batch_size, seq_len, d_model) -> (batch_size, num_heads, seq_len, head_dim)
@@ -87,7 +120,8 @@ class TransformerFourHead(nn.Module):
 
 
 if __name__ == "__main__":
-    model = TransformerFourHead(vocab_size=98, d_model=128, num_heads=4)
+    # Nanda-Unified: p = 113 -> vocab_size = 113 + 1 = 114
+    model = TransformerFourHead(vocab_size=114, d_model=128, num_heads=4)
 
     x = torch.eye(2, 3, dtype=torch.long)
     model.forward(x)

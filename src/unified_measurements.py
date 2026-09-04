@@ -38,11 +38,35 @@ class PredictorMeasurements:
     # ========== L2 NORM MEASUREMENTS ==========
 
     def save_l2_norm_data(self, l2_norm_history, epoch_grid, fast_ma, slow_ma,
-                         fast_ma_of_slow_ma, ma_of_ma_diff, detection_epoch=None):
-        """Save all L2 Norm measurements."""
+                         fast_ma_of_slow_ma, ma_of_ma_diff, detection_epoch=None,
+                         sum_w2_history=None, per_module_sum_w2_history=None):
+        """Save all L2 Norm measurements.
+
+        sum_w2_history: optional per-epoch list of sum-of-squared-weights
+            (the Nanda Figure 7 quantity; == l2_norm_history ** 2).
+        per_module_sum_w2_history: optional per-epoch list of dicts
+            {group_name: sum_w2} from
+            predictors.l2_norm.compute_per_module_sum_of_squared_weights.
+            Saved as per_module_sum_w2.npy shaped [n_groups, n_epochs] with
+            the row order recorded in per_module_sum_w2_names.npy.
+        """
 
         # Raw L2 norm
         np.save(os.path.join(self.l2_norm_dir, "l2_norm_history.npy"), l2_norm_history)
+
+        # sum w^2 (Nanda Fig 7 quantity) — total and per module
+        if sum_w2_history is not None:
+            np.save(os.path.join(self.l2_norm_dir, "sum_w2_history.npy"),
+                    np.asarray(sum_w2_history, dtype=float))
+        if per_module_sum_w2_history:
+            group_names = list(per_module_sum_w2_history[0].keys())
+            per_module_matrix = np.array(
+                [[row[g] for row in per_module_sum_w2_history] for g in group_names],
+                dtype=float,
+            )
+            np.save(os.path.join(self.l2_norm_dir, "per_module_sum_w2.npy"), per_module_matrix)
+            np.save(os.path.join(self.l2_norm_dir, "per_module_sum_w2_names.npy"),
+                    np.array(group_names))
 
         # Smoothed L2 norm (simple low-pass filter)
         l2_norm_smoothed = self._smooth_signal(l2_norm_history, window=50)

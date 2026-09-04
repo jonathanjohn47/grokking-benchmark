@@ -5916,3 +5916,131 @@ coded* does not work:
    Σw²).
 5. Unchanged: main `src/` experiment's p and betas decisions; L2 Norm &
    Dropout 3-criteria validation on the four-head data; then Spectral.
+
+---
+
+## Session Summary — September 4, 2026 (DECISION: whole benchmark moved to the "Nanda-Unified" substrate; `src/` re-aligned; infra done, runs + predictors 3–9 pending)
+
+### The decision (Jonathan's call, direct instruction)
+
+The open `p=97 vs p=113` question is now **closed**. The entire unified
+benchmark shifts to a single common protocol called **Nanda-Unified**.
+Every predictor (L2-Norm, Dropout, Spectral, HTSR Alpha, AGE, Weight-PCA,
+Higher-MI, Commutator Defect, …) is to be measured on a model trained with
+exactly this protocol — no predictor gets its own substrate. Rationale
+already on record (Sept 3–4 sessions): the p=97 default carried two
+artefacts that pollute every weight-space predictor (token-embedding init
+transient crushed by weight decay in the first ~2k epochs; `beta2=0.999`
+slingshot spike at grok), and the Nanda-aligned setup reproduces Nanda
+Figure 7 cleanly. Jonathan instructed direct implementation, no Opencode
+prompt. Earlier advice to get professor sign-off is noted; Jonathan
+overrode it and instructed the shift directly.
+
+### Nanda-Unified protocol — now the single source of truth
+
+New file **`configs/nanda_unified.yaml`** (canonical spec; `src/train_four_head.py`
+loads it at startup and asserts its own constants against it, so the two
+cannot drift):
+
+- task: `(a + b) mod 113`, `=` token id 113, vocab 114, 30/70 random split
+- architecture: 1-layer, 4-head, `d_model=128`, `d_mlp=512`, ReLU, **no
+  LayerNorm**, learned positions, untied embed/unembed, **no bias** in
+  query/key/value and output_head, **MLP keeps `b_in`/`b_out`** (Nanda does)
+- init: `N(0, 0.8/sqrt(d_model))` (~0.0707) for **every** weight matrix,
+  embeddings included (TransformerLens / Nanda scale); MLP biases zero-init
+- optimiser: AdamW, `lr=1e-3`, `weight_decay=1.0`, **`betas=(0.9, 0.98)`**
+- training: full-batch, no warmup, 40000 epochs
+- logging: per-epoch `l2` (√Σw²), `sum_w2` (Σw², the Nanda Fig 7 quantity),
+  and per-module `sum_w2` for 5 groups: `token_embedding`,
+  `position_embedding`, `attention_qkv`, `mlp`, `output_head`
+
+### Code changes (all in `src/`, direct edits)
+
+- **`configs/nanda_unified.yaml`** — NEW, canonical protocol spec.
+- **`src/data/modular_arithmetic.py`** — the `=` token id was hardcoded
+  `97`; now parametrised (`self.number`), so `get_dataloaders(113, …)`
+  gives `=` token id 113. Same fix that `nanda_l2_p113/` already had.
+- **`src/models/transformer_four_head.py`** (SHARED model — changed once,
+  affects all predictors, this is the intent):
+  - added `init_std=None` arg + `_init_weights()` — every weight matrix
+    drawn from `N(0, init_std)`, `init_std = 0.8/sqrt(d_model)` default
+    (ported from `nanda_l2_p113/models/transformer_four_head.py`).
+  - `mlp_in` / `mlp_out` `bias=False → bias=True`, zero-initialised.
+    query/key/value/output_head stay `bias=False`.
+  - header comment rewritten; `__main__` demo `vocab_size 98 → 114`.
+- **`src/predictors/l2_norm.py`** — added `compute_sum_of_squared_weights(model)`
+  (Σw², `== compute_l2_norm(model)**2`) and
+  `compute_per_module_sum_of_squared_weights(model)` (dict over the 5
+  groups, via `PER_MODULE_GROUPS`). Existing L2 functions untouched.
+- **`src/unified_measurements.py`** — `save_l2_norm_data()` gained two
+  optional args `sum_w2_history`, `per_module_sum_w2_history`. When given
+  it writes `l2_norm/sum_w2_history.npy` (shape `[E]`),
+  `l2_norm/per_module_sum_w2.npy` (shape `[5, E]`), and
+  `l2_norm/per_module_sum_w2_names.npy`. Backward-compatible (defaults None).
+- **`src/train_four_head.py`** — loads `configs/nanda_unified.yaml`;
+  `MODULUS/VOCAB_SIZE/BETAS/INIT_STD/…` all come from it; model built with
+  `init_std=INIT_STD`; `AdamW(… betas=BETAS)`; collects `sum_w2_history` +
+  `per_module_sum_w2_history` every epoch and passes them to
+  `save_l2_norm_data`; per-epoch print line adds `Sum w^2`. Dropout sweep
+  unchanged (still predictor #2).
+- **`src/generate_master_report.py`**, **`src/generate_l2_report.py`** —
+  one caption string each changed from "mod 97" to "mod 113 [Nanda-Unified]".
+  No logic change.
+
+### Filesystem
+
+- **`archive/p97_default/`** — the 3 old p=97 four-head runs
+  (`runs/four_head/run_{1,2,3}/`, ~29 MB) were `mv`'d here, with a
+  `README.md` recording the old substrate + its two artefacts.
+  `archive/p97_default/` added to `.gitignore` (kept on local disk only,
+  same policy as `runs/`). `runs/four_head/` is now empty.
+
+### Validation done (no training run)
+
+All 7 touched `.py` files byte-compile. Smoke test (`scratchpad/`, no
+training): config → `(p, vocab, betas, batch) = (113, 114, (0.9,0.98),
+3830)`; `=` token id 113, labels ≤ 112, 1 full batch; every param std ≈
+0.0707; MLP has zero bias, attention/unembed have none; forward →
+`(B, 3, 114)`; `l2**2 == sum_w2`, per-module total == `sum_w2`,
+`token_embedding` share now **7 %** of `sum_w2` (was ~94 % with the old
+`N(0,1)` init); `save_l2_norm_data` writes the 3 new npy files with shapes
+`[E]`, `[5, E]`, `[5]`.
+
+### NOT done — this is downstream work, NOT one session
+
+1. **Re-baseline runs.** No training was run. Jonathan runs
+   `python src/train_four_head.py` (or `run_full_benchmark.py`) for the 3
+   seeded L2+Dropout runs on the new substrate.
+2. **5-seed limit-cycle diagnostic** for p=113 (post-grok test-acc
+   oscillation seen in `nanda_l2_p113` run_1). Still open; run 5 seeds and
+   inspect the post-grok segment, then either document as a known
+   full-batch limit-cycle artefact or add LR decay / shorter horizon.
+3. **Predictors 3–9 do not exist in the repo.** Only `src/predictors/l2_norm.py`
+   and `src/predictors/dropout.py` are implemented. Spectral, HTSR Alpha,
+   AGE, Weight-PCA, Higher-MI, Commutator Defect are unbuilt — they get
+   implemented one at a time per the CLAUDE.md order, each on this same
+   Nanda-Unified substrate.
+4. "Figure 7 reproduced" for `src/` depends on step 1 finishing.
+5. `run_full_benchmark.py` was NOT modified — it still works (my change
+   only added npy files, removed none; the completeness check and
+   `BenchmarkAnalyzer` still pass). Wiring it to also surface the new
+   per-module curves is a later cleanup.
+6. `src/analysis_l2_norm_four_head.py` still has "mod 97" narrative text —
+   standalone manual tool, not on the pipeline path, left as-is.
+
+### `nanda_l2_p113/`
+
+Now largely redundant (its 4 alignments are folded into `src/`), but
+**left untouched** — it still has the finished p=113 L2-only 3-run result
+and analysis on record. Not deleted. Can be retired later once `src/` has
+its own p=113 baseline.
+
+### Files Modified / Added
+
+- Added: `configs/nanda_unified.yaml`, `archive/p97_default/README.md`.
+- Modified: `.gitignore`, `src/data/modular_arithmetic.py`,
+  `src/models/transformer_four_head.py`, `src/predictors/l2_norm.py`,
+  `src/unified_measurements.py`, `src/train_four_head.py`,
+  `src/generate_master_report.py`, `src/generate_l2_report.py`,
+  `context.md` (this entry).
+- Moved: `runs/four_head/run_{1,2,3}/` → `archive/p97_default/` (disk only).

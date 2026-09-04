@@ -116,7 +116,7 @@ def create_report(all_data, all_metrics):
         rate_str = ", ".join(f"{r:g}" for r in rates)
 
         summary = (
-            f"Task: four-head transformer on (a+b) mod 97, 30/70 train/test split\n"
+            f"Task: four-head transformer on (a+b) mod 113, 30/70 train/test split  [Nanda-Unified]\n"
             f"Model: 4 attention heads, d_model=128, head_dim=32\n"
             f"Runs analysed: {n}  (run numbers: {[m['run'] for m in all_metrics]})\n"
             f"Dropout predictor: full multi-rate sweep, rates = [{rate_str}]\n\n"

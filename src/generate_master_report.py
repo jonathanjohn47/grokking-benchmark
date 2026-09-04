@@ -384,7 +384,7 @@ def build_data_pdf(runs):
         # --- summary section ---
         head = ["FOUR-HEAD GROKKING BENCHMARK - EXHAUSTIVE NUMERIC DUMP", "",
                 f"Runs included: {[d['run'] for d in runs]}",
-                f"Task: (a+b) mod 97, 30/70 split, AdamW lr=1e-3 weight_decay=1.0",
+                f"Task: (a+b) mod 113, 30/70 split, AdamW lr=1e-3 weight_decay=1.0 betas=(0.9,0.98)  [Nanda-Unified]",
                 f"Model: 4 heads, d_model=128, head_dim=32", ""]
         groks = [d["grok_epoch"] for d in runs if d["grok_epoch"] is not None]
         if len(groks) >= 2:

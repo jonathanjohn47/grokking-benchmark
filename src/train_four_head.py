@@ -4,8 +4,11 @@ from torch.optim import AdamW
 import numpy as np
 import os
 import re
+import yaml
 from predictors.l2_norm import (
     compute_l2_norm,
+    compute_sum_of_squared_weights,
+    compute_per_module_sum_of_squared_weights,
     compute_fast_slow_moving_averages,
     detect_ma_crossover,
     compute_ma_of_slow_ma,
@@ -18,17 +21,25 @@ from predictors.dropout import compute_dropout_gap_multi_rate
 from unified_measurements import PredictorMeasurements
 
 # ======================================================================
-# 4-HEAD VARIANT of train.py.
+# 4-HEAD training loop — Nanda-Unified benchmark protocol.
 #
-# This script is a separate copy of the main training loop — it does NOT
-# modify train.py or any of its saved outputs. The only real difference
-# from train.py is the model: TransformerFourHead(num_heads=4) instead of
-# the original single-head Transformer. Same task (p=97), same optimiser
-# (AdamW, lr=1e-3, weight_decay=1.0), same full-batch training, same 30/70
-# split, same L2 Norm and Dropout Gap predictor code (reused as-is from
-# src/predictors/ — nothing predictor-specific needed to change, since
-# both predictors work on any model that exposes .parameters() and
-# .dropout1/.dropout2, which this model does too).
+# The substrate is defined ONCE in configs/nanda_unified.yaml and loaded
+# below. This script asserts its own constants against that file so the
+# two cannot drift silently. Every predictor in the thesis is measured on
+# a model trained by this exact loop.
+#
+# Nanda-Unified protocol (see configs/nanda_unified.yaml, context.md):
+#   - task            : (a + b) mod 113   ("=" token id 113, vocab 114)
+#   - architecture    : 1-layer, 4-head, d_model=128, d_mlp=512, ReLU,
+#                       NO LayerNorm, learned positions, untied embed/unembed,
+#                       no bias in attention/embedding/unembedding, MLP has bias
+#   - init            : N(0, 0.8/sqrt(d_model)) for EVERY weight matrix
+#                       (TransformerLens / Nanda scale)
+#   - optimiser       : AdamW, lr=1e-3, weight_decay=1.0, betas=(0.9, 0.98)
+#   - training        : full-batch, no warmup, 40000 epochs, 30/70 split
+#
+# This replaced the old default substrate (p=97, PyTorch-default init,
+# betas 0.9/0.999). Those 3 runs are archived at archive/p97_default/.
 #
 # Outputs are saved under results/four_head/run_<N>/ (created if it does not
 # exist yet), NOT in the project root, so they never overwrite train.py's
@@ -97,6 +108,33 @@ def get_next_run_number(four_head_dir):
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(project_root)
 
+# ---- Load the single common benchmark protocol -----------------------
+CONFIG_PATH = os.path.join(project_root, "configs", "nanda_unified.yaml")
+with open(CONFIG_PATH) as f:
+    CFG = yaml.safe_load(f)
+
+MODULUS = CFG["task"]["modulus"]
+VOCAB_SIZE = CFG["task"]["vocab_size"]
+TRAIN_FRACTION = CFG["task"]["train_fraction"]
+D_MODEL = CFG["architecture"]["d_model"]
+NUM_HEADS = CFG["architecture"]["num_heads"]
+INIT_STD = CFG["init"]["init_std"]
+if INIT_STD is None:
+    INIT_STD = 0.8 / (D_MODEL ** 0.5)
+LR = CFG["optimizer"]["lr"]
+WEIGHT_DECAY = CFG["optimizer"]["weight_decay"]
+BETAS = tuple(CFG["optimizer"]["betas"])
+NUM_EPOCHS = CFG["training"]["epochs"]
+BATCH_SIZE = int(TRAIN_FRACTION * MODULUS * MODULUS)
+
+# Fail loud if this script and the protocol file ever disagree.
+assert VOCAB_SIZE == MODULUS + 1, "vocab_size must be modulus + 1"
+assert D_MODEL % NUM_HEADS == 0, "d_model must be divisible by num_heads"
+print(f"Protocol: {CONFIG_PATH}")
+print(f"  p={MODULUS}  vocab={VOCAB_SIZE}  d_model={D_MODEL}  heads={NUM_HEADS}")
+print(f"  init_std={INIT_STD:.5f}  betas={BETAS}  wd={WEIGHT_DECAY}  lr={LR}")
+print(f"  epochs={NUM_EPOCHS}  full-batch size={BATCH_SIZE}")
+
 four_head_dir = os.path.join(project_root, "runs", "four_head")
 migrate_legacy_flat_run(four_head_dir)
 run_number = get_next_run_number(four_head_dir)
@@ -123,19 +161,23 @@ np.save("seed.npy", seed)
 device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 print("Device:", device)
 
-data_loader = get_dataloaders(97, batch_size=int(0.3 * 97 * 97))
-model = TransformerFourHead(vocab_size=98, d_model=128, num_heads=4).to(device)
-optimizer = AdamW(model.parameters(), lr=1e-3, weight_decay=1.0)
+data_loader = get_dataloaders(MODULUS, batch_size=BATCH_SIZE)
+model = TransformerFourHead(
+    vocab_size=VOCAB_SIZE, d_model=D_MODEL, num_heads=NUM_HEADS, init_std=INIT_STD
+).to(device)
+optimizer = AdamW(model.parameters(), lr=LR, weight_decay=WEIGHT_DECAY, betas=BETAS)
 
-print("Model: TransformerFourHead (num_heads=4, matches Nanda et al.)")
+print("Model: TransformerFourHead (num_heads=4, Nanda-Unified substrate)")
 print("Optimizer:", optimizer)
 cross_entropy_loss = nn.CrossEntropyLoss()
 
-num_epochs = 40000
+num_epochs = NUM_EPOCHS
 train_acc_history = []
 test_acc_history = []
 loss_history = []
 l2_norm_history = []
+sum_w2_history = []
+per_module_sum_w2_history = []
 dropout_gap_epochs = []
 dropout_rates = [0.1, 0.3, 0.5, 0.7, 0.9]
 dropout_gap_history_by_rate = {rate: [] for rate in dropout_rates}
@@ -175,6 +217,8 @@ for epoch in range(num_epochs):
     test_acc_history.append(test_total_correct / test_total_samples)
     loss_history.append(loss.item())
     l2_norm_history.append(compute_l2_norm(model))
+    sum_w2_history.append(compute_sum_of_squared_weights(model))
+    per_module_sum_w2_history.append(compute_per_module_sum_of_squared_weights(model))
 
     # Dropout Gap Predictor: full multi-rate sweep across all 5 rates
     # (0.1, 0.3, 0.5, 0.7, 0.9). There is no single "primary" rate — every
@@ -193,7 +237,7 @@ for epoch in range(num_epochs):
     model.train()
 
     gap_summary = ", ".join(f"p{rate}={results[rate]['dropout_gap']:+.3f}" for rate in dropout_rates)
-    print(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}, Train Accuracy: {train_acc_history[-1]:.4f}, Test Accuracy: {test_acc_history[-1]:.4f}, L2 Norm: {l2_norm_history[-1]:.4f}, Dropout Gap sweep: {gap_summary}")
+    print(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}, Train Accuracy: {train_acc_history[-1]:.4f}, Test Accuracy: {test_acc_history[-1]:.4f}, L2 Norm: {l2_norm_history[-1]:.4f}, Sum w^2: {sum_w2_history[-1]:.1f}, Dropout Gap sweep: {gap_summary}")
 
 # Save all measurements using unified system
 measurements.save_training_data(train_acc_history, test_acc_history, loss_history)
@@ -251,7 +295,9 @@ else:
 # Save all L2 Norm measurements
 measurements.save_l2_norm_data(
     l2_norm_history, epoch_grid, fast_ma, slow_ma,
-    fast_ma_of_slow_ma, ma_of_ma_diff, detection_epoch
+    fast_ma_of_slow_ma, ma_of_ma_diff, detection_epoch,
+    sum_w2_history=sum_w2_history,
+    per_module_sum_w2_history=per_module_sum_w2_history,
 )
 
 # Dropout Predictor: gap tracked at every epoch during training

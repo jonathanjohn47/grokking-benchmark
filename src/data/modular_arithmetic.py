@@ -22,6 +22,7 @@ def get_dataloaders(number, batch_size):
 
 class ModularArithmeticDataset(Dataset):
     def __init__(self, number):
+        self.number = number
         self.pairs = generate_pairs(number)
 
     def __len__(self):
@@ -29,11 +30,16 @@ class ModularArithmeticDataset(Dataset):
 
     def __getitem__(self, idx):
         return (self.get_tensor(self.pairs[idx]), self.pairs[idx][2])
-    
+
     def get_tensor(self, item):
-        sequence = [item[0], item[1], 97]
+        # item is (a, b, answer). The third sequence position is the "="
+        # token, whose id is the modulus itself (number tokens are 0..p-1,
+        # so the "=" token id is p). Previously hardcoded to 97; now
+        # parametrised so the Nanda-Unified protocol (p = 113) gives the
+        # "=" token id 113. See configs/nanda_unified.yaml.
+        sequence = [item[0], item[1], self.number]
         return tensor(sequence)
-    
-    
+
+
 if __name__ == "__main__":
-    print(tensor([5, 3, 8, 97]))
+    print(tensor([5, 3, 8, 113]))
