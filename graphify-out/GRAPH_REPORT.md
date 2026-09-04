@@ -1,16 +1,16 @@
 # Graph Report - grokking-benchmark  (2026-09-04)
 
 ## Corpus Check
-- 69 files · ~477,707 words
+- 71 files · ~479,551 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 499 nodes · 596 edges · 45 communities (41 shown, 4 thin omitted)
+- 515 nodes · 625 edges · 46 communities (40 shown, 6 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b21f0c7c`
+- Built from commit: `96812a49`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -49,6 +49,7 @@
 - [[_COMMUNITY_Community 41|Community 41]]
 - [[_COMMUNITY_Community 42|Community 42]]
 - [[_COMMUNITY_Community 43|Community 43]]
+- [[_COMMUNITY_Community 45|Community 45]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `Indian English Communication Skill` - 16 edges
@@ -63,15 +64,15 @@
 10. `B. Combined Glossary` - 8 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `_analysis_outputs_present()` --calls--> `Path`  [INFERRED]
+  run_full_benchmark.py → tools/compile_python_files.py
+- `main()` --calls--> `Path`  [INFERRED]
+  run_full_benchmark.py → tools/compile_python_files.py
 - `Apply moving average smoothing to reduce noise.     window_size: number of epoch` --rationale_for--> `apply_moving_average()`  [EXTRACTED]
   src/predictors/l2_norm.py → archive/src_p97_mainstream_old/predictors/l2_norm.py
 - `Compute two moving averages on a LOG-EPOCH-UNIFORM grid, so the window     cover` --rationale_for--> `compute_fast_slow_moving_averages()`  [EXTRACTED]
   src/predictors/l2_norm.py → archive/src_p97_mainstream_old/predictors/l2_norm.py
 - `Detect where fast MA crosses above slow MA, searching along the     log-uniform` --rationale_for--> `detect_ma_crossover()`  [EXTRACTED]
-  src/predictors/l2_norm.py → archive/src_p97_mainstream_old/predictors/l2_norm.py
-- `load_run()` --calls--> `detect_ma_crossover()`  [EXTRACTED]
-  src/generate_master_report.py → archive/src_p97_mainstream_old/predictors/l2_norm.py
-- `Estimate the normal noise level of the MA-of-MA difference from the quiet     ea` --rationale_for--> `compute_noise_floor()`  [EXTRACTED]
   src/predictors/l2_norm.py → archive/src_p97_mainstream_old/predictors/l2_norm.py
 
 ## Import Cycles
@@ -80,11 +81,11 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (45 total, 4 thin omitted)
+## Communities (46 total, 6 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.36
-Nodes (3): generate_pairs(), get_dataloaders(), ModularArithmeticDataset
+Cohesion: 0.31
+Nodes (4): Dataset, generate_pairs(), get_dataloaders(), ModularArithmeticDataset
 
 ### Community 1 - "Community 1"
 Cohesion: 0.23
@@ -102,17 +103,13 @@ Nodes (5): Archived — single-head experiment, How to bring it back, Nothing wa
 Cohesion: 0.09
 Nodes (20): apply_moving_average(), compute_acceleration(), compute_fast_slow_moving_averages(), compute_ma_of_slow_ma(), compute_noise_floor(), detect_inflection(), detect_ma_crossover(), detect_ma_of_ma_trigger() (+12 more)
 
-### Community 5 - "Community 5"
-Cohesion: 0.70
-Nodes (4): get_images(), horizontal_collage(), main(), vertical_collage()
-
 ### Community 6 - "Community 6"
 Cohesion: 0.20
 Nodes (9): Core Project Files, Directory Structure, Documentation, Experiments & Results, Grokking Predictors Benchmark, Other, Quick Reference, Source Code (+1 more)
 
 ### Community 7 - "Community 7"
-Cohesion: 0.47
-Nodes (3): main(), render_page(), wrap_markdown()
+Cohesion: 0.14
+Nodes (13): Path, get_images(), horizontal_collage(), main(), vertical_collage(), main(), should_skip(), compile_python_files_to_pdf() (+5 more)
 
 ### Community 8 - "Community 8"
 Cohesion: 0.25
@@ -128,7 +125,7 @@ Nodes (4): data/modular_arithmetic.py, models/transformer.py, Python Project Com
 
 ### Community 11 - "Community 11"
 Cohesion: 0.07
-Nodes (13): generate_pairs(), get_dataloaders(), ModularArithmeticDataset, Dataset, Transformer, Transformer, compute_accuracy(), compute_dropout_gap_multi_rate() (+5 more)
+Nodes (23): generate_pairs(), get_dataloaders(), ModularArithmeticDataset, Transformer, compute_accuracy(), compute_dropout_gap_multi_rate(), # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, aggregate() (+15 more)
 
 ### Community 19 - "Community 19"
 Cohesion: 0.10
@@ -139,12 +136,12 @@ Cohesion: 0.20
 Nodes (8): discover_run_dirs(), migrate_legacy_flat_run(), plot_comparison(), plot_single_run(), Recreates this run's own 8 plots, saved inside results/four_head/run_<N>/ itself, Builds 4 plots overlaying every discovered run together, saved     directly in r, Same migration as train_four_head.py — kept here too so this     script can be r, Finds every run_<N> folder inside base_dir, sorted by run number     (not alphab
 
 ### Community 21 - "Community 21"
-Cohesion: 0.09
-Nodes (24): Path, _analysis_outputs_present(), BenchmarkAnalyzer, main(), prepare_four_head_dir(), Run one four-head training session, then verify it really finished., Load all four-head runs., Ordered keys of the four-head runs that actually loaded. (+16 more)
+Cohesion: 0.13
+Nodes (18): _analysis_outputs_present(), BenchmarkAnalyzer, main(), prepare_four_head_dir(), Run one four-head training session, then verify it really finished., Load all four-head runs., Ordered keys of the four-head runs that actually loaded., Find grokking epoch (test acc > 90%). (+10 more)
 
 ### Community 22 - "Community 22"
-Cohesion: 0.05
-Nodes (42): apply_moving_average(), compute_acceleration(), compute_fast_slow_moving_averages(), compute_ma_of_slow_ma(), compute_noise_floor(), compute_per_module_sum_of_squared_weights(), compute_sum_of_squared_weights(), detect_inflection() (+34 more)
+Cohesion: 0.06
+Nodes (31): apply_moving_average(), compute_acceleration(), compute_fast_slow_moving_averages(), compute_ma_of_slow_ma(), compute_per_module_sum_of_squared_weights(), compute_sum_of_squared_weights(), detect_inflection(), detect_ma_of_ma_trigger() (+23 more)
 
 ### Community 23 - "Community 23"
 Cohesion: 0.06
@@ -183,8 +180,8 @@ Cohesion: 0.10
 Nodes (11): PredictorMeasurements, Unified measurement collection for L2 Norm and Dropout predictors. Ensures consi, Collects and saves all measurements for both predictors., Generate standalone Dropout visualization graphs., Generate combined PDF report with all measurements., Create subdirectories for each predictor., Apply simple moving average smoothing., Save core training metrics. (+3 more)
 
 ### Community 32 - "Community 32"
-Cohesion: 0.26
-Nodes (14): build_data_pdf(), build_plots_pdf(), _comparison_pages(), _dump_table(), grok_epoch(), _grok_vline(), load_run(), main() (+6 more)
+Cohesion: 0.12
+Nodes (25): compute_noise_floor(), detect_ma_crossover(), detect_ma_of_ma_zero_crossing(), Detect where fast MA crosses above slow MA, searching along the     log-uniform, Estimate the normal noise level of the MA-of-MA difference from the quiet     ea, Detect where fast MA crosses above slow MA, searching along the     log-uniform, Fire on the first epoch (after skip_epochs) where diff crosses from     positive, Estimate the normal noise level of the MA-of-MA difference from the quiet     ea (+17 more)
 
 ### Community 33 - "Community 33"
 Cohesion: 0.26
@@ -205,22 +202,22 @@ Nodes (4): archive/src_p97_mainstream_old/ — the pre-Nanda-Unified `src/` snap
 ## Knowledge Gaps
 - **106 isolated node(s):** `Why it is kept`, `What the old code did (differs from the current `src/`)`, `Not a runnable tree`, `What this is`, `The four deliberate differences from `src/`` (+101 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **6 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `ModularArithmeticDataset` connect `Community 0` to `Community 11`?**
-  _High betweenness centrality (0.007) - this node is a cross-community bridge._
-- **Why does `Path` connect `Community 21` to `Community 5`, `Community 7`?**
+- **Why does `ModularArithmeticDataset` connect `Community 11` to `Community 0`?**
+  _High betweenness centrality (0.012) - this node is a cross-community bridge._
+- **Why does `TransformerFourHead` connect `Community 42` to `Community 11`?**
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
-- **What connects `Why it is kept`, `What the old code did (differs from the current `src/`)`, `Not a runnable tree` to the rest of the system?**
-  _218 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `Find all Python (.py) files in the current project directory,     excluding virt`, `Read configs/nanda_unified.yaml -> flat dict of the constants used here.`, `Detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test` to the rest of the system?**
+  _221 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 4` be split into smaller, more focused modules?**
   _Cohesion score 0.09420289855072464 - nodes in this community are weakly interconnected._
+- **Should `Community 7` be split into smaller, more focused modules?**
+  _Cohesion score 0.14285714285714285 - nodes in this community are weakly interconnected._
 - **Should `Community 11` be split into smaller, more focused modules?**
-  _Cohesion score 0.06722689075630252 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07195121951219512 - nodes in this community are weakly interconnected._
 - **Should `Community 19` be split into smaller, more focused modules?**
   _Cohesion score 0.10476190476190476 - nodes in this community are weakly interconnected._
-- **Should `Community 21` be split into smaller, more focused modules?**
-  _Cohesion score 0.0915915915915916 - nodes in this community are weakly interconnected._
