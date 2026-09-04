@@ -603,5 +603,75 @@
     "mtime": 1788482541.01508,
     "ast_hash": "70f507c360b1660830e1f6807d988d3e",
     "semantic_hash": ""
+  },
+  "archive/src_p97_mainstream_old/analysis_l2_norm_four_head.py": {
+    "mtime": 1788478372.0,
+    "ast_hash": "e0b5321f7da5df3687d73c696cc8440d",
+    "semantic_hash": ""
+  },
+  "archive/src_p97_mainstream_old/data/modular_arithmetic.py": {
+    "mtime": 1788478372.0,
+    "ast_hash": "f999f00cb044dc9e5c5515780c6fbbbc",
+    "semantic_hash": ""
+  },
+  "archive/src_p97_mainstream_old/generate_l2_report.py": {
+    "mtime": 1788478372.0,
+    "ast_hash": "7d353590a242bc7b8a8535dba44634b3",
+    "semantic_hash": ""
+  },
+  "archive/src_p97_mainstream_old/generate_master_report.py": {
+    "mtime": 1788478372.0,
+    "ast_hash": "34711408990aa4a7a116cc2a5892f5e0",
+    "semantic_hash": ""
+  },
+  "archive/src_p97_mainstream_old/models/model_shadow_with_layernorm.py": {
+    "mtime": 1788478372.0,
+    "ast_hash": "39af9b4d02433131d3aaf11467e1a7a0",
+    "semantic_hash": ""
+  },
+  "archive/src_p97_mainstream_old/models/transformer_four_head.py": {
+    "mtime": 1788478372.0,
+    "ast_hash": "1e6e1688f6d98fa3a685b4801478f426",
+    "semantic_hash": ""
+  },
+  "archive/src_p97_mainstream_old/plot_results_four_head.py": {
+    "mtime": 1788478372.0,
+    "ast_hash": "4d744f5bea7f175517997afc819ffcc2",
+    "semantic_hash": ""
+  },
+  "archive/src_p97_mainstream_old/plot_shadow_layernorm.py": {
+    "mtime": 1788478372.0,
+    "ast_hash": "4e968d6fe13d2147e0155b41a6a44dd3",
+    "semantic_hash": ""
+  },
+  "archive/src_p97_mainstream_old/predictors/dropout.py": {
+    "mtime": 1788478372.0,
+    "ast_hash": "07ca8737b33caed681d15158887defba",
+    "semantic_hash": ""
+  },
+  "archive/src_p97_mainstream_old/predictors/l2_norm.py": {
+    "mtime": 1788478372.0,
+    "ast_hash": "cefb17b190b43d6d7034ca83bc999780",
+    "semantic_hash": ""
+  },
+  "archive/src_p97_mainstream_old/train_four_head.py": {
+    "mtime": 1788478372.0,
+    "ast_hash": "3c9127ea4990ad8098dc3a4dbdfdf807",
+    "semantic_hash": ""
+  },
+  "archive/src_p97_mainstream_old/train_shadow_layernorm.py": {
+    "mtime": 1788478372.0,
+    "ast_hash": "d8e9ece97bb15e5a1c056ca4082002cb",
+    "semantic_hash": ""
+  },
+  "archive/src_p97_mainstream_old/unified_measurements.py": {
+    "mtime": 1788478372.0,
+    "ast_hash": "c8731bae963d6853ad4e5e7e2df91619",
+    "semantic_hash": ""
+  },
+  "archive/src_p97_mainstream_old/README.md": {
+    "mtime": 1788496509.2850907,
+    "ast_hash": "dc83fa87703b119ec02747ceb7964b56",
+    "semantic_hash": ""
   }
 }

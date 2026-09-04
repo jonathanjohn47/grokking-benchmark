@@ -1,16 +1,16 @@
 # Graph Report - grokking-benchmark  (2026-09-04)
 
 ## Corpus Check
-- 55 files · ~465,445 words
+- 69 files · ~477,707 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 409 nodes · 475 edges · 38 communities (34 shown, 4 thin omitted)
+- 499 nodes · 596 edges · 45 communities (41 shown, 4 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `029b7390`
+- Built from commit: `b21f0c7c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -42,31 +42,37 @@
 - [[_COMMUNITY_Community 28|Community 28]]
 - [[_COMMUNITY_Community 29|Community 29]]
 - [[_COMMUNITY_Community 30|Community 30]]
+- [[_COMMUNITY_Community 31|Community 31]]
+- [[_COMMUNITY_Community 32|Community 32]]
 - [[_COMMUNITY_Community 33|Community 33]]
+- [[_COMMUNITY_Community 34|Community 34]]
+- [[_COMMUNITY_Community 41|Community 41]]
+- [[_COMMUNITY_Community 42|Community 42]]
+- [[_COMMUNITY_Community 43|Community 43]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `Indian English Communication Skill` - 16 edges
 2. `PredictorMeasurements` - 11 edges
-3. `BenchmarkAnalyzer` - 11 edges
-4. `L2 Norm Predictor — Easy Notes for Revision and Viva` - 11 edges
-5. `BenchmarkAnalyzer` - 10 edges
-6. `Literature` - 10 edges
-7. `PredictorMeasurements` - 9 edges
-8. `Results Directory Structure` - 9 edges
-9. `B. Combined Glossary` - 8 edges
-10. `ModularArithmeticDataset` - 7 edges
+3. `PredictorMeasurements` - 11 edges
+4. `BenchmarkAnalyzer` - 11 edges
+5. `L2 Norm Predictor — Easy Notes for Revision and Viva` - 11 edges
+6. `BenchmarkAnalyzer` - 10 edges
+7. `Literature` - 10 edges
+8. `PredictorMeasurements` - 9 edges
+9. `Results Directory Structure` - 9 edges
+10. `B. Combined Glossary` - 8 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `_analysis_outputs_present()` --calls--> `Path`  [INFERRED]
-  run_full_benchmark.py → tools/compile_python_files.py
-- `main()` --calls--> `Path`  [INFERRED]
-  run_full_benchmark.py → tools/compile_python_files.py
-- `main()` --calls--> `Path`  [INFERRED]
-  tools/collage_images.py → tools/compile_python_files.py
-- `main()` --calls--> `Path`  [INFERRED]
-  tools/md_to_image.py → tools/compile_python_files.py
-- `compile_python_files_to_pdf()` --calls--> `Path`  [INFERRED]
-  tools/compile_python_files_to_pdf.py → tools/compile_python_files.py
+- `Apply moving average smoothing to reduce noise.     window_size: number of epoch` --rationale_for--> `apply_moving_average()`  [EXTRACTED]
+  src/predictors/l2_norm.py → archive/src_p97_mainstream_old/predictors/l2_norm.py
+- `Compute two moving averages on a LOG-EPOCH-UNIFORM grid, so the window     cover` --rationale_for--> `compute_fast_slow_moving_averages()`  [EXTRACTED]
+  src/predictors/l2_norm.py → archive/src_p97_mainstream_old/predictors/l2_norm.py
+- `Detect where fast MA crosses above slow MA, searching along the     log-uniform` --rationale_for--> `detect_ma_crossover()`  [EXTRACTED]
+  src/predictors/l2_norm.py → archive/src_p97_mainstream_old/predictors/l2_norm.py
+- `load_run()` --calls--> `detect_ma_crossover()`  [EXTRACTED]
+  src/generate_master_report.py → archive/src_p97_mainstream_old/predictors/l2_norm.py
+- `Estimate the normal noise level of the MA-of-MA difference from the quiet     ea` --rationale_for--> `compute_noise_floor()`  [EXTRACTED]
+  src/predictors/l2_norm.py → archive/src_p97_mainstream_old/predictors/l2_norm.py
 
 ## Import Cycles
 - None detected.
@@ -74,11 +80,11 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (38 total, 4 thin omitted)
+## Communities (45 total, 4 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.16
-Nodes (7): generate_pairs(), get_dataloaders(), ModularArithmeticDataset, Dataset, generate_pairs(), get_dataloaders(), ModularArithmeticDataset
+Cohesion: 0.36
+Nodes (3): generate_pairs(), get_dataloaders(), ModularArithmeticDataset
 
 ### Community 1 - "Community 1"
 Cohesion: 0.23
@@ -121,8 +127,8 @@ Cohesion: 0.40
 Nodes (4): data/modular_arithmetic.py, models/transformer.py, Python Project Compilation, train.py
 
 ### Community 11 - "Community 11"
-Cohesion: 0.11
-Nodes (7): TransformerFourHead, Transformer, compute_accuracy(), compute_dropout_gap_multi_rate(), # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, migrate_legacy_flat_run(), Earlier versions of this script saved directly into results/four_head/     inste
+Cohesion: 0.07
+Nodes (13): generate_pairs(), get_dataloaders(), ModularArithmeticDataset, Dataset, Transformer, Transformer, compute_accuracy(), compute_dropout_gap_multi_rate() (+5 more)
 
 ### Community 19 - "Community 19"
 Cohesion: 0.10
@@ -137,8 +143,8 @@ Cohesion: 0.09
 Nodes (24): Path, _analysis_outputs_present(), BenchmarkAnalyzer, main(), prepare_four_head_dir(), Run one four-head training session, then verify it really finished., Load all four-head runs., Ordered keys of the four-head runs that actually loaded. (+16 more)
 
 ### Community 22 - "Community 22"
-Cohesion: 0.07
-Nodes (38): apply_moving_average(), compute_acceleration(), compute_fast_slow_moving_averages(), compute_ma_of_slow_ma(), compute_noise_floor(), compute_per_module_sum_of_squared_weights(), compute_sum_of_squared_weights(), detect_inflection() (+30 more)
+Cohesion: 0.05
+Nodes (42): apply_moving_average(), compute_acceleration(), compute_fast_slow_moving_averages(), compute_ma_of_slow_ma(), compute_noise_floor(), compute_per_module_sum_of_squared_weights(), compute_sum_of_squared_weights(), detect_inflection() (+34 more)
 
 ### Community 23 - "Community 23"
 Cohesion: 0.06
@@ -172,25 +178,49 @@ Nodes (11): compute_l2_statistics(), create_pdf_report(), find_grok_epoch(), loa
 Cohesion: 0.29
 Nodes (6): How to run, nanda_l2_p113 — L2-Norm predictor on (a + b) mod 113, Outputs, The four deliberate differences from `src/`, What this is, Why `p = 113`, `betas = (0.9, 0.98)`, and the small init
 
+### Community 31 - "Community 31"
+Cohesion: 0.10
+Nodes (11): PredictorMeasurements, Unified measurement collection for L2 Norm and Dropout predictors. Ensures consi, Collects and saves all measurements for both predictors., Generate standalone Dropout visualization graphs., Generate combined PDF report with all measurements., Create subdirectories for each predictor., Apply simple moving average smoothing., Save core training metrics. (+3 more)
+
+### Community 32 - "Community 32"
+Cohesion: 0.26
+Nodes (14): build_data_pdf(), build_plots_pdf(), _comparison_pages(), _dump_table(), grok_epoch(), _grok_vline(), load_run(), main() (+6 more)
+
+### Community 33 - "Community 33"
+Cohesion: 0.26
+Nodes (14): build_data_pdf(), build_plots_pdf(), _comparison_pages(), _dump_table(), grok_epoch(), _grok_vline(), load_run(), main() (+6 more)
+
+### Community 34 - "Community 34"
+Cohesion: 0.23
+Nodes (11): compute_l2_statistics(), create_pdf_report(), find_grok_epoch(), load_run_data(), main(), L2 Norm Behavior Analysis for Four-Head Transformer Detailed technical report on, Create a comprehensive PDF report., Load all relevant data from a specific run. (+3 more)
+
+### Community 41 - "Community 41"
+Cohesion: 0.31
+Nodes (10): create_report(), discover_run_numbers(), extract_metrics(), find_grok_epoch(), load_run_data(), main(), L2 Norm + Dropout analysis report for the four-head transformer.  Standalone too, Load one run from the per-predictor subdir layout. (+2 more)
+
+### Community 43 - "Community 43"
+Cohesion: 0.40
+Nodes (4): archive/src_p97_mainstream_old/ — the pre-Nanda-Unified `src/` snapshot, Not a runnable tree, What the old code did (differs from the current `src/`), Why it is kept
+
 ## Knowledge Gaps
-- **103 isolated node(s):** `What this is`, `The four deliberate differences from `src/``, `Why `p = 113`, `betas = (0.9, 0.98)`, and the small init`, `How to run`, `Outputs` (+98 more)
+- **106 isolated node(s):** `Why it is kept`, `What the old code did (differs from the current `src/`)`, `Not a runnable tree`, `What this is`, `The four deliberate differences from `src/`` (+101 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
+- **Why does `ModularArithmeticDataset` connect `Community 0` to `Community 11`?**
+  _High betweenness centrality (0.007) - this node is a cross-community bridge._
 - **Why does `Path` connect `Community 21` to `Community 5`, `Community 7`?**
-  _High betweenness centrality (0.008) - this node is a cross-community bridge._
-- **What connects `L2 Norm + Dropout analysis report for the four-head transformer.  Standalone too`, `Load one run from the per-predictor subdir layout.`, `First 1-indexed epoch where test accuracy exceeds threshold.` to the rest of the system?**
-  _180 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _High betweenness centrality (0.005) - this node is a cross-community bridge._
+- **What connects `Why it is kept`, `What the old code did (differs from the current `src/`)`, `Not a runnable tree` to the rest of the system?**
+  _218 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 4` be split into smaller, more focused modules?**
   _Cohesion score 0.09420289855072464 - nodes in this community are weakly interconnected._
 - **Should `Community 11` be split into smaller, more focused modules?**
-  _Cohesion score 0.10822510822510822 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06722689075630252 - nodes in this community are weakly interconnected._
 - **Should `Community 19` be split into smaller, more focused modules?**
   _Cohesion score 0.10476190476190476 - nodes in this community are weakly interconnected._
 - **Should `Community 21` be split into smaller, more focused modules?**
   _Cohesion score 0.0915915915915916 - nodes in this community are weakly interconnected._
-- **Should `Community 22` be split into smaller, more focused modules?**
-  _Cohesion score 0.06755260243632337 - nodes in this community are weakly interconnected._
