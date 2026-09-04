@@ -12,7 +12,6 @@ This applies before:
 - Planning an implementation
 - Writing code
 - Giving technical advice
-- Creating an Opencode prompt
 
 This rule has the highest priority in this file.
 
@@ -30,7 +29,7 @@ If `context.md` cannot be found or cannot be read:
 - Do not inspect source files.
 - Do not inspect Graphify.
 - Do not make a plan.
-- Do not write an implementation prompt.
+- Do not write an implementation.
 - Do not suggest a solution.
 - Ask the user where `context.md` is or ask them to provide it.
 
@@ -96,7 +95,6 @@ The skill must be applied even when:
 - The user asks a very short question.
 - The response is only a few sentences.
 - The response is highly technical.
-- The response is an Opencode prompt.
 - The response is a project status update.
 - The user does not explicitly mention Indian English.
 
@@ -331,52 +329,36 @@ When possible:
 
 ---
 
-# 8. OPENCODE / ANTIGRAVITY WORKFLOW
+# 8. DIRECT IMPLEMENTATION — CLAUDE DOES THE WORK ITSELF
 
-For implementation tasks, Claude should normally create a detailed `.md` prompt for Opencode or Antigravity CLI.
-
-Claude should **not directly edit project files** unless the user explicitly gives permission.
+There is no separate AI coding-agent step in this project. Claude does not
+write implementation prompts for any external tool. Whatever command the
+user gives — fix it, implement it, add the feature, update the code,
+refactor it, make it work — Claude must carry out the work itself, directly,
+inside this project's own files.
 
 ## Default rule
 
-> If the user asks what should be implemented, explain it and create an implementation prompt.
+> Whatever task the user asks for, Claude performs it directly. Claude does
+> not create a prompt file for another tool to execute later.
 
-> If the user explicitly asks Claude to implement it, Claude may implement it directly.
+This does not remove Section 7's Code Policy above: Claude still teaches
+first and writes full code only when the situation calls for it (the user
+asks for code or implementation, the user is blocked, or a short example is
+needed). The change here is only about **who does the implementation work**
+— it is always Claude, directly, never a prompt handed off to a separate
+coding agent.
 
----
+## When implementing directly
 
-# 9. OPENCODE PROMPT RULES
-
-Every Opencode prompt must start with:
-
-```md
-IMPORTANT:
-Do not read, analyze, reference, or modify CLAUDE.md.
-CLAUDE.md is reserved exclusively for Claude.
-Use only project source code and existing implementation patterns.
-```
-
-Every prompt must contain:
-
-- Objective
-- Context
-- Relevant Findings
-- Files To Inspect
-- Requirements
-- Constraints
-- Implementation Steps
-- Validation Steps
-- Acceptance Criteria
-
-The prompt itself must also use **natural Indian English**.
-
-The user is Indian, so do not write Opencode prompts in American English by default.
-
-Do not write a complicated prompt just because it is an AI coding-agent prompt.
+1. Explain what is being changed.
+2. Make the change.
+3. Validate it.
+4. Explain the result in **natural Indian English**.
 
 ---
 
-# 10. PROJECT MEMORY — `context.md`
+# 9. PROJECT MEMORY — `context.md`
 
 `context.md` is the persistent memory of the project.
 
@@ -447,9 +429,9 @@ If the answer is no, improve `context.md` before the commit.
 
 ---
 
-# 11. GIT COMMIT RULE
+# 10. GIT COMMIT RULE
 
-Every Opencode prompt must end with:
+Whenever the user asks for a Git commit, Claude must follow this procedure:
 
 ```md
 ## Commit
@@ -468,28 +450,7 @@ Do not leave uncommitted files behind.
 
 ---
 
-# 12. DIRECT IMPLEMENTATION OVERRIDE
-
-Claude may directly modify project files only when the user clearly says something like:
-
-- "Implement it yourself."
-- "Write the code directly."
-- "Edit the files yourself."
-- "Claude should make the changes."
-- "Do not generate an Opencode prompt."
-
-Otherwise, generate an Opencode prompt.
-
-Even when direct implementation is allowed:
-
-1. Explain what is being changed.
-2. Make the change.
-3. Validate it.
-4. Explain the result in **natural Indian English**.
-
----
-
-# 13. IMPORTANT PROJECT RULE — SHARED MODEL ARCHITECTURE
+# 11. IMPORTANT PROJECT RULE — SHARED MODEL ARCHITECTURE
 
 `transformer.py` is the **shared model architecture**.
 
@@ -523,7 +484,7 @@ These are three different things.
 
 ---
 
-# 14. PENDING / POSTPONED WORK
+# 12. PENDING / POSTPONED WORK
 
 When a technical question is deliberately postponed, do not describe it as deleted, removed, solved, or abandoned unless that is actually true.
 
@@ -547,7 +508,7 @@ This distinction is important for project history.
 
 ---
 
-# 15. PROJECT-SPECIFIC RULES
+# 13. PROJECT-SPECIFIC RULES
 
 ## Experiment prerequisite
 
@@ -610,7 +571,7 @@ Never use:
 
 ---
 
-# 16. HOW TO EXPLAIN TECHNICAL CHANGES
+# 14. HOW TO EXPLAIN TECHNICAL CHANGES
 
 Whenever the user asks what happened to the code or why something changed, use this simple structure when useful:
 
@@ -650,7 +611,7 @@ Use this format whenever it helps prevent confusion.
 
 ---
 
-# 17. NON-NEGOTIABLE PROJECT RULES
+# 15. NON-NEGOTIABLE PROJECT RULES
 
 1. Read `context.md` completely before doing anything else.
 2. If `context.md` is unavailable or cannot be read, stop.
@@ -660,30 +621,28 @@ Use this format whenever it helps prevent confusion.
 6. Teach before implementing.
 7. Explain before coding.
 8. Use the existing project patterns and abstractions.
-9. Generate Opencode prompts by default for implementation work.
-10. Direct implementation requires explicit user permission.
-11. Never let Opencode or Antigravity read, reference, analyze, or modify `CLAUDE.md`.
-12. Update `context.md` before every requested Git commit.
-13. Leave the repository clean after a commit.
-14. Treat `context.md` as the main project memory.
-15. Clearly separate shared model changes from predictor-specific changes.
-16. Clearly distinguish changed, unchanged, deleted, and postponed work.
-17. Never say code was removed when it was only left untouched.
-18. Never describe a postponed decision as completed.
-19. Follow the required predictor evaluation order.
-20. Preserve the project's PyTorch + Apple Silicon (MPS) target.
-21. Avoid prohibited external services and credentials.
-22. Use Google Sheets only; never use Excel or `.xlsx`.
-23. Optimize for the user's understanding, not implementation speed.
-24. Use **`indian-english` for every user-facing response**.
-25. Actually **load/apply the `indian-english` skill before drafting every response**.
-26. Never merely mention `indian-english` without applying it.
-27. Never replace `indian-english` with generic "simple English".
-28. Do not default to American English, American conversational patterns, American corporate language, or British English.
+9. Claude implements every requested change directly, itself, inside the project's own files — no separate prompt file is created for another tool.
+10. Update `context.md` before every requested Git commit.
+11. Leave the repository clean after a commit.
+12. Treat `context.md` as the main project memory.
+13. Clearly separate shared model changes from predictor-specific changes.
+14. Clearly distinguish changed, unchanged, deleted, and postponed work.
+15. Never say code was removed when it was only left untouched.
+16. Never describe a postponed decision as completed.
+17. Follow the required predictor evaluation order.
+18. Preserve the project's PyTorch + Apple Silicon (MPS) target.
+19. Avoid prohibited external services and credentials.
+20. Use Google Sheets only; never use Excel or `.xlsx`.
+21. Optimize for the user's understanding, not implementation speed.
+22. Use **`indian-english` for every user-facing response**.
+23. Actually **load/apply the `indian-english` skill before drafting every response**.
+24. Never merely mention `indian-english` without applying it.
+25. Never replace `indian-english` with generic "simple English".
+26. Do not default to American English, American conversational patterns, American corporate language, or British English.
 
 ---
 
-# 18. FINAL COMMUNICATION CHECK
+# 16. FINAL COMMUNICATION CHECK
 
 Before sending **any** user-facing response, Claude must complete this mental check.
 

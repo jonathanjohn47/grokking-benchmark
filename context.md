@@ -6974,3 +6974,206 @@ either alone.
 - Predictors 3–9 (Spectral next, per the CLAUDE.md order) still unbuilt;
   Spectral's exact signal definition is still an open design question
   per the entry above.
+
+---
+
+## Session Summary — September 4, 2026 (Dropout predictor REOPENED — literature search found a directly-relevant paper (Salah & Yevick) after the earlier "formally closed" decision; decision reversed; Opencode prompt drafted, not yet implemented)
+
+### 1. What happened, in order
+
+- The previous entry in this file records Dropout being formally closed
+  as a live/causal predictor (Jonathan's explicit choice of "option b":
+  keep it only as a post-hoc characterization metric, do not port the
+  archived single-head per-epoch tracking, move to Spectral).
+- Jonathan then asked which literature paper the Dropout predictor was
+  actually based on. Checked `Literature/README.md` and confirmed: **no
+  paper in the project's 25-PDF/21-paper set is mapped to Dropout** — the
+  README's own housekeeping notes list Dropout among 5 predictors
+  (Dropout, AGE, Correlation Traps, Weight-PCA, Commutator Defect) with
+  "predictor → paper map still needed."
+- Jonathan asked to read the full extraction report
+  (`Literature/exhaustive_literature_extraction_report.md`, all 21
+  papers) and identify the best available fit for Dropout, plus any
+  external option. Full report read. Best in-set conceptual matches
+  identified: Paper 11 (Sokolić et al., *Robust Large Margin Deep Neural
+  Networks*, 2017 — bounded local Jacobian spectral norm as a
+  robustness/generalization link, same "robustness-implies-
+  generalization" spirit as the Dropout Gap hypothesis, but via input
+  perturbation, not unit ablation) and Paper 2 (Power et al., the
+  project's own base grokking paper — its preliminary sharpness-vs-
+  validation-accuracy correlation, Spearman −0.79548, is the same
+  flat-minima/robustness family of idea). Neither paper is literally
+  about dropout.
+- A web search for a more precise external match found two directly
+  relevant, uncatalogued papers:
+  1. **Ahmed Salah & David Yevick, "Tracing the Path to Grokking:
+     Embeddings, Dropout, and Network Activation," arXiv:2507.11645
+     (also published in *Neural Processing Letters*,
+     DOI-bearing Springer record
+     `10.1007/s11063-026-11843-4`).** This paper studies grokking on a
+     2-layer MLP (256 hidden units, ReLU) doing modular addition with
+     `p=53`, AdamW, weight_decay=1.0, lr=3e-4, Xavier Normal init, 50%
+     train split — a smaller/simpler substrate than this project's
+     four-head Nanda transformer, but the same grokking phenomenon.
+     **Method:** at a checkpoint, freeze the weights and run 100
+     stochastic forward passes over the test set (dropout active each
+     pass); record the variance of test accuracy across those 100
+     passes. Repeat at multiple checkpoints through training. **Finding:**
+     this variance is near-zero during memorization, rises sharply
+     "at the onset of generalization" (their words), and decays back to
+     near-zero once both train and test accuracy have saturated — i.e.
+     a transient spike concentrated around the grok transition, not a
+     monotonic trend. They also define a **Dropout Robustness Curve
+     (DRC)**: test accuracy vs. dropout rate (0.0–0.9), plotted at
+     several epoch checkpoints — pre-grok, any dropout collapses
+     accuracy; post-grok, accuracy stays flat up to rate ≈0.5. The paper
+     frames the variance peak as a "concurrent or slightly leading"
+     correlate of the grokking window, not as a rigorously validated,
+     always-fires-first predictor in the same strict sense as this
+     project's L2-Norm 3-criteria test — it does not report per-run
+     trigger-epoch-vs-grok-epoch numbers the way this project's L2 Norm
+     work does.
+  2. **"Understanding Grokking Through A Robustness Viewpoint,"
+     arXiv:2311.06597** — different angle, ties L2-norm/perturbation
+     robustness to grokking and claims L2 weight norm is "a sufficient
+     condition for grokking." Not about dropout specifically; flagged as
+     a secondary reference and as a potential point of tension with this
+     project's own L2-Norm negative result (worth a thesis discussion
+     note, not pursued further this session).
+- **Decision reversed.** Given a precise, literature-backed, and cheaply
+  testable hypothesis now exists (variance of test accuracy under
+  repeated stochastic dropout, tracked over training, should spike near
+  the grok transition) that maps closely onto infrastructure already
+  built (`compute_dropout_gap_multi_rate`), Jonathan chose to **reopen**
+  Dropout rather than leave it closed. Explicit instruction: build this
+  on the current Nanda-Unified/four-head substrate — do **not** revive
+  the archived single-head architecture.
+
+### 2. Files Modified
+
+- `results/README.md` — Dropout status reverted from "✅ Formally
+  closed" back to "🔄 Reopened," citing Salah & Yevick (2025/2026) and
+  the variance-under-dropout hypothesis; "Key Findings" bullet rewritten
+  again to describe the new plan instead of the closure.
+- `context.md` — this entry (supersedes the immediately preceding
+  "Dropout formally closed" entry's conclusion, though that entry is
+  left in place, not deleted, per this file's own house rule of keeping
+  full history rather than erasing superseded decisions).
+- `opencode_prompt_dropout_variance_predictor.md` (repo root, new) — the
+  Opencode prompt for implementing per-checkpoint dropout-variance
+  tracking on the Nanda-Unified four-head model, written this session,
+  not yet executed. Per `CLAUDE.md` Section 6 (default action for
+  development tasks is an Opencode prompt, not direct implementation),
+  no predictor/runner code has been changed yet.
+
+### Next
+
+1. Jonathan to review `opencode_prompt_dropout_variance_predictor.md`
+   and run it (or ask for direct implementation instead).
+2. Once implemented and run, evaluate the resulting variance-vs-epoch
+   curves across the 5 Nanda-Unified seeds against the same rigor used
+   to close L2 Norm — specifically, whether the variance peak's epoch
+   tracks each seed's own grok epoch proportionally (the same Criterion
+   2 check that L2 Norm failed), not just whether a peak exists near
+   grokking in each run individually.
+3. Consider downloading the Salah & Yevick PDF into `Literature/` and
+   updating `Literature/README.md`'s predictor→paper map (currently
+   flagged as an open TODO for Dropout, AGE, Correlation Traps,
+   Weight-PCA, Commutator Defect) — not done yet, optional, Jonathan's
+   call.
+4. Formal move to Spectral is now deferred again until the reopened
+   Dropout investigation reaches a verdict (pass/fail), same pattern as
+   the original L2 Norm → Dropout handoff earlier in this project.
+
+## Session Summary — September 4, 2026 (CLAUDE.md rewritten: Opencode/Antigravity workflow removed, Claude now implements directly)
+
+### 1. What Was Requested
+
+Jonathan gave an explicit, direct instruction: remove every mention of
+"Opencode" from `CLAUDE.md`, and wherever an Opencode-specific rule is
+removed, state clearly that Claude must carry out every requested task
+itself, directly, whatever command is given.
+
+### 2. What Changed in `CLAUDE.md`
+
+- The old **Section 8 ("OPENCODE / ANTIGRAVITY WORKFLOW")** and
+  **Section 9 ("OPENCODE PROMPT RULES")** — which told Claude to
+  normally write a `.md` prompt for an external coding agent instead of
+  editing files directly — have been merged and replaced with a single
+  new **Section 8 ("DIRECT IMPLEMENTATION — CLAUDE DOES THE WORK
+  ITSELF")**. It states plainly that there is no separate AI
+  coding-agent step in this project any more: whatever the user asks
+  for (fix it, implement it, add the feature, update it, refactor it),
+  Claude performs the work itself, directly, inside the project's own
+  files.
+- The old **Section 12 ("DIRECT IMPLEMENTATION OVERRIDE")** — which
+  required a trigger phrase such as "Implement it yourself" before
+  Claude was allowed to edit files directly — has been removed
+  entirely. Direct implementation is now the unconditional default, not
+  something that needs to be unlocked.
+- **Section 11 ("GIT COMMIT RULE")** was reworded to stand on its own —
+  it no longer says "Every Opencode prompt must end with"; it now says
+  "Whenever the user asks for a Git commit, Claude must follow this
+  procedure." The actual commit steps (update `context.md` first, then
+  `git add .`, `git commit`, `git status`, verify a clean tree) are
+  unchanged.
+- Small bullet-level references to "Creating an Opencode prompt" (old
+  Section 1) and "The response is an Opencode prompt" (old Section 2)
+  were removed, since no such artifact is produced any more.
+- **NON-NEGOTIABLE PROJECT RULES** items 9–11 (Opencode-by-default,
+  permission-gated direct implementation, "never let Opencode read
+  CLAUDE.md") were replaced with one rule: "Claude implements every
+  requested change directly, itself, inside the project's own files —
+  no separate prompt file is created for another tool."
+- Sections renumbered afterward (old 10–18 → new 9–16) since two
+  sections were merged into one and one was deleted outright. The file
+  went from 726 lines / 18 sections to 684 lines / 16 sections.
+
+### 3. What Did NOT Change
+
+- Section 7 (Code Policy — teach first, write full code only when
+  actually needed) is untouched; it never mentioned Opencode.
+- Section 13 (Shared Model Architecture rule), Section 15
+  (Project-Specific Rules — experiment prerequisite, predictor
+  evaluation order, Google-Sheets-only policy, PyTorch+MPS target, and
+  the "never use Direct Firebase connections / external auth /
+  production credentials / secret management systems" prohibition) are
+  untouched.
+- The `indian-english` communication requirement (Section 2, Section
+  16) is untouched.
+- The mandatory `context.md`-first workflow (Section 1, Section 6) is
+  untouched.
+
+### 4. Practical Effect Going Forward
+
+From this point on, for this project, Claude does not generate a
+separate Opencode/Antigravity implementation-prompt file for
+development tasks. Any command such as "fix it," "implement it," "add
+the feature," or "update it" is carried out directly by Claude in the
+project's own files, following the existing teach-first, one-step-at-a-
+time style set out in Sections 4–6. This supersedes the project's
+earlier default (documented in this file's own history above) of
+producing an Opencode prompt unless the user explicitly said otherwise.
+
+The already-written `opencode_prompt_dropout_variance_predictor.md`
+(created earlier this session, before this instruction) is left in the
+repository as a record of what was planned — it is not deleted — but it
+will not be executed by an external tool. When Jonathan is ready to
+proceed with the Dropout-variance predictor, Claude will implement it
+directly instead.
+
+### 5. Files Modified
+
+- `CLAUDE.md` — Opencode/Antigravity workflow sections removed and
+  replaced with a direct-implementation rule, as described above.
+
+### Next
+
+1. Jonathan to say when he wants to proceed with the Dropout-variance
+   predictor described in `opencode_prompt_dropout_variance_predictor.md`
+   — Claude will now implement it directly rather than waiting for an
+   external tool to run the prompt.
+2. All outstanding uncommitted work from this session (the L2 Norm
+   review, the Dropout close-then-reopen decision, and this CLAUDE.md
+   rewrite) is being committed together in this same session, per
+   Jonathan's request.
