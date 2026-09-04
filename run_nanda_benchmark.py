@@ -210,6 +210,7 @@ def train_one_seed(seed, args, cfg, device):
     l2_norm_history, sum_w2_history, per_module_sum_w2_history = [], [], []
 
     started = time.time()
+    last_log = started
     for epoch in range(args.epochs):
         # ---- train pass (full-batch: one iteration) ----
         model.train()
@@ -244,10 +245,16 @@ def train_one_seed(seed, args, cfg, device):
             compute_per_module_sum_of_squared_weights(model))
 
         if epoch % LOG_EVERY == 0 or epoch == args.epochs - 1:
+            now = time.time()
+            elapsed = now - started          # total wall time this seed
+            since_last = now - last_log       # wall time for the last LOG_EVERY block
+            last_log = now
             print(f"[seed {seed}] epoch {epoch:>6}/{args.epochs}  "
                   f"train_acc={train_acc_history[-1]:.4f}  "
                   f"test_acc={test_acc_history[-1]:.4f}  "
-                  f"sum_w2={sum_w2_history[-1]:.1f}", flush=True)
+                  f"sum_w2={sum_w2_history[-1]:.1f}  "
+                  f"elapsed={elapsed:10.3f}s  "
+                  f"d{LOG_EVERY}={since_last:8.3f}s", flush=True)
 
     # (f) save the per-epoch histories
     measurements.save_training_data(train_acc_history, test_acc_history, loss_history)

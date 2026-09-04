@@ -6228,3 +6228,89 @@ substrate and runs the predictors built so far. Only 2 predictors exist
 
 Full `run_nanda_benchmark.py --seeds 5 --epochs 40000` re-baseline is
 NOT run yet. Predictors 3–9 still unbuilt.
+
+---
+
+## Session Summary — September 4, 2026 (`run_nanda_benchmark.py`: verified no hang + added per-1000-epoch wall-clock timing to the console line)
+
+### Request
+
+Two small things on the runner only:
+1. Confirm/fix the reported "hangs at epoch 0/40000" bug (3 post-training
+   blocks suspected to be indented INSIDE the `for epoch` loop).
+2. Add a wall-clock time (millisecond precision) to the every-1000-epoch
+   console line so Jonathan can extrapolate the full 5×40000 runtime
+   before committing to it.
+
+Direct implementation. `src/` must NOT be touched — it is already the
+Nanda-Unified substrate (p=113, `=` token 113, `init_std 0.8/sqrt(d)`,
+betas 0.9/0.98). Runner only. No full run.
+
+### 1. Hang bug — NOT present in the working tree
+
+Inspected `train_one_seed`. The three blocks named in the task
+(`measurements.save_training_data(...)`; the L2 MA computations +
+`save_l2_norm_data()` + `l2_predictor_signals.json`; the
+`compute_dropout_gap_multi_rate()` sweep + `save_dropout_data()` +
+`dropout_gap_final.json` + `grok_epoch_from()` + `limit_cycle_check()` +
+`summary.json`) were **already correctly dedented** to function-body
+level — same indent as `for epoch in range(args.epochs):`. Only the
+train pass, test pass, the 6 history `append`s and the
+`if epoch % LOG_EVERY` print sit inside the loop. So nothing to fix on
+that front — the file as committed in `96812a4` already matched the
+desired end state. `sum_w2 ≈ 1045` at epoch 0 confirms `init_std`
+0.07071 is correct; not touched.
+
+### 2. Timing added to the console line (the only code change)
+
+In `train_one_seed`:
+- new `last_log = started` just before the epoch loop.
+- inside the `if epoch % LOG_EVERY == 0 or epoch == args.epochs - 1`
+  block: compute `now = time.time()`, `elapsed = now - started` (total
+  wall time this seed), `since_last = now - last_log` (wall time for the
+  last `LOG_EVERY`-epoch block), then `last_log = now`.
+- print line now ends with `elapsed={elapsed:10.3f}s
+  d{LOG_EVERY}={since_last:8.3f}s` — seconds to millisecond precision.
+  `d1000` on the real run is the per-1000-epoch cost; full run ≈
+  `d1000 × 40 × 5` + a small one-time post-training cost per seed (L2 MA
+  maths + the 5-rate dropout sweep).
+
+Nothing else changed. No new imports (`time` already imported). `src/`
+untouched.
+
+### Verification done
+
+- `py_compile run_nanda_benchmark.py` → OK.
+- grep `97` in the runner → none.
+- `python run_nanda_benchmark.py --seeds 1 --epochs 100 --output_dir
+  results/test_smoke --config configs/nanda_unified.yaml` → 12.8 s on
+  MPS, printed epoch 0 then epoch 99 with the new
+  `elapsed=... d1000=...` fields, ran post-training + aggregate, **no
+  hang at epoch 0**. Smoke dir deleted afterwards.
+
+### Run command for the full re-baseline (NOT yet run)
+
+```
+python run_nanda_benchmark.py \
+    --seeds 5 --epochs 40000 \
+    --output_dir results/nanda_unified \
+    --config configs/nanda_unified.yaml \
+    2>&1 | tee results/nanda_unified/run.log
+```
+
+(`mkdir -p results/nanda_unified` first if the `tee` target's dir does
+not exist. `results/nanda_unified/` is gitignored, so the log is not
+tracked. Resume is automatic — re-running skips any seed that already
+has `summary.json`.)
+
+### Files Modified / Added
+
+- Modified: `run_nanda_benchmark.py` — added `last_log` + the
+  `elapsed` / `d{LOG_EVERY}` timing fields on the console line. No other
+  change.
+- Modified: `context.md` (this entry).
+
+### Still pending (unchanged)
+
+Full `run_nanda_benchmark.py --seeds 5 --epochs 40000` re-baseline still
+NOT run. Predictors 3–9 still unbuilt.
