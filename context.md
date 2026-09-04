@@ -6651,3 +6651,174 @@ call.
 3. If Jonathan wants `combined_code.pdf`'s output location also anchored
    to `REPO_ROOT` (see the known-not-fixed note above), that's a small
    follow-up, not yet done.
+
+---
+
+## Session Summary — September 4, 2026 (Discussion: why the benchmark uses multiple seeds — no code changed)
+
+### 1. Question answered — "what is the point of many different seeds?"
+
+Jonathan asked why the benchmark runs 5 seeds per experiment instead of
+one. Answered using the existing `results/nanda_unified/` 5-seed run as
+the concrete example (no new data generated, no files touched):
+
+- A single seed's outcome can be an artefact of that run's random weight
+  initialisation, not a general property of the training dynamics.
+  Point made concrete with the run's own `grok_epoch` spread: 7.7k–12.7k
+  for four seeds, 25505 for seed 4 — a single-seed benchmark could easily
+  have landed on seed 4 alone and wrongly concluded grokking happens at
+  ~epoch 25k.
+- For predictor evaluation specifically (the thesis's core method): a
+  predictor "working" on one seed could be coincidence. Multiple seeds
+  are what let a correlation failure — e.g. `predictor_vs_grok_scatter.png`
+  from the previous session, both L2-Norm signals flat across all 5 seeds
+  regardless of actual grok epoch — be reported as a real negative
+  result rather than a single unlucky comparison.
+- Seeds also convert a single grok-epoch number into a distribution
+  (mean ± std across seeds), which is the form the thesis's 3-criteria
+  writeup needs rather than one run pretending to be ground truth.
+
+This is a teaching/methodology discussion, not a new decision — the
+5-seed protocol itself was already established in earlier sessions; this
+entry records the justification in case it's needed for the thesis
+methodology section.
+
+### Files Modified
+
+- `context.md` (this entry) only. No source files touched.
+
+### Next
+
+- Unchanged from the previous entry: explain the seed-4 grok-epoch
+  outlier (25505) specifically — still open; optionally add
+  Pearson/Spearman correlation stats formalising the scatter-plot
+  negative result; write up the L2-Norm predictor's 3-criteria result
+  for the thesis.
+- Predictors 3–9 (Spectral next, per the CLAUDE.md order) still unbuilt.
+
+---
+
+## Session Summary — September 4, 2026 (Discussion: why L2 Norm cannot be used as a grokking predictor — full review of plots, results and numbers; no code changed)
+
+### 1. Question answered — "why can't L2 Norm be used as a predictor?"
+
+Jonathan asked for a full check of all L2-Norm-related plots, results and
+numbers, and an explanation of why the L2 Norm predictor does not qualify
+as a working (causal, live) grokking predictor. Reviewed for this answer:
+`docs/L2_Norm_Predictor_Notes.md`, `results/README.md`,
+`results/nanda_unified/aggregate.json`, `src/predictors/l2_norm.py` /
+`nanda_l2_p113/predictors/l2_norm.py`, and the plots in
+`results/nanda_unified/plots/comparison/` (in particular
+`04_predictor_vs_grok_scatter.png`, `02_sum_w2_overlay.png`,
+`01_grokking_overlay.png`). No files were changed as part of the review
+itself.
+
+**Definition used:** L2 Norm of the weights is
+`sqrt(sum(w_i^2))` over all model parameters — a single scalar tracked
+per epoch (`compute_l2_norm` / `compute_sum_of_squared_weights` in
+`src/predictors/l2_norm.py`).
+
+**Five detection strategies tried (from `L2_Norm_Predictor_Notes.md`,
+Phase 2 — Predictor 1 of 9, single-head p97 setup):**
+1. Raw rate-of-decline threshold — signal inverted (L2 norm falls
+   fastest during early memorisation, not during the grok transition).
+2. Second-derivative (acceleration) sign-flip — too noisy, fired at an
+   artificial "skip-epoch" boundary rather than a real feature.
+3. Double-smoothed inflection — set aside in favour of the MA-of-MA
+   family before being fully tested.
+4. Fast/slow moving-average (windows 50/200) crossover — first crossover
+   always driven by early-training noise; lead time 3000–5000+ epochs on
+   every run, far too early to be a tight signal.
+5a. MA-of-MA fixed-threshold trigger (10x noise floor) — not robust: on
+    a second run, early humps (12.8x, 19x noise floor) crossed the fixed
+    threshold long before the real signal (fired at epoch 205 vs. actual
+    grok epoch 4806).
+5b. MA-of-MA zero-crossing trigger — the strategy actually adopted and
+    tested across three runs; see numbers below.
+
+**Three formal pass/fail criteria** (fixed in advance, not judged "by
+eye"): (1) always fires before grokking, zero exceptions allowed;
+(2) the trigger-to-grok gap must stay small and consistent as a
+*proportion* of run length, not just in absolute epochs; (3) the signal
+at the trigger point must be clearly above the noise floor.
+
+**Original 3-run single-head (p97) result for strategy 5b:**
+
+| Run | Grok Epoch | Trigger Epoch | Trigger/Grok Ratio | Verdict |
+|---|---|---|---|---|
+| 1 | 5739 | 2007.8 | 0.350 | Fires early, not tight (fails Criterion 2) |
+| 2 | 4806 | 1688.6 | 0.351 | Fires early, not tight (fails Criterion 2) |
+| 3 | 3760 | 5643.8 | 1.501 | Fires 1884 epochs AFTER grokking (fails Criterion 1) |
+
+**New evidence from the current 5-seed `nanda_unified` run (modulus 113,
+40000 epochs, read from `aggregate.json`) — none of these 5 runs is
+postdictive, yet the predictor still fails:**
+
+| Seed | Grok Epoch | MA-Crossover Trigger | MA-of-MA Zero-Crossing Trigger |
+|---|---|---|---|
+| 1 | 7721 | 101.3 | 1774.3 |
+| 2 | 11376 | 107.2 | 1833.5 |
+| 0 | 12686 | 130.4 | 1786.5 |
+| 3 | 12678 | 114.0 | 1798.4 |
+| 4 | 25505 | 144.0 | 1779.0 |
+
+Grok epoch varies 3.3x across seeds (7721 to 25505) while both trigger
+signals stay essentially flat (MA-crossover: 101–144; zero-crossing:
+1774–1834). `04_predictor_vs_grok_scatter.png` shows this directly: both
+predictor series sit in a horizontal band, far off the y = x
+("perfect predictor") diagonal. `02_sum_w2_overlay.png` shows why: sum-
+of-squared-weights rises and peaks early (~epoch 1000–2000, well before
+any seed's grok epoch), then spends thousands of epochs in a noisy
+oscillating region that the actual grok epochs fall into at different,
+seed-dependent points — so any fixed rule calibrated from the early
+(quiet-region) noise floor ends up firing at a roughly fixed epoch that
+has no relationship to that run's actual grok timing.
+
+A non-causal "peak-of-difference" candidate was also found in the
+original report — it passes Criteria 1 and 2 on all three single-head
+runs (gap shrinks from 1.05% to 0.42% to 0.18% of run length) — but
+finding a curve's peak requires seeing the entire future of the curve,
+so it cannot be used as a live detector without being rebuilt as a
+causal, rising-edge rule. This has not been done; it is flagged as
+"promising, untested" rather than ruled out.
+
+### 2. Follow-up correction — "isn't the one postdictive run (Run 3) the
+biggest reason L2 Norm was declared unfit?"
+
+Jonathan asked whether the single postdictive run (Run 3 firing after
+grokking) was "the elephant in the room" and the single biggest reason
+for rejecting L2 Norm. Answered with a correction:
+
+- The postdictive Run 3 result is a genuine, unambiguous disqualifier —
+  but only for strategy 5b specifically, since Criterion 1 was defined
+  to allow zero exceptions. It is not the reason the other four
+  strategies failed (1 = inverted signal, 2 = noise/artificial
+  boundary, 5a = non-robust fixed threshold, 5b's own Criterion-2
+  failure on Runs 1–2 even before Run 3 is considered).
+- More importantly: the 5-seed `nanda_unified` data contains zero
+  postdictive runs, and the predictor still fails — because the trigger
+  epoch does not track the grok epoch at all (flat ~1780–1830 vs. grok
+  epoch spanning 7721–25505). This is arguably the more fundamental
+  failure mode, since it does not depend on one unlucky/lucky run — it
+  shows the trigger's timing is set by early-training noise
+  characteristics, structurally decoupled from the later phase
+  transition, and no amount of additional tuning would fix that.
+- Conclusion given: the postdictive run is a clean, "hard" disqualifier
+  for one specific rule, but the overall verdict against L2 Norm as a
+  predictor rests on the combination of all five failed strategies plus
+  the Criterion-2 (non-tracking) evidence, which is demonstrable even
+  without any postdictive run.
+
+### Files Modified
+
+- `context.md` (this entry) only. No source, results, or predictor code
+  touched.
+
+### Next
+
+- Unchanged: explain the seed-4 grok-epoch outlier (25505) specifically;
+  optionally add Pearson/Spearman correlation stats formalising the
+  scatter-plot negative result; write up the L2-Norm predictor's
+  3-criteria result for the thesis (this entry plus the previous
+  session's discussion together cover most of the needed narrative).
+- Predictors 3–9 (Spectral next, per the CLAUDE.md order) still unbuilt.
