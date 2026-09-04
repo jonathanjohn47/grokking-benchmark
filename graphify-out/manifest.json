@@ -5,8 +5,8 @@
     "semantic_hash": "916a0e4f33d2556de626c397b36c5fb4"
   },
   "src/data/modular_arithmetic.py": {
-    "mtime": 1788236728.8494227,
-    "ast_hash": "f999f00cb044dc9e5c5515780c6fbbbc",
+    "mtime": 1788482548.909,
+    "ast_hash": "8082d771fbeaad638f5c05efec0fff11",
     "semantic_hash": ""
   },
   "requirements.txt": {
@@ -40,8 +40,8 @@
     "semantic_hash": ""
   },
   "src/predictors/l2_norm.py": {
-    "mtime": 1788236728.8512332,
-    "ast_hash": "cefb17b190b43d6d7034ca83bc999780",
+    "mtime": 1788482589.3700063,
+    "ast_hash": "bb5ebe6c59a203123cbe75738feffcc5",
     "semantic_hash": ""
   },
   ".claude/settings.json": {
@@ -75,8 +75,8 @@
     "semantic_hash": ""
   },
   "src/generate_l2_report.py": {
-    "mtime": 1788296390.72712,
-    "ast_hash": "7d353590a242bc7b8a8535dba44634b3",
+    "mtime": 1788482729.2834814,
+    "ast_hash": "3967088361ad51a4ef29e4658df0d188",
     "semantic_hash": ""
   },
   "src/models/model_shadow_with_layernorm.py": {
@@ -85,8 +85,8 @@
     "semantic_hash": ""
   },
   "src/models/transformer_four_head.py": {
-    "mtime": 1788236728.8500767,
-    "ast_hash": "1e6e1688f6d98fa3a685b4801478f426",
+    "mtime": 1788482576.515171,
+    "ast_hash": "ec244052c471e422ecbea0b5b4d92fe3",
     "semantic_hash": ""
   },
   "src/plot_results_four_head.py": {
@@ -105,8 +105,8 @@
     "semantic_hash": ""
   },
   "src/train_four_head.py": {
-    "mtime": 1788295698.5391183,
-    "ast_hash": "3c9127ea4990ad8098dc3a4dbdfdf807",
+    "mtime": 1788482664.4098253,
+    "ast_hash": "575def325ae1bce77ae52c78642c1347",
     "semantic_hash": ""
   },
   "src/train_shadow_layernorm.py": {
@@ -280,8 +280,8 @@
     "semantic_hash": ""
   },
   "src/unified_measurements.py": {
-    "mtime": 1788295654.7501113,
-    "ast_hash": "c8731bae963d6853ad4e5e7e2df91619",
+    "mtime": 1788482602.7592323,
+    "ast_hash": "e041b79b17a0684074624f4aaea57d5a",
     "semantic_hash": ""
   },
   "run_full_benchmark.py": {
@@ -340,8 +340,8 @@
     "semantic_hash": ""
   },
   "src/generate_master_report.py": {
-    "mtime": 1788297736.3671222,
-    "ast_hash": "34711408990aa4a7a116cc2a5892f5e0",
+    "mtime": 1788482725.1645563,
+    "ast_hash": "7b4c099ca434b80667960900c2b7c26d",
     "semantic_hash": ""
   },
   "benchmark_analysis/benchmark_report.pdf": {
@@ -597,6 +597,11 @@
   "nanda_l2_p113/benchmark_analysis/02_l2_norm_comparison.png": {
     "mtime": 1788474616.6625917,
     "ast_hash": "7dd8801a1d1184e2ce125305225888a7",
+    "semantic_hash": ""
+  },
+  "configs/nanda_unified.yaml": {
+    "mtime": 1788482541.01508,
+    "ast_hash": "70f507c360b1660830e1f6807d988d3e",
     "semantic_hash": ""
   }
 }

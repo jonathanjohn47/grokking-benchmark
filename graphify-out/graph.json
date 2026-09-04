@@ -21,14 +21,964 @@
   },
   "nodes": [
     {
+      "label": "modular_arithmetic.py",
+      "file_type": "code",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "data_modular_arithmetic",
+      "community": 0,
+      "norm_label": "modular_arithmetic.py"
+    },
+    {
+      "label": "generate_pairs()",
+      "file_type": "code",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "data_modular_arithmetic_generate_pairs",
+      "community": 0,
+      "norm_label": "generate_pairs()"
+    },
+    {
+      "label": "get_dataloaders()",
+      "file_type": "code",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "data_modular_arithmetic_get_dataloaders",
+      "community": 0,
+      "norm_label": "get_dataloaders()"
+    },
+    {
+      "label": "ModularArithmeticDataset",
+      "file_type": "code",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "data_modular_arithmetic_modulararithmeticdataset",
+      "community": 0,
+      "norm_label": "modulararithmeticdataset"
+    },
+    {
+      "label": "Dataset",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "dataset",
+      "community": 0,
+      "norm_label": "dataset"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "data_modular_arithmetic_modulararithmeticdataset_init",
+      "community": 0,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": ".__len__()",
+      "file_type": "code",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L28",
+      "_origin": "ast",
+      "id": "data_modular_arithmetic_modulararithmeticdataset_len",
+      "community": 0,
+      "norm_label": ".__len__()"
+    },
+    {
+      "label": ".__getitem__()",
+      "file_type": "code",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L31",
+      "_origin": "ast",
+      "id": "data_modular_arithmetic_modulararithmeticdataset_getitem",
+      "community": 0,
+      "norm_label": ".__getitem__()"
+    },
+    {
+      "label": ".get_tensor()",
+      "file_type": "code",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "data_modular_arithmetic_modulararithmeticdataset_get_tensor",
+      "community": 0,
+      "norm_label": ".get_tensor()"
+    },
+    {
+      "label": "generate_l2_report.py",
+      "file_type": "code",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_generate_l2_report",
+      "community": 9,
+      "norm_label": "generate_l2_report.py"
+    },
+    {
+      "label": "discover_run_numbers()",
+      "file_type": "code",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "src_generate_l2_report_discover_run_numbers",
+      "community": 9,
+      "norm_label": "discover_run_numbers()"
+    },
+    {
+      "label": "load_run_data()",
+      "file_type": "code",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "src_generate_l2_report_load_run_data",
+      "community": 9,
+      "norm_label": "load_run_data()"
+    },
+    {
+      "label": "find_grok_epoch()",
+      "file_type": "code",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L56",
+      "_origin": "ast",
+      "id": "src_generate_l2_report_find_grok_epoch",
+      "community": 9,
+      "norm_label": "find_grok_epoch()"
+    },
+    {
+      "label": "extract_metrics()",
+      "file_type": "code",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L62",
+      "_origin": "ast",
+      "id": "src_generate_l2_report_extract_metrics",
+      "community": 9,
+      "norm_label": "extract_metrics()"
+    },
+    {
+      "label": "_style_header()",
+      "file_type": "code",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L94",
+      "_origin": "ast",
+      "id": "src_generate_l2_report_style_header",
+      "community": 9,
+      "norm_label": "_style_header()"
+    },
+    {
+      "label": "create_report()",
+      "file_type": "code",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L100",
+      "_origin": "ast",
+      "id": "src_generate_l2_report_create_report",
+      "community": 9,
+      "norm_label": "create_report()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L309",
+      "_origin": "ast",
+      "id": "src_generate_l2_report_main",
+      "community": 9,
+      "norm_label": "main()"
+    },
+    {
+      "label": "L2 Norm + Dropout analysis report for the four-head transformer.  Standalone too",
+      "file_type": "rationale",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_generate_l2_report_rationale_1",
+      "community": 9,
+      "norm_label": "l2 norm + dropout analysis report for the four-head transformer.  standalone too"
+    },
+    {
+      "label": "Load one run from the per-predictor subdir layout.",
+      "file_type": "rationale",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L38",
+      "_origin": "ast",
+      "id": "src_generate_l2_report_rationale_38",
+      "community": 9,
+      "norm_label": "load one run from the per-predictor subdir layout."
+    },
+    {
+      "label": "First 1-indexed epoch where test accuracy exceeds threshold.",
+      "file_type": "rationale",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L57",
+      "_origin": "ast",
+      "id": "src_generate_l2_report_rationale_57",
+      "community": 9,
+      "norm_label": "first 1-indexed epoch where test accuracy exceeds threshold."
+    },
+    {
+      "label": "generate_master_report.py",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_generate_master_report",
+      "community": 22,
+      "norm_label": "generate_master_report.py"
+    },
+    {
+      "label": "_run_numbers()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L60",
+      "_origin": "ast",
+      "id": "src_generate_master_report_run_numbers",
+      "community": 22,
+      "norm_label": "_run_numbers()"
+    },
+    {
+      "label": "_opt()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L71",
+      "_origin": "ast",
+      "id": "src_generate_master_report_opt",
+      "community": 22,
+      "norm_label": "_opt()"
+    },
+    {
+      "label": "load_run()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L75",
+      "_origin": "ast",
+      "id": "src_generate_master_report_load_run",
+      "community": 22,
+      "norm_label": "load_run()"
+    },
+    {
+      "label": "grok_epoch()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L119",
+      "_origin": "ast",
+      "id": "src_generate_master_report_grok_epoch",
+      "community": 22,
+      "norm_label": "grok_epoch()"
+    },
+    {
+      "label": "_grok_vline()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L128",
+      "_origin": "ast",
+      "id": "src_generate_master_report_grok_vline",
+      "community": 22,
+      "norm_label": "_grok_vline()"
+    },
+    {
+      "label": "build_plots_pdf()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L134",
+      "_origin": "ast",
+      "id": "src_generate_master_report_build_plots_pdf",
+      "community": 22,
+      "norm_label": "build_plots_pdf()"
+    },
+    {
+      "label": "_comparison_pages()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L265",
+      "_origin": "ast",
+      "id": "src_generate_master_report_comparison_pages",
+      "community": 22,
+      "norm_label": "_comparison_pages()"
+    },
+    {
+      "label": "_series_stats()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L360",
+      "_origin": "ast",
+      "id": "src_generate_master_report_series_stats",
+      "community": 22,
+      "norm_label": "_series_stats()"
+    },
+    {
+      "label": "_text_page()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L366",
+      "_origin": "ast",
+      "id": "src_generate_master_report_text_page",
+      "community": 22,
+      "norm_label": "_text_page()"
+    },
+    {
+      "label": "_dump_table()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L372",
+      "_origin": "ast",
+      "id": "src_generate_master_report_dump_table",
+      "community": 22,
+      "norm_label": "_dump_table()"
+    },
+    {
+      "label": "build_data_pdf()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L382",
+      "_origin": "ast",
+      "id": "src_generate_master_report_build_data_pdf",
+      "community": 22,
+      "norm_label": "build_data_pdf()"
+    },
+    {
+      "label": "write_csvs()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L487",
+      "_origin": "ast",
+      "id": "src_generate_master_report_write_csvs",
+      "community": 22,
+      "norm_label": "write_csvs()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L542",
+      "_origin": "ast",
+      "id": "src_generate_master_report_main",
+      "community": 22,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Master report generator for the four-head grokking benchmark.  Reads every COMPL",
+      "file_type": "rationale",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_generate_master_report_rationale_1",
+      "community": 22,
+      "norm_label": "master report generator for the four-head grokking benchmark.  reads every compl"
+    },
+    {
+      "label": "transformer_four_head.py",
+      "file_type": "code",
+      "source_file": "src/models/transformer_four_head.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "models_transformer_four_head",
+      "community": 11,
+      "norm_label": "transformer_four_head.py"
+    },
+    {
+      "label": "TransformerFourHead",
+      "file_type": "code",
+      "source_file": "src/models/transformer_four_head.py",
+      "source_location": "L38",
+      "_origin": "ast",
+      "id": "models_transformer_four_head_transformerfourhead",
+      "community": 11,
+      "norm_label": "transformerfourhead"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "src/models/transformer_four_head.py",
+      "source_location": "L39",
+      "_origin": "ast",
+      "id": "models_transformer_four_head_transformerfourhead_init",
+      "community": 11,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "._init_weights()",
+      "file_type": "code",
+      "source_file": "src/models/transformer_four_head.py",
+      "source_location": "L68",
+      "_origin": "ast",
+      "id": "models_transformer_four_head_transformerfourhead_init_weights",
+      "community": 11,
+      "norm_label": "._init_weights()"
+    },
+    {
+      "label": ".split_into_heads()",
+      "file_type": "code",
+      "source_file": "src/models/transformer_four_head.py",
+      "source_location": "L80",
+      "_origin": "ast",
+      "id": "models_transformer_four_head_transformerfourhead_split_into_heads",
+      "community": 11,
+      "norm_label": ".split_into_heads()"
+    },
+    {
+      "label": ".combine_heads()",
+      "file_type": "code",
+      "source_file": "src/models/transformer_four_head.py",
+      "source_location": "L89",
+      "_origin": "ast",
+      "id": "models_transformer_four_head_transformerfourhead_combine_heads",
+      "community": 11,
+      "norm_label": ".combine_heads()"
+    },
+    {
+      "label": ".forward()",
+      "file_type": "code",
+      "source_file": "src/models/transformer_four_head.py",
+      "source_location": "L98",
+      "_origin": "ast",
+      "id": "models_transformer_four_head_transformerfourhead_forward",
+      "community": 11,
+      "norm_label": ".forward()"
+    },
+    {
+      "label": "l2_norm.py",
+      "file_type": "code",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "predictors_l2_norm",
+      "community": 22,
+      "norm_label": "l2_norm.py"
+    },
+    {
+      "label": "compute_l2_norm()",
+      "file_type": "code",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_compute_l2_norm",
+      "community": 22,
+      "norm_label": "compute_l2_norm()"
+    },
+    {
+      "label": "compute_sum_of_squared_weights()",
+      "file_type": "code",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_compute_sum_of_squared_weights",
+      "community": 22,
+      "norm_label": "compute_sum_of_squared_weights()"
+    },
+    {
+      "label": "compute_per_module_sum_of_squared_weights()",
+      "file_type": "code",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_compute_per_module_sum_of_squared_weights",
+      "community": 22,
+      "norm_label": "compute_per_module_sum_of_squared_weights()"
+    },
+    {
+      "label": "compute_l2_norm_rate_of_decline()",
+      "file_type": "code",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L61",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_compute_l2_norm_rate_of_decline",
+      "community": 22,
+      "norm_label": "compute_l2_norm_rate_of_decline()"
+    },
+    {
+      "label": "detect_l2_norm_drop()",
+      "file_type": "code",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_detect_l2_norm_drop",
+      "community": 22,
+      "norm_label": "detect_l2_norm_drop()"
+    },
+    {
+      "label": "compute_acceleration()",
+      "file_type": "code",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L74",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_compute_acceleration",
+      "community": 22,
+      "norm_label": "compute_acceleration()"
+    },
+    {
+      "label": "detect_inflection()",
+      "file_type": "code",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L86",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_detect_inflection",
+      "community": 22,
+      "norm_label": "detect_inflection()"
+    },
+    {
+      "label": "apply_moving_average()",
+      "file_type": "code",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L105",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_apply_moving_average",
+      "community": 22,
+      "norm_label": "apply_moving_average()"
+    },
+    {
+      "label": "resample_to_log_uniform_grid()",
+      "file_type": "code",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L114",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_resample_to_log_uniform_grid",
+      "community": 22,
+      "norm_label": "resample_to_log_uniform_grid()"
+    },
+    {
+      "label": "compute_fast_slow_moving_averages()",
+      "file_type": "code",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L139",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_compute_fast_slow_moving_averages",
+      "community": 22,
+      "norm_label": "compute_fast_slow_moving_averages()"
+    },
+    {
+      "label": "detect_ma_crossover()",
+      "file_type": "code",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L172",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_detect_ma_crossover",
+      "community": 22,
+      "norm_label": "detect_ma_crossover()"
+    },
+    {
+      "label": "compute_ma_of_slow_ma()",
+      "file_type": "code",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L192",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_compute_ma_of_slow_ma",
+      "community": 22,
+      "norm_label": "compute_ma_of_slow_ma()"
+    },
+    {
+      "label": "compute_noise_floor()",
+      "file_type": "code",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L205",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_compute_noise_floor",
+      "community": 22,
+      "norm_label": "compute_noise_floor()"
+    },
+    {
+      "label": "detect_ma_of_ma_trigger()",
+      "file_type": "code",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L215",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_detect_ma_of_ma_trigger",
+      "community": 22,
+      "norm_label": "detect_ma_of_ma_trigger()"
+    },
+    {
+      "label": "detect_ma_of_ma_zero_crossing()",
+      "file_type": "code",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L232",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_detect_ma_of_ma_zero_crossing",
+      "community": 22,
+      "norm_label": "detect_ma_of_ma_zero_crossing()"
+    },
+    {
+      "label": "Sum of squared weights over ALL parameters (sum w^2). This is the exact     quan",
+      "file_type": "rationale",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_rationale_12",
+      "community": 22,
+      "norm_label": "sum of squared weights over all parameters (sum w^2). this is the exact     quan"
+    },
+    {
+      "label": "Sum w^2 split by module group (token_embedding, position_embedding,     attentio",
+      "file_type": "rationale",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L38",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_rationale_38",
+      "community": 22,
+      "norm_label": "sum w^2 split by module group (token_embedding, position_embedding,     attentio"
+    },
+    {
+      "label": "Compute the second derivative of L2 norm (acceleration).     acceleration[i] = r",
+      "file_type": "rationale",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L75",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_rationale_75",
+      "community": 22,
+      "norm_label": "compute the second derivative of l2 norm (acceleration).     acceleration[i] = r"
+    },
+    {
+      "label": "Detect inflection point where acceleration changes sign.     This is where the d",
+      "file_type": "rationale",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L87",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_rationale_87",
+      "community": 22,
+      "norm_label": "detect inflection point where acceleration changes sign.     this is where the d"
+    },
+    {
+      "label": "Apply moving average smoothing to reduce noise.     window_size: number of epoch",
+      "file_type": "rationale",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L106",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_rationale_106",
+      "community": 22,
+      "norm_label": "apply moving average smoothing to reduce noise.     window_size: number of epoch"
+    },
+    {
+      "label": "Resample data onto a grid uniformly spaced in log10(epoch) \u2014 i.e. the     SAME s",
+      "file_type": "rationale",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L115",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_rationale_115",
+      "community": 22,
+      "norm_label": "resample data onto a grid uniformly spaced in log10(epoch) \u2014 i.e. the     same s"
+    },
+    {
+      "label": "Compute two moving averages on a LOG-EPOCH-UNIFORM grid, so the window     cover",
+      "file_type": "rationale",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L140",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_rationale_140",
+      "community": 22,
+      "norm_label": "compute two moving averages on a log-epoch-uniform grid, so the window     cover"
+    },
+    {
+      "label": "Detect where fast MA crosses above slow MA, searching along the     log-uniform",
+      "file_type": "rationale",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L173",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_rationale_173",
+      "community": 22,
+      "norm_label": "detect where fast ma crosses above slow ma, searching along the     log-uniform"
+    },
+    {
+      "label": "Apply a second, faster-window moving average on top of the already-smoothed",
+      "file_type": "rationale",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L193",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_rationale_193",
+      "community": 22,
+      "norm_label": "apply a second, faster-window moving average on top of the already-smoothed"
+    },
+    {
+      "label": "Estimate the normal noise level of the MA-of-MA difference from the quiet     ea",
+      "file_type": "rationale",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L206",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_rationale_206",
+      "community": 22,
+      "norm_label": "estimate the normal noise level of the ma-of-ma difference from the quiet     ea"
+    },
+    {
+      "label": "Fire on the first epoch (after skip_epochs) where diff climbs past     threshold",
+      "file_type": "rationale",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L216",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_rationale_216",
+      "community": 22,
+      "norm_label": "fire on the first epoch (after skip_epochs) where diff climbs past     threshold"
+    },
+    {
+      "label": "Fire on the first epoch (after skip_epochs) where diff crosses from     positive",
+      "file_type": "rationale",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L233",
+      "_origin": "ast",
+      "id": "predictors_l2_norm_rationale_233",
+      "community": 22,
+      "norm_label": "fire on the first epoch (after skip_epochs) where diff crosses from     positive"
+    },
+    {
+      "label": "train_four_head.py",
+      "file_type": "code",
+      "source_file": "src/train_four_head.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_train_four_head",
+      "community": 11,
+      "norm_label": "train_four_head.py"
+    },
+    {
+      "label": "migrate_legacy_flat_run()",
+      "file_type": "code",
+      "source_file": "src/train_four_head.py",
+      "source_location": "L70",
+      "_origin": "ast",
+      "id": "src_train_four_head_migrate_legacy_flat_run",
+      "community": 11,
+      "norm_label": "migrate_legacy_flat_run()"
+    },
+    {
+      "label": "get_next_run_number()",
+      "file_type": "code",
+      "source_file": "src/train_four_head.py",
+      "source_location": "L97",
+      "_origin": "ast",
+      "id": "src_train_four_head_get_next_run_number",
+      "community": 11,
+      "norm_label": "get_next_run_number()"
+    },
+    {
+      "label": "Earlier versions of this script saved directly into results/four_head/     inste",
+      "file_type": "rationale",
+      "source_file": "src/train_four_head.py",
+      "source_location": "L71",
+      "_origin": "ast",
+      "id": "src_train_four_head_rationale_71",
+      "community": 11,
+      "norm_label": "earlier versions of this script saved directly into results/four_head/     inste"
+    },
+    {
+      "label": "unified_measurements.py",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_unified_measurements",
+      "community": 19,
+      "norm_label": "unified_measurements.py"
+    },
+    {
+      "label": "PredictorMeasurements",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "src_unified_measurements_predictormeasurements",
+      "community": 19,
+      "norm_label": "predictormeasurements"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "src_unified_measurements_predictormeasurements_init",
+      "community": 19,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": ".create_subdirs()",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L22",
+      "_origin": "ast",
+      "id": "src_unified_measurements_predictormeasurements_create_subdirs",
+      "community": 19,
+      "norm_label": ".create_subdirs()"
+    },
+    {
+      "label": ".save_training_data()",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "src_unified_measurements_predictormeasurements_save_training_data",
+      "community": 19,
+      "norm_label": ".save_training_data()"
+    },
+    {
+      "label": ".save_l2_norm_data()",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L40",
+      "_origin": "ast",
+      "id": "src_unified_measurements_predictormeasurements_save_l2_norm_data",
+      "community": 19,
+      "norm_label": ".save_l2_norm_data()"
+    },
+    {
+      "label": ".save_dropout_data()",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L96",
+      "_origin": "ast",
+      "id": "src_unified_measurements_predictormeasurements_save_dropout_data",
+      "community": 19,
+      "norm_label": ".save_dropout_data()"
+    },
+    {
+      "label": ".generate_l2_norm_visualizations()",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L118",
+      "_origin": "ast",
+      "id": "src_unified_measurements_predictormeasurements_generate_l2_norm_visualizations",
+      "community": 19,
+      "norm_label": ".generate_l2_norm_visualizations()"
+    },
+    {
+      "label": ".generate_dropout_visualizations()",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L197",
+      "_origin": "ast",
+      "id": "src_unified_measurements_predictormeasurements_generate_dropout_visualizations",
+      "community": 19,
+      "norm_label": ".generate_dropout_visualizations()"
+    },
+    {
+      "label": ".generate_combined_report()",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L221",
+      "_origin": "ast",
+      "id": "src_unified_measurements_predictormeasurements_generate_combined_report",
+      "community": 19,
+      "norm_label": ".generate_combined_report()"
+    },
+    {
+      "label": "._smooth_signal()",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L301",
+      "_origin": "ast",
+      "id": "src_unified_measurements_predictormeasurements_smooth_signal",
+      "community": 19,
+      "norm_label": "._smooth_signal()"
+    },
+    {
+      "label": "Unified measurement collection for L2 Norm and Dropout predictors. Ensures consi",
+      "file_type": "rationale",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_unified_measurements_rationale_1",
+      "community": 19,
+      "norm_label": "unified measurement collection for l2 norm and dropout predictors. ensures consi"
+    },
+    {
+      "label": "Collects and saves all measurements for both predictors.",
+      "file_type": "rationale",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "src_unified_measurements_rationale_15",
+      "community": 19,
+      "norm_label": "collects and saves all measurements for both predictors."
+    },
+    {
+      "label": "Create subdirectories for each predictor.",
+      "file_type": "rationale",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "src_unified_measurements_rationale_23",
+      "community": 19,
+      "norm_label": "create subdirectories for each predictor."
+    },
+    {
+      "label": "Save core training metrics.",
+      "file_type": "rationale",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L33",
+      "_origin": "ast",
+      "id": "src_unified_measurements_rationale_33",
+      "community": 19,
+      "norm_label": "save core training metrics."
+    },
+    {
+      "label": "Save all L2 Norm measurements.          sum_w2_history: optional per-epoch list",
+      "file_type": "rationale",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "src_unified_measurements_rationale_43",
+      "community": 19,
+      "norm_label": "save all l2 norm measurements.          sum_w2_history: optional per-epoch list"
+    },
+    {
+      "label": "Save all Dropout measurements \u2014 full multi-rate sweep only.          There is no",
+      "file_type": "rationale",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L98",
+      "_origin": "ast",
+      "id": "src_unified_measurements_rationale_98",
+      "community": 19,
+      "norm_label": "save all dropout measurements \u2014 full multi-rate sweep only.          there is no"
+    },
+    {
+      "label": "Generate standalone L2 Norm visualization graphs.",
+      "file_type": "rationale",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L121",
+      "_origin": "ast",
+      "id": "src_unified_measurements_rationale_121",
+      "community": 19,
+      "norm_label": "generate standalone l2 norm visualization graphs."
+    },
+    {
+      "label": "Generate standalone Dropout visualization graphs.",
+      "file_type": "rationale",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L199",
+      "_origin": "ast",
+      "id": "src_unified_measurements_rationale_199",
+      "community": 19,
+      "norm_label": "generate standalone dropout visualization graphs."
+    },
+    {
+      "label": "Generate combined PDF report with all measurements.",
+      "file_type": "rationale",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L224",
+      "_origin": "ast",
+      "id": "src_unified_measurements_rationale_224",
+      "community": 19,
+      "norm_label": "generate combined pdf report with all measurements."
+    },
+    {
+      "label": "Apply simple moving average smoothing.",
+      "file_type": "rationale",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L302",
+      "_origin": "ast",
+      "id": "src_unified_measurements_rationale_302",
+      "community": 19,
+      "norm_label": "apply simple moving average smoothing."
+    },
+    {
       "label": "README.md",
       "file_type": "document",
       "source_file": "nanda_l2_p113/README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "nanda_l2_p113_readme",
       "community": 30,
-      "norm_label": "readme.md"
+      "norm_label": "readme.md",
+      "id": "nanda_l2_p113_readme"
     },
     {
       "label": "nanda_l2_p113 \u2014 L2-Norm predictor on (a + b) mod 113",
@@ -36,9 +986,9 @@
       "source_file": "nanda_l2_p113/README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "nanda_l2_p113_readme_nanda_l2_p113_l2_norm_predictor_on_a_b_mod_113",
       "community": 30,
-      "norm_label": "nanda_l2_p113 \u2014 l2-norm predictor on (a + b) mod 113"
+      "norm_label": "nanda_l2_p113 \u2014 l2-norm predictor on (a + b) mod 113",
+      "id": "nanda_l2_p113_readme_nanda_l2_p113_l2_norm_predictor_on_a_b_mod_113"
     },
     {
       "label": "What this is",
@@ -46,9 +996,9 @@
       "source_file": "nanda_l2_p113/README.md",
       "source_location": "L7",
       "_origin": "ast",
-      "id": "nanda_l2_p113_readme_what_this_is",
       "community": 30,
-      "norm_label": "what this is"
+      "norm_label": "what this is",
+      "id": "nanda_l2_p113_readme_what_this_is"
     },
     {
       "label": "The four deliberate differences from `src/`",
@@ -56,9 +1006,9 @@
       "source_file": "nanda_l2_p113/README.md",
       "source_location": "L16",
       "_origin": "ast",
-      "id": "nanda_l2_p113_readme_the_four_deliberate_differences_from_src",
       "community": 30,
-      "norm_label": "the four deliberate differences from `src/`"
+      "norm_label": "the four deliberate differences from `src/`",
+      "id": "nanda_l2_p113_readme_the_four_deliberate_differences_from_src"
     },
     {
       "label": "Why `p = 113`, `betas = (0.9, 0.98)`, and the small init",
@@ -66,9 +1016,9 @@
       "source_file": "nanda_l2_p113/README.md",
       "source_location": "L35",
       "_origin": "ast",
-      "id": "nanda_l2_p113_readme_why_p_113_betas_0_9_0_98_and_the_small_init",
       "community": 30,
-      "norm_label": "why `p = 113`, `betas = (0.9, 0.98)`, and the small init"
+      "norm_label": "why `p = 113`, `betas = (0.9, 0.98)`, and the small init",
+      "id": "nanda_l2_p113_readme_why_p_113_betas_0_9_0_98_and_the_small_init"
     },
     {
       "label": "How to run",
@@ -76,9 +1026,9 @@
       "source_file": "nanda_l2_p113/README.md",
       "source_location": "L56",
       "_origin": "ast",
-      "id": "nanda_l2_p113_readme_how_to_run",
       "community": 30,
-      "norm_label": "how to run"
+      "norm_label": "how to run",
+      "id": "nanda_l2_p113_readme_how_to_run"
     },
     {
       "label": "Outputs",
@@ -86,79 +1036,9 @@
       "source_file": "nanda_l2_p113/README.md",
       "source_location": "L66",
       "_origin": "ast",
-      "id": "nanda_l2_p113_readme_outputs",
       "community": 30,
-      "norm_label": "outputs"
-    },
-    {
-      "label": "transformer_four_head.py",
-      "file_type": "code",
-      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "models_transformer_four_head",
-      "community": 34,
-      "norm_label": "transformer_four_head.py"
-    },
-    {
-      "label": "TransformerFourHead",
-      "file_type": "code",
-      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
-      "source_location": "L35",
-      "_origin": "ast",
-      "id": "models_transformer_four_head_transformerfourhead",
-      "community": 34,
-      "norm_label": "transformerfourhead"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
-      "source_location": "L36",
-      "_origin": "ast",
-      "id": "models_transformer_four_head_transformerfourhead_init",
-      "community": 34,
-      "norm_label": ".__init__()"
-    },
-    {
-      "label": "._init_weights()",
-      "file_type": "code",
-      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
-      "source_location": "L65",
-      "_origin": "ast",
-      "id": "models_transformer_four_head_transformerfourhead_init_weights",
-      "community": 34,
-      "norm_label": "._init_weights()"
-    },
-    {
-      "label": ".split_into_heads()",
-      "file_type": "code",
-      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
-      "source_location": "L77",
-      "_origin": "ast",
-      "id": "models_transformer_four_head_transformerfourhead_split_into_heads",
-      "community": 34,
-      "norm_label": ".split_into_heads()"
-    },
-    {
-      "label": ".combine_heads()",
-      "file_type": "code",
-      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
-      "source_location": "L86",
-      "_origin": "ast",
-      "id": "models_transformer_four_head_transformerfourhead_combine_heads",
-      "community": 34,
-      "norm_label": ".combine_heads()"
-    },
-    {
-      "label": ".forward()",
-      "file_type": "code",
-      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
-      "source_location": "L95",
-      "_origin": "ast",
-      "id": "models_transformer_four_head_transformerfourhead_forward",
-      "community": 34,
-      "norm_label": ".forward()"
+      "norm_label": "outputs",
+      "id": "nanda_l2_p113_readme_outputs"
     },
     {
       "label": "train.py",
@@ -166,9 +1046,9 @@
       "source_file": "nanda_l2_p113/train.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "nanda_l2_p113_train",
-      "community": 34,
-      "norm_label": "train.py"
+      "community": 11,
+      "norm_label": "train.py",
+      "id": "nanda_l2_p113_train"
     },
     {
       "label": "get_next_run_number()",
@@ -176,9 +1056,9 @@
       "source_file": "nanda_l2_p113/train.py",
       "source_location": "L50",
       "_origin": "ast",
-      "id": "nanda_l2_p113_train_get_next_run_number",
-      "community": 34,
-      "norm_label": "get_next_run_number()"
+      "community": 11,
+      "norm_label": "get_next_run_number()",
+      "id": "nanda_l2_p113_train_get_next_run_number"
     },
     {
       "label": "transformer.py",
@@ -299,16 +1179,6 @@
       "community": 0,
       "norm_label": "modulararithmeticdataset",
       "id": "nanda_l2_p113_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset"
-    },
-    {
-      "label": "Dataset",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "dataset",
-      "id": "dataset"
     },
     {
       "label": ".__init__()",
@@ -1046,7 +1916,7 @@
       "source_file": "run_full_benchmark.py",
       "source_location": "L140",
       "_origin": "ast",
-      "community": 7,
+      "community": 21,
       "norm_label": ".__init__()",
       "id": "run_full_benchmark_benchmarkanalyzer_init"
     },
@@ -1371,346 +2241,6 @@
       "id": "src_analysis_l2_norm_four_head_rationale_462"
     },
     {
-      "label": "modular_arithmetic.py",
-      "file_type": "code",
-      "source_file": "src/data/modular_arithmetic.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "modular_arithmetic.py",
-      "id": "src_data_modular_arithmetic_py_data_modular_arithmetic"
-    },
-    {
-      "label": "generate_pairs()",
-      "file_type": "code",
-      "source_file": "src/data/modular_arithmetic.py",
-      "source_location": "L4",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "generate_pairs()",
-      "id": "src_data_modular_arithmetic_py_data_modular_arithmetic_generate_pairs"
-    },
-    {
-      "label": "get_dataloaders()",
-      "file_type": "code",
-      "source_file": "src/data/modular_arithmetic.py",
-      "source_location": "L11",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "get_dataloaders()",
-      "id": "src_data_modular_arithmetic_py_data_modular_arithmetic_get_dataloaders"
-    },
-    {
-      "label": "ModularArithmeticDataset",
-      "file_type": "code",
-      "source_file": "src/data/modular_arithmetic.py",
-      "source_location": "L23",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "modulararithmeticdataset",
-      "id": "src_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "src/data/modular_arithmetic.py",
-      "source_location": "L24",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": ".__init__()",
-      "id": "src_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset_init"
-    },
-    {
-      "label": ".__len__()",
-      "file_type": "code",
-      "source_file": "src/data/modular_arithmetic.py",
-      "source_location": "L27",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": ".__len__()",
-      "id": "src_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset_len"
-    },
-    {
-      "label": ".__getitem__()",
-      "file_type": "code",
-      "source_file": "src/data/modular_arithmetic.py",
-      "source_location": "L30",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": ".__getitem__()",
-      "id": "src_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset_getitem"
-    },
-    {
-      "label": ".get_tensor()",
-      "file_type": "code",
-      "source_file": "src/data/modular_arithmetic.py",
-      "source_location": "L33",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": ".get_tensor()",
-      "id": "src_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset_get_tensor"
-    },
-    {
-      "label": "generate_l2_report.py",
-      "file_type": "code",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "generate_l2_report.py",
-      "id": "src_generate_l2_report"
-    },
-    {
-      "label": "discover_run_numbers()",
-      "file_type": "code",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L26",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "discover_run_numbers()",
-      "id": "src_generate_l2_report_discover_run_numbers"
-    },
-    {
-      "label": "load_run_data()",
-      "file_type": "code",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L37",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "load_run_data()",
-      "id": "src_generate_l2_report_load_run_data"
-    },
-    {
-      "label": "find_grok_epoch()",
-      "file_type": "code",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L56",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "find_grok_epoch()",
-      "id": "src_generate_l2_report_find_grok_epoch"
-    },
-    {
-      "label": "extract_metrics()",
-      "file_type": "code",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L62",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "extract_metrics()",
-      "id": "src_generate_l2_report_extract_metrics"
-    },
-    {
-      "label": "_style_header()",
-      "file_type": "code",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L94",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "_style_header()",
-      "id": "src_generate_l2_report_style_header"
-    },
-    {
-      "label": "create_report()",
-      "file_type": "code",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L100",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "create_report()",
-      "id": "src_generate_l2_report_create_report"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L309",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "main()",
-      "id": "src_generate_l2_report_main"
-    },
-    {
-      "label": "L2 Norm + Dropout analysis report for the four-head transformer.  Standalone too",
-      "file_type": "rationale",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "l2 norm + dropout analysis report for the four-head transformer.  standalone too",
-      "id": "src_generate_l2_report_rationale_1"
-    },
-    {
-      "label": "Load one run from the per-predictor subdir layout.",
-      "file_type": "rationale",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L38",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "load one run from the per-predictor subdir layout.",
-      "id": "src_generate_l2_report_rationale_38"
-    },
-    {
-      "label": "First 1-indexed epoch where test accuracy exceeds threshold.",
-      "file_type": "rationale",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L57",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "first 1-indexed epoch where test accuracy exceeds threshold.",
-      "id": "src_generate_l2_report_rationale_57"
-    },
-    {
-      "label": "generate_master_report.py",
-      "file_type": "code",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 22,
-      "norm_label": "generate_master_report.py",
-      "id": "src_generate_master_report"
-    },
-    {
-      "label": "_run_numbers()",
-      "file_type": "code",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L60",
-      "_origin": "ast",
-      "community": 22,
-      "norm_label": "_run_numbers()",
-      "id": "src_generate_master_report_run_numbers"
-    },
-    {
-      "label": "_opt()",
-      "file_type": "code",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L71",
-      "_origin": "ast",
-      "community": 22,
-      "norm_label": "_opt()",
-      "id": "src_generate_master_report_opt"
-    },
-    {
-      "label": "load_run()",
-      "file_type": "code",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L75",
-      "_origin": "ast",
-      "community": 22,
-      "norm_label": "load_run()",
-      "id": "src_generate_master_report_load_run"
-    },
-    {
-      "label": "grok_epoch()",
-      "file_type": "code",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L119",
-      "_origin": "ast",
-      "community": 22,
-      "norm_label": "grok_epoch()",
-      "id": "src_generate_master_report_grok_epoch"
-    },
-    {
-      "label": "_grok_vline()",
-      "file_type": "code",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L128",
-      "_origin": "ast",
-      "community": 22,
-      "norm_label": "_grok_vline()",
-      "id": "src_generate_master_report_grok_vline"
-    },
-    {
-      "label": "build_plots_pdf()",
-      "file_type": "code",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L134",
-      "_origin": "ast",
-      "community": 22,
-      "norm_label": "build_plots_pdf()",
-      "id": "src_generate_master_report_build_plots_pdf"
-    },
-    {
-      "label": "_comparison_pages()",
-      "file_type": "code",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L265",
-      "_origin": "ast",
-      "community": 22,
-      "norm_label": "_comparison_pages()",
-      "id": "src_generate_master_report_comparison_pages"
-    },
-    {
-      "label": "_series_stats()",
-      "file_type": "code",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L360",
-      "_origin": "ast",
-      "community": 22,
-      "norm_label": "_series_stats()",
-      "id": "src_generate_master_report_series_stats"
-    },
-    {
-      "label": "_text_page()",
-      "file_type": "code",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L366",
-      "_origin": "ast",
-      "community": 22,
-      "norm_label": "_text_page()",
-      "id": "src_generate_master_report_text_page"
-    },
-    {
-      "label": "_dump_table()",
-      "file_type": "code",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L372",
-      "_origin": "ast",
-      "community": 22,
-      "norm_label": "_dump_table()",
-      "id": "src_generate_master_report_dump_table"
-    },
-    {
-      "label": "build_data_pdf()",
-      "file_type": "code",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L382",
-      "_origin": "ast",
-      "community": 22,
-      "norm_label": "build_data_pdf()",
-      "id": "src_generate_master_report_build_data_pdf"
-    },
-    {
-      "label": "write_csvs()",
-      "file_type": "code",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L487",
-      "_origin": "ast",
-      "community": 22,
-      "norm_label": "write_csvs()",
-      "id": "src_generate_master_report_write_csvs"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L542",
-      "_origin": "ast",
-      "community": 22,
-      "norm_label": "main()",
-      "id": "src_generate_master_report_main"
-    },
-    {
-      "label": "Master report generator for the four-head grokking benchmark.  Reads every COMPL",
-      "file_type": "rationale",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 22,
-      "norm_label": "master report generator for the four-head grokking benchmark.  reads every compl",
-      "id": "src_generate_master_report_rationale_1"
-    },
-    {
       "label": "model_shadow_with_layernorm.py",
       "file_type": "code",
       "source_file": "src/models/model_shadow_with_layernorm.py",
@@ -1749,66 +2279,6 @@
       "community": 33,
       "norm_label": ".forward()",
       "id": "models_model_shadow_with_layernorm_transformer_forward"
-    },
-    {
-      "label": "transformer_four_head.py",
-      "file_type": "code",
-      "source_file": "src/models/transformer_four_head.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 32,
-      "norm_label": "transformer_four_head.py",
-      "id": "src_models_transformer_four_head_py_models_transformer_four_head"
-    },
-    {
-      "label": "TransformerFourHead",
-      "file_type": "code",
-      "source_file": "src/models/transformer_four_head.py",
-      "source_location": "L24",
-      "_origin": "ast",
-      "community": 32,
-      "norm_label": "transformerfourhead",
-      "id": "src_models_transformer_four_head_py_models_transformer_four_head_transformerfourhead"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "src/models/transformer_four_head.py",
-      "source_location": "L25",
-      "_origin": "ast",
-      "community": 32,
-      "norm_label": ".__init__()",
-      "id": "src_models_transformer_four_head_py_models_transformer_four_head_transformerfourhead_init"
-    },
-    {
-      "label": ".split_into_heads()",
-      "file_type": "code",
-      "source_file": "src/models/transformer_four_head.py",
-      "source_location": "L47",
-      "_origin": "ast",
-      "community": 32,
-      "norm_label": ".split_into_heads()",
-      "id": "src_models_transformer_four_head_py_models_transformer_four_head_transformerfourhead_split_into_heads"
-    },
-    {
-      "label": ".combine_heads()",
-      "file_type": "code",
-      "source_file": "src/models/transformer_four_head.py",
-      "source_location": "L56",
-      "_origin": "ast",
-      "community": 32,
-      "norm_label": ".combine_heads()",
-      "id": "src_models_transformer_four_head_py_models_transformer_four_head_transformerfourhead_combine_heads"
-    },
-    {
-      "label": ".forward()",
-      "file_type": "code",
-      "source_file": "src/models/transformer_four_head.py",
-      "source_location": "L65",
-      "_origin": "ast",
-      "community": 32,
-      "norm_label": ".forward()",
-      "id": "src_models_transformer_four_head_py_models_transformer_four_head_transformerfourhead_forward"
     },
     {
       "label": "plot_results_four_head.py",
@@ -1961,286 +2431,6 @@
       "id": "predictors_dropout_rationale_19"
     },
     {
-      "label": "l2_norm.py",
-      "file_type": "code",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "l2_norm.py",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm"
-    },
-    {
-      "label": "compute_l2_norm()",
-      "file_type": "code",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L5",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "compute_l2_norm()",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_compute_l2_norm"
-    },
-    {
-      "label": "compute_l2_norm_rate_of_decline()",
-      "file_type": "code",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L10",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "compute_l2_norm_rate_of_decline()",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_compute_l2_norm_rate_of_decline"
-    },
-    {
-      "label": "detect_l2_norm_drop()",
-      "file_type": "code",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L14",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "detect_l2_norm_drop()",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_detect_l2_norm_drop"
-    },
-    {
-      "label": "compute_acceleration()",
-      "file_type": "code",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L23",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "compute_acceleration()",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_compute_acceleration"
-    },
-    {
-      "label": "detect_inflection()",
-      "file_type": "code",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L35",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "detect_inflection()",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_detect_inflection"
-    },
-    {
-      "label": "apply_moving_average()",
-      "file_type": "code",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L54",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "apply_moving_average()",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_apply_moving_average"
-    },
-    {
-      "label": "resample_to_log_uniform_grid()",
-      "file_type": "code",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L63",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "resample_to_log_uniform_grid()",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_resample_to_log_uniform_grid"
-    },
-    {
-      "label": "compute_fast_slow_moving_averages()",
-      "file_type": "code",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L88",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "compute_fast_slow_moving_averages()",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_compute_fast_slow_moving_averages"
-    },
-    {
-      "label": "detect_ma_crossover()",
-      "file_type": "code",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L121",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "detect_ma_crossover()",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_detect_ma_crossover"
-    },
-    {
-      "label": "compute_ma_of_slow_ma()",
-      "file_type": "code",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L141",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "compute_ma_of_slow_ma()",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_compute_ma_of_slow_ma"
-    },
-    {
-      "label": "compute_noise_floor()",
-      "file_type": "code",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L154",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "compute_noise_floor()",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_compute_noise_floor"
-    },
-    {
-      "label": "detect_ma_of_ma_trigger()",
-      "file_type": "code",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L164",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "detect_ma_of_ma_trigger()",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_detect_ma_of_ma_trigger"
-    },
-    {
-      "label": "detect_ma_of_ma_zero_crossing()",
-      "file_type": "code",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L181",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "detect_ma_of_ma_zero_crossing()",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_detect_ma_of_ma_zero_crossing"
-    },
-    {
-      "label": "Compute the second derivative of L2 norm (acceleration).     acceleration[i] = r",
-      "file_type": "rationale",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L24",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "compute the second derivative of l2 norm (acceleration).     acceleration[i] = r",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_rationale_24"
-    },
-    {
-      "label": "Detect inflection point where acceleration changes sign.     This is where the d",
-      "file_type": "rationale",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L36",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "detect inflection point where acceleration changes sign.     this is where the d",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_rationale_36"
-    },
-    {
-      "label": "Apply moving average smoothing to reduce noise.     window_size: number of epoch",
-      "file_type": "rationale",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L55",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "apply moving average smoothing to reduce noise.     window_size: number of epoch",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_rationale_55"
-    },
-    {
-      "label": "Resample data onto a grid uniformly spaced in log10(epoch) \u2014 i.e. the     SAME s",
-      "file_type": "rationale",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L64",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "resample data onto a grid uniformly spaced in log10(epoch) \u2014 i.e. the     same s",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_rationale_64"
-    },
-    {
-      "label": "Compute two moving averages on a LOG-EPOCH-UNIFORM grid, so the window     cover",
-      "file_type": "rationale",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L89",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "compute two moving averages on a log-epoch-uniform grid, so the window     cover",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_rationale_89"
-    },
-    {
-      "label": "Detect where fast MA crosses above slow MA, searching along the     log-uniform",
-      "file_type": "rationale",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L122",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "detect where fast ma crosses above slow ma, searching along the     log-uniform",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_rationale_122"
-    },
-    {
-      "label": "Apply a second, faster-window moving average on top of the already-smoothed",
-      "file_type": "rationale",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L142",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "apply a second, faster-window moving average on top of the already-smoothed",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_rationale_142"
-    },
-    {
-      "label": "Estimate the normal noise level of the MA-of-MA difference from the quiet     ea",
-      "file_type": "rationale",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L155",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "estimate the normal noise level of the ma-of-ma difference from the quiet     ea",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_rationale_155"
-    },
-    {
-      "label": "Fire on the first epoch (after skip_epochs) where diff climbs past     threshold",
-      "file_type": "rationale",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L165",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "fire on the first epoch (after skip_epochs) where diff climbs past     threshold",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_rationale_165"
-    },
-    {
-      "label": "Fire on the first epoch (after skip_epochs) where diff crosses from     positive",
-      "file_type": "rationale",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L182",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "fire on the first epoch (after skip_epochs) where diff crosses from     positive",
-      "id": "src_predictors_l2_norm_py_predictors_l2_norm_rationale_182"
-    },
-    {
-      "label": "train_four_head.py",
-      "file_type": "code",
-      "source_file": "src/train_four_head.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 11,
-      "norm_label": "train_four_head.py",
-      "id": "src_train_four_head"
-    },
-    {
-      "label": "migrate_legacy_flat_run()",
-      "file_type": "code",
-      "source_file": "src/train_four_head.py",
-      "source_location": "L59",
-      "_origin": "ast",
-      "community": 11,
-      "norm_label": "migrate_legacy_flat_run()",
-      "id": "src_train_four_head_migrate_legacy_flat_run"
-    },
-    {
-      "label": "get_next_run_number()",
-      "file_type": "code",
-      "source_file": "src/train_four_head.py",
-      "source_location": "L86",
-      "_origin": "ast",
-      "community": 11,
-      "norm_label": "get_next_run_number()",
-      "id": "src_train_four_head_get_next_run_number"
-    },
-    {
-      "label": "Earlier versions of this script saved directly into results/four_head/     inste",
-      "file_type": "rationale",
-      "source_file": "src/train_four_head.py",
-      "source_location": "L60",
-      "_origin": "ast",
-      "community": 11,
-      "norm_label": "earlier versions of this script saved directly into results/four_head/     inste",
-      "id": "src_train_four_head_rationale_60"
-    },
-    {
       "label": "train_shadow_layernorm.py",
       "file_type": "code",
       "source_file": "src/train_shadow_layernorm.py",
@@ -2249,216 +2439,6 @@
       "community": 33,
       "norm_label": "train_shadow_layernorm.py",
       "id": "src_train_shadow_layernorm"
-    },
-    {
-      "label": "unified_measurements.py",
-      "file_type": "code",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 19,
-      "norm_label": "unified_measurements.py",
-      "id": "src_unified_measurements"
-    },
-    {
-      "label": "PredictorMeasurements",
-      "file_type": "code",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L14",
-      "_origin": "ast",
-      "community": 19,
-      "norm_label": "predictormeasurements",
-      "id": "src_unified_measurements_predictormeasurements"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L17",
-      "_origin": "ast",
-      "community": 19,
-      "norm_label": ".__init__()",
-      "id": "src_unified_measurements_predictormeasurements_init"
-    },
-    {
-      "label": ".create_subdirs()",
-      "file_type": "code",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L22",
-      "_origin": "ast",
-      "community": 19,
-      "norm_label": ".create_subdirs()",
-      "id": "src_unified_measurements_predictormeasurements_create_subdirs"
-    },
-    {
-      "label": ".save_training_data()",
-      "file_type": "code",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L32",
-      "_origin": "ast",
-      "community": 19,
-      "norm_label": ".save_training_data()",
-      "id": "src_unified_measurements_predictormeasurements_save_training_data"
-    },
-    {
-      "label": ".save_l2_norm_data()",
-      "file_type": "code",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L40",
-      "_origin": "ast",
-      "community": 19,
-      "norm_label": ".save_l2_norm_data()",
-      "id": "src_unified_measurements_predictormeasurements_save_l2_norm_data"
-    },
-    {
-      "label": ".save_dropout_data()",
-      "file_type": "code",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L72",
-      "_origin": "ast",
-      "community": 19,
-      "norm_label": ".save_dropout_data()",
-      "id": "src_unified_measurements_predictormeasurements_save_dropout_data"
-    },
-    {
-      "label": ".generate_l2_norm_visualizations()",
-      "file_type": "code",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L94",
-      "_origin": "ast",
-      "community": 19,
-      "norm_label": ".generate_l2_norm_visualizations()",
-      "id": "src_unified_measurements_predictormeasurements_generate_l2_norm_visualizations"
-    },
-    {
-      "label": ".generate_dropout_visualizations()",
-      "file_type": "code",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L173",
-      "_origin": "ast",
-      "community": 19,
-      "norm_label": ".generate_dropout_visualizations()",
-      "id": "src_unified_measurements_predictormeasurements_generate_dropout_visualizations"
-    },
-    {
-      "label": ".generate_combined_report()",
-      "file_type": "code",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L197",
-      "_origin": "ast",
-      "community": 19,
-      "norm_label": ".generate_combined_report()",
-      "id": "src_unified_measurements_predictormeasurements_generate_combined_report"
-    },
-    {
-      "label": "._smooth_signal()",
-      "file_type": "code",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L277",
-      "_origin": "ast",
-      "community": 19,
-      "norm_label": "._smooth_signal()",
-      "id": "src_unified_measurements_predictormeasurements_smooth_signal"
-    },
-    {
-      "label": "Unified measurement collection for L2 Norm and Dropout predictors. Ensures consi",
-      "file_type": "rationale",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 19,
-      "norm_label": "unified measurement collection for l2 norm and dropout predictors. ensures consi",
-      "id": "src_unified_measurements_rationale_1"
-    },
-    {
-      "label": "Collects and saves all measurements for both predictors.",
-      "file_type": "rationale",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L15",
-      "_origin": "ast",
-      "community": 19,
-      "norm_label": "collects and saves all measurements for both predictors.",
-      "id": "src_unified_measurements_rationale_15"
-    },
-    {
-      "label": "Create subdirectories for each predictor.",
-      "file_type": "rationale",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L23",
-      "_origin": "ast",
-      "community": 19,
-      "norm_label": "create subdirectories for each predictor.",
-      "id": "src_unified_measurements_rationale_23"
-    },
-    {
-      "label": "Save core training metrics.",
-      "file_type": "rationale",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L33",
-      "_origin": "ast",
-      "community": 19,
-      "norm_label": "save core training metrics.",
-      "id": "src_unified_measurements_rationale_33"
-    },
-    {
-      "label": "Save all L2 Norm measurements.",
-      "file_type": "rationale",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L42",
-      "_origin": "ast",
-      "community": 19,
-      "norm_label": "save all l2 norm measurements.",
-      "id": "src_unified_measurements_rationale_42"
-    },
-    {
-      "label": "Save all Dropout measurements \u2014 full multi-rate sweep only.          There is no",
-      "file_type": "rationale",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L74",
-      "_origin": "ast",
-      "community": 19,
-      "norm_label": "save all dropout measurements \u2014 full multi-rate sweep only.          there is no",
-      "id": "src_unified_measurements_rationale_74"
-    },
-    {
-      "label": "Generate standalone L2 Norm visualization graphs.",
-      "file_type": "rationale",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L97",
-      "_origin": "ast",
-      "community": 19,
-      "norm_label": "generate standalone l2 norm visualization graphs.",
-      "id": "src_unified_measurements_rationale_97"
-    },
-    {
-      "label": "Generate standalone Dropout visualization graphs.",
-      "file_type": "rationale",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L175",
-      "_origin": "ast",
-      "community": 19,
-      "norm_label": "generate standalone dropout visualization graphs.",
-      "id": "src_unified_measurements_rationale_175"
-    },
-    {
-      "label": "Generate combined PDF report with all measurements.",
-      "file_type": "rationale",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L200",
-      "_origin": "ast",
-      "community": 19,
-      "norm_label": "generate combined pdf report with all measurements.",
-      "id": "src_unified_measurements_rationale_200"
-    },
-    {
-      "label": "Apply simple moving average smoothing.",
-      "file_type": "rationale",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L278",
-      "_origin": "ast",
-      "community": 19,
-      "norm_label": "apply simple moving average smoothing.",
-      "id": "src_unified_measurements_rationale_278"
     },
     {
       "label": "analyze_threshold.py",
@@ -2476,7 +2456,7 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 7,
+      "community": 5,
       "norm_label": "collage_images.py",
       "id": "tools_collage_images"
     },
@@ -2486,7 +2466,7 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 7,
+      "community": 5,
       "norm_label": "get_images()",
       "id": "tools_collage_images_get_images"
     },
@@ -2496,7 +2476,7 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 7,
+      "community": 5,
       "norm_label": "horizontal_collage()",
       "id": "tools_collage_images_horizontal_collage"
     },
@@ -2506,7 +2486,7 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 7,
+      "community": 5,
       "norm_label": "vertical_collage()",
       "id": "tools_collage_images_vertical_collage"
     },
@@ -2516,7 +2496,7 @@
       "source_file": "tools/collage_images.py",
       "source_location": "L64",
       "_origin": "ast",
-      "community": 7,
+      "community": 5,
       "norm_label": "main()",
       "id": "tools_collage_images_main"
     },
@@ -2546,7 +2526,7 @@
       "source_file": "tools/compile_python_files.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 7,
+      "community": 21,
       "norm_label": "compile_python_files.py",
       "id": "tools_compile_python_files"
     },
@@ -2556,7 +2536,7 @@
       "source_file": "tools/compile_python_files.py",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 7,
+      "community": 21,
       "norm_label": "should_skip()",
       "id": "tools_compile_python_files_should_skip"
     },
@@ -2566,7 +2546,7 @@
       "source_file": "tools/compile_python_files.py",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 7,
+      "community": 21,
       "norm_label": "path",
       "id": "path"
     },
@@ -2576,7 +2556,7 @@
       "source_file": "tools/compile_python_files.py",
       "source_location": "L24",
       "_origin": "ast",
-      "community": 7,
+      "community": 21,
       "norm_label": "main()",
       "id": "tools_compile_python_files_main"
     },
@@ -2586,7 +2566,7 @@
       "source_file": "tools/compile_python_files_to_pdf.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 7,
+      "community": 21,
       "norm_label": "compile_python_files_to_pdf.py",
       "id": "tools_compile_python_files_to_pdf"
     },
@@ -2596,7 +2576,7 @@
       "source_file": "tools/compile_python_files_to_pdf.py",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 7,
+      "community": 21,
       "norm_label": "gather_python_files()",
       "id": "tools_compile_python_files_to_pdf_gather_python_files"
     },
@@ -2606,7 +2586,7 @@
       "source_file": "tools/compile_python_files_to_pdf.py",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 7,
+      "community": 21,
       "norm_label": "wrap_text()",
       "id": "tools_compile_python_files_to_pdf_wrap_text"
     },
@@ -2616,7 +2596,7 @@
       "source_file": "tools/compile_python_files_to_pdf.py",
       "source_location": "L56",
       "_origin": "ast",
-      "community": 7,
+      "community": 21,
       "norm_label": "compile_python_files_to_pdf()",
       "id": "tools_compile_python_files_to_pdf_compile_python_files_to_pdf"
     },
@@ -2626,7 +2606,7 @@
       "source_file": "tools/compile_python_files_to_pdf.py",
       "source_location": "L108",
       "_origin": "ast",
-      "community": 7,
+      "community": 21,
       "norm_label": "parse_arguments()",
       "id": "tools_compile_python_files_to_pdf_parse_arguments"
     },
@@ -4135,6 +4115,1336 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "data_modular_arithmetic",
+      "target": "data_modular_arithmetic_generate_pairs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "data_modular_arithmetic",
+      "target": "data_modular_arithmetic_get_dataloaders",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "data_modular_arithmetic",
+      "target": "data_modular_arithmetic_modulararithmeticdataset",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/train_four_head.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "src_train_four_head",
+      "target": "data_modular_arithmetic",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "data_modular_arithmetic_modulararithmeticdataset_init",
+      "target": "data_modular_arithmetic_generate_pairs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "data_modular_arithmetic_get_dataloaders",
+      "target": "data_modular_arithmetic_modulararithmeticdataset",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "data_modular_arithmetic_modulararithmeticdataset",
+      "target": "data_modular_arithmetic_modulararithmeticdataset_get_tensor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "data_modular_arithmetic_modulararithmeticdataset",
+      "target": "data_modular_arithmetic_modulararithmeticdataset_getitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "data_modular_arithmetic_modulararithmeticdataset",
+      "target": "data_modular_arithmetic_modulararithmeticdataset_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "data_modular_arithmetic_modulararithmeticdataset",
+      "target": "data_modular_arithmetic_modulararithmeticdataset_len",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "data_modular_arithmetic_modulararithmeticdataset",
+      "target": "dataset",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "nanda_l2_p113/data/modular_arithmetic.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nanda_l2_p113_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset",
+      "target": "dataset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/modular_arithmetic.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "data_modular_arithmetic_modulararithmeticdataset_getitem",
+      "target": "data_modular_arithmetic_modulararithmeticdataset_get_tensor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L100",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_l2_report",
+      "target": "src_generate_l2_report_create_report"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_l2_report",
+      "target": "src_generate_l2_report_discover_run_numbers"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L62",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_l2_report",
+      "target": "src_generate_l2_report_extract_metrics"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L56",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_l2_report",
+      "target": "src_generate_l2_report_find_grok_epoch"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_l2_report",
+      "target": "src_generate_l2_report_load_run_data"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L309",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_l2_report",
+      "target": "src_generate_l2_report_main"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L94",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_l2_report",
+      "target": "src_generate_l2_report_style_header"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_l2_report_rationale_1",
+      "target": "src_generate_l2_report"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L310",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_l2_report_main",
+      "target": "src_generate_l2_report_discover_run_numbers"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L318",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_l2_report_main",
+      "target": "src_generate_l2_report_load_run_data"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L38",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_l2_report_rationale_38",
+      "target": "src_generate_l2_report_load_run_data"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L200",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_l2_report_create_report",
+      "target": "src_generate_l2_report_find_grok_epoch"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L85",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_l2_report_extract_metrics",
+      "target": "src_generate_l2_report_find_grok_epoch"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L57",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_l2_report_rationale_57",
+      "target": "src_generate_l2_report_find_grok_epoch"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L323",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_l2_report_main",
+      "target": "src_generate_l2_report_extract_metrics"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L156",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_l2_report_create_report",
+      "target": "src_generate_l2_report_style_header"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_l2_report.py",
+      "source_location": "L330",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_l2_report_main",
+      "target": "src_generate_l2_report_create_report"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "src_generate_master_report",
+      "target": "predictors_l2_norm",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L382",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_build_data_pdf"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L134",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_build_plots_pdf"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L265",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_comparison_pages"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L372",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_dump_table"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L119",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_grok_epoch"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L128",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_grok_vline"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_load_run"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L542",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_main"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_opt"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L60",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_run_numbers"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L360",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_series_stats"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L366",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_text_page"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L487",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report",
+      "target": "src_generate_master_report_write_csvs"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report_rationale_1",
+      "target": "src_generate_master_report"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L543",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report_main",
+      "target": "src_generate_master_report_run_numbers"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L82",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report_load_run",
+      "target": "src_generate_master_report_opt"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L111",
+      "weight": 1.0,
+      "source": "src_generate_master_report_load_run",
+      "target": "predictors_l2_norm_compute_noise_floor"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L112",
+      "weight": 1.0,
+      "source": "src_generate_master_report_load_run",
+      "target": "predictors_l2_norm_detect_ma_crossover"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L110",
+      "weight": 1.0,
+      "source": "src_generate_master_report_load_run",
+      "target": "predictors_l2_norm_detect_ma_of_ma_zero_crossing"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L105",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report_load_run",
+      "target": "src_generate_master_report_grok_epoch"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L550",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report_main",
+      "target": "src_generate_master_report_load_run"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L146",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report_build_plots_pdf",
+      "target": "src_generate_master_report_grok_vline"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L272",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report_comparison_pages",
+      "target": "src_generate_master_report_grok_vline"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L260",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report_build_plots_pdf",
+      "target": "src_generate_master_report_comparison_pages"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L553",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report_main",
+      "target": "src_generate_master_report_build_plots_pdf"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L404",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report_build_data_pdf",
+      "target": "src_generate_master_report_series_stats"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L393",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report_build_data_pdf",
+      "target": "src_generate_master_report_text_page"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L442",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report_build_data_pdf",
+      "target": "src_generate_master_report_dump_table"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L557",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report_main",
+      "target": "src_generate_master_report_build_data_pdf"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generate_master_report.py",
+      "source_location": "L561",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_generate_master_report_main",
+      "target": "src_generate_master_report_write_csvs"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "models_transformer_four_head",
+      "target": "models_transformer_four_head_transformerfourhead"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "nanda_l2_p113/train.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nanda_l2_p113_train",
+      "target": "models_transformer_four_head"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/train_four_head.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "src_train_four_head",
+      "target": "models_transformer_four_head",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "models_transformer_four_head_transformerfourhead",
+      "target": "models_transformer_four_head_transformerfourhead_combine_heads"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
+      "source_location": "L95",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "models_transformer_four_head_transformerfourhead",
+      "target": "models_transformer_four_head_transformerfourhead_forward"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "models_transformer_four_head_transformerfourhead",
+      "target": "models_transformer_four_head_transformerfourhead_init"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "models_transformer_four_head_transformerfourhead",
+      "target": "models_transformer_four_head_transformerfourhead_init_weights"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
+      "source_location": "L77",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "models_transformer_four_head_transformerfourhead",
+      "target": "models_transformer_four_head_transformerfourhead_split_into_heads"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
+      "source_location": "L63",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "models_transformer_four_head_transformerfourhead_init",
+      "target": "models_transformer_four_head_transformerfourhead_init_weights"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
+      "source_location": "L100",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "models_transformer_four_head_transformerfourhead_forward",
+      "target": "models_transformer_four_head_transformerfourhead_split_into_heads"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
+      "source_location": "L109",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "models_transformer_four_head_transformerfourhead_forward",
+      "target": "models_transformer_four_head_transformerfourhead_combine_heads"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L105",
+      "weight": 1.0,
+      "source": "predictors_l2_norm",
+      "target": "predictors_l2_norm_apply_moving_average",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L74",
+      "weight": 1.0,
+      "source": "predictors_l2_norm",
+      "target": "predictors_l2_norm_compute_acceleration",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L139",
+      "weight": 1.0,
+      "source": "predictors_l2_norm",
+      "target": "predictors_l2_norm_compute_fast_slow_moving_averages",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "predictors_l2_norm",
+      "target": "predictors_l2_norm_compute_l2_norm",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "predictors_l2_norm",
+      "target": "predictors_l2_norm_compute_l2_norm_rate_of_decline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L192",
+      "weight": 1.0,
+      "source": "predictors_l2_norm",
+      "target": "predictors_l2_norm_compute_ma_of_slow_ma",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L205",
+      "weight": 1.0,
+      "source": "predictors_l2_norm",
+      "target": "predictors_l2_norm_compute_noise_floor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "predictors_l2_norm",
+      "target": "predictors_l2_norm_compute_per_module_sum_of_squared_weights",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "predictors_l2_norm",
+      "target": "predictors_l2_norm_compute_sum_of_squared_weights",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "source": "predictors_l2_norm",
+      "target": "predictors_l2_norm_detect_inflection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "predictors_l2_norm",
+      "target": "predictors_l2_norm_detect_l2_norm_drop",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L172",
+      "weight": 1.0,
+      "source": "predictors_l2_norm",
+      "target": "predictors_l2_norm_detect_ma_crossover",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L215",
+      "weight": 1.0,
+      "source": "predictors_l2_norm",
+      "target": "predictors_l2_norm_detect_ma_of_ma_trigger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L232",
+      "weight": 1.0,
+      "source": "predictors_l2_norm",
+      "target": "predictors_l2_norm_detect_ma_of_ma_zero_crossing",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L114",
+      "weight": 1.0,
+      "source": "predictors_l2_norm",
+      "target": "predictors_l2_norm_resample_to_log_uniform_grid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/train_four_head.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_train_four_head",
+      "target": "predictors_l2_norm",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "predictors_l2_norm_rationale_12",
+      "target": "predictors_l2_norm_compute_sum_of_squared_weights",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "predictors_l2_norm_rationale_38",
+      "target": "predictors_l2_norm_compute_per_module_sum_of_squared_weights",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "source": "predictors_l2_norm_rationale_75",
+      "target": "predictors_l2_norm_compute_acceleration",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "source": "predictors_l2_norm_rationale_87",
+      "target": "predictors_l2_norm_detect_inflection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L163",
+      "weight": 1.0,
+      "source": "predictors_l2_norm_compute_fast_slow_moving_averages",
+      "target": "predictors_l2_norm_apply_moving_average",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L200",
+      "weight": 1.0,
+      "source": "predictors_l2_norm_compute_ma_of_slow_ma",
+      "target": "predictors_l2_norm_apply_moving_average",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L106",
+      "weight": 1.0,
+      "source": "predictors_l2_norm_rationale_106",
+      "target": "predictors_l2_norm_apply_moving_average",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L161",
+      "weight": 1.0,
+      "source": "predictors_l2_norm_compute_fast_slow_moving_averages",
+      "target": "predictors_l2_norm_resample_to_log_uniform_grid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L115",
+      "weight": 1.0,
+      "source": "predictors_l2_norm_rationale_115",
+      "target": "predictors_l2_norm_resample_to_log_uniform_grid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L140",
+      "weight": 1.0,
+      "source": "predictors_l2_norm_rationale_140",
+      "target": "predictors_l2_norm_compute_fast_slow_moving_averages",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L173",
+      "weight": 1.0,
+      "source": "predictors_l2_norm_rationale_173",
+      "target": "predictors_l2_norm_detect_ma_crossover",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L193",
+      "weight": 1.0,
+      "source": "predictors_l2_norm_rationale_193",
+      "target": "predictors_l2_norm_compute_ma_of_slow_ma",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L206",
+      "weight": 1.0,
+      "source": "predictors_l2_norm_rationale_206",
+      "target": "predictors_l2_norm_compute_noise_floor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L216",
+      "weight": 1.0,
+      "source": "predictors_l2_norm_rationale_216",
+      "target": "predictors_l2_norm_detect_ma_of_ma_trigger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/l2_norm.py",
+      "source_location": "L233",
+      "weight": 1.0,
+      "source": "predictors_l2_norm_rationale_233",
+      "target": "predictors_l2_norm_detect_ma_of_ma_zero_crossing",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/train_four_head.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_train_four_head",
+      "target": "predictors_dropout"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/train_four_head.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_train_four_head",
+      "target": "src_train_four_head_get_next_run_number"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/train_four_head.py",
+      "source_location": "L59",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_train_four_head",
+      "target": "src_train_four_head_migrate_legacy_flat_run"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/train_four_head.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "src_train_four_head_rationale_71",
+      "target": "src_train_four_head_migrate_legacy_flat_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements",
+      "target": "src_unified_measurements_predictormeasurements"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_rationale_1",
+      "target": "src_unified_measurements"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements",
+      "target": "src_unified_measurements_predictormeasurements_create_subdirs"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L194",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements",
+      "target": "src_unified_measurements_predictormeasurements_generate_combined_report"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L170",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements",
+      "target": "src_unified_measurements_predictormeasurements_generate_dropout_visualizations"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L91",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements",
+      "target": "src_unified_measurements_predictormeasurements_generate_l2_norm_visualizations"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements",
+      "target": "src_unified_measurements_predictormeasurements_init"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L72",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements",
+      "target": "src_unified_measurements_predictormeasurements_save_dropout_data"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements",
+      "target": "src_unified_measurements_predictormeasurements_save_l2_norm_data"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements",
+      "target": "src_unified_measurements_predictormeasurements_save_training_data"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L274",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements",
+      "target": "src_unified_measurements_predictormeasurements_smooth_signal"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_rationale_15",
+      "target": "src_unified_measurements_predictormeasurements"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements_init",
+      "target": "src_unified_measurements_predictormeasurements_create_subdirs"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_rationale_23",
+      "target": "src_unified_measurements_predictormeasurements_create_subdirs"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_rationale_33",
+      "target": "src_unified_measurements_predictormeasurements_save_training_data"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L48",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_unified_measurements_predictormeasurements_save_l2_norm_data",
+      "target": "src_unified_measurements_predictormeasurements_smooth_signal"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "src_unified_measurements_rationale_43",
+      "target": "src_unified_measurements_predictormeasurements_save_l2_norm_data",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L98",
+      "weight": 1.0,
+      "source": "src_unified_measurements_rationale_98",
+      "target": "src_unified_measurements_predictormeasurements_save_dropout_data",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L121",
+      "weight": 1.0,
+      "source": "src_unified_measurements_rationale_121",
+      "target": "src_unified_measurements_predictormeasurements_generate_l2_norm_visualizations",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L199",
+      "weight": 1.0,
+      "source": "src_unified_measurements_rationale_199",
+      "target": "src_unified_measurements_predictormeasurements_generate_dropout_visualizations",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L224",
+      "weight": 1.0,
+      "source": "src_unified_measurements_rationale_224",
+      "target": "src_unified_measurements_predictormeasurements_generate_combined_report",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L302",
+      "weight": 1.0,
+      "source": "src_unified_measurements_rationale_302",
+      "target": "src_unified_measurements_predictormeasurements_smooth_signal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "nanda_l2_p113/README.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -4191,110 +5501,6 @@
       "confidence_score": 1.0,
       "source": "nanda_l2_p113_readme_nanda_l2_p113_l2_norm_predictor_on_a_b_mod_113",
       "target": "nanda_l2_p113_readme_why_p_113_betas_0_9_0_98_and_the_small_init"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
-      "source_location": "L35",
-      "weight": 1.0,
-      "source": "models_transformer_four_head",
-      "target": "models_transformer_four_head_transformerfourhead",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "nanda_l2_p113/train.py",
-      "source_location": "L16",
-      "weight": 1.0,
-      "source": "nanda_l2_p113_train",
-      "target": "models_transformer_four_head",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
-      "source_location": "L86",
-      "weight": 1.0,
-      "source": "models_transformer_four_head_transformerfourhead",
-      "target": "models_transformer_four_head_transformerfourhead_combine_heads",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
-      "source_location": "L95",
-      "weight": 1.0,
-      "source": "models_transformer_four_head_transformerfourhead",
-      "target": "models_transformer_four_head_transformerfourhead_forward",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
-      "source_location": "L36",
-      "weight": 1.0,
-      "source": "models_transformer_four_head_transformerfourhead",
-      "target": "models_transformer_four_head_transformerfourhead_init",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
-      "source_location": "L65",
-      "weight": 1.0,
-      "source": "models_transformer_four_head_transformerfourhead",
-      "target": "models_transformer_four_head_transformerfourhead_init_weights",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
-      "source_location": "L77",
-      "weight": 1.0,
-      "source": "models_transformer_four_head_transformerfourhead",
-      "target": "models_transformer_four_head_transformerfourhead_split_into_heads",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
-      "source_location": "L63",
-      "weight": 1.0,
-      "source": "models_transformer_four_head_transformerfourhead_init",
-      "target": "models_transformer_four_head_transformerfourhead_init_weights",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
-      "source_location": "L100",
-      "weight": 1.0,
-      "source": "models_transformer_four_head_transformerfourhead_forward",
-      "target": "models_transformer_four_head_transformerfourhead_split_into_heads",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "nanda_l2_p113/models/transformer_four_head.py",
-      "source_location": "L109",
-      "weight": 1.0,
-      "source": "models_transformer_four_head_transformerfourhead_forward",
-      "target": "models_transformer_four_head_transformerfourhead_combine_heads",
-      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -4411,16 +5617,6 @@
       "target": "nanda_l2_p113_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset"
     },
     {
-      "relation": "inherits",
-      "confidence": "EXTRACTED",
-      "source_file": "nanda_l2_p113/data/modular_arithmetic.py",
-      "source_location": "L34",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "nanda_l2_p113_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset",
-      "target": "dataset"
-    },
-    {
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "nanda_l2_p113/data/modular_arithmetic.py",
@@ -4459,16 +5655,6 @@
       "confidence_score": 1.0,
       "source": "nanda_l2_p113_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset",
       "target": "nanda_l2_p113_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset_len"
-    },
-    {
-      "relation": "inherits",
-      "confidence": "EXTRACTED",
-      "source_file": "src/data/modular_arithmetic.py",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset",
-      "target": "dataset"
     },
     {
       "relation": "calls",
@@ -5940,569 +7126,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "src/data/modular_arithmetic.py",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_data_modular_arithmetic_py_data_modular_arithmetic",
-      "target": "src_data_modular_arithmetic_py_data_modular_arithmetic_generate_pairs"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/data/modular_arithmetic.py",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_data_modular_arithmetic_py_data_modular_arithmetic",
-      "target": "src_data_modular_arithmetic_py_data_modular_arithmetic_get_dataloaders"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/data/modular_arithmetic.py",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_data_modular_arithmetic_py_data_modular_arithmetic",
-      "target": "src_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/data/modular_arithmetic.py",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset_init",
-      "target": "src_data_modular_arithmetic_py_data_modular_arithmetic_generate_pairs"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/data/modular_arithmetic.py",
-      "source_location": "L12",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_data_modular_arithmetic_py_data_modular_arithmetic_get_dataloaders",
-      "target": "src_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/data/modular_arithmetic.py",
-      "source_location": "L33",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset",
-      "target": "src_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset_get_tensor"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/data/modular_arithmetic.py",
-      "source_location": "L30",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset",
-      "target": "src_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset_getitem"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/data/modular_arithmetic.py",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset",
-      "target": "src_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset_init"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/data/modular_arithmetic.py",
-      "source_location": "L27",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset",
-      "target": "src_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset_len"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/data/modular_arithmetic.py",
-      "source_location": "L31",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset_getitem",
-      "target": "src_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset_get_tensor"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L100",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_l2_report",
-      "target": "src_generate_l2_report_create_report"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L26",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_l2_report",
-      "target": "src_generate_l2_report_discover_run_numbers"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L62",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_l2_report",
-      "target": "src_generate_l2_report_extract_metrics"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L56",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_l2_report",
-      "target": "src_generate_l2_report_find_grok_epoch"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L37",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_l2_report",
-      "target": "src_generate_l2_report_load_run_data"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L309",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_l2_report",
-      "target": "src_generate_l2_report_main"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L94",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_l2_report",
-      "target": "src_generate_l2_report_style_header"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_l2_report_rationale_1",
-      "target": "src_generate_l2_report"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L310",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_l2_report_main",
-      "target": "src_generate_l2_report_discover_run_numbers"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L318",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_l2_report_main",
-      "target": "src_generate_l2_report_load_run_data"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L38",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_l2_report_rationale_38",
-      "target": "src_generate_l2_report_load_run_data"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L200",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_l2_report_create_report",
-      "target": "src_generate_l2_report_find_grok_epoch"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L85",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_l2_report_extract_metrics",
-      "target": "src_generate_l2_report_find_grok_epoch"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L57",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_l2_report_rationale_57",
-      "target": "src_generate_l2_report_find_grok_epoch"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L323",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_l2_report_main",
-      "target": "src_generate_l2_report_extract_metrics"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L156",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_l2_report_create_report",
-      "target": "src_generate_l2_report_style_header"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_l2_report.py",
-      "source_location": "L330",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_l2_report_main",
-      "target": "src_generate_l2_report_create_report"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L382",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report",
-      "target": "src_generate_master_report_build_data_pdf"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L134",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report",
-      "target": "src_generate_master_report_build_plots_pdf"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L265",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report",
-      "target": "src_generate_master_report_comparison_pages"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L372",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report",
-      "target": "src_generate_master_report_dump_table"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L119",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report",
-      "target": "src_generate_master_report_grok_epoch"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L128",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report",
-      "target": "src_generate_master_report_grok_vline"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L75",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report",
-      "target": "src_generate_master_report_load_run"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L542",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report",
-      "target": "src_generate_master_report_main"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L71",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report",
-      "target": "src_generate_master_report_opt"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L60",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report",
-      "target": "src_generate_master_report_run_numbers"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L360",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report",
-      "target": "src_generate_master_report_series_stats"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L366",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report",
-      "target": "src_generate_master_report_text_page"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L487",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report",
-      "target": "src_generate_master_report_write_csvs"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report_rationale_1",
-      "target": "src_generate_master_report"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L543",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report_main",
-      "target": "src_generate_master_report_run_numbers"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L82",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report_load_run",
-      "target": "src_generate_master_report_opt"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L105",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report_load_run",
-      "target": "src_generate_master_report_grok_epoch"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L550",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report_main",
-      "target": "src_generate_master_report_load_run"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L146",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report_build_plots_pdf",
-      "target": "src_generate_master_report_grok_vline"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L272",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report_comparison_pages",
-      "target": "src_generate_master_report_grok_vline"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L260",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report_build_plots_pdf",
-      "target": "src_generate_master_report_comparison_pages"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L553",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report_main",
-      "target": "src_generate_master_report_build_plots_pdf"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L404",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report_build_data_pdf",
-      "target": "src_generate_master_report_series_stats"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L393",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report_build_data_pdf",
-      "target": "src_generate_master_report_text_page"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L442",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report_build_data_pdf",
-      "target": "src_generate_master_report_dump_table"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L557",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report_main",
-      "target": "src_generate_master_report_build_data_pdf"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/generate_master_report.py",
-      "source_location": "L561",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_generate_master_report_main",
-      "target": "src_generate_master_report_write_csvs"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "src/models/model_shadow_with_layernorm.py",
       "source_location": "L8",
       "weight": 1.0,
@@ -6540,78 +7163,6 @@
       "confidence_score": 1.0,
       "source": "models_model_shadow_with_layernorm_transformer",
       "target": "models_model_shadow_with_layernorm_transformer_init"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/models/transformer_four_head.py",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_models_transformer_four_head_py_models_transformer_four_head",
-      "target": "src_models_transformer_four_head_py_models_transformer_four_head_transformerfourhead"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/models/transformer_four_head.py",
-      "source_location": "L56",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_models_transformer_four_head_py_models_transformer_four_head_transformerfourhead",
-      "target": "src_models_transformer_four_head_py_models_transformer_four_head_transformerfourhead_combine_heads"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/models/transformer_four_head.py",
-      "source_location": "L65",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_models_transformer_four_head_py_models_transformer_four_head_transformerfourhead",
-      "target": "src_models_transformer_four_head_py_models_transformer_four_head_transformerfourhead_forward"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/models/transformer_four_head.py",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_models_transformer_four_head_py_models_transformer_four_head_transformerfourhead",
-      "target": "src_models_transformer_four_head_py_models_transformer_four_head_transformerfourhead_init"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/models/transformer_four_head.py",
-      "source_location": "L47",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_models_transformer_four_head_py_models_transformer_four_head_transformerfourhead",
-      "target": "src_models_transformer_four_head_py_models_transformer_four_head_transformerfourhead_split_into_heads"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/models/transformer_four_head.py",
-      "source_location": "L70",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_models_transformer_four_head_py_models_transformer_four_head_transformerfourhead_forward",
-      "target": "src_models_transformer_four_head_py_models_transformer_four_head_transformerfourhead_split_into_heads"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/models/transformer_four_head.py",
-      "source_location": "L79",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_models_transformer_four_head_py_models_transformer_four_head_transformerfourhead_forward",
-      "target": "src_models_transformer_four_head_py_models_transformer_four_head_transformerfourhead_combine_heads"
     },
     {
       "relation": "contains",
@@ -6734,17 +7285,6 @@
       "target": "predictors_dropout"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/train_four_head.py",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_train_four_head",
-      "target": "predictors_dropout"
-    },
-    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -6754,521 +7294,6 @@
       "confidence_score": 1.0,
       "source": "predictors_dropout_compute_dropout_gap_multi_rate",
       "target": "predictors_dropout_compute_accuracy"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L54",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_apply_moving_average"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_compute_acceleration"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L88",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_compute_fast_slow_moving_averages"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_compute_l2_norm"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L10",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_compute_l2_norm_rate_of_decline"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L141",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_compute_ma_of_slow_ma"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L154",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_compute_noise_floor"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L35",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_detect_inflection"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L14",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_detect_l2_norm_drop"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L121",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_detect_ma_crossover"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L164",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_detect_ma_of_ma_trigger"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L181",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_detect_ma_of_ma_zero_crossing"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L63",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_resample_to_log_uniform_grid"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm_rationale_24",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_compute_acceleration"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L36",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm_rationale_36",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_detect_inflection"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L112",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm_compute_fast_slow_moving_averages",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_apply_moving_average"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L149",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm_compute_ma_of_slow_ma",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_apply_moving_average"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L55",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm_rationale_55",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_apply_moving_average"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L110",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm_compute_fast_slow_moving_averages",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_resample_to_log_uniform_grid"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L64",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm_rationale_64",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_resample_to_log_uniform_grid"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L89",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm_rationale_89",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_compute_fast_slow_moving_averages"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L122",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm_rationale_122",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_detect_ma_crossover"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L142",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm_rationale_142",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_compute_ma_of_slow_ma"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L155",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm_rationale_155",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_compute_noise_floor"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L165",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm_rationale_165",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_detect_ma_of_ma_trigger"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/predictors/l2_norm.py",
-      "source_location": "L182",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_predictors_l2_norm_py_predictors_l2_norm_rationale_182",
-      "target": "src_predictors_l2_norm_py_predictors_l2_norm_detect_ma_of_ma_zero_crossing"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/train_four_head.py",
-      "source_location": "L86",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_train_four_head",
-      "target": "src_train_four_head_get_next_run_number"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/train_four_head.py",
-      "source_location": "L59",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_train_four_head",
-      "target": "src_train_four_head_migrate_legacy_flat_run"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/train_four_head.py",
-      "source_location": "L60",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_train_four_head_rationale_60",
-      "target": "src_train_four_head_migrate_legacy_flat_run"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L14",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements",
-      "target": "src_unified_measurements_predictormeasurements"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements_rationale_1",
-      "target": "src_unified_measurements"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L22",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements_predictormeasurements",
-      "target": "src_unified_measurements_predictormeasurements_create_subdirs"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L194",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements_predictormeasurements",
-      "target": "src_unified_measurements_predictormeasurements_generate_combined_report"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L170",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements_predictormeasurements",
-      "target": "src_unified_measurements_predictormeasurements_generate_dropout_visualizations"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L91",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements_predictormeasurements",
-      "target": "src_unified_measurements_predictormeasurements_generate_l2_norm_visualizations"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements_predictormeasurements",
-      "target": "src_unified_measurements_predictormeasurements_init"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L72",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements_predictormeasurements",
-      "target": "src_unified_measurements_predictormeasurements_save_dropout_data"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L40",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements_predictormeasurements",
-      "target": "src_unified_measurements_predictormeasurements_save_l2_norm_data"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L32",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements_predictormeasurements",
-      "target": "src_unified_measurements_predictormeasurements_save_training_data"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L274",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements_predictormeasurements",
-      "target": "src_unified_measurements_predictormeasurements_smooth_signal"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L15",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements_rationale_15",
-      "target": "src_unified_measurements_predictormeasurements"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L20",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements_predictormeasurements_init",
-      "target": "src_unified_measurements_predictormeasurements_create_subdirs"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements_rationale_23",
-      "target": "src_unified_measurements_predictormeasurements_create_subdirs"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L33",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements_rationale_33",
-      "target": "src_unified_measurements_predictormeasurements_save_training_data"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L48",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements_predictormeasurements_save_l2_norm_data",
-      "target": "src_unified_measurements_predictormeasurements_smooth_signal"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L42",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements_rationale_42",
-      "target": "src_unified_measurements_predictormeasurements_save_l2_norm_data"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L74",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements_rationale_74",
-      "target": "src_unified_measurements_predictormeasurements_save_dropout_data"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L97",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements_rationale_97",
-      "target": "src_unified_measurements_predictormeasurements_generate_l2_norm_visualizations"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L175",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements_rationale_175",
-      "target": "src_unified_measurements_predictormeasurements_generate_dropout_visualizations"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L200",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements_rationale_200",
-      "target": "src_unified_measurements_predictormeasurements_generate_combined_report"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "src/unified_measurements.py",
-      "source_location": "L278",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_unified_measurements_rationale_278",
-      "target": "src_unified_measurements_predictormeasurements_smooth_signal"
     },
     {
       "relation": "contains",
@@ -8967,5 +8992,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "fcc69087399091e0a97532d84c7867baf1180dcd"
+  "built_at_commit": "029b73903a116b3290dc0d55d2c50c61c2077436"
 }

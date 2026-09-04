@@ -1,16 +1,16 @@
 # Graph Report - grokking-benchmark  (2026-09-04)
 
 ## Corpus Check
-- 55 files · ~464,180 words
+- 55 files · ~465,445 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 411 nodes · 471 edges · 40 communities (34 shown, 6 thin omitted)
+- 409 nodes · 475 edges · 38 communities (34 shown, 4 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `fcc69087`
+- Built from commit: `029b7390`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -42,14 +42,12 @@
 - [[_COMMUNITY_Community 28|Community 28]]
 - [[_COMMUNITY_Community 29|Community 29]]
 - [[_COMMUNITY_Community 30|Community 30]]
-- [[_COMMUNITY_Community 32|Community 32]]
 - [[_COMMUNITY_Community 33|Community 33]]
-- [[_COMMUNITY_Community 34|Community 34]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `Indian English Communication Skill` - 16 edges
-2. `BenchmarkAnalyzer` - 11 edges
-3. `PredictorMeasurements` - 11 edges
+2. `PredictorMeasurements` - 11 edges
+3. `BenchmarkAnalyzer` - 11 edges
 4. `L2 Norm Predictor — Easy Notes for Revision and Viva` - 11 edges
 5. `BenchmarkAnalyzer` - 10 edges
 6. `Literature` - 10 edges
@@ -65,9 +63,9 @@
   run_full_benchmark.py → tools/compile_python_files.py
 - `main()` --calls--> `Path`  [INFERRED]
   tools/collage_images.py → tools/compile_python_files.py
+- `main()` --calls--> `Path`  [INFERRED]
+  tools/md_to_image.py → tools/compile_python_files.py
 - `compile_python_files_to_pdf()` --calls--> `Path`  [INFERRED]
-  tools/compile_python_files_to_pdf.py → tools/compile_python_files.py
-- `gather_python_files()` --calls--> `Path`  [INFERRED]
   tools/compile_python_files_to_pdf.py → tools/compile_python_files.py
 
 ## Import Cycles
@@ -76,11 +74,11 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (40 total, 6 thin omitted)
+## Communities (38 total, 4 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.16
-Nodes (7): Dataset, generate_pairs(), get_dataloaders(), ModularArithmeticDataset, generate_pairs(), get_dataloaders(), ModularArithmeticDataset
+Nodes (7): generate_pairs(), get_dataloaders(), ModularArithmeticDataset, Dataset, generate_pairs(), get_dataloaders(), ModularArithmeticDataset
 
 ### Community 1 - "Community 1"
 Cohesion: 0.23
@@ -99,16 +97,16 @@ Cohesion: 0.09
 Nodes (20): apply_moving_average(), compute_acceleration(), compute_fast_slow_moving_averages(), compute_ma_of_slow_ma(), compute_noise_floor(), detect_inflection(), detect_ma_crossover(), detect_ma_of_ma_trigger() (+12 more)
 
 ### Community 5 - "Community 5"
-Cohesion: 0.09
-Nodes (20): apply_moving_average(), compute_acceleration(), compute_fast_slow_moving_averages(), compute_ma_of_slow_ma(), compute_noise_floor(), detect_inflection(), detect_ma_crossover(), detect_ma_of_ma_trigger() (+12 more)
+Cohesion: 0.70
+Nodes (4): get_images(), horizontal_collage(), main(), vertical_collage()
 
 ### Community 6 - "Community 6"
 Cohesion: 0.20
 Nodes (9): Core Project Files, Directory Structure, Documentation, Experiments & Results, Grokking Predictors Benchmark, Other, Quick Reference, Source Code (+1 more)
 
 ### Community 7 - "Community 7"
-Cohesion: 0.14
-Nodes (13): Path, get_images(), horizontal_collage(), main(), vertical_collage(), main(), should_skip(), compile_python_files_to_pdf() (+5 more)
+Cohesion: 0.47
+Nodes (3): main(), render_page(), wrap_markdown()
 
 ### Community 8 - "Community 8"
 Cohesion: 0.25
@@ -123,24 +121,24 @@ Cohesion: 0.40
 Nodes (4): data/modular_arithmetic.py, models/transformer.py, Python Project Compilation, train.py
 
 ### Community 11 - "Community 11"
-Cohesion: 0.17
-Nodes (6): Transformer, compute_accuracy(), compute_dropout_gap_multi_rate(), # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, migrate_legacy_flat_run(), Earlier versions of this script saved directly into results/four_head/     inste
+Cohesion: 0.11
+Nodes (7): TransformerFourHead, Transformer, compute_accuracy(), compute_dropout_gap_multi_rate(), # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, migrate_legacy_flat_run(), Earlier versions of this script saved directly into results/four_head/     inste
 
 ### Community 19 - "Community 19"
 Cohesion: 0.10
-Nodes (11): PredictorMeasurements, Unified measurement collection for L2 Norm and Dropout predictors. Ensures consi, Collects and saves all measurements for both predictors., Generate standalone Dropout visualization graphs., Generate combined PDF report with all measurements., Create subdirectories for each predictor., Apply simple moving average smoothing., Save core training metrics. (+3 more)
+Nodes (11): PredictorMeasurements, Unified measurement collection for L2 Norm and Dropout predictors. Ensures consi, Generate standalone L2 Norm visualization graphs., Collects and saves all measurements for both predictors., Generate standalone Dropout visualization graphs., Generate combined PDF report with all measurements., Create subdirectories for each predictor., Apply simple moving average smoothing. (+3 more)
 
 ### Community 20 - "Community 20"
 Cohesion: 0.20
 Nodes (8): discover_run_dirs(), migrate_legacy_flat_run(), plot_comparison(), plot_single_run(), Recreates this run's own 8 plots, saved inside results/four_head/run_<N>/ itself, Builds 4 plots overlaying every discovered run together, saved     directly in r, Same migration as train_four_head.py — kept here too so this     script can be r, Finds every run_<N> folder inside base_dir, sorted by run number     (not alphab
 
 ### Community 21 - "Community 21"
-Cohesion: 0.13
-Nodes (18): _analysis_outputs_present(), BenchmarkAnalyzer, main(), prepare_four_head_dir(), Run one four-head training session, then verify it really finished., Load all four-head runs., Ordered keys of the four-head runs that actually loaded., Find grokking epoch (test acc > 90%). (+10 more)
+Cohesion: 0.09
+Nodes (24): Path, _analysis_outputs_present(), BenchmarkAnalyzer, main(), prepare_four_head_dir(), Run one four-head training session, then verify it really finished., Load all four-head runs., Ordered keys of the four-head runs that actually loaded. (+16 more)
 
 ### Community 22 - "Community 22"
-Cohesion: 0.26
-Nodes (14): build_data_pdf(), build_plots_pdf(), _comparison_pages(), _dump_table(), grok_epoch(), _grok_vline(), load_run(), main() (+6 more)
+Cohesion: 0.07
+Nodes (38): apply_moving_average(), compute_acceleration(), compute_fast_slow_moving_averages(), compute_ma_of_slow_ma(), compute_noise_floor(), compute_per_module_sum_of_squared_weights(), compute_sum_of_squared_weights(), detect_inflection() (+30 more)
 
 ### Community 23 - "Community 23"
 Cohesion: 0.06
@@ -177,22 +175,22 @@ Nodes (6): How to run, nanda_l2_p113 — L2-Norm predictor on (a + b) mod 113, O
 ## Knowledge Gaps
 - **103 isolated node(s):** `What this is`, `The four deliberate differences from `src/``, `Why `p = 113`, `betas = (0.9, 0.98)`, and the small init`, `How to run`, `Outputs` (+98 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **6 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Path` connect `Community 7` to `Community 21`?**
+- **Why does `Path` connect `Community 21` to `Community 5`, `Community 7`?**
   _High betweenness centrality (0.008) - this node is a cross-community bridge._
-- **Why does `main()` connect `Community 21` to `Community 7`?**
-  _High betweenness centrality (0.005) - this node is a cross-community bridge._
-- **Why does `BenchmarkAnalyzer` connect `Community 21` to `Community 7`?**
-  _High betweenness centrality (0.005) - this node is a cross-community bridge._
-- **What connects `What this is`, `The four deliberate differences from `src/``, `Why `p = 113`, `betas = (0.9, 0.98)`, and the small init` to the rest of the system?**
-  _178 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `L2 Norm + Dropout analysis report for the four-head transformer.  Standalone too`, `Load one run from the per-predictor subdir layout.`, `First 1-indexed epoch where test accuracy exceeds threshold.` to the rest of the system?**
+  _180 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 4` be split into smaller, more focused modules?**
   _Cohesion score 0.09420289855072464 - nodes in this community are weakly interconnected._
-- **Should `Community 5` be split into smaller, more focused modules?**
-  _Cohesion score 0.09420289855072464 - nodes in this community are weakly interconnected._
-- **Should `Community 7` be split into smaller, more focused modules?**
-  _Cohesion score 0.14285714285714285 - nodes in this community are weakly interconnected._
+- **Should `Community 11` be split into smaller, more focused modules?**
+  _Cohesion score 0.10822510822510822 - nodes in this community are weakly interconnected._
+- **Should `Community 19` be split into smaller, more focused modules?**
+  _Cohesion score 0.10476190476190476 - nodes in this community are weakly interconnected._
+- **Should `Community 21` be split into smaller, more focused modules?**
+  _Cohesion score 0.0915915915915916 - nodes in this community are weakly interconnected._
+- **Should `Community 22` be split into smaller, more focused modules?**
+  _Cohesion score 0.06755260243632337 - nodes in this community are weakly interconnected._
