@@ -1,7 +1,7 @@
 # Graph Report - grokking-benchmark  (2026-09-04)
 
 ## Corpus Check
-- 71 files · ~479,551 words
+- 71 files · ~479,588 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `96812a49`
+- Built from commit: `ab1b7418`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -211,7 +211,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.012) - this node is a cross-community bridge._
 - **Why does `TransformerFourHead` connect `Community 42` to `Community 11`?**
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
-- **What connects `Find all Python (.py) files in the current project directory,     excluding virt`, `Read configs/nanda_unified.yaml -> flat dict of the constants used here.`, `Detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test` to the rest of the system?**
+- **What connects `Read configs/nanda_unified.yaml -> flat dict of the constants used here.`, `Detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test`, `Find all Python (.py) files in the current project directory,     excluding virt` to the rest of the system?**
   _221 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 4` be split into smaller, more focused modules?**
   _Cohesion score 0.09420289855072464 - nodes in this community are weakly interconnected._
