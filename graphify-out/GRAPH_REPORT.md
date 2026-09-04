@@ -1,16 +1,16 @@
 # Graph Report - grokking-benchmark  (2026-09-04)
 
 ## Corpus Check
-- 71 files · ~480,019 words
+- 72 files · ~482,227 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 524 nodes · 640 edges · 45 communities (41 shown, 4 thin omitted)
+- 560 nodes · 723 edges · 46 communities (42 shown, 4 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `6194032b`
+- Built from commit: `23208a40`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -20,6 +20,7 @@
 - [[_COMMUNITY_Community 2|Community 2]]
 - [[_COMMUNITY_Community 3|Community 3]]
 - [[_COMMUNITY_Community 4|Community 4]]
+- [[_COMMUNITY_Community 5|Community 5]]
 - [[_COMMUNITY_Community 6|Community 6]]
 - [[_COMMUNITY_Community 7|Community 7]]
 - [[_COMMUNITY_Community 8|Community 8]]
@@ -51,16 +52,16 @@
 - [[_COMMUNITY_Community 45|Community 45]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `Indian English Communication Skill` - 16 edges
-2. `PredictorMeasurements` - 11 edges
-3. `PredictorMeasurements` - 11 edges
-4. `BenchmarkAnalyzer` - 11 edges
-5. `L2 Norm Predictor — Easy Notes for Revision and Viva` - 11 edges
-6. `BenchmarkAnalyzer` - 10 edges
-7. `Literature` - 10 edges
-8. `PredictorMeasurements` - 9 edges
-9. `Results Directory Structure` - 9 edges
-10. `B. Combined Glossary` - 8 edges
+1. `main()` - 24 edges
+2. `new_fig()` - 17 edges
+3. `Indian English Communication Skill` - 16 edges
+4. `PredictorMeasurements` - 11 edges
+5. `PredictorMeasurements` - 11 edges
+6. `BenchmarkAnalyzer` - 11 edges
+7. `L2 Norm Predictor — Easy Notes for Revision and Viva` - 11 edges
+8. `BenchmarkAnalyzer` - 10 edges
+9. `Literature` - 10 edges
+10. `PredictorMeasurements` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `_analysis_outputs_present()` --calls--> `Path`  [INFERRED]
@@ -80,11 +81,11 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (45 total, 4 thin omitted)
+## Communities (46 total, 4 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.29
-Nodes (12): aggregate(), grok_epoch_from(), limit_cycle_check(), load_config(), main(), _num_or_none(), pick_device(), Detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test (+4 more)
+Cohesion: 0.09
+Nodes (20): Transformer, compute_accuracy(), compute_dropout_gap_multi_rate(), # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, aggregate(), grok_epoch_from(), limit_cycle_check(), load_config() (+12 more)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.23
@@ -101,6 +102,10 @@ Nodes (5): Archived — single-head experiment, How to bring it back, Nothing wa
 ### Community 4 - "Community 4"
 Cohesion: 0.09
 Nodes (20): apply_moving_average(), compute_acceleration(), compute_fast_slow_moving_averages(), compute_ma_of_slow_ma(), compute_noise_floor(), detect_inflection(), detect_ma_crossover(), detect_ma_of_ma_trigger() (+12 more)
+
+### Community 5 - "Community 5"
+Cohesion: 0.13
+Nodes (32): aggregate_summary_lines(), Collector, discover_seeds(), fmt_epoch(), load_aggregate(), load_seed(), main(), mark_grok() (+24 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.20
@@ -123,8 +128,8 @@ Cohesion: 0.40
 Nodes (4): data/modular_arithmetic.py, models/transformer.py, Python Project Compilation, train.py
 
 ### Community 11 - "Community 11"
-Cohesion: 0.06
-Nodes (16): generate_pairs(), get_dataloaders(), ModularArithmeticDataset, Dataset, Transformer, Transformer, generate_pairs(), get_dataloaders() (+8 more)
+Cohesion: 0.11
+Nodes (8): generate_pairs(), get_dataloaders(), ModularArithmeticDataset, Dataset, Transformer, generate_pairs(), get_dataloaders(), ModularArithmeticDataset
 
 ### Community 19 - "Community 19"
 Cohesion: 0.10
@@ -210,17 +215,17 @@ Nodes (11): add_results_section(), add_text_lines(), compile_py_to_pdf(), _escap
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `TransformerFourHead` connect `Community 42` to `Community 11`?**
-  _High betweenness centrality (0.005) - this node is a cross-community bridge._
+- **Why does `TransformerFourHead` connect `Community 42` to `Community 0`?**
+  _High betweenness centrality (0.004) - this node is a cross-community bridge._
 - **What connects `Escape a plain-text line for ReportLab's Paragraph XML/HTML parser,     convert`, `Append plain-text lines to the story as Paragraphs (or blank     Spacers), using`, `Format one seed's summary dict (matching results/nanda_unified/     seed_*/summa` to the rest of the system?**
-  _225 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _232 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `Community 0` be split into smaller, more focused modules?**
+  _Cohesion score 0.08712121212121213 - nodes in this community are weakly interconnected._
 - **Should `Community 4` be split into smaller, more focused modules?**
   _Cohesion score 0.09420289855072464 - nodes in this community are weakly interconnected._
+- **Should `Community 5` be split into smaller, more focused modules?**
+  _Cohesion score 0.13174603174603175 - nodes in this community are weakly interconnected._
 - **Should `Community 7` be split into smaller, more focused modules?**
   _Cohesion score 0.14285714285714285 - nodes in this community are weakly interconnected._
 - **Should `Community 11` be split into smaller, more focused modules?**
-  _Cohesion score 0.05647840531561462 - nodes in this community are weakly interconnected._
-- **Should `Community 19` be split into smaller, more focused modules?**
-  _Cohesion score 0.10476190476190476 - nodes in this community are weakly interconnected._
-- **Should `Community 21` be split into smaller, more focused modules?**
-  _Cohesion score 0.12535612535612536 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.11067193675889328 - nodes in this community are weakly interconnected._
