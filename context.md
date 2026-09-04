@@ -7470,3 +7470,434 @@ next-step cleanup.
    5 seeds without computing the new signal.
 3. Predictors 3–9 (Spectral next) remain unbuilt, deferred until the
    Dropout verdict lands.
+
+---
+
+## Session Summary — September 5, 2026 (Per-predictor resume logic + checkpoint saving built into `run_nanda_benchmark.py`, so the completed 5-seed run does not need to be archived to add dropout_variance)
+
+### 1. What was requested
+
+Jonathan flagged three problems with the previous session's
+`dropout_variance` implementation, all stemming from the same root cause
+(`seed_is_complete()` only checked whether `summary.json` exists, not
+what is inside it):
+
+1. A 5-seed run done before `dropout_variance` existed has a
+   `summary.json` without a `dropout_variance_predictor` key, but the
+   runner still says "complete - skipping" and never computes the new
+   signal for it.
+2. That old run never saved intermediate model weights, so
+   `dropout_variance` (which needs live checkpoints, not just per-epoch
+   scalar histories) cannot be recovered without a full retrain.
+3. Jonathan does not want to archive `results/nanda_unified/` every time
+   a new predictor is added — the resume logic itself should be able to
+   tell "seed is done" apart from "seed is done FOR predictor X."
+
+Direct implementation (current `CLAUDE.md`, no Opencode prompt).
+
+### 2. What changed in `run_nanda_benchmark.py`
+
+- **`seed_is_complete()` removed.** Replaced with:
+  - `get_done_predictors(output_dir, seed)` — reads `summary.json` (if it
+    exists) and returns the subset of `{"l2", "dropout_gap",
+    "dropout_variance"}` whose corresponding key
+    (`l2_predictor` / `dropout_final_gap_by_rate` /
+    `dropout_variance_predictor`) is present and not `None`. Empty set if
+    `summary.json` is missing, or exists but predates a given predictor.
+  - `is_predictor_done()` — one-predictor convenience wrapper.
+  - Small helpers added alongside: `checkpoints_dir_for()`,
+    `summary_path_for()`, `load_summary()`,
+    `has_saved_checkpoints()` (true iff `seed_{n}/checkpoints/*.pt`
+    exists and is non-empty).
+- **Model-weight checkpointing**, independent of the variance
+  measurement itself: inside `train_one_seed()`'s per-epoch loop, at
+  every `epoch in dv_checkpoint_set` (the existing 24-point log-uniform
+  Dropout-Variance schedule — no new schedule was introduced, checkpoint
+  saving just rides the same trigger points), `torch.save(
+  model.state_dict(), .../checkpoints/model_epoch_{epoch}.pt)` now runs
+  whenever `save_checkpoints` is true (default on; `--no_save_checkpoints`
+  disables it). This is deliberately decoupled from whether
+  `dropout_variance` itself is being computed this call, so a future
+  predictor (Spectral, etc.) can reuse these same `.pt` files later
+  without forcing a retrain just to get weight snapshots.
+- **New CLI flags:** `--predictors` (comma list, default
+  `l2,dropout_gap,dropout_variance`), `--overwrite` (comma list, default
+  empty — forces the named predictor(s) to be treated as NOT done even
+  if `summary.json` already has that key), `--no_save_checkpoints`.
+- **`train_one_seed()` signature changed** — now takes
+  `predictors_to_compute` (a set), `old_summary` (dict or `None`), and
+  `save_checkpoints`. Only the requested predictors' expensive work runs
+  (`compute_dv` / `compute_dropout_gap` / `compute_l2` flags gate the
+  dropout-variance checkpoint loop body, the final dropout-gap sweep, and
+  which L2 block wins). `l2_norm_history` itself is still collected every
+  epoch regardless (cheap, needed for the training-data plots either
+  way) — only the L2-*predictor-signal* block in `summary.json` is
+  conditionally skipped/reused. For any predictor NOT in
+  `predictors_to_compute`, its block is carried forward from
+  `old_summary` unchanged (or left `None` if there was no old block) —
+  **no old predictor block is ever silently dropped or overwritten with
+  nothing.**
+- **New function `recompute_from_checkpoints(seed, args, cfg, device,
+  predictors_to_compute, old_summary)`** — for the case where the only
+  missing predictor is `dropout_variance` AND
+  `has_saved_checkpoints()` is true for that seed: rebuilds a fresh
+  `TransformerFourHead` (untouched — same constructor, no new code path
+  in the model itself), loads each saved `model_epoch_*.pt`
+  `state_dict()` in turn, and re-runs `compute_dropout_variance` /
+  `compute_dropout_gap_multi_rate` (DRC subset) at each — **zero
+  training epochs executed.** `grok_epoch` is read from `old_summary`
+  (already known, does not need recomputation). Every other key in
+  `old_summary` is copied into the new `summary.json` verbatim; only
+  `dropout_variance_predictor` is replaced. Asserts
+  `predictors_to_compute <= {"dropout_variance"}` — this function
+  deliberately does NOT know how to rebuild `l2` or `dropout_gap` from
+  checkpoints alone (both need either the full per-epoch weight-norm
+  history, or specifically the true final-epoch weights, neither of
+  which the checkpoint schedule guarantees on its own), so those two
+  always fall through to a full `train_one_seed()` retrain if missing.
+- **`main()`'s seed loop rewritten**: for each seed, compute
+  `get_done_predictors()`, subtract `--overwrite`, print a per-predictor
+  `"[seed N] {predictor} complete - skipping"` line for anything already
+  satisfied, and collect the rest into `missing`. If `missing` is empty,
+  reload `old_summary` and move on (same as the old behaviour, just
+  finer-grained). If not empty: use `recompute_from_checkpoints()` when
+  possible (see above), otherwise call `train_one_seed()` with only
+  `missing` as `predictors_to_compute`, passing `old_summary` through so
+  already-done predictors' blocks survive the retrain.
+- **`aggregate()`** — the L2-Norm and dropout-gap per-seed print loops
+  now use `.get(...)` and print `"n/a (not computed for this seed)"`
+  instead of crashing on a `KeyError` for a summary that is missing that
+  block (the Dropout-Variance loop already had this guard from the
+  previous session). `aggregate.json`'s own schema is unchanged — each
+  seed's full (possibly partial) `summary` dict is still embedded as-is.
+- **`compute_dropout_variance`'s docstring** (in `src/predictors/dropout.py`
+  — already referenced Salah & Yevick from the previous session) was
+  left as-is; instead the **module-level comment block above the
+  `DROPOUT_VARIANCE_*` constants in `run_nanda_benchmark.py`** was
+  expanded to spell out both deviations from the paper in one place:
+  paper uses 100 passes at rate 0.3 for their Figure 1 sweep, this
+  project uses `n_samples=30` at `rate=0.5` (their own Figure 2 DRC shows
+  the clearest pre-/post-grok separation at 0.5) for MPS wall-clock
+  budget; paper implicitly measures at every epoch, this project uses
+  24 log-uniform checkpoints instead, for the same reason.
+
+### 3. What did NOT change
+
+- `src/predictors/l2_norm.py`, `TransformerFourHead`
+  (`src/models/transformer_four_head.py`), `archive/`, and every file
+  under `results/nanda_unified/` (the real, completed 5-seed run) —
+  untouched, verified with `git status`/`git diff` before and after.
+- `plot_nanda_results.py` — checked, not modified. Its `list_seeds()`
+  only globs for `seed_{n}/summary.json`; the new `checkpoints/`
+  subdirectory sitting alongside `l2_norm/`, `dropout/`, `reports/`,
+  `training/` inside each seed folder is simply never iterated over, so
+  no change was needed there.
+- `unified_measurements.py`'s `PredictorMeasurements` class — untouched;
+  `checkpoints/` is created directly by `run_nanda_benchmark.py`
+  (`os.makedirs`), not through that class, since it is not one of the
+  four predictor-measurement subdirectories that class manages.
+- `configs/nanda_unified.yaml` — untouched, read for reference only.
+
+### 4. Verification done (all three of the task's required checks)
+
+- `python -m py_compile run_nanda_benchmark.py` → OK.
+- **Fresh-run smoke test:** `python run_nanda_benchmark.py --seeds 1
+  --epochs 100 --output_dir results/test_smoke --predictors
+  l2,dropout_variance` → ran on `mps`, 20 checkpoints saved under
+  `seed_0/checkpoints/model_epoch_*.pt` (matches the 20-point schedule
+  for 100 epochs from the previous session), `dropout_variance_history.npy`
+  had 0 NaNs across 20 entries, `dropout_final_gap_by_rate` correctly
+  `None` in `summary.json` (not requested this run).
+- **Second run, same output_dir, same `--predictors`:** printed
+  `[seed 0] dropout_variance complete - skipping` and
+  `[seed 0] l2 complete - skipping` — no retraining, no epoch-loop
+  console output at all.
+- **Delete-and-recover test:** deleted
+  `seed_0/dropout/dropout_variance_signal.json` and manually nulled out
+  `dropout_variance_predictor` in `summary.json` (simulating an old
+  pre-dropout_variance run) while leaving `l2_predictor` and the saved
+  `checkpoints/*.pt` in place; ran with `--predictors dropout_variance
+  --overwrite dropout_variance` → printed `[seed 0] dropout_variance
+  recomputed from 20 saved checkpoints (no retrain)` (confirming
+  `recompute_from_checkpoints()` fired, not `train_one_seed()` — no
+  epoch-loop output), and `l2_predictor` in the rewritten `summary.json`
+  was confirmed byte-identical in content to before (reused, not
+  recomputed).
+- `results/test_smoke/` deleted after verification, per existing project
+  practice. `git status`/`git diff --stat` confirmed
+  `results/nanda_unified/` was never touched by any of the above.
+
+### 5. What was NOT done / still open
+
+1. **The real 5-seed re-run has still not been executed.** The good news
+   from this session: it no longer requires archiving
+   `results/nanda_unified/` first — running
+   `python run_nanda_benchmark.py --seeds 5 --epochs 40000 --output_dir
+   results/nanda_unified --config configs/nanda_unified.yaml` (unchanged
+   command) will now correctly detect that all 5 seeds already have `l2`
+   and `dropout_gap` done, skip those, and retrain each seed from scratch
+   only to obtain `dropout_variance` (a full retrain is still required
+   for the existing 5 seeds specifically, since they have no
+   `checkpoints/` saved at all — `has_saved_checkpoints()` will return
+   `False` for every one of them, so `recompute_from_checkpoints()` will
+   not fire; it will only skip retraining on a THIRD run, once
+   checkpoints exist). This retrain will reuse each seed's existing
+   `l2_predictor` and `dropout_final_gap_by_rate` blocks unchanged (per
+   §2 above), so the L2-Norm numbers already on record stay directly
+   comparable.
+2. Criterion 2 for the Dropout-Variance signal (does the variance-peak
+   epoch track grok epoch proportionally across seeds?) still has not
+   been checked — unchanged, still needs the real run from point 1.
+3. `plot_grok_epoch_bar`'s pre-existing `None`-grok-epoch crash (flagged
+   in the immediately preceding session's entry) — still not fixed,
+   still out of scope, still expected to be a non-issue once the real
+   5-seed run (which will grok on all 5 seeds) exists.
+4. Predictors 3–9 (Spectral next) remain unbuilt, unchanged.
+5. Not committed this session — Jonathan asked for the code change and
+   verification only; git commit instructions are pending his word, per
+   his standing instruction and this project's own Section 10 rule
+   (commit only when explicitly asked).
+
+### 6. Files Modified
+
+- `run_nanda_benchmark.py` — per-predictor resume logic, checkpoint
+  saving, `recompute_from_checkpoints()`, new CLI flags, `aggregate()`
+  guards, as described in §2. All changes described above are additive
+  to the existing L2-Norm/Dropout-Variance implementation from the
+  immediately preceding session — no existing predictor logic
+  (`compute_dropout_gap_multi_rate`, `compute_dropout_variance`, the L2
+  moving-average signals, the checkpoint-schedule formula itself) was
+  altered.
+- `context.md` — this entry.
+
+### Next
+
+1. Jonathan to decide when to kick off the real 5-seed retrain (point 1
+   in §5 above) — no archiving step needed first any more, the resume
+   logic now handles it correctly on its own.
+2. Once that completes, proceed exactly as the previous entry's "Next"
+   section already laid out: check Criterion 2, generate plots, reach a
+   pass/fail verdict on the reopened Dropout predictor, then move to
+   Spectral.
+
+---
+
+## Session Summary — September 5, 2026 (Checkpoint-recompute machinery generalised into a plugin registry; ONE full 5-seed re-train authorised by Jonathan but not yet executed; "spectral" stub built + torn down to prove the mechanism, not left in the shipped file)
+
+### 1. What was requested
+
+Jonathan confirmed intent: he is ready for **one** full 5-seed retrain
+(overriding the on-record L2 numbers is acceptable this one time), and
+this should be the **last** full retrain — every predictor added after
+this point (Spectral, AGE, ...) must have its result retained across
+future runs, never silently deleted or recomputed. He asked for the
+`get_done_predictors()` / checkpoint-saving / `--predictors` /
+`--overwrite` machinery (mostly already built in the immediately
+preceding session) to be re-verified against this exact framing, plus
+three specific things:
+1. `get_done_predictors()` as specified (already matched, no change
+   needed — same key-presence check as before).
+2. Checkpoint saving at the 24-point log-uniform schedule (already
+   matched from the previous session).
+3. **A concrete demonstration that a genuinely NEW, not-yet-built
+   predictor can be added later and have its result computed from saved
+   checkpoints alone, without retraining** — via a literal
+   `--predictors spectral` smoke test.
+
+Direct implementation, current `CLAUDE.md` (no Opencode prompt).
+
+### 2. What changed in `run_nanda_benchmark.py`
+
+- **`recompute_from_checkpoints()` generalised into a plugin registry**,
+  since the previous session's version was hard-coded to
+  `dropout_variance` only (an `assert predictors_to_compute <=
+  {"dropout_variance"}`) — not actually future-proof yet, just
+  future-shaped. Refactored:
+  - `_checkpoint_predictor_dropout_variance(model, test_loader, ckpt_dir,
+    ckpt_epochs, measurements, grok_epoch, device)` — the exact same
+    logic as before (load each checkpoint's `state_dict()` in turn,
+    re-run `compute_dropout_variance` / the DRC subset sweep, save the
+    same `.npy`/`.json` files, return the block dict), just pulled out
+    into a standalone function with a documented, reusable signature.
+  - `CHECKPOINT_PREDICTOR_FUNCS = {"dropout_variance":
+    _checkpoint_predictor_dropout_variance}` and
+    `CHECKPOINT_ONLY_PREDICTORS = set(CHECKPOINT_PREDICTOR_FUNCS.keys())`
+    — the registry. Adding a real future predictor that can be computed
+    from frozen weights alone (candidate: Spectral) is now: write one
+    function matching that signature, add one line to this dict, add the
+    predictor's name to `PREDICTOR_SUMMARY_KEY` / `ALL_PREDICTORS`. No
+    other function in this file needs to change — `main()`'s resume
+    loop, `recompute_from_checkpoints()`'s dispatch loop, and
+    `aggregate()`'s `.get()`-guarded printing all already generalise over
+    whatever is in `predictors_to_compute`.
+  - `recompute_from_checkpoints()` itself is now a thin loop: build the
+    model + test_loader once, list the saved checkpoint epochs once, then
+    for each predictor in `predictors_to_compute` call its registered
+    function and drop the returned block into `summary[
+    PREDICTOR_SUMMARY_KEY[predictor]]`. Every other key in `old_summary`
+    (the ones NOT recomputed this call) is still carried forward
+    unchanged, exactly as before.
+  - `main()`'s `can_skip_retrain` check now reads
+    `missing <= CHECKPOINT_ONLY_PREDICTORS` instead of the old hard-coded
+    `missing <= {"dropout_variance"}` — same behaviour today (only
+    `dropout_variance` is registered), automatically covers whatever gets
+    registered later.
+- **New combined skip message**: when a seed's `missing` set is empty
+  (every requested predictor already done), `main()` now prints
+  `"[seed N] all predictors complete - skipping"` in addition to the
+  existing per-predictor `"[seed N] {predictor} complete - skipping"`
+  lines — exact wording Jonathan's smoke-test-2 spec asked for.
+- L2/dropout-gap/dropout-variance computation logic inside
+  `train_one_seed()` itself — untouched from the previous session (no
+  bug found there; this session's changes are entirely in the
+  checkpoint-recompute path and the skip messaging).
+
+### 3. The "spectral" stub — built, exercised, then removed (not shipped)
+
+Jonathan's spec literally said `--predictors spectral (after you stub
+spectral)`. Per `CLAUDE.md` Section 15's predictor evaluation order
+(L2 → Dropout → **Spectral** → ...), Spectral is not actually built yet
+— a fake entry left permanently in `ALL_PREDICTORS`/the CLI's valid-value
+list would let `--predictors spectral` be run for real before the actual
+predictor is designed, which is exactly the "jump the queue" mistake
+this project's rules exist to prevent. So the stub was deliberately kept
+OUT of the shipped file:
+
+- Wrote a throwaway script in the scratchpad directory (not the repo)
+  that `import run_nanda_benchmark as rnb` and monkeypatches, purely in
+  that script's own process memory, three module-level dicts
+  (`PREDICTOR_SUMMARY_KEY`, `ALL_PREDICTORS`, `CHECKPOINT_PREDICTOR_FUNCS`
+  → `CHECKPOINT_ONLY_PREDICTORS`) to add one fake entry: `"spectral"` →
+  a dummy function computing the largest singular value of
+  `model.token_embedding.weight` at each checkpoint (explicitly labelled
+  in its own returned dict as `"stub_note": "NOT the real Spectral
+  predictor"` — not a real signal, just something checkpoint-shaped and
+  cheap to compute for the test).
+  - The SVD itself does not run on `mps` yet (PyTorch:
+    `aten::_linalg_svd.U` not implemented for MPS as of this session —
+    confirmed by hitting the actual `NotImplementedError` once before
+    fixing the throwaway script to move the weight tensor to `cpu()`
+    first for that one op; noted here only because it is a real,
+    reproducible MPS gap that would matter again if Spectral's real
+    implementation ever needs SVD directly on `mps` tensors).
+  - Called `rnb.get_done_predictors()`, confirmed
+    `{"l2", "dropout_gap", "dropout_variance"}` and NOT `"spectral"`;
+    confirmed `can_skip_retrain` evaluated `True`; called
+    `rnb.recompute_from_checkpoints(seed=0, ..., {"spectral"},
+    old_summary)` directly — **printed `"[seed 0] spectral recomputed
+    from 20 saved checkpoints (no retrain)"`, zero epoch-loop output** —
+    and asserted the returned `l2_predictor` / `dropout_variance_predictor`
+    blocks were unchanged (`==` against a `copy.deepcopy` taken before
+    the call) while a new `spectral_predictor` block appeared with
+    `num_checkpoints == 20`. All assertions passed.
+  - After the assertions passed, the script rewrote
+    `results/test_full/seed_0/summary.json` back to its exact pre-stub
+    state (dropping the fake `spectral_predictor` key) before exiting, so
+    even the test output directory carried no trace of the stub.
+  - The throwaway script itself was deleted after the run. **Nothing
+    about "spectral" exists in `run_nanda_benchmark.py` or anywhere else
+    in the repository after this session** — this was a proof that the
+    plugin mechanism works, not a start on the real Spectral predictor.
+
+### 4. What did NOT change
+
+- `src/predictors/l2_norm.py`, `TransformerFourHead`, `archive/`,
+  `plot_nanda_results.py`'s core logic, `unified_measurements.py`,
+  `configs/nanda_unified.yaml` — all untouched, same as the previous
+  session.
+- `results/nanda_unified/` (the real, completed 5-seed run) — untouched;
+  `git status`/`git diff --stat` checked before and after this session's
+  work, confirmed clean.
+- `src/predictors/dropout.py` — untouched; `compute_dropout_variance`'s
+  own docstring already carried the paper-comparison rationale from the
+  previous session, so no edit was needed there (the constants-block
+  comment above `DROPOUT_VARIANCE_RATE` etc. in `run_nanda_benchmark.py`,
+  already expanded last session, was re-read and confirmed to already
+  say everything Jonathan's spec asked for this time — 100-vs-30 passes,
+  0.3-vs-0.5 rate, every-epoch-vs-24-checkpoints).
+
+### 5. Verification done
+
+- `python -m py_compile run_nanda_benchmark.py` → OK, both immediately
+  after the registry refactor and again after the final edits.
+- **Smoke test 1** (`--seeds 1 --epochs 100 --output_dir
+  results/test_full --predictors l2,dropout_gap,dropout_variance
+  --overwrite l2,dropout_gap,dropout_variance`): ran on `mps`; 20
+  checkpoints saved (not 24 — expected at only 100 epochs, since the
+  log-uniform schedule dedupes near the start; confirmed this is the
+  same, already-understood behaviour from the previous session's smoke
+  test, not a new bug); `dropout_variance_history.npy` had 0 NaNs across
+  20 entries; `summary.json` had all three of `l2_predictor`,
+  `dropout_final_gap_by_rate`, `dropout_variance_predictor` present and
+  non-`None`.
+- **Smoke test 2** (same command, `--output_dir results/test_full`,
+  `--predictors l2,dropout_gap,dropout_variance`, no `--overwrite`):
+  printed `l2 complete - skipping`, `dropout_gap complete - skipping`,
+  `dropout_variance complete - skipping`, and the new combined
+  `all predictors complete - skipping` line — no epoch-loop console
+  output at all, confirming zero retraining.
+- **Smoke test 3** (the spectral-stub script, §3 above): passed all
+  assertions — no retrain, `l2`/`dropout_variance` blocks byte-identical
+  before/after, new `spectral_predictor` block appeared with the right
+  checkpoint count, and the on-disk summary was reverted afterward.
+- `results/test_full/` deleted after verification. `git status --short
+  results/nanda_unified/` and `git diff --stat` both confirmed the real
+  data directory was never touched by any test in this session.
+
+### 6. What was NOT done / still open
+
+1. **The real `--seeds 5 --epochs 40000` retrain has still not been
+   executed.** Jonathan authorised it (with `--overwrite
+   l2,dropout_gap,dropout_variance` to force-refresh L2/dropout_gap once
+   alongside generating the checkpoints) but this session was scoped to
+   implementation + smoke tests only, per the task instructions actually
+   given — the real command is long-running (roughly 80 minutes/seed x 5
+   seeds, per earlier session estimates, so multiple hours total) and
+   was not started without an explicit go-ahead to actually launch it.
+   **Exact command, ready to run when Jonathan says go:**
+   ```
+   python run_nanda_benchmark.py --seeds 5 --epochs 40000 \
+       --output_dir results/nanda_unified --config configs/nanda_unified.yaml \
+       --predictors l2,dropout_gap,dropout_variance \
+       --overwrite l2,dropout_gap,dropout_variance
+   ```
+   After this ONE run, Jonathan's stated intent is that no `--overwrite`
+   should be needed again — future predictors (Spectral etc.) should
+   just use `--predictors <existing>,<new_one>` with no `--overwrite`,
+   and the resume logic (now generalised, §2 above) will retain
+   `l2_predictor` / `dropout_final_gap_by_rate` / `dropout_variance_predictor`
+   automatically while computing only the new one.
+2. The real Spectral predictor itself is still **not built** — only a
+   throwaway, deliberately-not-shipped stub was exercised to prove the
+   checkpoint-plugin mechanism generalises (§3). Building the real
+   Spectral predictor (its actual signal definition, not just "some
+   checkpoint-shaped computation") remains future work, unchanged from
+   the predictor evaluation order.
+3. A real MPS gap was surfaced and noted for later:
+   `torch.linalg.svdvals` (and by extension other `aten::_linalg_svd*`
+   ops) does not run on `mps` yet — needs `.cpu()` first, or
+   `PYTORCH_ENABLE_MPS_FALLBACK=1`. Relevant if/when the real Spectral
+   predictor turns out to need SVD directly on GPU tensors.
+4. Criterion 2 for the Dropout-Variance signal (peak epoch tracking grok
+   epoch proportionally across seeds) — still unchanged, still needs the
+   real 5-seed run from point 1.
+5. Not committed this session — Jonathan asked for implementation +
+   verification only; commit is pending his word.
+
+### 7. Files Modified
+
+- `run_nanda_benchmark.py` — `recompute_from_checkpoints()` generalised
+  into a `CHECKPOINT_PREDICTOR_FUNCS` plugin registry, new combined
+  "all predictors complete - skipping" message, as described in §2. No
+  existing predictor computation logic was altered.
+- `context.md` — this entry.
+
+### Next
+
+1. Jonathan to say the word for the real 5-seed retrain — command is
+   ready in §6.1 above, no further code changes needed first.
+2. Once that completes: check Criterion 2, generate plots
+   (`python plot_nanda_results.py`), reach a pass/fail verdict on the
+   reopened Dropout predictor (both `dropout_gap` and
+   `dropout_variance`), then move to building the real Spectral
+   predictor next.

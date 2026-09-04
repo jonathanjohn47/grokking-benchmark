@@ -95,10 +95,31 @@ L2_QUIET_EPOCH_CUTOFF = 90
 # is where their Dropout Robustness Curve shows the clearest pre/post-grok
 # separation (see src/predictors/dropout.py's compute_dropout_variance
 # docstring for the full rationale).
+#
+# Deviations from the paper, and why (all for MPS wall-clock budget, same
+# spirit as this project's other predictors — no change to what is being
+# measured, only how densely/expensively):
+#   - paper: 100 stochastic passes per checkpoint, rate=0.3 for their
+#     Figure 1 sweep -> here: n_samples=30, rate=0.5 (their own Figure 2
+#     DRC shows rate=0.5 gives the clearest pre-/post-grok separation, so
+#     the primary signal uses that rate rather than 0.3).
+#   - paper: variance measured at (implicitly) every logged epoch -> here:
+#     DROPOUT_VARIANCE_NUM_CHECKPOINTS=24 log-uniform checkpoints across
+#     training (see dropout_variance_checkpoint_schedule below), since
+#     40000 epochs x 30 passes at every epoch is not affordable on MPS.
 DROPOUT_VARIANCE_RATE = 0.5
 DROPOUT_VARIANCE_N_SAMPLES = 30
 DROPOUT_VARIANCE_NUM_CHECKPOINTS = 24
 DROPOUT_VARIANCE_NUM_DRC_CHECKPOINTS = 5
+
+# Names understood by --predictors / --overwrite, and the summary.json key
+# each one's presence is checked against (see get_done_predictors below).
+PREDICTOR_SUMMARY_KEY = {
+    "l2": "l2_predictor",
+    "dropout_gap": "dropout_final_gap_by_rate",
+    "dropout_variance": "dropout_variance_predictor",
+}
+ALL_PREDICTORS = list(PREDICTOR_SUMMARY_KEY.keys())
 
 
 def dropout_variance_checkpoint_schedule(total_epochs, num_points=DROPOUT_VARIANCE_NUM_CHECKPOINTS):
@@ -176,8 +197,47 @@ def seed_dir_for(output_dir, seed):
     return os.path.join(output_dir, f"seed_{seed}")
 
 
-def seed_is_complete(output_dir, seed):
-    return os.path.isfile(os.path.join(seed_dir_for(output_dir, seed), "summary.json"))
+def checkpoints_dir_for(output_dir, seed):
+    return os.path.join(seed_dir_for(output_dir, seed), "checkpoints")
+
+
+def summary_path_for(output_dir, seed):
+    return os.path.join(seed_dir_for(output_dir, seed), "summary.json")
+
+
+def load_summary(output_dir, seed):
+    path = summary_path_for(output_dir, seed)
+    if not os.path.isfile(path):
+        return None
+    with open(path) as handle:
+        return json.load(handle)
+
+
+def get_done_predictors(output_dir, seed):
+    """Which predictors already have a real result in this seed's
+    summary.json, keyed by PREDICTOR_SUMMARY_KEY -> returns a set of
+    predictor names (e.g. {"l2", "dropout_gap"}). Empty set if
+    summary.json does not exist yet, or exists but is missing a key
+    entirely (e.g. an old run from before dropout_variance existed)."""
+    summary = load_summary(output_dir, seed)
+    if summary is None:
+        return set()
+    done = set()
+    for name, key in PREDICTOR_SUMMARY_KEY.items():
+        if summary.get(key) is not None:
+            done.add(name)
+    return done
+
+
+def is_predictor_done(output_dir, seed, predictor):
+    return predictor in get_done_predictors(output_dir, seed)
+
+
+def has_saved_checkpoints(output_dir, seed):
+    ckpt_dir = checkpoints_dir_for(output_dir, seed)
+    if not os.path.isdir(ckpt_dir):
+        return False
+    return any(name.endswith(".pt") for name in os.listdir(ckpt_dir))
 
 
 def grok_epoch_from(test_acc_history):
@@ -214,9 +274,26 @@ def limit_cycle_check(test_acc_history, grok_epoch, settle_epochs=500):
     }
 
 
-def train_one_seed(seed, args, cfg, device):
+def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
+                    save_checkpoints=True):
+    """Train seed from scratch. predictors_to_compute (a set, subset of
+    ALL_PREDICTORS) controls which expensive per-predictor work actually
+    runs this call; a predictor NOT in that set falls back to its block
+    in old_summary (if any) in the final summary.json, so a predictor
+    that was already done is never silently dropped or recomputed just
+    because a different predictor triggered this retrain. l2_norm_history
+    itself is always collected during training regardless (needed for the
+    training-data plots either way, and is cheap), but the L2-predictor
+    *signal* block still only overwrites old_summary's when "l2" is
+    actually requested."""
     out_dir = seed_dir_for(args.output_dir, seed)
     os.makedirs(out_dir, exist_ok=True)
+    ckpt_dir = checkpoints_dir_for(args.output_dir, seed)
+    if save_checkpoints:
+        os.makedirs(ckpt_dir, exist_ok=True)
+    compute_dropout_gap = "dropout_gap" in predictors_to_compute
+    compute_dv = "dropout_variance" in predictors_to_compute
+    compute_l2 = "l2" in predictors_to_compute
 
     # (a) deterministic per-seed RNG
     torch.manual_seed(seed)
@@ -303,19 +380,28 @@ def train_one_seed(seed, args, cfg, device):
         per_module_sum_w2_history.append(
             compute_per_module_sum_of_squared_weights(model))
 
-        # ---- Dropout-Variance predictor checkpoint (post-epoch, model frozen) ----
+        # ---- checkpoint save + Dropout-Variance predictor (post-epoch, model frozen) ----
         if epoch in dv_checkpoint_set:
-            mean_acc, variance = compute_dropout_variance(
-                model, test_loader, n_samples=DROPOUT_VARIANCE_N_SAMPLES,
-                dropout_rate=DROPOUT_VARIANCE_RATE, device=device)
-            dropout_variance_checkpoints.append(epoch)
-            dropout_variance_history.append(variance)
-            dropout_variance_mean_acc_history.append(mean_acc)
+            # Model-weight checkpointing is independent of whether the
+            # Dropout-Variance predictor is being computed THIS run — a
+            # future predictor (e.g. Spectral) can reuse these .pt files
+            # without needing to retrain, as long as save_checkpoints is on.
+            if save_checkpoints:
+                torch.save(model.state_dict(),
+                           os.path.join(ckpt_dir, f"model_epoch_{epoch}.pt"))
 
-            if epoch in dv_drc_checkpoint_set:
-                drc_results = compute_dropout_gap_multi_rate(model, test_loader, DROPOUT_RATES)
-                dropout_drc_snapshots[epoch] = {
-                    str(r): drc_results[r]["train_accuracy"] for r in DROPOUT_RATES}
+            if compute_dv:
+                mean_acc, variance = compute_dropout_variance(
+                    model, test_loader, n_samples=DROPOUT_VARIANCE_N_SAMPLES,
+                    dropout_rate=DROPOUT_VARIANCE_RATE, device=device)
+                dropout_variance_checkpoints.append(epoch)
+                dropout_variance_history.append(variance)
+                dropout_variance_mean_acc_history.append(mean_acc)
+
+                if epoch in dv_drc_checkpoint_set:
+                    drc_results = compute_dropout_gap_multi_rate(model, test_loader, DROPOUT_RATES)
+                    dropout_drc_snapshots[epoch] = {
+                        str(r): drc_results[r]["train_accuracy"] for r in DROPOUT_RATES}
 
         if epoch % LOG_EVERY == 0 or epoch == args.epochs - 1:
             now = time.time()
@@ -371,56 +457,72 @@ def train_one_seed(seed, args, cfg, device):
         json.dump(l2_signals, handle, indent=2)
 
     # (g) Dropout predictor — one multi-rate sweep on the final model
-    dropout_results = compute_dropout_gap_multi_rate(model, test_loader, DROPOUT_RATES)
-    model.train()  # compute_dropout_gap_multi_rate leaves the model in eval()
+    old_dropout_gap_block = (old_summary or {}).get("dropout_final_gap_by_rate")
+    if compute_dropout_gap:
+        dropout_results = compute_dropout_gap_multi_rate(model, test_loader, DROPOUT_RATES)
+        model.train()  # compute_dropout_gap_multi_rate leaves the model in eval()
 
-    final_epoch = args.epochs
-    measurements.save_dropout_data(
-        dropout_gap_epochs=[final_epoch],
-        dropout_gap_history_by_rate={
-            r: [dropout_results[r]["dropout_gap"]] for r in DROPOUT_RATES},
-        dropout_train_acc_by_rate={
-            r: [dropout_results[r]["train_accuracy"]] for r in DROPOUT_RATES},
-        dropout_eval_acc_by_rate={
-            r: [dropout_results[r]["eval_accuracy"]] for r in DROPOUT_RATES},
-        dropout_rates=DROPOUT_RATES,
-    )
-    dropout_json = {
-        str(r): {k: float(v) for k, v in dropout_results[r].items()}
-        for r in DROPOUT_RATES
-    }
-    with open(os.path.join(measurements.dropout_dir,
-                           "dropout_gap_final.json"), "w") as handle:
-        json.dump(dropout_json, handle, indent=2)
+        final_epoch = args.epochs
+        measurements.save_dropout_data(
+            dropout_gap_epochs=[final_epoch],
+            dropout_gap_history_by_rate={
+                r: [dropout_results[r]["dropout_gap"]] for r in DROPOUT_RATES},
+            dropout_train_acc_by_rate={
+                r: [dropout_results[r]["train_accuracy"]] for r in DROPOUT_RATES},
+            dropout_eval_acc_by_rate={
+                r: [dropout_results[r]["eval_accuracy"]] for r in DROPOUT_RATES},
+            dropout_rates=DROPOUT_RATES,
+        )
+        dropout_json = {
+            str(r): {k: float(v) for k, v in dropout_results[r].items()}
+            for r in DROPOUT_RATES
+        }
+        with open(os.path.join(measurements.dropout_dir,
+                               "dropout_gap_final.json"), "w") as handle:
+            json.dump(dropout_json, handle, indent=2)
+        dropout_gap_block = {
+            str(r): float(dropout_results[r]["dropout_gap"]) for r in DROPOUT_RATES}
+    else:
+        # not requested this call -> carry the old result forward unchanged
+        dropout_gap_block = old_dropout_gap_block
 
     # (h) Dropout-Variance predictor — per-checkpoint arrays + signal
-    np.save(os.path.join(measurements.dropout_dir, "dropout_variance_checkpoints.npy"),
-            np.array(dropout_variance_checkpoints, dtype=int))
-    np.save(os.path.join(measurements.dropout_dir, "dropout_variance_history.npy"),
-            np.array(dropout_variance_history, dtype=float))
-    np.save(os.path.join(measurements.dropout_dir, "dropout_variance_mean_acc_history.npy"),
-            np.array(dropout_variance_mean_acc_history, dtype=float))
-    with open(os.path.join(measurements.dropout_dir,
-                           "dropout_drc_snapshots.json"), "w") as handle:
-        json.dump({str(e): v for e, v in dropout_drc_snapshots.items()}, handle, indent=2)
+    old_dv_block = (old_summary or {}).get("dropout_variance_predictor")
+    if compute_dv:
+        np.save(os.path.join(measurements.dropout_dir, "dropout_variance_checkpoints.npy"),
+                np.array(dropout_variance_checkpoints, dtype=int))
+        np.save(os.path.join(measurements.dropout_dir, "dropout_variance_history.npy"),
+                np.array(dropout_variance_history, dtype=float))
+        np.save(os.path.join(measurements.dropout_dir, "dropout_variance_mean_acc_history.npy"),
+                np.array(dropout_variance_mean_acc_history, dtype=float))
+        with open(os.path.join(measurements.dropout_dir,
+                               "dropout_drc_snapshots.json"), "w") as handle:
+            json.dump({str(e): v for e, v in dropout_drc_snapshots.items()}, handle, indent=2)
 
-    peak_idx = int(np.argmax(dropout_variance_history))
-    variance_peak_epoch = dropout_variance_checkpoints[peak_idx]
-    dropout_variance_signal = {
-        "variance_peak_epoch": variance_peak_epoch,
-        "variance_peak_value": float(dropout_variance_history[peak_idx]),
-        "grok_epoch": grok_epoch,
-        "peak_to_grok_ratio": (
-            float(variance_peak_epoch) / grok_epoch if grok_epoch else None),
-        "rate": DROPOUT_VARIANCE_RATE,
-        "n_samples": DROPOUT_VARIANCE_N_SAMPLES,
-        "num_checkpoints": len(dropout_variance_checkpoints),
-    }
-    with open(os.path.join(measurements.dropout_dir,
-                           "dropout_variance_signal.json"), "w") as handle:
-        json.dump(dropout_variance_signal, handle, indent=2)
+        peak_idx = int(np.argmax(dropout_variance_history))
+        variance_peak_epoch = dropout_variance_checkpoints[peak_idx]
+        dropout_variance_block = {
+            "variance_peak_epoch": variance_peak_epoch,
+            "variance_peak_value": float(dropout_variance_history[peak_idx]),
+            "grok_epoch": grok_epoch,
+            "peak_to_grok_ratio": (
+                float(variance_peak_epoch) / grok_epoch if grok_epoch else None),
+            "rate": DROPOUT_VARIANCE_RATE,
+            "n_samples": DROPOUT_VARIANCE_N_SAMPLES,
+            "num_checkpoints": len(dropout_variance_checkpoints),
+        }
+        with open(os.path.join(measurements.dropout_dir,
+                               "dropout_variance_signal.json"), "w") as handle:
+            json.dump(dropout_variance_block, handle, indent=2)
+    else:
+        dropout_variance_block = old_dv_block
 
-    # per-seed summary + resume sentinel
+    # L2-predictor block: reuse the old one unless "l2" was requested.
+    old_l2_block = (old_summary or {}).get("l2_predictor")
+    l2_block = l2_signals if compute_l2 else (old_l2_block or l2_signals)
+
+    # per-seed summary + resume sentinel. Old blocks for predictors NOT
+    # recomputed this call are carried forward, never dropped.
     summary = {
         "seed": seed,
         "epochs": args.epochs,
@@ -434,10 +536,9 @@ def train_one_seed(seed, args, cfg, device):
         "sum_w2_final": float(sum_w2_history[-1]),
         "token_embedding_share_init": float(
             per_module_sum_w2_history[0]["token_embedding"] / sum_w2_history[0]),
-        "l2_predictor": l2_signals,
-        "dropout_final_gap_by_rate": {
-            str(r): float(dropout_results[r]["dropout_gap"]) for r in DROPOUT_RATES},
-        "dropout_variance_predictor": dropout_variance_signal,
+        "l2_predictor": l2_block,
+        "dropout_final_gap_by_rate": dropout_gap_block,
+        "dropout_variance_predictor": dropout_variance_block,
         "limit_cycle_check": limit_cycle_check(test_acc_history, grok_epoch),
         "wall_time_sec": round(time.time() - started, 1),
     }
@@ -447,6 +548,127 @@ def train_one_seed(seed, args, cfg, device):
     print(f"[seed {seed}] done in {summary['wall_time_sec']}s  "
           f"grok_epoch={grok_epoch}  "
           f"final_test_acc={summary['final_test_acc']:.4f}", flush=True)
+    return summary
+
+
+def _checkpoint_predictor_dropout_variance(model, test_loader, ckpt_dir, ckpt_epochs,
+                                            measurements, grok_epoch, device):
+    """CHECKPOINT_PREDICTOR_FUNCS["dropout_variance"] — loads each saved
+    checkpoint into `model` in turn and rebuilds the same variance-peak
+    signal that train_one_seed computes live during training. Returns the
+    dropout_variance_predictor block; also re-writes the same .npy/.json
+    files train_one_seed writes, so downstream (plot_nanda_results.py)
+    cannot tell a live-trained result from a checkpoint-recomputed one.
+
+    This is the reference shape for any FUTURE checkpoint-only predictor
+    (e.g. Spectral): take (model, test_loader, ckpt_dir, ckpt_epochs,
+    measurements, grok_epoch, device), load each checkpoint's
+    state_dict() into `model` yourself, compute your signal, save your own
+    files under measurements.<predictor>_dir, and return one block dict —
+    then register the function in CHECKPOINT_PREDICTOR_FUNCS below and add
+    the predictor's name to PREDICTOR_SUMMARY_KEY / ALL_PREDICTORS /
+    CHECKPOINT_ONLY_PREDICTORS. No other part of this file needs to
+    change."""
+    drc_checkpoints = set(pick_drc_checkpoint_subset(ckpt_epochs))
+    dropout_variance_checkpoints, dropout_variance_history = [], []
+    dropout_variance_mean_acc_history = []
+    dropout_drc_snapshots = {}
+
+    for epoch in ckpt_epochs:
+        state = torch.load(os.path.join(ckpt_dir, f"model_epoch_{epoch}.pt"), map_location=device)
+        model.load_state_dict(state)
+        mean_acc, variance = compute_dropout_variance(
+            model, test_loader, n_samples=DROPOUT_VARIANCE_N_SAMPLES,
+            dropout_rate=DROPOUT_VARIANCE_RATE, device=device)
+        dropout_variance_checkpoints.append(epoch)
+        dropout_variance_history.append(variance)
+        dropout_variance_mean_acc_history.append(mean_acc)
+        if epoch in drc_checkpoints:
+            drc_results = compute_dropout_gap_multi_rate(model, test_loader, DROPOUT_RATES)
+            dropout_drc_snapshots[epoch] = {
+                str(r): drc_results[r]["train_accuracy"] for r in DROPOUT_RATES}
+
+    np.save(os.path.join(measurements.dropout_dir, "dropout_variance_checkpoints.npy"),
+            np.array(dropout_variance_checkpoints, dtype=int))
+    np.save(os.path.join(measurements.dropout_dir, "dropout_variance_history.npy"),
+            np.array(dropout_variance_history, dtype=float))
+    np.save(os.path.join(measurements.dropout_dir, "dropout_variance_mean_acc_history.npy"),
+            np.array(dropout_variance_mean_acc_history, dtype=float))
+    with open(os.path.join(measurements.dropout_dir,
+                           "dropout_drc_snapshots.json"), "w") as handle:
+        json.dump({str(e): v for e, v in dropout_drc_snapshots.items()}, handle, indent=2)
+
+    peak_idx = int(np.argmax(dropout_variance_history))
+    variance_peak_epoch = dropout_variance_checkpoints[peak_idx]
+    block = {
+        "variance_peak_epoch": variance_peak_epoch,
+        "variance_peak_value": float(dropout_variance_history[peak_idx]),
+        "grok_epoch": grok_epoch,
+        "peak_to_grok_ratio": (
+            float(variance_peak_epoch) / grok_epoch if grok_epoch else None),
+        "rate": DROPOUT_VARIANCE_RATE,
+        "n_samples": DROPOUT_VARIANCE_N_SAMPLES,
+        "num_checkpoints": len(dropout_variance_checkpoints),
+    }
+    with open(os.path.join(measurements.dropout_dir,
+                           "dropout_variance_signal.json"), "w") as handle:
+        json.dump(block, handle, indent=2)
+    return block
+
+
+# Predictors this runner knows how to (re)compute from already-saved
+# checkpoints/model_epoch_*.pt alone, with NO retraining. Adding a future
+# predictor here (once it exists) is the ONLY change needed for it to gain
+# the same "compute later, no retrain" resume behaviour dropout_variance
+# already has — see _checkpoint_predictor_dropout_variance's docstring for
+# the exact function shape expected.
+CHECKPOINT_PREDICTOR_FUNCS = {
+    "dropout_variance": _checkpoint_predictor_dropout_variance,
+}
+CHECKPOINT_ONLY_PREDICTORS = set(CHECKPOINT_PREDICTOR_FUNCS.keys())
+
+
+def recompute_from_checkpoints(seed, args, cfg, device, predictors_to_compute, old_summary):
+    """Compute predictor(s) that only need frozen model weights (currently
+    just "dropout_variance", via CHECKPOINT_PREDICTOR_FUNCS) from this
+    seed's already-saved checkpoints/model_epoch_*.pt, with NO retraining.
+    Every other block in old_summary is carried forward unchanged. Only
+    called when predictors_to_compute is a subset of
+    CHECKPOINT_ONLY_PREDICTORS and has_saved_checkpoints() is true for
+    this seed."""
+    assert predictors_to_compute <= CHECKPOINT_ONLY_PREDICTORS, (
+        f"recompute_from_checkpoints can only rebuild "
+        f"{sorted(CHECKPOINT_ONLY_PREDICTORS)} from saved weights; the rest "
+        f"need the full per-epoch training history")
+
+    out_dir = seed_dir_for(args.output_dir, seed)
+    ckpt_dir = checkpoints_dir_for(args.output_dir, seed)
+    p = cfg["modulus"]
+    batch_size = int(cfg["train_fraction"] * p * p)
+    _, test_loader = get_dataloaders(number=p, batch_size=batch_size)
+
+    model = TransformerFourHead(
+        vocab_size=p + 1, d_model=cfg["d_model"], num_heads=cfg["num_heads"],
+        init_std=cfg["init_std"],
+    ).to(device)
+
+    ckpt_epochs = sorted(
+        int(name[len("model_epoch_"):-len(".pt")])
+        for name in os.listdir(ckpt_dir) if name.startswith("model_epoch_") and name.endswith(".pt"))
+    measurements = PredictorMeasurements(out_dir, model_type="four_head")
+    grok_epoch = old_summary.get("grok_epoch")
+
+    summary = dict(old_summary)  # carry every other block forward unchanged
+    for predictor in sorted(predictors_to_compute):
+        func = CHECKPOINT_PREDICTOR_FUNCS[predictor]
+        block = func(model, test_loader, ckpt_dir, ckpt_epochs, measurements, grok_epoch, device)
+        summary[PREDICTOR_SUMMARY_KEY[predictor]] = block
+
+    with open(summary_path_for(args.output_dir, seed), "w") as handle:
+        json.dump(summary, handle, indent=2)
+
+    print(f"[seed {seed}] {', '.join(sorted(predictors_to_compute))} recomputed from "
+          f"{len(ckpt_epochs)} saved checkpoints (no retrain)", flush=True)
     return summary
 
 
@@ -467,7 +689,10 @@ def aggregate(summaries, args):
 
     print("\nL2-Norm predictor (per seed):")
     for s in summaries:
-        lp = s["l2_predictor"]
+        lp = s.get("l2_predictor")
+        if lp is None:
+            print(f"  seed {s['seed']}: n/a (not computed for this seed)")
+            continue
         print(f"  seed {s['seed']}: MA-crossover={lp['ma_crossover_epoch']}  "
               f"MA-of-MA zero-cross={lp['ma_of_ma_zero_crossing_epoch']}  "
               f"(grok={s['grok_epoch']})")
@@ -485,7 +710,10 @@ def aggregate(summaries, args):
 
     print("\nDropout gap at final epoch (per seed, by rate):")
     for s in summaries:
-        gaps = s["dropout_final_gap_by_rate"]
+        gaps = s.get("dropout_final_gap_by_rate")
+        if gaps is None:
+            print(f"  seed {s['seed']}: n/a (not computed for this seed)")
+            continue
         print(f"  seed {s['seed']}: " +
               "  ".join(f"p{r}={gaps[r]:+.3f}" for r in gaps))
 
@@ -531,6 +759,13 @@ def main():
                         help="full-batch epochs per seed")
     parser.add_argument("--output_dir", type=str, default="results/nanda_unified")
     parser.add_argument("--config", type=str, default="configs/nanda_unified.yaml")
+    parser.add_argument("--predictors", type=str, default="l2,dropout_gap,dropout_variance",
+                        help="comma-separated subset of " + ",".join(ALL_PREDICTORS))
+    parser.add_argument("--overwrite", type=str, default="",
+                        help="comma-separated predictors to force-recompute even if "
+                             "already present in summary.json")
+    parser.add_argument("--no_save_checkpoints", action="store_true",
+                        help="disable saving checkpoints/model_epoch_*.pt during training")
     args = parser.parse_args()
 
     if not os.path.isabs(args.output_dir):
@@ -538,6 +773,13 @@ def main():
     if not os.path.isabs(args.config):
         args.config = os.path.join(REPO_ROOT, args.config)
     os.makedirs(args.output_dir, exist_ok=True)
+
+    requested_predictors = {p.strip() for p in args.predictors.split(",") if p.strip()}
+    unknown = requested_predictors - set(ALL_PREDICTORS)
+    assert not unknown, f"--predictors: unknown predictor(s) {unknown}, valid: {ALL_PREDICTORS}"
+    overwrite_predictors = {p.strip() for p in args.overwrite.split(",") if p.strip()}
+    unknown_ow = overwrite_predictors - set(ALL_PREDICTORS)
+    assert not unknown_ow, f"--overwrite: unknown predictor(s) {unknown_ow}, valid: {ALL_PREDICTORS}"
 
     cfg = load_config(args.config)
     device = pick_device()
@@ -560,13 +802,34 @@ def main():
 
     summaries = []
     for seed in range(args.seeds):
-        if seed_is_complete(args.output_dir, seed):
-            with open(os.path.join(seed_dir_for(args.output_dir, seed),
-                                   "summary.json")) as handle:
-                summaries.append(json.load(handle))
-            print(f"[seed {seed}] complete - skipping (found summary.json)")
+        old_summary = load_summary(args.output_dir, seed)
+        done = get_done_predictors(args.output_dir, seed)
+        effective_done = done - overwrite_predictors
+
+        missing = set()
+        for predictor in sorted(requested_predictors):
+            if predictor in effective_done:
+                print(f"[seed {seed}] {predictor} complete - skipping")
+            else:
+                missing.add(predictor)
+
+        if not missing:
+            print(f"[seed {seed}] all predictors complete - skipping")
+            summaries.append(old_summary)
             continue
-        summaries.append(train_one_seed(seed, args, cfg, device))
+
+        can_skip_retrain = (
+            missing <= CHECKPOINT_ONLY_PREDICTORS
+            and old_summary is not None
+            and has_saved_checkpoints(args.output_dir, seed)
+        )
+        if can_skip_retrain:
+            summaries.append(
+                recompute_from_checkpoints(seed, args, cfg, device, missing, old_summary))
+        else:
+            summaries.append(train_one_seed(
+                seed, args, cfg, device, predictors_to_compute=missing,
+                old_summary=old_summary, save_checkpoints=not args.no_save_checkpoints))
 
     aggregate(summaries, args)
 
