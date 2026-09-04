@@ -46,3 +46,10 @@ safemytrip-13b58-firebase-adminsdk-fbsvc-74587cebc1.json
 
 # ── Archived pre-Nanda-Unified run data (local disk only) ──────────
 archive/p97_default/
+
+# ── Benchmark output (large npy, local disk only) ──────────────────
+results/nanda_unified/
+results/test_smoke/
+
+# ── make_pdf.py output artefact ────────────────────────────────────
+combined_code.pdf

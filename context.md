@@ -6121,3 +6121,110 @@ contra to the CLAUDE.md rule against deleting other predictors' code.
 Re-baseline training runs on the new substrate; 5-seed limit-cycle
 diagnostic; predictors 3–9 (Spectral, HTSR Alpha, AGE, Weight-PCA,
 Higher-MI, Commutator Defect) are still unbuilt.
+
+---
+
+## Session Summary — September 4, 2026 (`run_nanda_benchmark.py`: master runner for the Nanda-Unified benchmark, L2-Norm + Dropout only)
+
+### Request
+
+Write a repo-root master runner that trains N seeds on the Nanda-Unified
+substrate and runs the predictors built so far. Only 2 predictors exist
+(`src/predictors/l2_norm.py`, `src/predictors/dropout.py`) — predictors
+3–9 are NOT called. Write + verify + 100-epoch smoke only, no full
+40k×5 run. Direct implementation.
+
+### New file — `run_nanda_benchmark.py` (repo root)
+
+- **Args:** `--seeds` (default 5), `--epochs` (default 40000),
+  `--output_dir` (default `results/nanda_unified`), `--config` (default
+  `configs/nanda_unified.yaml`).
+- **All task/optimiser constants come from the yaml** via `load_config()`
+  — `modulus`, `vocab_size`, `train_fraction`, `d_model`, `num_heads`,
+  `init_std` (None → `0.8/sqrt(d_model)`), `lr`, `weight_decay`, `betas`.
+  No `97`/`98` anywhere in the file (grep-clean). Adds `src/` to
+  `sys.path`; imports nothing from `archive/`.
+- **Per seed** (`train_one_seed`):
+  - `torch.manual_seed(seed)` + `np.random.seed(seed)` — deterministic,
+    seed *i* uses seed value *i* (unlike `src/train_four_head.py` which
+    draws a random `torch.seed()`).
+  - `get_dataloaders(number=p, batch_size=int(train_fraction*p*p))`
+    (full-batch); asserts the `=` token id == `p` (113).
+  - `TransformerFourHead(vocab_size=p+1, d_model, num_heads, init_std)`.
+  - `AdamW(lr, betas, weight_decay)` from config.
+  - every epoch collects `train_acc, test_acc, loss, l2_norm, sum_w2,
+    per_module_sum_w2` (5 groups: `token_embedding`, `position_embedding`,
+    `attention_qkv`, `mlp`, `output_head`).
+  - console line every 1000 epochs (+ final): seed, epoch, train/test acc,
+    `sum_w2`.
+  - saves via `PredictorMeasurements(seed_dir, "four_head")` →
+    `seed_{n}/training/*.npy`, `seed_{n}/l2_norm/*.npy` (incl.
+    `sum_w2_history.npy`, `per_module_sum_w2.npy [5,E]`,
+    `per_module_sum_w2_names.npy`).
+  - **L2-Norm predictor** (post-training): `compute_fast_slow_moving_averages`
+    (fast 50 / slow 200), `detect_ma_crossover` (skip 100),
+    `compute_ma_of_slow_ma` (fast 20), `compute_noise_floor` (quiet
+    cutoff 90), `detect_ma_of_ma_zero_crossing` (skip 100). Writes
+    `seed_{n}/l2_norm/l2_predictor_signals.json` holding **both** the
+    MA-crossover epoch and the MA-of-MA zero-crossing epoch + noise floor
+    — the zero-crossing epoch is otherwise not persisted by
+    `save_l2_norm_data` (gap flagged earlier in context.md, now closed for
+    this runner).
+  - **Dropout predictor** (post-training, ONE sweep on the final model):
+    `compute_dropout_gap_multi_rate(model, test_loader, [0.1,0.3,0.5,0.7,0.9])`.
+    Saved through `save_dropout_data` with length-1 histories (keeps the
+    project's `dropout/*.npy` layout) + a readable
+    `dropout/dropout_gap_final.json`.
+  - writes `seed_{n}/summary.json` (grok epoch, final acc, init/final
+    `l2`/`sum_w2`, init token-embedding share, L2 signals, dropout gaps,
+    limit-cycle check) — this file is also the **resume sentinel**.
+- **After all seeds** (`aggregate`): mean/std/min/max grok epoch (test
+  acc > 0.9), per-seed L2 signals, per-seed dropout gap sweep, and a
+  **limit-cycle check** — for each grokked seed it takes the test-acc
+  tail 500 epochs after grok and flags `LIMIT CYCLE` if `min < 0.9` and
+  `std > 0.05` (the p=113 run_1 artefact); prints `k/n seeds`. Writes
+  `output_dir/aggregate.json`.
+- **Resume:** a seed whose `seed_{n}/summary.json` exists is skipped and
+  its summary reloaded. Partial/interrupted seed dirs (no summary.json)
+  are retrained from scratch (no mid-training checkpoint, same as
+  `train_four_head.py`).
+
+### Design notes
+
+- Dropout is a **single post-training measurement**, not per-epoch (task
+  spec 2g). Cheaper; the per-epoch dropout sweep still lives in
+  `src/train_four_head.py` if the full history is ever needed.
+- Report/visualisation generation (`generate_*`) is NOT called by the
+  runner — only the `.npy` + `.json` saves. Keeps it lean.
+- `run_full_benchmark.py` (the older orchestrator) is untouched and
+  independent.
+
+### Verification done
+
+- `py_compile run_nanda_benchmark.py` + every `src/*.py` → OK.
+- grep `97`/`98` in the new file → none.
+- `python run_nanda_benchmark.py --seeds 1 --epochs 100 --output_dir
+  results/test_smoke` → ran 13 s on MPS. Header showed `p=113`, `=` token
+  113, vocab 114, `init_std=0.07071`, `betas=(0.9, 0.98)`, full-batch
+  3830. `Σw²` rose 1045 → 1944 over 100 epochs (small-init memorisation
+  growth, matches `nanda_l2_p113`). Output tree correct
+  (`seed_0/{training,l2_norm,dropout}/`, `aggregate.json`); 
+  `per_module_sum_w2.npy` shape `(5, 100)` with the 5 named groups;
+  `summary.json` complete. **Resume tested** — re-run skipped `seed_0`.
+  Smoke dir (`results/test_smoke/`) deleted afterwards.
+
+### Files Modified / Added
+
+- Added: `run_nanda_benchmark.py` (repo root).
+- Added: `make_pdf.py` (repo root) — a small standalone dev utility
+  Jonathan wrote that dumps every `.py` in the repo into one PDF
+  (`combined_code.pdf`) for sharing. Not part of the benchmark; committed
+  alongside. `combined_code.pdf` itself is a generated artefact and is
+  gitignored.
+- Modified: `.gitignore` (`results/nanda_unified/`, `results/test_smoke/`,
+  `combined_code.pdf`), `context.md` (this entry).
+
+### Still pending (unchanged)
+
+Full `run_nanda_benchmark.py --seeds 5 --epochs 40000` re-baseline is
+NOT run yet. Predictors 3–9 still unbuilt.
