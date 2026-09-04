@@ -6044,3 +6044,80 @@ its own p=113 baseline.
   `src/generate_master_report.py`, `src/generate_l2_report.py`,
   `context.md` (this entry).
 - Moved: `runs/four_head/run_{1,2,3}/` → `archive/p97_default/` (disk only).
+
+### Commit
+
+- `029b739` — Shift unified benchmark to Nanda-Unified substrate (infra only)
+- `cbf30fb` — Refresh graphify-out (post-commit hook rebuild for 029b739)
+
+---
+
+## Addendum — same day: old `src/` snapshotted, `src/` is now the Nanda-Unified mainstream
+
+Jonathan asked to archive a copy of the old `src/` and keep `src/` going
+forward as the Nanda-Unified implementation. He was offered three scopes
+(snapshot only / snapshot + move the shadow experiment out / strip `src/`
+to 7 files) and chose **"snapshot only, `src/` untouched"** — the third
+option was flagged as breaking `train_four_head.py` (it imports
+`predictors.dropout`, predictor #2) and the smoke-train step, and as
+contra to the CLAUDE.md rule against deleting other predictors' code.
+
+### What was done
+
+- **`archive/src_p97_mainstream_old/`** — NEW. A full copy of `src/` as it
+  stood at commit `6005a9f` (the parent of the Nanda-Unified commit
+  `029b739`), extracted with `git archive 6005a9f src/ | tar -x
+  --strip-components=1`. 13 `.py` files + a `README.md` documenting the
+  old-vs-new differences (p=97, PyTorch-default init, `betas=(0.9,0.999)`,
+  MLP `bias=False`, hardcoded `=` token 97, `l2`-only logging). Nothing
+  imports from it; it is a read-only record. `archive/` is tracked (like
+  `archive/single_head/`), so this folder IS committed — unlike
+  `archive/p97_default/` which holds run data and stays gitignored.
+- **`src/` was NOT modified this step.** It is already the Nanda-Unified
+  mainstream from commit `029b739`. No files moved out, no files deleted.
+  Dropout (predictor #2), the plot/analysis tools, and the Shadow-LayerNorm
+  side-experiment all stay in `src/`.
+
+### Clean check on the live `src/` pipeline
+
+`grep` over `src/` for `97` / `98` / `0.999` / init:
+
+- **Live Nanda-Unified pipeline (`train_four_head.py` → `data` / `models/
+  transformer_four_head` / `predictors` / `unified_measurements`): CLEAN.**
+  No hardcoded `97` in executable code (only in comments describing the
+  change); no reliance on the `nn.Embedding` `N(0,1)` default (every matrix
+  gets an explicit `nn.init.normal_(std=init_std)`); `betas` is
+  `(0.9, 0.98)` read from the yaml, never `(0.9, 0.999)`.
+- **Shadow-LayerNorm side-experiment (`src/train_shadow_layernorm.py`,
+  `src/models/model_shadow_with_layernorm.py`): still `p=97`, `vocab=98`.**
+  This is a deliberately frozen side-experiment (see Aug 17 + Sept 3
+  entries), NOT part of the Nanda-Unified mainstream, and was left as-is
+  per the "src/ untouched" choice. Flagged, not changed.
+- **`src/analysis_l2_norm_four_head.py`: stale "mod 97" narrative strings**
+  (4 lines of report prose). Standalone manual tool, not on the pipeline
+  path. Cosmetic; left as-is.
+
+### Verify (done)
+
+- `py_compile` over every `src/*.py` → OK. `py_compile` over
+  `archive/src_p97_mainstream_old/*.py` → OK.
+- 1-epoch smoke train on MPS using `configs/nanda_unified.yaml` (real
+  `get_dataloaders` / `TransformerFourHead` / AdamW, one full-batch epoch):
+  - weight-matrix init stds 0.0703–0.0723 (target ~0.0707) ✓
+  - `token_embedding` share of `Σw²` = **6.9 %** (old default ~94 %) ✓
+  - `=` token id = **113**, labels ≤ 112, exactly 1 full batch ✓
+  - epoch-1 loss ≈ 4.74 ≈ ln(114) (near-uniform, correct for small init);
+    `l2² == Σw²` ✓
+
+### Files Modified / Added (addendum)
+
+- Added: `archive/src_p97_mainstream_old/` (13 `.py` files copied from
+  `6005a9f` + `README.md`).
+- Modified: `context.md` (this addendum).
+- `src/` unchanged this step.
+
+### Still pending (unchanged from the main entry)
+
+Re-baseline training runs on the new substrate; 5-seed limit-cycle
+diagnostic; predictors 3–9 (Spectral, HTSR Alpha, AGE, Weight-PCA,
+Higher-MI, Commutator Defect) are still unbuilt.
