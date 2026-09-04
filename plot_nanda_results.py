@@ -84,6 +84,7 @@ def load_seed(results_dir, seed):
     seed_dir = os.path.join(results_dir, f"seed_{seed}")
     training_dir = os.path.join(seed_dir, "training")
     l2_dir = os.path.join(seed_dir, "l2_norm")
+    dropout_dir = os.path.join(seed_dir, "dropout")
 
     with open(os.path.join(seed_dir, "summary.json")) as handle:
         summary = json.load(handle)
@@ -102,6 +103,12 @@ def load_seed(results_dir, seed):
         "fast_ma": np.load(os.path.join(l2_dir, "fast_ma.npy")),
         "slow_ma": np.load(os.path.join(l2_dir, "slow_ma.npy")),
         "ma_of_ma_diff": np.load(os.path.join(l2_dir, "ma_of_ma_diff.npy")),
+        "dropout_variance_checkpoints": np.load(
+            os.path.join(dropout_dir, "dropout_variance_checkpoints.npy")),
+        "dropout_variance_history": np.load(
+            os.path.join(dropout_dir, "dropout_variance_history.npy")),
+        "dropout_variance_mean_acc_history": np.load(
+            os.path.join(dropout_dir, "dropout_variance_mean_acc_history.npy")),
     }
 
 
@@ -335,6 +342,30 @@ def plot_dropout_gap_bar(d):
     return fig
 
 
+def plot_dropout_variance_curve(d):
+    """Dropout-Variance predictor signal (Salah & Yevick): variance of test
+    accuracy under repeated stochastic dropout, at each checkpoint epoch,
+    with this seed's grok epoch marked — the same visual language as the
+    L2-Norm curve/MA plots, so the two predictors are directly comparable."""
+    s = d["summary"]
+    fig, ax = new_fig()
+    ax.plot(d["dropout_variance_checkpoints"], d["dropout_variance_history"],
+             color="slateblue", linewidth=2, marker="o", markersize=4,
+             label="Var(test acc) under dropout (rate=0.5, k=30)")
+    dv = s.get("dropout_variance_predictor")
+    if dv is not None and dv.get("variance_peak_epoch") is not None:
+        ax.axvline(x=dv["variance_peak_epoch"], color=TRIGGER_COLOR, linestyle="--",
+                    linewidth=2, label=f"Variance peak (epoch {dv['variance_peak_epoch']})")
+    mark_grok(ax, s["grok_epoch"])
+    ax.set_xscale("log")
+    ax.set_xlabel("Epoch (log scale)")
+    ax.set_ylabel("Variance of test accuracy")
+    ax.set_title(f"seed {d['seed']} — Dropout-Variance Predictor")
+    ax.legend(fontsize=9)
+    ax.grid(True, alpha=0.3)
+    return fig
+
+
 def seed_summary_lines(d):
     """Full human-readable numbers for one seed — same content/format as
     make_pdf.py's RESULTS section."""
@@ -365,6 +396,16 @@ def seed_summary_lines(d):
         "    " + "  ".join(f"p{r}={gaps[r]:+.4f}" for r in gaps),
         "",
     ]
+    dv = s.get("dropout_variance_predictor")
+    if dv is not None:
+        ratio = dv["peak_to_grok_ratio"]
+        ratio_str = f"{ratio:.4f}" if ratio is not None else "None"
+        lines.append("  Dropout-Variance predictor:")
+        lines.append(f"    variance_peak_epoch          : {dv['variance_peak_epoch']}")
+        lines.append(f"    peak_to_grok_ratio            : {ratio_str}")
+        lines.append(f"    rate={dv['rate']}  n_samples={dv['n_samples']}  "
+                      f"num_checkpoints={dv['num_checkpoints']}")
+        lines.append("")
     if lc.get("applicable"):
         label = "LIMIT CYCLE" if lc["limit_cycle"] else "stable"
         lines.append(f"  Limit-cycle check             : {label}")
@@ -462,6 +503,37 @@ def plot_predictor_vs_grok_scatter(seeds_data):
     ax.set_xlabel("Actual grok epoch (log scale)")
     ax.set_ylabel("Predictor signal epoch (log scale)")
     ax.set_title("L2-Norm predictor signal vs. actual grok epoch, across seeds\n"
+                 "(flat / off-diagonal = predictor does not track grok timing)")
+    ax.legend(fontsize=9)
+    ax.grid(True, alpha=0.3)
+    return fig
+
+
+def plot_dropout_variance_vs_grok_scatter(seeds_data):
+    """The Dropout-Variance predictor's version of the key negative-result
+    plot: does variance_peak_epoch track the actual grok epoch across
+    seeds? Directly modeled on plot_predictor_vs_grok_scatter (L2-Norm)
+    for visual comparability — if the hypothesis holds, points should sit
+    near the y=x line; if it fails the same way L2-Norm did, they will sit
+    in a flat band instead."""
+    fig, ax = new_fig()
+    groks = [d["summary"]["grok_epoch"] for d in seeds_data]
+    peaks = [d["summary"]["dropout_variance_predictor"]["variance_peak_epoch"] for d in seeds_data]
+    seed_ids = [d["seed"] for d in seeds_data]
+
+    ax.scatter(groks, peaks, color="slateblue", s=100, marker="o",
+               label="Dropout-Variance peak epoch")
+    for g, pk, sid in zip(groks, peaks, seed_ids):
+        ax.annotate(f"s{sid}", (g, pk), fontsize=8, xytext=(4, 4), textcoords="offset points")
+
+    lims = [min(groks + peaks) * 0.5, max(groks + peaks) * 1.1]
+    ax.plot(lims, lims, color="black", linestyle="--", linewidth=1, alpha=0.5,
+             label="y = x (perfect predictor)")
+    ax.set_xscale("log")
+    ax.set_yscale("log")
+    ax.set_xlabel("Actual grok epoch (log scale)")
+    ax.set_ylabel("Variance-peak epoch (log scale)")
+    ax.set_title("Dropout-Variance predictor signal vs. actual grok epoch, across seeds\n"
                  "(flat / off-diagonal = predictor does not track grok timing)")
     ax.legend(fontsize=9)
     ax.grid(True, alpha=0.3)
@@ -606,6 +678,8 @@ def main():
             ("05_dropout_gap_grouped_bar.png", plot_dropout_gap_grouped_bar(seeds_data)),
             ("06_limit_cycle_bar.png", plot_limit_cycle_bar(seeds_data)),
             ("07_token_embedding_share_bar.png", plot_token_embedding_share_bar(seeds_data)),
+            ("08_dropout_variance_vs_grok_scatter.png",
+             plot_dropout_variance_vs_grok_scatter(seeds_data)),
         ]
         for filename, fig in comparison_plots:
             collector.add("comparison", filename, fig)
@@ -627,6 +701,7 @@ def main():
             collector.add(subdir, "07_ma_of_ma_diff_log.png", plot_ma_of_ma_diff(d, log_x=True))
             collector.add(subdir, "08_ma_of_ma_diff_linear.png", plot_ma_of_ma_diff(d, log_x=False))
             collector.add(subdir, "09_dropout_gap_bar.png", plot_dropout_gap_bar(d))
+            collector.add(subdir, "10_dropout_variance_curve.png", plot_dropout_variance_curve(d))
 
     print("\n" + "=" * 72)
     print(f"Wrote {collector.count} figures under {output_dir}/")

@@ -7177,3 +7177,296 @@ directly instead.
    review, the Dropout close-then-reopen decision, and this CLAUDE.md
    rewrite) is being committed together in this same session, per
    Jonathan's request.
+
+---
+
+## Session Summary — September 5, 2026 (Dropout-Variance predictor implemented directly, per the Sept 4 `opencode_prompt_dropout_variance_predictor.md` spec; smoke-tested only, full 5-seed run NOT yet executed)
+
+### 1. What was requested
+
+Implement the per-checkpoint, stochastic-dropout variance signal (Salah &
+Yevick, arXiv:2507.11645) on the current Nanda-Unified four-head
+substrate, as a real "live" Dropout predictor signal — not the existing
+single post-training multi-rate sweep. This is the task already scoped
+in `opencode_prompt_dropout_variance_predictor.md` (git history, commit
+`50c5167`; the file itself is not present on disk any more, but the spec
+was pulled back out of git and followed closely). Per the now-current
+`CLAUDE.md` (Opencode workflow removed, Sept 4), this was implemented
+directly — no separate prompt file was written or executed.
+
+Asked Jonathan up front whether to re-run the existing (complete)
+5-seed/40000-epoch `results/nanda_unified/` batch immediately, or code +
+smoke-test only and let him decide separately when to run the real
+batch. **He chose code + smoke-test only** — the full 5-seed re-run with
+the new checkpoint hooks is a separate, not-yet-taken decision.
+
+### 2. Design decisions made this session
+
+- **`n_samples=30`** (not the paper's 100) at a single rate, **0.5**
+  (same DRC-based justification already on record in the Sept 4 draft:
+  Salah & Yevick's own Dropout Robustness Curve shows the clearest
+  pre-/post-grok separation at rate ≈0.5) — keeps the per-checkpoint cost
+  small relative to the ~80-minute/seed training budget.
+- **No BatchNorm exists anywhere in `TransformerFourHead`** — confirmed
+  by reading `src/models/transformer_four_head.py` before writing any
+  code. Only `self.dropout1`/`self.dropout2` (`nn.Dropout`) exist, and
+  there is deliberately no LayerNorm (Nanda-Unified spec). So
+  "dropout active during eval" is simply `model.train()` +
+  `torch.no_grad()` — no extra per-module eval-mode forcing was needed,
+  unlike the general BatchNorm caveat in the original task framing.
+- **Checkpoint schedule is log-uniform over actual epoch indices at
+  training time** (not a post-hoc resample of already-collected data,
+  since the dropout-variance measurement needs the live model weights at
+  that exact epoch — this is the one qualitative difference from how
+  L2-Norm's signals are computed, and is why a full re-run is required
+  to actually get real dropout-variance numbers; the already-completed
+  `results/nanda_unified/` run has no such checkpoints saved).
+  `dropout_variance_checkpoint_schedule(total_epochs, num_points=24)` in
+  `run_nanda_benchmark.py` — 0-based epoch indices (matches the training
+  loop's `for epoch in range(args.epochs)` convention), always includes
+  epoch 0 and the final epoch. A 5-point evenly-spaced-by-position subset
+  (`pick_drc_checkpoint_subset`) is used for the cheap qualitative
+  5-rate DRC-style snapshot (`compute_dropout_gap_multi_rate`, already
+  existing, `k=1`) — the expensive `k=30` sweep runs at every checkpoint,
+  not just the DRC subset.
+
+### 3. Files Modified
+
+- **`src/predictors/dropout.py`** — added `compute_dropout_variance(model,
+  data_loader, n_samples=30, dropout_rate=0.5, device=None)`, a NEW
+  function (existing `compute_accuracy` and `compute_dropout_gap_multi_rate`
+  untouched, same signatures/behavior as before). Runs `n_samples`
+  independent stochastic forward passes with `model.train()` +
+  `torch.no_grad()`, dropout rate set on both `dropout1`/`dropout2`,
+  collects test accuracy per pass, returns `(mean_accuracy,
+  variance_of_accuracy)`, restores `model.eval()` / `p=0.0` before
+  returning (same cleanup discipline as the existing function).
+- **`run_nanda_benchmark.py`**:
+  - New constants: `DROPOUT_VARIANCE_RATE=0.5`,
+    `DROPOUT_VARIANCE_N_SAMPLES=30`, `DROPOUT_VARIANCE_NUM_CHECKPOINTS=24`,
+    `DROPOUT_VARIANCE_NUM_DRC_CHECKPOINTS=5`.
+  - New helpers: `dropout_variance_checkpoint_schedule()`,
+    `pick_drc_checkpoint_subset()`.
+  - `train_one_seed()`: computes the checkpoint schedule once per seed
+    (from `args.epochs`); inside the per-epoch loop, after the existing
+    per-epoch logging block, calls `compute_dropout_variance` at each
+    scheduled checkpoint and (at the 5-point DRC subset only)
+    `compute_dropout_gap_multi_rate`; collects parallel arrays
+    (`dropout_variance_checkpoints/_history/_mean_acc_history`) and a
+    `dropout_drc_snapshots` dict.
+  - `grok_epoch = grok_epoch_from(test_acc_history)` was **moved earlier**
+    (right after `measurements.save_training_data(...)`, before the
+    L2-Norm signals block) so the new Dropout-Variance signal computation
+    can use it — the later duplicate assignment right before building
+    `summary` was removed. No other reordering; L2-Norm and the existing
+    Dropout multi-rate sweep blocks are otherwise untouched.
+  - New saves under `seed_{n}/dropout/` (alongside existing files, none
+    renamed/removed): `dropout_variance_checkpoints.npy`,
+    `dropout_variance_history.npy`,
+    `dropout_variance_mean_acc_history.npy`, `dropout_drc_snapshots.json`,
+    `dropout_variance_signal.json` (`variance_peak_epoch`,
+    `variance_peak_value`, `grok_epoch`, `peak_to_grok_ratio`, `rate`,
+    `n_samples`, `num_checkpoints`).
+  - `summary.json` gained a new top-level key, `dropout_variance_predictor`
+    (the same dict as `dropout_variance_signal.json`) — sibling to the
+    existing `l2_predictor` key, not a replacement.
+  - `aggregate()` gained a new per-seed print block ("Dropout-Variance
+    predictor (per seed): ... variance_peak_epoch=... peak/grok=..."),
+    mirroring the existing L2-Norm block. `aggregate.json`'s schema is
+    otherwise unchanged (the new signal reaches it automatically, since
+    each seed's full `summary` dict — now including
+    `dropout_variance_predictor` — is embedded under `"seeds"`, same as
+    before).
+- **`plot_nanda_results.py`**:
+  - `load_seed()` now also loads `dropout_variance_checkpoints.npy`,
+    `dropout_variance_history.npy`, `dropout_variance_mean_acc_history.npy`
+    from each seed's `dropout/` dir.
+  - New per-seed plot `plot_dropout_variance_curve(d)` — variance vs.
+    checkpoint epoch, variance-peak epoch marked (red dashed, same
+    `TRIGGER_COLOR` convention), grok epoch marked (green dotted, same
+    `mark_grok` helper as every other plot) — wired in as
+    `seed_{n}/10_dropout_variance_curve.png`.
+  - New cross-seed plot `plot_dropout_variance_vs_grok_scatter(seeds_data)`
+    — variance-peak epoch (y) vs. grok epoch (x), log-log, `y=x`
+    reference line — directly modeled on the existing
+    `plot_predictor_vs_grok_scatter` (L2-Norm) for visual comparability —
+    wired in as `comparison/08_dropout_variance_vs_grok_scatter.png`.
+  - `seed_summary_lines(d)` gained a "Dropout-Variance predictor:" block
+    (variance_peak_epoch, peak_to_grok_ratio, rate/n_samples/num_checkpoints)
+    in the per-seed text-summary page, same pattern as the existing L2
+    predictor block.
+  - Every existing plot function, the `Collector` class, and the overall
+    PDF/PNG dual-output structure are unchanged.
+
+### 4. Verification done
+
+- `python -m py_compile run_nanda_benchmark.py src/predictors/dropout.py
+  plot_nanda_results.py` → OK.
+- Smoke test: `python run_nanda_benchmark.py --seeds 1 --epochs 100
+  --output_dir results/test_smoke` → ran ~52s on MPS, no hang, no crash.
+  `dv_checkpoint_schedule(100)` produced 20 checkpoints
+  (`[0,1,2,3,4,5,6,8,10,13,15,19,24,29,36,44,54,66,81,99]`) — confirms
+  the log-spacing formula places real checkpoints well below epoch 100,
+  not just at the very end (this was explicitly checked, per the
+  original task's validation-step warning to "fix the formula before
+  moving on" if it didn't). `dropout_variance_history.npy` had no
+  NaN/degenerate values; lengths of `dropout_variance_checkpoints.npy` /
+  `_history.npy` / `_mean_acc_history.npy` all matched (20 each).
+  `dropout_drc_snapshots.json` had 5 entries (epochs 0, 5, 15, 36, 99),
+  each with all 5 dropout rates. `dropout_variance_signal.json` had
+  `variance_peak_epoch=8`, `grok_epoch=None`, `peak_to_grok_ratio=None`
+  (expected — 100 epochs is nowhere near grokking on this substrate, so
+  this run only proves the plumbing works, not the hypothesis, exactly
+  as the original task's validation steps anticipated).
+- `plot_nanda_results.py` run against the smoke-test output: the
+  **overview page rendered fine**, but the run then hit a **pre-existing,
+  unrelated crash** in `plot_grok_epoch_bar` (`TypeError: unsupported
+  operand type(s) for +: 'int' and 'NoneType'`) — caused by `grok_epoch`
+  being `None` (no grok in 100 epochs), which several already-existing
+  comparison plots (including the L2-Norm scatter) already assumed would
+  never happen. This is not a regression introduced this session — it is
+  the plotting script's existing, undocumented assumption that it is
+  only ever run against a fully-grokked benchmark result, and it
+  reproduces with `plot_grok_epoch_bar`, a function this session did not
+  touch. Not fixed this session (out of scope; flagged below).
+- Because of the above, the two **new** plot functions were verified in
+  isolation instead, with a small throwaway script (not saved to the
+  repo) feeding them synthetic-but-realistic grokked summaries (3 fake
+  seeds, grok epochs 7721/12686/25505, matching the real Sept 4 5-seed
+  run's actual values) — both `plot_dropout_variance_curve` and
+  `plot_dropout_variance_vs_grok_scatter` rendered without error.
+- `results/test_smoke/` deleted after verification, per existing project
+  practice. No file under `results/nanda_unified/` (the real, completed
+  5-seed run) was read, modified, or deleted this session.
+
+### 5. What was NOT done / still open
+
+1. **The real `--seeds 5 --epochs 40000` re-run has not been executed.**
+   The dropout-variance checkpoints are collected live during training —
+   they cannot be recovered from the already-completed
+   `results/nanda_unified/` run's saved histories. Jonathan will decide
+   separately when to kick off this run (same command as before:
+   `python run_nanda_benchmark.py --seeds 5 --epochs 40000 --output_dir
+   results/nanda_unified --config configs/nanda_unified.yaml`) — resume
+   logic means any seed whose `summary.json` already exists will be
+   skipped, so **the 5 already-completed seeds must first be archived or
+   the output_dir changed**, otherwise the runner will treat the old
+   summaries (which lack `dropout_variance_predictor`) as "already done"
+   and never compute the new signal for them. **Flagging this explicitly
+   so it is not missed:** either move `results/nanda_unified/` aside
+   (e.g. to `archive/`) or pass a new `--output_dir` before the real run.
+2. **Criterion 2 (does the variance peak track the grok epoch
+   proportionally across seeds?) has not been checked** — this requires
+   the real 5-seed run above. Once it exists, read
+   `aggregate.json`'s per-seed `dropout_variance_predictor` block, and
+   apply the exact same rigor used to close L2-Norm (tight, consistent
+   `variance_peak_epoch / grok_epoch` ratio despite a 3×+ spread in grok
+   epoch across seeds — not just "a peak exists somewhere near
+   grokking").
+3. **`plot_grok_epoch_bar`'s `None`-grok-epoch crash is pre-existing and
+   unrelated to this session's change** — flagged for a future session
+   if Jonathan ever wants to plot a partially-trained/non-grokked run;
+   not fixed here since it was out of this task's scope and the real
+   5-seed run (once executed) will not hit it (all 5 prior seeds
+   grokked).
+4. `Literature/` still does not have the Salah & Yevick PDF downloaded,
+   and `Literature/README.md`'s predictor→paper map still lists Dropout
+   as unmapped — unchanged from the Sept 4 entry, still optional,
+   Jonathan's call.
+5. Predictors 3–9 (Spectral next, per the `CLAUDE.md` order) remain
+   unbuilt — unchanged, still deferred until the reopened Dropout
+   investigation reaches a verdict.
+
+### Next
+
+1. Jonathan to decide when to run the real 5-seed benchmark with the new
+   checkpoint hooks (after archiving/moving the existing
+   `results/nanda_unified/` — see §5.1 above).
+2. Once that run completes: read `aggregate.json`, check Criterion 2 for
+   the Dropout-Variance signal, and generate the plots
+   (`python plot_nanda_results.py`) for the variance-vs-epoch curves and
+   the `dropout_variance_vs_grok_scatter.png` — the two artefacts the
+   original task asked to see.
+3. Reach a pass/fail verdict on the Dropout predictor (reopened Sept 4)
+   based on that Criterion-2 check, then move to Spectral (predictor 3).
+
+---
+
+## Session Summary — September 5, 2026 (Literature-mapping check for Dropout predictor; Salah & Yevick PDF added to `Literature/`; committed)
+
+### 1. What was asked and checked
+
+Jonathan asked which paper in `Literature/` the Dropout predictor is
+based on. Re-verified from scratch this session (not just recalled):
+grepped `Literature/exhaustive_literature_extraction_report.md` (2348
+lines, all 21 papers) for "dropout" — exactly **one** hit, in Paper 2's
+(Power et al., the base grokking paper) Methodology section, a passing
+mention of dropout as one item in a list of optimization/regularization
+ablations tested ("full-batch Adam with noise, momentum-related
+variants, dropout, weight decay, and gradient noise") — not a
+dropout-robustness or variance methodology, not a real match. Confirmed
+against the paper-title header list (all 21 `# [Paper N] - ...` headers)
+that no paper in this set is about dropout specifically. This reconfirms
+the same finding already on record from the Sept 4 "Dropout predictor
+REOPENED" entry (`Literature/README.md`'s own housekeeping notes already
+listed Dropout as unmapped) — nothing new was discovered, this was a
+verification pass, not a new result.
+
+Jonathan also asked about a "brief" file in `Literature/` — searched the
+whole repo (`find -iname "*brief*"`), found nothing. No such file exists
+on this machine; likely either a naming mix-up or the file lives only in
+the Windows Obsidian vault (`C:\Users\jonat\Documents\Obsidian
+Vaults\Grokking-Master-Thesis`, referenced in earlier sessions), which
+this machine cannot access. Not resolved — flagged, not chased further
+since Jonathan moved on to the actual literature-report check instead.
+
+### 2. Restated answer (for the record, in one place)
+
+**No paper in the 21-paper `Literature/` set is the basis for the
+Dropout predictor.** The actual source is external:
+**Ahmed Salah & David Yevick, "Tracing the Path to Grokking: Embeddings,
+Dropout, and Network Activation," arXiv:2507.11645** (also *Neural
+Processing Letters*, DOI `10.1007/s11063-026-11843-4`) — already
+identified and used as the basis for `compute_dropout_variance` in the
+previous session's implementation. Closest **in-set** conceptual (not
+literal) matches, both already on record from Sept 4: Paper 11 (Sokolić
+— Robust Large Margin Deep Neural Networks, input-perturbation
+robustness ↔ generalization) and Paper 2 (Power et al.'s own
+sharpness-vs-validation-accuracy correlation).
+
+### 3. File added — `Literature/Salah and Yevick.pdf`
+
+Jonathan downloaded the actual Salah & Yevick PDF into `Literature/`
+between sessions (found as an untracked file at commit time — 15 pages,
+1.1 MB, valid PDF, verified with `file`/`ls` before committing). This is
+the first time this paper physically exists in the repo — previously it
+was only cited by URL/DOI in `context.md`. `Literature/README.md`'s
+predictor→paper map still says "still needed" for Dropout as of this
+session; **not updated this session** (Jonathan did not ask for it,
+scope was the mapping question + commit) — flagged as the natural
+next-step cleanup.
+
+### 4. Files Modified / Added
+
+- Added: `Literature/Salah and Yevick.pdf` (Jonathan's addition, verified
+  and committed this session).
+- Modified: `context.md` (this entry).
+- No source or predictor code touched this session — this was a
+  literature/documentation session, following on from the previous
+  session's `compute_dropout_variance` implementation (still not run at
+  full 5-seed scale — see the immediately preceding entry's §5 for the
+  resume-logic / `--output_dir` warning that still applies).
+
+### Next
+
+1. Optional, not yet done: update `Literature/README.md`'s predictor→paper
+   map to point Dropout at the newly-added `Salah and Yevick.pdf` instead
+   of "still needed."
+2. Unchanged from the previous entry: the real 5-seed
+   `run_nanda_benchmark.py --epochs 40000` run (with the new
+   dropout-variance checkpoints) has not been executed; remember to move
+   the existing `results/nanda_unified/` aside (or use a new
+   `--output_dir`) before running it, or the resume logic will skip all
+   5 seeds without computing the new signal.
+3. Predictors 3–9 (Spectral next) remain unbuilt, deferred until the
+   Dropout verdict lands.

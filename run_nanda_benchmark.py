@@ -69,7 +69,10 @@ from predictors.l2_norm import (                                          # noqa
     compute_noise_floor,
     detect_ma_of_ma_zero_crossing,
 )
-from predictors.dropout import compute_dropout_gap_multi_rate             # noqa: E402
+from predictors.dropout import (                                          # noqa: E402
+    compute_dropout_gap_multi_rate,
+    compute_dropout_variance,
+)
 from unified_measurements import PredictorMeasurements                    # noqa: E402
 
 # The grok epoch is the first epoch test accuracy exceeds this (same
@@ -85,6 +88,50 @@ L2_SLOW_WINDOW = 200
 L2_MA_OF_MA_FAST_WINDOW = 20
 L2_SKIP_EPOCHS = 100
 L2_QUIET_EPOCH_CUTOFF = 90
+
+# Dropout-Variance predictor (Salah & Yevick, arXiv:2507.11645): at a
+# checkpoint, run n_samples stochastic forward passes with dropout active
+# and look at the variance of test accuracy across those passes. rate=0.5
+# is where their Dropout Robustness Curve shows the clearest pre/post-grok
+# separation (see src/predictors/dropout.py's compute_dropout_variance
+# docstring for the full rationale).
+DROPOUT_VARIANCE_RATE = 0.5
+DROPOUT_VARIANCE_N_SAMPLES = 30
+DROPOUT_VARIANCE_NUM_CHECKPOINTS = 24
+DROPOUT_VARIANCE_NUM_DRC_CHECKPOINTS = 5
+
+
+def dropout_variance_checkpoint_schedule(total_epochs, num_points=DROPOUT_VARIANCE_NUM_CHECKPOINTS):
+    """
+    Log-uniform-spaced epoch indices for the dropout-variance checkpoints,
+    same spirit as l2_norm.resample_to_log_uniform_grid's log-epoch grid —
+    equal VISUAL spacing on a log-x plot, so early training (where things
+    change fast) gets proportionally more checkpoints than the long flat
+    tail. Returns a sorted list of 0-based epoch indices (matching the
+    training loop's `epoch` variable, range(total_epochs)), always
+    including epoch 0 and the final epoch (total_epochs - 1).
+    """
+    if total_epochs <= 1:
+        return [0]
+    log_grid = np.linspace(0, np.log10(total_epochs), num_points)
+    raw = np.round(10 ** log_grid).astype(int) - 1  # 1..total_epochs -> 0..total_epochs-1
+    raw = np.clip(raw, 0, total_epochs - 1)
+    checkpoints = sorted(set(int(v) for v in raw))
+    if checkpoints[0] != 0:
+        checkpoints.insert(0, 0)
+    if checkpoints[-1] != total_epochs - 1:
+        checkpoints.append(total_epochs - 1)
+    return checkpoints
+
+
+def pick_drc_checkpoint_subset(checkpoints, num_drc=DROPOUT_VARIANCE_NUM_DRC_CHECKPOINTS):
+    """Evenly-spaced-by-position subset of an existing checkpoint list, for
+    the cheap 5-rate DRC-style snapshot (qualitative companion plot only —
+    NOT the k=30 variance sweep, which runs at every checkpoint)."""
+    if len(checkpoints) <= num_drc:
+        return list(checkpoints)
+    idx = np.linspace(0, len(checkpoints) - 1, num_drc).round().astype(int)
+    return sorted(set(checkpoints[i] for i in idx))
 
 
 def _num_or_none(value):
@@ -209,6 +256,18 @@ def train_one_seed(seed, args, cfg, device):
     train_acc_history, test_acc_history, loss_history = [], [], []
     l2_norm_history, sum_w2_history, per_module_sum_w2_history = [], [], []
 
+    # Dropout-Variance predictor: checkpoint schedule fixed up front, so
+    # every checkpoint's variance measurement uses this seed's actual
+    # weights at that exact epoch (cannot be recovered after the fact from
+    # saved histories, unlike L2 Norm's post-hoc-computable signals).
+    dv_checkpoint_schedule = dropout_variance_checkpoint_schedule(args.epochs)
+    dv_checkpoint_set = set(dv_checkpoint_schedule)
+    dv_drc_checkpoints = pick_drc_checkpoint_subset(dv_checkpoint_schedule)
+    dv_drc_checkpoint_set = set(dv_drc_checkpoints)
+    dropout_variance_checkpoints, dropout_variance_history = [], []
+    dropout_variance_mean_acc_history = []
+    dropout_drc_snapshots = {}
+
     started = time.time()
     last_log = started
     for epoch in range(args.epochs):
@@ -244,6 +303,20 @@ def train_one_seed(seed, args, cfg, device):
         per_module_sum_w2_history.append(
             compute_per_module_sum_of_squared_weights(model))
 
+        # ---- Dropout-Variance predictor checkpoint (post-epoch, model frozen) ----
+        if epoch in dv_checkpoint_set:
+            mean_acc, variance = compute_dropout_variance(
+                model, test_loader, n_samples=DROPOUT_VARIANCE_N_SAMPLES,
+                dropout_rate=DROPOUT_VARIANCE_RATE, device=device)
+            dropout_variance_checkpoints.append(epoch)
+            dropout_variance_history.append(variance)
+            dropout_variance_mean_acc_history.append(mean_acc)
+
+            if epoch in dv_drc_checkpoint_set:
+                drc_results = compute_dropout_gap_multi_rate(model, test_loader, DROPOUT_RATES)
+                dropout_drc_snapshots[epoch] = {
+                    str(r): drc_results[r]["train_accuracy"] for r in DROPOUT_RATES}
+
         if epoch % LOG_EVERY == 0 or epoch == args.epochs - 1:
             now = time.time()
             elapsed = now - started          # total wall time this seed
@@ -258,6 +331,10 @@ def train_one_seed(seed, args, cfg, device):
 
     # (f) save the per-epoch histories
     measurements.save_training_data(train_acc_history, test_acc_history, loss_history)
+
+    # grok_epoch only needs test_acc_history — compute it once here so both
+    # the Dropout-Variance signal below and the final summary can use it.
+    grok_epoch = grok_epoch_from(test_acc_history)
 
     # (g) L2-Norm predictor signals (post-training)
     epoch_grid, fast_ma, slow_ma = compute_fast_slow_moving_averages(
@@ -316,8 +393,34 @@ def train_one_seed(seed, args, cfg, device):
                            "dropout_gap_final.json"), "w") as handle:
         json.dump(dropout_json, handle, indent=2)
 
+    # (h) Dropout-Variance predictor — per-checkpoint arrays + signal
+    np.save(os.path.join(measurements.dropout_dir, "dropout_variance_checkpoints.npy"),
+            np.array(dropout_variance_checkpoints, dtype=int))
+    np.save(os.path.join(measurements.dropout_dir, "dropout_variance_history.npy"),
+            np.array(dropout_variance_history, dtype=float))
+    np.save(os.path.join(measurements.dropout_dir, "dropout_variance_mean_acc_history.npy"),
+            np.array(dropout_variance_mean_acc_history, dtype=float))
+    with open(os.path.join(measurements.dropout_dir,
+                           "dropout_drc_snapshots.json"), "w") as handle:
+        json.dump({str(e): v for e, v in dropout_drc_snapshots.items()}, handle, indent=2)
+
+    peak_idx = int(np.argmax(dropout_variance_history))
+    variance_peak_epoch = dropout_variance_checkpoints[peak_idx]
+    dropout_variance_signal = {
+        "variance_peak_epoch": variance_peak_epoch,
+        "variance_peak_value": float(dropout_variance_history[peak_idx]),
+        "grok_epoch": grok_epoch,
+        "peak_to_grok_ratio": (
+            float(variance_peak_epoch) / grok_epoch if grok_epoch else None),
+        "rate": DROPOUT_VARIANCE_RATE,
+        "n_samples": DROPOUT_VARIANCE_N_SAMPLES,
+        "num_checkpoints": len(dropout_variance_checkpoints),
+    }
+    with open(os.path.join(measurements.dropout_dir,
+                           "dropout_variance_signal.json"), "w") as handle:
+        json.dump(dropout_variance_signal, handle, indent=2)
+
     # per-seed summary + resume sentinel
-    grok_epoch = grok_epoch_from(test_acc_history)
     summary = {
         "seed": seed,
         "epochs": args.epochs,
@@ -334,6 +437,7 @@ def train_one_seed(seed, args, cfg, device):
         "l2_predictor": l2_signals,
         "dropout_final_gap_by_rate": {
             str(r): float(dropout_results[r]["dropout_gap"]) for r in DROPOUT_RATES},
+        "dropout_variance_predictor": dropout_variance_signal,
         "limit_cycle_check": limit_cycle_check(test_acc_history, grok_epoch),
         "wall_time_sec": round(time.time() - started, 1),
     }
@@ -367,6 +471,17 @@ def aggregate(summaries, args):
         print(f"  seed {s['seed']}: MA-crossover={lp['ma_crossover_epoch']}  "
               f"MA-of-MA zero-cross={lp['ma_of_ma_zero_crossing_epoch']}  "
               f"(grok={s['grok_epoch']})")
+
+    print("\nDropout-Variance predictor (per seed):")
+    for s in summaries:
+        dv = s.get("dropout_variance_predictor")
+        if dv is None:
+            print(f"  seed {s['seed']}: n/a (not computed for this seed)")
+            continue
+        ratio = dv["peak_to_grok_ratio"]
+        ratio_str = f"{ratio:.4f}" if ratio is not None else "None"
+        print(f"  seed {s['seed']}: variance_peak_epoch={dv['variance_peak_epoch']}  "
+              f"peak/grok={ratio_str}  (grok={s['grok_epoch']})")
 
     print("\nDropout gap at final epoch (per seed, by rate):")
     for s in summaries:
