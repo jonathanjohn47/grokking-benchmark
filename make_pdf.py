@@ -6,11 +6,18 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.platypus import PageBreak, Paragraph, SimpleDocTemplate, Spacer
 
-# Where the full 5-seed Nanda-Unified re-baseline results live. Relative to
-# the current working directory, same convention run_nanda_benchmark.py
-# uses for its --output_dir default. Not present until that benchmark has
-# actually been run (results/ is gitignored, disk only).
-RESULTS_JSON_PATH = os.path.join("results", "nanda_unified", "aggregate.json")
+# Where the full 5-seed Nanda-Unified re-baseline results live. Anchored to
+# this script's own directory (repo root), NOT the current working
+# directory — os.walk(".") below still assumes cwd == repo root, but this
+# path must not silently miss the results just because make_pdf.py was run
+# from somewhere else (e.g. an IDE "run" button using the file's own
+# folder as cwd). Not present until that benchmark has actually been run
+# (results/ is gitignored, disk only).
+REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
+RESULTS_JSON_PATH = os.path.join(REPO_ROOT, "results", "nanda_unified", "aggregate.json")
+# Display-only label — always "results/nanda_unified/aggregate.json"
+# regardless of cwd, since it's relative to REPO_ROOT not cwd.
+RESULTS_JSON_LABEL = os.path.relpath(RESULTS_JSON_PATH, REPO_ROOT)
 
 
 def _escape_line(line):
@@ -93,14 +100,14 @@ def add_results_section(story, header_style, results_style):
     cleanly with a note if the file does not exist yet (benchmark not run,
     or results/ not present on this machine)."""
     story.append(PageBreak())
-    story.append(Paragraph(f"=== RESULTS: {RESULTS_JSON_PATH} ===", header_style))
+    story.append(Paragraph(f"=== RESULTS: {RESULTS_JSON_LABEL} ===", header_style))
     story.append(Spacer(1, 5))
 
     if not os.path.isfile(RESULTS_JSON_PATH):
         print(f"No results found at {RESULTS_JSON_PATH} - skipping results section body.")
         add_text_lines(
             story,
-            [f"(not found - run run_nanda_benchmark.py first to produce {RESULTS_JSON_PATH})"],
+            [f"(not found - run run_nanda_benchmark.py first to produce {RESULTS_JSON_LABEL})"],
             results_style,
         )
         return

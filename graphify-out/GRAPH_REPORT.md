@@ -1,16 +1,16 @@
 # Graph Report - grokking-benchmark  (2026-09-04)
 
 ## Corpus Check
-- 71 files · ~479,664 words
+- 71 files · ~480,019 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 515 nodes · 625 edges · 46 communities (40 shown, 6 thin omitted)
+- 524 nodes · 640 edges · 45 communities (41 shown, 4 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b0cafb7c`
+- Built from commit: `6194032b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -20,7 +20,6 @@
 - [[_COMMUNITY_Community 2|Community 2]]
 - [[_COMMUNITY_Community 3|Community 3]]
 - [[_COMMUNITY_Community 4|Community 4]]
-- [[_COMMUNITY_Community 5|Community 5]]
 - [[_COMMUNITY_Community 6|Community 6]]
 - [[_COMMUNITY_Community 7|Community 7]]
 - [[_COMMUNITY_Community 8|Community 8]]
@@ -81,11 +80,11 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (46 total, 6 thin omitted)
+## Communities (45 total, 4 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.31
-Nodes (4): Dataset, generate_pairs(), get_dataloaders(), ModularArithmeticDataset
+Cohesion: 0.29
+Nodes (12): aggregate(), grok_epoch_from(), limit_cycle_check(), load_config(), main(), _num_or_none(), pick_device(), Detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test (+4 more)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.23
@@ -124,8 +123,8 @@ Cohesion: 0.40
 Nodes (4): data/modular_arithmetic.py, models/transformer.py, Python Project Compilation, train.py
 
 ### Community 11 - "Community 11"
-Cohesion: 0.07
-Nodes (23): generate_pairs(), get_dataloaders(), ModularArithmeticDataset, Transformer, compute_accuracy(), compute_dropout_gap_multi_rate(), # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, aggregate() (+15 more)
+Cohesion: 0.06
+Nodes (16): generate_pairs(), get_dataloaders(), ModularArithmeticDataset, Dataset, Transformer, Transformer, generate_pairs(), get_dataloaders() (+8 more)
 
 ### Community 19 - "Community 19"
 Cohesion: 0.10
@@ -140,8 +139,8 @@ Cohesion: 0.13
 Nodes (18): _analysis_outputs_present(), BenchmarkAnalyzer, main(), prepare_four_head_dir(), Run one four-head training session, then verify it really finished., Load all four-head runs., Ordered keys of the four-head runs that actually loaded., Find grokking epoch (test acc > 90%). (+10 more)
 
 ### Community 22 - "Community 22"
-Cohesion: 0.06
-Nodes (31): apply_moving_average(), compute_acceleration(), compute_fast_slow_moving_averages(), compute_ma_of_slow_ma(), compute_per_module_sum_of_squared_weights(), compute_sum_of_squared_weights(), detect_inflection(), detect_ma_of_ma_trigger() (+23 more)
+Cohesion: 0.05
+Nodes (42): apply_moving_average(), compute_acceleration(), compute_fast_slow_moving_averages(), compute_ma_of_slow_ma(), compute_noise_floor(), compute_per_module_sum_of_squared_weights(), compute_sum_of_squared_weights(), detect_inflection() (+34 more)
 
 ### Community 23 - "Community 23"
 Cohesion: 0.06
@@ -180,8 +179,8 @@ Cohesion: 0.10
 Nodes (11): PredictorMeasurements, Unified measurement collection for L2 Norm and Dropout predictors. Ensures consi, Collects and saves all measurements for both predictors., Generate standalone Dropout visualization graphs., Generate combined PDF report with all measurements., Create subdirectories for each predictor., Apply simple moving average smoothing., Save core training metrics. (+3 more)
 
 ### Community 32 - "Community 32"
-Cohesion: 0.12
-Nodes (25): compute_noise_floor(), detect_ma_crossover(), detect_ma_of_ma_zero_crossing(), Detect where fast MA crosses above slow MA, searching along the     log-uniform, Estimate the normal noise level of the MA-of-MA difference from the quiet     ea, Detect where fast MA crosses above slow MA, searching along the     log-uniform, Fire on the first epoch (after skip_epochs) where diff crosses from     positive, Estimate the normal noise level of the MA-of-MA difference from the quiet     ea (+17 more)
+Cohesion: 0.26
+Nodes (14): build_data_pdf(), build_plots_pdf(), _comparison_pages(), _dump_table(), grok_epoch(), _grok_vline(), load_run(), main() (+6 more)
 
 ### Community 33 - "Community 33"
 Cohesion: 0.26
@@ -199,25 +198,29 @@ Nodes (10): create_report(), discover_run_numbers(), extract_metrics(), find_gro
 Cohesion: 0.40
 Nodes (4): archive/src_p97_mainstream_old/ — the pre-Nanda-Unified `src/` snapshot, Not a runnable tree, What the old code did (differs from the current `src/`), Why it is kept
 
+### Community 45 - "Community 45"
+Cohesion: 0.26
+Nodes (11): add_results_section(), add_text_lines(), compile_py_to_pdf(), _escape_line(), _fmt_epoch(), Find all Python (.py) files in the current project directory,     excluding virt, Escape a plain-text line for ReportLab's Paragraph XML/HTML parser,     convert, Append plain-text lines to the story as Paragraphs (or blank     Spacers), using (+3 more)
+
 ## Knowledge Gaps
 - **106 isolated node(s):** `Why it is kept`, `What the old code did (differs from the current `src/`)`, `Not a runnable tree`, `What this is`, `The four deliberate differences from `src/`` (+101 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **6 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `ModularArithmeticDataset` connect `Community 11` to `Community 0`?**
-  _High betweenness centrality (0.012) - this node is a cross-community bridge._
 - **Why does `TransformerFourHead` connect `Community 42` to `Community 11`?**
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
-- **What connects `Read configs/nanda_unified.yaml -> flat dict of the constants used here.`, `Detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test`, `Find all Python (.py) files in the current project directory,     excluding virt` to the rest of the system?**
-  _221 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `Escape a plain-text line for ReportLab's Paragraph XML/HTML parser,     convert`, `Append plain-text lines to the story as Paragraphs (or blank     Spacers), using`, `Format one seed's summary dict (matching results/nanda_unified/     seed_*/summa` to the rest of the system?**
+  _225 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 4` be split into smaller, more focused modules?**
   _Cohesion score 0.09420289855072464 - nodes in this community are weakly interconnected._
 - **Should `Community 7` be split into smaller, more focused modules?**
   _Cohesion score 0.14285714285714285 - nodes in this community are weakly interconnected._
 - **Should `Community 11` be split into smaller, more focused modules?**
-  _Cohesion score 0.07195121951219512 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05647840531561462 - nodes in this community are weakly interconnected._
 - **Should `Community 19` be split into smaller, more focused modules?**
   _Cohesion score 0.10476190476190476 - nodes in this community are weakly interconnected._
+- **Should `Community 21` be split into smaller, more focused modules?**
+  _Cohesion score 0.12535612535612536 - nodes in this community are weakly interconnected._

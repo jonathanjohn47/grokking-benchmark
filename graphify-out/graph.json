@@ -21,13 +21,133 @@
   },
   "nodes": [
     {
+      "label": "make_pdf.py",
+      "file_type": "code",
+      "source_file": "make_pdf.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "make_pdf",
+      "community": 45,
+      "norm_label": "make_pdf.py"
+    },
+    {
+      "label": "_escape_line()",
+      "file_type": "code",
+      "source_file": "make_pdf.py",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "make_pdf_escape_line",
+      "community": 45,
+      "norm_label": "_escape_line()"
+    },
+    {
+      "label": "add_text_lines()",
+      "file_type": "code",
+      "source_file": "make_pdf.py",
+      "source_location": "L29",
+      "_origin": "ast",
+      "id": "make_pdf_add_text_lines",
+      "community": 45,
+      "norm_label": "add_text_lines()"
+    },
+    {
+      "label": "_fmt_epoch()",
+      "file_type": "code",
+      "source_file": "make_pdf.py",
+      "source_location": "L40",
+      "_origin": "ast",
+      "id": "make_pdf_fmt_epoch",
+      "community": 45,
+      "norm_label": "_fmt_epoch()"
+    },
+    {
+      "label": "_seed_result_lines()",
+      "file_type": "code",
+      "source_file": "make_pdf.py",
+      "source_location": "L44",
+      "_origin": "ast",
+      "id": "make_pdf_seed_result_lines",
+      "community": 45,
+      "norm_label": "_seed_result_lines()"
+    },
+    {
+      "label": "add_results_section()",
+      "file_type": "code",
+      "source_file": "make_pdf.py",
+      "source_location": "L90",
+      "_origin": "ast",
+      "id": "make_pdf_add_results_section",
+      "community": 45,
+      "norm_label": "add_results_section()"
+    },
+    {
+      "label": "compile_py_to_pdf()",
+      "file_type": "code",
+      "source_file": "make_pdf.py",
+      "source_location": "L128",
+      "_origin": "ast",
+      "id": "make_pdf_compile_py_to_pdf",
+      "community": 45,
+      "norm_label": "compile_py_to_pdf()"
+    },
+    {
+      "label": "Escape a plain-text line for ReportLab's Paragraph XML/HTML parser,     convert",
+      "file_type": "rationale",
+      "source_file": "make_pdf.py",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "make_pdf_rationale_17",
+      "community": 45,
+      "norm_label": "escape a plain-text line for reportlab's paragraph xml/html parser,     convert"
+    },
+    {
+      "label": "Append plain-text lines to the story as Paragraphs (or blank     Spacers), using",
+      "file_type": "rationale",
+      "source_file": "make_pdf.py",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "make_pdf_rationale_30",
+      "community": 45,
+      "norm_label": "append plain-text lines to the story as paragraphs (or blank     spacers), using"
+    },
+    {
+      "label": "Format one seed's summary dict (matching results/nanda_unified/     seed_*/summa",
+      "file_type": "rationale",
+      "source_file": "make_pdf.py",
+      "source_location": "L45",
+      "_origin": "ast",
+      "id": "make_pdf_rationale_45",
+      "community": 45,
+      "norm_label": "format one seed's summary dict (matching results/nanda_unified/     seed_*/summa"
+    },
+    {
+      "label": "Append a RESULTS section built from results/nanda_unified/     aggregate.json (t",
+      "file_type": "rationale",
+      "source_file": "make_pdf.py",
+      "source_location": "L91",
+      "_origin": "ast",
+      "id": "make_pdf_rationale_91",
+      "community": 45,
+      "norm_label": "append a results section built from results/nanda_unified/     aggregate.json (t"
+    },
+    {
+      "label": "Find all Python (.py) files in the current project directory,     excluding virt",
+      "file_type": "rationale",
+      "source_file": "make_pdf.py",
+      "source_location": "L129",
+      "_origin": "ast",
+      "id": "make_pdf_rationale_129",
+      "community": 45,
+      "norm_label": "find all python (.py) files in the current project directory,     excluding virt"
+    },
+    {
       "label": "run_nanda_benchmark.py",
       "file_type": "code",
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L1",
       "_origin": "ast",
       "id": "run_nanda_benchmark",
-      "community": 11,
+      "community": 0,
       "norm_label": "run_nanda_benchmark.py"
     },
     {
@@ -37,7 +157,7 @@
       "source_location": "L90",
       "_origin": "ast",
       "id": "run_nanda_benchmark_num_or_none",
-      "community": 11,
+      "community": 0,
       "norm_label": "_num_or_none()"
     },
     {
@@ -47,7 +167,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "run_nanda_benchmark_load_config",
-      "community": 11,
+      "community": 0,
       "norm_label": "load_config()"
     },
     {
@@ -57,7 +177,7 @@
       "source_location": "L124",
       "_origin": "ast",
       "id": "run_nanda_benchmark_pick_device",
-      "community": 11,
+      "community": 0,
       "norm_label": "pick_device()"
     },
     {
@@ -67,7 +187,7 @@
       "source_location": "L128",
       "_origin": "ast",
       "id": "run_nanda_benchmark_seed_dir_for",
-      "community": 11,
+      "community": 0,
       "norm_label": "seed_dir_for()"
     },
     {
@@ -77,7 +197,7 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "run_nanda_benchmark_seed_is_complete",
-      "community": 11,
+      "community": 0,
       "norm_label": "seed_is_complete()"
     },
     {
@@ -87,7 +207,7 @@
       "source_location": "L136",
       "_origin": "ast",
       "id": "run_nanda_benchmark_grok_epoch_from",
-      "community": 11,
+      "community": 0,
       "norm_label": "grok_epoch_from()"
     },
     {
@@ -97,7 +217,7 @@
       "source_location": "L142",
       "_origin": "ast",
       "id": "run_nanda_benchmark_limit_cycle_check",
-      "community": 11,
+      "community": 0,
       "norm_label": "limit_cycle_check()"
     },
     {
@@ -107,7 +227,7 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "run_nanda_benchmark_train_one_seed",
-      "community": 11,
+      "community": 0,
       "norm_label": "train_one_seed()"
     },
     {
@@ -117,17 +237,17 @@
       "source_location": "L349",
       "_origin": "ast",
       "id": "run_nanda_benchmark_aggregate",
-      "community": 11,
+      "community": 0,
       "norm_label": "aggregate()"
     },
     {
       "label": "main()",
       "file_type": "code",
       "source_file": "run_nanda_benchmark.py",
-      "source_location": "L425",
+      "source_location": "L408",
       "_origin": "ast",
       "id": "run_nanda_benchmark_main",
-      "community": 11,
+      "community": 0,
       "norm_label": "main()"
     },
     {
@@ -137,7 +257,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "run_nanda_benchmark_rationale_95",
-      "community": 11,
+      "community": 0,
       "norm_label": "read configs/nanda_unified.yaml -> flat dict of the constants used here."
     },
     {
@@ -147,38 +267,8 @@
       "source_location": "L143",
       "_origin": "ast",
       "id": "run_nanda_benchmark_rationale_143",
-      "community": 11,
+      "community": 0,
       "norm_label": "detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test"
-    },
-    {
-      "label": "make_pdf.py",
-      "file_type": "code",
-      "source_file": "make_pdf.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 45,
-      "norm_label": "make_pdf.py",
-      "id": "make_pdf"
-    },
-    {
-      "label": "compile_py_to_pdf()",
-      "file_type": "code",
-      "source_file": "make_pdf.py",
-      "source_location": "L9",
-      "_origin": "ast",
-      "community": 45,
-      "norm_label": "compile_py_to_pdf()",
-      "id": "make_pdf_compile_py_to_pdf"
-    },
-    {
-      "label": "Find all Python (.py) files in the current project directory,     excluding virt",
-      "file_type": "rationale",
-      "source_file": "make_pdf.py",
-      "source_location": "L10",
-      "_origin": "ast",
-      "community": 45,
-      "norm_label": "find all python (.py) files in the current project directory,     excluding virt",
-      "id": "make_pdf_rationale_10"
     },
     {
       "label": "README.md",
@@ -396,7 +486,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 0,
+      "community": 11,
       "norm_label": "dataset",
       "id": "dataset"
     },
@@ -706,7 +796,7 @@
       "source_file": "archive/src_p97_mainstream_old/models/model_shadow_with_layernorm.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 5,
+      "community": 11,
       "norm_label": "model_shadow_with_layernorm.py",
       "id": "models_model_shadow_with_layernorm"
     },
@@ -716,7 +806,7 @@
       "source_file": "archive/src_p97_mainstream_old/models/model_shadow_with_layernorm.py",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 5,
+      "community": 11,
       "norm_label": "transformer",
       "id": "models_model_shadow_with_layernorm_transformer"
     },
@@ -726,7 +816,7 @@
       "source_file": "archive/src_p97_mainstream_old/models/model_shadow_with_layernorm.py",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 5,
+      "community": 11,
       "norm_label": ".__init__()",
       "id": "models_model_shadow_with_layernorm_transformer_init"
     },
@@ -736,7 +826,7 @@
       "source_file": "archive/src_p97_mainstream_old/models/model_shadow_with_layernorm.py",
       "source_location": "L31",
       "_origin": "ast",
-      "community": 5,
+      "community": 11,
       "norm_label": ".forward()",
       "id": "models_model_shadow_with_layernorm_transformer_forward"
     },
@@ -846,7 +936,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L113",
       "_origin": "ast",
-      "community": 32,
+      "community": 22,
       "norm_label": "plot_single_run()",
       "id": "src_p97_mainstream_old_plot_results_four_head_plot_single_run"
     },
@@ -886,7 +976,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L114",
       "_origin": "ast",
-      "community": 32,
+      "community": 22,
       "norm_label": "recreates this run's own 8 plots, saved inside results/four_head/run_<n>/ itself",
       "id": "src_p97_mainstream_old_plot_results_four_head_rationale_114"
     },
@@ -1046,7 +1136,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L121",
       "_origin": "ast",
-      "community": 32,
+      "community": 22,
       "norm_label": "detect_ma_crossover()",
       "id": "predictors_l2_norm_detect_ma_crossover"
     },
@@ -1066,7 +1156,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L154",
       "_origin": "ast",
-      "community": 32,
+      "community": 22,
       "norm_label": "compute_noise_floor()",
       "id": "predictors_l2_norm_compute_noise_floor"
     },
@@ -1086,7 +1176,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L181",
       "_origin": "ast",
-      "community": 32,
+      "community": 22,
       "norm_label": "detect_ma_of_ma_zero_crossing()",
       "id": "predictors_l2_norm_detect_ma_of_ma_zero_crossing"
     },
@@ -1146,7 +1236,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L122",
       "_origin": "ast",
-      "community": 32,
+      "community": 22,
       "norm_label": "detect where fast ma crosses above slow ma, searching along the     log-uniform",
       "id": "predictors_l2_norm_rationale_122"
     },
@@ -1166,7 +1256,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L155",
       "_origin": "ast",
-      "community": 32,
+      "community": 22,
       "norm_label": "estimate the normal noise level of the ma-of-ma difference from the quiet     ea",
       "id": "predictors_l2_norm_rationale_155"
     },
@@ -1186,7 +1276,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L182",
       "_origin": "ast",
-      "community": 32,
+      "community": 22,
       "norm_label": "fire on the first epoch (after skip_epochs) where diff crosses from     positive",
       "id": "predictors_l2_norm_rationale_182"
     },
@@ -1236,7 +1326,7 @@
       "source_file": "archive/src_p97_mainstream_old/train_shadow_layernorm.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 5,
+      "community": 11,
       "norm_label": "train_shadow_layernorm.py",
       "id": "src_p97_mainstream_old_train_shadow_layernorm"
     },
@@ -1816,7 +1906,7 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L173",
       "_origin": "ast",
-      "community": 32,
+      "community": 22,
       "norm_label": "detect where fast ma crosses above slow ma, searching along the     log-uniform",
       "id": "predictors_l2_norm_rationale_173"
     },
@@ -1836,7 +1926,7 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L206",
       "_origin": "ast",
-      "community": 32,
+      "community": 22,
       "norm_label": "estimate the normal noise level of the ma-of-ma difference from the quiet     ea",
       "id": "predictors_l2_norm_rationale_206"
     },
@@ -1856,7 +1946,7 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L233",
       "_origin": "ast",
-      "community": 32,
+      "community": 22,
       "norm_label": "fire on the first epoch (after skip_epochs) where diff crosses from     positive",
       "id": "predictors_l2_norm_rationale_233"
     },
@@ -2286,7 +2376,7 @@
       "source_file": "nanda_l2_p113/data/modular_arithmetic.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
+      "community": 11,
       "norm_label": "modular_arithmetic.py",
       "id": "nanda_l2_p113_data_modular_arithmetic_py_data_modular_arithmetic"
     },
@@ -2296,7 +2386,7 @@
       "source_file": "nanda_l2_p113/data/modular_arithmetic.py",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 0,
+      "community": 11,
       "norm_label": "generate_pairs()",
       "id": "nanda_l2_p113_data_modular_arithmetic_py_data_modular_arithmetic_generate_pairs"
     },
@@ -2306,7 +2396,7 @@
       "source_file": "nanda_l2_p113/data/modular_arithmetic.py",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 0,
+      "community": 11,
       "norm_label": "get_dataloaders()",
       "id": "nanda_l2_p113_data_modular_arithmetic_py_data_modular_arithmetic_get_dataloaders"
     },
@@ -2316,7 +2406,7 @@
       "source_file": "nanda_l2_p113/data/modular_arithmetic.py",
       "source_location": "L34",
       "_origin": "ast",
-      "community": 0,
+      "community": 11,
       "norm_label": "modulararithmeticdataset",
       "id": "nanda_l2_p113_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset"
     },
@@ -2326,7 +2416,7 @@
       "source_file": "nanda_l2_p113/data/modular_arithmetic.py",
       "source_location": "L35",
       "_origin": "ast",
-      "community": 0,
+      "community": 11,
       "norm_label": ".__init__()",
       "id": "nanda_l2_p113_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset_init"
     },
@@ -2336,7 +2426,7 @@
       "source_file": "nanda_l2_p113/data/modular_arithmetic.py",
       "source_location": "L39",
       "_origin": "ast",
-      "community": 0,
+      "community": 11,
       "norm_label": ".__len__()",
       "id": "nanda_l2_p113_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset_len"
     },
@@ -2346,7 +2436,7 @@
       "source_file": "nanda_l2_p113/data/modular_arithmetic.py",
       "source_location": "L42",
       "_origin": "ast",
-      "community": 0,
+      "community": 11,
       "norm_label": ".__getitem__()",
       "id": "nanda_l2_p113_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset_getitem"
     },
@@ -2356,7 +2446,7 @@
       "source_file": "nanda_l2_p113/data/modular_arithmetic.py",
       "source_location": "L45",
       "_origin": "ast",
-      "community": 0,
+      "community": 11,
       "norm_label": ".get_tensor()",
       "id": "nanda_l2_p113_data_modular_arithmetic_py_data_modular_arithmetic_modulararithmeticdataset_get_tensor"
     },
@@ -3496,7 +3586,7 @@
       "source_file": "src/train_shadow_layernorm.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 5,
+      "community": 11,
       "norm_label": "train_shadow_layernorm.py",
       "id": "src_train_shadow_layernorm"
     },
@@ -5173,6 +5263,182 @@
   ],
   "links": [
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "make_pdf.py",
+      "source_location": "L90",
+      "weight": 1.0,
+      "source": "make_pdf",
+      "target": "make_pdf_add_results_section",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "make_pdf.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "make_pdf",
+      "target": "make_pdf_add_text_lines",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "make_pdf.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "make_pdf",
+      "target": "make_pdf_compile_py_to_pdf"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "make_pdf.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "make_pdf",
+      "target": "make_pdf_escape_line",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "make_pdf.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "make_pdf",
+      "target": "make_pdf_fmt_epoch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "make_pdf.py",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "make_pdf",
+      "target": "make_pdf_seed_result_lines",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "make_pdf.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "make_pdf_add_text_lines",
+      "target": "make_pdf_escape_line",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "make_pdf.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "make_pdf_rationale_17",
+      "target": "make_pdf_escape_line",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "make_pdf.py",
+      "source_location": "L101",
+      "weight": 1.0,
+      "source": "make_pdf_add_results_section",
+      "target": "make_pdf_add_text_lines",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "make_pdf.py",
+      "source_location": "L253",
+      "weight": 1.0,
+      "source": "make_pdf_compile_py_to_pdf",
+      "target": "make_pdf_add_text_lines",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "make_pdf.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "make_pdf_rationale_30",
+      "target": "make_pdf_add_text_lines",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "make_pdf.py",
+      "source_location": "L66",
+      "weight": 1.0,
+      "source": "make_pdf_seed_result_lines",
+      "target": "make_pdf_fmt_epoch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "make_pdf.py",
+      "source_location": "L124",
+      "weight": 1.0,
+      "source": "make_pdf_add_results_section",
+      "target": "make_pdf_seed_result_lines",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "make_pdf.py",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "make_pdf_rationale_45",
+      "target": "make_pdf_seed_result_lines",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "make_pdf.py",
+      "source_location": "L259",
+      "weight": 1.0,
+      "source": "make_pdf_compile_py_to_pdf",
+      "target": "make_pdf_add_results_section",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "make_pdf.py",
+      "source_location": "L91",
+      "weight": 1.0,
+      "source": "make_pdf_rationale_91",
+      "target": "make_pdf_add_results_section",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "make_pdf.py",
+      "source_location": "L129",
+      "weight": 1.0,
+      "source": "make_pdf_rationale_129",
+      "target": "make_pdf_compile_py_to_pdf",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -5456,26 +5722,6 @@
       "confidence_score": 1.0,
       "source": "run_nanda_benchmark_main",
       "target": "run_nanda_benchmark_aggregate"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "make_pdf.py",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "make_pdf",
-      "target": "make_pdf_compile_py_to_pdf"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "make_pdf.py",
-      "source_location": "L10",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "make_pdf_rationale_10",
-      "target": "make_pdf_compile_py_to_pdf"
     },
     {
       "relation": "contains",
@@ -11607,5 +11853,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "b0cafb7c7a83d89bb8d68fc27ccd51e8e350ef97"
+  "built_at_commit": "6194032b177313bbc43cbc56f7bf0f926e679d94"
 }

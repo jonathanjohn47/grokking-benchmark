@@ -6545,3 +6545,109 @@ part of the benchmark pipeline) gained:
    itself (console, live during a run) as well as in the PDF (static,
    after the fact), that is a separate ask — not assumed from this
    session.
+
+---
+
+## Session Summary — September 4, 2026 (New `plot_nanda_results.py`: full plotting tool for the 5-seed Nanda-Unified run; `make_pdf.py` cwd bug found and fixed)
+
+### 1. New file — `plot_nanda_results.py` (repo root)
+
+Jonathan had `archive/single_head/plot_results.py` open and asked whether
+it would plot the current 5-seed results — answered no (wrong data path,
+wrong/missing predictors import, single-run only, no seed loop). He then
+asked to "modify the whole file" to plot everything, separate graphs
+first, combined PDF second. Clarified via question first: **archive/
+single_head/plot_results.py stays frozen** (per every prior session's
+"archive untouched" record) — a **new file** was written instead. Direct
+implementation.
+
+`plot_nanda_results.py` reads `results/nanda_unified/seed_{n}/summary.json`
++ the raw per-epoch `.npy` histories already saved by
+`unified_measurements.PredictorMeasurements` (`training/`, `l2_norm/`) —
+nothing recomputed. For every seed it produces 9 plots (grokking curve,
+loss, L2 norm + MA-crossover marker, fast/slow MA detail, Σw² curve
+[Nanda Fig. 7 quantity], per-module Σw² breakdown [5 lines, log-log],
+MA-of-MA diff × log/linear, dropout gap bar) plus a full-numbers text
+page, and 7 cross-seed comparison plots (grokking overlay, Σw² overlay,
+grok-epoch bar, **predictor-signal-vs-grok-epoch scatter** [the key
+negative-result plot — see below], dropout grouped bar, limit-cycle bar,
+token-embedding-share bar). Every figure is saved as a standalone PNG
+under `results/nanda_unified/plots/{seed_n,comparison}/` AND as a page
+in one combined `results/nanda_unified/plots/nanda_results_report.pdf`
+(58 pages for this run) via a shared `Collector` class so both forms are
+guaranteed identical. Colours match the project's existing plotting
+convention (`unified_measurements.py`): steelblue/seagreen train/test,
+purple L2, blue/orange fast/slow MA, darkred diff, green grok marker,
+red trigger marker.
+
+**Verified by actually looking at renders, not just running clean:**
+- `predictor_vs_grok_scatter.png` — visual confirmation of the
+  correlation-failure finding from the Sept 4 re-baseline session: both
+  L2 predictor signals (MA-crossover, MA-of-MA zero-crossing) sit
+  essentially flat across seeds regardless of actual grok epoch
+  (7.7k→25.5k), nowhere near the y=x "perfect predictor" line.
+- `seed_4/00_summary.png` — text numbers checked against `summary.json`,
+  exact match.
+- `seed_0/06_per_module_sum_w2.png` — **new observation, not previously
+  on record**: the post-grok test-accuracy dips seen in
+  `limit_cycle_check` (e.g. seed 0's 35 dips below 0.9) are visible as
+  ongoing oscillation in every per-module Σw² curve after the grok
+  epoch, not just in test accuracy — and the same bumpiness appears
+  during the circuit-formation region (epoch ~2k–6k), consistent with
+  the "bumpy, not smooth" observation from the earlier `nanda_l2_p113`
+  sessions, now seen broken out by module for the first time.
+- `py_compile` OK; full run against the real 5-seed
+  `results/nanda_unified/` → 58 figures, 0 errors.
+
+### 2. `make_pdf.py` — cwd bug found and fixed
+
+Jonathan ran `make_pdf.py` (the previous session's RESULTS-section
+addition) and saw no results section. Root cause reproduced directly:
+`RESULTS_JSON_PATH` was relative to **cwd**, not to the script — the
+same assumption `os.walk(".")` already made, but this path is checked
+with `os.path.isfile()` before any walk, so running from anywhere but
+the repo root (an IDE "run" button often uses the file's own folder as
+cwd) made it silently print "No results found... skipping" and produce
+a code-only PDF with no error.
+
+**Fix:** `REPO_ROOT = os.path.dirname(os.path.abspath(__file__))`;
+`RESULTS_JSON_PATH` now joins off `REPO_ROOT`, immune to cwd. Added
+`RESULTS_JSON_LABEL = os.path.relpath(RESULTS_JSON_PATH, REPO_ROOT)` —
+a cwd-independent display string (always
+`"results/nanda_unified/aggregate.json"`) — used in the PDF header and
+console prints instead of the raw absolute path, so output stays
+readable.
+
+**Verified:** `py_compile` OK; ran from repo root (still works) AND from
+`src/` (the exact failing case) — both now print
+`Processing results: /…/results/nanda_unified/aggregate.json` and the
+section is present. The stray `src/combined_code.pdf` produced during
+that check was deleted (test artifact, not needed on disk;
+`combined_code.pdf` is gitignored repo-wide regardless of location).
+
+**Known, not fixed (flagged to Jonathan, not assumed):** the output
+PDF's own location (`output_filename="combined_code.pdf"`) is still
+cwd-relative — run from a subfolder and the PDF lands there. Pre-existing
+behaviour of Jonathan's original script, not something introduced by
+either the RESULTS-section change or this fix; left alone pending his
+call.
+
+### Files Modified / Added
+
+- Added: `plot_nanda_results.py` (repo root).
+- Modified: `make_pdf.py` (`REPO_ROOT`/`RESULTS_JSON_PATH`/
+  `RESULTS_JSON_LABEL` fix — see §2), `context.md` (this entry).
+- `results/nanda_unified/plots/` — new PNGs + PDF on disk from
+  `plot_nanda_results.py` (gitignored, under `results/`, not committed).
+
+### Next
+
+1. Unchanged: explain the seed-4 grok-epoch outlier (25505); optionally
+   add correlation-stats (Pearson/Spearman) formalising what
+   `predictor_vs_grok_scatter.png` now shows visually; write up the
+   L2-Norm predictor's 3-criteria result for the thesis using this
+   session's plots as the figures.
+2. Predictors 3–9 (Spectral next, per the CLAUDE.md order) still unbuilt.
+3. If Jonathan wants `combined_code.pdf`'s output location also anchored
+   to `REPO_ROOT` (see the known-not-fixed note above), that's a small
+   follow-up, not yet done.
