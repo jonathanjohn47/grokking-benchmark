@@ -361,33 +361,50 @@ def aggregate(summaries, args):
     else:
         print("Grok epoch: no seed reached the grok threshold")
 
-    print("\nL2-Norm predictor (per seed):")
-    for s in summaries:
-        lp = s["l2_predictor"]
-        print(f"  seed {s['seed']}: MA-crossover={lp['ma_crossover_epoch']}  "
-              f"MA-of-MA zero-cross={lp['ma_of_ma_zero_crossing_epoch']}  "
-              f"(grok={s['grok_epoch']})")
-
-    print("\nDropout gap at final epoch (per seed, by rate):")
-    for s in summaries:
-        gaps = s["dropout_final_gap_by_rate"]
-        print(f"  seed {s['seed']}: " +
-              "  ".join(f"p{r}={gaps[r]:+.3f}" for r in gaps))
-
-    print("\nLimit-cycle check (post-grok test-acc oscillation):")
+    print("\nFull per-seed results (every number from summary.json):")
     n_limit_cycle = 0
     for s in summaries:
+        lp = s["l2_predictor"]
+        gaps = s["dropout_final_gap_by_rate"]
         lc = s["limit_cycle_check"]
-        if not lc.get("applicable"):
-            print(f"  seed {s['seed']}: n/a ({lc.get('reason', 'n/a')})")
-            continue
-        n_limit_cycle += int(lc["limit_cycle"])
-        label = "LIMIT CYCLE" if lc["limit_cycle"] else "stable"
-        print(f"  seed {s['seed']}: {label}  "
-              f"post-grok min={lc['post_grok_min']:.3f}  "
-              f"std={lc['post_grok_std']:.3f}  "
-              f"final={lc['post_grok_final']:.3f}  "
-              f"dips<0.9={lc['epochs_below_0.9_post_grok']}")
+        w = lp["windows"]
+
+        print("-" * 72)
+        print(f"seed {s['seed']}  (modulus={s['modulus']}  epochs={s['epochs']}  "
+              f"wall_time={s['wall_time_sec']}s)")
+        print(f"  grok_epoch                    : {s['grok_epoch']}")
+        print(f"  final_train_acc               : {s['final_train_acc']:.4f}")
+        print(f"  final_test_acc                : {s['final_test_acc']:.4f}")
+        print(f"  l2_norm   init -> final        : "
+              f"{s['l2_norm_init']:.4f} -> {s['l2_norm_final']:.4f}")
+        print(f"  sum_w2    init -> final        : "
+              f"{s['sum_w2_init']:.3f} -> {s['sum_w2_final']:.3f}")
+        print(f"  token_embedding_share (init)  : {s['token_embedding_share_init']:.4f}")
+        ma_cross_str = "None" if lp['ma_crossover_epoch'] is None \
+            else f"{lp['ma_crossover_epoch']:.2f}"
+        ma_of_ma_str = "None" if lp['ma_of_ma_zero_crossing_epoch'] is None \
+            else f"{lp['ma_of_ma_zero_crossing_epoch']:.2f}"
+        print(f"  L2 predictor:")
+        print(f"    MA-crossover epoch           : {ma_cross_str}")
+        print(f"    MA-of-MA zero-crossing epoch : {ma_of_ma_str}")
+        print(f"    noise_floor                  : {lp['noise_floor']:.6f}")
+        print(f"    windows: fast={w['fast']} slow={w['slow']} "
+              f"ma_of_ma_fast={w['ma_of_ma_fast']} skip_epochs={w['skip_epochs']} "
+              f"quiet_epoch_cutoff={w['quiet_epoch_cutoff']}")
+        print(f"  Dropout gap by rate:")
+        print("    " + "  ".join(f"p{r}={gaps[r]:+.4f}" for r in gaps))
+        if lc.get("applicable"):
+            n_limit_cycle += int(lc["limit_cycle"])
+            label = "LIMIT CYCLE" if lc["limit_cycle"] else "stable"
+            print(f"  Limit-cycle check             : {label}  "
+                  f"window_start={lc['window_start_epoch']}  "
+                  f"post_grok_min={lc['post_grok_min']:.4f}  "
+                  f"post_grok_std={lc['post_grok_std']:.4f}  "
+                  f"post_grok_final={lc['post_grok_final']:.4f}  "
+                  f"dips<0.9={lc['epochs_below_0.9_post_grok']}")
+        else:
+            print(f"  Limit-cycle check             : n/a ({lc.get('reason', 'n/a')})")
+    print("-" * 72)
     print(f"\n  => {n_limit_cycle}/{len(summaries)} seeds show a post-grok limit cycle")
 
     agg_path = os.path.join(args.output_dir, "aggregate.json")

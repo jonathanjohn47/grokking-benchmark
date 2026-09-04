@@ -6314,3 +6314,130 @@ has `summary.json`.)
 
 Full `run_nanda_benchmark.py --seeds 5 --epochs 40000` re-baseline still
 NOT run. Predictors 3–9 still unbuilt.
+
+---
+
+## Session Summary — September 4, 2026 (Full 5-seed Nanda-Unified re-baseline completed and read; `run_nanda_benchmark.py` aggregate() rewritten to print a full per-seed results table)
+
+### 1. Full re-baseline run — COMPLETED by Jonathan
+
+Jonathan ran the previously-pending full re-baseline:
+
+```
+python run_nanda_benchmark.py --seeds 5 --epochs 40000 \
+    --output_dir results/nanda_unified --config configs/nanda_unified.yaml
+```
+
+`results/nanda_unified/` (gitignored, disk only) now holds `seed_{0..4}/`
+(each with `summary.json`, `seed.npy`, `training/`, `l2_norm/`, `dropout/`,
+`reports/`) and `aggregate.json`. Wall time ≈ 4900–4933 s/seed (~82 min),
+tight across seeds, total ≈ 4.1 hr for all 5. This is the first completed
+full-length run on the Nanda-Unified substrate (p=113, small init,
+`betas=(0.9,0.98)`) — everything before this was either the old p=97
+substrate or the separate `nanda_l2_p113/` folder.
+
+### 2. Results read from `aggregate.json` and interpreted
+
+**Grok epochs** (test acc > 0.9): `[12686, 7721, 11376, 12678, 25505]`,
+mean **13993 ± 6036**. Four of five seeds land near Nanda's p=113 range
+(7.7k–12.7k); **seed 4 is an outlier at 25505**, ~2× the rest, and pulls
+the mean/std up hard. Not yet explained — flagged as open.
+
+**Limit-cycle check: 0/5 flagged** (`limit_cycle: false` for all seeds) —
+the post-grok instability seen earlier in `nanda_l2_p113/run_1` does
+**not** reproduce here at n=5. But it is not perfectly flat either: 4/5
+seeds show brief post-grok dips (test acc min 0.49–0.63, 17–83 epochs
+below 0.9) that don't sustain long enough to trip the `std > 0.05`
+limit-cycle threshold. Seed 2 is the one fully clean seed (0 dips).
+
+**L2-Norm predictor — confirms the earlier `nanda_l2_p113` finding, now
+with n=5, and adds a new negative result:**
+- MA-crossover fires epoch ~101–144 (mean ~119) vs grok mean 13993 —
+  off by roughly 100×. Still latching onto the memorisation-phase rise,
+  not the pre-grok drop.
+- MA-of-MA zero-crossing fires ~1774–1834 (tight, std ≈ 23 across seeds)
+  — this range is now captured on every run via `l2_predictor_signals.json`
+  / `summary.json` (the earlier `nanda_l2_p113` gap: it used to only be
+  computed in-memory, never persisted — `run_nanda_benchmark.py` already
+  fixed this, see the Sept 4 "master runner" session entry above).
+  **New observation this session:** the zero-crossing epoch does not
+  track the grok epoch at all across seeds — seed 1 (earliest grok, 7721)
+  crosses at 1774.3; seed 4 (latest grok by far, 25505) crosses at
+  1779.0, almost identical. This is a concrete, quantified failure of the
+  **correlation** criterion (not just the timing criterion) for the
+  L2-Norm predictor, and reads well for the thesis as a legitimate
+  negative benchmark row with numeric backing.
+
+**Dropout:** final gap goes monotonically more negative as rate rises
+0.1→0.9 for all 5 seeds (expected shape — model relies on the full
+weight set). Purely descriptive at this point (one post-training sweep
+per seed); not yet run through the 3-criteria trigger logic.
+
+No files changed by this step — read-only interpretation of
+`results/nanda_unified/aggregate.json`.
+
+### 3. `run_nanda_benchmark.py` — `aggregate()` rewritten: full per-seed results table
+
+Jonathan asked to modify `run_nanda_benchmark.py` so it also prints the
+"corresponding results with complete numbers." Clarified via question:
+chose **"print full results table"** (not new correlation stats — that
+option is still open, offered again below). Direct implementation
+(explicit "modify the file" instruction).
+
+- The old `aggregate()` had three separate abbreviated per-seed loops
+  (one-line L2-Norm signals, one-line dropout gaps, one-line limit-cycle)
+  that left out several numbers already present in `summary.json` (L2
+  norm init/final, Σw² init/final, token-embedding share, wall time,
+  noise floor, window params).
+- Replaced with **one consolidated per-seed block** printing every field
+  from `summary.json`: seed/modulus/epochs/wall_time header line, then
+  grok_epoch, final_train_acc, final_test_acc, l2_norm init→final, Σw²
+  init→final, token_embedding_share_init, the full L2 predictor block
+  (MA-crossover epoch and MA-of-MA zero-crossing epoch now rounded to
+  2dp via a small `None`-safe formatting branch, noise_floor at 6dp, all
+  window params), the full dropout gap sweep (4dp), and the full
+  limit-cycle stats (window_start, post_grok_min/std/final, dips<0.9).
+- The top grok-summary line (mean/std/min/max/n-grokked) and the closing
+  `n/{total} seeds show a post-grok limit cycle` line are unchanged.
+- `aggregate.json` schema/contents unchanged — this is console output
+  only, no new fields written to disk.
+
+### Verification done
+
+- `py_compile run_nanda_benchmark.py` → OK, twice (once before, once
+  after the 2dp rounding fix).
+- Ran `python run_nanda_benchmark.py --seeds 5 --epochs 40000
+  --output_dir results/nanda_unified` against the already-complete run —
+  all 5 seeds resume-skipped (no retraining), `aggregate()` ran and
+  reprinted/rewrote `aggregate.json`. Full per-seed table checked by eye
+  against the raw `aggregate.json` values for all 5 seeds — exact match
+  (e.g. seed 0 MA-crossover 130.4336836963267 → printed `130.43`; seed 4
+  grok_epoch 25505, l2_norm 32.2933→32.6518, all matched).
+
+### Files Modified / Added
+
+- Modified: `run_nanda_benchmark.py` (`aggregate()` per-seed printing
+  only — `train_one_seed`, `load_config`, `main`, `aggregate.json`
+  schema all untouched), `context.md` (this entry).
+- `results/nanda_unified/` — no new files this session; already existed
+  from Jonathan's run before this session started, re-written in place
+  (same values) when `aggregate()` ran during verification.
+
+### Next
+
+1. Explain the seed-4 grok-epoch outlier (25505 vs ~7.7k–12.7k for the
+   other four) — inspect its training curve / loss / L2 history for
+   anything unusual before concluding it's just seed variance.
+2. Optionally add the correlation-stats option that was offered and not
+   chosen this session: Pearson/Spearman between per-seed MA-of-MA
+   zero-crossing epoch and grok epoch, to formalise the "seed 1 vs seed 4"
+   observation above as a numeric correlation coefficient for the
+   thesis's 3-criteria writeup on L2-Norm.
+3. Write up the L2-Norm predictor's 3-criteria result (timing: fails;
+   correlation: fails, now quantified; the third criterion per the
+   benchmark protocol — check `context.md`'s earlier 3-criteria
+   definition / thesis draft for what it is — still to be evaluated).
+4. Unchanged: predictors 3–9 (Spectral next per the CLAUDE.md order) are
+   still unbuilt; 5-seed limit-cycle diagnostic is now effectively done
+   by this run (0/5 flagged) — can likely be marked resolved rather than
+   open, pending Jonathan's confirmation.
