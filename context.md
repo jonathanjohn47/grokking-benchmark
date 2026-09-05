@@ -8992,10 +8992,31 @@ Two-criterion test:
 
 **Verdict: AGE is CLOSED, negative.** NC1 variability collapse is real
 and large on this substrate (Tr(Sigma_W)/Tr(Sigma_B) drops ~45 → ~0.05
-in all 5 seeds), but it develops *after* the test-accuracy jump, not
-before it. Same failure shape as Spectral: the signal lands at or after
-grok in every seed. Feature norm `fn` grows monotonically (~1.4 → ~15+)
-alongside the collapse, as expected, and adds no separate timing signal.
+in all 5 seeds — a ~660x collapse), but it develops *after* the
+test-accuracy jump, not before it. Same failure shape as Spectral: the
+signal lands at or after grok in every seed. Feature norm `fn` grows the
+other way over the same window — ~1.4 → tens/hundreds (seed maxima
+157–353), rising through training and noisy/non-monotone in the
+post-grok tail — consistent with the equinorm side of neural collapse
+under `weight_decay=1.0`, and it adds no separate pre-grok timing
+signal.
+
+Why AGE fails, in one line, alongside the three already-closed
+predictors (all four: real phenomenon, wrong timing on this
+feature-learning substrate):
+- **L2-Norm** — small init + `weight_decay=1.0` puts the MA-crossover at
+  epoch ~103–121, thousands of epochs before grok.
+- **Dropout-Variance** — the model only becomes dropout-robust once the
+  Fourier circuit exists, so the variance peak is post-grok.
+- **Spectral (Canatar)** — Canatar's task-model alignment is a
+  kernel/NTK lazy-regime result; grokking on `(a+b) mod 113` is
+  feature-learning, so there is no global spectral concentration ahead
+  of the jump.
+- **AGE (Papyan NC1)** — penultimate within-class variability collapse
+  is a *consequence* of circuit consolidation that keeps going through
+  25k–40k epochs, so `nc1_min` lands after grok in 5/5. The AGOP
+  mechanism (Beaglehole 2024, Mallinar 2024) still holds — AGOP
+  structure builds gradually — but its NC1 readout is a late one.
 
 Not-yet-tried extension, left for later if AGE is revisited: read the
 collapse *onset* (first checkpoint where NC1 crosses a fixed threshold,
@@ -9018,5 +9039,25 @@ by the long monotone tail and cannot lead grok by construction.
 
 - `results/nanda_unified/seed_0..4/{l2_norm,dropout,spectral,checkpoints}/`
   — not modified (l2/dropout/spectral skipped, checkpoints only read).
+  `checkpoints/` — 24 `.pt` per seed, intact.
 - `results/nanda_unified/seed_*/summary.json` — only the `age_predictor`
   key added/filled; every other block byte-identical (carried forward).
+- `results/nanda_unified/seed_*/age/` — 4 files each: `age_checkpoints.npy`
+  (24), `age_nc1.npy` (24), `age_fn.npy` (24), `age_signal.json`.
+- `results/nanda_unified/aggregate.json` — `age_predictor` block now
+  present for all 5 seeds.
+
+### 7. Next
+
+- No source-code change needed for AGE; this entry closes it.
+- **Predictor 5 — HTSR Alpha** (Martin & Mahoney, `weightwatcher`
+  heavy-tailed self-regularisation; PDF `literature/Charles H. Martin -
+  Predicting trends in the quality of state-of-the-art neural networks
+  ... .pdf`). Same checkpoint-only plugin pattern:
+  `src/predictors/htsr_alpha.py`, `save_htsr_data` in
+  `src/unified_measurements.py`, `_checkpoint_predictor_htsr_alpha`
+  registered in `CHECKPOINT_PREDICTOR_FUNCS` / `PREDICTOR_SUMMARY_KEY` —
+  reading `model_epoch_{epoch}.pt`, no live-training-loop change. This
+  one IS a per-weight-matrix spectral fit (power-law exponent alpha of
+  each layer's ESD), unlike Spectral which was a representation-kernel
+  method — the two are different predictors, do not conflate.
