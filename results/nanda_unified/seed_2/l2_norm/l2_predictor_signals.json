@@ -1,0 +1,12 @@
+{
+  "ma_crossover_epoch": 119.51483483342196,
+  "ma_of_ma_zero_crossing_epoch": 1802.223864069342,
+  "noise_floor": 0.00046426335190662886,
+  "windows": {
+    "fast": 50,
+    "slow": 200,
+    "ma_of_ma_fast": 20,
+    "skip_epochs": 100,
+    "quiet_epoch_cutoff": 90
+  }
+}
