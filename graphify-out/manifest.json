@@ -205,8 +205,8 @@
     "semantic_hash": ""
   },
   "results/README.md": {
-    "mtime": 1788638909.0834985,
-    "ast_hash": "85f9dc2cd92da098193805a7ad9b2d88",
+    "mtime": 1788639203.0053468,
+    "ast_hash": "63b2ed195869c7ce474363051db23725",
     "semantic_hash": ""
   },
   "docs/reports/M1_Gate_Results_Grokking_Reproduction.pdf": {
@@ -690,7 +690,7 @@
     "semantic_hash": ""
   },
   "results/nanda_unified/aggregate.json": {
-    "mtime": 1788638792.342746,
+    "mtime": 1788639043.6404638,
     "ast_hash": "e3a75bbdb8ae8063d838783df49d4e56",
     "semantic_hash": ""
   },
