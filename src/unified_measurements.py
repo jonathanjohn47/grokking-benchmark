@@ -23,10 +23,12 @@ class PredictorMeasurements:
         """Create subdirectories for each predictor."""
         self.l2_norm_dir = os.path.join(self.output_dir, "l2_norm")
         self.dropout_dir = os.path.join(self.output_dir, "dropout")
+        self.spectral_dir = os.path.join(self.output_dir, "spectral")
         self.reports_dir = os.path.join(self.output_dir, "reports")
         self.training_dir = os.path.join(self.output_dir, "training")
 
-        for dir_path in [self.l2_norm_dir, self.dropout_dir, self.reports_dir, self.training_dir]:
+        for dir_path in [self.l2_norm_dir, self.dropout_dir, self.spectral_dir,
+                          self.reports_dir, self.training_dir]:
             os.makedirs(dir_path, exist_ok=True)
 
     def save_training_data(self, train_acc, test_acc, loss):
@@ -112,6 +114,44 @@ class PredictorMeasurements:
         np.save(os.path.join(self.dropout_dir, "dropout_gap_by_rate.npy"), gap_by_rate)
         np.save(os.path.join(self.dropout_dir, "dropout_train_acc_by_rate.npy"), train_acc_by_rate)
         np.save(os.path.join(self.dropout_dir, "dropout_eval_acc_by_rate.npy"), eval_acc_by_rate)
+
+    # ========== SPECTRAL MEASUREMENTS ==========
+
+    def save_spectral_data(self, spectral_checkpoints, spectral_history_by_module):
+        """Save all Spectral (Predictor 3) measurements.
+
+        spectral_checkpoints: list/array of epoch indices, one per
+            checkpoint that was evaluated (same role as
+            dropout_variance_checkpoints.npy).
+        spectral_history_by_module: {module_name: {metric_name: [value
+            per checkpoint, same order as spectral_checkpoints]}}, as
+            produced by calling
+            predictors.spectral.compute_spectral_for_model at each
+            checkpoint and transposing module -> metric -> per-checkpoint
+            list. Every module's dict must have the same metric_name keys
+            (spectral_norm, fro_norm, stable_rank, effective_rank —
+            top5_singular is intentionally not saved here, it is a
+            per-checkpoint diagnostic only, not a plotted history).
+
+        For each metric, saves spectral_<metric>.npy shaped
+        [n_modules, n_checkpoints] (row order recorded in
+        spectral_module_names.npy), matching the per_module_sum_w2.npy
+        convention already used by L2-Norm.
+        """
+        np.save(os.path.join(self.spectral_dir, "spectral_checkpoints.npy"),
+                np.array(spectral_checkpoints, dtype=int))
+
+        module_names = list(spectral_history_by_module.keys())
+        np.save(os.path.join(self.spectral_dir, "spectral_module_names.npy"),
+                np.array(module_names))
+
+        metric_names = ["spectral_norm", "fro_norm", "stable_rank", "effective_rank"]
+        for metric in metric_names:
+            matrix = np.array(
+                [spectral_history_by_module[m][metric] for m in module_names],
+                dtype=float,
+            )
+            np.save(os.path.join(self.spectral_dir, f"spectral_{metric}.npy"), matrix)
 
     # ========== VISUALIZATION GENERATION ==========
 

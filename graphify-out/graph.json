@@ -21,14 +21,34 @@
   },
   "nodes": [
     {
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "archive/p97_default/README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "p97_default_readme",
+      "community": 42,
+      "norm_label": "readme.md"
+    },
+    {
+      "label": "archive/p97_default/ \u2014 pre-Nanda-Unified four-head runs",
+      "file_type": "document",
+      "source_file": "archive/p97_default/README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "p97_default_readme_archive_p97_default_pre_nanda_unified_four_head_runs",
+      "community": 42,
+      "norm_label": "archive/p97_default/ \u2014 pre-nanda-unified four-head runs"
+    },
+    {
       "label": "run_nanda_benchmark.py",
       "file_type": "code",
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "run_nanda_benchmark",
       "community": 0,
-      "norm_label": "run_nanda_benchmark.py"
+      "norm_label": "run_nanda_benchmark.py",
+      "id": "run_nanda_benchmark"
     },
     {
       "label": "dropout_variance_checkpoint_schedule()",
@@ -36,9 +56,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L125",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_dropout_variance_checkpoint_schedule",
       "community": 0,
-      "norm_label": "dropout_variance_checkpoint_schedule()"
+      "norm_label": "dropout_variance_checkpoint_schedule()",
+      "id": "run_nanda_benchmark_dropout_variance_checkpoint_schedule"
     },
     {
       "label": "pick_drc_checkpoint_subset()",
@@ -46,9 +66,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L148",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_pick_drc_checkpoint_subset",
       "community": 0,
-      "norm_label": "pick_drc_checkpoint_subset()"
+      "norm_label": "pick_drc_checkpoint_subset()",
+      "id": "run_nanda_benchmark_pick_drc_checkpoint_subset"
     },
     {
       "label": "_num_or_none()",
@@ -56,9 +76,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L158",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_num_or_none",
       "community": 0,
-      "norm_label": "_num_or_none()"
+      "norm_label": "_num_or_none()",
+      "id": "run_nanda_benchmark_num_or_none"
     },
     {
       "label": "load_config()",
@@ -66,9 +86,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L162",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_load_config",
       "community": 0,
-      "norm_label": "load_config()"
+      "norm_label": "load_config()",
+      "id": "run_nanda_benchmark_load_config"
     },
     {
       "label": "pick_device()",
@@ -76,9 +96,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L192",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_pick_device",
       "community": 0,
-      "norm_label": "pick_device()"
+      "norm_label": "pick_device()",
+      "id": "run_nanda_benchmark_pick_device"
     },
     {
       "label": "seed_dir_for()",
@@ -86,9 +106,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L196",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_seed_dir_for",
       "community": 0,
-      "norm_label": "seed_dir_for()"
+      "norm_label": "seed_dir_for()",
+      "id": "run_nanda_benchmark_seed_dir_for"
     },
     {
       "label": "checkpoints_dir_for()",
@@ -96,9 +116,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L200",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_checkpoints_dir_for",
       "community": 0,
-      "norm_label": "checkpoints_dir_for()"
+      "norm_label": "checkpoints_dir_for()",
+      "id": "run_nanda_benchmark_checkpoints_dir_for"
     },
     {
       "label": "summary_path_for()",
@@ -106,9 +126,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L204",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_summary_path_for",
       "community": 0,
-      "norm_label": "summary_path_for()"
+      "norm_label": "summary_path_for()",
+      "id": "run_nanda_benchmark_summary_path_for"
     },
     {
       "label": "load_summary()",
@@ -116,9 +136,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L208",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_load_summary",
       "community": 0,
-      "norm_label": "load_summary()"
+      "norm_label": "load_summary()",
+      "id": "run_nanda_benchmark_load_summary"
     },
     {
       "label": "get_done_predictors()",
@@ -126,9 +146,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L216",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_get_done_predictors",
       "community": 0,
-      "norm_label": "get_done_predictors()"
+      "norm_label": "get_done_predictors()",
+      "id": "run_nanda_benchmark_get_done_predictors"
     },
     {
       "label": "is_predictor_done()",
@@ -136,9 +156,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L232",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_is_predictor_done",
       "community": 0,
-      "norm_label": "is_predictor_done()"
+      "norm_label": "is_predictor_done()",
+      "id": "run_nanda_benchmark_is_predictor_done"
     },
     {
       "label": "has_saved_checkpoints()",
@@ -146,9 +166,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L236",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_has_saved_checkpoints",
       "community": 0,
-      "norm_label": "has_saved_checkpoints()"
+      "norm_label": "has_saved_checkpoints()",
+      "id": "run_nanda_benchmark_has_saved_checkpoints"
     },
     {
       "label": "grok_epoch_from()",
@@ -156,9 +176,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L243",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_grok_epoch_from",
       "community": 0,
-      "norm_label": "grok_epoch_from()"
+      "norm_label": "grok_epoch_from()",
+      "id": "run_nanda_benchmark_grok_epoch_from"
     },
     {
       "label": "limit_cycle_check()",
@@ -166,9 +186,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L249",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_limit_cycle_check",
       "community": 0,
-      "norm_label": "limit_cycle_check()"
+      "norm_label": "limit_cycle_check()",
+      "id": "run_nanda_benchmark_limit_cycle_check"
     },
     {
       "label": "train_one_seed()",
@@ -176,9 +196,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L277",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_train_one_seed",
       "community": 0,
-      "norm_label": "train_one_seed()"
+      "norm_label": "train_one_seed()",
+      "id": "run_nanda_benchmark_train_one_seed"
     },
     {
       "label": "_checkpoint_predictor_dropout_variance()",
@@ -186,9 +206,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L554",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_checkpoint_predictor_dropout_variance",
       "community": 0,
-      "norm_label": "_checkpoint_predictor_dropout_variance()"
+      "norm_label": "_checkpoint_predictor_dropout_variance()",
+      "id": "run_nanda_benchmark_checkpoint_predictor_dropout_variance"
     },
     {
       "label": "recompute_from_checkpoints()",
@@ -196,9 +216,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L631",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_recompute_from_checkpoints",
       "community": 0,
-      "norm_label": "recompute_from_checkpoints()"
+      "norm_label": "recompute_from_checkpoints()",
+      "id": "run_nanda_benchmark_recompute_from_checkpoints"
     },
     {
       "label": "aggregate()",
@@ -206,9 +226,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L675",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_aggregate",
       "community": 0,
-      "norm_label": "aggregate()"
+      "norm_label": "aggregate()",
+      "id": "run_nanda_benchmark_aggregate"
     },
     {
       "label": "main()",
@@ -216,9 +236,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L751",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_main",
       "community": 0,
-      "norm_label": "main()"
+      "norm_label": "main()",
+      "id": "run_nanda_benchmark_main"
     },
     {
       "label": "Log-uniform-spaced epoch indices for the dropout-variance checkpoints,     same",
@@ -226,9 +246,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L126",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_rationale_126",
       "community": 0,
-      "norm_label": "log-uniform-spaced epoch indices for the dropout-variance checkpoints,     same"
+      "norm_label": "log-uniform-spaced epoch indices for the dropout-variance checkpoints,     same",
+      "id": "run_nanda_benchmark_rationale_126"
     },
     {
       "label": "Evenly-spaced-by-position subset of an existing checkpoint list, for     the che",
@@ -236,9 +256,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L149",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_rationale_149",
       "community": 0,
-      "norm_label": "evenly-spaced-by-position subset of an existing checkpoint list, for     the che"
+      "norm_label": "evenly-spaced-by-position subset of an existing checkpoint list, for     the che",
+      "id": "run_nanda_benchmark_rationale_149"
     },
     {
       "label": "Read configs/nanda_unified.yaml -> flat dict of the constants used here.",
@@ -246,9 +266,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L163",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_rationale_163",
       "community": 0,
-      "norm_label": "read configs/nanda_unified.yaml -> flat dict of the constants used here."
+      "norm_label": "read configs/nanda_unified.yaml -> flat dict of the constants used here.",
+      "id": "run_nanda_benchmark_rationale_163"
     },
     {
       "label": "Which predictors already have a real result in this seed's     summary.json, key",
@@ -256,9 +276,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L217",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_rationale_217",
       "community": 0,
-      "norm_label": "which predictors already have a real result in this seed's     summary.json, key"
+      "norm_label": "which predictors already have a real result in this seed's     summary.json, key",
+      "id": "run_nanda_benchmark_rationale_217"
     },
     {
       "label": "Detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test",
@@ -266,9 +286,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L250",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_rationale_250",
       "community": 0,
-      "norm_label": "detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test"
+      "norm_label": "detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test",
+      "id": "run_nanda_benchmark_rationale_250"
     },
     {
       "label": "Train seed from scratch. predictors_to_compute (a set, subset of     ALL_PREDICT",
@@ -276,9 +296,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L279",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_rationale_279",
       "community": 0,
-      "norm_label": "train seed from scratch. predictors_to_compute (a set, subset of     all_predict"
+      "norm_label": "train seed from scratch. predictors_to_compute (a set, subset of     all_predict",
+      "id": "run_nanda_benchmark_rationale_279"
     },
     {
       "label": "CHECKPOINT_PREDICTOR_FUNCS[\"dropout_variance\"] \u2014 loads each saved     checkpoint",
@@ -286,9 +306,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L556",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_rationale_556",
       "community": 0,
-      "norm_label": "checkpoint_predictor_funcs[\"dropout_variance\"] \u2014 loads each saved     checkpoint"
+      "norm_label": "checkpoint_predictor_funcs[\"dropout_variance\"] \u2014 loads each saved     checkpoint",
+      "id": "run_nanda_benchmark_rationale_556"
     },
     {
       "label": "Compute predictor(s) that only need frozen model weights (currently     just \"dr",
@@ -296,9 +316,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L632",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_rationale_632",
       "community": 0,
-      "norm_label": "compute predictor(s) that only need frozen model weights (currently     just \"dr"
+      "norm_label": "compute predictor(s) that only need frozen model weights (currently     just \"dr",
+      "id": "run_nanda_benchmark_rationale_632"
     },
     {
       "label": "plot_nanda_results.py",
@@ -1276,7 +1296,7 @@
       "source_file": "archive/src_p97_mainstream_old/generate_master_report.py",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 42,
+      "community": 33,
       "norm_label": "_opt()",
       "id": "src_p97_mainstream_old_generate_master_report_opt"
     },
@@ -1286,7 +1306,7 @@
       "source_file": "archive/src_p97_mainstream_old/generate_master_report.py",
       "source_location": "L75",
       "_origin": "ast",
-      "community": 42,
+      "community": 33,
       "norm_label": "load_run()",
       "id": "src_p97_mainstream_old_generate_master_report_load_run"
     },
@@ -1296,7 +1316,7 @@
       "source_file": "archive/src_p97_mainstream_old/generate_master_report.py",
       "source_location": "L119",
       "_origin": "ast",
-      "community": 42,
+      "community": 33,
       "norm_label": "grok_epoch()",
       "id": "src_p97_mainstream_old_generate_master_report_grok_epoch"
     },
@@ -1506,7 +1526,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 47,
+      "community": 22,
       "norm_label": "plot_results_four_head.py",
       "id": "src_p97_mainstream_old_plot_results_four_head"
     },
@@ -1516,7 +1536,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L51",
       "_origin": "ast",
-      "community": 47,
+      "community": 22,
       "norm_label": "migrate_legacy_flat_run()",
       "id": "src_p97_mainstream_old_plot_results_four_head_migrate_legacy_flat_run"
     },
@@ -1526,7 +1546,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L73",
       "_origin": "ast",
-      "community": 47,
+      "community": 22,
       "norm_label": "discover_run_dirs()",
       "id": "src_p97_mainstream_old_plot_results_four_head_discover_run_dirs"
     },
@@ -1536,7 +1556,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L87",
       "_origin": "ast",
-      "community": 47,
+      "community": 22,
       "norm_label": "load_run_data()",
       "id": "src_p97_mainstream_old_plot_results_four_head_load_run_data"
     },
@@ -1546,7 +1566,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L113",
       "_origin": "ast",
-      "community": 42,
+      "community": 22,
       "norm_label": "plot_single_run()",
       "id": "src_p97_mainstream_old_plot_results_four_head_plot_single_run"
     },
@@ -1556,7 +1576,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L289",
       "_origin": "ast",
-      "community": 47,
+      "community": 22,
       "norm_label": "plot_comparison()",
       "id": "src_p97_mainstream_old_plot_results_four_head_plot_comparison"
     },
@@ -1566,7 +1586,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L52",
       "_origin": "ast",
-      "community": 47,
+      "community": 22,
       "norm_label": "same migration as train_four_head.py \u2014 kept here too so this     script can be r",
       "id": "src_p97_mainstream_old_plot_results_four_head_rationale_52"
     },
@@ -1576,7 +1596,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L74",
       "_origin": "ast",
-      "community": 47,
+      "community": 22,
       "norm_label": "finds every run_<n> folder inside base_dir, sorted by run number     (not alphab",
       "id": "src_p97_mainstream_old_plot_results_four_head_rationale_74"
     },
@@ -1586,7 +1606,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L114",
       "_origin": "ast",
-      "community": 42,
+      "community": 22,
       "norm_label": "recreates this run's own 8 plots, saved inside results/four_head/run_<n>/ itself",
       "id": "src_p97_mainstream_old_plot_results_four_head_rationale_114"
     },
@@ -1596,7 +1616,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L290",
       "_origin": "ast",
-      "community": 47,
+      "community": 22,
       "norm_label": "builds 4 plots overlaying every discovered run together, saved     directly in r",
       "id": "src_p97_mainstream_old_plot_results_four_head_rationale_290"
     },
@@ -1666,7 +1686,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 50,
+      "community": 22,
       "norm_label": "compute_acceleration()",
       "id": "predictors_l2_norm_compute_acceleration"
     },
@@ -1686,7 +1706,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 48,
+      "community": 22,
       "norm_label": "apply_moving_average()",
       "id": "predictors_l2_norm_apply_moving_average"
     },
@@ -1696,7 +1716,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L63",
       "_origin": "ast",
-      "community": 49,
+      "community": 22,
       "norm_label": "resample_to_log_uniform_grid()",
       "id": "predictors_l2_norm_resample_to_log_uniform_grid"
     },
@@ -1706,7 +1726,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L88",
       "_origin": "ast",
-      "community": 49,
+      "community": 22,
       "norm_label": "compute_fast_slow_moving_averages()",
       "id": "predictors_l2_norm_compute_fast_slow_moving_averages"
     },
@@ -1716,7 +1736,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L121",
       "_origin": "ast",
-      "community": 42,
+      "community": 22,
       "norm_label": "detect_ma_crossover()",
       "id": "predictors_l2_norm_detect_ma_crossover"
     },
@@ -1726,7 +1746,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L141",
       "_origin": "ast",
-      "community": 48,
+      "community": 22,
       "norm_label": "compute_ma_of_slow_ma()",
       "id": "predictors_l2_norm_compute_ma_of_slow_ma"
     },
@@ -1736,7 +1756,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L154",
       "_origin": "ast",
-      "community": 42,
+      "community": 22,
       "norm_label": "compute_noise_floor()",
       "id": "predictors_l2_norm_compute_noise_floor"
     },
@@ -1756,7 +1776,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L181",
       "_origin": "ast",
-      "community": 42,
+      "community": 22,
       "norm_label": "detect_ma_of_ma_zero_crossing()",
       "id": "predictors_l2_norm_detect_ma_of_ma_zero_crossing"
     },
@@ -1766,7 +1786,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L24",
       "_origin": "ast",
-      "community": 50,
+      "community": 22,
       "norm_label": "compute the second derivative of l2 norm (acceleration).     acceleration[i] = r",
       "id": "predictors_l2_norm_rationale_24"
     },
@@ -1786,7 +1806,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L55",
       "_origin": "ast",
-      "community": 48,
+      "community": 22,
       "norm_label": "apply moving average smoothing to reduce noise.     window_size: number of epoch",
       "id": "predictors_l2_norm_rationale_55"
     },
@@ -1796,7 +1816,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L64",
       "_origin": "ast",
-      "community": 49,
+      "community": 22,
       "norm_label": "resample data onto a grid uniformly spaced in log10(epoch) \u2014 i.e. the     same s",
       "id": "predictors_l2_norm_rationale_64"
     },
@@ -1806,7 +1826,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L89",
       "_origin": "ast",
-      "community": 49,
+      "community": 22,
       "norm_label": "compute two moving averages on a log-epoch-uniform grid, so the window     cover",
       "id": "predictors_l2_norm_rationale_89"
     },
@@ -1816,7 +1836,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L122",
       "_origin": "ast",
-      "community": 42,
+      "community": 22,
       "norm_label": "detect where fast ma crosses above slow ma, searching along the     log-uniform",
       "id": "predictors_l2_norm_rationale_122"
     },
@@ -1826,7 +1846,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L142",
       "_origin": "ast",
-      "community": 48,
+      "community": 22,
       "norm_label": "apply a second, faster-window moving average on top of the already-smoothed",
       "id": "predictors_l2_norm_rationale_142"
     },
@@ -1836,7 +1856,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L155",
       "_origin": "ast",
-      "community": 42,
+      "community": 22,
       "norm_label": "estimate the normal noise level of the ma-of-ma difference from the quiet     ea",
       "id": "predictors_l2_norm_rationale_155"
     },
@@ -1856,7 +1876,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L182",
       "_origin": "ast",
-      "community": 42,
+      "community": 22,
       "norm_label": "fire on the first epoch (after skip_epochs) where diff crosses from     positive",
       "id": "predictors_l2_norm_rationale_182"
     },
@@ -2436,7 +2456,7 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L75",
       "_origin": "ast",
-      "community": 50,
+      "community": 22,
       "norm_label": "compute the second derivative of l2 norm (acceleration).     acceleration[i] = r",
       "id": "predictors_l2_norm_rationale_75"
     },
@@ -2456,7 +2476,7 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L106",
       "_origin": "ast",
-      "community": 48,
+      "community": 22,
       "norm_label": "apply moving average smoothing to reduce noise.     window_size: number of epoch",
       "id": "predictors_l2_norm_rationale_106"
     },
@@ -2466,7 +2486,7 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L115",
       "_origin": "ast",
-      "community": 49,
+      "community": 22,
       "norm_label": "resample data onto a grid uniformly spaced in log10(epoch) \u2014 i.e. the     same s",
       "id": "predictors_l2_norm_rationale_115"
     },
@@ -2476,7 +2496,7 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L140",
       "_origin": "ast",
-      "community": 49,
+      "community": 22,
       "norm_label": "compute two moving averages on a log-epoch-uniform grid, so the window     cover",
       "id": "predictors_l2_norm_rationale_140"
     },
@@ -2486,7 +2506,7 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L173",
       "_origin": "ast",
-      "community": 42,
+      "community": 22,
       "norm_label": "detect where fast ma crosses above slow ma, searching along the     log-uniform",
       "id": "predictors_l2_norm_rationale_173"
     },
@@ -2496,7 +2516,7 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L193",
       "_origin": "ast",
-      "community": 48,
+      "community": 22,
       "norm_label": "apply a second, faster-window moving average on top of the already-smoothed",
       "id": "predictors_l2_norm_rationale_193"
     },
@@ -2506,7 +2526,7 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L206",
       "_origin": "ast",
-      "community": 42,
+      "community": 22,
       "norm_label": "estimate the normal noise level of the ma-of-ma difference from the quiet     ea",
       "id": "predictors_l2_norm_rationale_206"
     },
@@ -2526,7 +2546,7 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L233",
       "_origin": "ast",
-      "community": 42,
+      "community": 22,
       "norm_label": "fire on the first epoch (after skip_epochs) where diff crosses from     positive",
       "id": "predictors_l2_norm_rationale_233"
     },
@@ -5843,6 +5863,16 @@
   ],
   "links": [
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "archive/p97_default/README.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "p97_default_readme",
+      "target": "p97_default_readme_archive_p97_default_pre_nanda_unified_four_head_runs",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -5902,9 +5932,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L554",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark",
-      "target": "run_nanda_benchmark_checkpoint_predictor_dropout_variance",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_checkpoint_predictor_dropout_variance"
     },
     {
       "relation": "contains",
@@ -5912,9 +5942,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L200",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark",
-      "target": "run_nanda_benchmark_checkpoints_dir_for",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_checkpoints_dir_for"
     },
     {
       "relation": "contains",
@@ -5932,9 +5962,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L216",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark",
-      "target": "run_nanda_benchmark_get_done_predictors",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_get_done_predictors"
     },
     {
       "relation": "contains",
@@ -5952,9 +5982,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L236",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark",
-      "target": "run_nanda_benchmark_has_saved_checkpoints",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_has_saved_checkpoints"
     },
     {
       "relation": "contains",
@@ -5962,9 +5992,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L232",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark",
-      "target": "run_nanda_benchmark_is_predictor_done",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_is_predictor_done"
     },
     {
       "relation": "contains",
@@ -5992,9 +6022,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L208",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark",
-      "target": "run_nanda_benchmark_load_summary",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_load_summary"
     },
     {
       "relation": "contains",
@@ -6042,9 +6072,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L631",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark",
-      "target": "run_nanda_benchmark_recompute_from_checkpoints",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_recompute_from_checkpoints"
     },
     {
       "relation": "contains",
@@ -6062,9 +6092,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L204",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark",
-      "target": "run_nanda_benchmark_summary_path_for",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_summary_path_for"
     },
     {
       "relation": "contains",
@@ -6082,9 +6112,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L126",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_126",
-      "target": "run_nanda_benchmark_dropout_variance_checkpoint_schedule",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_dropout_variance_checkpoint_schedule"
     },
     {
       "relation": "calls",
@@ -6104,9 +6134,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L572",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_checkpoint_predictor_dropout_variance",
-      "target": "run_nanda_benchmark_pick_drc_checkpoint_subset",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_pick_drc_checkpoint_subset"
     },
     {
       "relation": "rationale_for",
@@ -6114,9 +6144,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L149",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_149",
-      "target": "run_nanda_benchmark_pick_drc_checkpoint_subset",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_pick_drc_checkpoint_subset"
     },
     {
       "relation": "calls",
@@ -6157,9 +6187,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L163",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_163",
-      "target": "run_nanda_benchmark_load_config",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_load_config"
     },
     {
       "relation": "calls",
@@ -6179,9 +6209,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L201",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_checkpoints_dir_for",
-      "target": "run_nanda_benchmark_seed_dir_for",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_seed_dir_for"
     },
     {
       "relation": "calls",
@@ -6201,9 +6231,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L644",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_recompute_from_checkpoints",
-      "target": "run_nanda_benchmark_seed_dir_for",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_seed_dir_for"
     },
     {
       "relation": "calls",
@@ -6212,9 +6242,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L205",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_summary_path_for",
-      "target": "run_nanda_benchmark_seed_dir_for",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_seed_dir_for"
     },
     {
       "relation": "calls",
@@ -6234,9 +6264,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L237",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_has_saved_checkpoints",
-      "target": "run_nanda_benchmark_checkpoints_dir_for",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_checkpoints_dir_for"
     },
     {
       "relation": "calls",
@@ -6245,9 +6275,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L645",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_recompute_from_checkpoints",
-      "target": "run_nanda_benchmark_checkpoints_dir_for",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_checkpoints_dir_for"
     },
     {
       "relation": "calls",
@@ -6256,9 +6286,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L291",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_train_one_seed",
-      "target": "run_nanda_benchmark_checkpoints_dir_for",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_checkpoints_dir_for"
     },
     {
       "relation": "calls",
@@ -6267,9 +6297,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L209",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_load_summary",
-      "target": "run_nanda_benchmark_summary_path_for",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_summary_path_for"
     },
     {
       "relation": "calls",
@@ -6278,9 +6308,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L667",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_recompute_from_checkpoints",
-      "target": "run_nanda_benchmark_summary_path_for",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_summary_path_for"
     },
     {
       "relation": "calls",
@@ -6289,9 +6319,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L222",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_get_done_predictors",
-      "target": "run_nanda_benchmark_load_summary",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_load_summary"
     },
     {
       "relation": "calls",
@@ -6300,9 +6330,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L805",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_main",
-      "target": "run_nanda_benchmark_load_summary",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_load_summary"
     },
     {
       "relation": "calls",
@@ -6311,9 +6341,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L233",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_is_predictor_done",
-      "target": "run_nanda_benchmark_get_done_predictors",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_get_done_predictors"
     },
     {
       "relation": "calls",
@@ -6322,9 +6352,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L806",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_main",
-      "target": "run_nanda_benchmark_get_done_predictors",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_get_done_predictors"
     },
     {
       "relation": "rationale_for",
@@ -6332,9 +6362,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L217",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_217",
-      "target": "run_nanda_benchmark_get_done_predictors",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_get_done_predictors"
     },
     {
       "relation": "calls",
@@ -6343,9 +6373,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L824",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_main",
-      "target": "run_nanda_benchmark_has_saved_checkpoints",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_has_saved_checkpoints"
     },
     {
       "relation": "calls",
@@ -6364,9 +6394,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L250",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_250",
-      "target": "run_nanda_benchmark_limit_cycle_check",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_limit_cycle_check"
     },
     {
       "relation": "calls",
@@ -6396,9 +6426,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L279",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_279",
-      "target": "run_nanda_benchmark_train_one_seed",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_train_one_seed"
     },
     {
       "relation": "calls",
@@ -6428,9 +6458,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L556",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_556",
-      "target": "run_nanda_benchmark_checkpoint_predictor_dropout_variance",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_checkpoint_predictor_dropout_variance"
     },
     {
       "relation": "calls",
@@ -6439,9 +6469,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L828",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_main",
-      "target": "run_nanda_benchmark_recompute_from_checkpoints",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_recompute_from_checkpoints"
     },
     {
       "relation": "rationale_for",
@@ -6449,9 +6479,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L632",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_632",
-      "target": "run_nanda_benchmark_recompute_from_checkpoints",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_recompute_from_checkpoints"
     },
     {
       "relation": "calls",
@@ -13773,5 +13803,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "ae454078f3ea7c43a33502ef044c6bd04b405f54"
+  "built_at_commit": "986fa63c8beead06f340b94666d80e9abed0abd2"
 }

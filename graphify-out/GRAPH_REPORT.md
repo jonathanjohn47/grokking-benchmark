@@ -1,16 +1,16 @@
 # Graph Report - grokking-benchmark  (2026-09-05)
 
 ## Corpus Check
-- 72 files · ~484,743 words
+- 99 files · ~683,458 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 582 nodes · 767 edges · 51 communities (48 shown, 3 thin omitted)
+- 584 nodes · 768 edges · 47 communities (43 shown, 4 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ae454078`
+- Built from commit: `986fa63c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -51,10 +51,6 @@
 - [[_COMMUNITY_Community 43|Community 43]]
 - [[_COMMUNITY_Community 45|Community 45]]
 - [[_COMMUNITY_Community 46|Community 46]]
-- [[_COMMUNITY_Community 47|Community 47]]
-- [[_COMMUNITY_Community 48|Community 48]]
-- [[_COMMUNITY_Community 49|Community 49]]
-- [[_COMMUNITY_Community 50|Community 50]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `main()` - 26 edges
@@ -86,7 +82,7 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (51 total, 3 thin omitted)
+## Communities (47 total, 4 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.09
@@ -149,8 +145,8 @@ Cohesion: 0.09
 Nodes (24): Path, _analysis_outputs_present(), BenchmarkAnalyzer, main(), prepare_four_head_dir(), Run one four-head training session, then verify it really finished., Load all four-head runs., Ordered keys of the four-head runs that actually loaded. (+16 more)
 
 ### Community 22 - "Community 22"
-Cohesion: 0.14
-Nodes (10): compute_per_module_sum_of_squared_weights(), compute_sum_of_squared_weights(), detect_inflection(), detect_ma_of_ma_trigger(), Sum of squared weights over ALL parameters (sum w^2). This is the exact     quan, Fire on the first epoch (after skip_epochs) where diff climbs past     threshold, Fire on the first epoch (after skip_epochs) where diff climbs past     threshold, Detect inflection point where acceleration changes sign.     This is where the d (+2 more)
+Cohesion: 0.05
+Nodes (42): apply_moving_average(), compute_acceleration(), compute_fast_slow_moving_averages(), compute_ma_of_slow_ma(), compute_noise_floor(), compute_per_module_sum_of_squared_weights(), compute_sum_of_squared_weights(), detect_inflection() (+34 more)
 
 ### Community 23 - "Community 23"
 Cohesion: 0.06
@@ -193,8 +189,8 @@ Cohesion: 0.26
 Nodes (14): build_data_pdf(), build_plots_pdf(), _comparison_pages(), _dump_table(), grok_epoch(), _grok_vline(), load_run(), main() (+6 more)
 
 ### Community 33 - "Community 33"
-Cohesion: 0.32
-Nodes (11): build_data_pdf(), build_plots_pdf(), _comparison_pages(), _dump_table(), _grok_vline(), main(), Master report generator for the four-head grokking benchmark.  Reads every COMPL, _run_numbers() (+3 more)
+Cohesion: 0.26
+Nodes (14): build_data_pdf(), build_plots_pdf(), _comparison_pages(), _dump_table(), grok_epoch(), _grok_vline(), load_run(), main() (+6 more)
 
 ### Community 34 - "Community 34"
 Cohesion: 0.23
@@ -203,10 +199,6 @@ Nodes (11): compute_l2_statistics(), create_pdf_report(), find_grok_epoch(), loa
 ### Community 41 - "Community 41"
 Cohesion: 0.31
 Nodes (10): create_report(), discover_run_numbers(), extract_metrics(), find_grok_epoch(), load_run_data(), main(), L2 Norm + Dropout analysis report for the four-head transformer.  Standalone too, Load one run from the per-predictor subdir layout. (+2 more)
-
-### Community 42 - "Community 42"
-Cohesion: 0.16
-Nodes (14): compute_noise_floor(), detect_ma_crossover(), detect_ma_of_ma_zero_crossing(), Detect where fast MA crosses above slow MA, searching along the     log-uniform, Estimate the normal noise level of the MA-of-MA difference from the quiet     ea, Detect where fast MA crosses above slow MA, searching along the     log-uniform, Fire on the first epoch (after skip_epochs) where diff crosses from     positive, Estimate the normal noise level of the MA-of-MA difference from the quiet     ea (+6 more)
 
 ### Community 43 - "Community 43"
 Cohesion: 0.40
@@ -220,32 +212,16 @@ Nodes (11): add_results_section(), add_text_lines(), compile_py_to_pdf(), _escap
 Cohesion: 0.70
 Nodes (4): get_images(), horizontal_collage(), main(), vertical_collage()
 
-### Community 47 - "Community 47"
-Cohesion: 0.25
-Nodes (6): discover_run_dirs(), migrate_legacy_flat_run(), plot_comparison(), Builds 4 plots overlaying every discovered run together, saved     directly in r, Same migration as train_four_head.py — kept here too so this     script can be r, Finds every run_<N> folder inside base_dir, sorted by run number     (not alphab
-
-### Community 48 - "Community 48"
-Cohesion: 0.33
-Nodes (6): apply_moving_average(), compute_ma_of_slow_ma(), Apply moving average smoothing to reduce noise.     window_size: number of epoch, Apply a second, faster-window moving average on top of the already-smoothed, Apply a second, faster-window moving average on top of the already-smoothed, Apply moving average smoothing to reduce noise.     window_size: number of epoch
-
-### Community 49 - "Community 49"
-Cohesion: 0.33
-Nodes (6): compute_fast_slow_moving_averages(), Resample data onto a grid uniformly spaced in log10(epoch) — i.e. the     SAME s, Compute two moving averages on a LOG-EPOCH-UNIFORM grid, so the window     cover, Resample data onto a grid uniformly spaced in log10(epoch) — i.e. the     SAME s, Compute two moving averages on a LOG-EPOCH-UNIFORM grid, so the window     cover, resample_to_log_uniform_grid()
-
-### Community 50 - "Community 50"
-Cohesion: 0.67
-Nodes (3): compute_acceleration(), Compute the second derivative of L2 norm (acceleration).     acceleration[i] = r, Compute the second derivative of L2 norm (acceleration).     acceleration[i] = r
-
 ## Knowledge Gaps
-- **106 isolated node(s):** `Why it is kept`, `What the old code did (differs from the current `src/`)`, `Not a runnable tree`, `What this is`, `The four deliberate differences from `src/`` (+101 more)
+- **107 isolated node(s):** `archive/p97_default/ — pre-Nanda-Unified four-head runs`, `Why it is kept`, `What the old code did (differs from the current `src/`)`, `Not a runnable tree`, `What this is` (+102 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **What connects `Log-uniform-spaced epoch indices for the dropout-variance checkpoints,     same`, `Evenly-spaced-by-position subset of an existing checkpoint list, for     the che`, `Read configs/nanda_unified.yaml -> flat dict of the constants used here.` to the rest of the system?**
-  _242 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `archive/p97_default/ — pre-Nanda-Unified four-head runs`, `Log-uniform-spaced epoch indices for the dropout-variance checkpoints,     same`, `Evenly-spaced-by-position subset of an existing checkpoint list, for     the che` to the rest of the system?**
+  _243 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.08717948717948718 - nodes in this community are weakly interconnected._
 - **Should `Community 4` be split into smaller, more focused modules?**

@@ -8202,3 +8202,196 @@ That decision is Jonathan's, not yet made.
    not been smoke-tested within any session on record yet, unlike the
    throwaway stub two sessions ago which was explicitly tested and torn
    down.
+
+---
+
+### Session Summary — September 5, 2026 (Spectral predictor — real implementation, built and verified)
+
+#### 1. What was implemented
+
+The real Predictor 3 (Spectral) — not a stub, per-project's evaluation
+order (L2 → Dropout → **Spectral** → ...), following the exact
+`_checkpoint_predictor_dropout_variance` plugin shape the previous
+session's registry refactor set up for this.
+
+- **`src/predictors/spectral.py`** (new file):
+  - `compute_spectral_metrics_for_weight(W)`: takes a 2D weight tensor,
+    moves it to CPU via `W.detach().cpu()` before
+    `torch.linalg.svdvals(...)` — required because `aten::_linalg_svd*`
+    ops still do not run on `mps` (the same gap the throwaway stub hit
+    two sessions ago, now permanently documented in this file's module
+    docstring instead of only in a torn-down script). Returns
+    `spectral_norm` (largest singular value), `fro_norm` (Frobenius norm
+    of the singular-value vector), `stable_rank`
+    (`fro_norm**2 / (spectral_norm**2 + 1e-12)`), `effective_rank`
+    (`exp(entropy(s / s.sum()))`), and `top5_singular`.
+  - `compute_spectral_for_model(model)`: iterates a fixed module list
+    (`SPECTRAL_MODULE_NAMES = ["token_embedding", "query", "key",
+    "value", "mlp_in", "mlp_out", "output_head"]`, matching
+    `TransformerFourHead`'s actual attribute names — `position_embedding`
+    deliberately excluded, only `(3, d_model)`, too small for a rank
+    signal) and returns `{module_name: metrics_dict}`.
+  - Docstring records the scientific expectation being tested:
+    `stable_rank` (and `effective_rank`) should DROP around/before grok,
+    since the Fourier-based modular-addition circuit is low-rank relative
+    to a full `d_model x d_model` matrix — the per-weight-matrix mirror of
+    L2-Norm's "aggregate weight norm falls post-grok" story.
+
+- **`src/unified_measurements.py`**:
+  - `create_subdirs`: added `self.spectral_dir = os.path.join(output_dir,
+    "spectral")`, created alongside the existing four subdirs.
+  - New `save_spectral_data(self, spectral_checkpoints,
+    spectral_history_by_module)` method, same convention as
+    `save_l2_norm_data`'s `per_module_sum_w2.npy`: saves
+    `spectral_checkpoints.npy`, `spectral_module_names.npy`, and one
+    `spectral_<metric>.npy` per metric (`spectral_norm`, `fro_norm`,
+    `stable_rank`, `effective_rank`), each shaped `[n_modules,
+    n_checkpoints]`. `top5_singular` intentionally not saved as a
+    history — per-checkpoint diagnostic only.
+
+- **`run_nanda_benchmark.py`**:
+  - `_checkpoint_predictor_spectral(model, test_loader, ckpt_dir,
+    ckpt_epochs, measurements, grok_epoch, device)` added, matching
+    `_checkpoint_predictor_dropout_variance`'s exact signature and
+    pattern: loads each saved `model_epoch_{epoch}.pt` in turn, calls
+    `compute_spectral_for_model`, collects the per-module history,
+    calls `measurements.save_spectral_data`, writes
+    `spectral_signal.json`, and returns the `spectral_predictor` block
+    (`spectral_checkpoints`, `spectral_history_by_module`,
+    `module_names`, `grok_epoch`, `stable_rank_min_epoch_by_module`,
+    `stable_rank_first_last_by_module`, `num_checkpoints`).
+  - Registered: `PREDICTOR_SUMMARY_KEY["spectral"] =
+    "spectral_predictor"`, `ALL_PREDICTORS` (auto-derives from the dict),
+    `CHECKPOINT_PREDICTOR_FUNCS["spectral"] =
+    _checkpoint_predictor_spectral`, `CHECKPOINT_ONLY_PREDICTORS`
+    (auto-derives).
+  - `train_one_seed`: spectral is checkpoint-only and never computed live
+    inside the epoch loop (unlike `dropout_variance`, which has a live
+    fast-path) — added `spectral_block = (old_summary or
+    {}).get("spectral_predictor")` so a fresh/partial retrain always
+    carries forward whatever was already computed for spectral, and added
+    `"spectral_predictor": spectral_block` to the written `summary.json`.
+  - `aggregate()`: added a "Spectral predictor (per seed, stable_rank
+    first->last by module)" print block, same `.get()`-guarded pattern as
+    the other three predictor sections.
+  - **Bug found and fixed during smoke testing (this session, not
+    carried over from a previous one):** on a genuinely first-time
+    `--predictors spectral` run (no `summary.json` yet), `can_skip_retrain`
+    is `False` (requires `old_summary is not None`), so `main()` correctly
+    falls through to `train_one_seed`. But `train_one_seed` never computes
+    spectral live, so the first run finished with `spectral_predictor:
+    None` even though fresh checkpoints had just been saved — a silent
+    no-op, not an error. Fixed in `main()`: after `train_one_seed`
+    returns, checks `leftover = {p for p in (missing &
+    CHECKPOINT_ONLY_PREDICTORS) if summary.get(PREDICTOR_SUMMARY_KEY[p])
+    is None}`; if non-empty and checkpoints were saved, immediately calls
+    `recompute_from_checkpoints` for exactly those predictors off the
+    seed's brand-new checkpoints, before appending to `summaries`. This is
+    a general fix — it will also cover any future checkpoint-only
+    predictor that (like spectral) has no live-training fast path,
+    without needing a special case per predictor.
+
+#### 2. What did NOT change
+
+- `src/predictors/l2_norm.py`, `src/predictors/dropout.py`,
+  `configs/nanda_unified.yaml`, `TransformerFourHead` — all untouched.
+- `results/nanda_unified/` (the real, committed 5-seed L2/Dropout run) —
+  untouched; `git status --short results/nanda_unified/` confirmed clean
+  before and after this session.
+- The Dropout predictor's CLOSED/negative verdict from the previous
+  session — unchanged, not revisited this session.
+
+#### 3. Verification done
+
+- `python -m py_compile run_nanda_benchmark.py src/predictors/spectral.py
+  src/unified_measurements.py` — passed, both before and after the
+  `main()` fix.
+- **Smoke test 1** (`--seeds 1 --epochs 100 --output_dir
+  results/test_spectral --predictors spectral`, fresh directory): trained
+  100 epochs on `mps` (no grok at this length — expected, matches every
+  prior 100-epoch smoke test in this project), saved 20 checkpoints, then
+  printed `"[seed 0] spectral recomputed from 20 saved checkpoints (no
+  retrain)"` right after training finished (the new `main()` leftover-fix
+  firing correctly) — before the fix this line did not appear and
+  `spectral_predictor` stayed `None`.
+- Confirmed on disk: `results/test_spectral/seed_0/spectral/` contains
+  `spectral_checkpoints.npy`, `spectral_module_names.npy`,
+  `spectral_spectral_norm.npy`, `spectral_fro_norm.npy`,
+  `spectral_stable_rank.npy`, `spectral_effective_rank.npy`,
+  `spectral_signal.json`; `summary.json`'s `spectral_predictor` had all 7
+  expected keys and `num_checkpoints == 20`; `l2_predictor` (computed by
+  the same training run) was also present and non-`None`.
+- **Smoke test 2** (same command run again, no `--overwrite`): printed
+  `"[seed 0] spectral complete - skipping"` and `"[seed 0] all predictors
+  complete - skipping"` — zero epoch-loop output, confirming the
+  already-known no-retrain resume path also works correctly for spectral
+  on a second call, and `l2_predictor` was still present unchanged in
+  `summary.json` (checked field-by-field, not just non-`None`).
+- `results/test_spectral/` deleted after verification; `git status
+  --short results/nanda_unified/` re-checked clean.
+- Aggregate print sample from the smoke test (illustrative numbers only,
+  100-epoch pre-grok, NOT a verdict): `token_embedding=30.9->29.5
+  query=33.8->1.5 key=33.5->3.2 value=33.7->31.4 mlp_in=58.5->39.1
+  mlp_out=58.9->39.4 output_head=31.4->32.4` — query/key's large early
+  drop at only 100 epochs is noted here as an observation from the smoke
+  test only, not yet interpreted; the real signal needs the full 40000-
+  epoch, 5-seed run before any pass/fail reading is attempted.
+
+#### 4. What was NOT done / still open
+
+1. **The real 5-seed Spectral computation has not been run.** Since
+   `results/nanda_unified/` already has all 5 seeds' checkpoints saved
+   (24 each, from the committed L2/Dropout run), this does NOT need a
+   retrain — the exact command, ready to run when Jonathan says go:
+   ```
+   python run_nanda_benchmark.py --seeds 5 --epochs 40000 \
+       --output_dir results/nanda_unified --config configs/nanda_unified.yaml \
+       --predictors l2,dropout_gap,dropout_variance,spectral
+   ```
+   (no `--overwrite` needed — `l2`/`dropout_gap`/`dropout_variance` are
+   already done and will print "complete - skipping"; only `spectral` is
+   missing and will recompute from the saved checkpoints, no retraining,
+   in well under a minute based on the smoke test's per-checkpoint cost).
+2. No pass/fail verdict exists yet for Spectral — Criterion 1 (does
+   `stable_rank`'s minimum lead grok epoch, mirroring L2-Norm's and
+   Dropout-Variance's two-criterion test) and Criterion 2 (is that lead
+   tight/consistent across the 5 seeds) still need the real run's numbers.
+3. The pre-existing unstaged items this session found already sitting in
+   the working tree (`run_full_benchmark.py` deletion,
+   `archive/old_benchmarks/run_full_benchmark.py.deprecated` — confirmed
+   byte-identical to the deleted file via `diff`, i.e. a clean rename, not
+   a lossy edit) and `graphify-out/*` (auto-refreshed after
+   `spectral.py` was added) were bundled into this session's commit at
+   Jonathan's explicit request ("sab kuchh commit krdo") rather than left
+   for a separate decision, resolving the previous entry's open question
+   in favour of one combined commit.
+
+#### 5. Files Modified
+
+- `src/predictors/spectral.py` — new file, real Spectral predictor
+  (§1 above).
+- `src/unified_measurements.py` — `spectral_dir` + `save_spectral_data`.
+- `run_nanda_benchmark.py` — `_checkpoint_predictor_spectral` registered
+  into the existing plugin registry; `train_one_seed` and `aggregate`
+  updated to carry/print the new `spectral_predictor` block; `main()`
+  fixed so a first-time checkpoint-only predictor request is actually
+  computed right after the training run that produced its checkpoints,
+  not silently left `None`.
+- `context.md` — this entry.
+- `run_full_benchmark.py` (deleted) / `archive/old_benchmarks/
+  run_full_benchmark.py.deprecated` (already present) — pre-existing
+  working-tree state from before this session, committed now per §4.3.
+- `graphify-out/*` — auto-refreshed manifest/graph after `spectral.py`
+  was added; committed as-is, no manual edits.
+
+### Next
+
+1. Jonathan to say the word for the real `--predictors ...,spectral`
+   checkpoint-only recompute (§4.1 command above) — near-instant, no
+   retraining needed.
+2. Once that completes: read `stable_rank_min_epoch_by_module` vs
+   `grok_epoch` per seed, apply the same two-criterion test used for
+   L2-Norm and Dropout, reach a pass/fail verdict for Spectral (Predictor
+   3 of 9).
+3. Per the predictor evaluation order, Predictor 4 (AGE) is next after
+   Spectral is closed either way.

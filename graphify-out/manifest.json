@@ -280,13 +280,8 @@
     "semantic_hash": ""
   },
   "src/unified_measurements.py": {
-    "mtime": 1788482602.7592323,
-    "ast_hash": "e041b79b17a0684074624f4aaea57d5a",
-    "semantic_hash": ""
-  },
-  "run_full_benchmark.py": {
-    "mtime": 1788297764.4211342,
-    "ast_hash": "555ee83ace48fc8164a72205bd3aea0b",
+    "mtime": 1788600016.2658021,
+    "ast_hash": "2d2f16230515e4a56df90580b3455f76",
     "semantic_hash": ""
   },
   "archive/single_head/models/transformer.py": {
@@ -680,8 +675,8 @@
     "semantic_hash": ""
   },
   "run_nanda_benchmark.py": {
-    "mtime": 1788553286.5065446,
-    "ast_hash": "8b5285956321e3178fa6b603cf932571",
+    "mtime": 1788600138.1516857,
+    "ast_hash": "9492651eee625181accfb3efaf61c95e",
     "semantic_hash": ""
   },
   "plot_nanda_results.py": {
@@ -1117,6 +1112,106 @@
   "results/nanda_unified/plots/seed_4/09_dropout_gap_bar.png": {
     "mtime": 1788542083.9780319,
     "ast_hash": "529c06ff6ed30b2d3e5d1e4ee50dbef1",
+    "semantic_hash": ""
+  },
+  "src/predictors/spectral.py": {
+    "mtime": 1788599997.245223,
+    "ast_hash": "a8102cbed05bba68152aee017ae1a7e8",
+    "semantic_hash": ""
+  },
+  "archive/p97_default/README.md": {
+    "mtime": 1788482521.5760944,
+    "ast_hash": "dd448103d57135c67b71f840589a731e",
+    "semantic_hash": ""
+  },
+  "archive/p97_default/run_1/reports/training_report.pdf": {
+    "mtime": 1788333538.1958833,
+    "ast_hash": "e0c422d9c87f4de2e1a4fa8c72bf540f",
+    "semantic_hash": ""
+  },
+  "archive/p97_default/run_2/reports/training_report.pdf": {
+    "mtime": 1788348371.7602732,
+    "ast_hash": "dac5c6644134804063339e6f74c564cf",
+    "semantic_hash": ""
+  },
+  "archive/p97_default/run_3/reports/training_report.pdf": {
+    "mtime": 1788363239.984101,
+    "ast_hash": "bb789f1fe165a8fe77b72a30b04aabb7",
+    "semantic_hash": ""
+  },
+  "archive/p97_default/run_1/dropout/dropout_gap_curve.png": {
+    "mtime": 1788333537.7552507,
+    "ast_hash": "70840e5a4564e7e83854bae67efb88dc",
+    "semantic_hash": ""
+  },
+  "archive/p97_default/run_1/l2_norm/l2_norm_curve.png": {
+    "mtime": 1788333536.9467247,
+    "ast_hash": "fd4a6af1fba43eb22da358888555c39a",
+    "semantic_hash": ""
+  },
+  "archive/p97_default/run_1/l2_norm/ma_of_ma_diff.png": {
+    "mtime": 1788333537.3154821,
+    "ast_hash": "a18d6e38a7285c19fc915bebf39d9962",
+    "semantic_hash": ""
+  },
+  "archive/p97_default/run_1/l2_norm/ma_of_ma_diff_linear.png": {
+    "mtime": 1788333537.4430363,
+    "ast_hash": "8b8ebdfd8404527506951e462038a0a2",
+    "semantic_hash": ""
+  },
+  "archive/p97_default/run_1/l2_norm/ma_of_slow_ma_crossover.png": {
+    "mtime": 1788333537.1372206,
+    "ast_hash": "d750d8232623f666e92e35a7b1f64dda",
+    "semantic_hash": ""
+  },
+  "archive/p97_default/run_2/dropout/dropout_gap_curve.png": {
+    "mtime": 1788348371.3136206,
+    "ast_hash": "97ba37b4a3e943ace9d4253d7fdcee14",
+    "semantic_hash": ""
+  },
+  "archive/p97_default/run_2/l2_norm/l2_norm_curve.png": {
+    "mtime": 1788348370.5367646,
+    "ast_hash": "6205f9d35411dcd7f6e3c8dd3506f5b9",
+    "semantic_hash": ""
+  },
+  "archive/p97_default/run_2/l2_norm/ma_of_ma_diff.png": {
+    "mtime": 1788348370.9133542,
+    "ast_hash": "6802d4603cf44dbe8bc646efa6401fc5",
+    "semantic_hash": ""
+  },
+  "archive/p97_default/run_2/l2_norm/ma_of_ma_diff_linear.png": {
+    "mtime": 1788348371.0376341,
+    "ast_hash": "cbcf39a7bbc70bdafe5aa8052d2f508d",
+    "semantic_hash": ""
+  },
+  "archive/p97_default/run_2/l2_norm/ma_of_slow_ma_crossover.png": {
+    "mtime": 1788348370.735906,
+    "ast_hash": "51497dfc2b920966ff43b6841b1b89b2",
+    "semantic_hash": ""
+  },
+  "archive/p97_default/run_3/dropout/dropout_gap_curve.png": {
+    "mtime": 1788363239.5493953,
+    "ast_hash": "dcfded6e5f65840a6779058fb0cf2f98",
+    "semantic_hash": ""
+  },
+  "archive/p97_default/run_3/l2_norm/l2_norm_curve.png": {
+    "mtime": 1788363238.7598023,
+    "ast_hash": "edbdeccf2b744446c0899d6195c98646",
+    "semantic_hash": ""
+  },
+  "archive/p97_default/run_3/l2_norm/ma_of_ma_diff.png": {
+    "mtime": 1788363239.144918,
+    "ast_hash": "8f3590b845f8cc63e24d9e47b7a44c55",
+    "semantic_hash": ""
+  },
+  "archive/p97_default/run_3/l2_norm/ma_of_ma_diff_linear.png": {
+    "mtime": 1788363239.271479,
+    "ast_hash": "e7597a8528dfb1edc13111b3e0798001",
+    "semantic_hash": ""
+  },
+  "archive/p97_default/run_3/l2_norm/ma_of_slow_ma_crossover.png": {
+    "mtime": 1788363238.9522228,
+    "ast_hash": "d0be824e455e31efd3c4b04398850df5",
     "semantic_hash": ""
   }
 }

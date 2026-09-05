@@ -73,6 +73,7 @@ from predictors.dropout import (                                          # noqa
     compute_dropout_gap_multi_rate,
     compute_dropout_variance,
 )
+from predictors.spectral import compute_spectral_for_model                # noqa: E402
 from unified_measurements import PredictorMeasurements                    # noqa: E402
 
 # The grok epoch is the first epoch test accuracy exceeds this (same
@@ -118,6 +119,7 @@ PREDICTOR_SUMMARY_KEY = {
     "l2": "l2_predictor",
     "dropout_gap": "dropout_final_gap_by_rate",
     "dropout_variance": "dropout_variance_predictor",
+    "spectral": "spectral_predictor",
 }
 ALL_PREDICTORS = list(PREDICTOR_SUMMARY_KEY.keys())
 
@@ -521,6 +523,11 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
     old_l2_block = (old_summary or {}).get("l2_predictor")
     l2_block = l2_signals if compute_l2 else (old_l2_block or l2_signals)
 
+    # Spectral is checkpoint-only (see CHECKPOINT_PREDICTOR_FUNCS below) —
+    # train_one_seed never computes it live, it only carries forward
+    # whatever recompute_from_checkpoints already wrote for this seed.
+    spectral_block = (old_summary or {}).get("spectral_predictor")
+
     # per-seed summary + resume sentinel. Old blocks for predictors NOT
     # recomputed this call are carried forward, never dropped.
     summary = {
@@ -539,6 +546,7 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
         "l2_predictor": l2_block,
         "dropout_final_gap_by_rate": dropout_gap_block,
         "dropout_variance_predictor": dropout_variance_block,
+        "spectral_predictor": spectral_block,
         "limit_cycle_check": limit_cycle_check(test_acc_history, grok_epoch),
         "wall_time_sec": round(time.time() - started, 1),
     }
@@ -616,6 +624,64 @@ def _checkpoint_predictor_dropout_variance(model, test_loader, ckpt_dir, ckpt_ep
     return block
 
 
+def _checkpoint_predictor_spectral(model, test_loader, ckpt_dir, ckpt_epochs,
+                                    measurements, grok_epoch, device):
+    """CHECKPOINT_PREDICTOR_FUNCS["spectral"] — same shape as
+    _checkpoint_predictor_dropout_variance above: loads each saved
+    checkpoint into `model` in turn, computes
+    predictors.spectral.compute_spectral_for_model(model) at that
+    checkpoint, collects the per-module singular-value history across all
+    checkpoints, saves it via measurements.save_spectral_data, and
+    returns the spectral_predictor block for summary.json.
+
+    test_loader is unused (spectral metrics only need the frozen weights,
+    not the data), but is kept in the signature to match the shared
+    CHECKPOINT_PREDICTOR_FUNCS shape every registered function follows."""
+    spectral_checkpoints = []
+    spectral_history_by_module = {name: {"spectral_norm": [], "fro_norm": [],
+                                          "stable_rank": [], "effective_rank": []}
+                                   for name in compute_spectral_for_model(model)}
+
+    for epoch in ckpt_epochs:
+        state = torch.load(os.path.join(ckpt_dir, f"model_epoch_{epoch}.pt"), map_location=device)
+        model.load_state_dict(state)
+        metrics_by_module = compute_spectral_for_model(model)
+        spectral_checkpoints.append(epoch)
+        for name, metrics in metrics_by_module.items():
+            for metric_name in ("spectral_norm", "fro_norm", "stable_rank", "effective_rank"):
+                spectral_history_by_module[name][metric_name].append(metrics[metric_name])
+
+    measurements.save_spectral_data(spectral_checkpoints, spectral_history_by_module)
+
+    # Aggregate signal: stable_rank should drop toward the low-rank Fourier
+    # circuit (see src/predictors/spectral.py docstring). Track, per
+    # module, the epoch where stable_rank first reaches its post-checkpoint
+    # minimum, and compare it against grok_epoch.
+    stable_rank_min_epoch_by_module = {}
+    stable_rank_first_last_by_module = {}
+    for name, metrics in spectral_history_by_module.items():
+        sr = metrics["stable_rank"]
+        min_idx = int(np.argmin(sr))
+        stable_rank_min_epoch_by_module[name] = spectral_checkpoints[min_idx]
+        stable_rank_first_last_by_module[name] = {
+            "first": float(sr[0]), "last": float(sr[-1]),
+        }
+
+    block = {
+        "spectral_checkpoints": spectral_checkpoints,
+        "spectral_history_by_module": spectral_history_by_module,
+        "module_names": list(spectral_history_by_module.keys()),
+        "grok_epoch": grok_epoch,
+        "stable_rank_min_epoch_by_module": stable_rank_min_epoch_by_module,
+        "stable_rank_first_last_by_module": stable_rank_first_last_by_module,
+        "num_checkpoints": len(spectral_checkpoints),
+    }
+    with open(os.path.join(measurements.spectral_dir,
+                           "spectral_signal.json"), "w") as handle:
+        json.dump(block, handle, indent=2)
+    return block
+
+
 # Predictors this runner knows how to (re)compute from already-saved
 # checkpoints/model_epoch_*.pt alone, with NO retraining. Adding a future
 # predictor here (once it exists) is the ONLY change needed for it to gain
@@ -624,6 +690,7 @@ def _checkpoint_predictor_dropout_variance(model, test_loader, ckpt_dir, ckpt_ep
 # the exact function shape expected.
 CHECKPOINT_PREDICTOR_FUNCS = {
     "dropout_variance": _checkpoint_predictor_dropout_variance,
+    "spectral": _checkpoint_predictor_spectral,
 }
 CHECKPOINT_ONLY_PREDICTORS = set(CHECKPOINT_PREDICTOR_FUNCS.keys())
 
@@ -707,6 +774,17 @@ def aggregate(summaries, args):
         ratio_str = f"{ratio:.4f}" if ratio is not None else "None"
         print(f"  seed {s['seed']}: variance_peak_epoch={dv['variance_peak_epoch']}  "
               f"peak/grok={ratio_str}  (grok={s['grok_epoch']})")
+
+    print("\nSpectral predictor (per seed, stable_rank first->last by module):")
+    for s in summaries:
+        sp = s.get("spectral_predictor")
+        if sp is None:
+            print(f"  seed {s['seed']}: n/a (not computed for this seed)")
+            continue
+        fl = sp["stable_rank_first_last_by_module"]
+        print(f"  seed {s['seed']}: " +
+              "  ".join(f"{m}={fl[m]['first']:.1f}->{fl[m]['last']:.1f}" for m in fl) +
+              f"  (grok={s['grok_epoch']})")
 
     print("\nDropout gap at final epoch (per seed, by rate):")
     for s in summaries:
@@ -827,9 +905,20 @@ def main():
             summaries.append(
                 recompute_from_checkpoints(seed, args, cfg, device, missing, old_summary))
         else:
-            summaries.append(train_one_seed(
+            summary = train_one_seed(
                 seed, args, cfg, device, predictors_to_compute=missing,
-                old_summary=old_summary, save_checkpoints=not args.no_save_checkpoints))
+                old_summary=old_summary, save_checkpoints=not args.no_save_checkpoints)
+            # Some CHECKPOINT_ONLY_PREDICTORS (e.g. spectral) are never
+            # computed live inside train_one_seed's epoch loop — they only
+            # need the checkpoints that fresh training just saved. Run
+            # those now, straight off this seed's brand-new checkpoints,
+            # so a first-time "--predictors spectral" run does not silently
+            # finish with spectral_predictor still None.
+            leftover = {p for p in (missing & CHECKPOINT_ONLY_PREDICTORS)
+                        if summary.get(PREDICTOR_SUMMARY_KEY[p]) is None}
+            if leftover and not args.no_save_checkpoints and has_saved_checkpoints(args.output_dir, seed):
+                summary = recompute_from_checkpoints(seed, args, cfg, device, leftover, summary)
+            summaries.append(summary)
 
     aggregate(summaries, args)
 
