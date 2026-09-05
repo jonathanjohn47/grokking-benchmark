@@ -117,41 +117,67 @@ class PredictorMeasurements:
 
     # ========== SPECTRAL MEASUREMENTS ==========
 
-    def save_spectral_data(self, spectral_checkpoints, spectral_history_by_module):
-        """Save all Spectral (Predictor 3) measurements.
+    def save_spectral_data(self, spectral_checkpoints, spectral_history):
+        """Save all Spectral (Predictor 3) measurements — Canatar et al.
+        2021 task-model-alignment version (NOT the old per-weight-matrix
+        stable_rank version, which has been removed).
 
         spectral_checkpoints: list/array of epoch indices, one per
             checkpoint that was evaluated (same role as
             dropout_variance_checkpoints.npy).
-        spectral_history_by_module: {module_name: {metric_name: [value
-            per checkpoint, same order as spectral_checkpoints]}}, as
-            produced by calling
-            predictors.spectral.compute_spectral_for_model at each
-            checkpoint and transposing module -> metric -> per-checkpoint
-            list. Every module's dict must have the same metric_name keys
-            (spectral_norm, fro_norm, stable_rank, effective_rank —
-            top5_singular is intentionally not saved here, it is a
-            per-checkpoint diagnostic only, not a plotted history).
+        spectral_history: dict of per-checkpoint lists, all the same
+            length as spectral_checkpoints:
+                k_90               : list[int]
+                k_95               : list[int]
+                alignment_score    : list[float]
+                entropy            : list[float]
+                eigenvalues_history: list[list[float]]  (top-50 eta_k per checkpoint)
+                cumulative_power_history: list[list[float]]  (C(1..100) per checkpoint)
+            built by calling
+            predictors.spectral.compute_spectral_metrics_for_checkpoint at
+            each checkpoint and collecting each returned field.
 
-        For each metric, saves spectral_<metric>.npy shaped
-        [n_modules, n_checkpoints] (row order recorded in
-        spectral_module_names.npy), matching the per_module_sum_w2.npy
-        convention already used by L2-Norm.
+        Saves (all under self.spectral_dir):
+            spectral_checkpoints.npy      [n_checkpoints]
+            spectral_k90.npy             [n_checkpoints]
+            spectral_k95.npy             [n_checkpoints]
+            spectral_alignment.npy       [n_checkpoints]
+            spectral_entropy.npy         [n_checkpoints]
+            spectral_eigenvalues.npy     [n_checkpoints, 50]
+            spectral_cumulative_power.npy [n_checkpoints, 100]
         """
         np.save(os.path.join(self.spectral_dir, "spectral_checkpoints.npy"),
                 np.array(spectral_checkpoints, dtype=int))
+        np.save(os.path.join(self.spectral_dir, "spectral_k90.npy"),
+                np.array(spectral_history["k_90"], dtype=float))
+        np.save(os.path.join(self.spectral_dir, "spectral_k95.npy"),
+                np.array(spectral_history["k_95"], dtype=float))
+        np.save(os.path.join(self.spectral_dir, "spectral_alignment.npy"),
+                np.array(spectral_history["alignment_score"], dtype=float))
+        np.save(os.path.join(self.spectral_dir, "spectral_entropy.npy"),
+                np.array(spectral_history["entropy"], dtype=float))
 
-        module_names = list(spectral_history_by_module.keys())
-        np.save(os.path.join(self.spectral_dir, "spectral_module_names.npy"),
-                np.array(module_names))
+        eig = self._stack_ragged(spectral_history["eigenvalues_history"], width=50)
+        np.save(os.path.join(self.spectral_dir, "spectral_eigenvalues.npy"), eig)
 
-        metric_names = ["spectral_norm", "fro_norm", "stable_rank", "effective_rank"]
-        for metric in metric_names:
-            matrix = np.array(
-                [spectral_history_by_module[m][metric] for m in module_names],
-                dtype=float,
-            )
-            np.save(os.path.join(self.spectral_dir, f"spectral_{metric}.npy"), matrix)
+        cum = self._stack_ragged(spectral_history["cumulative_power_history"], width=100)
+        np.save(os.path.join(self.spectral_dir, "spectral_cumulative_power.npy"), cum)
+
+    @staticmethod
+    def _stack_ragged(list_of_lists, width):
+        """[n_checkpoints] lists of <= `width` floats -> float array
+        [n_checkpoints, width], right-padded with the last value (NaN if a
+        row is empty). For the Nanda-Unified run every row is already
+        exactly `width` long (N = 3830 >> width), so this is just a guard."""
+        n = len(list_of_lists)
+        out = np.full((n, width), np.nan, dtype=float)
+        for i, row in enumerate(list_of_lists):
+            row = np.asarray(row, dtype=float)
+            m = min(len(row), width)
+            out[i, :m] = row[:m]
+            if 0 < m < width:
+                out[i, m:] = row[m - 1]
+        return out
 
     # ========== VISUALIZATION GENERATION ==========
 

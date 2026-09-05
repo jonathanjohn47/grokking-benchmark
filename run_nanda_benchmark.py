@@ -73,7 +73,7 @@ from predictors.dropout import (                                          # noqa
     compute_dropout_gap_multi_rate,
     compute_dropout_variance,
 )
-from predictors.spectral import compute_spectral_for_model                # noqa: E402
+from predictors.spectral import compute_spectral_metrics_for_checkpoint   # noqa: E402
 from unified_measurements import PredictorMeasurements                    # noqa: E402
 
 # The grok epoch is the first epoch test accuracy exceeds this (same
@@ -626,54 +626,79 @@ def _checkpoint_predictor_dropout_variance(model, test_loader, ckpt_dir, ckpt_ep
 
 def _checkpoint_predictor_spectral(model, test_loader, ckpt_dir, ckpt_epochs,
                                     measurements, grok_epoch, device):
-    """CHECKPOINT_PREDICTOR_FUNCS["spectral"] — same shape as
-    _checkpoint_predictor_dropout_variance above: loads each saved
-    checkpoint into `model` in turn, computes
-    predictors.spectral.compute_spectral_for_model(model) at that
-    checkpoint, collects the per-module singular-value history across all
-    checkpoints, saves it via measurements.save_spectral_data, and
-    returns the spectral_predictor block for summary.json.
+    """CHECKPOINT_PREDICTOR_FUNCS["spectral"] — Canatar et al. 2021
+    task-model alignment (see src/predictors/spectral.py). Loads each
+    saved checkpoint into `model` in turn, computes
+    compute_spectral_metrics_for_checkpoint(model, train_loader, device)
+    — kernel eigenvalues eta_k, task power w_k^2, cumulative power C(k),
+    k_90 / k_95, alignment_score, entropy — collects the per-checkpoint
+    history, saves it via measurements.save_spectral_data, and returns the
+    spectral_predictor block for summary.json.
 
-    test_loader is unused (spectral metrics only need the frozen weights,
-    not the data), but is kept in the signature to match the shared
-    CHECKPOINT_PREDICTOR_FUNCS shape every registered function follows."""
+    test_loader is IGNORED — Canatar's metrics are built on the TRAINING
+    representations and training labels, not the test split. This function
+    rebuilds the exact training split this seed used (same per-seed RNG
+    seeding as train_one_seed step (a)) so the sampled kernel matches the
+    one the model was actually trained on. The signature keeps
+    `test_loader` only to match the shared CHECKPOINT_PREDICTOR_FUNCS
+    shape every registered function follows."""
+    # Recover this seed and rebuild its training split deterministically.
+    seed = int(np.load(os.path.join(measurements.output_dir, "seed.npy"))[0])
+    p = model.output_head.out_features - 1
+    batch_size = int(0.3 * p * p)  # full-batch training split (matches get_dataloaders)
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    train_loader, _ = get_dataloaders(number=p, batch_size=batch_size)
+
     spectral_checkpoints = []
-    spectral_history_by_module = {name: {"spectral_norm": [], "fro_norm": [],
-                                          "stable_rank": [], "effective_rank": []}
-                                   for name in compute_spectral_for_model(model)}
+    hist = {
+        "k_90": [], "k_95": [], "alignment_score": [], "entropy": [],
+        "eigenvalues_history": [], "cumulative_power_history": [],
+    }
 
     for epoch in ckpt_epochs:
         state = torch.load(os.path.join(ckpt_dir, f"model_epoch_{epoch}.pt"), map_location=device)
         model.load_state_dict(state)
-        metrics_by_module = compute_spectral_for_model(model)
+        m = compute_spectral_metrics_for_checkpoint(model, train_loader, device)
         spectral_checkpoints.append(epoch)
-        for name, metrics in metrics_by_module.items():
-            for metric_name in ("spectral_norm", "fro_norm", "stable_rank", "effective_rank"):
-                spectral_history_by_module[name][metric_name].append(metrics[metric_name])
+        hist["k_90"].append(m["k_90"])
+        hist["k_95"].append(m["k_95"])
+        hist["alignment_score"].append(m["alignment_score"])
+        hist["entropy"].append(m["entropy"])
+        hist["eigenvalues_history"].append(m["eigenvalues"])
+        hist["cumulative_power_history"].append(m["cumulative_power"])
 
-    measurements.save_spectral_data(spectral_checkpoints, spectral_history_by_module)
+    measurements.save_spectral_data(spectral_checkpoints, hist)
 
-    # Aggregate signal: stable_rank should drop toward the low-rank Fourier
-    # circuit (see src/predictors/spectral.py docstring). Track, per
-    # module, the epoch where stable_rank first reaches its post-checkpoint
-    # minimum, and compare it against grok_epoch.
-    stable_rank_min_epoch_by_module = {}
-    stable_rank_first_last_by_module = {}
-    for name, metrics in spectral_history_by_module.items():
-        sr = metrics["stable_rank"]
-        min_idx = int(np.argmin(sr))
-        stable_rank_min_epoch_by_module[name] = spectral_checkpoints[min_idx]
-        stable_rank_first_last_by_module[name] = {
-            "first": float(sr[0]), "last": float(sr[-1]),
-        }
+    # Aggregate signal (Canatar): task-model alignment should form at or
+    # before grokking, i.e. k_90 DROPS and alignment_score RISES around
+    # grok_epoch. Record the checkpoint epoch of minimum k_90 / maximum
+    # alignment and compare against grok_epoch.
+    k90 = hist["k_90"]
+    align = hist["alignment_score"]
+    k_90_min_idx = int(np.argmin(k90))
+    k_95_min_idx = int(np.argmin(hist["k_95"]))
+    alignment_max_idx = int(np.argmax(align))
+    k_90_min_epoch = spectral_checkpoints[k_90_min_idx]
+    alignment_max_epoch = spectral_checkpoints[alignment_max_idx]
 
     block = {
         "spectral_checkpoints": spectral_checkpoints,
-        "spectral_history_by_module": spectral_history_by_module,
-        "module_names": list(spectral_history_by_module.keys()),
+        "k_90_history": [int(v) for v in k90],
+        "k_95_history": [int(v) for v in hist["k_95"]],
+        "alignment_history": [float(v) for v in align],
+        "entropy_history": [float(v) for v in hist["entropy"]],
         "grok_epoch": grok_epoch,
-        "stable_rank_min_epoch_by_module": stable_rank_min_epoch_by_module,
-        "stable_rank_first_last_by_module": stable_rank_first_last_by_module,
+        "k_90_min_epoch": k_90_min_epoch,
+        "k_95_min_epoch": spectral_checkpoints[k_95_min_idx],
+        "alignment_max_epoch": alignment_max_epoch,
+        "k_90_first_last": {"first": int(k90[0]), "last": int(k90[-1])},
+        "k_95_first_last": {"first": int(hist["k_95"][0]), "last": int(hist["k_95"][-1])},
+        "alignment_first_last": {"first": float(align[0]), "last": float(align[-1])},
+        "k_90_min_to_grok_ratio": (
+            float(k_90_min_epoch) / grok_epoch if grok_epoch else None),
+        "alignment_max_to_grok_ratio": (
+            float(alignment_max_epoch) / grok_epoch if grok_epoch else None),
         "num_checkpoints": len(spectral_checkpoints),
     }
     with open(os.path.join(measurements.spectral_dir,
@@ -775,16 +800,19 @@ def aggregate(summaries, args):
         print(f"  seed {s['seed']}: variance_peak_epoch={dv['variance_peak_epoch']}  "
               f"peak/grok={ratio_str}  (grok={s['grok_epoch']})")
 
-    print("\nSpectral predictor (per seed, stable_rank first->last by module):")
+    print("\nSpectral predictor (Canatar task-model alignment, per seed):")
     for s in summaries:
         sp = s.get("spectral_predictor")
         if sp is None:
             print(f"  seed {s['seed']}: n/a (not computed for this seed)")
             continue
-        fl = sp["stable_rank_first_last_by_module"]
-        print(f"  seed {s['seed']}: " +
-              "  ".join(f"{m}={fl[m]['first']:.1f}->{fl[m]['last']:.1f}" for m in fl) +
-              f"  (grok={s['grok_epoch']})")
+        k90 = sp["k_90_first_last"]
+        al = sp["alignment_first_last"]
+        print(f"  seed {s['seed']}: k_90 {k90['first']}->{k90['last']}  "
+              f"k_90_min_epoch={sp['k_90_min_epoch']}  "
+              f"alignment {al['first']:.4f}->{al['last']:.4f}  "
+              f"alignment_max_epoch={sp['alignment_max_epoch']}  "
+              f"(grok={s['grok_epoch']})")
 
     print("\nDropout gap at final epoch (per seed, by rate):")
     for s in summaries:
