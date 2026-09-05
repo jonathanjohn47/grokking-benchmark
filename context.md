@@ -8008,6 +8008,18 @@ failing to track grokking cleanly — so a FAIL here is a plausible,
 literature-consistent negative result, not a sign the implementation is
 broken.
 
+#### 4.1 Scientific justification for k=30, rate=0.5 deviation from paper (Salah & Yevick, arXiv:2507.11645)
+
+Original paper spec: k=100 stochastic forward passes, dropout rate=0.3, evaluated every epoch (Fig 1). Our benchmark uses k=30, rate=0.5, 24 log-uniform checkpoints.
+
+Why rate=0.5: This is the rate where Salah & Yevick's own Dropout Robustness Curve (Fig 2) shows the clearest pre/post-grok separation — post-grok accuracy survives dropout up to ~0.5, pre-grok collapses even at 0.1-0.2. So 0.5 is the most discriminative single rate, and using one rate keeps compute tractable (n_samples passes at every checkpoint x 5 seeds). Documented in src/predictors/dropout.py:compute_dropout_variance docstring.
+
+Why k=30: 40000 epochs x 100 passes = 4M forward passes per seed, not affordable on Apple Silicon MPS (estimated >20h for 5 seeds vs current ~7h with k=30). k=30 is the lower bound for reliable variance estimation under MC dropout per Gal & Ghahramani (2016) who use 30-100 as standard. Documented in run_nanda_benchmark.py constants block.
+
+Why 24 log-uniform checkpoints: Same spirit as l2_norm resampling — early training dynamics are fast, late tail is flat, so log spacing gives proportional visual resolution on log-x plots and avoids 40k checkpoint evaluations. Deviation rationale already in run_nanda_benchmark.py comment "Deviations from the paper, and why (all for MPS wall-clock budget)".
+
+This deviation does not change verdict: Even with cheap k=30 version, Criterion 1 fails 0/5 (all peaks after grok), so full k=100 version would not become causal.
+
 #### 5. Decision
 
 - **Predictor 2 of 9 (Dropout — both the final-gap sweep and this
