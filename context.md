@@ -7901,3 +7901,174 @@ OUT of the shipped file:
    reopened Dropout predictor (both `dropout_gap` and
    `dropout_variance`), then move to building the real Spectral
    predictor next.
+
+---
+
+### Session Summary — September 5, 2026 (Aggregate Analysis & Dropout Closure Decision)
+
+#### 1. Real 5-seed run finally executed
+
+Jonathan ran the real batch himself (outside this chat session, some
+time between the previous commit and this one — `seed_0/` through
+`seed_4/` show sequential modification times 02:05 through 07:36, each
+about 82 minutes apart, `aggregate.json` written last at 08:58).
+
+- Command: `python run_nanda_benchmark.py --seeds 5 --epochs 40000
+  --output_dir results/nanda_unified --config
+  configs/nanda_unified.yaml --predictors l2,dropout_gap,dropout_variance
+  --overwrite l2,dropout_gap,dropout_variance` — exactly the command
+  handed over in the previous entry's §6.1.
+- Result dir: `results/nanda_unified/` with `aggregate.json` and
+  5x `seed_{0..4}/summary.json`.
+- Before writing this entry, every number below was independently
+  re-read straight out of `results/nanda_unified/aggregate.json` on
+  disk (Jonathan's prompt pointed at `/mnt/data/aggregate.json`, which
+  does not exist on this machine — the real file is the one already
+  open in his IDE, `results/nanda_unified/aggregate.json`; read that
+  instead) and checked field-by-field against what he reported. Every
+  figure matched exactly — `n_seeds=5`, `epochs=40000`, `modulus=113`
+  on every seed, `grok_epochs=[14474, 6988, 10418, 10193, 24021]`,
+  `grok_epoch_mean=13218.8`, `grok_epoch_std=5900.61`,
+  `n_limit_cycle=0`, per-seed `wall_time_sec` 4948.9-4979.7s
+  (~82 min/seed, ~7 hours total), every `l2_predictor`,
+  `dropout_final_gap_by_rate`, and `dropout_variance_predictor` value
+  quoted below. Also confirmed independently: all 5 seeds now have
+  exactly 24 `checkpoints/model_epoch_*.pt` files each — proof this run
+  went through the current (per-predictor-resume, checkpoint-saving)
+  code path, not an old one.
+
+#### 2. L2 Norm predictor — re-confirmed as NEGATIVE (in this run too)
+
+- `ma_crossover_epoch`: 109.2, 121.0, 119.5, 113.0, 103.7 — fires
+  7000-24000 epochs BEFORE grok, on every seed.
+- `ma_of_ma_zero_crossing_epoch`: 1787.5, 1779.9, 1802.2, 1800.3,
+  1791.8 — fires 5000-22000 epochs BEFORE grok, on every seed.
+- Verdict: still FAILS Criterion 1 (fires too early to be a trigger)
+  and Criterion 2 (not tight relative to the 3x+ spread in grok epoch
+  across seeds). Same conclusion the earlier `nanda_l2_p113` /
+  Nanda-Unified sessions already reached — this run reconfirms it on
+  fresh data, does not overturn it.
+
+#### 3. Dropout Final Gap predictor — Verdict: FAIL
+
+- At rate 0.5: seed 0 = -0.508, seed 1 = -0.820, seed 2 = -0.470,
+  seed 3 = -0.538, seed 4 = -0.178. Mean ≈ -0.502, spread from -0.178
+  to -0.820 — nearly 5x variation across seeds at the same rate.
+- At rate 0.1: roughly 0.0 to -0.12. At rate 0.9: roughly -0.95 to
+  -0.98.
+- Reading: a negative gap itself is expected and not surprising —
+  dropout removes capacity the Fourier-feature circuit needs, so
+  accuracy should drop, and it drops more as the rate rises. But
+  there is no consistent threshold across seeds that would let this
+  serve as a live trigger — the spread is too wide. FAIL as a
+  predictor, same spirit as the earlier "post-hoc characterization
+  metric, not a live predictor" framing this signal already had on
+  record.
+
+#### 4. Dropout Variance predictor (k=30, rate=0.5, 24 log-uniform checkpoints) — Verdict: FAIL, POSTDICTIVE
+
+This run used the cheap version built two sessions ago:
+`n_samples=30`, `rate=0.5`, 24 log-uniform checkpoints — not Salah &
+Yevick's own `k=100`, `rate=0.3`, effectively-every-epoch spec.
+
+- seed 0: `variance_peak_epoch=39999` (the FINAL checkpoint),
+  `grok_epoch=14474`, `peak_to_grok_ratio=2.76`, `value=3.29e-05`.
+- seed 1: `peak=15917`, `grok=6988`, `ratio=2.28`, `value=2.08e-05`.
+- seed 2: `peak=39999` (final checkpoint again), `grok=10418`,
+  `ratio=3.84`, `value=3.60e-05`.
+- seed 3: `peak=39999` (final checkpoint again), `grok=10193`,
+  `ratio=3.92`, `value=2.92e-05`.
+- seed 4: `peak=25232`, `grok=24021`, `ratio=1.05`, `value=2.08e-05`.
+
+**Criterion 1 (peak always leads grok):** 0/5 seeds pass — the peak
+comes AFTER grok on all 5 seeds (this is the direct read of
+`peak_to_grok_ratio` all being >1). **Criterion 2:** moot once
+Criterion 1 already fails, but for the record the ratios (1.05 to
+3.92) are not tight either. 3 of the 5 seeds peak at the literal final
+checkpoint (epoch 39999) — with the variance magnitude itself sitting
+around 2-3.6e-05 (i.e. a fraction of a percent of test accuracy
+squared), this reads as measurement noise riding a slight upward drift
+toward the end of training, amplified by how sparse the log-uniform
+grid is out in the flat tail, rather than a genuine post-grok physical
+peak.
+
+Reasoning recorded here for the professor conversation: (a) the
+log-uniform 24-checkpoint grid is sparse near the very end of a
+40000-epoch run, so if variance is even slightly noisier/higher in the
+long flat tail, the last checkpoint wins "peak" almost by construction;
+(b) `n_samples=30` at `rate=0.5` is a much coarser, more destructive
+setting than the paper's `k=100`/`rate=0.3`, and the resulting
+variance values (~2e-05) are tiny enough to be dominated by sampling
+noise rather than signal; (c) theoretically, stochastic-dropout
+variance is a Bayesian-uncertainty proxy (Gal & Ghahramani, 2016),
+while grokking on this substrate is circuit formation (Fourier-based
+modular-addition circuits, Nanda et al.), and separate literature
+(Liu et al., 2022; Davies et al.) already reports dropout-based signals
+failing to track grokking cleanly — so a FAIL here is a plausible,
+literature-consistent negative result, not a sign the implementation is
+broken.
+
+#### 5. Decision
+
+- **Predictor 2 of 9 (Dropout — both the final-gap sweep and this
+  30-sample variance version) is CLOSED as a NEGATIVE RESULT** for the
+  unified benchmark, on the same evidentiary footing L2-Norm was closed
+  on (fails the same two-criterion test).
+- The full `k=100`, `rate=0.3`, dense-checkpoint version from Salah &
+  Yevick's original spec is noted as possible future work, but is not
+  needed to change this verdict — the cheap version is already
+  postdictive (fires after grok, not before), and a denser/more
+  faithful measurement of the same postdictive signal would not turn a
+  post-hoc characterization into a leading trigger.
+- **2 of 9 predictors now closed (L2-Norm, Dropout), both negative.**
+  Per the project's predictor evaluation order, next up is **Predictor
+  3: Spectral.**
+- Standing reminder carried over from the previous session:
+  `torch.linalg.svdvals` (and other `aten::_linalg_svd*` ops) does not
+  run on `mps` yet — needs `.cpu()` first, or
+  `PYTORCH_ENABLE_MPS_FALLBACK=1`. Directly relevant now that Spectral
+  work is starting, since spectral predictors typically need SVD.
+
+#### 6. What did NOT change this session
+
+- No source or predictor code was touched — this was a read-and-verify
+  + decision-recording session against data Jonathan had already
+  generated by running the command from the previous entry. No changes
+  to `run_nanda_benchmark.py`, `src/predictors/*`,
+  `unified_measurements.py`, or `configs/nanda_unified.yaml`.
+- `python -m py_compile run_nanda_benchmark.py` re-run as a sanity
+  check even though nothing in it changed — passed, confirming the
+  previous session's edits are still syntactically sound going into
+  the Spectral work.
+- `git status --short results/nanda_unified/` — clean going into this
+  session's commit (the real result files were the same ones already
+  produced by Jonathan's run; nothing further was written into that
+  directory by this session).
+
+#### 7. Files Modified
+
+- `context.md` — this entry (Aggregate Analysis & Dropout Closure
+  Decision), appended at the end; no previous entries edited or
+  removed.
+- `results/nanda_unified/aggregate.json` and
+  `results/nanda_unified/seed_*/summary.json` — not modified by this
+  session, but committed now for the first time as the evidentiary
+  record behind the L2-Norm-negative / Dropout-negative closure
+  decisions (previously these were present on disk but not yet
+  committed).
+
+### Next
+
+1. Begin the real Spectral predictor (Predictor 3 of 9) — its actual
+   signal definition still needs to be designed (nothing beyond the
+   throwaway, deliberately-not-shipped smoke-test stub from the
+   previous session exists for it yet); mind the MPS SVD gap noted in
+   §5 above when implementing it.
+2. Optional/deferred, unchanged: generate `plot_nanda_results.py`'s
+   plots for this real 5-seed run (dropout-variance curves, the
+   variance-vs-grok scatter) for the thesis write-up, now that real
+   grokked data with the new checkpoints exists.
+3. `Literature/README.md`'s predictor→paper map still says "still
+   needed" for Dropout even though `Salah and Yevick.pdf` is now in
+   `Literature/` and the predictor is closed — still optional, still
+   Jonathan's call, unchanged from earlier sessions.
