@@ -21,6 +21,176 @@
   },
   "nodes": [
     {
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "results/README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "results_readme",
+      "community": 28,
+      "norm_label": "readme.md"
+    },
+    {
+      "label": "Results Directory Structure",
+      "file_type": "document",
+      "source_file": "results/README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "results_readme_results_directory_structure",
+      "community": 28,
+      "norm_label": "results directory structure"
+    },
+    {
+      "label": "Overview",
+      "file_type": "document",
+      "source_file": "results/README.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "results_readme_overview",
+      "community": 28,
+      "norm_label": "overview"
+    },
+    {
+      "label": "Single-Head Results",
+      "file_type": "document",
+      "source_file": "results/README.md",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "results_readme_single_head_results",
+      "community": 28,
+      "norm_label": "single-head results"
+    },
+    {
+      "label": "`training/`",
+      "file_type": "document",
+      "source_file": "results/README.md",
+      "source_location": "L28",
+      "_origin": "ast",
+      "id": "results_readme_training",
+      "community": 28,
+      "norm_label": "`training/`"
+    },
+    {
+      "label": "`l2_norm/`",
+      "file_type": "document",
+      "source_file": "results/README.md",
+      "source_location": "L35",
+      "_origin": "ast",
+      "id": "results_readme_l2_norm",
+      "community": 28,
+      "norm_label": "`l2_norm/`"
+    },
+    {
+      "label": "`dropout/`",
+      "file_type": "document",
+      "source_file": "results/README.md",
+      "source_location": "L46",
+      "_origin": "ast",
+      "id": "results_readme_dropout",
+      "community": 28,
+      "norm_label": "`dropout/`"
+    },
+    {
+      "label": "`reports/`",
+      "file_type": "document",
+      "source_file": "results/README.md",
+      "source_location": "L59",
+      "_origin": "ast",
+      "id": "results_readme_reports",
+      "community": 28,
+      "norm_label": "`reports/`"
+    },
+    {
+      "label": "Four-Head Results",
+      "file_type": "document",
+      "source_file": "results/README.md",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "results_readme_four_head_results",
+      "community": 28,
+      "norm_label": "four-head results"
+    },
+    {
+      "label": "Per-Run Structure (`run_1/`, `run_2/`, `run_3/`)",
+      "file_type": "document",
+      "source_file": "results/README.md",
+      "source_location": "L69",
+      "_origin": "ast",
+      "id": "results_readme_per_run_structure_run_1_run_2_run_3",
+      "community": 28,
+      "norm_label": "per-run structure (`run_1/`, `run_2/`, `run_3/`)"
+    },
+    {
+      "label": "`comparisons/`",
+      "file_type": "document",
+      "source_file": "results/README.md",
+      "source_location": "L88",
+      "_origin": "ast",
+      "id": "results_readme_comparisons",
+      "community": 28,
+      "norm_label": "`comparisons/`"
+    },
+    {
+      "label": "Experiments",
+      "file_type": "document",
+      "source_file": "results/README.md",
+      "source_location": "L95",
+      "_origin": "ast",
+      "id": "results_readme_experiments",
+      "community": 28,
+      "norm_label": "experiments"
+    },
+    {
+      "label": "`shadow_layernorm/`",
+      "file_type": "document",
+      "source_file": "results/README.md",
+      "source_location": "L97",
+      "_origin": "ast",
+      "id": "results_readme_shadow_layernorm",
+      "community": 28,
+      "norm_label": "`shadow_layernorm/`"
+    },
+    {
+      "label": "Predictor Evaluation Order",
+      "file_type": "document",
+      "source_file": "results/README.md",
+      "source_location": "L104",
+      "_origin": "ast",
+      "id": "results_readme_predictor_evaluation_order",
+      "community": 28,
+      "norm_label": "predictor evaluation order"
+    },
+    {
+      "label": "How to Use This Structure",
+      "file_type": "document",
+      "source_file": "results/README.md",
+      "source_location": "L118",
+      "_origin": "ast",
+      "id": "results_readme_how_to_use_this_structure",
+      "community": 28,
+      "norm_label": "how to use this structure"
+    },
+    {
+      "label": "Key Findings",
+      "file_type": "document",
+      "source_file": "results/README.md",
+      "source_location": "L153",
+      "_origin": "ast",
+      "id": "results_readme_key_findings",
+      "community": 28,
+      "norm_label": "key findings"
+    },
+    {
+      "label": "Last Updated",
+      "file_type": "document",
+      "source_file": "results/README.md",
+      "source_location": "L163",
+      "_origin": "ast",
+      "id": "results_readme_last_updated",
+      "community": 28,
+      "norm_label": "last updated"
+    },
+    {
       "label": "run_nanda_benchmark.py",
       "file_type": "code",
       "source_file": "run_nanda_benchmark.py",
@@ -197,14 +367,14 @@
       "source_location": "L627",
       "_origin": "ast",
       "id": "run_nanda_benchmark_checkpoint_predictor_spectral",
-      "community": 0,
+      "community": 46,
       "norm_label": "_checkpoint_predictor_spectral()"
     },
     {
       "label": "recompute_from_checkpoints()",
       "file_type": "code",
       "source_file": "run_nanda_benchmark.py",
-      "source_location": "L698",
+      "source_location": "L723",
       "_origin": "ast",
       "id": "run_nanda_benchmark_recompute_from_checkpoints",
       "community": 0,
@@ -214,7 +384,7 @@
       "label": "aggregate()",
       "file_type": "code",
       "source_file": "run_nanda_benchmark.py",
-      "source_location": "L742",
+      "source_location": "L767",
       "_origin": "ast",
       "id": "run_nanda_benchmark_aggregate",
       "community": 0,
@@ -224,7 +394,7 @@
       "label": "main()",
       "file_type": "code",
       "source_file": "run_nanda_benchmark.py",
-      "source_location": "L829",
+      "source_location": "L857",
       "_origin": "ast",
       "id": "run_nanda_benchmark_main",
       "community": 0,
@@ -301,22 +471,22 @@
       "norm_label": "checkpoint_predictor_funcs[\"dropout_variance\"] \u2014 loads each saved     checkpoint"
     },
     {
-      "label": "CHECKPOINT_PREDICTOR_FUNCS[\"spectral\"] \u2014 same shape as     _checkpoint_predictor",
+      "label": "CHECKPOINT_PREDICTOR_FUNCS[\"spectral\"] \u2014 Canatar et al. 2021     task-model alig",
       "file_type": "rationale",
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L629",
       "_origin": "ast",
       "id": "run_nanda_benchmark_rationale_629",
-      "community": 0,
-      "norm_label": "checkpoint_predictor_funcs[\"spectral\"] \u2014 same shape as     _checkpoint_predictor"
+      "community": 46,
+      "norm_label": "checkpoint_predictor_funcs[\"spectral\"] \u2014 canatar et al. 2021     task-model alig"
     },
     {
       "label": "Compute predictor(s) that only need frozen model weights (currently     just \"dr",
       "file_type": "rationale",
       "source_file": "run_nanda_benchmark.py",
-      "source_location": "L699",
+      "source_location": "L724",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_rationale_699",
+      "id": "run_nanda_benchmark_rationale_724",
       "community": 0,
       "norm_label": "compute predictor(s) that only need frozen model weights (currently     just \"dr"
     },
@@ -327,58 +497,78 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "predictors_spectral",
-      "community": 0,
+      "community": 46,
       "norm_label": "spectral.py"
     },
     {
-      "label": "compute_spectral_metrics_for_weight()",
+      "label": "_collect_representations_and_labels()",
       "file_type": "code",
       "source_file": "src/predictors/spectral.py",
-      "source_location": "L29",
+      "source_location": "L81",
       "_origin": "ast",
-      "id": "predictors_spectral_compute_spectral_metrics_for_weight",
-      "community": 0,
-      "norm_label": "compute_spectral_metrics_for_weight()"
+      "id": "predictors_spectral_collect_representations_and_labels",
+      "community": 46,
+      "norm_label": "_collect_representations_and_labels()"
+    },
+    {
+      "label": "compute_spectral_metrics_for_checkpoint()",
+      "file_type": "code",
+      "source_file": "src/predictors/spectral.py",
+      "source_location": "L114",
+      "_origin": "ast",
+      "id": "predictors_spectral_compute_spectral_metrics_for_checkpoint",
+      "community": 46,
+      "norm_label": "compute_spectral_metrics_for_checkpoint()"
     },
     {
       "label": "compute_spectral_for_model()",
       "file_type": "code",
       "source_file": "src/predictors/spectral.py",
-      "source_location": "L68",
+      "source_location": "L179",
       "_origin": "ast",
       "id": "predictors_spectral_compute_spectral_for_model",
-      "community": 0,
+      "community": 46,
       "norm_label": "compute_spectral_for_model()"
     },
     {
-      "label": "Spectral predictor (Predictor 3 of 9).  Signal: per-weight-matrix singular-value",
+      "label": "Spectral predictor (Predictor 3 of 9) \u2014 FAITHFUL Canatar et al. 2021.  Paper: Ab",
       "file_type": "rationale",
       "source_file": "src/predictors/spectral.py",
       "source_location": "L1",
       "_origin": "ast",
       "id": "predictors_spectral_rationale_1",
-      "community": 0,
-      "norm_label": "spectral predictor (predictor 3 of 9).  signal: per-weight-matrix singular-value"
+      "community": 46,
+      "norm_label": "spectral predictor (predictor 3 of 9) \u2014 faithful canatar et al. 2021.  paper: ab"
     },
     {
-      "label": "W: a 2D weight tensor (any device). Returns a dict of singular-value     statist",
+      "label": "Run the model over the full training split and capture, per example,     the hid",
       "file_type": "rationale",
       "source_file": "src/predictors/spectral.py",
-      "source_location": "L30",
+      "source_location": "L82",
       "_origin": "ast",
-      "id": "predictors_spectral_rationale_30",
-      "community": 0,
-      "norm_label": "w: a 2d weight tensor (any device). returns a dict of singular-value     statist"
+      "id": "predictors_spectral_rationale_82",
+      "community": 46,
+      "norm_label": "run the model over the full training split and capture, per example,     the hid"
     },
     {
-      "label": "Returns {module_name: compute_spectral_metrics_for_weight(...)} for     every mo",
+      "label": "Canatar et al. 2021 task-model-alignment metrics for ONE frozen     model checkp",
       "file_type": "rationale",
       "source_file": "src/predictors/spectral.py",
-      "source_location": "L69",
+      "source_location": "L115",
       "_origin": "ast",
-      "id": "predictors_spectral_rationale_69",
-      "community": 0,
-      "norm_label": "returns {module_name: compute_spectral_metrics_for_weight(...)} for     every mo"
+      "id": "predictors_spectral_rationale_115",
+      "community": 46,
+      "norm_label": "canatar et al. 2021 task-model-alignment metrics for one frozen     model checkp"
+    },
+    {
+      "label": "Thin wrapper kept for run_nanda_benchmark.py's import. One frozen     checkpoint",
+      "file_type": "rationale",
+      "source_file": "src/predictors/spectral.py",
+      "source_location": "L180",
+      "_origin": "ast",
+      "id": "predictors_spectral_rationale_180",
+      "community": 46,
+      "norm_label": "thin wrapper kept for run_nanda_benchmark.py's import. one frozen     checkpoint"
     },
     {
       "label": "unified_measurements.py",
@@ -461,10 +651,20 @@
       "norm_label": ".save_spectral_data()"
     },
     {
+      "label": "._stack_ragged()",
+      "file_type": "code",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L167",
+      "_origin": "ast",
+      "id": "src_unified_measurements_predictormeasurements_stack_ragged",
+      "community": 19,
+      "norm_label": "._stack_ragged()"
+    },
+    {
       "label": ".generate_l2_norm_visualizations()",
       "file_type": "code",
       "source_file": "src/unified_measurements.py",
-      "source_location": "L158",
+      "source_location": "L184",
       "_origin": "ast",
       "id": "src_unified_measurements_predictormeasurements_generate_l2_norm_visualizations",
       "community": 19,
@@ -474,7 +674,7 @@
       "label": ".generate_dropout_visualizations()",
       "file_type": "code",
       "source_file": "src/unified_measurements.py",
-      "source_location": "L237",
+      "source_location": "L263",
       "_origin": "ast",
       "id": "src_unified_measurements_predictormeasurements_generate_dropout_visualizations",
       "community": 19,
@@ -484,7 +684,7 @@
       "label": ".generate_combined_report()",
       "file_type": "code",
       "source_file": "src/unified_measurements.py",
-      "source_location": "L261",
+      "source_location": "L287",
       "_origin": "ast",
       "id": "src_unified_measurements_predictormeasurements_generate_combined_report",
       "community": 19,
@@ -494,7 +694,7 @@
       "label": "._smooth_signal()",
       "file_type": "code",
       "source_file": "src/unified_measurements.py",
-      "source_location": "L341",
+      "source_location": "L367",
       "_origin": "ast",
       "id": "src_unified_measurements_predictormeasurements_smooth_signal",
       "community": 19,
@@ -561,22 +761,32 @@
       "norm_label": "save all dropout measurements \u2014 full multi-rate sweep only.          there is no"
     },
     {
-      "label": "Save all Spectral (Predictor 3) measurements.          spectral_checkpoints: lis",
+      "label": "Save all Spectral (Predictor 3) measurements \u2014 Canatar et al.         2021 task-",
       "file_type": "rationale",
       "source_file": "src/unified_measurements.py",
       "source_location": "L121",
       "_origin": "ast",
       "id": "src_unified_measurements_rationale_121",
       "community": 19,
-      "norm_label": "save all spectral (predictor 3) measurements.          spectral_checkpoints: lis"
+      "norm_label": "save all spectral (predictor 3) measurements \u2014 canatar et al.         2021 task-"
+    },
+    {
+      "label": "[n_checkpoints] lists of <= `width` floats -> float array         [n_checkpoints",
+      "file_type": "rationale",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L168",
+      "_origin": "ast",
+      "id": "src_unified_measurements_rationale_168",
+      "community": 19,
+      "norm_label": "[n_checkpoints] lists of <= `width` floats -> float array         [n_checkpoints"
     },
     {
       "label": "Generate standalone L2 Norm visualization graphs.",
       "file_type": "rationale",
       "source_file": "src/unified_measurements.py",
-      "source_location": "L161",
+      "source_location": "L187",
       "_origin": "ast",
-      "id": "src_unified_measurements_rationale_161",
+      "id": "src_unified_measurements_rationale_187",
       "community": 19,
       "norm_label": "generate standalone l2 norm visualization graphs."
     },
@@ -584,9 +794,9 @@
       "label": "Generate standalone Dropout visualization graphs.",
       "file_type": "rationale",
       "source_file": "src/unified_measurements.py",
-      "source_location": "L239",
+      "source_location": "L265",
       "_origin": "ast",
-      "id": "src_unified_measurements_rationale_239",
+      "id": "src_unified_measurements_rationale_265",
       "community": 19,
       "norm_label": "generate standalone dropout visualization graphs."
     },
@@ -594,9 +804,9 @@
       "label": "Generate combined PDF report with all measurements.",
       "file_type": "rationale",
       "source_file": "src/unified_measurements.py",
-      "source_location": "L264",
+      "source_location": "L290",
       "_origin": "ast",
-      "id": "src_unified_measurements_rationale_264",
+      "id": "src_unified_measurements_rationale_290",
       "community": 19,
       "norm_label": "generate combined pdf report with all measurements."
     },
@@ -604,9 +814,9 @@
       "label": "Apply simple moving average smoothing.",
       "file_type": "rationale",
       "source_file": "src/unified_measurements.py",
-      "source_location": "L342",
+      "source_location": "L368",
       "_origin": "ast",
-      "id": "src_unified_measurements_rationale_342",
+      "id": "src_unified_measurements_rationale_368",
       "community": 19,
       "norm_label": "apply simple moving average smoothing."
     },
@@ -1776,7 +1986,7 @@
       "source_file": "archive/src_p97_mainstream_old/models/transformer_four_head.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 11,
+      "community": 0,
       "norm_label": "transformer_four_head.py",
       "id": "models_transformer_four_head"
     },
@@ -2196,7 +2406,7 @@
       "source_file": "archive/src_p97_mainstream_old/train_four_head.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 11,
+      "community": 0,
       "norm_label": "train_four_head.py",
       "id": "src_p97_mainstream_old_train_four_head"
     },
@@ -2206,7 +2416,7 @@
       "source_file": "archive/src_p97_mainstream_old/train_four_head.py",
       "source_location": "L59",
       "_origin": "ast",
-      "community": 11,
+      "community": 0,
       "norm_label": "migrate_legacy_flat_run()",
       "id": "src_p97_mainstream_old_train_four_head_migrate_legacy_flat_run"
     },
@@ -2216,7 +2426,7 @@
       "source_file": "archive/src_p97_mainstream_old/train_four_head.py",
       "source_location": "L86",
       "_origin": "ast",
-      "community": 11,
+      "community": 0,
       "norm_label": "get_next_run_number()",
       "id": "src_p97_mainstream_old_train_four_head_get_next_run_number"
     },
@@ -2226,7 +2436,7 @@
       "source_file": "archive/src_p97_mainstream_old/train_four_head.py",
       "source_location": "L60",
       "_origin": "ast",
-      "community": 11,
+      "community": 0,
       "norm_label": "earlier versions of this script saved directly into results/four_head/     inste",
       "id": "src_p97_mainstream_old_train_four_head_rationale_60"
     },
@@ -2866,7 +3076,7 @@
       "source_file": "src/train_four_head.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 11,
+      "community": 0,
       "norm_label": "train_four_head.py",
       "id": "src_train_four_head"
     },
@@ -2876,7 +3086,7 @@
       "source_file": "src/train_four_head.py",
       "source_location": "L70",
       "_origin": "ast",
-      "community": 11,
+      "community": 0,
       "norm_label": "migrate_legacy_flat_run()",
       "id": "src_train_four_head_migrate_legacy_flat_run"
     },
@@ -2886,7 +3096,7 @@
       "source_file": "src/train_four_head.py",
       "source_location": "L97",
       "_origin": "ast",
-      "community": 11,
+      "community": 0,
       "norm_label": "get_next_run_number()",
       "id": "src_train_four_head_get_next_run_number"
     },
@@ -2896,7 +3106,7 @@
       "source_file": "src/train_four_head.py",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 11,
+      "community": 0,
       "norm_label": "earlier versions of this script saved directly into results/four_head/     inste",
       "id": "src_train_four_head_rationale_71"
     },
@@ -2976,7 +3186,7 @@
       "source_file": "nanda_l2_p113/train.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 11,
+      "community": 0,
       "norm_label": "train.py",
       "id": "nanda_l2_p113_train"
     },
@@ -2986,7 +3196,7 @@
       "source_file": "nanda_l2_p113/train.py",
       "source_location": "L50",
       "_origin": "ast",
-      "community": 11,
+      "community": 0,
       "norm_label": "get_next_run_number()",
       "id": "nanda_l2_p113_train_get_next_run_number"
     },
@@ -5509,179 +5719,169 @@
       "community": 10,
       "norm_label": "train.py",
       "id": "docs_project_compilation_src_train_py"
-    },
-    {
-      "label": "README.md",
-      "file_type": "document",
-      "source_file": "results/README.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "readme.md",
-      "id": "results_readme"
-    },
-    {
-      "label": "Results Directory Structure",
-      "file_type": "document",
-      "source_file": "results/README.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "results directory structure",
-      "id": "results_readme_results_directory_structure"
-    },
-    {
-      "label": "Overview",
-      "file_type": "document",
-      "source_file": "results/README.md",
-      "source_location": "L5",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "overview",
-      "id": "results_readme_overview"
-    },
-    {
-      "label": "Single-Head Results",
-      "file_type": "document",
-      "source_file": "results/README.md",
-      "source_location": "L26",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "single-head results",
-      "id": "results_readme_single_head_results"
-    },
-    {
-      "label": "`training/`",
-      "file_type": "document",
-      "source_file": "results/README.md",
-      "source_location": "L28",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "`training/`",
-      "id": "results_readme_training"
-    },
-    {
-      "label": "`l2_norm/`",
-      "file_type": "document",
-      "source_file": "results/README.md",
-      "source_location": "L35",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "`l2_norm/`",
-      "id": "results_readme_l2_norm"
-    },
-    {
-      "label": "`dropout/`",
-      "file_type": "document",
-      "source_file": "results/README.md",
-      "source_location": "L46",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "`dropout/`",
-      "id": "results_readme_dropout"
-    },
-    {
-      "label": "`reports/`",
-      "file_type": "document",
-      "source_file": "results/README.md",
-      "source_location": "L59",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "`reports/`",
-      "id": "results_readme_reports"
-    },
-    {
-      "label": "Four-Head Results",
-      "file_type": "document",
-      "source_file": "results/README.md",
-      "source_location": "L65",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "four-head results",
-      "id": "results_readme_four_head_results"
-    },
-    {
-      "label": "Per-Run Structure (`run_1/`, `run_2/`, `run_3/`)",
-      "file_type": "document",
-      "source_file": "results/README.md",
-      "source_location": "L69",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "per-run structure (`run_1/`, `run_2/`, `run_3/`)",
-      "id": "results_readme_per_run_structure_run_1_run_2_run_3"
-    },
-    {
-      "label": "`comparisons/`",
-      "file_type": "document",
-      "source_file": "results/README.md",
-      "source_location": "L88",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "`comparisons/`",
-      "id": "results_readme_comparisons"
-    },
-    {
-      "label": "Experiments",
-      "file_type": "document",
-      "source_file": "results/README.md",
-      "source_location": "L95",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "experiments",
-      "id": "results_readme_experiments"
-    },
-    {
-      "label": "`shadow_layernorm/`",
-      "file_type": "document",
-      "source_file": "results/README.md",
-      "source_location": "L97",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "`shadow_layernorm/`",
-      "id": "results_readme_shadow_layernorm"
-    },
-    {
-      "label": "Predictor Evaluation Order",
-      "file_type": "document",
-      "source_file": "results/README.md",
-      "source_location": "L104",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "predictor evaluation order",
-      "id": "results_readme_predictor_evaluation_order"
-    },
-    {
-      "label": "How to Use This Structure",
-      "file_type": "document",
-      "source_file": "results/README.md",
-      "source_location": "L118",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "how to use this structure",
-      "id": "results_readme_how_to_use_this_structure"
-    },
-    {
-      "label": "Key Findings",
-      "file_type": "document",
-      "source_file": "results/README.md",
-      "source_location": "L153",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "key findings",
-      "id": "results_readme_key_findings"
-    },
-    {
-      "label": "Last Updated",
-      "file_type": "document",
-      "source_file": "results/README.md",
-      "source_location": "L161",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "last updated",
-      "id": "results_readme_last_updated"
     }
   ],
   "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "results/README.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "results_readme",
+      "target": "results_readme_results_directory_structure"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "results/README.md",
+      "source_location": "L95",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "results_readme_results_directory_structure",
+      "target": "results_readme_experiments"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "results/README.md",
+      "source_location": "L65",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "results_readme_results_directory_structure",
+      "target": "results_readme_four_head_results"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "results/README.md",
+      "source_location": "L118",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "results_readme_results_directory_structure",
+      "target": "results_readme_how_to_use_this_structure"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "results/README.md",
+      "source_location": "L153",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "results_readme_results_directory_structure",
+      "target": "results_readme_key_findings"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "results/README.md",
+      "source_location": "L161",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "results_readme_results_directory_structure",
+      "target": "results_readme_last_updated"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "results/README.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "results_readme_results_directory_structure",
+      "target": "results_readme_overview"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "results/README.md",
+      "source_location": "L104",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "results_readme_results_directory_structure",
+      "target": "results_readme_predictor_evaluation_order"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "results/README.md",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "results_readme_results_directory_structure",
+      "target": "results_readme_single_head_results"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "results/README.md",
+      "source_location": "L46",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "results_readme_single_head_results",
+      "target": "results_readme_dropout"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "results/README.md",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "results_readme_single_head_results",
+      "target": "results_readme_l2_norm"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "results/README.md",
+      "source_location": "L59",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "results_readme_single_head_results",
+      "target": "results_readme_reports"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "results/README.md",
+      "source_location": "L28",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "results_readme_single_head_results",
+      "target": "results_readme_training"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "results/README.md",
+      "source_location": "L88",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "results_readme_four_head_results",
+      "target": "results_readme_comparisons"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "results/README.md",
+      "source_location": "L69",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "results_readme_four_head_results",
+      "target": "results_readme_per_run_structure_run_1_run_2_run_3"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "results/README.md",
+      "source_location": "L97",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "results_readme_experiments",
+      "target": "results_readme_shadow_layernorm"
+    },
     {
       "relation": "imports_from",
       "context": "import",
@@ -5733,9 +5933,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L76",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark",
-      "target": "predictors_spectral",
-      "confidence_score": 1.0
+      "target": "predictors_spectral"
     },
     {
       "relation": "contains",
@@ -5763,9 +5963,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L627",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark",
-      "target": "run_nanda_benchmark_checkpoint_predictor_spectral",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_checkpoint_predictor_spectral"
     },
     {
       "relation": "contains",
@@ -5943,9 +6143,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L128",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_128",
-      "target": "run_nanda_benchmark_dropout_variance_checkpoint_schedule",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_dropout_variance_checkpoint_schedule"
     },
     {
       "relation": "calls",
@@ -5975,9 +6175,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L151",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_151",
-      "target": "run_nanda_benchmark_pick_drc_checkpoint_subset",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_pick_drc_checkpoint_subset"
     },
     {
       "relation": "calls",
@@ -6018,9 +6218,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L165",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_165",
-      "target": "run_nanda_benchmark_load_config",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_load_config"
     },
     {
       "relation": "calls",
@@ -6193,9 +6393,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L219",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_219",
-      "target": "run_nanda_benchmark_get_done_predictors",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_get_done_predictors"
     },
     {
       "relation": "calls",
@@ -6225,9 +6425,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L252",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_252",
-      "target": "run_nanda_benchmark_limit_cycle_check",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_limit_cycle_check"
     },
     {
       "relation": "calls",
@@ -6257,9 +6457,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L281",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_281",
-      "target": "run_nanda_benchmark_train_one_seed",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_train_one_seed"
     },
     {
       "relation": "calls",
@@ -6300,9 +6500,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L564",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_564",
-      "target": "run_nanda_benchmark_checkpoint_predictor_dropout_variance",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_checkpoint_predictor_dropout_variance"
     },
     {
       "relation": "calls",
@@ -6316,14 +6516,25 @@
       "target": "predictors_spectral_compute_spectral_for_model"
     },
     {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "run_nanda_benchmark.py",
+      "source_location": "L662",
+      "weight": 1.0,
+      "source": "run_nanda_benchmark_checkpoint_predictor_spectral",
+      "target": "predictors_spectral_compute_spectral_metrics_for_checkpoint"
+    },
+    {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L629",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_629",
-      "target": "run_nanda_benchmark_checkpoint_predictor_spectral",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_checkpoint_predictor_spectral"
     },
     {
       "relation": "calls",
@@ -6340,9 +6551,9 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "run_nanda_benchmark.py",
-      "source_location": "L699",
+      "source_location": "L724",
       "weight": 1.0,
-      "source": "run_nanda_benchmark_rationale_699",
+      "source": "run_nanda_benchmark_rationale_724",
       "target": "run_nanda_benchmark_recompute_from_checkpoints",
       "confidence_score": 1.0
     },
@@ -6372,20 +6583,30 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/predictors/spectral.py",
-      "source_location": "L68",
+      "source_location": "L81",
       "weight": 1.0,
       "source": "predictors_spectral",
-      "target": "predictors_spectral_compute_spectral_for_model",
+      "target": "predictors_spectral_collect_representations_and_labels",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/predictors/spectral.py",
-      "source_location": "L29",
+      "source_location": "L68",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "predictors_spectral",
+      "target": "predictors_spectral_compute_spectral_for_model"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/spectral.py",
+      "source_location": "L114",
       "weight": 1.0,
       "source": "predictors_spectral",
-      "target": "predictors_spectral_compute_spectral_metrics_for_weight",
+      "target": "predictors_spectral_compute_spectral_metrics_for_checkpoint",
       "confidence_score": 1.0
     },
     {
@@ -6394,8 +6615,29 @@
       "source_file": "src/predictors/spectral.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "predictors_spectral_rationale_1",
-      "target": "predictors_spectral",
+      "target": "predictors_spectral"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/spectral.py",
+      "source_location": "L128",
+      "weight": 1.0,
+      "source": "predictors_spectral_compute_spectral_metrics_for_checkpoint",
+      "target": "predictors_spectral_collect_representations_and_labels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/predictors/spectral.py",
+      "source_location": "L82",
+      "weight": 1.0,
+      "source": "predictors_spectral_rationale_82",
+      "target": "predictors_spectral_collect_representations_and_labels",
       "confidence_score": 1.0
     },
     {
@@ -6403,29 +6645,29 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/predictors/spectral.py",
-      "source_location": "L76",
+      "source_location": "L183",
       "weight": 1.0,
       "source": "predictors_spectral_compute_spectral_for_model",
-      "target": "predictors_spectral_compute_spectral_metrics_for_weight",
+      "target": "predictors_spectral_compute_spectral_metrics_for_checkpoint",
       "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "src/predictors/spectral.py",
-      "source_location": "L30",
+      "source_location": "L115",
       "weight": 1.0,
-      "source": "predictors_spectral_rationale_30",
-      "target": "predictors_spectral_compute_spectral_metrics_for_weight",
+      "source": "predictors_spectral_rationale_115",
+      "target": "predictors_spectral_compute_spectral_metrics_for_checkpoint",
       "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "src/predictors/spectral.py",
-      "source_location": "L69",
+      "source_location": "L180",
       "weight": 1.0,
-      "source": "predictors_spectral_rationale_69",
+      "source": "predictors_spectral_rationale_180",
       "target": "predictors_spectral_compute_spectral_for_model",
       "confidence_score": 1.0
     },
@@ -6525,9 +6767,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L120",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_unified_measurements_predictormeasurements",
-      "target": "src_unified_measurements_predictormeasurements_save_spectral_data",
-      "confidence_score": 1.0
+      "target": "src_unified_measurements_predictormeasurements_save_spectral_data"
     },
     {
       "relation": "method",
@@ -6548,6 +6790,16 @@
       "confidence_score": 1.0,
       "source": "src_unified_measurements_predictormeasurements",
       "target": "src_unified_measurements_predictormeasurements_smooth_signal"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L167",
+      "weight": 1.0,
+      "source": "src_unified_measurements_predictormeasurements",
+      "target": "src_unified_measurements_predictormeasurements_stack_ragged",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -6586,9 +6838,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_unified_measurements_rationale_35",
-      "target": "src_unified_measurements_predictormeasurements_save_training_data",
-      "confidence_score": 1.0
+      "target": "src_unified_measurements_predictormeasurements_save_training_data"
     },
     {
       "relation": "calls",
@@ -6607,9 +6859,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L45",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_unified_measurements_rationale_45",
-      "target": "src_unified_measurements_predictormeasurements_save_l2_norm_data",
-      "confidence_score": 1.0
+      "target": "src_unified_measurements_predictormeasurements_save_l2_norm_data"
     },
     {
       "relation": "rationale_for",
@@ -6617,8 +6869,19 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L100",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_unified_measurements_rationale_100",
-      "target": "src_unified_measurements_predictormeasurements_save_dropout_data",
+      "target": "src_unified_measurements_predictormeasurements_save_dropout_data"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L160",
+      "weight": 1.0,
+      "source": "src_unified_measurements_predictormeasurements_save_spectral_data",
+      "target": "src_unified_measurements_predictormeasurements_stack_ragged",
       "confidence_score": 1.0
     },
     {
@@ -6627,8 +6890,18 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L121",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_unified_measurements_rationale_121",
-      "target": "src_unified_measurements_predictormeasurements_save_spectral_data",
+      "target": "src_unified_measurements_predictormeasurements_save_spectral_data"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/unified_measurements.py",
+      "source_location": "L168",
+      "weight": 1.0,
+      "source": "src_unified_measurements_rationale_168",
+      "target": "src_unified_measurements_predictormeasurements_stack_ragged",
       "confidence_score": 1.0
     },
     {
@@ -6645,9 +6918,9 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "src/unified_measurements.py",
-      "source_location": "L161",
+      "source_location": "L187",
       "weight": 1.0,
-      "source": "src_unified_measurements_rationale_161",
+      "source": "src_unified_measurements_rationale_187",
       "target": "src_unified_measurements_predictormeasurements_generate_l2_norm_visualizations",
       "confidence_score": 1.0
     },
@@ -6655,9 +6928,9 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "src/unified_measurements.py",
-      "source_location": "L239",
+      "source_location": "L265",
       "weight": 1.0,
-      "source": "src_unified_measurements_rationale_239",
+      "source": "src_unified_measurements_rationale_265",
       "target": "src_unified_measurements_predictormeasurements_generate_dropout_visualizations",
       "confidence_score": 1.0
     },
@@ -6665,9 +6938,9 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "src/unified_measurements.py",
-      "source_location": "L264",
+      "source_location": "L290",
       "weight": 1.0,
-      "source": "src_unified_measurements_rationale_264",
+      "source": "src_unified_measurements_rationale_290",
       "target": "src_unified_measurements_predictormeasurements_generate_combined_report",
       "confidence_score": 1.0
     },
@@ -6675,9 +6948,9 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "src/unified_measurements.py",
-      "source_location": "L342",
+      "source_location": "L368",
       "weight": 1.0,
-      "source": "src_unified_measurements_rationale_342",
+      "source": "src_unified_measurements_rationale_368",
       "target": "src_unified_measurements_predictormeasurements_smooth_signal",
       "confidence_score": 1.0
     },
@@ -13099,166 +13372,6 @@
       "confidence_score": 1.0,
       "source": "docs_project_compilation_src_python_project_compilation",
       "target": "docs_project_compilation_src_train_py"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "results/README.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "results_readme",
-      "target": "results_readme_results_directory_structure"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "results/README.md",
-      "source_location": "L95",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "results_readme_results_directory_structure",
-      "target": "results_readme_experiments"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "results/README.md",
-      "source_location": "L65",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "results_readme_results_directory_structure",
-      "target": "results_readme_four_head_results"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "results/README.md",
-      "source_location": "L118",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "results_readme_results_directory_structure",
-      "target": "results_readme_how_to_use_this_structure"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "results/README.md",
-      "source_location": "L153",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "results_readme_results_directory_structure",
-      "target": "results_readme_key_findings"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "results/README.md",
-      "source_location": "L161",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "results_readme_results_directory_structure",
-      "target": "results_readme_last_updated"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "results/README.md",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "results_readme_results_directory_structure",
-      "target": "results_readme_overview"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "results/README.md",
-      "source_location": "L104",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "results_readme_results_directory_structure",
-      "target": "results_readme_predictor_evaluation_order"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "results/README.md",
-      "source_location": "L26",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "results_readme_results_directory_structure",
-      "target": "results_readme_single_head_results"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "results/README.md",
-      "source_location": "L46",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "results_readme_single_head_results",
-      "target": "results_readme_dropout"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "results/README.md",
-      "source_location": "L35",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "results_readme_single_head_results",
-      "target": "results_readme_l2_norm"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "results/README.md",
-      "source_location": "L59",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "results_readme_single_head_results",
-      "target": "results_readme_reports"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "results/README.md",
-      "source_location": "L28",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "results_readme_single_head_results",
-      "target": "results_readme_training"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "results/README.md",
-      "source_location": "L88",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "results_readme_four_head_results",
-      "target": "results_readme_comparisons"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "results/README.md",
-      "source_location": "L69",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "results_readme_four_head_results",
-      "target": "results_readme_per_run_structure_run_1_run_2_run_3"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "results/README.md",
-      "source_location": "L97",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "results_readme_experiments",
-      "target": "results_readme_shadow_layernorm"
     }
   ],
   "hyperedges": [
@@ -13277,5 +13390,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "3e12604377f167a46be79d7d872e1bb40793d803"
+  "built_at_commit": "1525c55a93e788fde7f247c35decc070c68923a7"
 }
