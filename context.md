@@ -8406,3 +8406,111 @@ session's registry refactor set up for this.
    3 of 9).
 3. Per the predictor evaluation order, Predictor 4 (AGE) is next after
    Spectral is closed either way.
+
+---
+
+## Session Summary — September 5, 2026 (Spectral predictor — real 5-seed run + CLOSED negative verdict)
+
+### 1. What was requested
+
+Jonathan authorised the real 5-seed Spectral checkpoint-only recompute
+queued at the end of the previous session — the exact command from that
+entry's §4.1, no retraining involved since `results/nanda_unified/`
+already held all 24 checkpoints per seed from the committed L2/Dropout
+run:
+
+```
+python run_nanda_benchmark.py --seeds 5 --epochs 40000 \
+    --output_dir results/nanda_unified --config configs/nanda_unified.yaml \
+    --predictors l2,dropout_gap,dropout_variance,spectral
+```
+
+### 2. What was found / Results
+
+- Run behaved exactly as predicted: `l2`, `dropout_gap`, `dropout_variance`
+  each printed "complete - skipping" per seed (no retrain touched them),
+  and `spectral` printed "recomputed from 24 saved checkpoints (no
+  retrain)" for each of the 5 seeds.
+- `aggregate.json`'s `spectral_predictor.stable_rank_min_epoch_by_module`,
+  per seed (grok epoch alongside):
+
+  | Seed | grok_epoch | token_embedding | query | key | value | mlp_in | mlp_out | output_head |
+  |---|---|---|---|---|---|---|---|---|
+  | 0 | 14474 | 25232 | 6333 | 25232 | 39999 | 39999 | 25232 | 39999 |
+  | 1 | 6988 | 39999 | 39999 | 15917 | 15917 | 39999 | 10040 | 39999 |
+  | 2 | 10418 | 39999 | 25232 | 10040 | 39999 | 39999 | 39999 | 39999 |
+  | 3 | 10193 | 25232 | 10040 | 39999 | 39999 | 25232 | 25232 | 25232 |
+  | 4 | 24021 | 39999 | 39999 | 25232 | 39999 | 39999 | 39999 | 39999 |
+
+- Applied the same two-criterion test used to close L2-Norm and Dropout:
+  - **Criterion 1 (does the `stable_rank` minimum lead grok?):** out of
+    35 (module × seed) cells, only 3 have `min_epoch < grok_epoch` —
+    Seed 0 query (6333 < 14474), Seed 2 key (10040 < 10418), Seed 3 query
+    (10040 < 10193). The other 32 cells have the minimum landing at or
+    after grok, many pinned at `39999` (the last saved checkpoint),
+    meaning `stable_rank` is still falling when measurement stops, not
+    forming a genuine pre-grok minimum.
+  - **Criterion 2 (is the lead consistent across seeds?):** No. The 3
+    early cases above are 3 different modules (query, key, query) in 3
+    different seeds — no single module leads grok reliably across the
+    5-seed set.
+  - Conclusion: same failure mode as L2-Norm and Dropout — a
+    weight-geometry statistic that mostly declines *after* grok rather
+    than predicting it beforehand.
+- **Verdict: Spectral (Predictor 3 of 9) is CLOSED, NEGATIVE result** —
+  same standing as L2-Norm and Dropout.
+
+### 3. What changed
+
+- `results/nanda_unified/aggregate.json` — `spectral_predictor` block
+  populated with real 5-seed numbers (previously absent/None).
+- `results/nanda_unified/seed_0/` … `seed_4/spectral/` — new directories,
+  each with `spectral_checkpoints.npy`, `spectral_module_names.npy`,
+  `spectral_spectral_norm.npy`, `spectral_fro_norm.npy`,
+  `spectral_stable_rank.npy`, `spectral_effective_rank.npy`,
+  `spectral_signal.json`.
+- `results/nanda_unified/seed_0/summary.json` … `seed_4/summary.json` —
+  `spectral_predictor` field now populated (was `None`).
+- No retrain occurred; no source-code changes this session —
+  `src/predictors/spectral.py`, `src/unified_measurements.py`,
+  `run_nanda_benchmark.py` were already committed in the previous session
+  and were not touched here.
+
+### 4. Verification done
+
+- Console output checked line-by-line: confirmed "complete - skipping"
+  for `l2`/`dropout_gap`/`dropout_variance` and "recomputed from 24 saved
+  checkpoints (no retrain)" for `spectral`, for all 5 seeds — no
+  unexpected retraining happened.
+- `aggregate.json` read back and cross-checked against each seed's
+  `summary.json` — `stable_rank_min_epoch_by_module` values match between
+  the per-seed files and the aggregate.
+- Two-criterion test applied by hand across all 35 (module × seed) cells
+  (table in §2 above), same method as used for the L2-Norm and Dropout
+  verdicts, for consistency of methodology across predictors.
+
+### 5. Files Modified
+
+- `results/nanda_unified/aggregate.json` — spectral_predictor block added.
+- `results/nanda_unified/seed_0/summary.json` … `seed_4/summary.json` —
+  spectral_predictor populated.
+- `results/nanda_unified/seed_0/spectral/` … `seed_4/spectral/` — new,
+  untracked at time of writing (checkpoint-derived `.npy`/`.json` data).
+- `context.md` — this entry.
+
+### Next
+
+1. **Spectral predictor is now CLOSED, NEGATIVE (3 of 9 predictors done:
+   L2-Norm, Dropout, Spectral — all negative).**
+2. Per the required predictor evaluation order, **Predictor 4 (AGE) is
+   next.**
+3. AGE implementation should follow the same checkpoint-only plugin
+   pattern already established by `_checkpoint_predictor_dropout_variance`
+   (see its docstring in `run_nanda_benchmark.py`) and mirrored exactly by
+   `_checkpoint_predictor_spectral` this session and last: a
+   `_checkpoint_predictor_age()` function registered into
+   `CHECKPOINT_PREDICTOR_FUNCS`/`PREDICTOR_SUMMARY_KEY`, reading saved
+   `model_epoch_{epoch}.pt` checkpoints, no changes needed to the live
+   training loop.
+4. Jonathan has asked for this session's changes to be committed —
+   pending git commit (see commit instructions below).

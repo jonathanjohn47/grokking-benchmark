@@ -49,3 +49,7 @@ results/test_smoke/
 
 # ── make_pdf.py output artefact ────────────────────────────────────
 combined_code.pdf
+
+# ── compile_context_bundle.py + output artefact ─────────────────────
+tools/compile_context_bundle.py
+full_context_profile.pdf
