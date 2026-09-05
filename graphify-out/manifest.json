@@ -690,8 +690,8 @@
     "semantic_hash": ""
   },
   "results/nanda_unified/aggregate.json": {
-    "mtime": 1788578917.7684233,
-    "ast_hash": "a445cc3f823dfa490c81415046f38952",
+    "mtime": 1788602592.9702697,
+    "ast_hash": "8ed26c76beb6de2b511e86a5a0bd3a39",
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_0/dropout/dropout_drc_snapshots.json": {
@@ -715,8 +715,8 @@
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_0/summary.json": {
-    "mtime": 1788559111.7778902,
-    "ast_hash": "0706d39f6a85a4934d3fb9d7aae0a2df",
+    "mtime": 1788602591.9195206,
+    "ast_hash": "bc74e3e6a4715aa2af1c4d49c011d221",
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_1/dropout/dropout_drc_snapshots.json": {
@@ -740,8 +740,8 @@
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_1/summary.json": {
-    "mtime": 1788564062.6842113,
-    "ast_hash": "52d2c5a255685a26787f20eb0587a118",
+    "mtime": 1788602592.2024906,
+    "ast_hash": "68433b4ebd0d353c9ec66cd542a80bdf",
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_2/dropout/dropout_drc_snapshots.json": {
@@ -765,8 +765,8 @@
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_2/summary.json": {
-    "mtime": 1788569015.268047,
-    "ast_hash": "5eabc36cb2040d5d00d60de1134b5fde",
+    "mtime": 1788602592.4415822,
+    "ast_hash": "f4fd2a104bec62cfffc22a546618f754",
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_3/dropout/dropout_drc_snapshots.json": {
@@ -790,8 +790,8 @@
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_3/summary.json": {
-    "mtime": 1788573968.8401349,
-    "ast_hash": "9b5d1f3e7dba2be34e61946869863d66",
+    "mtime": 1788602592.6803513,
+    "ast_hash": "8ba75ae0efefebdd0e9107154cdd6d10",
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_4/dropout/dropout_drc_snapshots.json": {
@@ -815,8 +815,8 @@
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_4/summary.json": {
-    "mtime": 1788578917.75924,
-    "ast_hash": "d37ca311e82ffcc73c427ad1f7938680",
+    "mtime": 1788602592.9666178,
+    "ast_hash": "0c5b5fd850a66173443a877060d46b7f",
     "semantic_hash": ""
   },
   "results/nanda_unified/plots/nanda_results_report.pdf": {
@@ -1212,6 +1212,31 @@
   "archive/p97_default/run_3/l2_norm/ma_of_slow_ma_crossover.png": {
     "mtime": 1788363238.9522228,
     "ast_hash": "d0be824e455e31efd3c4b04398850df5",
+    "semantic_hash": ""
+  },
+  "results/nanda_unified/seed_0/spectral/spectral_signal.json": {
+    "mtime": 1788602591.9187958,
+    "ast_hash": "810edfa095ea92fcb29c59a6d2e8b49e",
+    "semantic_hash": ""
+  },
+  "results/nanda_unified/seed_1/spectral/spectral_signal.json": {
+    "mtime": 1788602592.2016551,
+    "ast_hash": "b2226985c460bc0bb174d93b3b1464e0",
+    "semantic_hash": ""
+  },
+  "results/nanda_unified/seed_2/spectral/spectral_signal.json": {
+    "mtime": 1788602592.440844,
+    "ast_hash": "35b243ba2c807ccb175170f38dbb2842",
+    "semantic_hash": ""
+  },
+  "results/nanda_unified/seed_3/spectral/spectral_signal.json": {
+    "mtime": 1788602592.679465,
+    "ast_hash": "3d48872dd2e3429126be52386c6c7a66",
+    "semantic_hash": ""
+  },
+  "results/nanda_unified/seed_4/spectral/spectral_signal.json": {
+    "mtime": 1788602592.965887,
+    "ast_hash": "0982ac77e0e335b0c85b9c506146129c",
     "semantic_hash": ""
   }
 }
