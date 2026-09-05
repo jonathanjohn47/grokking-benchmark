@@ -74,6 +74,7 @@ from predictors.dropout import (                                          # noqa
     compute_dropout_variance,
 )
 from predictors.spectral import compute_spectral_metrics_for_checkpoint   # noqa: E402
+from predictors.age import compute_age_metrics_for_checkpoint             # noqa: E402
 from unified_measurements import PredictorMeasurements                    # noqa: E402
 
 # The grok epoch is the first epoch test accuracy exceeds this (same
@@ -120,6 +121,7 @@ PREDICTOR_SUMMARY_KEY = {
     "dropout_gap": "dropout_final_gap_by_rate",
     "dropout_variance": "dropout_variance_predictor",
     "spectral": "spectral_predictor",
+    "age": "age_predictor",
 }
 ALL_PREDICTORS = list(PREDICTOR_SUMMARY_KEY.keys())
 
@@ -528,6 +530,11 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
     # whatever recompute_from_checkpoints already wrote for this seed.
     spectral_block = (old_summary or {}).get("spectral_predictor")
 
+    # AGE is checkpoint-only too (CHECKPOINT_PREDICTOR_FUNCS["age"]) —
+    # train_one_seed never computes it live, it only carries forward
+    # whatever recompute_from_checkpoints already wrote for this seed.
+    age_block = (old_summary or {}).get("age_predictor")
+
     # per-seed summary + resume sentinel. Old blocks for predictors NOT
     # recomputed this call are carried forward, never dropped.
     summary = {
@@ -547,6 +554,7 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
         "dropout_final_gap_by_rate": dropout_gap_block,
         "dropout_variance_predictor": dropout_variance_block,
         "spectral_predictor": spectral_block,
+        "age_predictor": age_block,
         "limit_cycle_check": limit_cycle_check(test_acc_history, grok_epoch),
         "wall_time_sec": round(time.time() - started, 1),
     }
@@ -707,6 +715,75 @@ def _checkpoint_predictor_spectral(model, test_loader, ckpt_dir, ckpt_epochs,
     return block
 
 
+def _checkpoint_predictor_age(model, test_loader, ckpt_dir, ckpt_epochs,
+                              measurements, grok_epoch, device):
+    """CHECKPOINT_PREDICTOR_FUNCS["age"] — AGE, Adaptive Grokking Epoch via
+    Neural Collapse (Papyan et al. 2020 NC1; see src/predictors/age.py).
+    Loads each saved checkpoint into `model` in turn, computes
+    compute_age_metrics_for_checkpoint(model, train_loader, device) — the
+    NC1 variability-collapse ratio Tr(Sigma_W)/Tr(Sigma_B) and the mean
+    feature norm — collects the per-checkpoint history, saves it via
+    measurements.save_age_data, and returns the age_predictor block for
+    summary.json.
+
+    test_loader is IGNORED — NC1 is a property of the TRAINING
+    representations (within-/between-class scatter of the penultimate
+    features on the train split). This function rebuilds the exact
+    training split this seed used (same per-seed RNG seeding as
+    train_one_seed step (a) and _checkpoint_predictor_spectral) so the
+    class means match the data the model was trained on. The signature
+    keeps `test_loader` only to match the shared
+    CHECKPOINT_PREDICTOR_FUNCS shape.
+
+    AGE prediction under test: NC1 falls sharply at or BEFORE grok, so the
+    checkpoint epoch of minimum NC1 is a leading/coincident grokking
+    marker. nc1_min_to_grok_ratio = nc1_min_epoch / grok_epoch is the
+    head-to-head number the benchmark records."""
+    # Recover this seed and rebuild its training split deterministically.
+    seed = int(np.load(os.path.join(measurements.output_dir, "seed.npy"))[0])
+    p = model.output_head.out_features - 1
+    batch_size = int(0.3 * p * p)  # full-batch training split (matches get_dataloaders)
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    train_loader, _ = get_dataloaders(number=p, batch_size=batch_size)
+
+    age_checkpoints = []
+    nc1_history, fn_history = [], []
+
+    for epoch in ckpt_epochs:
+        state = torch.load(os.path.join(ckpt_dir, f"model_epoch_{epoch}.pt"), map_location=device)
+        model.load_state_dict(state)
+        m = compute_age_metrics_for_checkpoint(model, train_loader, device)
+        age_checkpoints.append(epoch)
+        nc1_history.append(m["nc1"])
+        fn_history.append(m["fn"])
+
+    measurements.save_age_data(age_checkpoints, {"nc1": nc1_history, "fn": fn_history})
+
+    nc1_min_idx = int(np.argmin(nc1_history))
+    nc1_min_epoch = age_checkpoints[nc1_min_idx]
+    fn_arr = np.asarray(fn_history, dtype=float)
+
+    block = {
+        "age_checkpoints": age_checkpoints,
+        "nc1_history": [float(v) for v in nc1_history],
+        "fn_history": [float(v) for v in fn_history],
+        "grok_epoch": grok_epoch,
+        "nc1_min_epoch": nc1_min_epoch,
+        "nc1_min_value": float(nc1_history[nc1_min_idx]),
+        "nc1_first_last": {"first": float(nc1_history[0]), "last": float(nc1_history[-1])},
+        "fn_first_last": {"first": float(fn_history[0]), "last": float(fn_history[-1])},
+        "fn_min": float(fn_arr.min()),
+        "fn_max": float(fn_arr.max()),
+        "nc1_min_to_grok_ratio": (
+            float(nc1_min_epoch) / grok_epoch if grok_epoch else None),
+        "num_checkpoints": len(age_checkpoints),
+    }
+    with open(os.path.join(measurements.age_dir, "age_signal.json"), "w") as handle:
+        json.dump(block, handle, indent=2)
+    return block
+
+
 # Predictors this runner knows how to (re)compute from already-saved
 # checkpoints/model_epoch_*.pt alone, with NO retraining. Adding a future
 # predictor here (once it exists) is the ONLY change needed for it to gain
@@ -716,6 +793,7 @@ def _checkpoint_predictor_spectral(model, test_loader, ckpt_dir, ckpt_epochs,
 CHECKPOINT_PREDICTOR_FUNCS = {
     "dropout_variance": _checkpoint_predictor_dropout_variance,
     "spectral": _checkpoint_predictor_spectral,
+    "age": _checkpoint_predictor_age,
 }
 CHECKPOINT_ONLY_PREDICTORS = set(CHECKPOINT_PREDICTOR_FUNCS.keys())
 
@@ -813,6 +891,19 @@ def aggregate(summaries, args):
               f"alignment {al['first']:.4f}->{al['last']:.4f}  "
               f"alignment_max_epoch={sp['alignment_max_epoch']}  "
               f"(grok={s['grok_epoch']})")
+
+    print("\nAGE predictor (NC1 variability collapse, per seed):")
+    for s in summaries:
+        ap = s.get("age_predictor")
+        if ap is None:
+            print(f"  seed {s['seed']}: n/a (not computed for this seed)")
+            continue
+        nc1 = ap["nc1_first_last"]
+        ratio = ap["nc1_min_to_grok_ratio"]
+        ratio_str = f"{ratio:.4f}" if ratio is not None else "None"
+        print(f"  seed {s['seed']}: NC1 {nc1['first']:.4f}->{nc1['last']:.4f}  "
+              f"nc1_min_epoch={ap['nc1_min_epoch']}  "
+              f"nc1_min/grok={ratio_str}  (grok={s['grok_epoch']})")
 
     print("\nDropout gap at final epoch (per seed, by rate):")
     for s in summaries:

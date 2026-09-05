@@ -24,11 +24,12 @@ class PredictorMeasurements:
         self.l2_norm_dir = os.path.join(self.output_dir, "l2_norm")
         self.dropout_dir = os.path.join(self.output_dir, "dropout")
         self.spectral_dir = os.path.join(self.output_dir, "spectral")
+        self.age_dir = os.path.join(self.output_dir, "age")
         self.reports_dir = os.path.join(self.output_dir, "reports")
         self.training_dir = os.path.join(self.output_dir, "training")
 
         for dir_path in [self.l2_norm_dir, self.dropout_dir, self.spectral_dir,
-                          self.reports_dir, self.training_dir]:
+                          self.age_dir, self.reports_dir, self.training_dir]:
             os.makedirs(dir_path, exist_ok=True)
 
     def save_training_data(self, train_acc, test_acc, loss):
@@ -162,6 +163,37 @@ class PredictorMeasurements:
 
         cum = self._stack_ragged(spectral_history["cumulative_power_history"], width=100)
         np.save(os.path.join(self.spectral_dir, "spectral_cumulative_power.npy"), cum)
+
+    # ========== AGE MEASUREMENTS ==========
+
+    def save_age_data(self, age_checkpoints, age_history):
+        """Save all AGE (Predictor 4) measurements — Papyan et al. 2020 NC1
+        variability-collapse version (see src/predictors/age.py). AGE is a
+        checkpoint-only, loss-agnostic signal, so its arrays follow the
+        same per-checkpoint layout as save_spectral_data (NOT a per-epoch
+        history like L2 Norm).
+
+        age_checkpoints: list/array of epoch indices, one per checkpoint
+            that was evaluated (same role as spectral_checkpoints.npy).
+        age_history: dict of per-checkpoint lists, all the same length as
+            age_checkpoints:
+                nc1 : list[float]   Tr(Sigma_W) / Tr(Sigma_B) per checkpoint
+                fn  : list[float]   mean feature norm per checkpoint
+            built by calling
+            predictors.age.compute_age_metrics_for_checkpoint at each
+            checkpoint and collecting each returned field.
+
+        Saves (all under self.age_dir):
+            age_checkpoints.npy   [n_checkpoints]
+            age_nc1.npy           [n_checkpoints]
+            age_fn.npy            [n_checkpoints]
+        """
+        np.save(os.path.join(self.age_dir, "age_checkpoints.npy"),
+                np.array(age_checkpoints, dtype=int))
+        np.save(os.path.join(self.age_dir, "age_nc1.npy"),
+                np.array(age_history["nc1"], dtype=float))
+        np.save(os.path.join(self.age_dir, "age_fn.npy"),
+                np.array(age_history["fn"], dtype=float))
 
     @staticmethod
     def _stack_ragged(list_of_lists, width):

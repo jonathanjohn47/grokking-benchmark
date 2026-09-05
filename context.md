@@ -8782,8 +8782,16 @@ scientific reason the predictor fails here:
    alignment; real representation-kernel `eigh` on the 3830×3830 centred
    Gram matrix; `k_90_min` and `alignment_max` land at or after grok in
    5/5 seeds; 8 `.npy`/`.json` files per seed).
-4. **AGE (Adaptive Grokking Epoch)** — NEXT, not started.
-5. HTSR Alpha — not started.
+4. **AGE (Adaptive Grokking Epoch via Neural Collapse)** — CLOSED,
+   negative (2026-09-06). Signal = NC1 within-class variability collapse
+   (Papyan et al. 2020), `Tr(Sigma_W)/Tr(Sigma_B)`; head-to-head =
+   checkpoint epoch of minimum NC1 vs grok epoch. NC1 collapses ~45 →
+   ~0.05 in 5/5 seeds, but `nc1_min_epoch` LAGS grok in 5/5 (ratio
+   1.67–3.92; min pinned to the final checkpoint in 3/5). Checkpoint-only,
+   loss-agnostic, independent of the Nanda substrate. See the dedicated
+   session entry at the bottom of this file for the locked definition and
+   the full verdict table.
+5. HTSR Alpha — NEXT, not started.
 6. Correlation Traps — not started.
 7. Weight-PCA — not started.
 8. Higher-MI — not started.
@@ -8795,14 +8803,26 @@ scientific reason the predictor fails here:
   cheaper weight-spectrum proxy") from the Sept 4 entry is now
   **resolved and closed** — the literal representation-kernel Canatar
   route was implemented and evaluated, verdict negative.
-- **New open item — AGE (Predictor 4):** pin down the exact AGE signal
-  definition (from the AGE paper in `literature/`) and confirm it can be
-  computed checkpoint-only, before writing `src/predictors/age.py`. AGE
-  should follow the same plugin pattern as
-  `_checkpoint_predictor_dropout_variance` /
-  `_checkpoint_predictor_spectral`: a `_checkpoint_predictor_age()`
-  registered into `CHECKPOINT_PREDICTOR_FUNCS` / `PREDICTOR_SUMMARY_KEY`,
-  reading `model_epoch_{epoch}.pt`, no change to the live training loop.
+- ~~**New open item — AGE (Predictor 4):** pin down the exact AGE signal
+  definition~~ **— CLOSED.** Definition locked (see the dedicated session
+  entry at the bottom of this file). AGE = Adaptive Grokking Epoch via
+  Neural Collapse: the epoch of NC1 within-class variability collapse
+  (Papyan et al. 2020), `Tr(Sigma_W)/Tr(Sigma_B) -> 0`, computed on the
+  penultimate training representations. Checkpoint-only, loss-agnostic,
+  independent of the Nanda substrate. `src/predictors/age.py`,
+  `save_age_data` in `src/unified_measurements.py`, and
+  `_checkpoint_predictor_age` (registered into
+  `CHECKPOINT_PREDICTOR_FUNCS` / `PREDICTOR_SUMMARY_KEY` /
+  `CHECKPOINT_ONLY_PREDICTORS`) are all in place, following the exact
+  `_checkpoint_predictor_spectral` plugin pattern; the live training loop
+  was not touched. 5-seed recompute run 2026-09-06 — **verdict CLOSED,
+  negative** (`nc1_min_epoch` lags grok in 5/5 seeds); see the dedicated
+  session entry at the bottom of this file.
+- Earlier grouping wording reconciled: entries that called AGE just
+  "Adaptive Grokking Epoch" and entries that filed it under generic
+  "neural-collapse lenses (AGE / Weight-PCA)" both refer to this same
+  NC1-based detector. No contradiction — the full name is **Adaptive
+  Grokking Epoch via Neural Collapse (NC1)**.
 - Prof. Rashid's two older personal open questions (previous thesis topic
   + Jammu clarification) — still pending, unrelated to the code track,
   carried forward.
@@ -8830,3 +8850,173 @@ scientific reason the predictor fails here:
   (`--seeds 1 --epochs 100 --predictors spectral`) passed end-to-end,
   exit 0, then the 5-seed recompute above was run and produced the
   CLOSED-negative verdict recorded in this entry.
+
+---
+
+## Session — 2026-09-06 — AGE predictor (Predictor 4): implemented, definition locked, 5-seed recompute run, VERDICT CLOSED negative
+
+### 1. AGE definition — LOCKED (resolves the open item)
+
+**AGE = Adaptive Grokking Epoch via Neural Collapse.** AGE is the epoch
+at which NC1 "within-class variability collapse" occurs. NC1 is the
+neural-collapse quantity from Papyan, Han & Donoho 2020 ("Prevalence of
+neural collapse during the terminal phase of deep learning training",
+PNAS 117(40):24652-24663; PDF `literature/Vardan Papyan - Prevalence of
+neural collapse ... [2020].pdf`): the last-layer features of same-class
+examples stop varying, so `Tr(Sigma_W)/Tr(Sigma_B) -> 0`, where
+`Sigma_W` is the within-class covariance of the penultimate features and
+`Sigma_B` the between-class covariance of the class means. AGE reads
+this collapse epoch off frozen checkpoints and compares it to the grok
+epoch; the prediction under test is that NC1 bottoms out at or **before**
+the test-accuracy jump, so `nc1_min_epoch` is a leading/coincident
+grokking marker. The head-to-head number recorded is
+`nc1_min_to_grok_ratio = nc1_min_epoch / grok_epoch`.
+
+This signal is **checkpoint-computable, loss-agnostic, and independent
+of the Nanda substrate** — it needs only frozen weights plus the
+training inputs, nothing from the loss curve or the optimiser. There is
+**no weight-matrix SVD** anywhere in AGE.
+
+Mechanism citations (why last-layer neural collapse should track
+grokking on `(a+b) mod p` at all): Beaglehole et al. 2024, "Average
+gradient outer product as a mechanism for deep neural collapse"
+(arXiv:2402.13728); Mallinar et al. 2024, "Emergence in non-neural
+models: grokking modular arithmetic via average gradient outer product"
+(arXiv:2407.20199). Collapse-epoch reading follows Paul & Rupa 2026,
+"Neural Collapse Dynamics".
+
+The earlier context wording is reconciled, not contradicted: entries
+naming it "Adaptive Grokking Epoch" and entries filing it under generic
+"neural-collapse lenses (AGE / Weight-PCA)" both mean this same NC1
+detector. Full name: Adaptive Grokking Epoch via Neural Collapse (NC1).
+
+### 2. Code added (no live training loop touched)
+
+- **`src/predictors/age.py`** (new). `_collect_representations_and_labels`
+  copied verbatim from `src/predictors/spectral.py` — hook on
+  `model.output_head`, capture `inputs[0][:, 2, :]`, `.cpu().double()`
+  (off MPS first, then promote). `compute_age_metrics_for_checkpoint(
+  model, train_loader, device)` builds `Phi [N,128]` float64 CPU and
+  `Y [N]` int CPU from the full train split, computes per-class means
+  `mu_c`, global mean `mu_G`, `Tr(Sigma_W) = mean_c mean_{i in c}
+  ||h_i - mu_c||^2`, `Tr(Sigma_B) = mean_c ||mu_c - mu_G||^2`,
+  `nc1 = Tr_W/(Tr_B + 1e-12)`, `fn = mean_i ||h_i||_2`; returns
+  `{"nc1", "fn", "N"}`. Classes with zero train examples are skipped
+  (not counted in the class-mean average). `compute_age_for_model` is the
+  thin wrapper. `python -m py_compile` clean.
+
+- **`src/unified_measurements.py`**. `create_subdirs()` now also makes
+  `self.age_dir = <output_dir>/age`. New `save_age_data(age_checkpoints,
+  age_history)` writes `age_checkpoints.npy`, `age_nc1.npy`, `age_fn.npy`
+  under `age_dir` — same per-checkpoint layout as `save_spectral_data`.
+  `l2_norm` / `dropout` / `spectral` save paths untouched; `_stack_ragged`
+  unchanged. `py_compile` clean.
+
+- **`run_nanda_benchmark.py`**. Imports
+  `compute_age_metrics_for_checkpoint`. New `_checkpoint_predictor_age(
+  model, test_loader, ckpt_dir, ckpt_epochs, measurements, grok_epoch,
+  device)` — exact `_checkpoint_predictor_spectral` shape: recovers seed
+  from `seed_dir/seed.npy`, re-seeds `torch.manual_seed` +
+  `np.random.seed`, rebuilds `train_loader` via
+  `get_dataloaders(number=p, batch_size=int(0.3*p*p))`, iterates
+  `ckpt_epochs` loading `model_epoch_{epoch}.pt`, collects
+  `nc1_history` / `fn_history`, calls `measurements.save_age_data(...)`,
+  writes `age_signal.json` (keys `nc1_history`, `fn_history`,
+  `nc1_min_epoch`, `grok_epoch`, `nc1_min_to_grok_ratio`,
+  `num_checkpoints`, plus `nc1_min_value`, first/last of nc1 and fn,
+  fn min/max), returns the block filed under `summary.json` key
+  `age_predictor`. Registered in `CHECKPOINT_PREDICTOR_FUNCS["age"]`,
+  `PREDICTOR_SUMMARY_KEY["age"] = "age_predictor"` (so `ALL_PREDICTORS`
+  and `CHECKPOINT_ONLY_PREDICTORS` pick it up automatically).
+  `train_one_seed`'s summary dict now carries `age_predictor` forward
+  from `old_summary` (checkpoint-only, never computed live), same as
+  `spectral_predictor`. `aggregate()` prints a per-seed AGE line.
+  `py_compile` clean.
+
+- **`literature/README.md`**. Housekeeping "Predictor → paper map" is now
+  a real table: L2 / Dropout / Spectral marked CLOSED negative, AGE row
+  = Papyan 2020 PNAS (NC1) with Beaglehole 2024 + Mallinar 2024 as
+  mechanism. Papyan entry in section 3 annotated as the AGE source.
+  (Status line updated again after the recompute below to CLOSED,
+  negative.)
+
+### 3. Verification done
+
+- Smoke test:
+  `python run_nanda_benchmark.py --seeds 1 --epochs 100 --output_dir
+  results/test_age --config configs/nanda_unified.yaml --predictors age`
+  — printed `[seed 0] age recomputed from N saved checkpoints (no
+  retrain)`, created `results/test_age/seed_0/age/` with
+  `age_checkpoints.npy`, `age_nc1.npy`, `age_fn.npy`, `age_signal.json`,
+  no retrain. Test dir then deleted.
+- `results/nanda_unified/seed_0..4/{l2_norm,dropout,checkpoints}/`
+  confirmed untouched.
+
+### 4. 5-seed recompute — DONE — VERDICT: CLOSED, negative
+
+Ran off the existing `results/nanda_unified/seed_0..4/checkpoints/`, no
+retrain:
+
+```
+python run_nanda_benchmark.py --seeds 5 --epochs 40000 \
+    --output_dir results/nanda_unified --config configs/nanda_unified.yaml \
+    --predictors l2,dropout_gap,dropout_variance,spectral,age
+```
+
+l2 / dropout_gap / dropout_variance / spectral all printed
+"complete - skipping" for every seed; only `age` computed. 24 checkpoints
+per seed. `aggregate.json` and all 5 `summary.json` regenerated with the
+`age_predictor` block; `results/nanda_unified/seed_*/age/` now holds
+`age_checkpoints.npy`, `age_nc1.npy`, `age_fn.npy`, `age_signal.json`.
+
+Per-seed result (grok epoch = first epoch test acc > 0.9):
+
+| seed | grok | nc1_min_epoch | nc1_min / grok | NC1 first → last |
+|---|---|---|---|---|
+| 0 | 14474 | 25232 | 1.74 | 45.37 → 0.069 |
+| 1 |  6988 | 15917 | 2.28 | 44.64 → 0.050 |
+| 2 | 10418 | 39999 | 3.84 | 44.59 → 0.064 |
+| 3 | 10193 | 39999 | 3.92 | 47.86 → 0.063 |
+| 4 | 24021 | 39999 | 1.67 | 46.10 → 0.044 |
+
+Two-criterion test:
+
+1. **Does `nc1_min_epoch` lead `grok_epoch`?  NO — 5/5 seeds.** The NC1
+   ratio is > 1 in every seed (1.67–3.92). NC1 keeps falling long after
+   grokking; in 3/5 seeds the minimum is pinned to the final checkpoint
+   (39999), and NC1 is close to monotone-decreasing throughout, so
+   `nc1_min_epoch` carries essentially no timing information relative to
+   grok — it just marks "end of training".
+2. **Consistent across seeds?  YES** — but consistently in the wrong
+   direction (a lagging, not leading, marker).
+
+**Verdict: AGE is CLOSED, negative.** NC1 variability collapse is real
+and large on this substrate (Tr(Sigma_W)/Tr(Sigma_B) drops ~45 → ~0.05
+in all 5 seeds), but it develops *after* the test-accuracy jump, not
+before it. Same failure shape as Spectral: the signal lands at or after
+grok in every seed. Feature norm `fn` grows monotonically (~1.4 → ~15+)
+alongside the collapse, as expected, and adds no separate timing signal.
+
+Not-yet-tried extension, left for later if AGE is revisited: read the
+collapse *onset* (first checkpoint where NC1 crosses a fixed threshold,
+e.g. NC1 < 1) instead of the argmin. The argmin as defined is dominated
+by the long monotone tail and cannot lead grok by construction.
+
+### 5. Predictor Evaluation Order after this session
+
+1. L2 Norm — CLOSED, negative
+2. Dropout — CLOSED, negative
+3. Spectral — CLOSED, negative
+4. **AGE — CLOSED, negative** (this session)
+5. HTSR Alpha — NEXT, not started
+6. Correlation Traps — not started
+7. Weight-PCA — not started
+8. Higher-MI — not started
+9. Commutator Defect — not started
+
+### 6. Files verified untouched
+
+- `results/nanda_unified/seed_0..4/{l2_norm,dropout,spectral,checkpoints}/`
+  — not modified (l2/dropout/spectral skipped, checkpoints only read).
+- `results/nanda_unified/seed_*/summary.json` — only the `age_predictor`
+  key added/filled; every other block byte-identical (carried forward).
