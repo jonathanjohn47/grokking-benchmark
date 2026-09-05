@@ -8300,6 +8300,17 @@ session's registry refactor set up for this.
   before and after this session.
 - The Dropout predictor's CLOSED/negative verdict from the previous
   session — unchanged, not revisited this session.
+- `run_full_benchmark.py` deprecated on Sept 5, 2026 — moved to
+  `archive/old_benchmarks/run_full_benchmark.py.deprecated`. This was the
+  old 3-run pipeline using `src/train_four_head.py` -> `runs/four_head/`.
+  Replaced by `run_nanda_benchmark.py` as single source of truth for
+  unified benchmark (5 seeds, 40000 epochs, mod 113,
+  `results/nanda_unified/`). No active code depends on it now — confirmed
+  via repo-wide grep for `run_full_benchmark` outside `archive/`: only
+  historical/comment mentions remain in `nanda_l2_p113/README.md`,
+  `nanda_l2_p113/run_benchmark.py`, and `src/generate_master_report.py`
+  (docstring/README text describing lineage, not an active `import` or
+  call — nothing breaks).
 
 #### 3. Verification done
 
