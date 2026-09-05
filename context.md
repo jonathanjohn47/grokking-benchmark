@@ -8084,3 +8084,121 @@ This deviation does not change verdict: Even with cheap k=30 version, Criterion 
    needed" for Dropout even though `Salah and Yevick.pdf` is now in
    `Literature/` and the predictor is closed — still optional, still
    Jonathan's call, unchanged from earlier sessions.
+
+---
+
+## Session Summary — September 5, 2026 (`archive/` folder untracked-file cleanup: `.gitignore` exception removed, everything staged for commit)
+
+### 1. What was requested
+
+Jonathan asked for the `archive/` folder and everything inside it to go
+into git. Separately he flagged that `archive/p97_default/` specifically
+had not shown up as committed, and asked why.
+
+### 2. What was found
+
+- `.gitignore` had a dedicated rule, `archive/p97_default/` (added in an
+  earlier session, comment: "Archived pre-Nanda-Unified run data (local
+  disk only)"), which was excluding that one subfolder from git while
+  the rest of `archive/` (`old_benchmarks/`, `single_head/`,
+  `src_p97_mainstream_old/`) was already untracked-but-not-ignored, or in
+  the case of `single_head/` and `src_p97_mainstream_old/` already fully
+  tracked from an earlier commit.
+- `archive/old_benchmarks/run_full_benchmark.py.deprecated` was new and
+  untracked (this is where the deleted `run_full_benchmark.py` — see the
+  pre-existing uncommitted deletion noted in §4 below — appears to have
+  been moved to, though that move happened before this session and was
+  not verified here beyond confirming the `.deprecated` file's presence).
+
+### 3. What changed
+
+- **`.gitignore`**: removed the `archive/p97_default/` rule (and its
+  explanatory comment) entirely — no replacement rule added, so nothing
+  under `archive/` is gitignored any more.
+- **`git add archive/ .gitignore`**: staged every previously-untracked
+  file under `archive/p97_default/` (all three `run_1`/`run_2`/`run_3`
+  subfolders — L2-Norm and Dropout `.npy`/`.png` measurement files, PDF
+  reports, seed files, training histories) and
+  `archive/old_benchmarks/run_full_benchmark.py.deprecated`.
+  `archive/single_head/` and `archive/src_p97_mainstream_old/` needed no
+  `git add` — already fully tracked, `git status` on those two paths
+  alone reported "nothing to commit, working tree clean".
+- `archive/*/__pycache__/` stays out of git — covered by the pre-existing
+  generic `__pycache__/` rule in `.gitignore`, which was left untouched;
+  this is ordinary Python build junk, not part of "the archive contents"
+  in any meaningful sense.
+
+### 4. What did NOT change (pre-existing uncommitted state, present at
+the start of this session, untouched by this session's work)
+
+These were already sitting as uncommitted changes in the working tree
+before this session started and were not modified, investigated, or
+explained by this session — noted here only so the git status make
+sense to whoever reads this next:
+- `run_full_benchmark.py` — deleted (unstaged) in the working tree.
+- `run_nanda_benchmark.py` — modified (unstaged): a `spectral` entry has
+  been added to `PREDICTOR_SUMMARY_KEY`/`ALL_PREDICTORS`, a new
+  `_checkpoint_predictor_spectral()` function and
+  `CHECKPOINT_PREDICTOR_FUNCS["spectral"]` registration, an `aggregate()`
+  print block for the spectral predictor, and `main()` now runs any
+  `CHECKPOINT_ONLY_PREDICTORS` left over after a fresh (non-resumed)
+  training run so a first-time `--predictors spectral` run doesn't finish
+  with `spectral_predictor` still `None`.
+- `src/unified_measurements.py` — modified (unstaged): new `spectral_dir`
+  subfolder and a `save_spectral_data()` method, same shape as the
+  existing L2-Norm/Dropout save methods.
+- `src/predictors/spectral.py` — new, untracked, 77 lines: looks like a
+  real (non-stub) Spectral predictor implementation — per-weight-matrix
+  SVD stats (spectral norm, Frobenius norm, stable rank, effective rank)
+  over `SPECTRAL_MODULE_NAMES`, with the already-known MPS
+  `torch.linalg.svdvals` gap worked around via `.cpu()` before the SVD
+  call, matching the standing reminder on record since two sessions ago.
+
+None of the four items above were part of what this session was asked to
+do, and none of them were touched — they are flagged here only so the
+next session (or the next `git status`) isn't a surprise. **This is a
+change from the previous entry's §6.2**, which described only a
+deliberately-not-shipped Spectral stub — the file now on disk looks like
+the real predictor, not the stub, but this was not verified or
+authorised within this session.
+
+### 5. Verification done
+
+- `git status` before and after: confirmed exactly which paths were
+  gitignored vs. untracked vs. already-tracked before touching anything.
+- `git check-ignore -v` on `archive/p97_default/run_1` and
+  `archive/single_head/results` / `archive/src_p97_mainstream_old/__pycache__`
+  — confirmed only the `p97_default` rule and the generic `__pycache__`
+  rule were in play.
+- After staging: `git status` re-run, confirmed all of
+  `archive/p97_default/**` and `archive/old_benchmarks/*.deprecated` show
+  as new files staged for commit, and that the four pre-existing
+  unstaged changes from §4 were left exactly as found (not staged, not
+  reverted).
+
+### 6. Not committed yet
+
+Jonathan has not yet said the word to commit. Per this project's Section
+10 rule, the commit itself (when requested) must stage everything
+intentionally — including a decision on whether the four pre-existing
+unstaged items in §4 (Spectral work, `run_full_benchmark.py` deletion)
+should go into the same commit as the archive cleanup, or a separate one.
+That decision is Jonathan's, not yet made.
+
+### 7. Files Modified
+
+- `.gitignore` — removed the `archive/p97_default/` ignore rule.
+- `context.md` — this entry.
+- (staged, not yet committed) `archive/p97_default/**`,
+  `archive/old_benchmarks/run_full_benchmark.py.deprecated`.
+
+### Next
+
+1. Jonathan to decide: commit the archive cleanup alone, or bundle it
+   with the pre-existing Spectral-predictor changes (§4) in the same
+   commit.
+2. If bundling: the real Spectral predictor in `src/predictors/spectral.py`
+   should be reviewed/tested before committing as "real" work — it has
+   not been smoke-tested within any session on record yet, unlike the
+   throwaway stub two sessions ago which was explicitly tested and torn
+   down.

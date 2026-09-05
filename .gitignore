@@ -44,9 +44,6 @@ safemytrip-13b58-firebase-adminsdk-fbsvc-74587cebc1.json
 *firebase-adminsdk*.json
 *-service-account*.json
 
-# ── Archived pre-Nanda-Unified run data (local disk only) ──────────
-archive/p97_default/
-
 # ── Benchmark output (large npy, local disk only) ──────────────────
 results/test_smoke/
 
