@@ -21,14 +21,44 @@
   },
   "nodes": [
     {
+      "label": "BENCHMARK-V4.md",
+      "file_type": "document",
+      "source_file": "results/nanda_unified/BENCHMARK-V4.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "nanda_unified_benchmark_v4",
+      "community": 7,
+      "norm_label": "benchmark-v4.md"
+    },
+    {
+      "label": "NANDA-UNIFIED BENCHMARK v4 \u2014 4 Predictors CLOSED",
+      "file_type": "document",
+      "source_file": "results/nanda_unified/BENCHMARK-V4.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "nanda_unified_benchmark_v4_nanda_unified_benchmark_v4_4_predictors_closed",
+      "community": 7,
+      "norm_label": "nanda-unified benchmark v4 \u2014 4 predictors closed"
+    },
+    {
+      "label": "Benchmark Result \u2014 All 4 CLOSED Negative (Valid Falsification)",
+      "file_type": "document",
+      "source_file": "results/nanda_unified/BENCHMARK-V4.md",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "nanda_unified_benchmark_v4_benchmark_result_all_4_closed_negative_valid_falsification",
+      "community": 7,
+      "norm_label": "benchmark result \u2014 all 4 closed negative (valid falsification)"
+    },
+    {
       "label": "README.md",
       "file_type": "document",
       "source_file": "Literature/README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "literature_readme",
       "community": 24,
-      "norm_label": "readme.md"
+      "norm_label": "readme.md",
+      "id": "literature_readme"
     },
     {
       "label": "Literature",
@@ -36,9 +66,9 @@
       "source_file": "Literature/README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "literature_readme_literature",
       "community": 24,
-      "norm_label": "literature"
+      "norm_label": "literature",
+      "id": "literature_readme_literature"
     },
     {
       "label": "1. Grokking \u2014 direct",
@@ -46,9 +76,9 @@
       "source_file": "Literature/README.md",
       "source_location": "L14",
       "_origin": "ast",
-      "id": "literature_readme_1_grokking_direct",
       "community": 24,
-      "norm_label": "1. grokking \u2014 direct"
+      "norm_label": "1. grokking \u2014 direct",
+      "id": "literature_readme_1_grokking_direct"
     },
     {
       "label": "2. Heavy-tailed self-regularisation / weight-matrix spectra",
@@ -56,9 +86,9 @@
       "source_file": "Literature/README.md",
       "source_location": "L22",
       "_origin": "ast",
-      "id": "literature_readme_2_heavy_tailed_self_regularisation_weight_matrix_spectra",
       "community": 24,
-      "norm_label": "2. heavy-tailed self-regularisation / weight-matrix spectra"
+      "norm_label": "2. heavy-tailed self-regularisation / weight-matrix spectra",
+      "id": "literature_readme_2_heavy_tailed_self_regularisation_weight_matrix_spectra"
     },
     {
       "label": "3. Neural collapse (terminal phase of training)",
@@ -66,9 +96,9 @@
       "source_file": "Literature/README.md",
       "source_location": "L29",
       "_origin": "ast",
-      "id": "literature_readme_3_neural_collapse_terminal_phase_of_training",
       "community": 24,
-      "norm_label": "3. neural collapse (terminal phase of training)"
+      "norm_label": "3. neural collapse (terminal phase of training)",
+      "id": "literature_readme_3_neural_collapse_terminal_phase_of_training"
     },
     {
       "label": "4. Generalisation dynamics / double descent / interpolation",
@@ -76,9 +106,9 @@
       "source_file": "Literature/README.md",
       "source_location": "L38",
       "_origin": "ast",
-      "id": "literature_readme_4_generalisation_dynamics_double_descent_interpolation",
       "community": 24,
-      "norm_label": "4. generalisation dynamics / double descent / interpolation"
+      "norm_label": "4. generalisation dynamics / double descent / interpolation",
+      "id": "literature_readme_4_generalisation_dynamics_double_descent_interpolation"
     },
     {
       "label": "5. Kernel / random-features / mean-field theory",
@@ -86,9 +116,9 @@
       "source_file": "Literature/README.md",
       "source_location": "L49",
       "_origin": "ast",
-      "id": "literature_readme_5_kernel_random_features_mean_field_theory",
       "community": 24,
-      "norm_label": "5. kernel / random-features / mean-field theory"
+      "norm_label": "5. kernel / random-features / mean-field theory",
+      "id": "literature_readme_5_kernel_random_features_mean_field_theory"
     },
     {
       "label": "6. Scaling laws / representations",
@@ -96,9 +126,9 @@
       "source_file": "Literature/README.md",
       "source_location": "L59",
       "_origin": "ast",
-      "id": "literature_readme_6_scaling_laws_representations",
       "community": 24,
-      "norm_label": "6. scaling laws / representations"
+      "norm_label": "6. scaling laws / representations",
+      "id": "literature_readme_6_scaling_laws_representations"
     },
     {
       "label": "7. Robustness / margins / shortcut learning",
@@ -106,9 +136,9 @@
       "source_file": "Literature/README.md",
       "source_location": "L66",
       "_origin": "ast",
-      "id": "literature_readme_7_robustness_margins_shortcut_learning",
       "community": 24,
-      "norm_label": "7. robustness / margins / shortcut learning"
+      "norm_label": "7. robustness / margins / shortcut learning",
+      "id": "literature_readme_7_robustness_margins_shortcut_learning"
     },
     {
       "label": "8. Other",
@@ -116,9 +146,9 @@
       "source_file": "Literature/README.md",
       "source_location": "L73",
       "_origin": "ast",
-      "id": "literature_readme_8_other",
       "community": 24,
-      "norm_label": "8. other"
+      "norm_label": "8. other",
+      "id": "literature_readme_8_other"
     },
     {
       "label": "Housekeeping notes",
@@ -126,9 +156,9 @@
       "source_file": "Literature/README.md",
       "source_location": "L81",
       "_origin": "ast",
-      "id": "literature_readme_housekeeping_notes",
       "community": 24,
-      "norm_label": "housekeeping notes"
+      "norm_label": "housekeeping notes",
+      "id": "literature_readme_housekeeping_notes"
     },
     {
       "label": "README.md",
@@ -136,9 +166,9 @@
       "source_file": "results/README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "results_readme",
       "community": 28,
-      "norm_label": "readme.md"
+      "norm_label": "readme.md",
+      "id": "results_readme"
     },
     {
       "label": "Results Directory Structure",
@@ -146,9 +176,9 @@
       "source_file": "results/README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "results_readme_results_directory_structure",
       "community": 28,
-      "norm_label": "results directory structure"
+      "norm_label": "results directory structure",
+      "id": "results_readme_results_directory_structure"
     },
     {
       "label": "Overview",
@@ -156,9 +186,9 @@
       "source_file": "results/README.md",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "results_readme_overview",
       "community": 28,
-      "norm_label": "overview"
+      "norm_label": "overview",
+      "id": "results_readme_overview"
     },
     {
       "label": "Single-Head Results",
@@ -166,9 +196,9 @@
       "source_file": "results/README.md",
       "source_location": "L26",
       "_origin": "ast",
-      "id": "results_readme_single_head_results",
       "community": 28,
-      "norm_label": "single-head results"
+      "norm_label": "single-head results",
+      "id": "results_readme_single_head_results"
     },
     {
       "label": "`training/`",
@@ -176,9 +206,9 @@
       "source_file": "results/README.md",
       "source_location": "L28",
       "_origin": "ast",
-      "id": "results_readme_training",
       "community": 28,
-      "norm_label": "`training/`"
+      "norm_label": "`training/`",
+      "id": "results_readme_training"
     },
     {
       "label": "`l2_norm/`",
@@ -186,9 +216,9 @@
       "source_file": "results/README.md",
       "source_location": "L35",
       "_origin": "ast",
-      "id": "results_readme_l2_norm",
       "community": 28,
-      "norm_label": "`l2_norm/`"
+      "norm_label": "`l2_norm/`",
+      "id": "results_readme_l2_norm"
     },
     {
       "label": "`dropout/`",
@@ -196,9 +226,9 @@
       "source_file": "results/README.md",
       "source_location": "L46",
       "_origin": "ast",
-      "id": "results_readme_dropout",
       "community": 28,
-      "norm_label": "`dropout/`"
+      "norm_label": "`dropout/`",
+      "id": "results_readme_dropout"
     },
     {
       "label": "`reports/`",
@@ -206,9 +236,9 @@
       "source_file": "results/README.md",
       "source_location": "L59",
       "_origin": "ast",
-      "id": "results_readme_reports",
       "community": 28,
-      "norm_label": "`reports/`"
+      "norm_label": "`reports/`",
+      "id": "results_readme_reports"
     },
     {
       "label": "Four-Head Results",
@@ -216,9 +246,9 @@
       "source_file": "results/README.md",
       "source_location": "L65",
       "_origin": "ast",
-      "id": "results_readme_four_head_results",
       "community": 28,
-      "norm_label": "four-head results"
+      "norm_label": "four-head results",
+      "id": "results_readme_four_head_results"
     },
     {
       "label": "Per-Run Structure (`run_1/`, `run_2/`, `run_3/`)",
@@ -226,9 +256,9 @@
       "source_file": "results/README.md",
       "source_location": "L69",
       "_origin": "ast",
-      "id": "results_readme_per_run_structure_run_1_run_2_run_3",
       "community": 28,
-      "norm_label": "per-run structure (`run_1/`, `run_2/`, `run_3/`)"
+      "norm_label": "per-run structure (`run_1/`, `run_2/`, `run_3/`)",
+      "id": "results_readme_per_run_structure_run_1_run_2_run_3"
     },
     {
       "label": "`comparisons/`",
@@ -236,9 +266,9 @@
       "source_file": "results/README.md",
       "source_location": "L88",
       "_origin": "ast",
-      "id": "results_readme_comparisons",
       "community": 28,
-      "norm_label": "`comparisons/`"
+      "norm_label": "`comparisons/`",
+      "id": "results_readme_comparisons"
     },
     {
       "label": "Experiments",
@@ -246,9 +276,9 @@
       "source_file": "results/README.md",
       "source_location": "L95",
       "_origin": "ast",
-      "id": "results_readme_experiments",
       "community": 28,
-      "norm_label": "experiments"
+      "norm_label": "experiments",
+      "id": "results_readme_experiments"
     },
     {
       "label": "`shadow_layernorm/`",
@@ -256,9 +286,9 @@
       "source_file": "results/README.md",
       "source_location": "L97",
       "_origin": "ast",
-      "id": "results_readme_shadow_layernorm",
       "community": 28,
-      "norm_label": "`shadow_layernorm/`"
+      "norm_label": "`shadow_layernorm/`",
+      "id": "results_readme_shadow_layernorm"
     },
     {
       "label": "Predictor Evaluation Order",
@@ -266,9 +296,9 @@
       "source_file": "results/README.md",
       "source_location": "L104",
       "_origin": "ast",
-      "id": "results_readme_predictor_evaluation_order",
       "community": 28,
-      "norm_label": "predictor evaluation order"
+      "norm_label": "predictor evaluation order",
+      "id": "results_readme_predictor_evaluation_order"
     },
     {
       "label": "How to Use This Structure",
@@ -276,9 +306,9 @@
       "source_file": "results/README.md",
       "source_location": "L118",
       "_origin": "ast",
-      "id": "results_readme_how_to_use_this_structure",
       "community": 28,
-      "norm_label": "how to use this structure"
+      "norm_label": "how to use this structure",
+      "id": "results_readme_how_to_use_this_structure"
     },
     {
       "label": "Key Findings",
@@ -286,9 +316,9 @@
       "source_file": "results/README.md",
       "source_location": "L153",
       "_origin": "ast",
-      "id": "results_readme_key_findings",
       "community": 28,
-      "norm_label": "key findings"
+      "norm_label": "key findings",
+      "id": "results_readme_key_findings"
     },
     {
       "label": "Last Updated",
@@ -296,9 +326,9 @@
       "source_file": "results/README.md",
       "source_location": "L165",
       "_origin": "ast",
-      "id": "results_readme_last_updated",
       "community": 28,
-      "norm_label": "last updated"
+      "norm_label": "last updated",
+      "id": "results_readme_last_updated"
     },
     {
       "label": "run_nanda_benchmark.py",
@@ -306,9 +336,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "run_nanda_benchmark",
       "community": 0,
-      "norm_label": "run_nanda_benchmark.py"
+      "norm_label": "run_nanda_benchmark.py",
+      "id": "run_nanda_benchmark"
     },
     {
       "label": "dropout_variance_checkpoint_schedule()",
@@ -316,9 +346,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L129",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_dropout_variance_checkpoint_schedule",
       "community": 0,
-      "norm_label": "dropout_variance_checkpoint_schedule()"
+      "norm_label": "dropout_variance_checkpoint_schedule()",
+      "id": "run_nanda_benchmark_dropout_variance_checkpoint_schedule"
     },
     {
       "label": "pick_drc_checkpoint_subset()",
@@ -326,9 +356,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L152",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_pick_drc_checkpoint_subset",
       "community": 0,
-      "norm_label": "pick_drc_checkpoint_subset()"
+      "norm_label": "pick_drc_checkpoint_subset()",
+      "id": "run_nanda_benchmark_pick_drc_checkpoint_subset"
     },
     {
       "label": "_num_or_none()",
@@ -336,9 +366,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L162",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_num_or_none",
       "community": 0,
-      "norm_label": "_num_or_none()"
+      "norm_label": "_num_or_none()",
+      "id": "run_nanda_benchmark_num_or_none"
     },
     {
       "label": "load_config()",
@@ -346,9 +376,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L166",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_load_config",
       "community": 0,
-      "norm_label": "load_config()"
+      "norm_label": "load_config()",
+      "id": "run_nanda_benchmark_load_config"
     },
     {
       "label": "pick_device()",
@@ -356,9 +386,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L196",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_pick_device",
       "community": 0,
-      "norm_label": "pick_device()"
+      "norm_label": "pick_device()",
+      "id": "run_nanda_benchmark_pick_device"
     },
     {
       "label": "seed_dir_for()",
@@ -366,9 +396,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L200",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_seed_dir_for",
       "community": 0,
-      "norm_label": "seed_dir_for()"
+      "norm_label": "seed_dir_for()",
+      "id": "run_nanda_benchmark_seed_dir_for"
     },
     {
       "label": "checkpoints_dir_for()",
@@ -376,9 +406,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L204",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_checkpoints_dir_for",
       "community": 0,
-      "norm_label": "checkpoints_dir_for()"
+      "norm_label": "checkpoints_dir_for()",
+      "id": "run_nanda_benchmark_checkpoints_dir_for"
     },
     {
       "label": "summary_path_for()",
@@ -386,9 +416,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L208",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_summary_path_for",
       "community": 0,
-      "norm_label": "summary_path_for()"
+      "norm_label": "summary_path_for()",
+      "id": "run_nanda_benchmark_summary_path_for"
     },
     {
       "label": "load_summary()",
@@ -396,9 +426,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L212",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_load_summary",
       "community": 0,
-      "norm_label": "load_summary()"
+      "norm_label": "load_summary()",
+      "id": "run_nanda_benchmark_load_summary"
     },
     {
       "label": "get_done_predictors()",
@@ -406,9 +436,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L220",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_get_done_predictors",
       "community": 0,
-      "norm_label": "get_done_predictors()"
+      "norm_label": "get_done_predictors()",
+      "id": "run_nanda_benchmark_get_done_predictors"
     },
     {
       "label": "is_predictor_done()",
@@ -416,9 +446,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L236",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_is_predictor_done",
       "community": 0,
-      "norm_label": "is_predictor_done()"
+      "norm_label": "is_predictor_done()",
+      "id": "run_nanda_benchmark_is_predictor_done"
     },
     {
       "label": "has_saved_checkpoints()",
@@ -426,9 +456,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L240",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_has_saved_checkpoints",
       "community": 0,
-      "norm_label": "has_saved_checkpoints()"
+      "norm_label": "has_saved_checkpoints()",
+      "id": "run_nanda_benchmark_has_saved_checkpoints"
     },
     {
       "label": "grok_epoch_from()",
@@ -436,9 +466,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L247",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_grok_epoch_from",
       "community": 0,
-      "norm_label": "grok_epoch_from()"
+      "norm_label": "grok_epoch_from()",
+      "id": "run_nanda_benchmark_grok_epoch_from"
     },
     {
       "label": "limit_cycle_check()",
@@ -446,9 +476,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L253",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_limit_cycle_check",
       "community": 0,
-      "norm_label": "limit_cycle_check()"
+      "norm_label": "limit_cycle_check()",
+      "id": "run_nanda_benchmark_limit_cycle_check"
     },
     {
       "label": "train_one_seed()",
@@ -456,9 +486,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L281",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_train_one_seed",
       "community": 0,
-      "norm_label": "train_one_seed()"
+      "norm_label": "train_one_seed()",
+      "id": "run_nanda_benchmark_train_one_seed"
     },
     {
       "label": "_checkpoint_predictor_dropout_variance()",
@@ -466,9 +496,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L570",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_checkpoint_predictor_dropout_variance",
       "community": 0,
-      "norm_label": "_checkpoint_predictor_dropout_variance()"
+      "norm_label": "_checkpoint_predictor_dropout_variance()",
+      "id": "run_nanda_benchmark_checkpoint_predictor_dropout_variance"
     },
     {
       "label": "_checkpoint_predictor_spectral()",
@@ -476,9 +506,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L635",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_checkpoint_predictor_spectral",
       "community": 46,
-      "norm_label": "_checkpoint_predictor_spectral()"
+      "norm_label": "_checkpoint_predictor_spectral()",
+      "id": "run_nanda_benchmark_checkpoint_predictor_spectral"
     },
     {
       "label": "_checkpoint_predictor_age()",
@@ -486,9 +516,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L718",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_checkpoint_predictor_age",
       "community": 47,
-      "norm_label": "_checkpoint_predictor_age()"
+      "norm_label": "_checkpoint_predictor_age()",
+      "id": "run_nanda_benchmark_checkpoint_predictor_age"
     },
     {
       "label": "recompute_from_checkpoints()",
@@ -496,9 +526,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L801",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_recompute_from_checkpoints",
       "community": 0,
-      "norm_label": "recompute_from_checkpoints()"
+      "norm_label": "recompute_from_checkpoints()",
+      "id": "run_nanda_benchmark_recompute_from_checkpoints"
     },
     {
       "label": "aggregate()",
@@ -506,9 +536,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L845",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_aggregate",
       "community": 0,
-      "norm_label": "aggregate()"
+      "norm_label": "aggregate()",
+      "id": "run_nanda_benchmark_aggregate"
     },
     {
       "label": "main()",
@@ -516,9 +546,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L948",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_main",
       "community": 0,
-      "norm_label": "main()"
+      "norm_label": "main()",
+      "id": "run_nanda_benchmark_main"
     },
     {
       "label": "Log-uniform-spaced epoch indices for the dropout-variance checkpoints,     same",
@@ -526,9 +556,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L130",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_rationale_130",
       "community": 0,
-      "norm_label": "log-uniform-spaced epoch indices for the dropout-variance checkpoints,     same"
+      "norm_label": "log-uniform-spaced epoch indices for the dropout-variance checkpoints,     same",
+      "id": "run_nanda_benchmark_rationale_130"
     },
     {
       "label": "Evenly-spaced-by-position subset of an existing checkpoint list, for     the che",
@@ -536,9 +566,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L153",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_rationale_153",
       "community": 0,
-      "norm_label": "evenly-spaced-by-position subset of an existing checkpoint list, for     the che"
+      "norm_label": "evenly-spaced-by-position subset of an existing checkpoint list, for     the che",
+      "id": "run_nanda_benchmark_rationale_153"
     },
     {
       "label": "Read configs/nanda_unified.yaml -> flat dict of the constants used here.",
@@ -546,9 +576,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L167",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_rationale_167",
       "community": 0,
-      "norm_label": "read configs/nanda_unified.yaml -> flat dict of the constants used here."
+      "norm_label": "read configs/nanda_unified.yaml -> flat dict of the constants used here.",
+      "id": "run_nanda_benchmark_rationale_167"
     },
     {
       "label": "Which predictors already have a real result in this seed's     summary.json, key",
@@ -556,9 +586,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L221",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_rationale_221",
       "community": 0,
-      "norm_label": "which predictors already have a real result in this seed's     summary.json, key"
+      "norm_label": "which predictors already have a real result in this seed's     summary.json, key",
+      "id": "run_nanda_benchmark_rationale_221"
     },
     {
       "label": "Detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test",
@@ -566,9 +596,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L254",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_rationale_254",
       "community": 0,
-      "norm_label": "detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test"
+      "norm_label": "detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test",
+      "id": "run_nanda_benchmark_rationale_254"
     },
     {
       "label": "Train seed from scratch. predictors_to_compute (a set, subset of     ALL_PREDICT",
@@ -576,9 +606,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L283",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_rationale_283",
       "community": 0,
-      "norm_label": "train seed from scratch. predictors_to_compute (a set, subset of     all_predict"
+      "norm_label": "train seed from scratch. predictors_to_compute (a set, subset of     all_predict",
+      "id": "run_nanda_benchmark_rationale_283"
     },
     {
       "label": "CHECKPOINT_PREDICTOR_FUNCS[\"dropout_variance\"] \u2014 loads each saved     checkpoint",
@@ -586,9 +616,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L572",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_rationale_572",
       "community": 0,
-      "norm_label": "checkpoint_predictor_funcs[\"dropout_variance\"] \u2014 loads each saved     checkpoint"
+      "norm_label": "checkpoint_predictor_funcs[\"dropout_variance\"] \u2014 loads each saved     checkpoint",
+      "id": "run_nanda_benchmark_rationale_572"
     },
     {
       "label": "CHECKPOINT_PREDICTOR_FUNCS[\"spectral\"] \u2014 Canatar et al. 2021     task-model alig",
@@ -596,9 +626,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L637",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_rationale_637",
       "community": 46,
-      "norm_label": "checkpoint_predictor_funcs[\"spectral\"] \u2014 canatar et al. 2021     task-model alig"
+      "norm_label": "checkpoint_predictor_funcs[\"spectral\"] \u2014 canatar et al. 2021     task-model alig",
+      "id": "run_nanda_benchmark_rationale_637"
     },
     {
       "label": "CHECKPOINT_PREDICTOR_FUNCS[\"age\"] \u2014 AGE, Adaptive Grokking Epoch via     Neural",
@@ -606,9 +636,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L720",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_rationale_720",
       "community": 47,
-      "norm_label": "checkpoint_predictor_funcs[\"age\"] \u2014 age, adaptive grokking epoch via     neural"
+      "norm_label": "checkpoint_predictor_funcs[\"age\"] \u2014 age, adaptive grokking epoch via     neural",
+      "id": "run_nanda_benchmark_rationale_720"
     },
     {
       "label": "Compute predictor(s) that only need frozen model weights (currently     just \"dr",
@@ -616,9 +646,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L802",
       "_origin": "ast",
-      "id": "run_nanda_benchmark_rationale_802",
       "community": 0,
-      "norm_label": "compute predictor(s) that only need frozen model weights (currently     just \"dr"
+      "norm_label": "compute predictor(s) that only need frozen model weights (currently     just \"dr",
+      "id": "run_nanda_benchmark_rationale_802"
     },
     {
       "label": "age.py",
@@ -626,9 +656,9 @@
       "source_file": "src/predictors/age.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "predictors_age",
       "community": 47,
-      "norm_label": "age.py"
+      "norm_label": "age.py",
+      "id": "predictors_age"
     },
     {
       "label": "_collect_representations_and_labels()",
@@ -636,9 +666,9 @@
       "source_file": "src/predictors/age.py",
       "source_location": "L82",
       "_origin": "ast",
-      "id": "predictors_age_collect_representations_and_labels",
       "community": 47,
-      "norm_label": "_collect_representations_and_labels()"
+      "norm_label": "_collect_representations_and_labels()",
+      "id": "predictors_age_collect_representations_and_labels"
     },
     {
       "label": "compute_age_metrics_for_checkpoint()",
@@ -646,9 +676,9 @@
       "source_file": "src/predictors/age.py",
       "source_location": "L119",
       "_origin": "ast",
-      "id": "predictors_age_compute_age_metrics_for_checkpoint",
       "community": 47,
-      "norm_label": "compute_age_metrics_for_checkpoint()"
+      "norm_label": "compute_age_metrics_for_checkpoint()",
+      "id": "predictors_age_compute_age_metrics_for_checkpoint"
     },
     {
       "label": "compute_age_for_model()",
@@ -656,9 +686,9 @@
       "source_file": "src/predictors/age.py",
       "source_location": "L157",
       "_origin": "ast",
-      "id": "predictors_age_compute_age_for_model",
       "community": 47,
-      "norm_label": "compute_age_for_model()"
+      "norm_label": "compute_age_for_model()",
+      "id": "predictors_age_compute_age_for_model"
     },
     {
       "label": "AGE predictor (Predictor 4 of 9) \u2014 Adaptive Grokking Epoch via Neural Collapse.",
@@ -666,9 +696,9 @@
       "source_file": "src/predictors/age.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "predictors_age_rationale_1",
       "community": 47,
-      "norm_label": "age predictor (predictor 4 of 9) \u2014 adaptive grokking epoch via neural collapse."
+      "norm_label": "age predictor (predictor 4 of 9) \u2014 adaptive grokking epoch via neural collapse.",
+      "id": "predictors_age_rationale_1"
     },
     {
       "label": "Run the model over the full training split and capture, per example,     the hid",
@@ -676,9 +706,9 @@
       "source_file": "src/predictors/age.py",
       "source_location": "L83",
       "_origin": "ast",
-      "id": "predictors_age_rationale_83",
       "community": 47,
-      "norm_label": "run the model over the full training split and capture, per example,     the hid"
+      "norm_label": "run the model over the full training split and capture, per example,     the hid",
+      "id": "predictors_age_rationale_83"
     },
     {
       "label": "Papyan et al. 2020 NC1 variability-collapse metrics for ONE frozen     model che",
@@ -686,9 +716,9 @@
       "source_file": "src/predictors/age.py",
       "source_location": "L120",
       "_origin": "ast",
-      "id": "predictors_age_rationale_120",
       "community": 47,
-      "norm_label": "papyan et al. 2020 nc1 variability-collapse metrics for one frozen     model che"
+      "norm_label": "papyan et al. 2020 nc1 variability-collapse metrics for one frozen     model che",
+      "id": "predictors_age_rationale_120"
     },
     {
       "label": "Thin wrapper kept parallel to     src/predictors/spectral.py::compute_spectral_f",
@@ -696,9 +726,9 @@
       "source_file": "src/predictors/age.py",
       "source_location": "L158",
       "_origin": "ast",
-      "id": "predictors_age_rationale_158",
       "community": 47,
-      "norm_label": "thin wrapper kept parallel to     src/predictors/spectral.py::compute_spectral_f"
+      "norm_label": "thin wrapper kept parallel to     src/predictors/spectral.py::compute_spectral_f",
+      "id": "predictors_age_rationale_158"
     },
     {
       "label": "unified_measurements.py",
@@ -706,9 +736,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "src_unified_measurements",
       "community": 19,
-      "norm_label": "unified_measurements.py"
+      "norm_label": "unified_measurements.py",
+      "id": "src_unified_measurements"
     },
     {
       "label": "PredictorMeasurements",
@@ -716,9 +746,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L14",
       "_origin": "ast",
-      "id": "src_unified_measurements_predictormeasurements",
       "community": 19,
-      "norm_label": "predictormeasurements"
+      "norm_label": "predictormeasurements",
+      "id": "src_unified_measurements_predictormeasurements"
     },
     {
       "label": ".__init__()",
@@ -726,9 +756,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L17",
       "_origin": "ast",
-      "id": "src_unified_measurements_predictormeasurements_init",
       "community": 19,
-      "norm_label": ".__init__()"
+      "norm_label": ".__init__()",
+      "id": "src_unified_measurements_predictormeasurements_init"
     },
     {
       "label": ".create_subdirs()",
@@ -736,9 +766,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L22",
       "_origin": "ast",
-      "id": "src_unified_measurements_predictormeasurements_create_subdirs",
       "community": 19,
-      "norm_label": ".create_subdirs()"
+      "norm_label": ".create_subdirs()",
+      "id": "src_unified_measurements_predictormeasurements_create_subdirs"
     },
     {
       "label": ".save_training_data()",
@@ -746,9 +776,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L35",
       "_origin": "ast",
-      "id": "src_unified_measurements_predictormeasurements_save_training_data",
       "community": 19,
-      "norm_label": ".save_training_data()"
+      "norm_label": ".save_training_data()",
+      "id": "src_unified_measurements_predictormeasurements_save_training_data"
     },
     {
       "label": ".save_l2_norm_data()",
@@ -756,9 +786,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L43",
       "_origin": "ast",
-      "id": "src_unified_measurements_predictormeasurements_save_l2_norm_data",
       "community": 19,
-      "norm_label": ".save_l2_norm_data()"
+      "norm_label": ".save_l2_norm_data()",
+      "id": "src_unified_measurements_predictormeasurements_save_l2_norm_data"
     },
     {
       "label": ".save_dropout_data()",
@@ -766,9 +796,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L99",
       "_origin": "ast",
-      "id": "src_unified_measurements_predictormeasurements_save_dropout_data",
       "community": 19,
-      "norm_label": ".save_dropout_data()"
+      "norm_label": ".save_dropout_data()",
+      "id": "src_unified_measurements_predictormeasurements_save_dropout_data"
     },
     {
       "label": ".save_spectral_data()",
@@ -776,9 +806,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L121",
       "_origin": "ast",
-      "id": "src_unified_measurements_predictormeasurements_save_spectral_data",
       "community": 19,
-      "norm_label": ".save_spectral_data()"
+      "norm_label": ".save_spectral_data()",
+      "id": "src_unified_measurements_predictormeasurements_save_spectral_data"
     },
     {
       "label": ".save_age_data()",
@@ -786,9 +816,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L169",
       "_origin": "ast",
-      "id": "src_unified_measurements_predictormeasurements_save_age_data",
       "community": 19,
-      "norm_label": ".save_age_data()"
+      "norm_label": ".save_age_data()",
+      "id": "src_unified_measurements_predictormeasurements_save_age_data"
     },
     {
       "label": "._stack_ragged()",
@@ -796,9 +826,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L199",
       "_origin": "ast",
-      "id": "src_unified_measurements_predictormeasurements_stack_ragged",
       "community": 19,
-      "norm_label": "._stack_ragged()"
+      "norm_label": "._stack_ragged()",
+      "id": "src_unified_measurements_predictormeasurements_stack_ragged"
     },
     {
       "label": ".generate_l2_norm_visualizations()",
@@ -806,9 +836,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L216",
       "_origin": "ast",
-      "id": "src_unified_measurements_predictormeasurements_generate_l2_norm_visualizations",
       "community": 19,
-      "norm_label": ".generate_l2_norm_visualizations()"
+      "norm_label": ".generate_l2_norm_visualizations()",
+      "id": "src_unified_measurements_predictormeasurements_generate_l2_norm_visualizations"
     },
     {
       "label": ".generate_dropout_visualizations()",
@@ -816,9 +846,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L295",
       "_origin": "ast",
-      "id": "src_unified_measurements_predictormeasurements_generate_dropout_visualizations",
       "community": 19,
-      "norm_label": ".generate_dropout_visualizations()"
+      "norm_label": ".generate_dropout_visualizations()",
+      "id": "src_unified_measurements_predictormeasurements_generate_dropout_visualizations"
     },
     {
       "label": ".generate_combined_report()",
@@ -826,9 +856,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L319",
       "_origin": "ast",
-      "id": "src_unified_measurements_predictormeasurements_generate_combined_report",
       "community": 19,
-      "norm_label": ".generate_combined_report()"
+      "norm_label": ".generate_combined_report()",
+      "id": "src_unified_measurements_predictormeasurements_generate_combined_report"
     },
     {
       "label": "._smooth_signal()",
@@ -836,9 +866,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L399",
       "_origin": "ast",
-      "id": "src_unified_measurements_predictormeasurements_smooth_signal",
       "community": 19,
-      "norm_label": "._smooth_signal()"
+      "norm_label": "._smooth_signal()",
+      "id": "src_unified_measurements_predictormeasurements_smooth_signal"
     },
     {
       "label": "Unified measurement collection for L2 Norm and Dropout predictors. Ensures consi",
@@ -846,9 +876,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "src_unified_measurements_rationale_1",
       "community": 19,
-      "norm_label": "unified measurement collection for l2 norm and dropout predictors. ensures consi"
+      "norm_label": "unified measurement collection for l2 norm and dropout predictors. ensures consi",
+      "id": "src_unified_measurements_rationale_1"
     },
     {
       "label": "Collects and saves all measurements for both predictors.",
@@ -856,9 +886,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L15",
       "_origin": "ast",
-      "id": "src_unified_measurements_rationale_15",
       "community": 19,
-      "norm_label": "collects and saves all measurements for both predictors."
+      "norm_label": "collects and saves all measurements for both predictors.",
+      "id": "src_unified_measurements_rationale_15"
     },
     {
       "label": "Create subdirectories for each predictor.",
@@ -866,9 +896,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L23",
       "_origin": "ast",
-      "id": "src_unified_measurements_rationale_23",
       "community": 19,
-      "norm_label": "create subdirectories for each predictor."
+      "norm_label": "create subdirectories for each predictor.",
+      "id": "src_unified_measurements_rationale_23"
     },
     {
       "label": "Save core training metrics.",
@@ -876,9 +906,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L36",
       "_origin": "ast",
-      "id": "src_unified_measurements_rationale_36",
       "community": 19,
-      "norm_label": "save core training metrics."
+      "norm_label": "save core training metrics.",
+      "id": "src_unified_measurements_rationale_36"
     },
     {
       "label": "Save all L2 Norm measurements.          sum_w2_history: optional per-epoch list",
@@ -886,9 +916,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L46",
       "_origin": "ast",
-      "id": "src_unified_measurements_rationale_46",
       "community": 19,
-      "norm_label": "save all l2 norm measurements.          sum_w2_history: optional per-epoch list"
+      "norm_label": "save all l2 norm measurements.          sum_w2_history: optional per-epoch list",
+      "id": "src_unified_measurements_rationale_46"
     },
     {
       "label": "Save all Dropout measurements \u2014 full multi-rate sweep only.          There is no",
@@ -896,9 +926,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L101",
       "_origin": "ast",
-      "id": "src_unified_measurements_rationale_101",
       "community": 19,
-      "norm_label": "save all dropout measurements \u2014 full multi-rate sweep only.          there is no"
+      "norm_label": "save all dropout measurements \u2014 full multi-rate sweep only.          there is no",
+      "id": "src_unified_measurements_rationale_101"
     },
     {
       "label": "Save all Spectral (Predictor 3) measurements \u2014 Canatar et al.         2021 task-",
@@ -906,9 +936,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L122",
       "_origin": "ast",
-      "id": "src_unified_measurements_rationale_122",
       "community": 19,
-      "norm_label": "save all spectral (predictor 3) measurements \u2014 canatar et al.         2021 task-"
+      "norm_label": "save all spectral (predictor 3) measurements \u2014 canatar et al.         2021 task-",
+      "id": "src_unified_measurements_rationale_122"
     },
     {
       "label": "Save all AGE (Predictor 4) measurements \u2014 Papyan et al. 2020 NC1         variabi",
@@ -916,9 +946,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L170",
       "_origin": "ast",
-      "id": "src_unified_measurements_rationale_170",
       "community": 19,
-      "norm_label": "save all age (predictor 4) measurements \u2014 papyan et al. 2020 nc1         variabi"
+      "norm_label": "save all age (predictor 4) measurements \u2014 papyan et al. 2020 nc1         variabi",
+      "id": "src_unified_measurements_rationale_170"
     },
     {
       "label": "[n_checkpoints] lists of <= `width` floats -> float array         [n_checkpoints",
@@ -926,9 +956,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L200",
       "_origin": "ast",
-      "id": "src_unified_measurements_rationale_200",
       "community": 19,
-      "norm_label": "[n_checkpoints] lists of <= `width` floats -> float array         [n_checkpoints"
+      "norm_label": "[n_checkpoints] lists of <= `width` floats -> float array         [n_checkpoints",
+      "id": "src_unified_measurements_rationale_200"
     },
     {
       "label": "Generate standalone L2 Norm visualization graphs.",
@@ -936,9 +966,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L219",
       "_origin": "ast",
-      "id": "src_unified_measurements_rationale_219",
       "community": 19,
-      "norm_label": "generate standalone l2 norm visualization graphs."
+      "norm_label": "generate standalone l2 norm visualization graphs.",
+      "id": "src_unified_measurements_rationale_219"
     },
     {
       "label": "Generate standalone Dropout visualization graphs.",
@@ -946,9 +976,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L297",
       "_origin": "ast",
-      "id": "src_unified_measurements_rationale_297",
       "community": 19,
-      "norm_label": "generate standalone dropout visualization graphs."
+      "norm_label": "generate standalone dropout visualization graphs.",
+      "id": "src_unified_measurements_rationale_297"
     },
     {
       "label": "Generate combined PDF report with all measurements.",
@@ -956,9 +986,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L322",
       "_origin": "ast",
-      "id": "src_unified_measurements_rationale_322",
       "community": 19,
-      "norm_label": "generate combined pdf report with all measurements."
+      "norm_label": "generate combined pdf report with all measurements.",
+      "id": "src_unified_measurements_rationale_322"
     },
     {
       "label": "Apply simple moving average smoothing.",
@@ -966,9 +996,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L400",
       "_origin": "ast",
-      "id": "src_unified_measurements_rationale_400",
       "community": 19,
-      "norm_label": "apply simple moving average smoothing."
+      "norm_label": "apply simple moving average smoothing.",
+      "id": "src_unified_measurements_rationale_400"
     },
     {
       "label": "spectral.py",
@@ -2046,7 +2076,7 @@
       "source_file": "archive/src_p97_mainstream_old/generate_master_report.py",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 7,
+      "community": 33,
       "norm_label": "_opt()",
       "id": "src_p97_mainstream_old_generate_master_report_opt"
     },
@@ -2056,7 +2086,7 @@
       "source_file": "archive/src_p97_mainstream_old/generate_master_report.py",
       "source_location": "L75",
       "_origin": "ast",
-      "community": 7,
+      "community": 33,
       "norm_label": "load_run()",
       "id": "src_p97_mainstream_old_generate_master_report_load_run"
     },
@@ -2066,7 +2096,7 @@
       "source_file": "archive/src_p97_mainstream_old/generate_master_report.py",
       "source_location": "L119",
       "_origin": "ast",
-      "community": 7,
+      "community": 33,
       "norm_label": "grok_epoch()",
       "id": "src_p97_mainstream_old_generate_master_report_grok_epoch"
     },
@@ -2276,7 +2306,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 48,
+      "community": 22,
       "norm_label": "plot_results_four_head.py",
       "id": "src_p97_mainstream_old_plot_results_four_head"
     },
@@ -2286,7 +2316,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L51",
       "_origin": "ast",
-      "community": 48,
+      "community": 22,
       "norm_label": "migrate_legacy_flat_run()",
       "id": "src_p97_mainstream_old_plot_results_four_head_migrate_legacy_flat_run"
     },
@@ -2296,7 +2326,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L73",
       "_origin": "ast",
-      "community": 48,
+      "community": 22,
       "norm_label": "discover_run_dirs()",
       "id": "src_p97_mainstream_old_plot_results_four_head_discover_run_dirs"
     },
@@ -2306,7 +2336,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L87",
       "_origin": "ast",
-      "community": 48,
+      "community": 22,
       "norm_label": "load_run_data()",
       "id": "src_p97_mainstream_old_plot_results_four_head_load_run_data"
     },
@@ -2316,7 +2346,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L113",
       "_origin": "ast",
-      "community": 7,
+      "community": 22,
       "norm_label": "plot_single_run()",
       "id": "src_p97_mainstream_old_plot_results_four_head_plot_single_run"
     },
@@ -2326,7 +2356,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L289",
       "_origin": "ast",
-      "community": 48,
+      "community": 22,
       "norm_label": "plot_comparison()",
       "id": "src_p97_mainstream_old_plot_results_four_head_plot_comparison"
     },
@@ -2336,7 +2366,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L52",
       "_origin": "ast",
-      "community": 48,
+      "community": 22,
       "norm_label": "same migration as train_four_head.py \u2014 kept here too so this     script can be r",
       "id": "src_p97_mainstream_old_plot_results_four_head_rationale_52"
     },
@@ -2346,7 +2376,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L74",
       "_origin": "ast",
-      "community": 48,
+      "community": 22,
       "norm_label": "finds every run_<n> folder inside base_dir, sorted by run number     (not alphab",
       "id": "src_p97_mainstream_old_plot_results_four_head_rationale_74"
     },
@@ -2356,7 +2386,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L114",
       "_origin": "ast",
-      "community": 7,
+      "community": 22,
       "norm_label": "recreates this run's own 8 plots, saved inside results/four_head/run_<n>/ itself",
       "id": "src_p97_mainstream_old_plot_results_four_head_rationale_114"
     },
@@ -2366,7 +2396,7 @@
       "source_file": "archive/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L290",
       "_origin": "ast",
-      "community": 48,
+      "community": 22,
       "norm_label": "builds 4 plots overlaying every discovered run together, saved     directly in r",
       "id": "src_p97_mainstream_old_plot_results_four_head_rationale_290"
     },
@@ -2436,7 +2466,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 51,
+      "community": 22,
       "norm_label": "compute_acceleration()",
       "id": "predictors_l2_norm_compute_acceleration"
     },
@@ -2456,7 +2486,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 49,
+      "community": 22,
       "norm_label": "apply_moving_average()",
       "id": "predictors_l2_norm_apply_moving_average"
     },
@@ -2466,7 +2496,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L63",
       "_origin": "ast",
-      "community": 50,
+      "community": 22,
       "norm_label": "resample_to_log_uniform_grid()",
       "id": "predictors_l2_norm_resample_to_log_uniform_grid"
     },
@@ -2476,7 +2506,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L88",
       "_origin": "ast",
-      "community": 50,
+      "community": 22,
       "norm_label": "compute_fast_slow_moving_averages()",
       "id": "predictors_l2_norm_compute_fast_slow_moving_averages"
     },
@@ -2486,7 +2516,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L121",
       "_origin": "ast",
-      "community": 7,
+      "community": 22,
       "norm_label": "detect_ma_crossover()",
       "id": "predictors_l2_norm_detect_ma_crossover"
     },
@@ -2496,7 +2526,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L141",
       "_origin": "ast",
-      "community": 49,
+      "community": 22,
       "norm_label": "compute_ma_of_slow_ma()",
       "id": "predictors_l2_norm_compute_ma_of_slow_ma"
     },
@@ -2506,7 +2536,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L154",
       "_origin": "ast",
-      "community": 7,
+      "community": 22,
       "norm_label": "compute_noise_floor()",
       "id": "predictors_l2_norm_compute_noise_floor"
     },
@@ -2526,7 +2556,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L181",
       "_origin": "ast",
-      "community": 7,
+      "community": 22,
       "norm_label": "detect_ma_of_ma_zero_crossing()",
       "id": "predictors_l2_norm_detect_ma_of_ma_zero_crossing"
     },
@@ -2536,7 +2566,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L24",
       "_origin": "ast",
-      "community": 51,
+      "community": 22,
       "norm_label": "compute the second derivative of l2 norm (acceleration).     acceleration[i] = r",
       "id": "predictors_l2_norm_rationale_24"
     },
@@ -2556,7 +2586,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L55",
       "_origin": "ast",
-      "community": 49,
+      "community": 22,
       "norm_label": "apply moving average smoothing to reduce noise.     window_size: number of epoch",
       "id": "predictors_l2_norm_rationale_55"
     },
@@ -2566,7 +2596,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L64",
       "_origin": "ast",
-      "community": 50,
+      "community": 22,
       "norm_label": "resample data onto a grid uniformly spaced in log10(epoch) \u2014 i.e. the     same s",
       "id": "predictors_l2_norm_rationale_64"
     },
@@ -2576,7 +2606,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L89",
       "_origin": "ast",
-      "community": 50,
+      "community": 22,
       "norm_label": "compute two moving averages on a log-epoch-uniform grid, so the window     cover",
       "id": "predictors_l2_norm_rationale_89"
     },
@@ -2586,7 +2616,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L122",
       "_origin": "ast",
-      "community": 7,
+      "community": 22,
       "norm_label": "detect where fast ma crosses above slow ma, searching along the     log-uniform",
       "id": "predictors_l2_norm_rationale_122"
     },
@@ -2596,7 +2626,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L142",
       "_origin": "ast",
-      "community": 49,
+      "community": 22,
       "norm_label": "apply a second, faster-window moving average on top of the already-smoothed",
       "id": "predictors_l2_norm_rationale_142"
     },
@@ -2606,7 +2636,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L155",
       "_origin": "ast",
-      "community": 7,
+      "community": 22,
       "norm_label": "estimate the normal noise level of the ma-of-ma difference from the quiet     ea",
       "id": "predictors_l2_norm_rationale_155"
     },
@@ -2626,7 +2656,7 @@
       "source_file": "archive/src_p97_mainstream_old/predictors/l2_norm.py",
       "source_location": "L182",
       "_origin": "ast",
-      "community": 7,
+      "community": 22,
       "norm_label": "fire on the first epoch (after skip_epochs) where diff crosses from     positive",
       "id": "predictors_l2_norm_rationale_182"
     },
@@ -3206,7 +3236,7 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L75",
       "_origin": "ast",
-      "community": 51,
+      "community": 22,
       "norm_label": "compute the second derivative of l2 norm (acceleration).     acceleration[i] = r",
       "id": "predictors_l2_norm_rationale_75"
     },
@@ -3226,7 +3256,7 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L106",
       "_origin": "ast",
-      "community": 49,
+      "community": 22,
       "norm_label": "apply moving average smoothing to reduce noise.     window_size: number of epoch",
       "id": "predictors_l2_norm_rationale_106"
     },
@@ -3236,7 +3266,7 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L115",
       "_origin": "ast",
-      "community": 50,
+      "community": 22,
       "norm_label": "resample data onto a grid uniformly spaced in log10(epoch) \u2014 i.e. the     same s",
       "id": "predictors_l2_norm_rationale_115"
     },
@@ -3246,7 +3276,7 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L140",
       "_origin": "ast",
-      "community": 50,
+      "community": 22,
       "norm_label": "compute two moving averages on a log-epoch-uniform grid, so the window     cover",
       "id": "predictors_l2_norm_rationale_140"
     },
@@ -3256,7 +3286,7 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L173",
       "_origin": "ast",
-      "community": 7,
+      "community": 22,
       "norm_label": "detect where fast ma crosses above slow ma, searching along the     log-uniform",
       "id": "predictors_l2_norm_rationale_173"
     },
@@ -3266,7 +3296,7 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L193",
       "_origin": "ast",
-      "community": 49,
+      "community": 22,
       "norm_label": "apply a second, faster-window moving average on top of the already-smoothed",
       "id": "predictors_l2_norm_rationale_193"
     },
@@ -3276,7 +3306,7 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L206",
       "_origin": "ast",
-      "community": 7,
+      "community": 22,
       "norm_label": "estimate the normal noise level of the ma-of-ma difference from the quiet     ea",
       "id": "predictors_l2_norm_rationale_206"
     },
@@ -3296,7 +3326,7 @@
       "source_file": "src/predictors/l2_norm.py",
       "source_location": "L233",
       "_origin": "ast",
-      "community": 7,
+      "community": 22,
       "norm_label": "fire on the first epoch (after skip_epochs) where diff crosses from     positive",
       "id": "predictors_l2_norm_rationale_233"
     },
@@ -5845,6 +5875,26 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "results/nanda_unified/BENCHMARK-V4.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "nanda_unified_benchmark_v4",
+      "target": "nanda_unified_benchmark_v4_nanda_unified_benchmark_v4_4_predictors_closed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "results/nanda_unified/BENCHMARK-V4.md",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "nanda_unified_benchmark_v4_nanda_unified_benchmark_v4_4_predictors_closed",
+      "target": "nanda_unified_benchmark_v4_benchmark_result_all_4_closed_negative_valid_falsification",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "Literature/README.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -6131,9 +6181,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L77",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark",
-      "target": "predictors_age",
-      "confidence_score": 1.0
+      "target": "predictors_age"
     },
     {
       "relation": "imports_from",
@@ -6184,9 +6234,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L718",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark",
-      "target": "run_nanda_benchmark_checkpoint_predictor_age",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_checkpoint_predictor_age"
     },
     {
       "relation": "contains",
@@ -6384,9 +6434,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L130",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_130",
-      "target": "run_nanda_benchmark_dropout_variance_checkpoint_schedule",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_dropout_variance_checkpoint_schedule"
     },
     {
       "relation": "calls",
@@ -6416,9 +6466,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L153",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_153",
-      "target": "run_nanda_benchmark_pick_drc_checkpoint_subset",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_pick_drc_checkpoint_subset"
     },
     {
       "relation": "calls",
@@ -6459,9 +6509,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L167",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_167",
-      "target": "run_nanda_benchmark_load_config",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_load_config"
     },
     {
       "relation": "calls",
@@ -6634,9 +6684,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L221",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_221",
-      "target": "run_nanda_benchmark_get_done_predictors",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_get_done_predictors"
     },
     {
       "relation": "calls",
@@ -6666,9 +6716,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L254",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_254",
-      "target": "run_nanda_benchmark_limit_cycle_check",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_limit_cycle_check"
     },
     {
       "relation": "calls",
@@ -6698,9 +6748,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L283",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_283",
-      "target": "run_nanda_benchmark_train_one_seed",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_train_one_seed"
     },
     {
       "relation": "calls",
@@ -6741,9 +6791,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L572",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_572",
-      "target": "run_nanda_benchmark_checkpoint_predictor_dropout_variance",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_checkpoint_predictor_dropout_variance"
     },
     {
       "relation": "calls",
@@ -6773,9 +6823,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L637",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_637",
-      "target": "run_nanda_benchmark_checkpoint_predictor_spectral",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_checkpoint_predictor_spectral"
     },
     {
       "relation": "calls",
@@ -6794,9 +6844,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L720",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_720",
-      "target": "run_nanda_benchmark_checkpoint_predictor_age",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_checkpoint_predictor_age"
     },
     {
       "relation": "calls",
@@ -6815,9 +6865,9 @@
       "source_file": "run_nanda_benchmark.py",
       "source_location": "L802",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_nanda_benchmark_rationale_802",
-      "target": "run_nanda_benchmark_recompute_from_checkpoints",
-      "confidence_score": 1.0
+      "target": "run_nanda_benchmark_recompute_from_checkpoints"
     },
     {
       "relation": "calls",
@@ -6847,9 +6897,9 @@
       "source_file": "src/predictors/age.py",
       "source_location": "L82",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "predictors_age",
-      "target": "predictors_age_collect_representations_and_labels",
-      "confidence_score": 1.0
+      "target": "predictors_age_collect_representations_and_labels"
     },
     {
       "relation": "contains",
@@ -6857,9 +6907,9 @@
       "source_file": "src/predictors/age.py",
       "source_location": "L157",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "predictors_age",
-      "target": "predictors_age_compute_age_for_model",
-      "confidence_score": 1.0
+      "target": "predictors_age_compute_age_for_model"
     },
     {
       "relation": "contains",
@@ -6867,9 +6917,9 @@
       "source_file": "src/predictors/age.py",
       "source_location": "L119",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "predictors_age",
-      "target": "predictors_age_compute_age_metrics_for_checkpoint",
-      "confidence_score": 1.0
+      "target": "predictors_age_compute_age_metrics_for_checkpoint"
     },
     {
       "relation": "rationale_for",
@@ -6877,9 +6927,9 @@
       "source_file": "src/predictors/age.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "predictors_age_rationale_1",
-      "target": "predictors_age",
-      "confidence_score": 1.0
+      "target": "predictors_age"
     },
     {
       "relation": "calls",
@@ -6888,9 +6938,9 @@
       "source_file": "src/predictors/age.py",
       "source_location": "L130",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "predictors_age_compute_age_metrics_for_checkpoint",
-      "target": "predictors_age_collect_representations_and_labels",
-      "confidence_score": 1.0
+      "target": "predictors_age_collect_representations_and_labels"
     },
     {
       "relation": "rationale_for",
@@ -6898,9 +6948,9 @@
       "source_file": "src/predictors/age.py",
       "source_location": "L83",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "predictors_age_rationale_83",
-      "target": "predictors_age_collect_representations_and_labels",
-      "confidence_score": 1.0
+      "target": "predictors_age_collect_representations_and_labels"
     },
     {
       "relation": "calls",
@@ -6909,9 +6959,9 @@
       "source_file": "src/predictors/age.py",
       "source_location": "L162",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "predictors_age_compute_age_for_model",
-      "target": "predictors_age_compute_age_metrics_for_checkpoint",
-      "confidence_score": 1.0
+      "target": "predictors_age_compute_age_metrics_for_checkpoint"
     },
     {
       "relation": "rationale_for",
@@ -6919,9 +6969,9 @@
       "source_file": "src/predictors/age.py",
       "source_location": "L120",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "predictors_age_rationale_120",
-      "target": "predictors_age_compute_age_metrics_for_checkpoint",
-      "confidence_score": 1.0
+      "target": "predictors_age_compute_age_metrics_for_checkpoint"
     },
     {
       "relation": "rationale_for",
@@ -6929,9 +6979,9 @@
       "source_file": "src/predictors/age.py",
       "source_location": "L158",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "predictors_age_rationale_158",
-      "target": "predictors_age_compute_age_for_model",
-      "confidence_score": 1.0
+      "target": "predictors_age_compute_age_for_model"
     },
     {
       "relation": "contains",
@@ -7009,9 +7059,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L169",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_unified_measurements_predictormeasurements",
-      "target": "src_unified_measurements_predictormeasurements_save_age_data",
-      "confidence_score": 1.0
+      "target": "src_unified_measurements_predictormeasurements_save_age_data"
     },
     {
       "relation": "method",
@@ -7110,9 +7160,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_unified_measurements_rationale_36",
-      "target": "src_unified_measurements_predictormeasurements_save_training_data",
-      "confidence_score": 1.0
+      "target": "src_unified_measurements_predictormeasurements_save_training_data"
     },
     {
       "relation": "calls",
@@ -7131,9 +7181,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_unified_measurements_rationale_46",
-      "target": "src_unified_measurements_predictormeasurements_save_l2_norm_data",
-      "confidence_score": 1.0
+      "target": "src_unified_measurements_predictormeasurements_save_l2_norm_data"
     },
     {
       "relation": "rationale_for",
@@ -7141,9 +7191,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L101",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_unified_measurements_rationale_101",
-      "target": "src_unified_measurements_predictormeasurements_save_dropout_data",
-      "confidence_score": 1.0
+      "target": "src_unified_measurements_predictormeasurements_save_dropout_data"
     },
     {
       "relation": "calls",
@@ -7162,9 +7212,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L122",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_unified_measurements_rationale_122",
-      "target": "src_unified_measurements_predictormeasurements_save_spectral_data",
-      "confidence_score": 1.0
+      "target": "src_unified_measurements_predictormeasurements_save_spectral_data"
     },
     {
       "relation": "rationale_for",
@@ -7172,9 +7222,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L170",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_unified_measurements_rationale_170",
-      "target": "src_unified_measurements_predictormeasurements_save_age_data",
-      "confidence_score": 1.0
+      "target": "src_unified_measurements_predictormeasurements_save_age_data"
     },
     {
       "relation": "rationale_for",
@@ -7182,9 +7232,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L200",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_unified_measurements_rationale_200",
-      "target": "src_unified_measurements_predictormeasurements_stack_ragged",
-      "confidence_score": 1.0
+      "target": "src_unified_measurements_predictormeasurements_stack_ragged"
     },
     {
       "relation": "rationale_for",
@@ -7192,9 +7242,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L219",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_unified_measurements_rationale_219",
-      "target": "src_unified_measurements_predictormeasurements_generate_l2_norm_visualizations",
-      "confidence_score": 1.0
+      "target": "src_unified_measurements_predictormeasurements_generate_l2_norm_visualizations"
     },
     {
       "relation": "rationale_for",
@@ -7202,9 +7252,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L297",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_unified_measurements_rationale_297",
-      "target": "src_unified_measurements_predictormeasurements_generate_dropout_visualizations",
-      "confidence_score": 1.0
+      "target": "src_unified_measurements_predictormeasurements_generate_dropout_visualizations"
     },
     {
       "relation": "rationale_for",
@@ -7212,9 +7262,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L322",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_unified_measurements_rationale_322",
-      "target": "src_unified_measurements_predictormeasurements_generate_combined_report",
-      "confidence_score": 1.0
+      "target": "src_unified_measurements_predictormeasurements_generate_combined_report"
     },
     {
       "relation": "rationale_for",
@@ -7222,9 +7272,9 @@
       "source_file": "src/unified_measurements.py",
       "source_location": "L400",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_unified_measurements_rationale_400",
-      "target": "src_unified_measurements_predictormeasurements_smooth_signal",
-      "confidence_score": 1.0
+      "target": "src_unified_measurements_predictormeasurements_smooth_signal"
     },
     {
       "relation": "contains",
@@ -13654,5 +13704,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "195d398717b08d600c2fec320d306ee4aea42404"
+  "built_at_commit": "680a108224ea4016922678e2615eb57e5d71a084"
 }

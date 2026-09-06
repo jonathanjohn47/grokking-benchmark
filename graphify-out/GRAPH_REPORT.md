@@ -1,16 +1,16 @@
-# Graph Report - grokking-benchmark  (2026-09-06)
+# Graph Report - grokking-benchmark  (2026-09-07)
 
 ## Corpus Check
-- 110 files · ~690,922 words
+- 111 files · ~873,772 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 582 nodes · 756 edges · 52 communities (48 shown, 4 thin omitted)
+- 585 nodes · 758 edges · 48 communities (43 shown, 5 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `195d3987`
+- Built from commit: `680a1082`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -52,10 +52,6 @@
 - [[_COMMUNITY_Community 45|Community 45]]
 - [[_COMMUNITY_Community 46|Community 46]]
 - [[_COMMUNITY_Community 47|Community 47]]
-- [[_COMMUNITY_Community 48|Community 48]]
-- [[_COMMUNITY_Community 49|Community 49]]
-- [[_COMMUNITY_Community 50|Community 50]]
-- [[_COMMUNITY_Community 51|Community 51]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `main()` - 26 edges
@@ -87,7 +83,7 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (52 total, 4 thin omitted)
+## Communities (48 total, 5 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.09
@@ -116,10 +112,6 @@ Nodes (36): aggregate_summary_lines(), Collector, discover_seeds(), fmt_epoch(),
 ### Community 6 - "Community 6"
 Cohesion: 0.20
 Nodes (9): Core Project Files, Directory Structure, Documentation, Experiments & Results, Grokking Predictors Benchmark, Other, Quick Reference, Source Code (+1 more)
-
-### Community 7 - "Community 7"
-Cohesion: 0.16
-Nodes (14): compute_noise_floor(), detect_ma_crossover(), detect_ma_of_ma_zero_crossing(), Detect where fast MA crosses above slow MA, searching along the     log-uniform, Estimate the normal noise level of the MA-of-MA difference from the quiet     ea, Detect where fast MA crosses above slow MA, searching along the     log-uniform, Fire on the first epoch (after skip_epochs) where diff crosses from     positive, Estimate the normal noise level of the MA-of-MA difference from the quiet     ea (+6 more)
 
 ### Community 8 - "Community 8"
 Cohesion: 0.25
@@ -150,8 +142,8 @@ Cohesion: 0.15
 Nodes (13): Path, get_images(), horizontal_collage(), main(), vertical_collage(), main(), should_skip(), compile_python_files_to_pdf() (+5 more)
 
 ### Community 22 - "Community 22"
-Cohesion: 0.14
-Nodes (10): compute_per_module_sum_of_squared_weights(), compute_sum_of_squared_weights(), detect_inflection(), detect_ma_of_ma_trigger(), Sum of squared weights over ALL parameters (sum w^2). This is the exact     quan, Fire on the first epoch (after skip_epochs) where diff climbs past     threshold, Fire on the first epoch (after skip_epochs) where diff climbs past     threshold, Detect inflection point where acceleration changes sign.     This is where the d (+2 more)
+Cohesion: 0.05
+Nodes (42): apply_moving_average(), compute_acceleration(), compute_fast_slow_moving_averages(), compute_ma_of_slow_ma(), compute_noise_floor(), compute_per_module_sum_of_squared_weights(), compute_sum_of_squared_weights(), detect_inflection() (+34 more)
 
 ### Community 23 - "Community 23"
 Cohesion: 0.06
@@ -194,8 +186,8 @@ Cohesion: 0.26
 Nodes (14): build_data_pdf(), build_plots_pdf(), _comparison_pages(), _dump_table(), grok_epoch(), _grok_vline(), load_run(), main() (+6 more)
 
 ### Community 33 - "Community 33"
-Cohesion: 0.32
-Nodes (11): build_data_pdf(), build_plots_pdf(), _comparison_pages(), _dump_table(), _grok_vline(), main(), Master report generator for the four-head grokking benchmark.  Reads every COMPL, _run_numbers() (+3 more)
+Cohesion: 0.26
+Nodes (14): build_data_pdf(), build_plots_pdf(), _comparison_pages(), _dump_table(), grok_epoch(), _grok_vline(), load_run(), main() (+6 more)
 
 ### Community 34 - "Community 34"
 Cohesion: 0.23
@@ -221,26 +213,10 @@ Nodes (9): _collect_representations_and_labels(), compute_spectral_for_model(), 
 Cohesion: 0.24
 Nodes (9): _collect_representations_and_labels(), compute_age_for_model(), compute_age_metrics_for_checkpoint(), AGE predictor (Predictor 4 of 9) — Adaptive Grokking Epoch via Neural Collapse., Papyan et al. 2020 NC1 variability-collapse metrics for ONE frozen     model che, Thin wrapper kept parallel to     src/predictors/spectral.py::compute_spectral_f, Run the model over the full training split and capture, per example,     the hid, _checkpoint_predictor_age() (+1 more)
 
-### Community 48 - "Community 48"
-Cohesion: 0.25
-Nodes (6): discover_run_dirs(), migrate_legacy_flat_run(), plot_comparison(), Builds 4 plots overlaying every discovered run together, saved     directly in r, Same migration as train_four_head.py — kept here too so this     script can be r, Finds every run_<N> folder inside base_dir, sorted by run number     (not alphab
-
-### Community 49 - "Community 49"
-Cohesion: 0.33
-Nodes (6): apply_moving_average(), compute_ma_of_slow_ma(), Apply moving average smoothing to reduce noise.     window_size: number of epoch, Apply a second, faster-window moving average on top of the already-smoothed, Apply a second, faster-window moving average on top of the already-smoothed, Apply moving average smoothing to reduce noise.     window_size: number of epoch
-
-### Community 50 - "Community 50"
-Cohesion: 0.33
-Nodes (6): compute_fast_slow_moving_averages(), Resample data onto a grid uniformly spaced in log10(epoch) — i.e. the     SAME s, Compute two moving averages on a LOG-EPOCH-UNIFORM grid, so the window     cover, Resample data onto a grid uniformly spaced in log10(epoch) — i.e. the     SAME s, Compute two moving averages on a LOG-EPOCH-UNIFORM grid, so the window     cover, resample_to_log_uniform_grid()
-
-### Community 51 - "Community 51"
-Cohesion: 0.67
-Nodes (3): compute_acceleration(), Compute the second derivative of L2 norm (acceleration).     acceleration[i] = r, Compute the second derivative of L2 norm (acceleration).     acceleration[i] = r
-
 ## Knowledge Gaps
-- **107 isolated node(s):** `1. Grokking — direct`, `2. Heavy-tailed self-regularisation / weight-matrix spectra`, `3. Neural collapse (terminal phase of training)`, `4. Generalisation dynamics / double descent / interpolation`, `5. Kernel / random-features / mean-field theory` (+102 more)
+- **108 isolated node(s):** `Benchmark Result — All 4 CLOSED Negative (Valid Falsification)`, `1. Grokking — direct`, `2. Heavy-tailed self-regularisation / weight-matrix spectra`, `3. Neural collapse (terminal phase of training)`, `4. Generalisation dynamics / double descent / interpolation` (+103 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -251,8 +227,8 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.018) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `PredictorMeasurements` (e.g. with `recompute_from_checkpoints()` and `train_one_seed()`) actually correct?**
   _`PredictorMeasurements` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `1. Grokking — direct`, `2. Heavy-tailed self-regularisation / weight-matrix spectra`, `3. Neural collapse (terminal phase of training)` to the rest of the system?**
-  _245 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `Benchmark Result — All 4 CLOSED Negative (Valid Falsification)`, `1. Grokking — direct`, `2. Heavy-tailed self-regularisation / weight-matrix spectra` to the rest of the system?**
+  _246 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.08717948717948718 - nodes in this community are weakly interconnected._
 - **Should `Community 4` be split into smaller, more focused modules?**
