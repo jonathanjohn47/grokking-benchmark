@@ -9046,6 +9046,19 @@ by the long monotone tail and cannot lead grok by construction.
   (24), `age_nc1.npy` (24), `age_fn.npy` (24), `age_signal.json`.
 - `results/nanda_unified/aggregate.json` — `age_predictor` block now
   present for all 5 seeds.
+- `results/nanda_unified/seed_*/age/age_signal.json` keys: `age_checkpoints`,
+  `nc1_history`, `fn_history`, `grok_epoch`, `nc1_min_epoch`,
+  `nc1_min_value`, `nc1_first_last`, `fn_first_last`, `fn_min`, `fn_max`,
+  `nc1_min_to_grok_ratio`, `num_checkpoints`.
+- `summary.json` keys after this session: `seed`, `epochs`, `modulus`,
+  `grok_epoch`, `final_train_acc`, `final_test_acc`, `l2_norm_init`,
+  `l2_norm_final`, `sum_w2_init`, `sum_w2_final`,
+  `token_embedding_share_init`, `l2_predictor`,
+  `dropout_final_gap_by_rate`, `dropout_variance_predictor`,
+  `spectral_predictor`, `age_predictor`, `limit_cycle_check`,
+  `wall_time_sec`.
+- Aggregate grok epoch: mean 13218.8, std 5900.6, min 6988 (seed 1),
+  max 24021 (seed 4), 5/5 grokked.
 
 ### 7. Next
 
