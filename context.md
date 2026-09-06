@@ -9074,3 +9074,150 @@ by the long monotone tail and cannot lead grok by construction.
   one IS a per-weight-matrix spectral fit (power-law exponent alpha of
   each layer's ESD), unlike Spectral which was a representation-kernel
   method — the two are different predictors, do not conflate.
+
+## Session — 2026-09-07 — Benchmark v4 FINAL — commit `680a108` — tag `benchmark-v4-4predictors`
+
+Full data dump for the record, boss. This session made no code changes —
+it is the formal close-out of Predictors 1–4 under the Nanda-Unified
+protocol, gathering everything already built in the sessions above into
+one reference block, plus the exact reproduce commands and artefact
+inventory. Nothing below contradicts the per-predictor sessions above;
+treat this block as the canonical summary to hand to another Claude
+session.
+
+### 1. Nanda-Unified Protocol (`configs/nanda_unified.yaml`)
+
+- Task: `(a+b) mod 113`. `'='` token id = 113. Vocab size = 114.
+- Model: 4-head transformer, `d_model=128`, small-init `init_std=0.07071`.
+- Training: full-batch, batch size 3830. AdamW, `lr=0.001`,
+  `betas=(0.9, 0.98)`, `weight_decay=1.0`. 40000 epochs.
+- Checkpoints: 24, log-uniform spaced —
+  `[0, 1, 2, 3, 5, 9, 15, 24, 39, 62, 99, 158, 251, 398, 632, 1002, 1589,
+  2520, 3995, 6333, 10040, 15917, 25232, 39999]`.
+- Device: `mps`.
+- Small-init sanity check (`token_embedding_share_init`): `[0.06915,
+  0.0681, 0.0693, 0.0680, 0.0697]` across the 5 seeds — passes.
+
+### 2. Aggregate Summary — 5 seeds
+
+Grok epochs (first epoch test accuracy > 0.9):
+`[14474, 6988, 10418, 10193, 24021]` — mean **13218.8**, std
+**5900.607880549257**, min 6988 (seed 1), max 24021 (seed 4). **5/5
+grokked. 0/5 limit-cycle.** Wall time ≈ 4950–4979 sec per seed.
+
+Limit-cycle check detail: post-grok test-accuracy minimum per seed
+`[0.859, 0.547, 0.529, 0.587, 0.737]`, number of dips below 0.9 per seed
+`[6, 80, 34, 20, 6]` — none of the 5 seeds classified as a limit cycle.
+
+### 3. Predictor 1 — L2-Norm (Nanda Fig. 7) — CLOSED, negative
+
+| seed | MA-crossover epoch | MA-of-MA epoch | grok |
+|---|---|---|---|
+| 0 | 109.24922935052808 | 1787.4835363859129 | 14474 |
+| 1 | 121.0122598607711  | 1779.9228581873886 |  6988 |
+| 2 | 119.51483483342196 | 1802.223864069342  | 10418 |
+| 3 | 112.98747098854668 | 1800.3150770647353 | 10193 |
+| 4 | 103.72124578510692 | 1791.7505225832244 | 24021 |
+
+Verdict: crossover fires far before grok in every seed — it is tracking
+an early transient, not grokking.
+
+### 4. Predictor 2 — Dropout-Variance (Salah & Yevick 2025, k=30, rate=0.5, deviation documented) — CLOSED, negative
+
+- `variance_peak_epoch`: `[39999, 15917, 39999, 39999, 25232]`
+- `peak_epoch / grok_epoch`: `[2.7635, 2.2778, 3.8394, 3.9242, 1.0504]`
+- `dropout_final_gap_by_rate`:
+  - p0.1: `[-0.002, -0.124, -0.003, -0.001, 0.000]`
+  - p0.5: `[-0.508, -0.820, -0.470, -0.538, -0.178]`
+
+Verdict: variance peak lands after grok in 5/5 seeds.
+
+### 5. Predictor 3 — Spectral (Canatar et al. 2021, task-model alignment) — CLOSED, negative
+
+| seed | k_90 (start→end) | k_90_min epoch | alignment (start→end) | alignment_max epoch | grok |
+|---|---|---|---|---|---|
+| 0 | 3448→3369 | 25232 | 0.00018→0.00847 | 25232 | 14474 |
+| 1 | 3447→3404 | 10040 | — | 15917 | 6988 |
+| 2 | 3448→3398 | 25232 | — | 39999 | 10418 |
+| 3 | 3450→3346 | 39999 | — | 39999 | 10193 |
+| 4 | 3448→3350 | 39999 | — | 39999 | 24021 |
+
+`k_90` drops only 2–3% over the whole run; entropy `8.24 → 7.94`.
+
+Verdict: no meaningful rank collapse ahead of grok — confirms
+feature-learning regime, not lazy/kernel regime.
+
+### 6. Predictor 4 — AGE (Papyan et al. 2020 NC1 + Beaglehole 2024 + Mallinar 2024) — CLOSED, negative
+
+| seed | NC1 (start→end) | nc1_min_epoch | nc1_min/grok ratio | grok |
+|---|---|---|---|---|
+| 0 | 45.3710→0.0688 | 25232 | 1.7433 | 14474 |
+| 1 | 44.6403→0.0501 | 15917 | 2.2778 |  6988 |
+| 2 | 44.5868→0.0638 | 39999 | 3.8394 | 10418 |
+| 3 | 47.8560→0.0632 | 39999 | 3.9242 | 10193 |
+| 4 | 46.0980→0.0435 | 39999 | 1.6652 | 24021 |
+
+NC1 collapses ~45 → ~0.05 (~660x, real and large) but strictly after
+grok in every seed. Feature norm `fn` rises the other way over the same
+window, roughly `1.6 → 41–157` across seeds.
+
+(Full detail already on record in the AGE session above — this row
+repeats the numbers for the consolidated v4 table only.)
+
+### 7. Two-criteria falsification test (applied identically to all 4)
+
+1. **Does the signal extremum lead grok?** No — 5/5 seeds, for all four
+   predictors (L2-Norm, Dropout-Variance, Spectral, AGE).
+2. **Is the failure direction at least consistent across seeds?** Fails
+   this too — L2-Norm fails early, the other three fail late, and even
+   within a predictor the ratio to grok is not stable seed-to-seed.
+
+Because both criteria fail, CLOSED negative is a valid falsification for
+all four predictors, not an inconclusive result.
+
+### 8. Predictor Evaluation Order — status after v4
+
+1. L2 Norm — CLOSED, negative
+2. Dropout — CLOSED, negative
+3. Spectral — CLOSED, negative
+4. AGE — CLOSED, negative
+5. **HTSR Alpha — NEXT, not started**
+6. Correlation Traps — not started
+7. Weight-PCA — not started
+8. Higher-MI — not started
+9. Commutator Defect — not started
+
+### 9. Benchmark Artefacts (v4)
+
+- `results/nanda_unified/aggregate.json` — canonical source for every
+  number in this section.
+- `results/nanda_unified/seed_*/checkpoints/` — 24 checkpoints per seed
+  (5 seeds).
+- `results/nanda_unified/seed_*/l2_norm/`, `dropout/`, `spectral/`
+  (`k90`, `k95`, `alignment`, `entropy`), `age/` (`nc1`, `fn`).
+- `reports/` — 66 PNGs + `nanda_results_report.pdf` (64 pages).
+- `BENCHMARK-V4.md` — top-level benchmark write-up for this tag.
+- Git: commit `680a108` ("Benchmark v4 — 4 predictors CLOSED negative,
+  mean grok 13218"), tag `benchmark-v4-4predictors`.
+
+### 10. Reproduce Commands
+
+```bash
+python run_nanda_benchmark.py --seeds 5 --epochs 40000 \
+    --output_dir results/nanda_unified --config configs/nanda_unified.yaml \
+    --predictors l2,dropout_gap,dropout_variance,spectral,age
+
+python plot_nanda_results.py --results_dir results/nanda_unified \
+    --output_dir results/nanda_unified/reports
+```
+
+### 11. Next — Predictor 5, HTSR Alpha
+
+Not started yet, boss — full detail and file plan already laid out at
+the end of the AGE session above (Martin & Mahoney `weightwatcher`
+heavy-tailed self-regularisation, per-weight-matrix ESD power-law
+exponent alpha, checkpoint-only plugin pattern:
+`src/predictors/htsr_alpha.py` + `save_htsr_data` in
+`src/unified_measurements.py` + `_checkpoint_predictor_htsr_alpha`
+registered in `CHECKPOINT_PREDICTOR_FUNCS` / `PREDICTOR_SUMMARY_KEY`).
+No source-code change made in this session.
