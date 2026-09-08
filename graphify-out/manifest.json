@@ -69,16 +69,6 @@
     "ast_hash": "e60b86a7065625ed16fee4fe186d6524",
     "semantic_hash": ""
   },
-  "src/analysis_l2_norm_four_head.py": {
-    "mtime": 1788236728.8488944,
-    "ast_hash": "e0b5321f7da5df3687d73c696cc8440d",
-    "semantic_hash": ""
-  },
-  "src/generate_l2_report.py": {
-    "mtime": 1788482729.2834814,
-    "ast_hash": "3967088361ad51a4ef29e4658df0d188",
-    "semantic_hash": ""
-  },
   "src/models/model_shadow_with_layernorm.py": {
     "mtime": 1788236728.8495991,
     "ast_hash": "39af9b4d02433131d3aaf11467e1a7a0",
@@ -124,19 +114,9 @@
     "ast_hash": "39e1d670c6b00163c7f910561ad0ab95",
     "semantic_hash": ""
   },
-  "tools/compile_images_to_pdf.py": {
-    "mtime": 1788236728.8017485,
-    "ast_hash": "a6effa71dc88e492588f317784168421",
-    "semantic_hash": ""
-  },
   "tools/compile_python_files.py": {
     "mtime": 1788236728.803095,
     "ast_hash": "bf515a8ff566a554df4d43ada6168fab",
-    "semantic_hash": ""
-  },
-  "tools/compile_python_files_to_pdf.py": {
-    "mtime": 1788236728.803211,
-    "ast_hash": "d0c4899a1f0301aa8b8b981378d33ce5",
     "semantic_hash": ""
   },
   "tools/debug_detection.py": {
@@ -147,11 +127,6 @@
   "tools/generate_file.py": {
     "mtime": 1783647898.8546257,
     "ast_hash": "12a5b09db315dc4901647b28203c90eb",
-    "semantic_hash": ""
-  },
-  "tools/generate_l2_report_corrected.py": {
-    "mtime": 1788236728.8049912,
-    "ast_hash": "8996f8b11f48d3eb2ddac68f9b900138",
     "semantic_hash": ""
   },
   "tools/inherticance_example.py": {
@@ -212,16 +187,6 @@
   "docs/reports/M1_Gate_Results_Grokking_Reproduction.pdf": {
     "mtime": 1785221886.663858,
     "ast_hash": "1a62200e2d0559dcc48d9aa410068ecc",
-    "semantic_hash": ""
-  },
-  "docs/reports/combined_output.pdf": {
-    "mtime": 1788236728.8012602,
-    "ast_hash": "ac3b61568f8e931b264713ff69ee2548",
-    "semantic_hash": ""
-  },
-  "docs/reports/python_files_compiled.pdf": {
-    "mtime": 1788236728.8093367,
-    "ast_hash": "29aed68533febd8ab6a0f57b28761a78",
     "semantic_hash": ""
   },
   "_to_delete/Grokking Curve.png": {
@@ -332,11 +297,6 @@
   "archive/single_head/results/l2_norm/ma_of_slow_ma_crossover.png": {
     "mtime": 1788293769.559326,
     "ast_hash": "0e1b6159d1b0ee7f7e435c9c95870098",
-    "semantic_hash": ""
-  },
-  "src/generate_master_report.py": {
-    "mtime": 1788482725.1645563,
-    "ast_hash": "7b4c099ca434b80667960900c2b7c26d",
     "semantic_hash": ""
   },
   "benchmark_analysis/benchmark_report.pdf": {
@@ -599,24 +559,9 @@
     "ast_hash": "70f507c360b1660830e1f6807d988d3e",
     "semantic_hash": ""
   },
-  "archive/src_p97_mainstream_old/analysis_l2_norm_four_head.py": {
-    "mtime": 1788478372.0,
-    "ast_hash": "e0b5321f7da5df3687d73c696cc8440d",
-    "semantic_hash": ""
-  },
   "archive/src_p97_mainstream_old/data/modular_arithmetic.py": {
     "mtime": 1788478372.0,
     "ast_hash": "f999f00cb044dc9e5c5515780c6fbbbc",
-    "semantic_hash": ""
-  },
-  "archive/src_p97_mainstream_old/generate_l2_report.py": {
-    "mtime": 1788478372.0,
-    "ast_hash": "7d353590a242bc7b8a8535dba44634b3",
-    "semantic_hash": ""
-  },
-  "archive/src_p97_mainstream_old/generate_master_report.py": {
-    "mtime": 1788478372.0,
-    "ast_hash": "34711408990aa4a7a116cc2a5892f5e0",
     "semantic_hash": ""
   },
   "archive/src_p97_mainstream_old/models/model_shadow_with_layernorm.py": {
@@ -669,19 +614,9 @@
     "ast_hash": "dc83fa87703b119ec02747ceb7964b56",
     "semantic_hash": ""
   },
-  "make_pdf.py": {
-    "mtime": 1788542224.7927163,
-    "ast_hash": "98bd72c0f3943c58b832a0334174e209",
-    "semantic_hash": ""
-  },
   "run_nanda_benchmark.py": {
     "mtime": 1788638246.9060018,
     "ast_hash": "b17d35842ee6f8004747cac2caaf7c22",
-    "semantic_hash": ""
-  },
-  "plot_nanda_results.py": {
-    "mtime": 1788549949.5455234,
-    "ast_hash": "3a44dde0606d3a1c9cca1ea6e207d21d",
     "semantic_hash": ""
   },
   "Literature/Salah and Yevick.pdf": {
@@ -690,7 +625,7 @@
     "semantic_hash": ""
   },
   "results/nanda_unified/aggregate.json": {
-    "mtime": 1788726100.117558,
+    "mtime": 1788860103.214061,
     "ast_hash": "e3a75bbdb8ae8063d838783df49d4e56",
     "semantic_hash": ""
   },
@@ -715,7 +650,7 @@
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_0/summary.json": {
-    "mtime": 1788638788.0613647,
+    "mtime": 1788859203.0721056,
     "ast_hash": "586875e0570b22e7ffdea766aab43ef1",
     "semantic_hash": ""
   },
@@ -740,7 +675,7 @@
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_1/summary.json": {
-    "mtime": 1788638789.101403,
+    "mtime": 1788859422.2619886,
     "ast_hash": "1d2410d42e9bc08699a30890b0798f8b",
     "semantic_hash": ""
   },
@@ -765,7 +700,7 @@
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_2/summary.json": {
-    "mtime": 1788638790.168013,
+    "mtime": 1788859650.0712073,
     "ast_hash": "ec9ab41a07e80516258349e12c86f2d1",
     "semantic_hash": ""
   },
@@ -790,7 +725,7 @@
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_3/summary.json": {
-    "mtime": 1788638791.2210705,
+    "mtime": 1788859877.2417402,
     "ast_hash": "f04cb55290e19c7f3a968f5f1213bd70",
     "semantic_hash": ""
   },
@@ -815,7 +750,7 @@
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_4/summary.json": {
-    "mtime": 1788638792.340493,
+    "mtime": 1788860103.2096434,
     "ast_hash": "7ba04b44c4d99c5356c76d301d0e9b9a",
     "semantic_hash": ""
   },
@@ -1215,52 +1150,52 @@
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_0/spectral/spectral_signal.json": {
-    "mtime": 1788726200.2331445,
+    "mtime": 1788859203.0708828,
     "ast_hash": "0c9933664529a9ce90f9d6f4fc838f7d",
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_1/spectral/spectral_signal.json": {
-    "mtime": 1788726200.2378676,
+    "mtime": 1788859422.260782,
     "ast_hash": "87c8ab0a7b2d7ceb53121d23a104dd94",
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_2/spectral/spectral_signal.json": {
-    "mtime": 1788726200.2421656,
+    "mtime": 1788859650.0699954,
     "ast_hash": "9a6ed7e4d3af4f35b062b5f0c75dad31",
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_3/spectral/spectral_signal.json": {
-    "mtime": 1788726200.2458146,
+    "mtime": 1788859877.2407434,
     "ast_hash": "79b10e14a3650807ec086f050c501dfd",
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_4/spectral/spectral_signal.json": {
-    "mtime": 1788726200.2493074,
+    "mtime": 1788860103.209071,
     "ast_hash": "16e7d981dfe4e5923d1af052de2bccf8",
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_0/age/age_signal.json": {
-    "mtime": 1788726200.2299004,
+    "mtime": 1788858967.905803,
     "ast_hash": "07d3b2280939bb7a290530d06ff7f108",
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_1/age/age_signal.json": {
-    "mtime": 1788726200.2349212,
+    "mtime": 1788859204.2740574,
     "ast_hash": "ab33869c385549e4af68578070f6b7fa",
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_2/age/age_signal.json": {
-    "mtime": 1788726200.2392616,
+    "mtime": 1788859423.3794465,
     "ast_hash": "d1d6bd419579d4e60ae0960f6d31c077",
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_3/age/age_signal.json": {
-    "mtime": 1788726200.243301,
+    "mtime": 1788859651.120531,
     "ast_hash": "5d43f859bedf640d57a15a23283a82b0",
     "semantic_hash": ""
   },
   "results/nanda_unified/seed_4/age/age_signal.json": {
-    "mtime": 1788726200.2468684,
+    "mtime": 1788859878.2552202,
     "ast_hash": "7f9589e5d88f1eeb3ee020fa24794e6c",
     "semantic_hash": ""
   },
