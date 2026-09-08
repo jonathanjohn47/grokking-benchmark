@@ -9221,3 +9221,204 @@ exponent alpha, checkpoint-only plugin pattern:
 `src/unified_measurements.py` + `_checkpoint_predictor_htsr_alpha`
 registered in `CHECKPOINT_PREDICTOR_FUNCS` / `PREDICTOR_SUMMARY_KEY`).
 No source-code change made in this session.
+
+---
+
+## Session Summary — 2026-09-08 — v4 Spectral + AGE closure consolidated + PDF-builder cleanup
+
+Boss, this session did no experiment work and touched no predictor code.
+It is a housekeeping-plus-documentation pass. Two things happened: (1) the
+Spectral and AGE closures — already worked out in the 2026-09-06 sessions
+above and gathered into the 2026-09-07 v4 dump — are re-stated here in one
+compact block so the current status is unambiguous; (2) the pile of
+old PDF-generator scripts was cleaned out and the canonical context
+bundle PDF was regenerated.
+
+### 1. Goals
+
+- Regenerate `full_context_profile.pdf` so a fresh chat session picks up
+  the true v4 state (4 predictors closed, HTSR Alpha next), not the stale
+  "Spectral = NEXT" text the bundle builder was still carrying.
+- Remove the duplicate / superseded PDF-builder scripts scattered across
+  `tools/`, `src/`, repo root and `archive/`. Keep exactly one canonical
+  builder.
+- Remove the stale compiled-code / combined-output PDFs under
+  `docs/reports/` and repo root.
+
+### 2. Actions taken
+
+**2a. Regenerated `full_context_profile.pdf`**
+
+```
+python tools/compile_context_bundle.py
+```
+
+- Date: 2026-09-08. Version: v4. 32 pages. Engine: `[reportlab]`.
+- The bundle now reads the two latest `context.md` sessions (the
+  2026-09-07 v4 dump and this entry), so its Section 4 `aggregate.json`
+  block carries the `spectral_predictor` and `age_predictor` per-seed
+  blocks.
+- `tools/compile_context_bundle.py` itself was edited in this session:
+  the hardcoded HIGHLIGHTS paragraph (both the reportlab and the
+  matplotlib-fallback code paths), the Section 9 predictor-order list
+  (both paths) and the trailing open-question text were updated from
+  "Spectral = NEXT / awaiting recompute" to "Predictors 1–4 CLOSED
+  negative, HTSR Alpha = NEXT". No other logic changed.
+
+**2b. Deleted superseded PDF-builder scripts**
+
+Canonical builder KEPT: `tools/compile_context_bundle.py` (the only
+script that generates `full_context_profile.pdf`).
+
+Deleted from the working tree (still recoverable from git history and
+from tag `benchmark-v4-4predictors`):
+
+```
+tools/generate_l2_report_corrected.py
+tools/compile_python_files_to_pdf.py
+tools/compile_images_to_pdf.py
+make_pdf.py
+plot_nanda_results.py
+src/generate_l2_report.py
+src/generate_master_report.py
+src/analysis_l2_norm_four_head.py
+archive/src_p97_mainstream_old/analysis_l2_norm_four_head.py
+archive/src_p97_mainstream_old/generate_master_report.py
+archive/src_p97_mainstream_old/generate_l2_report.py
+```
+
+Discovery command used:
+
+```
+grep -R -l "PdfPages\|reportlab\|SimpleDocTemplate" --include="*.py" . \
+  | grep -v ".venv" | grep -v "__pycache__" \
+  | grep -v "compile_context_bundle.py" | grep -v "unified_measurements.py" \
+  | grep -v "measurements.py" | grep -v "run_benchmark.py"
+```
+
+Note: no `archive/deprecated_pdf_builders/` folder was created — the
+files are plain-deleted, not moved. Recover from git if ever needed.
+
+**2c. Deleted stale project-compile PDFs**
+
+```
+rm -v ./docs/reports/python_files_compiled.pdf \
+      ./docs/reports/combined_output.pdf \
+      ./combined_code.pdf
+```
+
+(`combined_code.pdf` was untracked, so it does not appear in
+`git status`.)
+
+PDFs KEPT: `results/nanda_unified/plots/nanda_results_report.pdf`,
+`results/nanda_unified/reports/nanda_results_report.pdf`,
+`full_context_profile.pdf`, everything under `literature/` /
+`Literature/`.
+
+### 3. Results — Predictors 1–4, consolidated (no new numbers)
+
+All four verdicts were already reached in the 2026-09-06 and 2026-09-07
+sessions above. Restated here for one-glance status. Source of truth for
+every number: `results/nanda_unified/aggregate.json`. Aggregate grok
+epoch: mean **13218.8**, std **5900.6**, epochs `[14474, 6988, 10418,
+10193, 24021]`, 5/5 grokked, 0/5 limit-cycle.
+
+- **Predictor 1 — L2-Norm** — CLOSED, NEGATIVE. MA-crossover at epoch
+  ~103–121 in all 5 seeds, thousands of epochs before grok. Tracks the
+  early optimisation transient, not circuit formation.
+- **Predictor 2 — Dropout** — CLOSED, NEGATIVE. Variance-under-stochastic-
+  dropout peak (Salah & Yevick 2025; k=30, rate=0.5 deviations
+  documented and justified on compute grounds) lands at or after grok in
+  5/5 seeds (`peak/grok` ratio 1.05–3.92).
+- **Predictor 3 — Spectral (Canatar et al. 2021 task-model alignment)** —
+  CLOSED, NEGATIVE. `k_90` goes 3448 → ~3350–3400 (only ~2–3 % drop, no
+  rank collapse), representation entropy `8.24 → 7.94` (flat).
+  `alignment_max_epoch` lands at or after grok in 5/5. Confirms
+  feature-learning regime, not the lazy / kernel regime Canatar's theory
+  needs. FAILS the two-criterion test — same standing as L2 and Dropout.
+- **Predictor 4 — AGE / NC1 (Papyan et al. 2020, + Beaglehole 2024 /
+  Mallinar 2024 AGOP mechanism)** — CLOSED, NEGATIVE. NC1
+  `Tr(Sigma_W)/Tr(Sigma_B)` collapses ~45 → ~0.05 (~660x, real and
+  large) but strictly AFTER grok: `nc1_min_epoch` LAGS `grok_epoch` in
+  5/5 (`nc1_min/grok` ratio 1.67–3.92; minimum pinned to the final
+  checkpoint 39999 in 3/5). Variability collapse is a consequence of
+  grokking on this substrate, not a leading marker.
+
+Method for Predictors 3 and 4: checkpoint-only recompute off the frozen
+`results/nanda_unified/seed_*/checkpoints/` — no retrain. Run via
+`run_nanda_benchmark.py --predictors ...,spectral,age` with the seeds
+already trained.
+
+### 4. Two-criterion falsification test (applied identically to all 4)
+
+1. Does the signal extremum LEAD grok? No — 5/5 seeds, all four
+   predictors.
+2. Is the failure direction at least consistent across seeds? No —
+   L2-Norm fails early, the other three fail late, and the ratio to grok
+   is not seed-stable even within a predictor.
+
+Both criteria fail ⇒ CLOSED NEGATIVE is a valid falsification for all
+four, not an inconclusive result.
+
+### 5. Commands run this session
+
+```
+python tools/compile_context_bundle.py
+grep -R -l "PdfPages\|reportlab\|SimpleDocTemplate" --include="*.py" . | grep -v ".venv" | grep -v "__pycache__" | grep -v "compile_context_bundle.py" | grep -v "unified_measurements.py" | grep -v "measurements.py" | grep -v "run_benchmark.py"
+rm -v ./docs/reports/python_files_compiled.pdf ./docs/reports/combined_output.pdf ./combined_code.pdf
+git rm  (the 11 PDF-builder scripts listed in 2b)
+```
+
+### 6. Files changed
+
+- `context.md` — this entry.
+- `tools/compile_context_bundle.py` — HIGHLIGHTS paragraph + Section 9
+  predictor-order list + open-question text updated to v4 state (both the
+  reportlab and matplotlib-fallback code paths). No logic change.
+  NOTE: this file is in `.gitignore` (line 54), so the edit lives in the
+  working tree only and will NOT appear in the commit or git history.
+- `full_context_profile.pdf` — regenerated, v4, 32 pages, reportlab.
+  Also `.gitignore`d (line 55) — local artefact, not committed.
+- Deleted: the 11 PDF-builder scripts in 2b + the 2 tracked PDFs in 2c
+  (`docs/reports/python_files_compiled.pdf`,
+  `docs/reports/combined_output.pdf`).
+- NOT touched: `run_nanda_benchmark.py`, `src/predictors/*`,
+  `src/unified_measurements.py`, `results/nanda_unified/` (all read-only
+  this session).
+
+### 7. Open questions / caveats
+
+- **Stale reproduce command.** The 2026-09-07 v4 session, Section 10,
+  gives a plot command that calls `plot_nanda_results.py`. That script
+  was deleted in this session (2b). The plot artefacts it produced are
+  already committed under `results/nanda_unified/reports/` and
+  `results/nanda_unified/plots/`, so nothing is lost, but if the plots
+  ever need regenerating the script must be restored from git history
+  (tag `benchmark-v4-4predictors`) first. The benchmark run command in
+  that same section is unaffected.
+- Prof. Rashid's two older personal open questions (previous thesis
+  topic + Jammu clarification) — still pending, unrelated to the code
+  track, carried forward.
+
+### 8. Predictor Evaluation Order — status after this session
+
+1. L2 Norm — CLOSED, negative
+2. Dropout — CLOSED, negative (k=30, rate=0.5 deviation justified)
+3. Spectral — CLOSED, negative (v4; k_90 3448 → ~3350–3400, no collapse)
+4. AGE — CLOSED, negative (v4; NC1 collapses after grok in 5/5)
+5. **HTSR Alpha — NEXT, not started**
+6. Correlation Traps — not started
+7. Weight-PCA — not started
+8. Higher-MI — not started
+9. Commutator Defect — not started
+
+### 9. Next
+
+- Predictor 5 — HTSR Alpha (Martin & Mahoney `weightwatcher` heavy-tailed
+  self-regularisation, per-weight-matrix ESD power-law exponent alpha),
+  checkpoint-only plugin pattern: `src/predictors/htsr_alpha.py` +
+  `save_htsr_data` in `src/unified_measurements.py` +
+  `_checkpoint_predictor_htsr_alpha` registered in
+  `CHECKPOINT_PREDICTOR_FUNCS` / `PREDICTOR_SUMMARY_KEY`. This is a
+  per-weight-matrix spectral fit, NOT a representation-kernel method —
+  do not conflate with Spectral.
