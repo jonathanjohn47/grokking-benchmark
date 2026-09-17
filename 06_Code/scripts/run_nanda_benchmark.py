@@ -32,12 +32,12 @@ Resume: a seed whose output_dir/seed_{seed}/summary.json exists is
 skipped and its summary reloaded.
 
 Usage:
-    python run_nanda_benchmark.py --seeds 5 --epochs 40000 \
-        --output_dir results/nanda_unified --config configs/nanda_unified.yaml
+    python 06_Code/scripts/run_nanda_benchmark.py --seeds 5 --epochs 40000 \
+        --output_dir 08_Experiments/results/nanda_unified --config 06_Code/configs/nanda_unified.yaml
 
     # quick smoke:
-    python run_nanda_benchmark.py --seeds 1 --epochs 100 \
-        --output_dir results/test_smoke
+    python 06_Code/scripts/run_nanda_benchmark.py --seeds 1 --epochs 100 \
+        --output_dir 08_Experiments/results/test_smoke
 """
 
 import argparse
@@ -954,8 +954,8 @@ def main():
                         help="number of seeds; seed i uses torch.manual_seed(i)")
     parser.add_argument("--epochs", type=int, default=40000,
                         help="full-batch epochs per seed")
-    parser.add_argument("--output_dir", type=str, default="results/nanda_unified")
-    parser.add_argument("--config", type=str, default="configs/nanda_unified.yaml")
+    parser.add_argument("--output_dir", type=str, default="08_Experiments/results/nanda_unified")
+    parser.add_argument("--config", type=str, default="06_Code/configs/nanda_unified.yaml")
     parser.add_argument("--predictors", type=str, default="l2,dropout_gap,dropout_variance",
                         help="comma-separated subset of " + ",".join(ALL_PREDICTORS))
     parser.add_argument("--overwrite", type=str, default="",
