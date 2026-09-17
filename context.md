@@ -9587,3 +9587,19 @@ evaluation order — reference only.
   (see session chat for the viva-ready script). Predictor 5 (HTSR Alpha)
   work remains the next actual implementation task, unaffected by this
   note.
+
+---
+
+## [2026-09-17] Defense Note - Four Predictors Closed Negative - Viva Justification for Prof. Rashid
+
+Opening line: "All four predictors closed negative, and each failure is explainable against its own source paper, not against my pipeline."
+
+L2 Norm (Nanda et al. 2023, Fig. 7): Nanda shows weight-norm decay as descriptive observation during cleanup phase, after the fact. They do not claim it predicts grok timing in advance and state timing cannot be predicted from this signal. My MA-crossover fires ~epoch 110 in all 5 seeds, thousands of epochs before grok (mean grok 13,218.8, SD 5,900.6, range 6,988-24,021). This confirms Nanda, not contradicts.
+
+Dropout-Variance (Salah & Yevick): Their robustness curve is correlational/descriptive. My variance peak lands after grok in 5/5 seeds. Mechanistic reason: network becomes robust to dropout only once circuit is complete and redundant. So robustness is consequence of grokking, not cause. Fails my lead-criterion but does not contradict original paper.
+
+Spectral (Canatar, Bordelon and Pehlevan 2021): Theory applies to lazy/kernel regime where generalisation governed by nearly fixed kernel eigenspectrum. My Phase 1 replication already established grokking on (a+b) mod 113 is feature-learning, not lazy. So 2-3% drop in effective rank is exactly what correct Canatar implementation SHOULD show on feature-learning network. It is confirmation of regime, not failure, and not contradiction since Canatar never claimed this outside lazy regime. This is the point Prof. Rashid is most likely to press.
+
+AGE (Papyan et al. 2020, with Beaglehole 2024 and Mallinar 2024): Papyan defines Neural Collapse as terminal-phase phenomenon - develops after network has already reached near-zero training loss and keeps training. My NC1 collapses ~660x, effect is real and large, but lands after grok in 5/5 seeds. By Papyan's own definition, that is terminal phase. Using it as early-warning tests it outside original regime.
+
+Closing: Protocol is frozen - same config (configs/nanda_unified.yaml), same script (run_nanda_benchmark.py), same 5 seeds, same grok definition across all 4 predictors. Falsification test (2 criteria) was written before Predictor 1 and applied unchanged through Predictor 4, no criterion adjusted after. Four failures are not uniform, they fail for 4 different citable reasons, which is expected from working benchmark rejecting weak candidates, not broken pipeline. If every candidate had passed, that would be warning sign of too-loose criteria.

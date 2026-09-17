@@ -1538,5 +1538,40 @@
     "mtime": 1788725631.3976743,
     "ast_hash": "b9285c6c8b2a7abbe858465c921519ce",
     "semantic_hash": ""
+  },
+  "_to_delete/_tmp_spectral_report_data.json": {
+    "mtime": 1789455099.541685,
+    "ast_hash": "b79e5bd7f5894b5995f35af43bafad85",
+    "semantic_hash": ""
+  },
+  "docs/Spectral_Predictor_Task_Model_Alignment.md": {
+    "mtime": 1789460091.711323,
+    "ast_hash": "7d4bd7fb391298f1869c0625a438f9bf",
+    "semantic_hash": ""
+  },
+  "02_Progress_Reports/2026-09-17_Progress_Report.pdf": {
+    "mtime": 1789653962.841039,
+    "ast_hash": "9b125715c7b119c0c2cc57ac41f05b24",
+    "semantic_hash": ""
+  },
+  "Claude outputs/Grokking_Predictors_Progress_Report_2026-09-17.pdf": {
+    "mtime": 1789653281.18954,
+    "ast_hash": "6051d1e72c599c321d7692d239569acb",
+    "semantic_hash": ""
+  },
+  "docs/Spectral_Predictor_Report.pdf": {
+    "mtime": 1789455421.0123363,
+    "ast_hash": "1c940c017a9af7d1972c7efd5ac23516",
+    "semantic_hash": ""
+  },
+  "docs/Spectral_Predictor_Task_Model_Alignment.pdf": {
+    "mtime": 1789460426.7701547,
+    "ast_hash": "e24787300d30fb241b56ebd885eeb07b",
+    "semantic_hash": ""
+  },
+  "docs/reports/Progress_Report_2026-09-17.pdf": {
+    "mtime": 1789653265.532676,
+    "ast_hash": "6051d1e72c599c321d7692d239569acb",
+    "semantic_hash": ""
   }
 }

@@ -21,6 +21,286 @@
   },
   "nodes": [
     {
+      "label": "Spectral_Predictor_Task_Model_Alignment.md",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment",
+      "community": 9,
+      "norm_label": "spectral_predictor_task_model_alignment.md"
+    },
+    {
+      "label": "The Spectral Predictor: Task-Model Alignment Theory and Why It Failed to Predict Grokking",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_the_spectral_predictor_task_model_alignment_theory_and_why_it_failed_to_predict_grokking",
+      "community": 9,
+      "norm_label": "the spectral predictor: task-model alignment theory and why it failed to predict grokking"
+    },
+    {
+      "label": "1. Prerequisites Recap",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_1_prerequisites_recap",
+      "community": 9,
+      "norm_label": "1. prerequisites recap"
+    },
+    {
+      "label": "1.1 What is grokking",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_1_1_what_is_grokking",
+      "community": 9,
+      "norm_label": "1.1 what is grokking"
+    },
+    {
+      "label": "1.2 What a grokking predictor is supposed to do",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_1_2_what_a_grokking_predictor_is_supposed_to_do",
+      "community": 9,
+      "norm_label": "1.2 what a grokking predictor is supposed to do"
+    },
+    {
+      "label": "2. Kernel Regression Basics",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_2_kernel_regression_basics",
+      "community": 9,
+      "norm_label": "2. kernel regression basics"
+    },
+    {
+      "label": "2.1 What a kernel is",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L47",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_2_1_what_a_kernel_is",
+      "community": 9,
+      "norm_label": "2.1 what a kernel is"
+    },
+    {
+      "label": "2.2 Why a trained network's hidden layer defines a kernel",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L59",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_2_2_why_a_trained_network_s_hidden_layer_defines_a_kernel",
+      "community": 9,
+      "norm_label": "2.2 why a trained network's hidden layer defines a kernel"
+    },
+    {
+      "label": "2.3 The representation matrix and the Gram matrix",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L69",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_2_3_the_representation_matrix_and_the_gram_matrix",
+      "community": 9,
+      "norm_label": "2.3 the representation matrix and the gram matrix"
+    },
+    {
+      "label": "3. Eigen-decomposition of the Kernel",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L97",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_3_eigen_decomposition_of_the_kernel",
+      "community": 9,
+      "norm_label": "3. eigen-decomposition of the kernel"
+    },
+    {
+      "label": "3.1 Eigenvalues and eigenvectors of $K$",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L101",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_3_1_eigenvalues_and_eigenvectors_of_k",
+      "community": 9,
+      "norm_label": "3.1 eigenvalues and eigenvectors of $k$"
+    },
+    {
+      "label": "3.2 What \"ordering from largest to smallest\" means",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L121",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_3_2_what_ordering_from_largest_to_smallest_means",
+      "community": 9,
+      "norm_label": "3.2 what \"ordering from largest to smallest\" means"
+    },
+    {
+      "label": "3.3 Spectral bias \u2014 why large-eigenvalue directions are learned more strongly",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L127",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_3_3_spectral_bias_why_large_eigenvalue_directions_are_learned_more_strongly",
+      "community": 9,
+      "norm_label": "3.3 spectral bias \u2014 why large-eigenvalue directions are learned more strongly"
+    },
+    {
+      "label": "4. Task-Model Alignment",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L141",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_4_task_model_alignment",
+      "community": 9,
+      "norm_label": "4. task-model alignment"
+    },
+    {
+      "label": "4.1 Projecting the target onto the eigenvectors",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L147",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_4_1_projecting_the_target_onto_the_eigenvectors",
+      "community": 9,
+      "norm_label": "4.1 projecting the target onto the eigenvectors"
+    },
+    {
+      "label": "4.2 Task power and its normalized fraction",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L171",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_4_2_task_power_and_its_normalized_fraction",
+      "community": 9,
+      "norm_label": "4.2 task power and its normalized fraction"
+    },
+    {
+      "label": "4.3 Cumulative power $C(k)$",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L189",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_4_3_cumulative_power_c_k",
+      "community": 9,
+      "norm_label": "4.3 cumulative power $c(k)$"
+    },
+    {
+      "label": "4.4 Why fast-rising $C(k)$ means good generalization \u2014 Canatar et al.'s theory",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L209",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_4_4_why_fast_rising_c_k_means_good_generalization_canatar_et_al_s_theory",
+      "community": 9,
+      "norm_label": "4.4 why fast-rising $c(k)$ means good generalization \u2014 canatar et al.'s theory"
+    },
+    {
+      "label": "5. From Kernel Regression Theory to a Grokking Predictor",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L223",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_5_from_kernel_regression_theory_to_a_grokking_predictor",
+      "community": 9,
+      "norm_label": "5. from kernel regression theory to a grokking predictor"
+    },
+    {
+      "label": "5.1 The precise hypothesis being tested",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L227",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_5_1_the_precise_hypothesis_being_tested",
+      "community": 9,
+      "norm_label": "5.1 the precise hypothesis being tested"
+    },
+    {
+      "label": "5.2 Why this would count as an early-warning signal, if true",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L243",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_5_2_why_this_would_count_as_an_early_warning_signal_if_true",
+      "community": 9,
+      "norm_label": "5.2 why this would count as an early-warning signal, if true"
+    },
+    {
+      "label": "6. The Experimental Result and Its Interpretation",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L253",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_6_the_experimental_result_and_its_interpretation",
+      "community": 9,
+      "norm_label": "6. the experimental result and its interpretation"
+    },
+    {
+      "label": "6.1 Setup",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L257",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_6_1_setup",
+      "community": 9,
+      "norm_label": "6.1 setup"
+    },
+    {
+      "label": "6.2 The finding: $C(k)$ rises only after grokking, on every seed",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L267",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_6_2_the_finding_c_k_rises_only_after_grokking_on_every_seed",
+      "community": 9,
+      "norm_label": "6.2 the finding: $c(k)$ rises only after grokking, on every seed"
+    },
+    {
+      "label": "6.3 Why this is a valid negative result, not an implementation bug",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L291",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_6_3_why_this_is_a_valid_negative_result_not_an_implementation_bug",
+      "community": 9,
+      "norm_label": "6.3 why this is a valid negative result, not an implementation bug"
+    },
+    {
+      "label": "6.4 What this implies about the actual mechanism of grokking on modular addition",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L303",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_6_4_what_this_implies_about_the_actual_mechanism_of_grokking_on_modular_addition",
+      "community": 9,
+      "norm_label": "6.4 what this implies about the actual mechanism of grokking on modular addition"
+    },
+    {
+      "label": "7. Summary \u2014 Tying the Chain Together",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L317",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_7_summary_tying_the_chain_together",
+      "community": 9,
+      "norm_label": "7. summary \u2014 tying the chain together"
+    },
+    {
+      "label": "Falsification, stated simply",
+      "file_type": "document",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L335",
+      "_origin": "ast",
+      "id": "docs_spectral_predictor_task_model_alignment_falsification_stated_simply",
+      "community": 9,
+      "norm_label": "falsification, stated simply"
+    },
+    {
       "label": "BENCHMARK-V4.md",
       "file_type": "document",
       "source_file": "results/nanda_unified/BENCHMARK-V4.md",
@@ -4392,6 +4672,276 @@
     }
   ],
   "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment",
+      "target": "docs_spectral_predictor_task_model_alignment_the_spectral_predictor_task_model_alignment_theory_and_why_it_failed_to_predict_grokking",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_the_spectral_predictor_task_model_alignment_theory_and_why_it_failed_to_predict_grokking",
+      "target": "docs_spectral_predictor_task_model_alignment_1_prerequisites_recap",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_the_spectral_predictor_task_model_alignment_theory_and_why_it_failed_to_predict_grokking",
+      "target": "docs_spectral_predictor_task_model_alignment_2_kernel_regression_basics",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L97",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_the_spectral_predictor_task_model_alignment_theory_and_why_it_failed_to_predict_grokking",
+      "target": "docs_spectral_predictor_task_model_alignment_3_eigen_decomposition_of_the_kernel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L141",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_the_spectral_predictor_task_model_alignment_theory_and_why_it_failed_to_predict_grokking",
+      "target": "docs_spectral_predictor_task_model_alignment_4_task_model_alignment",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L223",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_the_spectral_predictor_task_model_alignment_theory_and_why_it_failed_to_predict_grokking",
+      "target": "docs_spectral_predictor_task_model_alignment_5_from_kernel_regression_theory_to_a_grokking_predictor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L253",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_the_spectral_predictor_task_model_alignment_theory_and_why_it_failed_to_predict_grokking",
+      "target": "docs_spectral_predictor_task_model_alignment_6_the_experimental_result_and_its_interpretation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L317",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_the_spectral_predictor_task_model_alignment_theory_and_why_it_failed_to_predict_grokking",
+      "target": "docs_spectral_predictor_task_model_alignment_7_summary_tying_the_chain_together",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_1_prerequisites_recap",
+      "target": "docs_spectral_predictor_task_model_alignment_1_1_what_is_grokking",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_1_prerequisites_recap",
+      "target": "docs_spectral_predictor_task_model_alignment_1_2_what_a_grokking_predictor_is_supposed_to_do",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L47",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_2_kernel_regression_basics",
+      "target": "docs_spectral_predictor_task_model_alignment_2_1_what_a_kernel_is",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_2_kernel_regression_basics",
+      "target": "docs_spectral_predictor_task_model_alignment_2_2_why_a_trained_network_s_hidden_layer_defines_a_kernel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L69",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_2_kernel_regression_basics",
+      "target": "docs_spectral_predictor_task_model_alignment_2_3_the_representation_matrix_and_the_gram_matrix",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L101",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_3_eigen_decomposition_of_the_kernel",
+      "target": "docs_spectral_predictor_task_model_alignment_3_1_eigenvalues_and_eigenvectors_of_k",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L121",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_3_eigen_decomposition_of_the_kernel",
+      "target": "docs_spectral_predictor_task_model_alignment_3_2_what_ordering_from_largest_to_smallest_means",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L127",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_3_eigen_decomposition_of_the_kernel",
+      "target": "docs_spectral_predictor_task_model_alignment_3_3_spectral_bias_why_large_eigenvalue_directions_are_learned_more_strongly",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L147",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_4_task_model_alignment",
+      "target": "docs_spectral_predictor_task_model_alignment_4_1_projecting_the_target_onto_the_eigenvectors",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L171",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_4_task_model_alignment",
+      "target": "docs_spectral_predictor_task_model_alignment_4_2_task_power_and_its_normalized_fraction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L189",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_4_task_model_alignment",
+      "target": "docs_spectral_predictor_task_model_alignment_4_3_cumulative_power_c_k",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L209",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_4_task_model_alignment",
+      "target": "docs_spectral_predictor_task_model_alignment_4_4_why_fast_rising_c_k_means_good_generalization_canatar_et_al_s_theory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L227",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_5_from_kernel_regression_theory_to_a_grokking_predictor",
+      "target": "docs_spectral_predictor_task_model_alignment_5_1_the_precise_hypothesis_being_tested",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L243",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_5_from_kernel_regression_theory_to_a_grokking_predictor",
+      "target": "docs_spectral_predictor_task_model_alignment_5_2_why_this_would_count_as_an_early_warning_signal_if_true",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L257",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_6_the_experimental_result_and_its_interpretation",
+      "target": "docs_spectral_predictor_task_model_alignment_6_1_setup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L267",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_6_the_experimental_result_and_its_interpretation",
+      "target": "docs_spectral_predictor_task_model_alignment_6_2_the_finding_c_k_rises_only_after_grokking_on_every_seed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L291",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_6_the_experimental_result_and_its_interpretation",
+      "target": "docs_spectral_predictor_task_model_alignment_6_3_why_this_is_a_valid_negative_result_not_an_implementation_bug",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L303",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_6_the_experimental_result_and_its_interpretation",
+      "target": "docs_spectral_predictor_task_model_alignment_6_4_what_this_implies_about_the_actual_mechanism_of_grokking_on_modular_addition",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
+      "source_location": "L335",
+      "weight": 1.0,
+      "source": "docs_spectral_predictor_task_model_alignment_7_summary_tying_the_chain_together",
+      "target": "docs_spectral_predictor_task_model_alignment_falsification_stated_simply",
+      "confidence_score": 1.0
+    },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
@@ -9479,5 +10029,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "3734e5b7a51cbad9e9b17a981d8e7299e36c254a"
+  "built_at_commit": "aad34cf73ebf18010ba44be22ee225ec6cb95315"
 }
