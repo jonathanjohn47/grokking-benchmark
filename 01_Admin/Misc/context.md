@@ -9603,3 +9603,166 @@ Spectral (Canatar, Bordelon and Pehlevan 2021): Theory applies to lazy/kernel re
 AGE (Papyan et al. 2020, with Beaglehole 2024 and Mallinar 2024): Papyan defines Neural Collapse as terminal-phase phenomenon - develops after network has already reached near-zero training loss and keeps training. My NC1 collapses ~660x, effect is real and large, but lands after grok in 5/5 seeds. By Papyan's own definition, that is terminal phase. Using it as early-warning tests it outside original regime.
 
 Closing: Protocol is frozen - same config (configs/nanda_unified.yaml), same script (run_nanda_benchmark.py), same 5 seeds, same grok definition across all 4 predictors. Falsification test (2 criteria) was written before Predictor 1 and applied unchanged through Predictor 4, no criterion adjusted after. Four failures are not uniform, they fail for 4 different citable reasons, which is expected from working benchmark rejecting weak candidates, not broken pipeline. If every candidate had passed, that would be warning sign of too-loose criteria.
+
+---
+
+## [2026-09-17] Repository Reorganized into Supervisor-Mandated Thesis Folder Structure
+
+Opening line: this session did not touch any predictor code, training code, or results data. It only reorganized where files sit in the repository, because the supervisor sent a fixed folder template that must be followed. HTSR Alpha (Predictor 5) work is still pending, untouched, and unaffected by this session.
+
+### Session Summary
+
+- The supervisor sent a required directory template (`01_Admin` through
+  `10_Publications`, plus `Archive`) and asked that the repository be
+  brought in line with it, with weekly updates and progress reports
+  going forward.
+- The whole repository was re-mapped into that template using `git mv`
+  for every tracked file, so file history is intact. This was a pure
+  housekeeping move — no predictor logic, training logic, or result
+  values were changed in this session.
+- `src/` moved to `06_Code/src`, `tools/` moved to `06_Code/scripts`,
+  `configs/` moved to `06_Code/configs`, `results/` moved to
+  `08_Experiments/results`, `nanda_l2_p113/` moved to
+  `08_Experiments/nanda_l2_p113`, `Literature/` and the analysis
+  `.md`/`.pdf` files from `docs/` moved into `04_Literature/Papers` and
+  `04_Literature/Notes`, `archive/` moved into `Archive/Deprecated_Code`,
+  and `_to_delete/` moved into `Archive/Unused`.
+- `context.md` and `full_context_profile.pdf` moved to
+  `01_Admin/Misc/` (this file is now at
+  `01_Admin/Misc/context.md`, not at the repo root any more —
+  important for the next session's "read context.md first" step).
+- Root `README.md` was rewritten to match the supervisor's required
+  template (thesis title, student name, supervisor name, objectives,
+  repository structure, software requirements, reproduction steps).
+  New `06_Code/README.md` and `07_Data/README.md` were also added.
+- An unrelated file, `safemytrip-13b58-firebase-adminsdk-fbsvc-...json`
+  (a Firebase admin credential for a different app, `safemytrip`, not
+  part of this thesis), was sitting at the repo root. It was already
+  gitignored, so it was never pushed to GitHub. The user was asked and
+  said to delete it — this was done.
+- Three near-identical copies of the same 2026-09-17 progress-report
+  PDF were found in `02_Progress_Reports/`, `Claude outputs/`, and
+  `docs/reports/`. Two were exact-duplicate (same MD5) files. One copy
+  was kept under `02_Progress_Reports/`, the duplicates were removed.
+- The whole reorganization was committed as a single commit
+  (`f2d927b`, message: "Reorganize repository into supervisor-required
+  thesis folder structure"). This commit has **not** been pushed to
+  GitHub yet — that is the user's call, to be done after review.
+
+### Technical Decisions
+
+- **git mv + one commit**, chosen by the user, over "move on disk, no
+  commit". Reason: this repo has a GitHub remote
+  (`jonathanjohn47/grokking-benchmark`), and `git mv` keeps file
+  history attached to the new paths instead of showing every moved
+  file as delete+add.
+- **`src/` vs `nanda_l2_p113/` code layout** — the user asked for
+  Claude's judgement here. Decision made: `src/` (four-head,
+  shadow-layernorm, spectral-predictor variants) is the **shared**
+  codebase, so it went to `06_Code/src`. `nanda_l2_p113/` is a
+  self-contained package with its own `models/`, `predictors/`,
+  `train.py`, `runs/`, and `results/` for one specific reproduction
+  (Nanda L2 predictor at p=113), so it went to
+  `08_Experiments/nanda_l2_p113` as one experiment, kept intact as a
+  unit rather than being split apart.
+- Two hardcoded relative-path defaults were found and fixed so the
+  moved scripts keep working when run from the repo root:
+  - `06_Code/scripts/run_nanda_benchmark.py` — `--output_dir` default
+    changed from `results/nanda_unified` to
+    `08_Experiments/results/nanda_unified`; `--config` default changed
+    from `configs/nanda_unified.yaml` to
+    `06_Code/configs/nanda_unified.yaml`. Usage docstring examples were
+    updated to match.
+  - `06_Code/scripts/compile_context_bundle.py` — same
+    `configs/nanda_unified.yaml` and `results/nanda_unified` path
+    references updated to their new locations.
+  - No other script referenced these paths (checked with `grep` across
+    the codebase; no `from src import ...`-style imports exist either,
+    so the code-file moves themselves carried no import-breakage risk).
+
+### User Instructions
+
+- Delete the unrelated Firebase credential file rather than archive it
+  or leave it (user's explicit answer).
+- Put `context.md` and `full_context_profile.pdf` under
+  `01_Admin/Misc` (user's explicit answer).
+- For the `src/` vs `nanda_l2_p113/` code layout, user said to use
+  Claude's own judgement — decision recorded above.
+- Use `git mv` and a single commit for the reorganisation, so history
+  is preserved (user's explicit answer).
+
+### Current Project State
+
+- Repository folder structure now matches the supervisor's required
+  template. Nothing about the actual grokking-predictor benchmark —
+  no training code, no predictor code, no results, no conclusions from
+  the four-predictors-closed-negative work — was touched or
+  reinterpreted in this session.
+- The reorganisation commit (`f2d927b`) sits on top of commit
+  `5d5aa06` ("context.md: add viva defense notes...") and is **local
+  only**, not yet pushed to `origin/main` on GitHub. Pushing is a
+  separate, deliberate next step for the user.
+- Predictor evaluation order and status are unchanged: Predictors 1–4
+  (L2 Norm, Dropout, Spectral, AGE) remain closed negative as recorded
+  in the entries above this one; Predictor 5 (HTSR Alpha) is still the
+  next actual implementation task.
+- **Important for future sessions:** `context.md` now lives at
+  `01_Admin/Misc/context.md`, not at the repository root. Any future
+  Claude session must look there first, not at the old root path.
+
+### Important Discoveries
+
+- Two stale, zero-byte git lock files (`.git/index.lock` and
+  `.git/HEAD.lock`) were found on disk, left over from an earlier
+  crashed or interrupted git operation (both timestamped 15:44, before
+  this session's own work began). No git process was actually running
+  (checked with `ps aux`) when these were found, so they were safely
+  removed before `git mv`/`git commit` would proceed. If git commands
+  fail with "Unable to create .git/...lock" again, check for a running
+  git process first; if none is running, the lock file is stale and
+  can be removed.
+- This Mac's mounted filesystem is **case-insensitive but
+  case-preserving** — `archive` and `Archive` resolve to the exact
+  same directory (confirmed via matching inode numbers). Creating
+  `Archive/Deprecated_Code` when `archive/` already existed silently
+  merged into the same folder instead of creating a separate one. Any
+  future reorganisation work in this repo should check for
+  case-only name collisions before assuming two similarly-named paths
+  are different folders.
+- `docs/reports/Progress_Report_2026-09-17.pdf` and
+  `Claude outputs/Grokking_Predictors_Progress_Report_2026-09-17.pdf`
+  were byte-for-byte identical (same MD5 checksum), even though they
+  sat in two different folders. Only one of the two was kept.
+
+### Files Modified
+
+- 716 files changed in the reorganisation commit (mostly renames via
+  `git mv`, so history is preserved for each).
+- Directory-level moves: `src/` → `06_Code/src/`, `tools/` →
+  `06_Code/scripts/`, `configs/` → `06_Code/configs/`, `results/` →
+  `08_Experiments/results/`, `nanda_l2_p113/` →
+  `08_Experiments/nanda_l2_p113/`, `benchmark_analysis/` →
+  `08_Experiments/benchmark_analysis/`, `Literature/` →
+  `04_Literature/{Papers,Notes}/`, `docs/*.md`, `docs/*.pdf` →
+  `04_Literature/Notes/`, `images/` →
+  `05_Thesis_Document/Figures/background_concepts/`, `archive/` →
+  `Archive/Deprecated_Code/`, `_to_delete/` → `Archive/Unused/`.
+- Content edits: `06_Code/scripts/run_nanda_benchmark.py` (path
+  defaults + docstring examples), `06_Code/scripts/compile_context_bundle.py`
+  (path references).
+- New files: root `README.md` (rewritten), `06_Code/README.md`,
+  `07_Data/README.md`, `.gitkeep` placeholders in empty required
+  folders (`03_Meeting_Minutes/`, `09_Presentations/*/`,
+  `10_Publications/*/`, `07_Data/{raw,processed,external,sample_data}/`,
+  etc.).
+- Deleted: `safemytrip-13b58-firebase-adminsdk-fbsvc-74587cebc1.json`
+  (unrelated credential file), duplicate
+  `docs/reports/Progress_Report_2026-09-17.pdf`.
+
+### Next
+
+- HTSR Alpha (Predictor 5) implementation is still the next actual
+  technical task, exactly as before this session — this reorganisation
+  did not move that work forward or backward.
+- User to review the reorganisation commit and push it to GitHub
+  whenever ready.
