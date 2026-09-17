@@ -9422,3 +9422,168 @@ git rm  (the 11 PDF-builder scripts listed in 2b)
   `CHECKPOINT_PREDICTOR_FUNCS` / `PREDICTOR_SUMMARY_KEY`. This is a
   per-weight-matrix spectral fit, NOT a representation-kernel method —
   do not conflate with Spectral.
+
+---
+
+## Session Summary — September 17, 2026 (Professor clarification: four-predictor baseline confirmed as L2 Norm, Dropout, Spectral, AGE — supersedes September 1 note)
+
+### Context
+
+Jonathan had a follow-up discussion with Prof. Dr.-Ing. Sheikh Faisal Rashid to clarify the definition of the "four-predictor baseline" referenced in the September 1, 2026 session entry above.
+
+### Decision (supersedes September 1, 2026 note)
+
+Prof. Rashid confirmed that the four-predictor baseline for the thesis is the **first four predictors in the original `CLAUDE.md` evaluation order**:
+
+1. L2 Norm
+2. Dropout
+3. Spectral
+4. AGE
+
+Key points of the clarification:
+
+- **L2 Norm is NOT deferred.** It IS part of the baseline. The September 1, 2026 note ("focus on Dropout, Spectral, AGE, HTSR Alpha; defer L2 Norm investigation") is superseded by this decision.
+- **HTSR Alpha is NOT part of the baseline.** It will be considered next, after the four-predictor baseline (L2 Norm, Dropout, Spectral, AGE) is complete — i.e. HTSR Alpha reverts to its original position as predictor 5 of 9 in the evaluation order, not a baseline member.
+- This aligns the "baseline" definition with the actual work already completed and formally closed as of the Nanda-Unified v4 benchmark (git commit `680a108`, tag `benchmark-v4-4predictors`, September 7, 2026): L2 Norm, Dropout, Spectral, and AGE are all closed negative, so the baseline is, as of this session, **complete**.
+
+### Why this matters
+
+The September 1 note and the actual predictor-closure order (L2 Norm closed September 3–4, before the September 1 feedback could be acted on) were in conflict — the work already in flight when the professor gave that feedback did not match what the note asked for. This session's clarification resolves that conflict by confirming, with the professor directly, that the baseline as actually executed (L2 Norm, Dropout, Spectral, AGE) is the correct and accepted one.
+
+### Current Project State
+
+- **Four-predictor baseline: COMPLETE** (L2 Norm, Dropout, Spectral, AGE — all closed negative).
+- **Next:** HTSR Alpha (predictor 5 of 9), not yet started, to be taken up now that the baseline is confirmed complete.
+- Predictors 6–9 (Correlation Traps, Weight-PCA, Higher-MI, Commutator Defect) remain not started, unaffected by this clarification.
+
+### Files Modified
+
+- `context.md` — this entry (session log only; no source, results, or predictor code touched).
+
+### Next
+
+1. Begin Predictor 5, HTSR Alpha (Martin & Mahoney, `weightwatcher`), per the plan already on record in the September 8, 2026 entry above.
+2. Reflect this clarified baseline definition in any progress reports or communication sent to the professor going forward (the September 17, 2026 progress report and covering email predate this clarification and should be read alongside this entry, not in place of it).
+
+
+---
+
+## Session Summary — September 17, 2026 (Defense note: four negative closes justified against original papers, for viva/professor discussion)
+
+### Purpose
+
+Jonathan asked Claude to prepare a paper-by-paper justification of why
+the four CLOSED-NEGATIVE predictors (L2 Norm, Dropout-Variance,
+Spectral, AGE) do not contradict their source papers, for use directly
+with Prof. Rashid. This entry is the canonical, citable version of that
+justification. It does not change any code, results, or the predictor
+evaluation order — reference only.
+
+### 1. L2 Norm — Nanda et al. (2023), Fig. 7
+
+- **Original claim:** weight-norm decay shown as a *descriptive*
+  correlate of the post-memorisation "cleanup" phase, on Nanda's own
+  reference run. Nanda et al. do not claim it as an ex-ante predictive
+  signal, and state explicitly that grokking's timing cannot be
+  predicted in advance from their analysis.
+- **Observed (this benchmark):** MA-crossover fires at epoch ~103–121
+  in all 5 seeds, thousands of epochs before grok (6,988–24,021).
+  Traced to small-init + `weight_decay=1.0` producing an early
+  optimisation-transient crossover, not a circuit-formation signal.
+- **Why this is not a contradiction:** the pre-registered criterion here
+  ("must lead grok, consistently, across seeds") is strictly stronger
+  than anything Nanda's paper claims for this quantity. Failing a test
+  the original paper never proposed to pass is not a falsification of
+  Nanda et al. — it is confirmation of Nanda's own caveat that timing is
+  not predictable from this signal.
+
+### 2. Dropout-Variance — Salah & Yevick (arXiv:2507.11645)
+
+- **Original claim:** a dropout-robustness curve, descriptive/
+  correlational, shown on their own setup at k=100 samples, rate=0.3,
+  every epoch. Not established as a causal, ex-ante, multi-seed
+  predictor.
+- **Observed:** variance peak lands after grok in 5/5 seeds
+  (peak/grok ratio 1.05–3.92), using this benchmark's k=30, rate=0.5
+  (rate chosen because it is the most discriminative point on Salah &
+  Yevick's own Fig. 2 curve).
+- **Why this is not a contradiction:** dropout robustness is a property
+  of an already-formed, redundant circuit. It is mechanistically a
+  *consequence* of circuit formation, not a cause, which is consistent
+  with what Salah & Yevick actually show (robustness rising through the
+  grokking window). A signal that is downstream of the event cannot lead
+  it under this benchmark's directional criterion — that is a limitation
+  of using it as a leading indicator, not a contradiction of the
+  original correlational finding.
+
+### 3. Spectral — Canatar, Bordelon & Pehlevan (2021, Nat. Commun.)
+
+- **Original claim:** a kernel-regression / NTK "lazy regime" theory —
+  generalisation is governed by how a near-fixed kernel's eigenspectrum
+  aligns with the target ("task-model alignment"). This theory is scoped
+  to the lazy/kernel training regime.
+- **Observed:** `k_90` (effective rank) falls only ~2–3% across all of
+  training (3448 → ~3350–3400 of N=3830); `alignment_score` maximum
+  lands after grok in 5/5 seeds.
+- **Direct answer to "is a 2–3% drop normal versus the original
+  experiment?": YES.** Grokking on modular addition with this
+  architecture is a documented **feature-learning regime** phenomenon
+  (confirmed by this project's own M1 Nanda-replication gate) — the
+  network builds a specific Fourier-multiplication circuit rather than
+  doing fixed-kernel regression. Canatar's theory was never claimed to
+  apply outside the lazy/kernel regime. A near-flat `k_90` is the
+  *expected* reading of a correctly implemented Canatar signal on a
+  feature-learning network — it is confirmatory of the regime
+  classification, not a bug and not a contradiction of Canatar et al.
+
+### 4. AGE — Papyan et al. (2020, PNAS, NC1) with Beaglehole (2024) / Mallinar (2024) as mechanism
+
+- **Original claim:** Papyan et al. define Neural Collapse (NC1 → 0) as
+  a **terminal-phase-of-training** phenomenon — observed *after* a
+  network reaches near-zero training loss and continues training well
+  past that point. Beaglehole/Mallinar's AGOP mechanism is offered as
+  *why* collapse happens, not as a claim that it happens early.
+- **Observed:** NC1 collapses ~660x (45 → 0.05 in 5/5 seeds), a real and
+  large effect, but `nc1_min_epoch` lags `grok_epoch` in 5/5 seeds
+  (ratio 1.67–3.92).
+- **Why this is not a contradiction:** by Papyan's own definition, NC1
+  collapse is a *terminal-phase* readout, i.e. something that keeps
+  developing after the network has already solved the task. Grok epoch
+  marks test-accuracy takeoff, which happens before the terminal phase,
+  not after it. NC1 lagging grok is exactly what "terminal phase"
+  means — using it as a leading indicator tests it outside the regime
+  Papyan et al. describe it in.
+
+### 5. Why four consecutive negative closes is a valid contribution, not a pipeline bug
+
+- The experimental substrate is frozen and identical across all four
+  closures: same `configs/nanda_unified.yaml`, same
+  `run_nanda_benchmark.py`, same 5 seeds, same 40,000-epoch schedule,
+  same grok-epoch definition (first epoch test accuracy > 0.9).
+- The falsification test (extremum must lead grok in 5/5 seeds;
+  direction must be consistent across seeds) was pre-registered before
+  Predictor 1 was run and applied **unchanged** through Predictor 4 —
+  no criterion was loosened or tightened after seeing a result.
+- The four failures are not uniform noise; they fail in different,
+  mechanistically explainable ways (L2-Norm too early, Dropout-Variance
+  and AGE too late, Spectral flat/wrong-regime) each traceable to a
+  specific, citable mismatch with what its source paper actually claims.
+  A pipeline bug would be expected to fail uniformly or arbitrarily;
+  this pattern is regime-specific and paper-consistent instead.
+- A benchmark where every candidate passes would indicate the
+  falsification criteria are too weak to discriminate. Rejecting weak
+  candidates under a frozen, pre-registered protocol is the benchmark
+  functioning correctly, and is itself the reportable result for this
+  phase of the thesis.
+
+### Files Modified
+
+- `context.md` — this entry only (defense/reference note). No source,
+  results, or predictor code touched.
+
+### Next
+
+- Use this entry as the source for the professor-facing verbal defense
+  (see session chat for the viva-ready script). Predictor 5 (HTSR Alpha)
+  work remains the next actual implementation task, unaffected by this
+  note.
