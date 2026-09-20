@@ -9766,3 +9766,16 @@ Opening line: this session did not touch any predictor code, training code, or r
   did not move that work forward or backward.
 - User to review the reorganisation commit and push it to GitHub
   whenever ready.
+
+---
+
+## [2026-09-21] context.md Moved Back to Repo Root
+
+- `context.md` was moved from `01_Admin/Misc/context.md` back to the
+  repository root (`git mv`), because project `CLAUDE.md` requires
+  `context.md` to be read from the project root first.
+- This overrides the 2026-09-17 note above that said the file lives in
+  `01_Admin/Misc/`. Current location: repo root `context.md`.
+- `full_context_profile.pdf` was not touched; it stays in `01_Admin/Misc/`.
+- No predictor, training, or results code changed. HTSR Alpha
+  (Predictor 5) is still the next technical task.
