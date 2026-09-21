@@ -9796,8 +9796,9 @@ Opening line: this session did not touch any predictor code, training code, or r
 - A PDF, `AGE_predictor_explained.pdf` (8 pages: meaning, substrate,
   NC1 formulas, worked example, code walkthrough, pipeline, results with a
   grok-vs-nc1_min figure, interpretation, summary), was generated in this
-  session and delivered in the chat. It was **not** committed into the
-  repository folder.
+  session and delivered in the chat. A copy is in
+  `Claude outputs/AGE_predictor_explained.pdf` (repo root) and was
+  committed in `9ce19f1`.
 
 ### AGE calculation — one checkpoint (what `age.py` does)
 
@@ -9902,5 +9903,12 @@ Note: this `Tr_W` / `Tr_B` is the mean over classes of per-class means
 
 ### Files Modified
 
-- `context.md` only (this section appended). No code, config, result or
+- `context.md` (this section appended). No AGE code, config, result or
   checkpoint files were touched.
+- Commit `9ce19f1` (`git add .`, per project rule) also swept in files not
+  produced by this AGE explanation: `06_Code/scripts/compile_python_files.py`
+  (modified outside this chat, +172/-55 lines), four new PDFs in
+  `04_Literature/Papers/` (2006.13198v6, 2008.08186v2, 2301.05217v3,
+  2507.11645v1), `Spectral_Predictor_Explained.pdf`,
+  `Spectral_Predictor_Step_by_Step_Lesson.pdf`, `project_compilation.pdf`
+  and `Claude outputs/` (AGE and Spectral lesson PDFs).
