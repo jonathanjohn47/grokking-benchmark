@@ -9779,3 +9779,128 @@ Opening line: this session did not touch any predictor code, training code, or r
 - `full_context_profile.pdf` was not touched; it stays in `01_Admin/Misc/`.
 - No predictor, training, or results code changed. HTSR Alpha
   (Predictor 5) is still the next technical task.
+
+---
+
+## [2026-09-22] AGE Calculation — Consolidated Step-by-Step Explanation, Worked Example, Teaching-Style Feedback
+
+### Session Summary
+
+- **Investigated / explained only.** No source file, config, result or
+  checkpoint was changed. AGE (Predictor 4) remains **CLOSED, negative**;
+  the numbers below are the same 5-seed numbers already recorded in the
+  2026-09-06 and 2026-09-07 sections.
+- User asked "how is AGE predictor working in this experiment?". This
+  section is the consolidated answer, written so a later session can
+  re-teach the AGE calculation without re-reading `age.py`.
+- A PDF, `AGE_predictor_explained.pdf` (8 pages: meaning, substrate,
+  NC1 formulas, worked example, code walkthrough, pipeline, results with a
+  grok-vs-nc1_min figure, interpretation, summary), was generated in this
+  session and delivered in the chat. It was **not** committed into the
+  repository folder.
+
+### AGE calculation — one checkpoint (what `age.py` does)
+
+1. **Features.** Forward hook on `model.output_head`; capture
+   `inputs[0][:, 2, :]` = input to the head at sequence position 2 (the
+   "=" token, id 113) for every training example. Gives
+   `Phi ∈ R^{N×128}`, `N = floor(0.3 · 113^2) = 3830`, float64 on CPU
+   (move off MPS first, then `.double()`, because MPS has no float64).
+2. **Classes.** Label `y_i = (a+b) mod 113`, so `C = 113` classes. Classes
+   with `n_c = 0` in the train split are skipped.
+3. **Means.** `mu_c` = mean of `h_i` in class c; `mu_G` = mean of all `h_i`.
+4. **Within-class scatter.**
+   `Tr_W = (1/C) Σ_c (1/n_c) Σ_{i∈c} ||h_i − mu_c||^2`
+5. **Between-class scatter.**
+   `Tr_B = (1/C) Σ_c ||mu_c − mu_G||^2`
+6. **Ratio.** `NC1 = Tr_W / (Tr_B + 1e-12)` (epsilon only guards
+   division by zero). Small NC1 = classes tight AND far apart; perfect
+   collapse = 0.
+7. **Diagnostic.** `fn = (1/N) Σ_i ||h_i||_2` (feature norm), stored but
+   not part of the predictor.
+
+Code correspondence: `within_sq` list = inner per-class average,
+`tr_w` = outer average over classes; `between_sq` = `||mu_c − mu_G||^2`,
+`tr_b` = its average; returns `{"nc1", "fn", "N"}`.
+
+Note: this `Tr_W` / `Tr_B` is the mean over classes of per-class means
+(each class weighted equally), which is the definition locked on
+2026-09-06. It is not the sample-weighted covariance trace.
+
+### Worked toy example (2-D features, 2 classes) — used for teaching
+
+- Class A: (1,2), (3,2), (2,5). Class B: (8,8), (10,8), (9,11).
+- `mu_A = (2,3)`, `mu_B = (9,9)`, `mu_G = (5.5, 6)`.
+- Per-class squared distances from own mean: A → 2, 2, 4 (mean 8/3);
+  B → same (8/3). So `Tr_W = 8/3 ≈ 2.67`.
+- `||mu_A − mu_G||^2 = ||mu_B − mu_G||^2 = 3.5^2 + 3^2 = 21.25`, so
+  `Tr_B = 21.25`.
+- `NC1 = 2.67 / 21.25 ≈ 0.125`.
+- Dartboard picture: `Tr_W` = how scattered each player's darts are
+  around his own cluster; `Tr_B` = how far apart the clusters are.
+
+### AGE in the pipeline (unchanged)
+
+- `run_nanda_benchmark.py::_checkpoint_predictor_age`, registered in
+  `CHECKPOINT_PREDICTOR_FUNCS["age"]` and
+  `PREDICTOR_SUMMARY_KEY["age"] = "age_predictor"`. Checkpoint-only; the
+  live training loop is never touched.
+- Per seed: load the 24 log-spaced checkpoints
+  `[0,1,2,3,5,9,15,24,39,62,99,158,251,398,632,1002,1589,2520,3995,6333,10040,15917,25232,39999]`;
+  read `seed.npy`, re-seed; rebuild train split with
+  `get_dataloaders(number=p, batch_size=int(0.3*p*p))`; compute NC1 and
+  `fn` per checkpoint; save `age_checkpoints.npy`, `age_nc1.npy`,
+  `age_fn.npy`, `age_signal.json` under `seed_N/age/`; add `age_predictor`
+  block to `summary.json`. Saving code: `save_age_data` in
+  `unified_measurements.py`.
+- Test: `nc1_min_to_grok_ratio = nc1_min_epoch / grok_epoch`; hypothesis
+  is ratio ≤ 1 in 5/5 seeds. Result: 1.74, 2.28, 3.84, 3.92, 1.67 →
+  fails criterion 1, consistently late (criterion 2 direction wrong).
+
+### Technical Decisions
+
+- **Shared model vs predictor.** `transformer.py` is the shared model;
+  AGE reads it but does not own it. All AGE code lives in
+  `src/predictors/age.py` plus its plugin function. The shared model file
+  did not change; the predictor file did not change.
+- No new hyperparameters, thresholds or protocol changes were made.
+
+### User Instructions (teaching style — important for future sessions)
+
+- The user was **frustrated** when the first AGE answer led with the
+  NC1 formulas plus pipeline, table and caveats all at once ("threw this
+  formula at me as if I am a double PhD"). He reminded Claude that his
+  default instructions apply: personal-tutor Q&A flow.
+- Default explanation shape (from his preferences): one-line essence
+  first → why we look at it → how it works step by step with ONE small
+  reused example → real-life picture → connection to code/math →
+  takeaway plus an open invitation (at most one question). Short
+  sentences, jargon translated immediately in brackets, no empty praise,
+  do not open a reply with "Fair", "Got it", "Sure thing", "Alright".
+- Do not lead with a formula. Introduce one piece (e.g. `Tr_W` alone),
+  do a tiny numeric example, then build up. Keep Indian English (see
+  `indian-english` skill).
+- His stored preference for rigour and rendered LaTeX still applies to
+  formulas once he has the intuition; the tutor flow decides the ORDER.
+
+### Important Discoveries / Caveats (restated, not new)
+
+- The argmin `nc1_min_epoch` sits at the final checkpoint (39999) in 3/5
+  seeds (2, 3, 4), so it mostly marks "end of training" and cannot lead
+  grok by construction.
+- NC1 falls ~45 → ~0.05 (~660×) in every seed; `fn` rises ~1.4–1.6 →
+  tens/hundreds.
+- **Still open, postponed:** collapse-onset reading (first checkpoint
+  with NC1 < 1) instead of the argmin. Not tried, not part of the current
+  protocol. The AGE code is not deleted; work has simply moved on.
+
+### Current Project State
+
+- Predictors 1–4 (L2 Norm, Dropout, Spectral, AGE) CLOSED, negative;
+  professor confirmed these four as the baseline on 2026-09-17.
+- HTSR Alpha (Predictor 5) is the next technical task; not started.
+
+### Files Modified
+
+- `context.md` only (this section appended). No code, config, result or
+  checkpoint files were touched.
