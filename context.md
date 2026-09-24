@@ -1,3 +1,18 @@
+# 0. CONTEXT.MD IS APPEND-ONLY — THE BIBLE OF THE EXPERIMENT
+
+**Rule (set by the user, 2026-09-25):**
+
+1. **Nothing is ever deleted from `context.md`. Ever.** No line, section, note, failed approach, or superseded decision may be removed, shortened, rewritten, or summarised away.
+2. **Every new update is appended** at the end of the file as a new dated section.
+3. If an older entry becomes wrong or outdated, do NOT edit or remove it. Append a new entry that says what changed and why. The old entry stays as history.
+4. Only allowed edits to existing text: none. (Inserting this rule at the top is the single exception, because it must be visible first.)
+
+**Purpose:** `context.md` is the complete record ("Bible") of the whole experiment. When the user writes the thesis, they will pick and choose from it what to include and what to reject. So it must keep everything: successes, failures, dead ends, decisions, numbers.
+
+**How to apply:** Before any commit-time update (see CLAUDE.md Section 9), append only. Never use tools or commands that overwrite or truncate the file (no rewrite of the whole file, no `>` redirect, no removal edits).
+
+---
+
 # 2. MANDATORY COMMUNICATION SKILL — `indian-english`
 
 Claude has access to a skill named:
@@ -10394,3 +10409,12 @@ largest usable spacing is about 261 epochs; 250 sits 4.5% inside it. Caveat unch
   the earlier single-run timing); the DRC snapshot adds a further few percent per checkpoint. Plan for this before the retrain.
 - Still pending from earlier entries: move the old results aside (already staged as renames into
   `Archive/Baseline_v4_24_Checkpoints/`), retrain once, then HTSR Alpha.
+
+---
+
+# Session Summary — 2026-09-25: context.md made append-only
+
+- **What changed:** Added Section 0 at the top of this file: `context.md` is append-only and nothing is ever deleted. All future updates go at the end as new dated sections.
+- **Why:** The user wants this file to be the complete "Bible" of the experiment. During thesis writing they will choose what to include or reject, so no history may be lost.
+- **What did not change:** No existing content was removed or altered. Only the new rule (top) and this note (bottom) were added.
+- **Files modified:** `context.md` only.
