@@ -10274,3 +10274,123 @@ the checkpoint-schedule edit stashed, so it was pre-existing, not caused by the 
 - `06_Code/scripts/run_nanda_benchmark.py` — `REPO_ROOT` and `SRC` only.
 - `context.md` — this section (append only).
 - `graphify-out/*` — refreshed automatically by the post-commit hook; no manual edits.
+
+
+---
+
+## 2026-09-25 — Defensible experiment cleanup (remove arbitrary magic numbers)
+
+Scope: only `06_Code/scripts/run_nanda_benchmark.py` and `06_Code/configs/nanda_unified.yaml`. The shared model,
+the dataset code and all predictor logic (`06_Code/src/...`) were **not changed**; no predictor code was deleted.
+L2 Norm is archived and was ignored, as instructed.
+
+### a) What was arbitrary (the 8 numbers removed from the two files)
+
+| # | Number | Where | Replaced by |
+|---|---|---|---|
+| 1 | `DROPOUT_VARIANCE_N_SAMPLES = 30` | runner | 100 (paper value), from yaml `dropout.n_samples` |
+| 2 | `DROPOUT_VARIANCE_NUM_CHECKPOINTS = 24` | runner | deleted; variance now uses the EVAL_EVERY grid |
+| 3 | `DROPOUT_VARIANCE_NUM_DRC_CHECKPOINTS = 5` | runner | deleted; the 5-rate DRC snapshot now runs on every eval-grid point |
+| 4 | `SAVE_EVERY = 50` (hard-coded) | runner | `math.gcd(*DESIRED_EVAL_GRIDS)`, which gives 50 |
+| 5 | `LOG_EVERY = 1000` | runner | `args.epochs // log_lines_per_run` (40 lines per run) |
+| 6 | `settle_epochs = 500` | runner (`limit_cycle_check`) | `int(0.05 * epochs)` = 2000 |
+| 7 | `GROK_ACC_THRESHOLD = 0.9` (single cut) | runner | `grok_thresholds: [0.9, 0.95, 0.99]` in yaml; all three reported |
+| 8 | `limit_cycle_diagnostic_runs: 5` | yaml | removed; the check runs on every seed (`--seeds`) |
+
+Also moved out of Python into the yaml (each with its source written next to it): dropout rates, dropout-variance rate,
+the five L2 window numbers, the limit-cycle std threshold (0.05) and the settle fraction (0.05). The limit-cycle "dip" level
+is no longer a separate 0.9; it is the primary grok threshold.
+
+Two items in the request that do **not** exist in these two files, so nothing was changed for them:
+- `pre_grok_start` is not in the runner. It exists only in `06_Code/scripts/analyze_threshold.py` (`pre_grok_start = 500`),
+  which was outside the allowed scope. Still open, not touched.
+- No code checked ">= 6 samples" or "<= 4% error"; they appeared only as comments in the runner (see d).
+
+### b) What changed in code (exact places, `run_nanda_benchmark.py`)
+
+- New `DESIRED_EVAL_GRIDS = [100, 200, 250]`; `SAVE_EVERY = math.gcd(*DESIRED_EVAL_GRIDS)` with the comment
+  "SAVE_EVERY derived as GCD of desired eval grids, so every eval grid is subset of saved checkpoints".
+  `EVAL_EVERY`, `EVAL_EVERY_FALLBACK`, `EVAL_EVERY_FALLBACK_COARSE` are now read from that list. `--epochs` default is `TOTAL_STEPS`.
+- `OLD_24_LOG_SPACED_CHECKPOINTS` kept, marked "LEGACY — for Archive comparison only, not used in unified benchmark".
+  `select_eval_epochs()` and the main flow never read it. The legacy generator's `num_points` default is now
+  `len(OLD_24_LOG_SPACED_CHECKPOINTS)`.
+- `pick_drc_checkpoint_subset()` deleted. In `train_one_seed()` and `_checkpoint_predictor_dropout_variance()` the DRC snapshot
+  runs at every eval-grid checkpoint, so Dropout-Variance and DRC use the same grid as every other predictor.
+- Constants block replaced by module names set once from the yaml by the new `apply_config_constants(cfg)` (called at the start
+  of `main()`); `load_config()` reads the new yaml keys.
+- New `grok_epochs_by_threshold()`; `grok_epoch_from(history, threshold=None)` takes a threshold. `summary.json` gains
+  `grok_epochs_by_threshold`; `aggregate()` prints mean/std/count for every threshold and `aggregate.json` gains
+  `grok_thresholds` and `grok_epochs_by_threshold`. `grok_epoch` stays the primary (first) threshold, 0.9, so all predictor
+  ratios (`peak_to_grok_ratio`, `nc1_min_to_grok_ratio`, ...) keep their meaning.
+- `limit_cycle_check(history, grok_epoch)`: settle window = `int(0.05 * run length)`, dips counted below the primary threshold.
+  The stored key is still `epochs_below_0.9_post_grok` (built from the primary threshold).
+- `log_every = max(1, args.epochs // log_lines_per_run)`, computed inside `train_one_seed()`.
+- Comments: the ">= 6 samples" / "<= 4% error" wording and the per-spacing table were removed from the runner; a pointer to this
+  file replaces them.
+
+Two deliberate small deviations from the wording of the request, both identical for the default 40000-epoch run:
+`LOG_EVERY` and `settle_epochs` are derived from `args.epochs` (the actual run length) instead of the constant `TOTAL_STEPS`,
+so they stay correct when `--epochs` is overridden. Consequence: a short dry run prints many more log lines (100 epochs gives
+`log_every = 2`).
+
+### c) Why the new values are defensible
+
+- **100 passes:** Salah & Yevick (arXiv:2507.11645) use 100 stochastic passes; 30 was only a compute saving. This supersedes the
+  "k=30 justification" paragraph (section 4.1) in the 2026-09-05 aggregate entry above. Rate stays 0.5 (their Fig. 2 separates
+  pre/post-grok best there; their Fig. 1 used 0.3), and evaluation is on the shared EVAL_EVERY grid; both remain documented deviations.
+- **GCD derivation:** an eval grid can only be used if every epoch on it was saved, so the save spacing must divide every desired
+  eval spacing. gcd(100, 200, 250) = 50, now computed instead of typed. Change the desired grids and the save spacing follows.
+- **Relative 5%:** the settle window and the 40-line log cadence scale with the run length, so they are proportions of the run,
+  not epoch counts tuned to one run. The old 500 was 1.25% of a 40000-epoch run, and 500 is well below the earliest observed grok
+  epoch (6988) anyway. The 5% fraction is our own choice, not a literature value; it is stated as such in the yaml.
+- **Multi-threshold grok:** 0.9 is the literature standard (delay until accuracy surpasses 0.9; other papers use 0.60, 0.75, 0.90, 0.95).
+  Reporting 0.9, 0.95 and 0.99 means no verdict rests on one arbitrary cut.
+- **Behaviour change to note:** the limit-cycle tail now starts 2000 epochs after grok (was 500). Benchmark v4's `n_limit_cycle = 0/5`
+  used the 500 window; it is not recomputed here. Compare like with like after the retrain.
+
+### d) What remains as explicit design criteria (thesis analysis only, NOT in code)
+
+These are our own thresholds used to judge checkpoint spacing; no paper prescribes them. They are no longer constants or checks in Python.
+Inputs measured from the 24-checkpoint-era run: narrowest 10%->90% transition = 1570 epochs (seed 1), earliest grok = 6988 epochs (seed 1).
+
+- Criterion 1: at least **6** samples inside the narrowest transition: samples = 1570 / spacing.
+- Criterion 2: worst-case ratio error at most **4%**: error = spacing / 6988.
+
+| Spacing | Samples (need >= 6) | Margin | Error (need <= 4%) | Margin |
+|---|---|---|---|---|
+| 50 | 31.40 | 5.2x the minimum | 0.72% | 5.6x under the limit |
+| 100 | 15.70 | 2.6x | 1.43% | 2.8x |
+| 200 | 7.85 | 1.3x (1.85 samples spare) | 2.86% | 1.14 percentage points spare |
+| 250 | 6.28 | 1.05x (0.28 samples spare) | 3.58% | 0.42 percentage points spare |
+| 500 | 3.14 | fails | 7.16% | fails |
+
+Binding limits: spacing <= 1570 / 6 = 261.7 (criterion 1) and <= 0.04 x 6988 = 279.5 (criterion 2). Criterion 1 binds first, so the
+largest usable spacing is about 261 epochs; 250 sits 4.5% inside it. Caveat unchanged: re-measure both extremes on the new retrain.
+
+### Verification done
+
+- `py_compile` OK. `len(SAVE_CHECKPOINTS) == 801` (0..39950 step 50, plus 39999); `SAVE_EVERY == 50`.
+- Legacy generator still reproduces the 24-point list; eval grids from the 801 saved points: 100 -> 401, 200 -> 201, 250 -> 161.
+- `--help` works when launched from `/tmp`.
+- 100-epoch dry run (`--seeds 1`, output in the scratchpad): saved checkpoints 0, 50, 99; Dropout-Variance and the DRC snapshot were
+  evaluated on epochs [0, 99] (the 100 grid plus the final epoch); `n_samples` in the summary is 100; the three thresholds print; the
+  old 24-point list was not used.
+- Synthetic 40000-epoch accuracy curve: grok epochs at 0.9 / 0.95 / 0.99 = 9654 / 9830 / 9966; settle window = 2000.
+
+### Files Modified
+
+- `06_Code/scripts/run_nanda_benchmark.py` — constants, checkpoint derivation, DRC grid, grok thresholds, limit-cycle, aggregate (see b).
+- `06_Code/configs/nanda_unified.yaml` — new `evaluation`, `dropout`, `l2_norm` sections; `limit_cycle_diagnostic_runs` removed.
+- `context.md` — this section (append only).
+
+### Open / side observations (not changed)
+
+- `06_Code/scripts/compile_context_bundle.py` greps this runner for the text `GROK_ACC_THRESHOLD = ` and the marker
+  `DROPOUT_VARIANCE_NUM_CHECKPOINTS`. Both changed, so its "Constants block" chunk will now be skipped (the script guards against a
+  missing block, so it does not crash).
+- `06_Code/src/predictors/dropout.py` still has a default `n_samples=30` in `compute_dropout_variance`; the runner always passes 100
+  explicitly, so nothing uses the default.
+- Compute cost: Dropout-Variance at 100 passes is about 3x the old per-checkpoint cost (roughly 6 s instead of 1.8 s, estimate from
+  the earlier single-run timing); the DRC snapshot adds a further few percent per checkpoint. Plan for this before the retrain.
+- Still pending from earlier entries: move the old results aside (already staged as renames into
+  `Archive/Baseline_v4_24_Checkpoints/`), retrain once, then HTSR Alpha.

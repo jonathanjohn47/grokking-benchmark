@@ -42,6 +42,7 @@ Usage:
 
 import argparse
 import json
+import math
 import os
 import sys
 import time
@@ -81,68 +82,58 @@ from predictors.spectral import compute_spectral_metrics_for_checkpoint   # noqa
 from predictors.age import compute_age_metrics_for_checkpoint             # noqa: E402
 from unified_measurements import PredictorMeasurements                    # noqa: E402
 
-# The grok epoch is the first epoch test accuracy exceeds this (same
-# threshold nanda_l2_p113 uses).
-GROK_ACC_THRESHOLD = 0.9
-# Dropout predictor: full multi-rate sweep, no single "primary" rate.
-DROPOUT_RATES = [0.1, 0.3, 0.5, 0.7, 0.9]
-# Console cadence (task: print every 1000 epochs).
-LOG_EVERY = 1000
-# L2-Norm predictor window parameters (identical to src/train_four_head.py).
-L2_FAST_WINDOW = 50
-L2_SLOW_WINDOW = 200
-L2_MA_OF_MA_FAST_WINDOW = 20
-L2_SKIP_EPOCHS = 100
-L2_QUIET_EPOCH_CUTOFF = 90
+# ---------------------------------------------------------------------------
+# Science constants live in configs/nanda_unified.yaml (the single source of
+# truth; every value has its source written next to it there). They are copied
+# into the module-level names below ONCE, by apply_config_constants(cfg) at the
+# start of main(), so every helper (including the checkpoint-predictor plugins,
+# whose signature is shared) can read them without a cfg argument.
+GROK_THRESHOLDS = None            # e.g. [0.9, 0.95, 0.99]; grok epoch reported for each
+GROK_ACC_THRESHOLD = None         # primary threshold = GROK_THRESHOLDS[0]
+LOG_LINES_PER_RUN = None          # console lines per run; log_every = epochs // this
+LIMIT_CYCLE_SETTLE_FRACTION = None
+LIMIT_CYCLE_STD_ABOVE = None
+DROPOUT_RATES = None              # multi-rate sweep
+DROPOUT_VARIANCE_RATE = None
+DROPOUT_VARIANCE_N_SAMPLES = None
+L2_FAST_WINDOW = None
+L2_SLOW_WINDOW = None
+L2_MA_OF_MA_FAST_WINDOW = None
+L2_SKIP_EPOCHS = None
+L2_QUIET_EPOCH_CUTOFF = None
 
 # Dropout-Variance predictor (Salah & Yevick, arXiv:2507.11645): at a
 # checkpoint, run n_samples stochastic forward passes with dropout active
-# and look at the variance of test accuracy across those passes. rate=0.5
-# is where their Dropout Robustness Curve shows the clearest pre/post-grok
-# separation (see src/predictors/dropout.py's compute_dropout_variance
-# docstring for the full rationale).
+# and look at the variance of test accuracy across those passes (see
+# src/predictors/dropout.py's compute_dropout_variance docstring).
 #
-# Deviations from the paper, and why (all for MPS wall-clock budget, same
-# spirit as this project's other predictors — no change to what is being
-# measured, only how densely/expensively):
-#   - paper: 100 stochastic passes per checkpoint, rate=0.3 for their
-#     Figure 1 sweep -> here: n_samples=30, rate=0.5 (their own Figure 2
-#     DRC shows rate=0.5 gives the clearest pre-/post-grok separation, so
-#     the primary signal uses that rate rather than 0.3).
-#   - paper: variance measured at (implicitly) every logged epoch -> here:
-#     measured on the EVAL_EVERY grid (default every 100 epochs, see the
-#     checkpoint-schedule block below), since 40000 epochs x 30 passes at
-#     every epoch is not affordable on MPS (about 1.8 s per measurement).
-DROPOUT_VARIANCE_RATE = 0.5
-DROPOUT_VARIANCE_N_SAMPLES = 30
-DROPOUT_VARIANCE_NUM_CHECKPOINTS = 24   # legacy default of the old log-spaced generator only
-DROPOUT_VARIANCE_NUM_DRC_CHECKPOINTS = 5
+# Now paper-faithful on the number of passes: n_samples = 100 (the paper's
+# own value; the earlier 30 was a compute saving). Remaining deviations:
+#   - rate = 0.5 here, the paper's Figure 1 sweep used 0.3. Their own
+#     Figure 2 (Dropout Robustness Curve) shows 0.5 separates pre- and
+#     post-grok best, so the primary signal uses 0.5.
+#   - the paper measures at (implicitly) every logged epoch; here every
+#     predictor, this one included, is evaluated on the same EVAL_EVERY grid
+#     (see the checkpoint-schedule block below). 40000 epochs x 100 passes at
+#     every epoch is not affordable on MPS.
+# Cost: about 3x the old n_samples=30 setting per checkpoint (was ~1.8 s).
 
 # ---------------------------------------------------------------------------
 # Checkpoint schedule: SAVING is decoupled from EVALUATING.
-# (Updates 2026-09-25; full derivations are in context.md, appended sections
-#  "Switch from 24 log-spaced to save-every-100 (derived)" and
-#  "Shift from 100 to 50 to support 250 grid (GCD justification)".)
+# (Updates 2026-09-25; the full derivations, the measured transition widths and
+#  the design criteria used to compare spacings are in context.md, appended
+#  sections "Switch from 24 log-spaced to save-every-100 (derived)" and
+#  "Shift from 100 to 50 to support 250 grid (GCD justification)". They are
+#  thesis analysis criteria, so they are deliberately NOT repeated as code
+#  constants or checks here.)
 #
-# Two requirements fix the spacing (thresholds are the project's own design
-# choice, NOT a literature standard):
-#   a) transition coverage : samples inside grok transition = width / spacing
-#        (narrowest measured 10%->90% test-acc width = 1570 epochs; want >= 6)
-#   b) ratio precision     : worst ratio error = spacing / smallest grok epoch
-#        (smallest measured grok epoch = 6988; want <= 4%)
-#   spacing  50 -> 31.40 samples, 0.72% error     (SAVE grid)
-#   spacing 100 -> 15.70 samples, 1.43% error     (default EVAL grid)
-#   spacing 200 ->  7.85 samples, 2.86% error     (fallback EVAL grid)
-#   spacing 250 ->  6.28 samples, 3.58% error     (coarsest fallback, just inside both thresholds)
-#   spacing 500 ->  3.14 samples, 7.16% error     (breaks both thresholds; what a "250 grid"
-#                                                  would silently become on a 100-grid save)
-#
-# WHY SAVE EVERY 50: the evaluation grids we want (100, 200, 250) have
-# gcd(100, 200, 250) = 50. A grid can only be evaluated if every one of its
-# epochs was saved, so SAVE_EVERY must divide all of them. 50 does; 100 does
-# not divide 250 (saved multiples of 100 that are also multiples of 250 are
-# only multiples of 500, i.e. aliasing to a 500 grid). Save densely once,
-# evaluate on any coarser grid later without retraining.
+# WHY SAVE EVERY 50: the evaluation grids we want to test are 100, 200 and
+# 250, and gcd(100, 200, 250) = 50. A grid can only be evaluated if every one
+# of its epochs was saved, so SAVE_EVERY must divide all of them. 50 does; 100
+# does not divide 250 (saved multiples of 100 that are also multiples of 250
+# are only multiples of 500, i.e. a "250 grid" would silently alias to a 500
+# grid). Save densely once, evaluate on any coarser grid later without
+# retraining.
 #
 # SAVE   : a checkpoint every SAVE_EVERY = 50 epochs, PLUS the final epoch:
 #          range(0, 40000, 50) = 800 points (0..39950) + epoch 39999 = 801.
@@ -161,16 +152,20 @@ DROPOUT_VARIANCE_NUM_DRC_CHECKPOINTS = 5
 # EVAL_EVERY = 0 means "use every saved checkpoint as-is" (needed to
 #          re-run predictors on the legacy 24-point directories).
 TOTAL_STEPS = 40000          # default --epochs
-SAVE_EVERY = 50
-EVAL_EVERY = 100
-EVAL_EVERY_FALLBACK = 200
-EVAL_EVERY_FALLBACK_COARSE = 250
+DESIRED_EVAL_GRIDS = [100, 200, 250]   # first = default, the rest = fallbacks
+# SAVE_EVERY derived as GCD of desired eval grids, so every eval grid is subset of saved checkpoints
+SAVE_EVERY = math.gcd(*DESIRED_EVAL_GRIDS)   # gives 50
+EVAL_EVERY = DESIRED_EVAL_GRIDS[0]
+EVAL_EVERY_FALLBACK = DESIRED_EVAL_GRIDS[1]
+EVAL_EVERY_FALLBACK_COARSE = DESIRED_EVAL_GRIDS[2]
 
-# Legacy schedule (used up to benchmark v4, tag benchmark-v4-4predictors):
-# 24 log-spaced epochs, chosen as a compute budget for Dropout-Variance, with
-# no scientific justification for the count (see context.md, 2026-09-25).
-# Kept, NOT deleted, so the old grid can be reproduced for ablation
-# comparison, e.g. via --eval_every 0 on a legacy results directory.
+# LEGACY — for Archive comparison only, not used in unified benchmark.
+# Schedule used up to benchmark v4 (tag benchmark-v4-4predictors): 24
+# log-spaced epochs, chosen as a compute budget for Dropout-Variance, with no
+# scientific justification for the count (see context.md, 2026-09-25). Kept,
+# NOT deleted, so the old grid can be reproduced for ablation comparison, e.g.
+# via --eval_every 0 on a legacy results directory. select_eval_epochs() and
+# the main flow never read it.
 OLD_24_LOG_SPACED_CHECKPOINTS = [
     0, 1, 2, 3, 5, 9, 15, 24, 39, 62, 99, 158, 251, 398, 632, 1002, 1589,
     2520, 3995, 6333, 10040, 15917, 25232, 39999,
@@ -231,10 +226,11 @@ def select_eval_epochs(saved_epochs, eval_every=EVAL_EVERY):
     return chosen
 
 
-def dropout_variance_checkpoint_schedule(total_epochs, num_points=DROPOUT_VARIANCE_NUM_CHECKPOINTS):
+def dropout_variance_checkpoint_schedule(total_epochs, num_points=len(OLD_24_LOG_SPACED_CHECKPOINTS)):
     """
-    LEGACY (24 log-spaced points; no longer used by default — see
-    OLD_24_LOG_SPACED_CHECKPOINTS and the checkpoint-schedule block above).
+    LEGACY — for Archive comparison only, not used in unified benchmark
+    (24 log-spaced points; see OLD_24_LOG_SPACED_CHECKPOINTS and the
+    checkpoint-schedule block above). Nothing in the main flow calls it.
     Log-uniform-spaced epoch indices for the dropout-variance checkpoints,
     same spirit as l2_norm.resample_to_log_uniform_grid's log-epoch grid —
     equal VISUAL spacing on a log-x plot, so early training (where things
@@ -254,16 +250,6 @@ def dropout_variance_checkpoint_schedule(total_epochs, num_points=DROPOUT_VARIAN
     if checkpoints[-1] != total_epochs - 1:
         checkpoints.append(total_epochs - 1)
     return checkpoints
-
-
-def pick_drc_checkpoint_subset(checkpoints, num_drc=DROPOUT_VARIANCE_NUM_DRC_CHECKPOINTS):
-    """Evenly-spaced-by-position subset of an existing checkpoint list, for
-    the cheap 5-rate DRC-style snapshot (qualitative companion plot only —
-    NOT the k=30 variance sweep, which runs at every checkpoint)."""
-    if len(checkpoints) <= num_drc:
-        return list(checkpoints)
-    idx = np.linspace(0, len(checkpoints) - 1, num_drc).round().astype(int)
-    return sorted(set(checkpoints[i] for i in idx))
 
 
 def _num_or_none(value):
@@ -291,13 +277,51 @@ def load_config(path):
         "weight_decay": float(cfg["optimizer"]["weight_decay"]),
         "betas": tuple(cfg["optimizer"]["betas"]),
         "epochs_default": int(cfg["training"]["epochs"]),
+        # evaluation / predictor constants (each has its source in the yaml)
+        "grok_thresholds": [float(t) for t in cfg["evaluation"]["grok_thresholds"]],
+        "log_lines_per_run": int(cfg["evaluation"]["log_lines_per_run"]),
+        "limit_cycle_settle_fraction": float(cfg["evaluation"]["limit_cycle"]["settle_fraction"]),
+        "limit_cycle_std_above": float(cfg["evaluation"]["limit_cycle"]["std_above"]),
+        "dropout_rates": [float(r) for r in cfg["dropout"]["rates"]],
+        "dropout_variance_rate": float(cfg["dropout"]["variance_rate"]),
+        "dropout_variance_n_samples": int(cfg["dropout"]["n_samples"]),
+        "l2_fast_window": int(cfg["l2_norm"]["fast_window"]),
+        "l2_slow_window": int(cfg["l2_norm"]["slow_window"]),
+        "l2_ma_of_ma_fast_window": int(cfg["l2_norm"]["ma_of_ma_fast_window"]),
+        "l2_skip_epochs": int(cfg["l2_norm"]["skip_epochs"]),
+        "l2_quiet_epoch_cutoff": int(cfg["l2_norm"]["quiet_epoch_cutoff"]),
     }
     # Fail loud if the config is internally inconsistent.
     assert parsed["vocab_size"] == parsed["modulus"] + 1, \
         "config: vocab_size must be modulus + 1"
     assert parsed["d_model"] % parsed["num_heads"] == 0, \
         "config: d_model must be divisible by num_heads"
+    assert parsed["grok_thresholds"], "config: evaluation.grok_thresholds must not be empty"
     return parsed
+
+
+def apply_config_constants(cfg):
+    """Copy the yaml-derived constants into the module-level names declared
+    near the top of this file (see the comment there for why). Called once,
+    at the start of main(), before any training or recompute."""
+    global GROK_THRESHOLDS, GROK_ACC_THRESHOLD, LOG_LINES_PER_RUN
+    global LIMIT_CYCLE_SETTLE_FRACTION, LIMIT_CYCLE_STD_ABOVE
+    global DROPOUT_RATES, DROPOUT_VARIANCE_RATE, DROPOUT_VARIANCE_N_SAMPLES
+    global L2_FAST_WINDOW, L2_SLOW_WINDOW, L2_MA_OF_MA_FAST_WINDOW
+    global L2_SKIP_EPOCHS, L2_QUIET_EPOCH_CUTOFF
+    GROK_THRESHOLDS = list(cfg["grok_thresholds"])
+    GROK_ACC_THRESHOLD = GROK_THRESHOLDS[0]      # primary
+    LOG_LINES_PER_RUN = cfg["log_lines_per_run"]
+    LIMIT_CYCLE_SETTLE_FRACTION = cfg["limit_cycle_settle_fraction"]
+    LIMIT_CYCLE_STD_ABOVE = cfg["limit_cycle_std_above"]
+    DROPOUT_RATES = list(cfg["dropout_rates"])
+    DROPOUT_VARIANCE_RATE = cfg["dropout_variance_rate"]
+    DROPOUT_VARIANCE_N_SAMPLES = cfg["dropout_variance_n_samples"]
+    L2_FAST_WINDOW = cfg["l2_fast_window"]
+    L2_SLOW_WINDOW = cfg["l2_slow_window"]
+    L2_MA_OF_MA_FAST_WINDOW = cfg["l2_ma_of_ma_fast_window"]
+    L2_SKIP_EPOCHS = cfg["l2_skip_epochs"]
+    L2_QUIET_EPOCH_CUTOFF = cfg["l2_quiet_epoch_cutoff"]
 
 
 def pick_device():
@@ -351,20 +375,34 @@ def has_saved_checkpoints(output_dir, seed):
     return any(name.endswith(".pt") for name in os.listdir(ckpt_dir))
 
 
-def grok_epoch_from(test_acc_history):
+def grok_epoch_from(test_acc_history, threshold=None):
+    """First epoch at which test accuracy exceeds `threshold` (default: the
+    primary threshold, GROK_THRESHOLDS[0]); None if it never does."""
+    if threshold is None:
+        threshold = GROK_ACC_THRESHOLD
     arr = np.asarray(test_acc_history, dtype=float)
-    hits = np.where(arr > GROK_ACC_THRESHOLD)[0]
+    hits = np.where(arr > threshold)[0]
     return int(hits[0]) if len(hits) else None
 
 
-def limit_cycle_check(test_acc_history, grok_epoch, settle_epochs=500):
+def grok_epochs_by_threshold(test_acc_history):
+    """{"0.9": epoch, "0.95": epoch, "0.99": epoch} for every threshold in
+    GROK_THRESHOLDS (None where a threshold is never reached)."""
+    return {str(t): grok_epoch_from(test_acc_history, t) for t in GROK_THRESHOLDS}
+
+
+def limit_cycle_check(test_acc_history, grok_epoch):
     """Detect the post-grok test-accuracy oscillation seen in the p=113
     run_1 (test acc swinging ~0.5-1.0 for the rest of training). Looks at
-    the test-acc tail starting settle_epochs after grok."""
+    the test-acc tail starting settle_epochs after grok, where settle_epochs
+    is LIMIT_CYCLE_SETTLE_FRACTION of the run length (5% = 2000 of 40000
+    epochs), so it scales with the run instead of being a fixed number. A
+    "dip" is a fall below the primary grok threshold."""
     arr = np.asarray(test_acc_history, dtype=float)
     if grok_epoch is None:
         return {"applicable": False, "limit_cycle": False,
                 "reason": "no grok"}
+    settle_epochs = int(LIMIT_CYCLE_SETTLE_FRACTION * len(arr))
     start = grok_epoch + settle_epochs
     if start >= len(arr) - 10:
         return {"applicable": False, "limit_cycle": False,
@@ -372,17 +410,24 @@ def limit_cycle_check(test_acc_history, grok_epoch, settle_epochs=500):
     tail = arr[start:]
     post_min = float(tail.min())
     post_std = float(tail.std())
-    n_dips = int(np.sum(tail < 0.9))
-    is_limit_cycle = bool((post_min < 0.9) and (post_std > 0.05))
+    n_dips = int(np.sum(tail < GROK_ACC_THRESHOLD))
+    is_limit_cycle = bool((post_min < GROK_ACC_THRESHOLD) and (post_std > LIMIT_CYCLE_STD_ABOVE))
     return {
         "applicable": True,
         "window_start_epoch": int(start),
         "post_grok_min": post_min,
         "post_grok_std": post_std,
         "post_grok_final": float(tail[-1]),
-        "epochs_below_0.9_post_grok": n_dips,
+        dips_key(): n_dips,
         "limit_cycle": is_limit_cycle,
     }
+
+
+def dips_key():
+    """Key under which limit_cycle_check stores its dip count. With the
+    primary grok threshold 0.9 this is 'epochs_below_0.9_post_grok', the same
+    key earlier summaries used."""
+    return f"epochs_below_{GROK_ACC_THRESHOLD}_post_grok"
 
 
 def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
@@ -455,8 +500,9 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
     dv_checkpoint_schedule = select_eval_epochs(
         sorted(save_checkpoint_set), args.eval_every)
     dv_checkpoint_set = set(dv_checkpoint_schedule)
-    dv_drc_checkpoints = pick_drc_checkpoint_subset(dv_checkpoint_schedule)
-    dv_drc_checkpoint_set = set(dv_drc_checkpoints)
+    # Console cadence derived from the run length: LOG_LINES_PER_RUN lines
+    # per run (40 lines = every 1000 epochs for the default 40000).
+    log_every = max(1, args.epochs // LOG_LINES_PER_RUN)
     dropout_variance_checkpoints, dropout_variance_history = [], []
     dropout_variance_mean_acc_history = []
     dropout_drc_snapshots = {}
@@ -514,28 +560,32 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
             dropout_variance_history.append(variance)
             dropout_variance_mean_acc_history.append(mean_acc)
 
-            if epoch in dv_drc_checkpoint_set:
-                drc_results = compute_dropout_gap_multi_rate(model, test_loader, DROPOUT_RATES)
-                dropout_drc_snapshots[epoch] = {
-                    str(r): drc_results[r]["train_accuracy"] for r in DROPOUT_RATES}
+            # 5-rate Dropout Robustness Curve snapshot on the SAME eval grid
+            # (no separate, smaller subset).
+            drc_results = compute_dropout_gap_multi_rate(model, test_loader, DROPOUT_RATES)
+            dropout_drc_snapshots[epoch] = {
+                str(r): drc_results[r]["train_accuracy"] for r in DROPOUT_RATES}
 
-        if epoch % LOG_EVERY == 0 or epoch == args.epochs - 1:
+        if epoch % log_every == 0 or epoch == args.epochs - 1:
             now = time.time()
             elapsed = now - started          # total wall time this seed
-            since_last = now - last_log       # wall time for the last LOG_EVERY block
+            since_last = now - last_log       # wall time for the last log_every block
             last_log = now
             print(f"[seed {seed}] epoch {epoch:>6}/{args.epochs}  "
                   f"train_acc={train_acc_history[-1]:.4f}  "
                   f"test_acc={test_acc_history[-1]:.4f}  "
                   f"sum_w2={sum_w2_history[-1]:.1f}  "
                   f"elapsed={elapsed:10.3f}s  "
-                  f"d{LOG_EVERY}={since_last:8.3f}s", flush=True)
+                  f"d{log_every}={since_last:8.3f}s", flush=True)
 
     # (f) save the per-epoch histories
     measurements.save_training_data(train_acc_history, test_acc_history, loss_history)
 
-    # grok_epoch only needs test_acc_history — compute it once here so both
-    # the Dropout-Variance signal below and the final summary can use it.
+    # grok epochs only need test_acc_history — compute them once here so both
+    # the Dropout-Variance signal below and the final summary can use them.
+    # grok_epoch is the primary threshold (GROK_THRESHOLDS[0]); the epochs for
+    # every threshold are also stored, so no conclusion rests on one cut.
+    grok_epochs_all = grok_epochs_by_threshold(test_acc_history)
     grok_epoch = grok_epoch_from(test_acc_history)
 
     # (g) L2-Norm predictor signals (post-training)
@@ -654,6 +704,7 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
         "epochs": args.epochs,
         "modulus": p,
         "grok_epoch": grok_epoch,
+        "grok_epochs_by_threshold": grok_epochs_all,
         "final_train_acc": float(train_acc_history[-1]),
         "final_test_acc": float(test_acc_history[-1]),
         "l2_norm_init": float(l2_norm_history[0]),
@@ -697,7 +748,6 @@ def _checkpoint_predictor_dropout_variance(model, test_loader, ckpt_dir, ckpt_ep
     the predictor's name to PREDICTOR_SUMMARY_KEY / ALL_PREDICTORS /
     CHECKPOINT_ONLY_PREDICTORS. No other part of this file needs to
     change."""
-    drc_checkpoints = set(pick_drc_checkpoint_subset(ckpt_epochs))
     dropout_variance_checkpoints, dropout_variance_history = [], []
     dropout_variance_mean_acc_history = []
     dropout_drc_snapshots = {}
@@ -711,10 +761,10 @@ def _checkpoint_predictor_dropout_variance(model, test_loader, ckpt_dir, ckpt_ep
         dropout_variance_checkpoints.append(epoch)
         dropout_variance_history.append(variance)
         dropout_variance_mean_acc_history.append(mean_acc)
-        if epoch in drc_checkpoints:
-            drc_results = compute_dropout_gap_multi_rate(model, test_loader, DROPOUT_RATES)
-            dropout_drc_snapshots[epoch] = {
-                str(r): drc_results[r]["train_accuracy"] for r in DROPOUT_RATES}
+        # DRC snapshot on every eval-grid checkpoint, same grid as the variance.
+        drc_results = compute_dropout_gap_multi_rate(model, test_loader, DROPOUT_RATES)
+        dropout_drc_snapshots[epoch] = {
+            str(r): drc_results[r]["train_accuracy"] for r in DROPOUT_RATES}
 
     np.save(os.path.join(measurements.dropout_dir, "dropout_variance_checkpoints.npy"),
             np.array(dropout_variance_checkpoints, dtype=int))
@@ -972,6 +1022,24 @@ def aggregate(summaries, args):
     else:
         print("Grok epoch: no seed reached the grok threshold")
 
+    # Grok epoch for EVERY threshold (primary first). Older summaries written
+    # before the multi-threshold change have no such block; they are skipped.
+    grok_by_threshold = {}
+    for t in GROK_THRESHOLDS:
+        per_seed = [(s.get("grok_epochs_by_threshold") or {}).get(str(t)) for s in summaries]
+        reached = [e for e in per_seed if e is not None]
+        grok_by_threshold[str(t)] = {
+            "per_seed": per_seed,
+            "mean": float(np.mean(reached)) if reached else None,
+            "std": float(np.std(reached)) if reached else None,
+            "n_grokked": len(reached),
+        }
+    print("\nGrok epoch by threshold (first epoch test acc > threshold):")
+    for t, info in grok_by_threshold.items():
+        mean_str = f"mean={info['mean']:.1f}  std={info['std']:.1f}" if info["mean"] is not None else "mean=n/a"
+        print(f"  > {t:<5}: {mean_str}  ({info['n_grokked']}/{len(summaries)} seeds)  "
+              f"per seed={info['per_seed']}")
+
     print("\nL2-Norm predictor (per seed):")
     for s in summaries:
         lp = s.get("l2_predictor")
@@ -1042,7 +1110,7 @@ def aggregate(summaries, args):
               f"post-grok min={lc['post_grok_min']:.3f}  "
               f"std={lc['post_grok_std']:.3f}  "
               f"final={lc['post_grok_final']:.3f}  "
-              f"dips<0.9={lc['epochs_below_0.9_post_grok']}")
+              f"dips<{GROK_ACC_THRESHOLD}={lc.get(dips_key())}")
     print(f"\n  => {n_limit_cycle}/{len(summaries)} seeds show a post-grok limit cycle")
 
     agg_path = os.path.join(args.output_dir, "aggregate.json")
@@ -1053,6 +1121,8 @@ def aggregate(summaries, args):
             "grok_epoch_mean": float(np.mean(groks)) if groks else None,
             "grok_epoch_std": float(np.std(groks)) if groks else None,
             "grok_epochs": groks,
+            "grok_thresholds": GROK_THRESHOLDS,
+            "grok_epochs_by_threshold": grok_by_threshold,
             "n_limit_cycle": n_limit_cycle,
             "seeds": summaries,
         }, handle, indent=2)
@@ -1067,7 +1137,7 @@ def main():
     )
     parser.add_argument("--seeds", type=int, default=5,
                         help="number of seeds; seed i uses torch.manual_seed(i)")
-    parser.add_argument("--epochs", type=int, default=40000,
+    parser.add_argument("--epochs", type=int, default=TOTAL_STEPS,
                         help="full-batch epochs per seed")
     parser.add_argument("--output_dir", type=str, default="08_Experiments/results/nanda_unified")
     parser.add_argument("--config", type=str, default="06_Code/configs/nanda_unified.yaml")
@@ -1099,6 +1169,7 @@ def main():
     assert not unknown_ow, f"--overwrite: unknown predictor(s) {unknown_ow}, valid: {ALL_PREDICTORS}"
 
     cfg = load_config(args.config)
+    apply_config_constants(cfg)
     device = pick_device()
 
     print("=" * 72)
@@ -1115,6 +1186,10 @@ def main():
           f"weight_decay={cfg['weight_decay']}")
     print(f"run        : seeds={args.seeds}  epochs={args.epochs}  "
           f"full-batch={int(cfg['train_fraction'] * cfg['modulus'] * cfg['modulus'])}")
+    print(f"grok thr.  : {GROK_THRESHOLDS} (primary {GROK_ACC_THRESHOLD})   "
+          f"dropout-variance: n_samples={DROPOUT_VARIANCE_N_SAMPLES} rate={DROPOUT_VARIANCE_RATE}")
+    print(f"checkpoints: save every {SAVE_EVERY} (gcd of {DESIRED_EVAL_GRIDS}), "
+          f"evaluate every {args.eval_every}")
     print("=" * 72)
 
     summaries = []

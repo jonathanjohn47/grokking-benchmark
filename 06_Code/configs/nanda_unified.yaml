@@ -80,7 +80,58 @@ training:
 
 seeds:
   per_predictor_min_runs: 3    # fresh torch.seed() per run, recorded to seed.npy
-  limit_cycle_diagnostic_runs: 5   # p=113 post-grok oscillation check (see context.md)
+  # (The post-grok limit-cycle check runs on every seed of the benchmark,
+  #  i.e. --seeds; it has no separate run count. The old fixed value 5 was removed.)
+
+# ----------------------------------------------------------------------
+# Evaluation constants read by 06_Code/scripts/run_nanda_benchmark.py.
+# Each one carries its source, so none of them is an unexplained magic number.
+# ----------------------------------------------------------------------
+evaluation:
+  # Grok epoch = first epoch at which test accuracy exceeds the threshold.
+  # All three are computed and reported for every seed. The FIRST entry is the
+  # primary one (used for every predictor's signal-epoch / grok-epoch ratio).
+  # Source: 0.9 is the literature standard (grokking time = delay until
+  # accuracy surpasses 0.9); 0.60/0.75/0.90/0.95 are used in other papers.
+  # 0.95 and 0.99 are added so the conclusions do not rest on one arbitrary cut.
+  grok_thresholds: [0.9, 0.95, 0.99]
+
+  # Console cadence: number of progress lines printed per run.
+  # Source: own engineering choice; log_every = epochs // log_lines_per_run.
+  log_lines_per_run: 40
+
+  # Post-grok limit-cycle diagnostic.
+  # settle_fraction: the window starts this fraction of the run AFTER grok, so
+  #   the immediate post-grok transient is excluded (settle = fraction * epochs).
+  # dip_below: primary grok threshold is used (a "dip" = test acc falls back
+  #   below the grokked level), so no separate number is needed.
+  # std_above: a tail with min < primary threshold AND std > std_above is called
+  #   a limit cycle. Source: own diagnostic, set from the p=113 run_1 artefact
+  #   (test acc swinging 0.5-1.0); not a literature standard.
+  limit_cycle:
+    settle_fraction: 0.05
+    std_above: 0.05
+
+# Dropout predictor.
+dropout:
+  # Multi-rate sweep. Source: own choice, same five rates as the earlier sweeps.
+  rates: [0.1, 0.3, 0.5, 0.7, 0.9]
+  # Dropout-Variance signal (Salah & Yevick, arXiv:2507.11645).
+  # n_samples: 100 stochastic passes per checkpoint = the paper's own value
+  #   (earlier 30 was a compute saving, no longer used).
+  # variance_rate: 0.5, where the paper's Dropout Robustness Curve (their
+  #   Fig. 2) separates pre- and post-grok best. (Their Fig. 1 sweep used 0.3.)
+  n_samples: 100
+  variance_rate: 0.5
+
+# L2-Norm predictor windows. Source: own choices from the 2026-08-07 sessions
+# (see context.md), identical to 06_Code/src/train_four_head.py. Not from a paper.
+l2_norm:
+  fast_window: 50
+  slow_window: 200
+  ma_of_ma_fast_window: 20
+  skip_epochs: 100
+  quiet_epoch_cutoff: 90
 
 logging:
   # Weight-norm quantities recorded every epoch for the weight-space predictors.
