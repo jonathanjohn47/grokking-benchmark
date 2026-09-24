@@ -60,8 +60,8 @@
     "semantic_hash": ""
   },
   "06_Code/scripts/compile_python_files.py": {
-    "mtime": 1788236728.803095,
-    "ast_hash": "bf515a8ff566a554df4d43ada6168fab",
+    "mtime": 1789933070.8645895,
+    "ast_hash": "c0a15cf3577e3e9d5978e95bc88a83da",
     "semantic_hash": ""
   },
   "06_Code/scripts/debug_detection.py": {
@@ -85,8 +85,8 @@
     "semantic_hash": ""
   },
   "06_Code/scripts/run_nanda_benchmark.py": {
-    "mtime": 1789660630.5307503,
-    "ast_hash": "d8bedcf15db5d316758025aed18c3115",
+    "mtime": 1790280171.983422,
+    "ast_hash": "4624ac0dd3446b9dc0a9dc34c7fed073",
     "semantic_hash": ""
   },
   "06_Code/scripts/scaffold.py": {
@@ -1577,6 +1577,51 @@
   "archive/Unused/shadow_ln_grokking_curve.png": {
     "mtime": 1788236728.7907543,
     "ast_hash": "a0c95733a1f8ad5bb12205ac60bfa7d4",
+    "semantic_hash": ""
+  },
+  "04_Literature/Papers/2006.13198v6.pdf": {
+    "mtime": 1789661756.5386817,
+    "ast_hash": "5b5000ed093211eeef4a10c276e02735",
+    "semantic_hash": ""
+  },
+  "04_Literature/Papers/2008.08186v2.pdf": {
+    "mtime": 1789661760.26392,
+    "ast_hash": "afa188858e898821b81884a550826c14",
+    "semantic_hash": ""
+  },
+  "04_Literature/Papers/2301.05217v3.pdf": {
+    "mtime": 1789661746.8059323,
+    "ast_hash": "c46ffc8571e58b68c7ed9d1ad6d29371",
+    "semantic_hash": ""
+  },
+  "04_Literature/Papers/2507.11645v1.pdf": {
+    "mtime": 1789661752.972512,
+    "ast_hash": "0eea09791e51a94d88c242ff934f04c4",
+    "semantic_hash": ""
+  },
+  "Claude outputs/AGE_predictor_explained.pdf": {
+    "mtime": 1790012325.1816328,
+    "ast_hash": "3549f23d2b218134876081862f52be74",
+    "semantic_hash": ""
+  },
+  "Claude outputs/Spectral_Predictor_Step_by_Step_Lesson.pdf": {
+    "mtime": 1789944372.093959,
+    "ast_hash": "18cce238f9c1b3cbac293c16ea371e7c",
+    "semantic_hash": ""
+  },
+  "Spectral_Predictor_Explained.pdf": {
+    "mtime": 1789929977.757759,
+    "ast_hash": "eba5b83c54f5a1fa42b5ed12ca00c0e7",
+    "semantic_hash": ""
+  },
+  "Spectral_Predictor_Step_by_Step_Lesson.pdf": {
+    "mtime": 1789946526.0421276,
+    "ast_hash": "18cce238f9c1b3cbac293c16ea371e7c",
+    "semantic_hash": ""
+  },
+  "project_compilation.pdf": {
+    "mtime": 1789933081.333461,
+    "ast_hash": "c8f1af682bd341b7df5b89441e65118a",
     "semantic_hash": ""
   }
 }

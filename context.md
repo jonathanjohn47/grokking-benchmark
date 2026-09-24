@@ -10062,3 +10062,149 @@ missed this one.
 
 - `06_Code/scripts/run_nanda_benchmark.py` — checkpoint schedule only (see g).
 - `context.md` — this section (append only).
+
+
+---
+
+### Update — 2026-09-25 — Shift from 100 to 50 to support 250 grid (GCD justification)
+
+This section **supersedes the save-every-100 decision** in the previous section ("Switch from 24 log-spaced to
+save-every-100 (derived)"). That section is kept unchanged as history. The measured data, the two requirements and
+the design thresholds are the same; only the SAVE spacing changes (100 -> 50), and with it the earlier "fallback
+is 200, not 250" deviation is resolved: both 200 and 250 now work.
+
+#### Measured data used (current run, 24-checkpoint era; per-epoch `test_acc_history.npy`)
+
+- Narrowest grok transition (test accuracy 10% -> 90%) = **1570** epochs (seed 1).
+- Earliest grok epoch (test accuracy first > 0.9) = **6988** (seed 1).
+
+#### a) The two formulas and the calculation for 50, 100, 200, 250, 500
+
+1. **Transition coverage:** `Samples_in_transition = width / spacing`, with width = 1570.
+2. **Ratio precision:** `Worst_error = spacing / 6988` (worst-case error on signal-epoch / grok-epoch).
+
+**Design thresholds — Jonathan's own choice, NOT a literature standard:** at least **6** samples inside the
+transition and at most **4%** ratio error.
+
+| Spacing | Samples = 1570 / spacing | Error = spacing / 6988 | Meets both thresholds? |
+|---|---|---|---|
+| 50 | 31.40 | 0.72% | yes |
+| 100 | 15.70 | 1.43% | yes |
+| 200 | 7.85 | 2.86% | yes |
+| 250 | 6.28 | 3.58% | yes (just inside) |
+| 500 | 3.14 | 7.16% | **no** (fails both) |
+
+Rounding note: the working notes had 0.71%, 3.57% and 7.15%; the exact values are 0.72% (0.7155), 3.58% (3.578)
+and 7.16% (7.155). The exact values are used everywhere in this file and in the code comments.
+
+#### b) The GCD argument — why 100 cannot support the 250 grid
+
+- An evaluation grid can only be used if **every** epoch on it was saved. So the save spacing must divide every
+  evaluation spacing we want to test.
+- The evaluation spacings we want are 100, 200 and 250. `gcd(100, 200, 250) = 50`.
+- 50 divides 100, 200 and 250. **100 does not divide 250.**
+- With saves at 0, 100, 200, 300, ..., an epoch such as 250 does not exist on disk. The only saved epochs that are
+  also multiples of 250 are multiples of **500**. Asking for "epoch % 250 == 0" would therefore silently become a
+  500-epoch grid: 1570/500 = **3.14** samples and 500/6988 = **7.16%** error, breaking both thresholds.
+- Saving every 50 removes the problem: 100, 200 and 250 are all multiples of 50, so all three grids are real
+  subsets of what is on disk.
+
+#### c) Updated option table (checkpoints counted with the final epoch 39999 included)
+
+Recompute time = Spectral (9.3 s) + Dropout-Variance (1.8 s) per checkpoint = about 11 s, from single timing runs on
+this machine (MPS), so estimates only. Storage = about 0.85 MB per checkpoint.
+
+| Spacing | Checkpoints per seed | Samples in narrowest transition | Worst ratio error | Spectral + Dropout-Var recompute | Role |
+|---|---|---|---|---|---|
+| 50 | 801 (800 + final) | 31.40 | 0.72% | ~2.5 h per seed | SAVE grid; also a valid EVAL grid |
+| 100 | 401 (400 + final) | 15.70 | 1.43% | ~1.2 h per seed | **default EVAL grid** |
+| 200 | 201 (200 + final) | 7.85 | 2.86% | ~0.6 h per seed | fallback EVAL grid |
+| 250 | 161 (160 + final) | 6.28 | 3.58% | ~0.5 h per seed | coarsest fallback EVAL grid |
+| 500 | 81 (80 + final) | 3.14 | 7.16% | ~0.25 h per seed | rejected (breaks thresholds) |
+
+Storage for saving every 50: **801 files, about 680 MB per seed, about 3.4 GB for 5 seeds.** Acceptable on this
+machine. Saving every 50 does **not** raise evaluation cost by itself; cost is set by the EVAL grid chosen.
+
+#### d) Final decision
+
+- `SAVE_EVERY = 50`. `SAVE_CHECKPOINTS = list(range(0, 40000, 50)) + [39999]` = 0..39950 (800 points) + 39999 =
+  **801 points**. Retrain **once**.
+- `EVAL_EVERY = 100` (default), fallbacks `EVAL_EVERY_FALLBACK = 200` and `EVAL_EVERY_FALLBACK_COARSE = 250`.
+  `--eval_every` accepts 50, 100, 200 and 250 (any multiple of 50); it raises a clear `ValueError` if the requested
+  grid is not on disk (for example 75 or 30). `--eval_every 0` still means "use every saved checkpoint" (legacy
+  24-point directories).
+- The final epoch 39999 is always included in every evaluation grid.
+- **Benefit:** save densely once, evaluate on any coarser grid (100, 200, 250, or the OLD 24 points) without
+  retraining. This allows an ablation showing whether the verdicts are stable across grids.
+- **Safety margin:** if, after retraining, the narrowest transition shrinks from 1570 to, say, 800 epochs, spacing
+  100 would give only 8 samples, while spacing 50 still gives 16.
+
+#### e) Thesis Methods paragraph (ready to copy)
+
+> We save a checkpoint every 50 epochs (801 checkpoints per seed including the final epoch 39999, about 680 MB per
+> seed). This gives 31.4 samples inside the narrowest observed transition of 1570 epochs and a worst-case ratio
+> error of 0.72% at the earliest grok epoch of 6988, exceeding our design thresholds of at least 6 samples and at
+> most 4% error. The thresholds are our own design choice. We choose 50 because it is the greatest common divisor
+> of the evaluation grids we wish to test (100, 200, 250); saving every 100 epochs would not support a 250 grid and
+> would alias it to 500 epochs (3.1 samples, 7.2% error). Saving densely once allows evaluation on any coarser grid
+> without retraining.
+
+(Two figures differ from the first draft only by rounding: 0.72% instead of 0.71%, and 7.2% instead of 7.1%.)
+
+#### f) Caveat
+
+The width 1570 and the earliest grok 6988 come from the **current (24-checkpoint-era) run**. After retraining,
+re-measure both from the new run and confirm that the spacing still meets the two thresholds. Both extremes
+currently come from a single seed (seed 1); other seeds may differ after retraining.
+
+#### g) Files changed
+
+Only `06_Code/scripts/run_nanda_benchmark.py` (checkpoint schedule constants, comments, messages). Model
+architecture, dataset code and predictor logic were **not** changed.
+- `SAVE_EVERY` 100 -> **50**. `SAVE_CHECKPOINTS` is now 801 points.
+- Added `EVAL_EVERY_FALLBACK_COARSE = 250`; `EVAL_EVERY = 100` and `EVAL_EVERY_FALLBACK = 200` kept.
+- `OLD_24_LOG_SPACED_CHECKPOINTS` kept unchanged (still importable, legacy generator still reproduces it).
+- Comment block rewritten: derivation table (50/100/200/250/500), GCD reason, storage (801 files, ~680 MB per seed,
+  ~3.4 GB for 5 seeds), evaluation cost per grid. Error message of `select_eval_epochs()` and the `--eval_every`
+  help text now name 100, 200 and 250; a stale docstring (401 points) corrected to 801.
+- `select_eval_epochs()` logic itself was **not** modified (it already checks that every multiple of `eval_every`
+  exists on disk and always appends the final epoch).
+
+**Verification done:** `py_compile` OK; `len(SAVE_CHECKPOINTS) == 801` (first 0, 50, 100; last 39900, 39950,
+39999) and equal to `list(range(0, 40000, SAVE_EVERY)) + [39999]`; old 24-point list importable (length 24);
+grid sizes from the 801 points: `eval_every` 50 -> 801, 100 -> 401, 200 -> 201, 250 -> 161, 0 -> 801; 75 and 30
+refused. Real 1000-epoch dry run: **21 checkpoints saved** (0, 50, ..., 950 and 999); AGE and Dropout-Variance
+evaluated on the 100 grid used **11 of the 21** files (0..900 and 999); re-running AGE with `--eval_every 250`
+from the same files used **5 of 21** (0, 250, 500, 750, 999) with no retraining; `--eval_every 75` refused.
+Scratch output deleted.
+
+#### h) Before the retrain: move the old results folder aside
+
+`08_Experiments/results/nanda_unified/` (the 24-checkpoint baseline, benchmark v4) must be **moved aside** (for
+example into `Archive/`) or a new `--output_dir` used. Otherwise the resume logic sees complete `summary.json`
+files and skips every seed without retraining. Keep the old results: they are needed for the legacy-grid
+comparison (`--eval_every 0` on the archived directory).
+
+#### i) Path bug from the 2026-09-17 reorganisation — still NOT fixed, not part of this commit
+
+`06_Code/scripts/run_nanda_benchmark.py` still cannot be launched normally: `REPO_ROOT` is the script's own folder
+(`06_Code/scripts`), so `SRC = REPO_ROOT/src` does not exist (`ModuleNotFoundError: No module named 'data'`), and
+relative `--output_dir` / `--config` defaults are joined onto the wrong folder. It was **not** fixed in this
+change, because no go-ahead was given for it; the verification above used `PYTHONPATH=../src` and absolute paths.
+Any later fix must be recorded separately. **It must be fixed before the retrain.**
+
+#### Next steps
+
+1. Fix the `REPO_ROOT` / `SRC` path bug (needs Jonathan's go-ahead).
+2. Move `08_Experiments/results/nanda_unified/` aside (section h).
+3. Retrain once, 5 seeds (about 82 min each, about 7 h), saving 801 checkpoints per seed.
+4. Re-measure transition widths and confirm the spacing (section f).
+5. Run all predictors on the 100 grid; use `--eval_every 200` or `250` for Spectral / Dropout-Variance only if needed,
+   and report both grids.
+6. Sensitivity check: 24-point legacy grid vs 100 grid vs 250 grid for the four closed predictors.
+7. Then HTSR Alpha (Predictor 5), Step 1: definition of the signal.
+
+#### Files Modified (this update)
+
+- `06_Code/scripts/run_nanda_benchmark.py` — checkpoint schedule (see g).
+- `context.md` — this section (append only).

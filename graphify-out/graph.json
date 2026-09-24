@@ -21,14 +21,374 @@
   },
   "nodes": [
     {
+      "label": "run_nanda_benchmark.py",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark",
+      "community": 14,
+      "norm_label": "run_nanda_benchmark.py"
+    },
+    {
+      "label": "save_checkpoint_schedule()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L177",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_save_checkpoint_schedule",
+      "community": 14,
+      "norm_label": "save_checkpoint_schedule()"
+    },
+    {
+      "label": "select_eval_epochs()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L193",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_select_eval_epochs",
+      "community": 14,
+      "norm_label": "select_eval_epochs()"
+    },
+    {
+      "label": "dropout_variance_checkpoint_schedule()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L219",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_dropout_variance_checkpoint_schedule",
+      "community": 14,
+      "norm_label": "dropout_variance_checkpoint_schedule()"
+    },
+    {
+      "label": "pick_drc_checkpoint_subset()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L244",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_pick_drc_checkpoint_subset",
+      "community": 14,
+      "norm_label": "pick_drc_checkpoint_subset()"
+    },
+    {
+      "label": "_num_or_none()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L254",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_num_or_none",
+      "community": 14,
+      "norm_label": "_num_or_none()"
+    },
+    {
+      "label": "load_config()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L258",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_load_config",
+      "community": 14,
+      "norm_label": "load_config()"
+    },
+    {
+      "label": "pick_device()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L288",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_pick_device",
+      "community": 14,
+      "norm_label": "pick_device()"
+    },
+    {
+      "label": "seed_dir_for()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L292",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_seed_dir_for",
+      "community": 14,
+      "norm_label": "seed_dir_for()"
+    },
+    {
+      "label": "checkpoints_dir_for()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L296",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_checkpoints_dir_for",
+      "community": 14,
+      "norm_label": "checkpoints_dir_for()"
+    },
+    {
+      "label": "summary_path_for()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L300",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_summary_path_for",
+      "community": 14,
+      "norm_label": "summary_path_for()"
+    },
+    {
+      "label": "load_summary()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L304",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_load_summary",
+      "community": 14,
+      "norm_label": "load_summary()"
+    },
+    {
+      "label": "get_done_predictors()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L312",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_get_done_predictors",
+      "community": 14,
+      "norm_label": "get_done_predictors()"
+    },
+    {
+      "label": "is_predictor_done()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L328",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_is_predictor_done",
+      "community": 14,
+      "norm_label": "is_predictor_done()"
+    },
+    {
+      "label": "has_saved_checkpoints()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L332",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_has_saved_checkpoints",
+      "community": 14,
+      "norm_label": "has_saved_checkpoints()"
+    },
+    {
+      "label": "grok_epoch_from()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L339",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_grok_epoch_from",
+      "community": 14,
+      "norm_label": "grok_epoch_from()"
+    },
+    {
+      "label": "limit_cycle_check()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L345",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_limit_cycle_check",
+      "community": 14,
+      "norm_label": "limit_cycle_check()"
+    },
+    {
+      "label": "train_one_seed()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L373",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_train_one_seed",
+      "community": 14,
+      "norm_label": "train_one_seed()"
+    },
+    {
+      "label": "_checkpoint_predictor_dropout_variance()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L667",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_checkpoint_predictor_dropout_variance",
+      "community": 14,
+      "norm_label": "_checkpoint_predictor_dropout_variance()"
+    },
+    {
+      "label": "_checkpoint_predictor_spectral()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L732",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_checkpoint_predictor_spectral",
+      "community": 14,
+      "norm_label": "_checkpoint_predictor_spectral()"
+    },
+    {
+      "label": "_checkpoint_predictor_age()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L815",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_checkpoint_predictor_age",
+      "community": 14,
+      "norm_label": "_checkpoint_predictor_age()"
+    },
+    {
+      "label": "recompute_from_checkpoints()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L898",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_recompute_from_checkpoints",
+      "community": 14,
+      "norm_label": "recompute_from_checkpoints()"
+    },
+    {
+      "label": "aggregate()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L945",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_aggregate",
+      "community": 14,
+      "norm_label": "aggregate()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L1048",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_main",
+      "community": 14,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Epoch indices (0-based, matching the training loop's `epoch`) at which     a mod",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L178",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_rationale_178",
+      "community": 14,
+      "norm_label": "epoch indices (0-based, matching the training loop's `epoch`) at which     a mod"
+    },
+    {
+      "label": "Subsample the evaluation grid from the SAVED checkpoint epochs.     Keeps saved",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L194",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_rationale_194",
+      "community": 14,
+      "norm_label": "subsample the evaluation grid from the saved checkpoint epochs.     keeps saved"
+    },
+    {
+      "label": "LEGACY (24 log-spaced points; no longer used by default \u2014 see     OLD_24_LOG_SPA",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L220",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_rationale_220",
+      "community": 14,
+      "norm_label": "legacy (24 log-spaced points; no longer used by default \u2014 see     old_24_log_spa"
+    },
+    {
+      "label": "Evenly-spaced-by-position subset of an existing checkpoint list, for     the che",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L245",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_rationale_245",
+      "community": 14,
+      "norm_label": "evenly-spaced-by-position subset of an existing checkpoint list, for     the che"
+    },
+    {
+      "label": "Read configs/nanda_unified.yaml -> flat dict of the constants used here.",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L259",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_rationale_259",
+      "community": 14,
+      "norm_label": "read configs/nanda_unified.yaml -> flat dict of the constants used here."
+    },
+    {
+      "label": "Which predictors already have a real result in this seed's     summary.json, key",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L313",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_rationale_313",
+      "community": 14,
+      "norm_label": "which predictors already have a real result in this seed's     summary.json, key"
+    },
+    {
+      "label": "Detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L346",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_rationale_346",
+      "community": 14,
+      "norm_label": "detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test"
+    },
+    {
+      "label": "Train seed from scratch. predictors_to_compute (a set, subset of     ALL_PREDICT",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L375",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_rationale_375",
+      "community": 14,
+      "norm_label": "train seed from scratch. predictors_to_compute (a set, subset of     all_predict"
+    },
+    {
+      "label": "CHECKPOINT_PREDICTOR_FUNCS[\"dropout_variance\"] \u2014 loads each saved     checkpoint",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L669",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_rationale_669",
+      "community": 14,
+      "norm_label": "checkpoint_predictor_funcs[\"dropout_variance\"] \u2014 loads each saved     checkpoint"
+    },
+    {
+      "label": "CHECKPOINT_PREDICTOR_FUNCS[\"spectral\"] \u2014 Canatar et al. 2021     task-model alig",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L734",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_rationale_734",
+      "community": 14,
+      "norm_label": "checkpoint_predictor_funcs[\"spectral\"] \u2014 canatar et al. 2021     task-model alig"
+    },
+    {
+      "label": "CHECKPOINT_PREDICTOR_FUNCS[\"age\"] \u2014 AGE, Adaptive Grokking Epoch via     Neural",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L817",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_rationale_817",
+      "community": 14,
+      "norm_label": "checkpoint_predictor_funcs[\"age\"] \u2014 age, adaptive grokking epoch via     neural"
+    },
+    {
+      "label": "Compute predictor(s) that only need frozen model weights (currently     just \"dr",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L899",
+      "_origin": "ast",
+      "id": "scripts_run_nanda_benchmark_rationale_899",
+      "community": 14,
+      "norm_label": "compute predictor(s) that only need frozen model weights (currently     just \"dr"
+    },
+    {
       "label": "Spectral_Predictor_Task_Model_Alignment.md",
       "file_type": "document",
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment",
       "community": 9,
-      "norm_label": "spectral_predictor_task_model_alignment.md"
+      "norm_label": "spectral_predictor_task_model_alignment.md",
+      "id": "docs_spectral_predictor_task_model_alignment"
     },
     {
       "label": "The Spectral Predictor: Task-Model Alignment Theory and Why It Failed to Predict Grokking",
@@ -36,9 +396,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_the_spectral_predictor_task_model_alignment_theory_and_why_it_failed_to_predict_grokking",
       "community": 9,
-      "norm_label": "the spectral predictor: task-model alignment theory and why it failed to predict grokking"
+      "norm_label": "the spectral predictor: task-model alignment theory and why it failed to predict grokking",
+      "id": "docs_spectral_predictor_task_model_alignment_the_spectral_predictor_task_model_alignment_theory_and_why_it_failed_to_predict_grokking"
     },
     {
       "label": "1. Prerequisites Recap",
@@ -46,9 +406,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L7",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_1_prerequisites_recap",
       "community": 9,
-      "norm_label": "1. prerequisites recap"
+      "norm_label": "1. prerequisites recap",
+      "id": "docs_spectral_predictor_task_model_alignment_1_prerequisites_recap"
     },
     {
       "label": "1.1 What is grokking",
@@ -56,9 +416,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L11",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_1_1_what_is_grokking",
       "community": 9,
-      "norm_label": "1.1 what is grokking"
+      "norm_label": "1.1 what is grokking",
+      "id": "docs_spectral_predictor_task_model_alignment_1_1_what_is_grokking"
     },
     {
       "label": "1.2 What a grokking predictor is supposed to do",
@@ -66,9 +426,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L25",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_1_2_what_a_grokking_predictor_is_supposed_to_do",
       "community": 9,
-      "norm_label": "1.2 what a grokking predictor is supposed to do"
+      "norm_label": "1.2 what a grokking predictor is supposed to do",
+      "id": "docs_spectral_predictor_task_model_alignment_1_2_what_a_grokking_predictor_is_supposed_to_do"
     },
     {
       "label": "2. Kernel Regression Basics",
@@ -76,9 +436,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L43",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_2_kernel_regression_basics",
       "community": 9,
-      "norm_label": "2. kernel regression basics"
+      "norm_label": "2. kernel regression basics",
+      "id": "docs_spectral_predictor_task_model_alignment_2_kernel_regression_basics"
     },
     {
       "label": "2.1 What a kernel is",
@@ -86,9 +446,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L47",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_2_1_what_a_kernel_is",
       "community": 9,
-      "norm_label": "2.1 what a kernel is"
+      "norm_label": "2.1 what a kernel is",
+      "id": "docs_spectral_predictor_task_model_alignment_2_1_what_a_kernel_is"
     },
     {
       "label": "2.2 Why a trained network's hidden layer defines a kernel",
@@ -96,9 +456,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L59",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_2_2_why_a_trained_network_s_hidden_layer_defines_a_kernel",
       "community": 9,
-      "norm_label": "2.2 why a trained network's hidden layer defines a kernel"
+      "norm_label": "2.2 why a trained network's hidden layer defines a kernel",
+      "id": "docs_spectral_predictor_task_model_alignment_2_2_why_a_trained_network_s_hidden_layer_defines_a_kernel"
     },
     {
       "label": "2.3 The representation matrix and the Gram matrix",
@@ -106,9 +466,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L69",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_2_3_the_representation_matrix_and_the_gram_matrix",
       "community": 9,
-      "norm_label": "2.3 the representation matrix and the gram matrix"
+      "norm_label": "2.3 the representation matrix and the gram matrix",
+      "id": "docs_spectral_predictor_task_model_alignment_2_3_the_representation_matrix_and_the_gram_matrix"
     },
     {
       "label": "3. Eigen-decomposition of the Kernel",
@@ -116,9 +476,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L97",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_3_eigen_decomposition_of_the_kernel",
       "community": 9,
-      "norm_label": "3. eigen-decomposition of the kernel"
+      "norm_label": "3. eigen-decomposition of the kernel",
+      "id": "docs_spectral_predictor_task_model_alignment_3_eigen_decomposition_of_the_kernel"
     },
     {
       "label": "3.1 Eigenvalues and eigenvectors of $K$",
@@ -126,9 +486,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L101",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_3_1_eigenvalues_and_eigenvectors_of_k",
       "community": 9,
-      "norm_label": "3.1 eigenvalues and eigenvectors of $k$"
+      "norm_label": "3.1 eigenvalues and eigenvectors of $k$",
+      "id": "docs_spectral_predictor_task_model_alignment_3_1_eigenvalues_and_eigenvectors_of_k"
     },
     {
       "label": "3.2 What \"ordering from largest to smallest\" means",
@@ -136,9 +496,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L121",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_3_2_what_ordering_from_largest_to_smallest_means",
       "community": 9,
-      "norm_label": "3.2 what \"ordering from largest to smallest\" means"
+      "norm_label": "3.2 what \"ordering from largest to smallest\" means",
+      "id": "docs_spectral_predictor_task_model_alignment_3_2_what_ordering_from_largest_to_smallest_means"
     },
     {
       "label": "3.3 Spectral bias \u2014 why large-eigenvalue directions are learned more strongly",
@@ -146,9 +506,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L127",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_3_3_spectral_bias_why_large_eigenvalue_directions_are_learned_more_strongly",
       "community": 9,
-      "norm_label": "3.3 spectral bias \u2014 why large-eigenvalue directions are learned more strongly"
+      "norm_label": "3.3 spectral bias \u2014 why large-eigenvalue directions are learned more strongly",
+      "id": "docs_spectral_predictor_task_model_alignment_3_3_spectral_bias_why_large_eigenvalue_directions_are_learned_more_strongly"
     },
     {
       "label": "4. Task-Model Alignment",
@@ -156,9 +516,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L141",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_4_task_model_alignment",
       "community": 9,
-      "norm_label": "4. task-model alignment"
+      "norm_label": "4. task-model alignment",
+      "id": "docs_spectral_predictor_task_model_alignment_4_task_model_alignment"
     },
     {
       "label": "4.1 Projecting the target onto the eigenvectors",
@@ -166,9 +526,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L147",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_4_1_projecting_the_target_onto_the_eigenvectors",
       "community": 9,
-      "norm_label": "4.1 projecting the target onto the eigenvectors"
+      "norm_label": "4.1 projecting the target onto the eigenvectors",
+      "id": "docs_spectral_predictor_task_model_alignment_4_1_projecting_the_target_onto_the_eigenvectors"
     },
     {
       "label": "4.2 Task power and its normalized fraction",
@@ -176,9 +536,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L171",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_4_2_task_power_and_its_normalized_fraction",
       "community": 9,
-      "norm_label": "4.2 task power and its normalized fraction"
+      "norm_label": "4.2 task power and its normalized fraction",
+      "id": "docs_spectral_predictor_task_model_alignment_4_2_task_power_and_its_normalized_fraction"
     },
     {
       "label": "4.3 Cumulative power $C(k)$",
@@ -186,9 +546,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L189",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_4_3_cumulative_power_c_k",
       "community": 9,
-      "norm_label": "4.3 cumulative power $c(k)$"
+      "norm_label": "4.3 cumulative power $c(k)$",
+      "id": "docs_spectral_predictor_task_model_alignment_4_3_cumulative_power_c_k"
     },
     {
       "label": "4.4 Why fast-rising $C(k)$ means good generalization \u2014 Canatar et al.'s theory",
@@ -196,9 +556,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L209",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_4_4_why_fast_rising_c_k_means_good_generalization_canatar_et_al_s_theory",
       "community": 9,
-      "norm_label": "4.4 why fast-rising $c(k)$ means good generalization \u2014 canatar et al.'s theory"
+      "norm_label": "4.4 why fast-rising $c(k)$ means good generalization \u2014 canatar et al.'s theory",
+      "id": "docs_spectral_predictor_task_model_alignment_4_4_why_fast_rising_c_k_means_good_generalization_canatar_et_al_s_theory"
     },
     {
       "label": "5. From Kernel Regression Theory to a Grokking Predictor",
@@ -206,9 +566,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L223",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_5_from_kernel_regression_theory_to_a_grokking_predictor",
       "community": 9,
-      "norm_label": "5. from kernel regression theory to a grokking predictor"
+      "norm_label": "5. from kernel regression theory to a grokking predictor",
+      "id": "docs_spectral_predictor_task_model_alignment_5_from_kernel_regression_theory_to_a_grokking_predictor"
     },
     {
       "label": "5.1 The precise hypothesis being tested",
@@ -216,9 +576,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L227",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_5_1_the_precise_hypothesis_being_tested",
       "community": 9,
-      "norm_label": "5.1 the precise hypothesis being tested"
+      "norm_label": "5.1 the precise hypothesis being tested",
+      "id": "docs_spectral_predictor_task_model_alignment_5_1_the_precise_hypothesis_being_tested"
     },
     {
       "label": "5.2 Why this would count as an early-warning signal, if true",
@@ -226,9 +586,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L243",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_5_2_why_this_would_count_as_an_early_warning_signal_if_true",
       "community": 9,
-      "norm_label": "5.2 why this would count as an early-warning signal, if true"
+      "norm_label": "5.2 why this would count as an early-warning signal, if true",
+      "id": "docs_spectral_predictor_task_model_alignment_5_2_why_this_would_count_as_an_early_warning_signal_if_true"
     },
     {
       "label": "6. The Experimental Result and Its Interpretation",
@@ -236,9 +596,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L253",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_6_the_experimental_result_and_its_interpretation",
       "community": 9,
-      "norm_label": "6. the experimental result and its interpretation"
+      "norm_label": "6. the experimental result and its interpretation",
+      "id": "docs_spectral_predictor_task_model_alignment_6_the_experimental_result_and_its_interpretation"
     },
     {
       "label": "6.1 Setup",
@@ -246,9 +606,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L257",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_6_1_setup",
       "community": 9,
-      "norm_label": "6.1 setup"
+      "norm_label": "6.1 setup",
+      "id": "docs_spectral_predictor_task_model_alignment_6_1_setup"
     },
     {
       "label": "6.2 The finding: $C(k)$ rises only after grokking, on every seed",
@@ -256,9 +616,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L267",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_6_2_the_finding_c_k_rises_only_after_grokking_on_every_seed",
       "community": 9,
-      "norm_label": "6.2 the finding: $c(k)$ rises only after grokking, on every seed"
+      "norm_label": "6.2 the finding: $c(k)$ rises only after grokking, on every seed",
+      "id": "docs_spectral_predictor_task_model_alignment_6_2_the_finding_c_k_rises_only_after_grokking_on_every_seed"
     },
     {
       "label": "6.3 Why this is a valid negative result, not an implementation bug",
@@ -266,9 +626,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L291",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_6_3_why_this_is_a_valid_negative_result_not_an_implementation_bug",
       "community": 9,
-      "norm_label": "6.3 why this is a valid negative result, not an implementation bug"
+      "norm_label": "6.3 why this is a valid negative result, not an implementation bug",
+      "id": "docs_spectral_predictor_task_model_alignment_6_3_why_this_is_a_valid_negative_result_not_an_implementation_bug"
     },
     {
       "label": "6.4 What this implies about the actual mechanism of grokking on modular addition",
@@ -276,9 +636,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L303",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_6_4_what_this_implies_about_the_actual_mechanism_of_grokking_on_modular_addition",
       "community": 9,
-      "norm_label": "6.4 what this implies about the actual mechanism of grokking on modular addition"
+      "norm_label": "6.4 what this implies about the actual mechanism of grokking on modular addition",
+      "id": "docs_spectral_predictor_task_model_alignment_6_4_what_this_implies_about_the_actual_mechanism_of_grokking_on_modular_addition"
     },
     {
       "label": "7. Summary \u2014 Tying the Chain Together",
@@ -286,9 +646,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L317",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_7_summary_tying_the_chain_together",
       "community": 9,
-      "norm_label": "7. summary \u2014 tying the chain together"
+      "norm_label": "7. summary \u2014 tying the chain together",
+      "id": "docs_spectral_predictor_task_model_alignment_7_summary_tying_the_chain_together"
     },
     {
       "label": "Falsification, stated simply",
@@ -296,9 +656,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L335",
       "_origin": "ast",
-      "id": "docs_spectral_predictor_task_model_alignment_falsification_stated_simply",
       "community": 9,
-      "norm_label": "falsification, stated simply"
+      "norm_label": "falsification, stated simply",
+      "id": "docs_spectral_predictor_task_model_alignment_falsification_stated_simply"
     },
     {
       "label": "BENCHMARK-V4.md",
@@ -1496,7 +1856,7 @@
       "source_file": "archive/src_p97_mainstream_old/data/modular_arithmetic.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 11,
+      "community": 1,
       "norm_label": "modular_arithmetic.py",
       "id": "data_modular_arithmetic"
     },
@@ -1506,7 +1866,7 @@
       "source_file": "archive/src_p97_mainstream_old/data/modular_arithmetic.py",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 11,
+      "community": 1,
       "norm_label": "generate_pairs()",
       "id": "data_modular_arithmetic_generate_pairs"
     },
@@ -1516,7 +1876,7 @@
       "source_file": "archive/src_p97_mainstream_old/data/modular_arithmetic.py",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 11,
+      "community": 1,
       "norm_label": "get_dataloaders()",
       "id": "data_modular_arithmetic_get_dataloaders"
     },
@@ -1526,7 +1886,7 @@
       "source_file": "archive/src_p97_mainstream_old/data/modular_arithmetic.py",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 11,
+      "community": 1,
       "norm_label": "modulararithmeticdataset",
       "id": "data_modular_arithmetic_modulararithmeticdataset"
     },
@@ -1536,7 +1896,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 11,
+      "community": 1,
       "norm_label": "dataset",
       "id": "dataset"
     },
@@ -1546,7 +1906,7 @@
       "source_file": "archive/src_p97_mainstream_old/data/modular_arithmetic.py",
       "source_location": "L24",
       "_origin": "ast",
-      "community": 11,
+      "community": 1,
       "norm_label": ".__init__()",
       "id": "data_modular_arithmetic_modulararithmeticdataset_init"
     },
@@ -1556,7 +1916,7 @@
       "source_file": "archive/src_p97_mainstream_old/data/modular_arithmetic.py",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 11,
+      "community": 1,
       "norm_label": ".__len__()",
       "id": "data_modular_arithmetic_modulararithmeticdataset_len"
     },
@@ -1566,7 +1926,7 @@
       "source_file": "archive/src_p97_mainstream_old/data/modular_arithmetic.py",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 11,
+      "community": 1,
       "norm_label": ".__getitem__()",
       "id": "data_modular_arithmetic_modulararithmeticdataset_getitem"
     },
@@ -1576,7 +1936,7 @@
       "source_file": "archive/src_p97_mainstream_old/data/modular_arithmetic.py",
       "source_location": "L33",
       "_origin": "ast",
-      "community": 11,
+      "community": 1,
       "norm_label": ".get_tensor()",
       "id": "data_modular_arithmetic_modulararithmeticdataset_get_tensor"
     },
@@ -1586,7 +1946,7 @@
       "source_file": "archive/src_p97_mainstream_old/models/model_shadow_with_layernorm.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 11,
+      "community": 1,
       "norm_label": "model_shadow_with_layernorm.py",
       "id": "models_model_shadow_with_layernorm"
     },
@@ -1596,7 +1956,7 @@
       "source_file": "archive/src_p97_mainstream_old/models/model_shadow_with_layernorm.py",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 11,
+      "community": 1,
       "norm_label": "transformer",
       "id": "models_model_shadow_with_layernorm_transformer"
     },
@@ -1606,7 +1966,7 @@
       "source_file": "archive/src_p97_mainstream_old/models/model_shadow_with_layernorm.py",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 11,
+      "community": 1,
       "norm_label": ".__init__()",
       "id": "models_model_shadow_with_layernorm_transformer_init"
     },
@@ -1616,7 +1976,7 @@
       "source_file": "archive/src_p97_mainstream_old/models/model_shadow_with_layernorm.py",
       "source_location": "L31",
       "_origin": "ast",
-      "community": 11,
+      "community": 1,
       "norm_label": ".forward()",
       "id": "models_model_shadow_with_layernorm_transformer_forward"
     },
@@ -2086,7 +2446,7 @@
       "source_file": "archive/src_p97_mainstream_old/train_shadow_layernorm.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 11,
+      "community": 1,
       "norm_label": "train_shadow_layernorm.py",
       "id": "src_p97_mainstream_old_train_shadow_layernorm"
     },
@@ -3476,7 +3836,7 @@
       "source_file": "src/train_shadow_layernorm.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 11,
+      "community": 1,
       "norm_label": "train_shadow_layernorm.py",
       "id": "src_train_shadow_layernorm"
     },
@@ -4673,14 +5033,727 @@
   ],
   "links": [
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "data_modular_arithmetic",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "models_transformer_four_head",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L77",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "predictors_age",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "predictors_dropout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "predictors_l2_norm",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "predictors_spectral",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L945",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_aggregate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L815",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_checkpoint_predictor_age",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L667",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_checkpoint_predictor_dropout_variance",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L732",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_checkpoint_predictor_spectral",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L296",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_checkpoints_dir_for",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L219",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_dropout_variance_checkpoint_schedule",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L312",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_get_done_predictors",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L339",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_grok_epoch_from",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L332",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_has_saved_checkpoints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L328",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_is_predictor_done",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L345",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_limit_cycle_check",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L258",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_load_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L304",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_load_summary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L1048",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L254",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_num_or_none",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L288",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_pick_device",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L244",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_pick_drc_checkpoint_subset",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L898",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_recompute_from_checkpoints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L177",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_save_checkpoint_schedule",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L292",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_seed_dir_for",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L193",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_select_eval_epochs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L300",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_summary_path_for",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L373",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark",
+      "target": "scripts_run_nanda_benchmark_train_one_seed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L178",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_rationale_178",
+      "target": "scripts_run_nanda_benchmark_save_checkpoint_schedule",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L439",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_train_one_seed",
+      "target": "scripts_run_nanda_benchmark_save_checkpoint_schedule",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L194",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_rationale_194",
+      "target": "scripts_run_nanda_benchmark_select_eval_epochs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L926",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_recompute_from_checkpoints",
+      "target": "scripts_run_nanda_benchmark_select_eval_epochs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L440",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_train_one_seed",
+      "target": "scripts_run_nanda_benchmark_select_eval_epochs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L220",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_rationale_220",
+      "target": "scripts_run_nanda_benchmark_dropout_variance_checkpoint_schedule",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L685",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_checkpoint_predictor_dropout_variance",
+      "target": "scripts_run_nanda_benchmark_pick_drc_checkpoint_subset",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L245",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_rationale_245",
+      "target": "scripts_run_nanda_benchmark_pick_drc_checkpoint_subset",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L443",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_train_one_seed",
+      "target": "scripts_run_nanda_benchmark_pick_drc_checkpoint_subset",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L546",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_train_one_seed",
+      "target": "scripts_run_nanda_benchmark_num_or_none",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L1086",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_main",
+      "target": "scripts_run_nanda_benchmark_load_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L259",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_rationale_259",
+      "target": "scripts_run_nanda_benchmark_load_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L1087",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_main",
+      "target": "scripts_run_nanda_benchmark_pick_device",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L297",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_checkpoints_dir_for",
+      "target": "scripts_run_nanda_benchmark_seed_dir_for",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L911",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_recompute_from_checkpoints",
+      "target": "scripts_run_nanda_benchmark_seed_dir_for",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L301",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_summary_path_for",
+      "target": "scripts_run_nanda_benchmark_seed_dir_for",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L385",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_train_one_seed",
+      "target": "scripts_run_nanda_benchmark_seed_dir_for",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L333",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_has_saved_checkpoints",
+      "target": "scripts_run_nanda_benchmark_checkpoints_dir_for",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L912",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_recompute_from_checkpoints",
+      "target": "scripts_run_nanda_benchmark_checkpoints_dir_for",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L387",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_train_one_seed",
+      "target": "scripts_run_nanda_benchmark_checkpoints_dir_for",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L305",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_load_summary",
+      "target": "scripts_run_nanda_benchmark_summary_path_for",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L936",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_recompute_from_checkpoints",
+      "target": "scripts_run_nanda_benchmark_summary_path_for",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L318",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_get_done_predictors",
+      "target": "scripts_run_nanda_benchmark_load_summary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L1107",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_main",
+      "target": "scripts_run_nanda_benchmark_load_summary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L329",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_is_predictor_done",
+      "target": "scripts_run_nanda_benchmark_get_done_predictors",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L1108",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_main",
+      "target": "scripts_run_nanda_benchmark_get_done_predictors",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L313",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_rationale_313",
+      "target": "scripts_run_nanda_benchmark_get_done_predictors",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L1126",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_main",
+      "target": "scripts_run_nanda_benchmark_has_saved_checkpoints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L524",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_train_one_seed",
+      "target": "scripts_run_nanda_benchmark_grok_epoch_from",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L346",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_rationale_346",
+      "target": "scripts_run_nanda_benchmark_limit_cycle_check",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L655",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_train_one_seed",
+      "target": "scripts_run_nanda_benchmark_limit_cycle_check",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L1132",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_main",
+      "target": "scripts_run_nanda_benchmark_train_one_seed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L375",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_rationale_375",
+      "target": "scripts_run_nanda_benchmark_train_one_seed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L669",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_rationale_669",
+      "target": "scripts_run_nanda_benchmark_checkpoint_predictor_dropout_variance",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L734",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_rationale_734",
+      "target": "scripts_run_nanda_benchmark_checkpoint_predictor_spectral",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L817",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_rationale_817",
+      "target": "scripts_run_nanda_benchmark_checkpoint_predictor_age",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L1130",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_main",
+      "target": "scripts_run_nanda_benchmark_recompute_from_checkpoints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L899",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_rationale_899",
+      "target": "scripts_run_nanda_benchmark_recompute_from_checkpoints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L1147",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_main",
+      "target": "scripts_run_nanda_benchmark_aggregate",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment",
-      "target": "docs_spectral_predictor_task_model_alignment_the_spectral_predictor_task_model_alignment_theory_and_why_it_failed_to_predict_grokking",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_the_spectral_predictor_task_model_alignment_theory_and_why_it_failed_to_predict_grokking"
     },
     {
       "relation": "contains",
@@ -4688,9 +5761,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_the_spectral_predictor_task_model_alignment_theory_and_why_it_failed_to_predict_grokking",
-      "target": "docs_spectral_predictor_task_model_alignment_1_prerequisites_recap",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_1_prerequisites_recap"
     },
     {
       "relation": "contains",
@@ -4698,9 +5771,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L43",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_the_spectral_predictor_task_model_alignment_theory_and_why_it_failed_to_predict_grokking",
-      "target": "docs_spectral_predictor_task_model_alignment_2_kernel_regression_basics",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_2_kernel_regression_basics"
     },
     {
       "relation": "contains",
@@ -4708,9 +5781,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L97",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_the_spectral_predictor_task_model_alignment_theory_and_why_it_failed_to_predict_grokking",
-      "target": "docs_spectral_predictor_task_model_alignment_3_eigen_decomposition_of_the_kernel",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_3_eigen_decomposition_of_the_kernel"
     },
     {
       "relation": "contains",
@@ -4718,9 +5791,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L141",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_the_spectral_predictor_task_model_alignment_theory_and_why_it_failed_to_predict_grokking",
-      "target": "docs_spectral_predictor_task_model_alignment_4_task_model_alignment",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_4_task_model_alignment"
     },
     {
       "relation": "contains",
@@ -4728,9 +5801,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L223",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_the_spectral_predictor_task_model_alignment_theory_and_why_it_failed_to_predict_grokking",
-      "target": "docs_spectral_predictor_task_model_alignment_5_from_kernel_regression_theory_to_a_grokking_predictor",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_5_from_kernel_regression_theory_to_a_grokking_predictor"
     },
     {
       "relation": "contains",
@@ -4738,9 +5811,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L253",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_the_spectral_predictor_task_model_alignment_theory_and_why_it_failed_to_predict_grokking",
-      "target": "docs_spectral_predictor_task_model_alignment_6_the_experimental_result_and_its_interpretation",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_6_the_experimental_result_and_its_interpretation"
     },
     {
       "relation": "contains",
@@ -4748,9 +5821,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L317",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_the_spectral_predictor_task_model_alignment_theory_and_why_it_failed_to_predict_grokking",
-      "target": "docs_spectral_predictor_task_model_alignment_7_summary_tying_the_chain_together",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_7_summary_tying_the_chain_together"
     },
     {
       "relation": "contains",
@@ -4758,9 +5831,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_1_prerequisites_recap",
-      "target": "docs_spectral_predictor_task_model_alignment_1_1_what_is_grokking",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_1_1_what_is_grokking"
     },
     {
       "relation": "contains",
@@ -4768,9 +5841,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_1_prerequisites_recap",
-      "target": "docs_spectral_predictor_task_model_alignment_1_2_what_a_grokking_predictor_is_supposed_to_do",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_1_2_what_a_grokking_predictor_is_supposed_to_do"
     },
     {
       "relation": "contains",
@@ -4778,9 +5851,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_2_kernel_regression_basics",
-      "target": "docs_spectral_predictor_task_model_alignment_2_1_what_a_kernel_is",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_2_1_what_a_kernel_is"
     },
     {
       "relation": "contains",
@@ -4788,9 +5861,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L59",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_2_kernel_regression_basics",
-      "target": "docs_spectral_predictor_task_model_alignment_2_2_why_a_trained_network_s_hidden_layer_defines_a_kernel",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_2_2_why_a_trained_network_s_hidden_layer_defines_a_kernel"
     },
     {
       "relation": "contains",
@@ -4798,9 +5871,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L69",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_2_kernel_regression_basics",
-      "target": "docs_spectral_predictor_task_model_alignment_2_3_the_representation_matrix_and_the_gram_matrix",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_2_3_the_representation_matrix_and_the_gram_matrix"
     },
     {
       "relation": "contains",
@@ -4808,9 +5881,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L101",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_3_eigen_decomposition_of_the_kernel",
-      "target": "docs_spectral_predictor_task_model_alignment_3_1_eigenvalues_and_eigenvectors_of_k",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_3_1_eigenvalues_and_eigenvectors_of_k"
     },
     {
       "relation": "contains",
@@ -4818,9 +5891,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L121",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_3_eigen_decomposition_of_the_kernel",
-      "target": "docs_spectral_predictor_task_model_alignment_3_2_what_ordering_from_largest_to_smallest_means",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_3_2_what_ordering_from_largest_to_smallest_means"
     },
     {
       "relation": "contains",
@@ -4828,9 +5901,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L127",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_3_eigen_decomposition_of_the_kernel",
-      "target": "docs_spectral_predictor_task_model_alignment_3_3_spectral_bias_why_large_eigenvalue_directions_are_learned_more_strongly",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_3_3_spectral_bias_why_large_eigenvalue_directions_are_learned_more_strongly"
     },
     {
       "relation": "contains",
@@ -4838,9 +5911,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L147",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_4_task_model_alignment",
-      "target": "docs_spectral_predictor_task_model_alignment_4_1_projecting_the_target_onto_the_eigenvectors",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_4_1_projecting_the_target_onto_the_eigenvectors"
     },
     {
       "relation": "contains",
@@ -4848,9 +5921,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L171",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_4_task_model_alignment",
-      "target": "docs_spectral_predictor_task_model_alignment_4_2_task_power_and_its_normalized_fraction",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_4_2_task_power_and_its_normalized_fraction"
     },
     {
       "relation": "contains",
@@ -4858,9 +5931,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L189",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_4_task_model_alignment",
-      "target": "docs_spectral_predictor_task_model_alignment_4_3_cumulative_power_c_k",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_4_3_cumulative_power_c_k"
     },
     {
       "relation": "contains",
@@ -4868,9 +5941,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L209",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_4_task_model_alignment",
-      "target": "docs_spectral_predictor_task_model_alignment_4_4_why_fast_rising_c_k_means_good_generalization_canatar_et_al_s_theory",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_4_4_why_fast_rising_c_k_means_good_generalization_canatar_et_al_s_theory"
     },
     {
       "relation": "contains",
@@ -4878,9 +5951,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L227",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_5_from_kernel_regression_theory_to_a_grokking_predictor",
-      "target": "docs_spectral_predictor_task_model_alignment_5_1_the_precise_hypothesis_being_tested",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_5_1_the_precise_hypothesis_being_tested"
     },
     {
       "relation": "contains",
@@ -4888,9 +5961,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L243",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_5_from_kernel_regression_theory_to_a_grokking_predictor",
-      "target": "docs_spectral_predictor_task_model_alignment_5_2_why_this_would_count_as_an_early_warning_signal_if_true",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_5_2_why_this_would_count_as_an_early_warning_signal_if_true"
     },
     {
       "relation": "contains",
@@ -4898,9 +5971,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L257",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_6_the_experimental_result_and_its_interpretation",
-      "target": "docs_spectral_predictor_task_model_alignment_6_1_setup",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_6_1_setup"
     },
     {
       "relation": "contains",
@@ -4908,9 +5981,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L267",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_6_the_experimental_result_and_its_interpretation",
-      "target": "docs_spectral_predictor_task_model_alignment_6_2_the_finding_c_k_rises_only_after_grokking_on_every_seed",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_6_2_the_finding_c_k_rises_only_after_grokking_on_every_seed"
     },
     {
       "relation": "contains",
@@ -4918,9 +5991,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L291",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_6_the_experimental_result_and_its_interpretation",
-      "target": "docs_spectral_predictor_task_model_alignment_6_3_why_this_is_a_valid_negative_result_not_an_implementation_bug",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_6_3_why_this_is_a_valid_negative_result_not_an_implementation_bug"
     },
     {
       "relation": "contains",
@@ -4928,9 +6001,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L303",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_6_the_experimental_result_and_its_interpretation",
-      "target": "docs_spectral_predictor_task_model_alignment_6_4_what_this_implies_about_the_actual_mechanism_of_grokking_on_modular_addition",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_6_4_what_this_implies_about_the_actual_mechanism_of_grokking_on_modular_addition"
     },
     {
       "relation": "contains",
@@ -4938,9 +6011,9 @@
       "source_file": "docs/Spectral_Predictor_Task_Model_Alignment.md",
       "source_location": "L335",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_spectral_predictor_task_model_alignment_7_summary_tying_the_chain_together",
-      "target": "docs_spectral_predictor_task_model_alignment_falsification_stated_simply",
-      "confidence_score": 1.0
+      "target": "docs_spectral_predictor_task_model_alignment_falsification_stated_simply"
     },
     {
       "relation": "contains",
@@ -10029,5 +11102,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "aad34cf73ebf18010ba44be22ee225ec6cb95315"
+  "built_at_commit": "c8b48977b08b892d6cb49c549d6d575aec47fb0c"
 }

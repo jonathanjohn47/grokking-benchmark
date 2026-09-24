@@ -1,16 +1,16 @@
-# Graph Report - grokking-benchmark  (2026-09-17)
+# Graph Report - grokking-benchmark  (2026-09-25)
 
 ## Corpus Check
-- 102 files · ~861,687 words
+- 105 files · ~865,629 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 465 nodes · 523 edges · 41 communities (35 shown, 6 thin omitted)
+- 501 nodes · 591 edges · 42 communities (36 shown, 6 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `aad34cf7`
+- Built from commit: `c8b48977`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -29,6 +29,7 @@
 - [[_COMMUNITY_Community 11|Community 11]]
 - [[_COMMUNITY_Community 12|Community 12]]
 - [[_COMMUNITY_Community 13|Community 13]]
+- [[_COMMUNITY_Community 14|Community 14]]
 - [[_COMMUNITY_Community 15|Community 15]]
 - [[_COMMUNITY_Community 19|Community 19]]
 - [[_COMMUNITY_Community 20|Community 20]]
@@ -51,13 +52,13 @@
 1. `PredictorMeasurements` - 16 edges
 2. `Indian English Communication Skill` - 16 edges
 3. `train_one_seed()` - 13 edges
-4. `PredictorMeasurements` - 11 edges
-5. `L2 Norm Predictor — Easy Notes for Revision and Viva` - 11 edges
-6. `Literature` - 10 edges
-7. `main()` - 10 edges
-8. `BenchmarkAnalyzer` - 10 edges
-9. `Results Directory Structure` - 9 edges
-10. `PredictorMeasurements` - 9 edges
+4. `train_one_seed()` - 11 edges
+5. `PredictorMeasurements` - 11 edges
+6. `L2 Norm Predictor — Easy Notes for Revision and Viva` - 11 edges
+7. `Literature` - 10 edges
+8. `main()` - 10 edges
+9. `BenchmarkAnalyzer` - 10 edges
+10. `main()` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `train_one_seed()` --calls--> `PredictorMeasurements`  [INFERRED]
@@ -77,15 +78,15 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (41 total, 6 thin omitted)
+## Communities (42 total, 6 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.11
 Nodes (33): compute_accuracy(), compute_dropout_gap_multi_rate(), compute_dropout_variance(), # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, Dropout-variance predictor signal (Salah & Yevick, arXiv:2507.11645):     at a f, aggregate(), _checkpoint_predictor_dropout_variance() (+25 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.36
-Nodes (3): generate_pairs(), get_dataloaders(), ModularArithmeticDataset
+Cohesion: 0.11
+Nodes (8): generate_pairs(), get_dataloaders(), ModularArithmeticDataset, Dataset, Transformer, generate_pairs(), get_dataloaders(), ModularArithmeticDataset
 
 ### Community 2 - "Community 2"
 Cohesion: 0.17
@@ -116,8 +117,12 @@ Cohesion: 0.40
 Nodes (4): data/modular_arithmetic.py, models/transformer.py, Python Project Compilation, train.py
 
 ### Community 11 - "Community 11"
-Cohesion: 0.08
-Nodes (10): generate_pairs(), get_dataloaders(), ModularArithmeticDataset, Dataset, Transformer, TransformerFourHead, migrate_legacy_flat_run(), Earlier versions of this script saved directly into results/four_head/     inste (+2 more)
+Cohesion: 0.14
+Nodes (5): TransformerFourHead, migrate_legacy_flat_run(), Earlier versions of this script saved directly into results/four_head/     inste, migrate_legacy_flat_run(), Earlier versions of this script saved directly into results/four_head/     inste
+
+### Community 14 - "Community 14"
+Cohesion: 0.10
+Nodes (35): aggregate(), _checkpoint_predictor_age(), _checkpoint_predictor_dropout_variance(), _checkpoint_predictor_spectral(), checkpoints_dir_for(), dropout_variance_checkpoint_schedule(), get_done_predictors(), grok_epoch_from() (+27 more)
 
 ### Community 19 - "Community 19"
 Cohesion: 0.08
@@ -188,16 +193,16 @@ Nodes (9): _collect_representations_and_labels(), compute_age_for_model(), compu
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `PredictorMeasurements` connect `Community 19` to `Community 0`?**
-  _High betweenness centrality (0.039) - this node is a cross-community bridge._
+  _High betweenness centrality (0.041) - this node is a cross-community bridge._
 - **Why does `train_one_seed()` connect `Community 0` to `Community 19`?**
-  _High betweenness centrality (0.024) - this node is a cross-community bridge._
+  _High betweenness centrality (0.025) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `PredictorMeasurements` (e.g. with `recompute_from_checkpoints()` and `train_one_seed()`) actually correct?**
   _`PredictorMeasurements` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `1.1 What is grokking`, `1.2 What a grokking predictor is supposed to do`, `2.1 What a kernel is` to the rest of the system?**
-  _225 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `Epoch indices (0-based, matching the training loop's `epoch`) at which     a mod`, `Subsample the evaluation grid from the SAVED checkpoint epochs.     Keeps saved`, `LEGACY (24 log-spaced points; no longer used by default — see     OLD_24_LOG_SPA` to the rest of the system?**
+  _237 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.10588235294117647 - nodes in this community are weakly interconnected._
+- **Should `Community 1` be split into smaller, more focused modules?**
+  _Cohesion score 0.11067193675889328 - nodes in this community are weakly interconnected._
 - **Should `Community 4` be split into smaller, more focused modules?**
   _Cohesion score 0.09420289855072464 - nodes in this community are weakly interconnected._
-- **Should `Community 9` be split into smaller, more focused modules?**
-  _Cohesion score 0.07142857142857142 - nodes in this community are weakly interconnected._

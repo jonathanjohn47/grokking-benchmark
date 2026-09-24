@@ -116,8 +116,9 @@ DROPOUT_VARIANCE_NUM_DRC_CHECKPOINTS = 5
 
 # ---------------------------------------------------------------------------
 # Checkpoint schedule: SAVING is decoupled from EVALUATING.
-# (Update 2026-09-25; full derivation is in context.md, appended section
-#  "Switch from 24 log-spaced to save-every-100 (derived)".)
+# (Updates 2026-09-25; full derivations are in context.md, appended sections
+#  "Switch from 24 log-spaced to save-every-100 (derived)" and
+#  "Shift from 100 to 50 to support 250 grid (GCD justification)".)
 #
 # Two requirements fix the spacing (thresholds are the project's own design
 # choice, NOT a literature standard):
@@ -125,32 +126,41 @@ DROPOUT_VARIANCE_NUM_DRC_CHECKPOINTS = 5
 #        (narrowest measured 10%->90% test-acc width = 1570 epochs; want >= 6)
 #   b) ratio precision     : worst ratio error = spacing / smallest grok epoch
 #        (smallest measured grok epoch = 6988; want <= 4%)
-#   spacing 100 -> ~15.7 samples, ~1.4% error     (default)
-#   spacing 200 -> ~7.8 samples,  ~2.9% error     (fallback, still inside both thresholds)
-#   spacing 250 -> ~6.3 samples,  ~3.6% error     (NOT usable on a 100-grid, see below)
+#   spacing  50 -> 31.40 samples, 0.72% error     (SAVE grid)
+#   spacing 100 -> 15.70 samples, 1.43% error     (default EVAL grid)
+#   spacing 200 ->  7.85 samples, 2.86% error     (fallback EVAL grid)
+#   spacing 250 ->  6.28 samples, 3.58% error     (coarsest fallback, just inside both thresholds)
+#   spacing 500 ->  3.14 samples, 7.16% error     (breaks both thresholds; what a "250 grid"
+#                                                  would silently become on a 100-grid save)
 #
-# SAVE   : a checkpoint every SAVE_EVERY epochs, PLUS the final epoch, so
-#          range(0, 40000, 100) = 400 points (0..39900) + epoch 39999 = 401.
-#          Storage: ~0.85 MB per checkpoint -> ~340 MB per seed, ~1.7 GB for 5 seeds.
+# WHY SAVE EVERY 50: the evaluation grids we want (100, 200, 250) have
+# gcd(100, 200, 250) = 50. A grid can only be evaluated if every one of its
+# epochs was saved, so SAVE_EVERY must divide all of them. 50 does; 100 does
+# not divide 250 (saved multiples of 100 that are also multiples of 250 are
+# only multiples of 500, i.e. aliasing to a 500 grid). Save densely once,
+# evaluate on any coarser grid later without retraining.
+#
+# SAVE   : a checkpoint every SAVE_EVERY = 50 epochs, PLUS the final epoch:
+#          range(0, 40000, 50) = 800 points (0..39950) + epoch 39999 = 801.
+#          Storage: ~0.85 MB per checkpoint -> ~680 MB per seed, ~3.4 GB for 5 seeds.
 # EVAL   : every predictor evaluates only the saved epochs with
 #          epoch % EVAL_EVERY == 0, PLUS the final saved epoch (the fully
 #          trained model; kept so results stay comparable with the earlier
 #          runs, whose grids always ended on epoch 39999). Saving is nearly
 #          free, evaluating is not: Spectral ~9.3 s and Dropout-Variance
-#          ~1.8 s per checkpoint on this machine, so 401 checkpoints cost
-#          about 1.2 h per seed for those two together.
-# FALLBACK: EVAL_EVERY_FALLBACK = 200, not 250. Saved epochs are multiples of
-#          100, so only multiples of 500 are also multiples of 250; a
-#          "250 grid" would silently become a 500 grid (~3 samples in the
-#          narrowest transition, ~7% ratio error, outside both thresholds).
-#          select_eval_epochs() raises if the requested grid is not present.
-#          To use a true 250 grid, save every 50 epochs instead.
+#          ~1.8 s per checkpoint on this machine (~11 s together), so the
+#          default 100 grid (401 points) costs about 1.2 h per seed for those
+#          two, the 200 grid (201 points) ~0.6 h, the 250 grid (161 points)
+#          ~0.5 h, and the full 50 grid (801 points) ~2.5 h.
+# --eval_every accepts 50, 100, 200 or 250 (any multiple of SAVE_EVERY);
+#          select_eval_epochs() raises if the requested grid is not on disk.
 # EVAL_EVERY = 0 means "use every saved checkpoint as-is" (needed to
 #          re-run predictors on the legacy 24-point directories).
 TOTAL_STEPS = 40000          # default --epochs
-SAVE_EVERY = 100
+SAVE_EVERY = 50
 EVAL_EVERY = 100
 EVAL_EVERY_FALLBACK = 200
+EVAL_EVERY_FALLBACK_COARSE = 250
 
 # Legacy schedule (used up to benchmark v4, tag benchmark-v4-4predictors):
 # 24 log-spaced epochs, chosen as a compute budget for Dropout-Variance, with
@@ -178,7 +188,7 @@ def save_checkpoint_schedule(total_epochs, save_every=SAVE_EVERY):
     """Epoch indices (0-based, matching the training loop's `epoch`) at which
     a model checkpoint is SAVED: 0, save_every, 2*save_every, ... below
     total_epochs, plus the final epoch total_epochs - 1. For 40000 epochs and
-    save_every=100 that is 400 + 1 = 401 points."""
+    save_every=50 that is 800 + 1 = 801 points."""
     if total_epochs <= 1:
         return [0]
     schedule = list(range(0, total_epochs, save_every))
@@ -208,7 +218,8 @@ def select_eval_epochs(saved_epochs, eval_every=EVAL_EVERY):
             f"eval_every={eval_every} needs saved checkpoints at epochs such as "
             f"{missing[:5]}, which are not on disk (saved grid spacing is not a "
             f"divisor of {eval_every}). Use a multiple of the save spacing "
-            f"(e.g. {SAVE_EVERY} or {EVAL_EVERY_FALLBACK}), or --eval_every 0 to use "
+            f"({SAVE_EVERY}; e.g. 100, {EVAL_EVERY_FALLBACK} or {EVAL_EVERY_FALLBACK_COARSE}), "
+            f"or --eval_every 0 to use "
             f"all saved checkpoints as they are.")
     chosen = [e for e in saved if e % eval_every == 0]
     if chosen[-1] != saved[-1]:
@@ -1066,7 +1077,7 @@ def main():
     parser.add_argument("--eval_every", type=int, default=EVAL_EVERY,
                         help=f"evaluate predictors on saved checkpoints with epoch %% eval_every == 0 "
                              f"(plus the final epoch). Must be a multiple of the save spacing "
-                             f"({SAVE_EVERY}); fallback if too slow: {EVAL_EVERY_FALLBACK}. "
+                             f"({SAVE_EVERY}); fallbacks if too slow: {EVAL_EVERY_FALLBACK}, {EVAL_EVERY_FALLBACK_COARSE}. "
                              f"0 = use every saved checkpoint (legacy 24-point directories).")
     args = parser.parse_args()
 
