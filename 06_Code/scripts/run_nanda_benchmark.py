@@ -52,8 +52,12 @@ import yaml
 from torch import nn
 from torch.optim import AdamW
 
-REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
-SRC = os.path.join(REPO_ROOT, "src")
+# This file lives at <repo>/06_Code/scripts/, so the repo root is two folders
+# up. (Before the 2026-09-17 reorganisation the script sat at the repo root,
+# and REPO_ROOT was simply its own folder; that broke after the move.) The
+# relative --output_dir / --config defaults below are resolved from here.
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+SRC = os.path.join(REPO_ROOT, "06_Code", "src")
 if SRC not in sys.path:
     sys.path.insert(0, SRC)
 

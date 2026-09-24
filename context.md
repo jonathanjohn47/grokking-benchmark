@@ -10208,3 +10208,69 @@ Any later fix must be recorded separately. **It must be fixed before the retrain
 
 - `06_Code/scripts/run_nanda_benchmark.py` — checkpoint schedule (see g).
 - `context.md` — this section (append only).
+
+
+---
+
+### Update — 2026-09-25 — Path bug in run_nanda_benchmark.py FIXED (broken since the 2026-09-17 reorganisation)
+
+This resolves the "Important discovery" recorded in the two 2026-09-25 checkpoint-schedule sections above
+(also item (i) of the save-every-50 section). Jonathan gave the go-ahead ("fix the path bug now").
+
+#### What was wrong
+
+`run_nanda_benchmark.py` computed `REPO_ROOT` as its own folder. Before the 2026-09-17 reorganisation the script
+sat at the repo root, so that was correct. After the move it lives in `06_Code/scripts/`, so:
+- `SRC = REPO_ROOT/src` pointed to `06_Code/scripts/src`, which does not exist, so the imports failed
+  (`ModuleNotFoundError: No module named 'data'`) and the runner could not start at all;
+- the relative defaults `--output_dir 08_Experiments/results/nanda_unified` and
+  `--config 06_Code/configs/nanda_unified.yaml` were joined onto `06_Code/scripts`, so they pointed to folders
+  that do not exist.
+
+The 2026-09-17 note that "no other script referenced these paths" missed this file. The bug was reproduced with
+the checkpoint-schedule edit stashed, so it was pre-existing, not caused by the schedule change.
+
+#### What changed (one file, three lines of code plus a comment)
+
+`06_Code/scripts/run_nanda_benchmark.py`:
+- `REPO_ROOT` is now the real repo root (three `dirname` calls from the file: scripts -> 06_Code -> repo root).
+- `SRC` is now `REPO_ROOT/06_Code/src`.
+- The two places that join a relative `--output_dir` / `--config` onto `REPO_ROOT` were **not** edited; they are
+  correct once `REPO_ROOT` is correct.
+- No change to the model, dataset code, predictor logic or the checkpoint schedule.
+
+#### Verification (all without the earlier `PYTHONPATH` workaround)
+
+- `--help` launched from `/tmp` (a different working folder): works, lists `--output_dir`, `--config`,
+  `--eval_every`.
+- 60-epoch run from the repo root with **relative** paths (`--output_dir 08_Experiments/results/_path_smoke`, default
+  `--config`): trained, printed `config : .../06_Code/configs/nanda_unified.yaml`, wrote `seed_0/` with
+  `training/`, `l2_norm/`, `checkpoints/` (3 files: epochs 0, 50, 59).
+- The same run launched from `/tmp`: output landed in `<repo>/08_Experiments/results/_path_smoke/seed_0`, and no
+  stray `06_Code/scripts/08_Experiments` folder was created.
+- The real `08_Experiments/results/nanda_unified/` was not touched. The temporary test folder was deleted.
+
+#### Side observations — NOT fixed (outside the request)
+
+- `06_Code/scripts/compile_context_bundle.py` has the same kind of mistake: `REPO_ROOT` is computed with two
+  `dirname` calls, which gives `06_Code`, not the repo root. Its `OUTPUT_PDF`, its `git` calls and its
+  `results/nanda_unified` path are all built on that value, so it probably writes and reads in the wrong place.
+  Not checked by running it.
+- The older scripts in `06_Code/src/` (`train_four_head.py`, `plot_results_four_head.py`,
+  `train_shadow_layernorm.py`, `plot_shadow_layernorm.py`) set `project_root` the same way (giving `06_Code`) and use it
+  for the old `runs/` layout. They are legacy tools, not on the benchmark pipeline.
+
+#### Current state and next steps
+
+1. Path bug: **fixed**. The runner can now be launched from any folder.
+2. Move `08_Experiments/results/nanda_unified/` aside before retraining (see the save-every-50 section, part h);
+   otherwise the resume logic skips every seed.
+3. Retrain once (5 seeds, 801 checkpoints per seed), re-measure transition widths, then run the predictors on the
+   100 grid, then HTSR Alpha (Predictor 5).
+4. Decide whether to fix `compile_context_bundle.py` and the legacy `src/` scripts.
+
+#### Files Modified (this update)
+
+- `06_Code/scripts/run_nanda_benchmark.py` — `REPO_ROOT` and `SRC` only.
+- `context.md` — this section (append only).
+- `graphify-out/*` — refreshed automatically by the post-commit hook; no manual edits.

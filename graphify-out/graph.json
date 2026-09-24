@@ -34,7 +34,7 @@
       "label": "save_checkpoint_schedule()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L177",
+      "source_location": "L187",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_save_checkpoint_schedule",
       "community": 14,
@@ -44,7 +44,7 @@
       "label": "select_eval_epochs()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L193",
+      "source_location": "L203",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_select_eval_epochs",
       "community": 14,
@@ -54,7 +54,7 @@
       "label": "dropout_variance_checkpoint_schedule()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L219",
+      "source_location": "L230",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_dropout_variance_checkpoint_schedule",
       "community": 14,
@@ -64,7 +64,7 @@
       "label": "pick_drc_checkpoint_subset()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L244",
+      "source_location": "L255",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_pick_drc_checkpoint_subset",
       "community": 14,
@@ -74,7 +74,7 @@
       "label": "_num_or_none()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L254",
+      "source_location": "L265",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_num_or_none",
       "community": 14,
@@ -84,7 +84,7 @@
       "label": "load_config()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L258",
+      "source_location": "L269",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_load_config",
       "community": 14,
@@ -94,7 +94,7 @@
       "label": "pick_device()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L288",
+      "source_location": "L299",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_pick_device",
       "community": 14,
@@ -104,7 +104,7 @@
       "label": "seed_dir_for()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L292",
+      "source_location": "L303",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_seed_dir_for",
       "community": 14,
@@ -114,7 +114,7 @@
       "label": "checkpoints_dir_for()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L296",
+      "source_location": "L307",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_checkpoints_dir_for",
       "community": 14,
@@ -124,7 +124,7 @@
       "label": "summary_path_for()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L300",
+      "source_location": "L311",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_summary_path_for",
       "community": 14,
@@ -134,7 +134,7 @@
       "label": "load_summary()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L304",
+      "source_location": "L315",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_load_summary",
       "community": 14,
@@ -144,7 +144,7 @@
       "label": "get_done_predictors()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L312",
+      "source_location": "L323",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_get_done_predictors",
       "community": 14,
@@ -154,7 +154,7 @@
       "label": "is_predictor_done()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L328",
+      "source_location": "L339",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_is_predictor_done",
       "community": 14,
@@ -164,7 +164,7 @@
       "label": "has_saved_checkpoints()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L332",
+      "source_location": "L343",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_has_saved_checkpoints",
       "community": 14,
@@ -174,7 +174,7 @@
       "label": "grok_epoch_from()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L339",
+      "source_location": "L350",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_grok_epoch_from",
       "community": 14,
@@ -184,7 +184,7 @@
       "label": "limit_cycle_check()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L345",
+      "source_location": "L356",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_limit_cycle_check",
       "community": 14,
@@ -194,7 +194,7 @@
       "label": "train_one_seed()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L373",
+      "source_location": "L384",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_train_one_seed",
       "community": 14,
@@ -204,7 +204,7 @@
       "label": "_checkpoint_predictor_dropout_variance()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L667",
+      "source_location": "L678",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_checkpoint_predictor_dropout_variance",
       "community": 14,
@@ -214,7 +214,7 @@
       "label": "_checkpoint_predictor_spectral()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L732",
+      "source_location": "L743",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_checkpoint_predictor_spectral",
       "community": 14,
@@ -224,7 +224,7 @@
       "label": "_checkpoint_predictor_age()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L815",
+      "source_location": "L826",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_checkpoint_predictor_age",
       "community": 14,
@@ -234,7 +234,7 @@
       "label": "recompute_from_checkpoints()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L898",
+      "source_location": "L909",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_recompute_from_checkpoints",
       "community": 14,
@@ -244,7 +244,7 @@
       "label": "aggregate()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L945",
+      "source_location": "L956",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_aggregate",
       "community": 14,
@@ -254,7 +254,7 @@
       "label": "main()",
       "file_type": "code",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L1048",
+      "source_location": "L1059",
       "_origin": "ast",
       "id": "scripts_run_nanda_benchmark_main",
       "community": 14,
@@ -264,9 +264,9 @@
       "label": "Epoch indices (0-based, matching the training loop's `epoch`) at which     a mod",
       "file_type": "rationale",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L178",
+      "source_location": "L188",
       "_origin": "ast",
-      "id": "scripts_run_nanda_benchmark_rationale_178",
+      "id": "scripts_run_nanda_benchmark_rationale_188",
       "community": 14,
       "norm_label": "epoch indices (0-based, matching the training loop's `epoch`) at which     a mod"
     },
@@ -274,9 +274,9 @@
       "label": "Subsample the evaluation grid from the SAVED checkpoint epochs.     Keeps saved",
       "file_type": "rationale",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L194",
+      "source_location": "L204",
       "_origin": "ast",
-      "id": "scripts_run_nanda_benchmark_rationale_194",
+      "id": "scripts_run_nanda_benchmark_rationale_204",
       "community": 14,
       "norm_label": "subsample the evaluation grid from the saved checkpoint epochs.     keeps saved"
     },
@@ -284,9 +284,9 @@
       "label": "LEGACY (24 log-spaced points; no longer used by default \u2014 see     OLD_24_LOG_SPA",
       "file_type": "rationale",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L220",
+      "source_location": "L231",
       "_origin": "ast",
-      "id": "scripts_run_nanda_benchmark_rationale_220",
+      "id": "scripts_run_nanda_benchmark_rationale_231",
       "community": 14,
       "norm_label": "legacy (24 log-spaced points; no longer used by default \u2014 see     old_24_log_spa"
     },
@@ -294,9 +294,9 @@
       "label": "Evenly-spaced-by-position subset of an existing checkpoint list, for     the che",
       "file_type": "rationale",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L245",
+      "source_location": "L256",
       "_origin": "ast",
-      "id": "scripts_run_nanda_benchmark_rationale_245",
+      "id": "scripts_run_nanda_benchmark_rationale_256",
       "community": 14,
       "norm_label": "evenly-spaced-by-position subset of an existing checkpoint list, for     the che"
     },
@@ -304,9 +304,9 @@
       "label": "Read configs/nanda_unified.yaml -> flat dict of the constants used here.",
       "file_type": "rationale",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L259",
+      "source_location": "L270",
       "_origin": "ast",
-      "id": "scripts_run_nanda_benchmark_rationale_259",
+      "id": "scripts_run_nanda_benchmark_rationale_270",
       "community": 14,
       "norm_label": "read configs/nanda_unified.yaml -> flat dict of the constants used here."
     },
@@ -314,9 +314,9 @@
       "label": "Which predictors already have a real result in this seed's     summary.json, key",
       "file_type": "rationale",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L313",
+      "source_location": "L324",
       "_origin": "ast",
-      "id": "scripts_run_nanda_benchmark_rationale_313",
+      "id": "scripts_run_nanda_benchmark_rationale_324",
       "community": 14,
       "norm_label": "which predictors already have a real result in this seed's     summary.json, key"
     },
@@ -324,9 +324,9 @@
       "label": "Detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test",
       "file_type": "rationale",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L346",
+      "source_location": "L357",
       "_origin": "ast",
-      "id": "scripts_run_nanda_benchmark_rationale_346",
+      "id": "scripts_run_nanda_benchmark_rationale_357",
       "community": 14,
       "norm_label": "detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test"
     },
@@ -334,9 +334,9 @@
       "label": "Train seed from scratch. predictors_to_compute (a set, subset of     ALL_PREDICT",
       "file_type": "rationale",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L375",
+      "source_location": "L386",
       "_origin": "ast",
-      "id": "scripts_run_nanda_benchmark_rationale_375",
+      "id": "scripts_run_nanda_benchmark_rationale_386",
       "community": 14,
       "norm_label": "train seed from scratch. predictors_to_compute (a set, subset of     all_predict"
     },
@@ -344,9 +344,9 @@
       "label": "CHECKPOINT_PREDICTOR_FUNCS[\"dropout_variance\"] \u2014 loads each saved     checkpoint",
       "file_type": "rationale",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L669",
+      "source_location": "L680",
       "_origin": "ast",
-      "id": "scripts_run_nanda_benchmark_rationale_669",
+      "id": "scripts_run_nanda_benchmark_rationale_680",
       "community": 14,
       "norm_label": "checkpoint_predictor_funcs[\"dropout_variance\"] \u2014 loads each saved     checkpoint"
     },
@@ -354,9 +354,9 @@
       "label": "CHECKPOINT_PREDICTOR_FUNCS[\"spectral\"] \u2014 Canatar et al. 2021     task-model alig",
       "file_type": "rationale",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L734",
+      "source_location": "L745",
       "_origin": "ast",
-      "id": "scripts_run_nanda_benchmark_rationale_734",
+      "id": "scripts_run_nanda_benchmark_rationale_745",
       "community": 14,
       "norm_label": "checkpoint_predictor_funcs[\"spectral\"] \u2014 canatar et al. 2021     task-model alig"
     },
@@ -364,9 +364,9 @@
       "label": "CHECKPOINT_PREDICTOR_FUNCS[\"age\"] \u2014 AGE, Adaptive Grokking Epoch via     Neural",
       "file_type": "rationale",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L817",
+      "source_location": "L828",
       "_origin": "ast",
-      "id": "scripts_run_nanda_benchmark_rationale_817",
+      "id": "scripts_run_nanda_benchmark_rationale_828",
       "community": 14,
       "norm_label": "checkpoint_predictor_funcs[\"age\"] \u2014 age, adaptive grokking epoch via     neural"
     },
@@ -374,9 +374,9 @@
       "label": "Compute predictor(s) that only need frozen model weights (currently     just \"dr",
       "file_type": "rationale",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L899",
+      "source_location": "L910",
       "_origin": "ast",
-      "id": "scripts_run_nanda_benchmark_rationale_899",
+      "id": "scripts_run_nanda_benchmark_rationale_910",
       "community": 14,
       "norm_label": "compute predictor(s) that only need frozen model weights (currently     just \"dr"
     },
@@ -5039,9 +5039,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L60",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "data_modular_arithmetic",
-      "confidence_score": 1.0
+      "target": "data_modular_arithmetic"
     },
     {
       "relation": "imports_from",
@@ -5050,9 +5050,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L61",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "models_transformer_four_head",
-      "confidence_score": 1.0
+      "target": "models_transformer_four_head"
     },
     {
       "relation": "imports_from",
@@ -5061,9 +5061,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L77",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "predictors_age",
-      "confidence_score": 1.0
+      "target": "predictors_age"
     },
     {
       "relation": "imports_from",
@@ -5072,9 +5072,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L72",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "predictors_dropout",
-      "confidence_score": 1.0
+      "target": "predictors_dropout"
     },
     {
       "relation": "imports_from",
@@ -5083,9 +5083,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L62",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "predictors_l2_norm",
-      "confidence_score": 1.0
+      "target": "predictors_l2_norm"
     },
     {
       "relation": "imports_from",
@@ -5094,9 +5094,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L76",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "predictors_spectral",
-      "confidence_score": 1.0
+      "target": "predictors_spectral"
     },
     {
       "relation": "contains",
@@ -5104,9 +5104,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L945",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_aggregate",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_aggregate"
     },
     {
       "relation": "contains",
@@ -5114,9 +5114,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L815",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_checkpoint_predictor_age",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_checkpoint_predictor_age"
     },
     {
       "relation": "contains",
@@ -5124,9 +5124,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L667",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_checkpoint_predictor_dropout_variance",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_checkpoint_predictor_dropout_variance"
     },
     {
       "relation": "contains",
@@ -5134,9 +5134,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L732",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_checkpoint_predictor_spectral",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_checkpoint_predictor_spectral"
     },
     {
       "relation": "contains",
@@ -5144,9 +5144,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L296",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_checkpoints_dir_for",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_checkpoints_dir_for"
     },
     {
       "relation": "contains",
@@ -5154,9 +5154,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L219",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_dropout_variance_checkpoint_schedule",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_dropout_variance_checkpoint_schedule"
     },
     {
       "relation": "contains",
@@ -5164,9 +5164,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L312",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_get_done_predictors",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_get_done_predictors"
     },
     {
       "relation": "contains",
@@ -5174,9 +5174,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L339",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_grok_epoch_from",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_grok_epoch_from"
     },
     {
       "relation": "contains",
@@ -5184,9 +5184,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L332",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_has_saved_checkpoints",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_has_saved_checkpoints"
     },
     {
       "relation": "contains",
@@ -5194,9 +5194,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L328",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_is_predictor_done",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_is_predictor_done"
     },
     {
       "relation": "contains",
@@ -5204,9 +5204,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L345",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_limit_cycle_check",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_limit_cycle_check"
     },
     {
       "relation": "contains",
@@ -5214,9 +5214,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L258",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_load_config",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_load_config"
     },
     {
       "relation": "contains",
@@ -5224,9 +5224,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L304",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_load_summary",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_load_summary"
     },
     {
       "relation": "contains",
@@ -5234,9 +5234,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L1048",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_main",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_main"
     },
     {
       "relation": "contains",
@@ -5244,9 +5244,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L254",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_num_or_none",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_num_or_none"
     },
     {
       "relation": "contains",
@@ -5254,9 +5254,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L288",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_pick_device",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_pick_device"
     },
     {
       "relation": "contains",
@@ -5264,9 +5264,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L244",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_pick_drc_checkpoint_subset",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_pick_drc_checkpoint_subset"
     },
     {
       "relation": "contains",
@@ -5274,9 +5274,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L898",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_recompute_from_checkpoints",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_recompute_from_checkpoints"
     },
     {
       "relation": "contains",
@@ -5284,9 +5284,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L177",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_save_checkpoint_schedule",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_save_checkpoint_schedule"
     },
     {
       "relation": "contains",
@@ -5294,9 +5294,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L292",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_seed_dir_for",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_seed_dir_for"
     },
     {
       "relation": "contains",
@@ -5304,9 +5304,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L193",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_select_eval_epochs",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_select_eval_epochs"
     },
     {
       "relation": "contains",
@@ -5314,9 +5314,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L300",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_summary_path_for",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_summary_path_for"
     },
     {
       "relation": "contains",
@@ -5324,17 +5324,17 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L373",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark",
-      "target": "scripts_run_nanda_benchmark_train_one_seed",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_train_one_seed"
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L178",
+      "source_location": "L188",
       "weight": 1.0,
-      "source": "scripts_run_nanda_benchmark_rationale_178",
+      "source": "scripts_run_nanda_benchmark_rationale_188",
       "target": "scripts_run_nanda_benchmark_save_checkpoint_schedule",
       "confidence_score": 1.0
     },
@@ -5345,17 +5345,17 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L439",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_train_one_seed",
-      "target": "scripts_run_nanda_benchmark_save_checkpoint_schedule",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_save_checkpoint_schedule"
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L194",
+      "source_location": "L204",
       "weight": 1.0,
-      "source": "scripts_run_nanda_benchmark_rationale_194",
+      "source": "scripts_run_nanda_benchmark_rationale_204",
       "target": "scripts_run_nanda_benchmark_select_eval_epochs",
       "confidence_score": 1.0
     },
@@ -5366,9 +5366,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L926",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_recompute_from_checkpoints",
-      "target": "scripts_run_nanda_benchmark_select_eval_epochs",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_select_eval_epochs"
     },
     {
       "relation": "calls",
@@ -5377,17 +5377,17 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L440",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_train_one_seed",
-      "target": "scripts_run_nanda_benchmark_select_eval_epochs",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_select_eval_epochs"
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L220",
+      "source_location": "L231",
       "weight": 1.0,
-      "source": "scripts_run_nanda_benchmark_rationale_220",
+      "source": "scripts_run_nanda_benchmark_rationale_231",
       "target": "scripts_run_nanda_benchmark_dropout_variance_checkpoint_schedule",
       "confidence_score": 1.0
     },
@@ -5398,17 +5398,17 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L685",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_checkpoint_predictor_dropout_variance",
-      "target": "scripts_run_nanda_benchmark_pick_drc_checkpoint_subset",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_pick_drc_checkpoint_subset"
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L245",
+      "source_location": "L256",
       "weight": 1.0,
-      "source": "scripts_run_nanda_benchmark_rationale_245",
+      "source": "scripts_run_nanda_benchmark_rationale_256",
       "target": "scripts_run_nanda_benchmark_pick_drc_checkpoint_subset",
       "confidence_score": 1.0
     },
@@ -5419,9 +5419,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L443",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_train_one_seed",
-      "target": "scripts_run_nanda_benchmark_pick_drc_checkpoint_subset",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_pick_drc_checkpoint_subset"
     },
     {
       "relation": "calls",
@@ -5430,9 +5430,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L546",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_train_one_seed",
-      "target": "scripts_run_nanda_benchmark_num_or_none",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_num_or_none"
     },
     {
       "relation": "calls",
@@ -5441,17 +5441,17 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L1086",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_main",
-      "target": "scripts_run_nanda_benchmark_load_config",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_load_config"
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L259",
+      "source_location": "L270",
       "weight": 1.0,
-      "source": "scripts_run_nanda_benchmark_rationale_259",
+      "source": "scripts_run_nanda_benchmark_rationale_270",
       "target": "scripts_run_nanda_benchmark_load_config",
       "confidence_score": 1.0
     },
@@ -5462,9 +5462,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L1087",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_main",
-      "target": "scripts_run_nanda_benchmark_pick_device",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_pick_device"
     },
     {
       "relation": "calls",
@@ -5473,9 +5473,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L297",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_checkpoints_dir_for",
-      "target": "scripts_run_nanda_benchmark_seed_dir_for",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_seed_dir_for"
     },
     {
       "relation": "calls",
@@ -5484,9 +5484,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L911",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_recompute_from_checkpoints",
-      "target": "scripts_run_nanda_benchmark_seed_dir_for",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_seed_dir_for"
     },
     {
       "relation": "calls",
@@ -5495,9 +5495,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L301",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_summary_path_for",
-      "target": "scripts_run_nanda_benchmark_seed_dir_for",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_seed_dir_for"
     },
     {
       "relation": "calls",
@@ -5506,9 +5506,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L385",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_train_one_seed",
-      "target": "scripts_run_nanda_benchmark_seed_dir_for",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_seed_dir_for"
     },
     {
       "relation": "calls",
@@ -5517,9 +5517,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L333",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_has_saved_checkpoints",
-      "target": "scripts_run_nanda_benchmark_checkpoints_dir_for",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_checkpoints_dir_for"
     },
     {
       "relation": "calls",
@@ -5528,9 +5528,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L912",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_recompute_from_checkpoints",
-      "target": "scripts_run_nanda_benchmark_checkpoints_dir_for",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_checkpoints_dir_for"
     },
     {
       "relation": "calls",
@@ -5539,9 +5539,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L387",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_train_one_seed",
-      "target": "scripts_run_nanda_benchmark_checkpoints_dir_for",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_checkpoints_dir_for"
     },
     {
       "relation": "calls",
@@ -5550,9 +5550,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L305",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_load_summary",
-      "target": "scripts_run_nanda_benchmark_summary_path_for",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_summary_path_for"
     },
     {
       "relation": "calls",
@@ -5561,9 +5561,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L936",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_recompute_from_checkpoints",
-      "target": "scripts_run_nanda_benchmark_summary_path_for",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_summary_path_for"
     },
     {
       "relation": "calls",
@@ -5572,9 +5572,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L318",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_get_done_predictors",
-      "target": "scripts_run_nanda_benchmark_load_summary",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_load_summary"
     },
     {
       "relation": "calls",
@@ -5583,9 +5583,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L1107",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_main",
-      "target": "scripts_run_nanda_benchmark_load_summary",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_load_summary"
     },
     {
       "relation": "calls",
@@ -5594,9 +5594,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L329",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_is_predictor_done",
-      "target": "scripts_run_nanda_benchmark_get_done_predictors",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_get_done_predictors"
     },
     {
       "relation": "calls",
@@ -5605,17 +5605,17 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L1108",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_main",
-      "target": "scripts_run_nanda_benchmark_get_done_predictors",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_get_done_predictors"
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L313",
+      "source_location": "L324",
       "weight": 1.0,
-      "source": "scripts_run_nanda_benchmark_rationale_313",
+      "source": "scripts_run_nanda_benchmark_rationale_324",
       "target": "scripts_run_nanda_benchmark_get_done_predictors",
       "confidence_score": 1.0
     },
@@ -5626,9 +5626,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L1126",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_main",
-      "target": "scripts_run_nanda_benchmark_has_saved_checkpoints",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_has_saved_checkpoints"
     },
     {
       "relation": "calls",
@@ -5637,17 +5637,17 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L524",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_train_one_seed",
-      "target": "scripts_run_nanda_benchmark_grok_epoch_from",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_grok_epoch_from"
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L346",
+      "source_location": "L357",
       "weight": 1.0,
-      "source": "scripts_run_nanda_benchmark_rationale_346",
+      "source": "scripts_run_nanda_benchmark_rationale_357",
       "target": "scripts_run_nanda_benchmark_limit_cycle_check",
       "confidence_score": 1.0
     },
@@ -5658,9 +5658,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L655",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_train_one_seed",
-      "target": "scripts_run_nanda_benchmark_limit_cycle_check",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_limit_cycle_check"
     },
     {
       "relation": "calls",
@@ -5669,7 +5669,17 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L1132",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_main",
+      "target": "scripts_run_nanda_benchmark_train_one_seed"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
+      "source_location": "L386",
+      "weight": 1.0,
+      "source": "scripts_run_nanda_benchmark_rationale_386",
       "target": "scripts_run_nanda_benchmark_train_one_seed",
       "confidence_score": 1.0
     },
@@ -5677,19 +5687,9 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L375",
+      "source_location": "L680",
       "weight": 1.0,
-      "source": "scripts_run_nanda_benchmark_rationale_375",
-      "target": "scripts_run_nanda_benchmark_train_one_seed",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L669",
-      "weight": 1.0,
-      "source": "scripts_run_nanda_benchmark_rationale_669",
+      "source": "scripts_run_nanda_benchmark_rationale_680",
       "target": "scripts_run_nanda_benchmark_checkpoint_predictor_dropout_variance",
       "confidence_score": 1.0
     },
@@ -5697,9 +5697,9 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L734",
+      "source_location": "L745",
       "weight": 1.0,
-      "source": "scripts_run_nanda_benchmark_rationale_734",
+      "source": "scripts_run_nanda_benchmark_rationale_745",
       "target": "scripts_run_nanda_benchmark_checkpoint_predictor_spectral",
       "confidence_score": 1.0
     },
@@ -5707,9 +5707,9 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L817",
+      "source_location": "L828",
       "weight": 1.0,
-      "source": "scripts_run_nanda_benchmark_rationale_817",
+      "source": "scripts_run_nanda_benchmark_rationale_828",
       "target": "scripts_run_nanda_benchmark_checkpoint_predictor_age",
       "confidence_score": 1.0
     },
@@ -5720,17 +5720,17 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L1130",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_main",
-      "target": "scripts_run_nanda_benchmark_recompute_from_checkpoints",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_recompute_from_checkpoints"
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
-      "source_location": "L899",
+      "source_location": "L910",
       "weight": 1.0,
-      "source": "scripts_run_nanda_benchmark_rationale_899",
+      "source": "scripts_run_nanda_benchmark_rationale_910",
       "target": "scripts_run_nanda_benchmark_recompute_from_checkpoints",
       "confidence_score": 1.0
     },
@@ -5741,9 +5741,9 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L1147",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_run_nanda_benchmark_main",
-      "target": "scripts_run_nanda_benchmark_aggregate",
-      "confidence_score": 1.0
+      "target": "scripts_run_nanda_benchmark_aggregate"
     },
     {
       "relation": "contains",
@@ -11102,5 +11102,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "c8b48977b08b892d6cb49c549d6d575aec47fb0c"
+  "built_at_commit": "81c3372e5a684a8ac40b9a3abc10e8968412a3e4"
 }
