@@ -9912,3 +9912,153 @@ Note: this `Tr_W` / `Tr_B` is the mean over classes of per-class means
   2507.11645v1), `Spectral_Predictor_Explained.pdf`,
   `Spectral_Predictor_Step_by_Step_Lesson.pdf`, `project_compilation.pdf`
   and `Claude outputs/` (AGE and Spectral lesson PDFs).
+
+
+---
+
+### Update — 2026-09-25 — Switch from 24 log-spaced to save-every-100 (derived)
+
+#### Why this update exists
+
+While planning Predictor 5 (HTSR Alpha), Jonathan asked why only 24 checkpoints exist. Checking `context.md`
+showed that the number 24 came from the Dropout-Variance predictor: a compute budget (30 stochastic passes
+per checkpoint on MPS), with the checkpoint saving simply attached to the same trigger points. Spectral
+and AGE later reused those files. **The count 24 has no scientific justification.** Only the log spacing
+had a stated reason (same spirit as the L2-Norm log-epoch grid). This section replaces it with a derived
+schedule. Nothing already recorded above is edited or removed.
+
+#### a) The two requirements and their formulas
+
+1. **Transition coverage:** `samples inside the grok transition = width / spacing`.
+2. **Ratio precision:** `worst-case error on (signal epoch / grok epoch) = spacing / smallest grok epoch`.
+
+Measured from the existing 5-seed run (`test_acc_history.npy`, per-epoch; transition = test accuracy from 10% to 90%):
+
+| Seed | 10% epoch | 90% (grok) epoch | Width | Old-grid checkpoints inside the transition |
+|---|---|---|---|---|
+| 0 | 10969 | 14474 | 3505 | 0 |
+| 1 | 5418 | 6988 | 1570 | 1 |
+| 2 | 8727 | 10418 | 1691 | 1 |
+| 3 | 7953 | 10193 | 2240 | 1 |
+| 4 | 22127 | 24021 | 1894 | 0 |
+
+Narrowest width = **1570** (seed 1). Smallest grok epoch = **6988** (seed 1). So the old 24-point grid put
+0 or 1 checkpoint inside the transition and could not resolve it.
+
+**Design thresholds — Jonathan's own design choice, NOT a literature standard:** at least **6** samples
+inside the narrowest transition, and at most **4%** ratio error.
+
+#### b) The three options evaluated
+
+| Spacing | Checkpoints | Samples in narrowest transition | Ratio error | Spectral + Dropout-Var recompute | Storage |
+|---|---|---|---|---|---|
+| Every 100 epochs | 400 (+ final = 401) | ~15.7 | ~1.4% | ~1.2 h per seed | ~340 MB per seed |
+| Every 250 epochs | 160 | ~6.3 | ~3.6% | ~0.5 h per seed | ~136 MB per seed |
+| Log-spaced, 2% steps | ~400 | ~11 at epoch 7,000 | ~2% | ~1.2 h per seed | ~340 MB per seed |
+
+Timings measured this session on one seed-0 checkpoint (epoch 10040), MPS, single runs, so estimates only:
+L2 2 ms, AGE 34 ms, Dropout-Variance (k=30) 1.8 s, Spectral (eigh) 9.3 s, HTSR (SVD of 7 matrices + one
+`powerlaw.Fit`) ~44 ms per call. Computing everything live at every epoch would cost about 126 h per seed
+(Spectral alone ~103 h), so a checkpoint-free design was rejected. One checkpoint file is ~0.85 MB.
+
+#### c) Why log spacing gives no saving here
+
+Grok happens late (epochs 7k to 24k). A log grid is already sparse there, so matching the resolution needed
+around grok forces ~400 points anyway, the same as uniform spacing, but with points wasted before epoch 1000
+where no transition happens.
+
+#### Literature check (for the record)
+
+Source PDFs were searched directly. **No paper prescribes a checkpoint count or spacing.** Salah & Yevick plot
+variance against epoch (Fig. 1) and average embedding statistics "at each epoch"; only their Dropout Robustness
+Curve uses selected epochs (500 to 2500). Nanda et al. train 40,000 full-batch epochs and evaluate on all held-out
+pairs; the sampling interval of their figures is not stated. Power et al. use log-axis plots over 10^0 to 10^6
+steps (a plotting choice). Martin & Mahoney apply alpha to already-trained models. Papyan: nothing verifiable was
+extracted. Conclusion: the field tracks these signals at fine, roughly per-epoch resolution, so a sparse 24-point
+grid is coarser than practice, but the literature gives a direction, not a number. The number therefore comes
+from the two requirements above.
+
+#### d) Final decision
+
+Separate **saving** from **evaluating**.
+- **Save** a checkpoint every **100** epochs, plus the final epoch: `range(0, 40000, 100)` = 400 points
+  (0..39900) **+ epoch 39999 = 401 points**. Choice made and fixed: **401**.
+- **Evaluate** every predictor on a common grid subsampled from the saved files: default `EVAL_EVERY = 100`
+  (401 points), fallback `EVAL_EVERY_FALLBACK = 200` (201 points). The final saved epoch is always included in
+  the evaluation grid (as in every earlier grid, and the fully trained model matters, e.g. NC1 minima were pinned
+  to epoch 39999).
+- **Deviation from the original plan, decided here:** the fallback is **200, not 250.** Saved epochs are multiples
+  of 100, so the only saved epochs that are also multiples of 250 are multiples of 500; a "250 grid" would silently
+  have become a 500 grid (~3 samples in the narrowest transition, ~7% ratio error, outside both thresholds).
+  200 gives ~7.8 samples and ~2.9% error, inside both thresholds. If a true 250 grid is ever wanted, save every 50
+  epochs instead. The code now raises an error instead of silently using a coarser grid.
+
+#### e) Justification paragraph for the thesis Methods section
+
+The spacing of the saved model checkpoints was derived from two requirements, and it was not chosen arbitrarily.
+First, the narrowest grok transition in the baseline run, where test accuracy rises from 10% to 90%, was 1,570
+epochs wide, so the spacing must place several samples inside it. Second, predictors are judged by the ratio of the
+signal epoch to the grok epoch, and the earliest grok occurred at epoch 6,988, so the spacing divided by 6,988 gives
+the worst-case error on that ratio. We required at least six samples inside the transition and at most 4% ratio
+error. These thresholds are our own design choice and not a standard from the literature, since none of the source
+papers prescribes a checkpoint count. A spacing of 100 epochs (about 15 samples, about 1.4% error) satisfies both,
+and a spacing of 200 epochs (about 7.8 samples, about 2.9% error) is kept as a fallback for the two expensive
+predictors.
+
+#### f) Caveat
+
+The transition widths above come from the **current (24-checkpoint-era) run**, not from the new grid. After
+retraining, the widths must be **re-measured** and the spacing re-confirmed against the same two thresholds. Also,
+the smallest grok epoch and narrowest width both come from one seed (seed 1); other seeds may differ after
+retraining.
+
+#### g) Files changed and what changed
+
+Only `06_Code/scripts/run_nanda_benchmark.py` (checkpoint schedule only). Model architecture, dataset code and all
+predictor logic (`06_Code/src/...`) were **not changed**.
+- Added `OLD_24_LOG_SPACED_CHECKPOINTS` (the 24-point list, kept as a constant for ablation comparison, not
+  deleted). The old generator `dropout_variance_checkpoint_schedule()` is kept, marked LEGACY, and still reproduces
+  that list exactly.
+- Added `TOTAL_STEPS = 40000`, `SAVE_EVERY = 100`, `EVAL_EVERY = 100`, `EVAL_EVERY_FALLBACK = 200`,
+  `save_checkpoint_schedule()`, `SAVE_CHECKPOINTS` (401 points) and `select_eval_epochs()`, with a comment block
+  giving the derivation, storage (~340 MB per seed, ~1.7 GB for 5 seeds) and compute estimates.
+- `train_one_seed()`: saves on the save grid; the live Dropout-Variance measurement runs only on the eval grid.
+- `recompute_from_checkpoints()`: enumerates saved files and subsamples with `select_eval_epochs()`, so Spectral,
+  AGE, Dropout-Variance (and future predictors) all use the eval grid.
+- New CLI flag `--eval_every` (default 100). `--eval_every 0` means "use every saved checkpoint" (needed to re-run
+  predictors on the legacy 24-point directories). `select_eval_epochs()` raises `ValueError` if the requested grid
+  is not present on disk (for example `--eval_every 250`).
+- Verified: `py_compile` OK; `len(SAVE_CHECKPOINTS) == 401` (first 0, 100, 200; last 39800, 39900, 39999); old list
+  importable with length 24; eval grids: 100 -> 401 points, 200 -> 201 points, legacy + `--eval_every 0` -> 24
+  points; `--eval_every 250` refused. A real 1000-epoch smoke run saved 11 checkpoints (0..900 and 999, ~0.81 MB
+  each) and Dropout-Variance and AGE evaluated on exactly those; re-running AGE with `--eval_every 200` used 6 of 11
+  saved files with no retraining. Scratch output was deleted.
+
+#### Important discovery (NOT fixed in this update — outside its scope)
+
+`06_Code/scripts/run_nanda_benchmark.py` **cannot be launched as it stands since the 2026-09-17 folder
+reorganisation.** `REPO_ROOT` is computed as the script's own folder (`06_Code/scripts`), so `SRC = REPO_ROOT/src`
+does not exist (`ModuleNotFoundError: No module named 'data'`), and relative `--output_dir` / `--config` defaults
+(`08_Experiments/...`, `06_Code/...`) are also joined onto `06_Code/scripts`. Confirmed present before this update
+(reproduced with the edit stashed). The smoke tests above worked around it with `PYTHONPATH=../src` and absolute
+paths. **It must be fixed before the retrain.** The 2026-09-17 note that no other script referenced these paths
+missed this one.
+
+#### h) Next steps
+
+1. Fix the `REPO_ROOT` / `SRC` path bug above (needs Jonathan's go-ahead).
+2. **Move the existing `08_Experiments/results/nanda_unified/` aside** (for example into `Archive/`) or use a new
+   `--output_dir`; otherwise the resume logic sees complete `summary.json` files and skips every seed without
+   retraining. Keep the old results: they are the 24-checkpoint baseline (benchmark v4).
+3. Retrain once (5 seeds, about 82 min each, about 7 h) with the new schedule.
+4. Re-measure transition widths from the new run and confirm the 100-epoch spacing still meets both thresholds.
+5. Run all predictors on the 100 grid (L2, Dropout-Gap, Dropout-Variance, Spectral, AGE, then HTSR Alpha). If Spectral
+   or Dropout-Variance is too slow, switch to `--eval_every 200` and report both grids.
+6. Sensitivity check: re-run the four closed predictors on the legacy 24 points (`--eval_every 0` on the archived
+   directory) versus the 401-point grid, and report whether any verdict changes.
+7. Then continue with HTSR Alpha (Predictor 5), Step 1: definition of the signal.
+
+#### Files Modified (this update)
+
+- `06_Code/scripts/run_nanda_benchmark.py` — checkpoint schedule only (see g).
+- `context.md` — this section (append only).

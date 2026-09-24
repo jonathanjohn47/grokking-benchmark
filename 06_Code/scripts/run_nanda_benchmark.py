@@ -106,13 +106,61 @@ L2_QUIET_EPOCH_CUTOFF = 90
 #     DRC shows rate=0.5 gives the clearest pre-/post-grok separation, so
 #     the primary signal uses that rate rather than 0.3).
 #   - paper: variance measured at (implicitly) every logged epoch -> here:
-#     DROPOUT_VARIANCE_NUM_CHECKPOINTS=24 log-uniform checkpoints across
-#     training (see dropout_variance_checkpoint_schedule below), since
-#     40000 epochs x 30 passes at every epoch is not affordable on MPS.
+#     measured on the EVAL_EVERY grid (default every 100 epochs, see the
+#     checkpoint-schedule block below), since 40000 epochs x 30 passes at
+#     every epoch is not affordable on MPS (about 1.8 s per measurement).
 DROPOUT_VARIANCE_RATE = 0.5
 DROPOUT_VARIANCE_N_SAMPLES = 30
-DROPOUT_VARIANCE_NUM_CHECKPOINTS = 24
+DROPOUT_VARIANCE_NUM_CHECKPOINTS = 24   # legacy default of the old log-spaced generator only
 DROPOUT_VARIANCE_NUM_DRC_CHECKPOINTS = 5
+
+# ---------------------------------------------------------------------------
+# Checkpoint schedule: SAVING is decoupled from EVALUATING.
+# (Update 2026-09-25; full derivation is in context.md, appended section
+#  "Switch from 24 log-spaced to save-every-100 (derived)".)
+#
+# Two requirements fix the spacing (thresholds are the project's own design
+# choice, NOT a literature standard):
+#   a) transition coverage : samples inside grok transition = width / spacing
+#        (narrowest measured 10%->90% test-acc width = 1570 epochs; want >= 6)
+#   b) ratio precision     : worst ratio error = spacing / smallest grok epoch
+#        (smallest measured grok epoch = 6988; want <= 4%)
+#   spacing 100 -> ~15.7 samples, ~1.4% error     (default)
+#   spacing 200 -> ~7.8 samples,  ~2.9% error     (fallback, still inside both thresholds)
+#   spacing 250 -> ~6.3 samples,  ~3.6% error     (NOT usable on a 100-grid, see below)
+#
+# SAVE   : a checkpoint every SAVE_EVERY epochs, PLUS the final epoch, so
+#          range(0, 40000, 100) = 400 points (0..39900) + epoch 39999 = 401.
+#          Storage: ~0.85 MB per checkpoint -> ~340 MB per seed, ~1.7 GB for 5 seeds.
+# EVAL   : every predictor evaluates only the saved epochs with
+#          epoch % EVAL_EVERY == 0, PLUS the final saved epoch (the fully
+#          trained model; kept so results stay comparable with the earlier
+#          runs, whose grids always ended on epoch 39999). Saving is nearly
+#          free, evaluating is not: Spectral ~9.3 s and Dropout-Variance
+#          ~1.8 s per checkpoint on this machine, so 401 checkpoints cost
+#          about 1.2 h per seed for those two together.
+# FALLBACK: EVAL_EVERY_FALLBACK = 200, not 250. Saved epochs are multiples of
+#          100, so only multiples of 500 are also multiples of 250; a
+#          "250 grid" would silently become a 500 grid (~3 samples in the
+#          narrowest transition, ~7% ratio error, outside both thresholds).
+#          select_eval_epochs() raises if the requested grid is not present.
+#          To use a true 250 grid, save every 50 epochs instead.
+# EVAL_EVERY = 0 means "use every saved checkpoint as-is" (needed to
+#          re-run predictors on the legacy 24-point directories).
+TOTAL_STEPS = 40000          # default --epochs
+SAVE_EVERY = 100
+EVAL_EVERY = 100
+EVAL_EVERY_FALLBACK = 200
+
+# Legacy schedule (used up to benchmark v4, tag benchmark-v4-4predictors):
+# 24 log-spaced epochs, chosen as a compute budget for Dropout-Variance, with
+# no scientific justification for the count (see context.md, 2026-09-25).
+# Kept, NOT deleted, so the old grid can be reproduced for ablation
+# comparison, e.g. via --eval_every 0 on a legacy results directory.
+OLD_24_LOG_SPACED_CHECKPOINTS = [
+    0, 1, 2, 3, 5, 9, 15, 24, 39, 62, 99, 158, 251, 398, 632, 1002, 1589,
+    2520, 3995, 6333, 10040, 15917, 25232, 39999,
+]
 
 # Names understood by --predictors / --overwrite, and the summary.json key
 # each one's presence is checked against (see get_done_predictors below).
@@ -126,8 +174,52 @@ PREDICTOR_SUMMARY_KEY = {
 ALL_PREDICTORS = list(PREDICTOR_SUMMARY_KEY.keys())
 
 
+def save_checkpoint_schedule(total_epochs, save_every=SAVE_EVERY):
+    """Epoch indices (0-based, matching the training loop's `epoch`) at which
+    a model checkpoint is SAVED: 0, save_every, 2*save_every, ... below
+    total_epochs, plus the final epoch total_epochs - 1. For 40000 epochs and
+    save_every=100 that is 400 + 1 = 401 points."""
+    if total_epochs <= 1:
+        return [0]
+    schedule = list(range(0, total_epochs, save_every))
+    if schedule[-1] != total_epochs - 1:
+        schedule.append(total_epochs - 1)
+    return schedule
+
+
+SAVE_CHECKPOINTS = save_checkpoint_schedule(TOTAL_STEPS)
+
+
+def select_eval_epochs(saved_epochs, eval_every=EVAL_EVERY):
+    """Subsample the evaluation grid from the SAVED checkpoint epochs.
+    Keeps saved epochs with epoch % eval_every == 0, plus the final saved
+    epoch. eval_every <= 0 returns every saved epoch unchanged (legacy
+    directories). Raises if the saved files cannot supply the requested
+    grid, instead of silently evaluating on a coarser one."""
+    saved = sorted(saved_epochs)
+    if not saved:
+        return []
+    if eval_every <= 0:
+        return saved
+    saved_set = set(saved)
+    missing = [e for e in range(0, saved[-1] + 1, eval_every) if e not in saved_set]
+    if missing:
+        raise ValueError(
+            f"eval_every={eval_every} needs saved checkpoints at epochs such as "
+            f"{missing[:5]}, which are not on disk (saved grid spacing is not a "
+            f"divisor of {eval_every}). Use a multiple of the save spacing "
+            f"(e.g. {SAVE_EVERY} or {EVAL_EVERY_FALLBACK}), or --eval_every 0 to use "
+            f"all saved checkpoints as they are.")
+    chosen = [e for e in saved if e % eval_every == 0]
+    if chosen[-1] != saved[-1]:
+        chosen.append(saved[-1])
+    return chosen
+
+
 def dropout_variance_checkpoint_schedule(total_epochs, num_points=DROPOUT_VARIANCE_NUM_CHECKPOINTS):
     """
+    LEGACY (24 log-spaced points; no longer used by default — see
+    OLD_24_LOG_SPACED_CHECKPOINTS and the checkpoint-schedule block above).
     Log-uniform-spaced epoch indices for the dropout-variance checkpoints,
     same spirit as l2_norm.resample_to_log_uniform_grid's log-epoch grid —
     equal VISUAL spacing on a log-x plot, so early training (where things
@@ -337,11 +429,16 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
     train_acc_history, test_acc_history, loss_history = [], [], []
     l2_norm_history, sum_w2_history, per_module_sum_w2_history = [], [], []
 
-    # Dropout-Variance predictor: checkpoint schedule fixed up front, so
-    # every checkpoint's variance measurement uses this seed's actual
-    # weights at that exact epoch (cannot be recovered after the fact from
-    # saved histories, unlike L2 Norm's post-hoc-computable signals).
-    dv_checkpoint_schedule = dropout_variance_checkpoint_schedule(args.epochs)
+    # Checkpoint SAVE grid (every SAVE_EVERY epochs + final epoch) and the
+    # EVAL grid (subsampled from it, every args.eval_every epochs + final
+    # epoch) are fixed up front. Saving and evaluating are decoupled: the
+    # Dropout-Variance measurement (which needs live weights) runs only on
+    # the eval grid, but every save-grid checkpoint is written to disk so
+    # any other predictor can later be evaluated on any coarser grid
+    # without retraining.
+    save_checkpoint_set = set(save_checkpoint_schedule(args.epochs))
+    dv_checkpoint_schedule = select_eval_epochs(
+        sorted(save_checkpoint_set), args.eval_every)
     dv_checkpoint_set = set(dv_checkpoint_schedule)
     dv_drc_checkpoints = pick_drc_checkpoint_subset(dv_checkpoint_schedule)
     dv_drc_checkpoint_set = set(dv_drc_checkpoints)
@@ -385,27 +482,27 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
             compute_per_module_sum_of_squared_weights(model))
 
         # ---- checkpoint save + Dropout-Variance predictor (post-epoch, model frozen) ----
-        if epoch in dv_checkpoint_set:
-            # Model-weight checkpointing is independent of whether the
-            # Dropout-Variance predictor is being computed THIS run — a
-            # future predictor (e.g. Spectral) can reuse these .pt files
-            # without needing to retrain, as long as save_checkpoints is on.
-            if save_checkpoints:
-                torch.save(model.state_dict(),
-                           os.path.join(ckpt_dir, f"model_epoch_{epoch}.pt"))
+        # Model-weight checkpointing (SAVE grid) is independent of whether the
+        # Dropout-Variance predictor is being computed THIS run — other
+        # predictors (Spectral, AGE, HTSR, ...) reuse these .pt files
+        # without retraining, as long as save_checkpoints is on.
+        if save_checkpoints and epoch in save_checkpoint_set:
+            torch.save(model.state_dict(),
+                       os.path.join(ckpt_dir, f"model_epoch_{epoch}.pt"))
 
-            if compute_dv:
-                mean_acc, variance = compute_dropout_variance(
-                    model, test_loader, n_samples=DROPOUT_VARIANCE_N_SAMPLES,
-                    dropout_rate=DROPOUT_VARIANCE_RATE, device=device)
-                dropout_variance_checkpoints.append(epoch)
-                dropout_variance_history.append(variance)
-                dropout_variance_mean_acc_history.append(mean_acc)
+        # Dropout-Variance evaluation (EVAL grid, a subset of the SAVE grid).
+        if compute_dv and epoch in dv_checkpoint_set:
+            mean_acc, variance = compute_dropout_variance(
+                model, test_loader, n_samples=DROPOUT_VARIANCE_N_SAMPLES,
+                dropout_rate=DROPOUT_VARIANCE_RATE, device=device)
+            dropout_variance_checkpoints.append(epoch)
+            dropout_variance_history.append(variance)
+            dropout_variance_mean_acc_history.append(mean_acc)
 
-                if epoch in dv_drc_checkpoint_set:
-                    drc_results = compute_dropout_gap_multi_rate(model, test_loader, DROPOUT_RATES)
-                    dropout_drc_snapshots[epoch] = {
-                        str(r): drc_results[r]["train_accuracy"] for r in DROPOUT_RATES}
+            if epoch in dv_drc_checkpoint_set:
+                drc_results = compute_dropout_gap_multi_rate(model, test_loader, DROPOUT_RATES)
+                dropout_drc_snapshots[epoch] = {
+                    str(r): drc_results[r]["train_accuracy"] for r in DROPOUT_RATES}
 
         if epoch % LOG_EVERY == 0 or epoch == args.epochs - 1:
             now = time.time()
@@ -822,9 +919,11 @@ def recompute_from_checkpoints(seed, args, cfg, device, predictors_to_compute, o
         init_std=cfg["init_std"],
     ).to(device)
 
-    ckpt_epochs = sorted(
+    saved_epochs = sorted(
         int(name[len("model_epoch_"):-len(".pt")])
         for name in os.listdir(ckpt_dir) if name.startswith("model_epoch_") and name.endswith(".pt"))
+    # Evaluate on the EVAL grid, subsampled from what is saved on disk.
+    ckpt_epochs = select_eval_epochs(saved_epochs, args.eval_every)
     measurements = PredictorMeasurements(out_dir, model_type="four_head")
     grok_epoch = old_summary.get("grok_epoch")
 
@@ -838,7 +937,8 @@ def recompute_from_checkpoints(seed, args, cfg, device, predictors_to_compute, o
         json.dump(summary, handle, indent=2)
 
     print(f"[seed {seed}] {', '.join(sorted(predictors_to_compute))} recomputed from "
-          f"{len(ckpt_epochs)} saved checkpoints (no retrain)", flush=True)
+          f"{len(ckpt_epochs)} of {len(saved_epochs)} saved checkpoints "
+          f"(eval_every={args.eval_every}, no retrain)", flush=True)
     return summary
 
 
@@ -963,6 +1063,11 @@ def main():
                              "already present in summary.json")
     parser.add_argument("--no_save_checkpoints", action="store_true",
                         help="disable saving checkpoints/model_epoch_*.pt during training")
+    parser.add_argument("--eval_every", type=int, default=EVAL_EVERY,
+                        help=f"evaluate predictors on saved checkpoints with epoch %% eval_every == 0 "
+                             f"(plus the final epoch). Must be a multiple of the save spacing "
+                             f"({SAVE_EVERY}); fallback if too slow: {EVAL_EVERY_FALLBACK}. "
+                             f"0 = use every saved checkpoint (legacy 24-point directories).")
     args = parser.parse_args()
 
     if not os.path.isabs(args.output_dir):
