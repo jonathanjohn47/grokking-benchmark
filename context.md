@@ -10450,3 +10450,118 @@ largest usable spacing is about 261 epochs; 250 sits 4.5% inside it. Caveat unch
 - `08_Experiments/results/nanda_unified/` — committed (aggregate.json, run.log, seed_0..4 summaries, training histories, l2_norm and dropout outputs). Checkpoints (*.pt, ~3.2 GB) are gitignored and NOT in git.
 - `context.md` — this section (append only).
 - `project_compilation.pdf` was already modified before this session; deliberately not included in this commit.
+
+---
+
+# Session Summary — 2026-09-25 (consolidated): Nanda-Unified pipeline changes and 5-seed results so far (L2 Norm + Dropout; Spectral and AGE NOT included here)
+
+This entry gathers, in one place, what changed in the pipeline today and the numbers the finished 5-seed run gave. It adds to, and does not replace, the earlier same-day entries (checkpoint schedule, path bug, magic-number removal). Spectral and AGE results are deliberately left out: they were still being computed from checkpoints when this was written. Source of all numbers: `08_Experiments/results/nanda_unified/run.log`, `aggregate.json`, `seed_*/summary.json`.
+
+## A) Pipeline changes made today (all in shared runner/config; predictor files untouched)
+
+Commits, in order (2026-09-25):
+1. `c8b4897` Checkpoint schedule: save every 100 epochs (401 points); saving decoupled from evaluation.
+2. `81c3372` Checkpoint schedule: save every 50 epochs (801 points = 0..39950 step 50, plus final epoch 39999), so that 100, 200 and 250 eval grids are all subsets of what is on disk.
+3. `9ab101e` Runner path bug fixed: `REPO_ROOT` / `SRC` in `run_nanda_benchmark.py` had been broken since the 2026-09-17 folder reorganisation. `REPO_ROOT` is now the real repo root, `SRC` is `06_Code/src`.
+4. `85fee1e` Arbitrary magic numbers removed from runner and `06_Code/configs/nanda_unified.yaml`; constants now come from the yaml (new `evaluation`, `dropout`, `l2_norm` sections). Detail table is in the earlier entry (8 numbers).
+5. `e1cfa3e` This run's results committed.
+
+Checkpoint / evaluation design now in force:
+- `DESIRED_EVAL_GRIDS = [100, 200, 250]`; `SAVE_EVERY = math.gcd(...) = 50`; `EVAL_EVERY = 100` by default (fallbacks 200, 250).
+- 801 checkpoints per seed, about 0.85 MB each: about 648 MB per seed, about 3.2 GB for 5 seeds on disk. `*.pt` is gitignored, so checkpoints are NOT in git.
+- Predictors evaluate the saved epochs with `epoch % eval_every == 0`, plus the final epoch: 401 evaluation points per seed at the default grid.
+- Dropout-Variance: `n_samples = 100`, `rate = 0.5` (from yaml). Dropout gap rates: 0.1, 0.3, 0.5, 0.7, 0.9.
+- Grok thresholds reported: 0.9 (primary), 0.95, 0.99. Limit-cycle check runs on every seed.
+- Spectral and AGE are checkpoint-only predictors, so they can be computed later from saved checkpoints with no retraining.
+
+Shared model vs predictor: the shared model file did not change today. Predictor files (`l2_norm.py`, `dropout.py`, `spectral.py`, `age.py`) did not change. Only the runner and the yaml changed.
+
+## B) Training run (fresh retrain, 5 seeds, 40000 epochs, p = 113)
+
+- Setup: 1-layer transformer, 4 heads, d_model 128, no LayerNorm, small init N(0, 0.8/sqrt(d)), AdamW lr 0.001, betas (0.9, 0.98), weight decay 1.0, full batch, 30/70 train/test split, MPS.
+- Wall time per seed: 7508 to 7720 s (about 2.1 h). About 188 s per 1000 epochs, stable across the run.
+- All 5 seeds reach final train accuracy 1.0 and final test accuracy 1.0. 5 of 5 grokked.
+
+Grok epoch (first epoch with test acc above threshold):
+
+| Seed | > 0.9 | > 0.95 | > 0.99 |
+|---|---|---|---|
+| 0 | 12987 | 13133 | 13457 |
+| 1 | 6921 | 7031 | 7237 |
+| 2 | 9510 | 9622 | 9852 |
+| 3 | 11019 | 11069 | 11138 |
+| 4 | 23747 | 23803 | 23913 |
+| mean | 12836.8 | 12931.6 | 13119.4 |
+| std | 5803.9 | 5787.4 | 5758.8 |
+
+Grok epoch varies by a factor of 3.4 between seeds (6921 to 23747). Seed 4 is a clear late outlier.
+
+Initial and final weight norms (sum of w^2, and L2 norm):
+
+| Seed | sum_w2 init | sum_w2 final | L2 init | L2 final |
+|---|---|---|---|---|
+| 0 | 1045.5 | 991.7 | 32.33 | 31.49 |
+| 1 | 1046.1 | 1560.9 | 32.34 | 39.51 |
+| 2 | 1044.2 | 1103.4 | 32.31 | 33.22 |
+| 3 | 1048.7 | 1320.7 | 32.38 | 36.34 |
+| 4 | 1042.9 | 1288.5 | 32.29 | 35.90 |
+
+Token-embedding share of initial sum_w2 is about 0.068 to 0.070 in every seed.
+
+Limit-cycle check (post-grok test-acc oscillation): 0 of 5 seeds show a limit cycle. All 5 end at 1.000. Post-grok minimum test acc: 0.620, 0.475, 0.534, 0.561, 0.841; std 0.007, 0.012, 0.010, 0.006, 0.003; number of dips below 0.9: 28, 75, 31, 18, 4. So brief post-grok dips do exist (seed 1 falls to 0.475), but they recover, and none is classed as a sustained cycle.
+
+## C) Predictor 1 — L2 Norm (5 of 5 seeds computed)
+
+Signals per seed: MA-crossover epoch (fast window 50, slow window 200) and MA-of-MA zero-crossing epoch (fast window 20, skip first 100 epochs, quiet-epoch cutoff 90). Noise floor was about 0.00046 to 0.00048 in all seeds.
+
+| Seed | grok epoch | MA-crossover | MA-of-MA zero-cross |
+|---|---|---|---|
+| 0 | 12987 | 113.4 | 1802.2 |
+| 1 | 6921 | 113.2 | 1767.2 |
+| 2 | 9510 | 120.1 | 1814.2 |
+| 3 | 11019 | 130.6 | 1810.8 |
+| 4 | 23747 | 136.8 | 1801.3 |
+
+Observation (not a final verdict): the MA-of-MA zero-crossing sits at about 1770 to 1815 in every seed, while grok epoch ranges from 6921 to 23747. The MA-crossover sits at 113 to 137 in every seed. Neither signal moves with grok epoch. Both look tied to early training dynamics that are the same across seeds, not to the time of grokking. Formal scoring against grok epoch (lead time, correlation) has NOT been done yet.
+
+## D) Predictor 2 — Dropout (5 of 5 seeds computed)
+
+Dropout-Variance signal: n_samples 100, rate 0.5, 401 checkpoints per seed.
+
+| Seed | grok epoch | variance peak epoch | peak / grok | peak value |
+|---|---|---|---|---|
+| 0 | 12987 | 24200 | 1.86 | 3.69e-05 |
+| 1 | 6921 | 25400 | 3.67 | 3.36e-05 |
+| 2 | 9510 | 16700 | 1.76 | 3.87e-05 |
+| 3 | 11019 | 18800 | 1.71 | 3.88e-05 |
+| 4 | 23747 | 39000 | 1.64 | 3.56e-05 |
+
+Observation (not a final verdict): in all 5 seeds the variance peak comes AFTER the grok epoch (ratio 1.64 to 3.67), never before. So as a predictor of grok it would arrive late. Peak ratios are fairly close (1.64 to 1.86) for four seeds; seed 1 is an outlier at 3.67. Not yet formally scored.
+
+Dropout gap at final epoch (train-acc minus dropout-eval-acc style gap, by dropout rate):
+
+| Seed | p0.1 | p0.3 | p0.5 | p0.7 | p0.9 |
+|---|---|---|---|---|---|
+| 0 | -0.056 | -0.494 | -0.788 | -0.919 | -0.981 |
+| 1 | -0.053 | -0.428 | -0.755 | -0.917 | -0.978 |
+| 2 | -0.011 | -0.286 | -0.674 | -0.888 | -0.972 |
+| 3 | -0.002 | -0.126 | -0.513 | -0.867 | -0.979 |
+| 4 | -0.010 | -0.295 | -0.657 | -0.879 | -0.976 |
+
+The final-epoch gap grows more negative as the dropout rate rises, in every seed. At low rates (0.1, 0.3) the seeds differ a lot; at high rates (0.7, 0.9) they are almost the same. The DRC snapshots (5 rates at every eval-grid point) are saved in `seed_*/dropout/dropout_drc_snapshots.json`.
+
+## E) Predictors 3 and 4 — Spectral and AGE (status only, results NOT recorded here)
+
+- The main run's default `--predictors` list excluded them, so `spectral_predictor` and `age_predictor` were `null` after training. The runner code for both already exists (`_checkpoint_predictor_spectral`, `_checkpoint_predictor_age`). No retraining is needed.
+- They were started afterwards as a separate background pass over the saved checkpoints (same command with `--predictors l2,dropout_gap,dropout_variance,spectral,age`). Their results will be appended in a later entry.
+- Earlier v4 (24-checkpoint, p = 97 baseline) verdicts for Spectral and AGE exist in older entries above and are NOT superseded by this run.
+
+## F) Open items
+
+- Formal scoring of L2 Norm and Dropout against grok epoch on this new 5-seed data (lead time, correlation, detection rate) is still to be done.
+- Spectral and AGE results to be appended when the background pass finishes.
+- HTSR Alpha and the later predictors are next in the evaluation order; no code for finished predictors was removed.
+- `project_compilation.pdf` was modified before this session and is not committed.
+
+## Files modified in this entry
+- `context.md` — this section only (append only).
