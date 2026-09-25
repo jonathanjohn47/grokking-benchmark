@@ -10622,3 +10622,15 @@ Source: `08_Experiments/results/nanda_unified/` (`run.log`, `aggregate.json`, `s
 - `08_Experiments/results/nanda_unified/seed_0..4/spectral/` (8 files each) and `age/` (4 files each) — new.
 - `08_Experiments/results/nanda_unified/aggregate.json`, `run.log` — regenerated with all four predictors.
 - `context.md` — this section (append only).
+
+---
+
+# Session Summary — 2026-09-25 (night): model checkpoints of the 5-seed Nanda-Unified run committed to git
+
+- **Decision (Jonathan):** commit ALL of `08_Experiments/results/nanda_unified/`, including the checkpoints, after being told about the size and the disk-space risk. Other options offered and not chosen: keep checkpoints out of git and back them up elsewhere; commit only a few key epochs per seed.
+- **Why they were uncommitted before:** `.gitignore` line 30 is `*.pt`. That rule ignores all 4005 checkpoint files (801 per seed x 5 seeds, `seed_*/checkpoints/model_epoch_*.pt`, about 0.8 MB each, about 3.2 GB in total).
+- **How:** `git add -f` on the `checkpoints/` folders only. The `*.pt` line in `.gitignore` was NOT changed, so future `.pt` files (other runs, smoke tests) are still ignored unless force-added.
+- **Disk-space note:** the disk was 99% full (2.1 GiB free) when this was first asked; Jonathan freed space (13 GiB free) before the commit. `.git` was about 269 MB before this commit.
+- **Caveat:** these are binary weights; they do not compress and they stay in git history for good. Pushing to `origin` (GitHub) will be about 3 GB and slow, and removing them later would need a history rewrite. Nothing was pushed in this step.
+- **Left uncommitted on purpose:** `project_compilation.pdf`; `graphify-out/` files rewritten by the hook.
+- **Files modified:** `context.md` (this section, append only); 4005 checkpoint `.pt` files added.
