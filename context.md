@@ -10700,3 +10700,29 @@ Reading:
 ## Files modified
 - New: `06_Code/scripts/analyze_nanda_unified.py`; `08_Experiments/results/nanda_unified/analysis/` (4 PNG plots, `predictor_events.json`).
 - `context.md` — this section (append only).
+
+---
+
+# Session Summary — 2026-09-25: Scope decision — no online detection rule; proceed with HTSR Alpha (Predictor 5)
+
+## Decision (Jonathan)
+- Chosen from the two open options: **Option 2** — proceed with HTSR Alpha, then the remaining predictors in the evaluation order.
+- **Option 1 (design an online detection rule for Spectral alignment and AGE NC1) is OUT OF SCOPE for this thesis.** This is a scope decision, not a code change. Nothing was deleted; Spectral and AGE code and results are unchanged.
+- The thesis is a benchmark of ESTABLISHED, PUBLISHED grokking predictors, each run with the methodology of its original paper inside one unified framework.
+- We must NOT introduce: a new online detection rule, new detection thresholds, arbitrary percentage-based thresholds, new signal-processing procedures, or predictor-specific tuning meant to improve performance.
+- HTSR Alpha must follow its original paper's methodology. Do not modify it to make it perform better.
+
+## Scientific rationale (preserve for the thesis; explains WHY online detection was not developed)
+> "The study evaluates established grokking predictors according to their published or predefined methodologies rather than introducing a new researcher-designed detection methodology. Developing an online detection rule would constitute an additional methodological contribution involving new assumptions, thresholds, and validation procedures. This would change the scope from benchmarking existing predictors to developing a new detection method. Therefore, online detection-rule development is intentionally excluded from the present study."
+
+## Consequences for earlier results
+- The 2026-09-26 analysis (Result A = predictors as implemented; Result B = retrospective 10% / 50% "fraction of change" events) stays as recorded. Result B was labelled by me as an illustrative sensitivity look with arbitrary levels, NOT a benchmark result and NOT a proposed detection rule. It must not be presented in the thesis as a new method.
+- The verdict "none of the four predictors works as implemented" stands. The statement "not proven that any is a usable predictor; that would need an online rule" is now a documented LIMITATION / future work, not an ignored problem.
+
+## Current Project State
+- Completed: L2 Norm, Dropout, Spectral, AGE on 5 seeds; analysis and verdict.
+- In progress: Predictor 5, HTSR Alpha (original-paper methodology only).
+- Later: Correlation Traps, Weight-PCA, Higher-MI, Commutator Defect.
+
+## Files modified
+- `context.md` — this section (append only).
