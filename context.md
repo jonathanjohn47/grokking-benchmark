@@ -10565,3 +10565,60 @@ The final-epoch gap grows more negative as the dropout rate rises, in every seed
 
 ## Files modified in this entry
 - `context.md` — this section only (append only).
+
+---
+
+# Session Summary — 2026-09-25 (evening): Spectral and AGE computed on the 5-seed Nanda-Unified run — all four baseline predictors now have data
+
+Source: `08_Experiments/results/nanda_unified/` (`run.log`, `aggregate.json`, `seed_*/summary.json`, `seed_*/spectral/`, `seed_*/age/`). Continues the two earlier entries of 2026-09-25 (pipeline changes and L2 Norm + Dropout results).
+
+## What was done
+- Found why Spectral and AGE were empty after training: the runner's `--predictors` default (`l2,dropout_gap,dropout_variance`) excludes them. Not a code bug. The functions `_checkpoint_predictor_spectral` and `_checkpoint_predictor_age` already existed.
+- Ran the runner again with `--predictors l2,dropout_gap,dropout_variance,spectral,age`. It skipped the finished predictors and computed Spectral and AGE from the saved checkpoints of each seed. **No retraining.** 401 of the 801 saved checkpoints per seed were evaluated (`eval_every = 100`).
+- Started 13:42 IST, finished before 18:47 IST. AGE takes about 20 s per seed. Spectral takes about 59 to 63 min per seed (seed 0: 59 min, seed 1: 63 min). Total about 5 h.
+- Runner code, yaml and predictor files were not changed for this pass.
+
+## Completeness checks
+- Every seed 0 to 4: `spectral/` has 8 files, `age/` has 4 files, `checkpoints/` still has 801 files.
+- L2 Norm and Dropout entries in every `summary.json` are unchanged.
+- No NaN or infinite values in any Spectral or AGE `.npy` array. Array shapes for seed 0: eigenvalues (401, 50), cumulative power (401, 100), all other Spectral and AGE arrays (401,).
+- `seed_*/reports/` folders are still empty. No predictor step writes there.
+- The runner docstring and start banner still say "L2-Norm and Dropout only". That text is stale; the code runs all four. Not changed (out of scope).
+
+## Predictor 3 — Spectral (Canatar task-model alignment), 5 of 5 seeds
+
+| Seed | Grok | k_90 first -> last | k_90 min epoch (x grok) | k_95 min epoch | Alignment first -> last | Alignment max epoch (x grok) |
+|---|---|---|---|---|---|---|
+| 0 | 12987 | 3451 -> 3368 | 29700 (2.29) | 39100 | 0.000186 -> 0.00857 | 31600 (2.43) |
+| 1 | 6921 | 3449 -> 3390 | 30700 (4.44) | 30700 | 0.000187 -> 0.00880 | 37800 (5.46) |
+| 2 | 9510 | 3450 -> 3406 | 14100 (1.48) | 15200 | 0.000190 -> 0.00825 | 29300 (3.08) |
+| 3 | 11019 | 3448 -> 3336 | 38000 (3.45) | 38000 | 0.000176 -> 0.00860 | 37400 (3.39) |
+| 4 | 23747 | 3450 -> 3364 | 33900 (1.43) | 31600 | 0.000182 -> 0.00600 | 32000 (1.35) |
+
+## Predictor 4 — AGE (Neural Collapse NC1 variability collapse), 5 of 5 seeds
+
+| Seed | Grok | NC1 first -> last | NC1 min value | NC1 min epoch (x grok) | Feature norm first -> last |
+|---|---|---|---|---|---|
+| 0 | 12987 | 45.37 -> 0.0632 | 0.0277 | 31500 (2.43) | 1.35 -> 192.8 |
+| 1 | 6921 | 44.64 -> 0.0392 | 0.0322 | 37800 (5.46) | 1.38 -> 264.2 |
+| 2 | 9510 | 44.59 -> 0.1000 | 0.0413 | 29300 (3.08) | 1.24 -> 115.7 |
+| 3 | 11019 | 47.86 -> 0.0575 | 0.0463 | 37400 (3.39) | 1.42 -> 85.0 |
+| 4 | 23747 | 46.10 -> 0.5112 | 0.0419 | 30100 (1.27) | 1.63 -> 161.5 |
+
+## Observations (not a formal verdict; formal scoring is still to be done)
+- In all 5 seeds, every Spectral and AGE signal reaches its extreme AFTER the grok epoch. Ratios to grok range from 1.27 to 5.46 and none is below 1. Spectral k_90-min is 1.43 to 4.44; alignment-max is 1.35 to 5.46; NC1-min is 1.27 to 5.46.
+- The direction of movement is as expected: alignment rises from about 0.0002 to about 0.006 to 0.0088; NC1 falls from about 45 to about 0.03 to 0.5; k_90 falls by about 45 to 115 directions out of about 3450. So the quantities do change with training, but they complete their change long after test accuracy has already jumped.
+- Alignment-max epoch equals NC1-min epoch exactly in seeds 1, 2 and 3 (37800, 29300, 37400). This may be a coincidence of the 100-epoch grid or a real coupling; not investigated.
+- Seed 4 (latest grok, 23747) has the smallest ratios for all three signals (1.27 to 1.43), and also the smallest final alignment (0.0060) and the highest final NC1 (0.51). Seed 1 (earliest grok, 6921) has the largest ratios (4.44 to 5.46). Suggests the signals move at about the same absolute epoch (roughly 29000 to 38000 in most seeds) whatever the grok epoch. Not yet tested.
+- Combined with earlier entries: L2 Norm (MA-of-MA crossing about 1800 in every seed, independent of grok), Dropout variance (peak 1.64 to 3.67x grok) and Spectral and AGE all fail to LEAD grok on this run. This agrees with the earlier v4 (p = 97, 24-checkpoint) negative verdicts for Spectral and AGE, which are not superseded. Caveat: the 100-epoch evaluation grid cannot resolve timing finer than 100 epochs, and the 1.27x case (seed 4) lies well outside that resolution.
+
+## Current Project State
+- Completed: 5-seed training; all four baseline predictors (L2 Norm, Dropout, Spectral, AGE) computed on all 5 seeds; results committed.
+- Still to do: formal scoring of the four predictors against grok epoch (lead time, correlation, detection); HTSR Alpha and later predictors. Nothing was deleted; code for finished predictors is unchanged.
+- Uncommitted and left out on purpose: `project_compilation.pdf` (modified before this session), `graphify-out/` files (rewritten by the graphify hook).
+
+## Files Modified
+- `08_Experiments/results/nanda_unified/seed_0..4/summary.json` — `spectral_predictor` and `age_predictor` blocks filled in (were null).
+- `08_Experiments/results/nanda_unified/seed_0..4/spectral/` (8 files each) and `age/` (4 files each) — new.
+- `08_Experiments/results/nanda_unified/aggregate.json`, `run.log` — regenerated with all four predictors.
+- `context.md` — this section (append only).
