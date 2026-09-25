@@ -1,7 +1,7 @@
 # Graph Report - grokking-benchmark  (2026-09-25)
 
 ## Corpus Check
-- 149 files · ~982,884 words
+- 149 files · ~984,518 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f0659392`
+- Built from commit: `aa363e3b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -207,7 +207,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.017) - this node is a cross-community bridge._
 - **Are the 4 inferred relationships involving `PredictorMeasurements` (e.g. with `recompute_from_checkpoints()` and `train_one_seed()`) actually correct?**
   _`PredictorMeasurements` has 4 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Epoch indices (0-based, matching the training loop's `epoch`) at which     a mod`, `Subsample the evaluation grid from the SAVED checkpoint epochs.     Keeps saved`, `LEGACY — for Archive comparison only, not used in unified benchmark     (24 log-` to the rest of the system?**
+- **What connects `First epoch at which y has covered `f` of the way from its start to     its fart`, `First epoch after the (smoothed) sum-of-squares peak at which it has     fallen`, `events[predictor_signal][seed] = epoch.` to the rest of the system?**
   _260 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.08717948717948718 - nodes in this community are weakly interconnected._

@@ -1625,7 +1625,7 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/aggregate.json": {
-    "mtime": 1790357401.5536137,
+    "mtime": 1790359400.3578289,
     "ast_hash": "573e1ce670875b88090a8effed8a9c73",
     "semantic_hash": ""
   },
@@ -1805,33 +1805,33 @@
     "semantic_hash": ""
   },
   "06_Code/scripts/analyze_nanda_unified.py": {
-    "mtime": 1790344398.7890832,
-    "ast_hash": "c4ba775ae0a83e8362948373c216beec",
+    "mtime": 1790359484.345321,
+    "ast_hash": "d26103fa3599b875ac7063e08a0bd0c8",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/analysis/predictor_events.json": {
-    "mtime": 1790344406.6274672,
-    "ast_hash": "88101be52690b81b247f30803340e81f",
+    "mtime": 1790359484.7927012,
+    "ast_hash": "f5d07add9c03c7562976f3ca077d7a05",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/analysis/01_grokking_curves.png": {
-    "mtime": 1790344406.8708084,
+    "mtime": 1790359485.0457878,
     "ast_hash": "320bfeeee955fb97384a72d8ffe397e2",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/analysis/02_signals_vs_grok.png": {
-    "mtime": 1790344407.5784688,
-    "ast_hash": "0dcb4d899c5844d2d733a68f6298d04d",
+    "mtime": 1790359486.0661793,
+    "ast_hash": "a1d15f76f998700a5a29c0c759cdeb73",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/analysis/03_event_vs_grok_scatter.png": {
-    "mtime": 1790344407.6865501,
-    "ast_hash": "569fb25691ead13d585400c24503d6bd",
+    "mtime": 1790359486.399394,
+    "ast_hash": "e98614279cbf6edbd875c05c9ade6b7a",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/analysis/04_lead_times.png": {
-    "mtime": 1790344407.7696195,
-    "ast_hash": "3284de6b9b0fa1cd73d58056eb4bfce2",
+    "mtime": 1790359486.5608075,
+    "ast_hash": "a80453259614b93723e8d4b8f1f8f225",
     "semantic_hash": ""
   },
   "06_Code/src/predictors/htsr_alpha.py": {
