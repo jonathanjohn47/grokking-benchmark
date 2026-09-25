@@ -10846,3 +10846,28 @@ Grok epochs, seeds 0 to 4: 12987 / 6921 / 9510 / 11019 / 23747.
 ## Files Modified
 - New: `02_Progress_Reports/2026-09-25_Progress_Report_Nanda_Unified_Predictors_1-5.pdf`.
 - `context.md` — this section (append only).
+
+---
+
+# Session Summary — 2026-09-25 (end of day, part 2): Report and email re-done to the professor's channel rules
+
+## Instruction received (Jonathan, pasted from the Teams channel welcome message)
+- The supervisor (Sheikh Faisal Rashid, per README.md) asked for: the numbered thesis folder structure (01_Admin ... 10_Publications, Archive); repository updated at least weekly and before every supervision meeting; a weekly or monthly progress report with five parts: **Objectives completed, Work accomplished, Challenges encountered, Results obtained, Plans for the next reporting period**; clear descriptive filenames (no `final_final_v2` or `new.pdf`); drafts never overwritten; experiments documented in 08_Experiments; a root README.md with thesis title, student name, supervisors, objectives, structure, software requirements and reproduction steps.
+- Jonathan asked: "Create report and email according to these rules".
+
+## What was done
+- The earlier same-day PDF (`2026-09-25_Progress_Report_Nanda_Unified_Predictors_1-5.pdf`, committed in `6faec78`) was REPLACED by `02_Progress_Reports/2026-09-25_Progress_Report_Predictors_1-5.pdf` (4 pages), which follows the five required headings, names student and supervisor, and covers only 25 September 2026 ("Period covered"). Content and numbers are the same as before (all five predictors fail as implemented; HTSR alpha caveat). The old file was deleted on purpose (it was my own same-day draft; it stays in git history).
+- New content added in the report that is my proposal, not a recorded decision: plan items "start writing the results chapter in 05_Thesis_Document" and discussion point "are 5 seeds enough or should more be added". Jonathan should confirm or remove them.
+- An email draft to the supervisor was written in chat (not sent; recipient address not known to Claude; Claude did not use Gmail).
+- Checked the root README.md against the checklist: it already has Student, Supervisor, Research Objectives, Repository Structure, Software Requirements and Instructions to Reproduce. Not edited. Observations only: objective 2 in README lists four predictors (L2, dropout gap, age-based, spectral) and does not mention HTSR Alpha or the later ones; the repository root also has folders outside the professor's layout (`Claude outputs`, `runs`, lowercase `archive` vs `Archive`, and two Spectral PDFs at root). Nothing was moved or changed.
+
+## Current Project State
+- Completed: Predictors 1 to 5 on 5 seeds, scored; report written to the supervisor's format; committed.
+- Next: Correlation Traps (Predictor 6), then Weight-PCA, Higher-MI, Commutator Defect.
+- Open: how to present alpha < 2; whether the retrospective sensitivity check goes into the thesis; whether to add seeds; whether to update the README objectives and tidy root-level folders (Jonathan's choice, not done).
+- Not pushed to `origin`.
+
+## Files Modified
+- Deleted: `02_Progress_Reports/2026-09-25_Progress_Report_Nanda_Unified_Predictors_1-5.pdf` (replaced).
+- New: `02_Progress_Reports/2026-09-25_Progress_Report_Predictors_1-5.pdf`.
+- `context.md` — this section (append only).
