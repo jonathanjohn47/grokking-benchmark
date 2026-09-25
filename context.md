@@ -10634,3 +10634,69 @@ Source: `08_Experiments/results/nanda_unified/` (`run.log`, `aggregate.json`, `s
 - **Caveat:** these are binary weights; they do not compress and they stay in git history for good. Pushing to `origin` (GitHub) will be about 3 GB and slow, and removing them later would need a history rewrite. Nothing was pushed in this step.
 - **Left uncommitted on purpose:** `project_compilation.pdf`; `graphify-out/` files rewritten by the hook.
 - **Files modified:** `context.md` (this section, append only); 4005 checkpoint `.pt` files added.
+
+---
+
+# Session Summary — 2026-09-26: Analysis and verdict for the four baseline predictors on the 5-seed Nanda-Unified run
+
+Source: `08_Experiments/results/nanda_unified/` (5 seeds, 40000 epochs, p = 113; predictors evaluated on 401 checkpoints per seed, 100-epoch grid). Analysis script: `06_Code/scripts/analyze_nanda_unified.py` (reads saved results only, no training). Outputs: `08_Experiments/results/nanda_unified/analysis/` = `01_grokking_curves.png`, `02_signals_vs_grok.png`, `03_event_vs_grok_scatter.png`, `04_lead_times.png`, `predictor_events.json`. Grok epochs (test acc > 0.9), seeds 0 to 4: 12987, 6921, 9510, 11019, 23747.
+
+## Test used (my working criteria, in line with the earlier v4 verdicts)
+1. The predictor must fire BEFORE grok in all 5 seeds (lead = grok epoch - event epoch, positive = early).
+2. The epoch at which it fires must move with the grok epoch from seed to seed (Spearman rho across seeds; with n = 5, rho 1.0 gives p about 0.017, rho 0.9 gives p about 0.037, rho 0.7 gives p about 0.19, so anything below 0.9 is not significant).
+
+## Result A — predictors as implemented (published-style rules): ALL FAIL, same conclusion as v4
+
+| Predictor and rule | Event epoch, seeds 0 to 4 | Lead, seeds 0 to 4 | Before grok | rho | Pearson r |
+|---|---|---|---|---|---|
+| L2: MA crossover | 113 / 113 / 120 / 130 / 136 | 12873 / 6807 / 9389 / 10888 / 23610 | 5/5 | 0.70 | 0.74 |
+| L2: MA-of-MA zero crossing | 1802 / 1767 / 1814 / 1810 / 1801 | 11184 / 5153 / 7695 / 9208 / 21945 | 5/5 | 0.00 | 0.29 |
+| Dropout: variance peak | 24200 / 25400 / 16700 / 18800 / 39000 | -11213 / -18479 / -7190 / -7781 / -15253 | 0/5 | 0.40 | 0.84 |
+| Spectral: k90 minimum | 29700 / 30700 / 14100 / 38000 / 33900 | -16713 / -23779 / -4590 / -26981 / -10153 | 0/5 | 0.30 | 0.33 |
+| Spectral: alignment maximum | 31600 / 37800 / 29300 / 37400 / 32000 | -18613 / -30879 / -19790 / -26381 / -8253 | 0/5 | -0.30 | -0.36 |
+| AGE: NC1 minimum | 31500 / 37800 / 29300 / 37400 / 30100 | -18513 / -30879 / -19790 / -26381 / -6353 | 0/5 | -0.40 | -0.53 |
+
+Reading:
+- **L2 Norm fails.** Both rules fire early in all 5 seeds, but at almost the same epoch whatever the grok epoch (MA crossover 113 to 136, MA-of-MA about 1800, rho 0.00). "Before grok" is true only because the rule catches an early training transient, not grokking. MA crossover rho 0.70 is not significant.
+- **Dropout variance peak, Spectral (k90-min, alignment-max) and AGE (NC1-min) fail.** In every seed the extreme value is reached after grok (leads all negative), because the "extreme" lies in the noisy post-grok oscillations (see plot 02). Alignment-max epoch equals NC1-min epoch exactly in seeds 1, 2, 3 (37800, 29300, 37400); reason not investigated.
+
+## Result B — the raw signals themselves (retrospective "fraction of change" events; NOT online predictors)
+
+Definition: first epoch at which a signal has covered 10% or 50% of the way from its start value to its farthest value (NC1 in log10). These use the run's final extreme, so a live monitor could not compute them. The 10% and 50% levels are my own illustrative choice (arbitrary); treat as a sensitivity look, not a benchmark result.
+
+| Signal and level | Event epoch, seeds 0 to 4 | Lead, seeds 0 to 4 | Before grok | rho | Pearson r |
+|---|---|---|---|---|---|
+| L2 sum(w^2) half-way down from peak | 11921 / 4969 / 9497 / 7868 / 19971 | 1066 / 1952 / 13 / 3151 / 3776 | 5/5 | 0.90 | 0.98 |
+| Dropout variance, 10% of rise | 11500 / 5800 / 9000 / 9100 / 22200 | 1487 / 1121 / 510 / 1919 / 1547 | 5/5 | 1.00 | 1.00 |
+| Dropout variance, 50% of rise | 13700 / 7200 / 9700 / 11300 / 23900 | -713 / -279 / -190 / -281 / -153 | 0/5 | 1.00 | 1.00 |
+| Spectral alignment, 10% of rise | 8500 / 4100 / 6400 / 2900 / 19600 | 4487 / 2821 / 3110 / 8119 / 4147 | 5/5 | 0.70 | 0.95 |
+| Spectral alignment, 50% of rise | 12500 / 6300 / 9500 / 10200 / 23200 | 487 / 621 / 10 / 819 / 547 | 5/5 | 1.00 | 1.00 |
+| Spectral k90, 50% of fall | 13800 / 7500 / 7500 / 11800 / 25100 | -813 / -579 / 2010 / -781 / -1353 | 1/5 | 1.00 | 0.99 |
+| AGE log10 NC1, 10% of fall | 8200 / 3000 / 4700 / 2500 / 19000 | 4787 / 3921 / 4810 / 8519 / 4747 | 5/5 | 0.70 | 0.96 |
+| AGE log10 NC1, 50% of fall | 12900 / 7000 / 10300 / 11100 / 23600 | 87 / -79 / -790 / -81 / 147 | 2/5 | 1.00 | 1.00 |
+
+Reading:
+- The raw signals do change sharply at grok in every seed (plot 02). Their 50% points sit within about 800 epochs of grok and rank the seeds correctly (rho 1.00). So the signals carry grok-timing information; it is the "take the extreme" detection rule that fails.
+- Earliest usable warning is the 10% onset: Spectral alignment leads by 2821 to 8119 epochs and AGE NC1 by 3921 to 8519 epochs, in all 5 seeds. Dropout variance onset leads by only 510 to 1919 epochs. The L2 sum(w^2) decline is weakest: lead as small as 13 epochs (seed 2).
+- Seed 3 has the earliest onset (2500 to 2900) but not the earliest grok, so the 10% onset ranks seeds less well (rho 0.70, not significant).
+- Seed 4 (latest grok, 23747) is the extreme point for every signal, so the high Pearson r values are partly driven by one seed.
+
+## Verdict (as given to Jonathan)
+- **None of the four predictors works as implemented.** L2 Norm fails (fires on an early transient, independent of grok). Dropout variance peak, Spectral and AGE all fail (extreme reached after grok in 5/5 seeds). Consistent with the v4 negative closes; not superseded.
+- **Worth keeping as candidate signals:** Spectral alignment and AGE NC1 (strongest), then Dropout variance (weaker lead), then L2 sum(w^2) decline (weakest).
+- **Not proven:** that any of them is a usable predictor. That needs an ONLINE detection rule (no future values, no hand-picked fraction).
+
+## Caveats
+- n = 5 seeds; only rho >= 0.9 is significant. Seed 4 dominates correlations.
+- The 100-epoch checkpoint grid limits timing resolution to 100 epochs; 50% events with leads under 100 (seed 2 spectral alignment: 10 epochs; AGE 50%: -79 to 147) are within grid resolution.
+- Fraction-of-change events are retrospective (use the final extreme). 10% and 50% levels are arbitrary, chosen by me.
+- Dropout-gap by rate is available only at the final epoch (one point per seed), so it is not part of this timing analysis.
+
+## Current Project State and next actions
+- Completed: L2 Norm, Dropout, Spectral, AGE computed on 5 seeds; analysis, plots and verdict done.
+- Next (Jonathan's choice, not yet decided): design an online detection rule for the Spectral-alignment and AGE-NC1 signals with no arbitrary constants; then HTSR Alpha and later predictors in the evaluation order. Code for finished predictors is unchanged.
+- Left uncommitted on purpose: `project_compilation.pdf` (Jonathan said to leave it); `graphify-out/` files rewritten by the hook.
+
+## Files modified
+- New: `06_Code/scripts/analyze_nanda_unified.py`; `08_Experiments/results/nanda_unified/analysis/` (4 PNG plots, `predictor_events.json`).
+- `context.md` — this section (append only).
