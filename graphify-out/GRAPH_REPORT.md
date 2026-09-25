@@ -1,16 +1,16 @@
 # Graph Report - grokking-benchmark  (2026-09-25)
 
 ## Corpus Check
-- 105 files · ~866,563 words
+- 143 files · ~968,950 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 506 nodes · 599 edges · 42 communities (35 shown, 7 thin omitted)
+- 524 nodes · 628 edges · 42 communities (36 shown, 6 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `8bbf9289`
+- Built from commit: `9fae9b29`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -78,11 +78,11 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (42 total, 7 thin omitted)
+## Communities (42 total, 6 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.11
-Nodes (33): compute_accuracy(), compute_dropout_gap_multi_rate(), compute_dropout_variance(), # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, Dropout-variance predictor signal (Salah & Yevick, arXiv:2507.11645):     at a f, aggregate(), _checkpoint_predictor_dropout_variance() (+25 more)
+Cohesion: 0.09
+Nodes (34): Transformer, compute_accuracy(), compute_dropout_gap_multi_rate(), compute_dropout_variance(), # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, Dropout-variance predictor signal (Salah & Yevick, arXiv:2507.11645):     at a f, aggregate() (+26 more)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.07
@@ -99,6 +99,10 @@ Nodes (5): Archived — single-head experiment, How to bring it back, Nothing wa
 ### Community 4 - "Community 4"
 Cohesion: 0.09
 Nodes (20): apply_moving_average(), compute_acceleration(), compute_fast_slow_moving_averages(), compute_ma_of_slow_ma(), compute_noise_floor(), detect_inflection(), detect_ma_crossover(), detect_ma_of_ma_trigger() (+12 more)
+
+### Community 5 - "Community 5"
+Cohesion: 0.19
+Nodes (16): build_events(), fraction_epochs(), l2_decline_epoch(), load_seed(), main(), plot_curves(), plot_leads(), plot_scatter() (+8 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.20
@@ -183,21 +187,21 @@ Nodes (9): _collect_representations_and_labels(), compute_age_for_model(), compu
 ## Knowledge Gaps
 - **127 isolated node(s):** `1.1 What is grokking`, `1.2 What a grokking predictor is supposed to do`, `2.1 What a kernel is`, `2.2 Why a trained network's hidden layer defines a kernel`, `2.3 The representation matrix and the Gram matrix` (+122 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **6 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `PredictorMeasurements` connect `Community 19` to `Community 0`?**
-  _High betweenness centrality (0.041) - this node is a cross-community bridge._
+  _High betweenness centrality (0.038) - this node is a cross-community bridge._
 - **Why does `train_one_seed()` connect `Community 0` to `Community 19`?**
-  _High betweenness centrality (0.025) - this node is a cross-community bridge._
+  _High betweenness centrality (0.023) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `PredictorMeasurements` (e.g. with `recompute_from_checkpoints()` and `train_one_seed()`) actually correct?**
   _`PredictorMeasurements` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Epoch indices (0-based, matching the training loop's `epoch`) at which     a mod`, `Subsample the evaluation grid from the SAVED checkpoint epochs.     Keeps saved`, `LEGACY — for Archive comparison only, not used in unified benchmark     (24 log-` to the rest of the system?**
-  _240 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `First epoch at which y has covered `f` of the way from its start to     its fart`, `First epoch after the (smoothed) sum-of-squares peak at which it has     fallen`, `events[predictor_signal][seed] = epoch.` to the rest of the system?**
+  _243 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.10588235294117647 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08717948717948718 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
   _Cohesion score 0.07130124777183601 - nodes in this community are weakly interconnected._
 - **Should `Community 4` be split into smaller, more focused modules?**
