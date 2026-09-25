@@ -10826,3 +10826,23 @@ Grok epochs, seeds 0 to 4: 12987 / 6921 / 9510 / 11019 / 23747.
 - `08_Experiments/results/nanda_unified/analysis/` — `01` to `04` PNGs and `predictor_events.json` regenerated with HTSR.
 - `context.md` — this section (append only).
 - Shared model file and all predictor files: not changed. `graphify-out/` files are rewritten by the graphify hook and are included by `git add .` per the commit rule.
+
+---
+
+# Session Summary — 2026-09-25 (end of day): Progress report PDF and Teams message for the professor
+
+## What was done
+- Jonathan asked for a PDF report of the day's work plus a short message to post on the Microsoft Teams channel for his professor. Claude wrote both.
+- **PDF:** `02_Progress_Reports/2026-09-25_Progress_Report_Nanda_Unified_Predictors_1-5.pdf` (5 pages, built with reportlab; generator script was kept in the session scratchpad only, not in the repository). Contents: summary; experimental setup and grok epochs; pipeline work of the day (checkpoint schedule, path bug, magic numbers, checkpoints committed); the five predictors and the two scoring tests; results table for all five as implemented; HTSR Alpha method and the alpha < 2 caveat; the retrospective 10% / 50% sensitivity look (clearly labelled illustrative, not a benchmark result, not repeated for HTSR); scope decision; limitations; next steps.
+- **Teams message:** drafted in chat (not sent; Claude has no Teams access, Jonathan posts it himself). It summarises the verdict and asks the professor two questions: (1) how to present HTSR alpha below 2 in the thesis; (2) whether the retrospective sensitivity analysis should appear in the thesis at all.
+- Note for the record: the message says "as we agreed" about the no-online-detection-rule scope decision. That decision is recorded in this file as Jonathan's choice; whether the professor agreed is NOT recorded anywhere. Jonathan was told to edit that phrase if needed.
+
+## Current Project State
+- Completed: L2 Norm, Dropout, Spectral, AGE, HTSR Alpha computed and scored on 5 seeds (all fail as implemented). Progress report written and committed.
+- Next: Correlation Traps (Predictor 6), then Weight-PCA, Higher-MI, Commutator Defect. Nothing was deleted; no predictor or shared-model code changed in this step.
+- Open (postponed, not solved): presentation of alpha < 2; whether Section 7 of the report goes into the thesis. Both are questions for the professor.
+- Not pushed: local `main` is ahead of `origin/main`; the branch carries about 3 GB of checkpoints, so a push will be slow.
+
+## Files Modified
+- New: `02_Progress_Reports/2026-09-25_Progress_Report_Nanda_Unified_Predictors_1-5.pdf`.
+- `context.md` — this section (append only).
