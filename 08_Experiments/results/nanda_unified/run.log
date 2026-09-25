@@ -1,0 +1,280 @@
+========================================================================
+NANDA-UNIFIED BENCHMARK RUNNER   (predictors built so far: L2-Norm, Dropout)
+========================================================================
+config     : /Users/jonathanjohn/Documents/grokking-benchmark/06_Code/configs/nanda_unified.yaml
+output_dir : /Users/jonathanjohn/Documents/grokking-benchmark/08_Experiments/results/nanda_unified
+device     : mps
+task       : (a + b) mod 113   '=' token id 113   vocab 114
+model      : 4-head, d_model=128, init_std=0.07071  (small init)
+optimiser  : AdamW lr=0.001 betas=(0.9, 0.98) weight_decay=1.0
+run        : seeds=5  epochs=40000  full-batch=3830
+grok thr.  : [0.9, 0.95, 0.99] (primary 0.9)   dropout-variance: n_samples=100 rate=0.5
+checkpoints: save every 50 (gcd of [100, 200, 250]), evaluate every 100
+========================================================================
+[seed 0] epoch      0/40000  train_acc=0.0081  test_acc=0.0081  sum_w2=1045.5  elapsed=     7.057s  d1000=   7.057s
+[seed 0] epoch   1000/40000  train_acc=1.0000  test_acc=0.0022  sum_w2=4961.2  elapsed=   193.871s  d1000= 186.813s
+[seed 0] epoch   2000/40000  train_acc=1.0000  test_acc=0.0027  sum_w2=3787.0  elapsed=   380.992s  d1000= 187.121s
+[seed 0] epoch   3000/40000  train_acc=1.0000  test_acc=0.0036  sum_w2=4645.7  elapsed=   568.217s  d1000= 187.225s
+[seed 0] epoch   4000/40000  train_acc=1.0000  test_acc=0.0041  sum_w2=4297.3  elapsed=   755.947s  d1000= 187.730s
+[seed 0] epoch   5000/40000  train_acc=1.0000  test_acc=0.0050  sum_w2=3613.4  elapsed=   943.091s  d1000= 187.144s
+[seed 0] epoch   6000/40000  train_acc=1.0000  test_acc=0.0066  sum_w2=4283.1  elapsed=  1130.205s  d1000= 187.114s
+[seed 0] epoch   7000/40000  train_acc=1.0000  test_acc=0.0084  sum_w2=4556.0  elapsed=  1317.775s  d1000= 187.570s
+[seed 0] epoch   8000/40000  train_acc=1.0000  test_acc=0.0120  sum_w2=4056.0  elapsed=  1504.994s  d1000= 187.219s
+[seed 0] epoch   9000/40000  train_acc=1.0000  test_acc=0.0225  sum_w2=4030.1  elapsed=  1692.469s  d1000= 187.475s
+[seed 0] epoch  10000/40000  train_acc=1.0000  test_acc=0.0478  sum_w2=4310.1  elapsed=  1880.151s  d1000= 187.682s
+[seed 0] epoch  11000/40000  train_acc=1.0000  test_acc=0.0971  sum_w2=3674.8  elapsed=  2067.168s  d1000= 187.018s
+[seed 0] epoch  12000/40000  train_acc=1.0000  test_acc=0.2582  sum_w2=2653.1  elapsed=  2254.407s  d1000= 187.239s
+[seed 0] epoch  13000/40000  train_acc=1.0000  test_acc=0.9066  sum_w2=2708.3  elapsed=  2442.286s  d1000= 187.879s
+[seed 0] epoch  14000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1984.2  elapsed=  2629.884s  d1000= 187.598s
+[seed 0] epoch  15000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1443.1  elapsed=  2817.382s  d1000= 187.497s
+[seed 0] epoch  16000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1423.3  elapsed=  3004.939s  d1000= 187.558s
+[seed 0] epoch  17000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1357.1  elapsed=  3192.525s  d1000= 187.586s
+[seed 0] epoch  18000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1005.8  elapsed=  3379.776s  d1000= 187.251s
+[seed 0] epoch  19000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1671.1  elapsed=  3567.012s  d1000= 187.236s
+[seed 0] epoch  20000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1290.1  elapsed=  3757.617s  d1000= 190.605s
+[seed 0] epoch  21000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1200.9  elapsed=  3958.334s  d1000= 200.717s
+[seed 0] epoch  22000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1477.1  elapsed=  4152.230s  d1000= 193.896s
+[seed 0] epoch  23000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1248.2  elapsed=  4346.946s  d1000= 194.716s
+[seed 0] epoch  24000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1569.3  elapsed=  4540.096s  d1000= 193.150s
+[seed 0] epoch  25000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1276.4  elapsed=  4732.726s  d1000= 192.630s
+[seed 0] epoch  26000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1362.6  elapsed=  4931.553s  d1000= 198.827s
+[seed 0] epoch  27000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1392.9  elapsed=  5124.091s  d1000= 192.537s
+[seed 0] epoch  28000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1266.3  elapsed=  5327.208s  d1000= 203.117s
+[seed 0] epoch  29000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1447.0  elapsed=  5523.139s  d1000= 195.932s
+[seed 0] epoch  30000/40000  train_acc=1.0000  test_acc=0.9998  sum_w2=1341.0  elapsed=  5721.053s  d1000= 197.913s
+[seed 0] epoch  31000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1602.1  elapsed=  5925.704s  d1000= 204.651s
+[seed 0] epoch  32000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1314.3  elapsed=  6124.159s  d1000= 198.456s
+[seed 0] epoch  33000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1266.4  elapsed=  6317.719s  d1000= 193.560s
+[seed 0] epoch  34000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1563.0  elapsed=  6516.650s  d1000= 198.931s
+[seed 0] epoch  35000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1355.1  elapsed=  6719.051s  d1000= 202.401s
+[seed 0] epoch  36000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1418.1  elapsed=  6915.737s  d1000= 196.686s
+[seed 0] epoch  37000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1300.1  elapsed=  7110.628s  d1000= 194.891s
+[seed 0] epoch  38000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1432.6  elapsed=  7318.332s  d1000= 207.704s
+[seed 0] epoch  39000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1312.9  elapsed=  7519.070s  d1000= 200.738s
+[seed 0] epoch  39999/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=991.7  elapsed=  7719.631s  d1000= 200.561s
+[seed 0] done in 7720.1s  grok_epoch=12987  final_test_acc=1.0000
+[seed 1] epoch      0/40000  train_acc=0.0086  test_acc=0.0093  sum_w2=1046.1  elapsed=     7.238s  d1000=   7.238s
+[seed 1] epoch   1000/40000  train_acc=1.0000  test_acc=0.0091  sum_w2=4873.5  elapsed=   202.176s  d1000= 194.938s
+[seed 1] epoch   2000/40000  train_acc=1.0000  test_acc=0.0096  sum_w2=3214.8  elapsed=   388.827s  d1000= 186.651s
+[seed 1] epoch   3000/40000  train_acc=1.0000  test_acc=0.0166  sum_w2=4357.8  elapsed=   586.349s  d1000= 197.522s
+[seed 1] epoch   4000/40000  train_acc=1.0000  test_acc=0.0280  sum_w2=4379.2  elapsed=   781.257s  d1000= 194.908s
+[seed 1] epoch   5000/40000  train_acc=1.0000  test_acc=0.0612  sum_w2=3018.6  elapsed=   969.240s  d1000= 187.982s
+[seed 1] epoch   6000/40000  train_acc=1.0000  test_acc=0.2773  sum_w2=3920.6  elapsed=  1157.825s  d1000= 188.586s
+[seed 1] epoch   7000/40000  train_acc=1.0000  test_acc=0.9370  sum_w2=2470.5  elapsed=  1345.822s  d1000= 187.997s
+[seed 1] epoch   8000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1837.7  elapsed=  1534.126s  d1000= 188.304s
+[seed 1] epoch   9000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1548.8  elapsed=  1722.161s  d1000= 188.035s
+[seed 1] epoch  10000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1561.4  elapsed=  1910.626s  d1000= 188.465s
+[seed 1] epoch  11000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1656.6  elapsed=  2098.947s  d1000= 188.321s
+[seed 1] epoch  12000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1525.2  elapsed=  2287.236s  d1000= 188.290s
+[seed 1] epoch  13000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1736.8  elapsed=  2475.985s  d1000= 188.748s
+[seed 1] epoch  14000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1142.4  elapsed=  2664.132s  d1000= 188.147s
+[seed 1] epoch  15000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1817.0  elapsed=  2852.685s  d1000= 188.553s
+[seed 1] epoch  16000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1024.3  elapsed=  3040.729s  d1000= 188.044s
+[seed 1] epoch  17000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1700.3  elapsed=  3229.700s  d1000= 188.971s
+[seed 1] epoch  18000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1278.5  elapsed=  3422.608s  d1000= 192.908s
+[seed 1] epoch  19000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1618.0  elapsed=  3615.125s  d1000= 192.517s
+[seed 1] epoch  20000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1470.5  elapsed=  3806.232s  d1000= 191.107s
+[seed 1] epoch  21000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1564.9  elapsed=  3996.301s  d1000= 190.069s
+[seed 1] epoch  22000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1754.9  elapsed=  4190.659s  d1000= 194.358s
+[seed 1] epoch  23000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1259.3  elapsed=  4382.260s  d1000= 191.601s
+[seed 1] epoch  24000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1684.5  elapsed=  4575.247s  d1000= 192.987s
+[seed 1] epoch  25000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1422.9  elapsed=  4770.584s  d1000= 195.337s
+[seed 1] epoch  26000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1581.4  elapsed=  4968.313s  d1000= 197.729s
+[seed 1] epoch  27000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1658.4  elapsed=  5168.625s  d1000= 200.312s
+[seed 1] epoch  28000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1310.6  elapsed=  5363.002s  d1000= 194.377s
+[seed 1] epoch  29000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1832.9  elapsed=  5556.719s  d1000= 193.717s
+[seed 1] epoch  30000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1256.1  elapsed=  5744.931s  d1000= 188.212s
+[seed 1] epoch  31000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1700.6  elapsed=  5932.824s  d1000= 187.893s
+[seed 1] epoch  32000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1588.1  elapsed=  6121.013s  d1000= 188.189s
+[seed 1] epoch  33000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1373.0  elapsed=  6309.127s  d1000= 188.114s
+[seed 1] epoch  34000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1714.2  elapsed=  6496.884s  d1000= 187.758s
+[seed 1] epoch  35000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1048.1  elapsed=  6684.959s  d1000= 188.074s
+[seed 1] epoch  36000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1784.2  elapsed=  6872.927s  d1000= 187.968s
+[seed 1] epoch  37000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1159.3  elapsed=  7063.203s  d1000= 190.276s
+[seed 1] epoch  38000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1706.0  elapsed=  7250.698s  d1000= 187.495s
+[seed 1] epoch  39000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1360.8  elapsed=  7438.373s  d1000= 187.675s
+[seed 1] epoch  39999/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1560.9  elapsed=  7625.617s  d1000= 187.244s
+[seed 1] done in 7626.0s  grok_epoch=6921  final_test_acc=1.0000
+[seed 2] epoch      0/40000  train_acc=0.0076  test_acc=0.0094  sum_w2=1044.2  elapsed=     6.641s  d1000=   6.641s
+[seed 2] epoch   1000/40000  train_acc=1.0000  test_acc=0.0104  sum_w2=4804.1  elapsed=   193.100s  d1000= 186.458s
+[seed 2] epoch   2000/40000  train_acc=1.0000  test_acc=0.0113  sum_w2=3591.6  elapsed=   379.907s  d1000= 186.808s
+[seed 2] epoch   3000/40000  train_acc=1.0000  test_acc=0.0160  sum_w2=4533.6  elapsed=   567.380s  d1000= 187.472s
+[seed 2] epoch   4000/40000  train_acc=1.0000  test_acc=0.0180  sum_w2=3958.2  elapsed=   754.094s  d1000= 186.715s
+[seed 2] epoch   5000/40000  train_acc=1.0000  test_acc=0.0244  sum_w2=4228.8  elapsed=   940.911s  d1000= 186.817s
+[seed 2] epoch   6000/40000  train_acc=1.0000  test_acc=0.0328  sum_w2=4567.9  elapsed=  1127.524s  d1000= 186.612s
+[seed 2] epoch   7000/40000  train_acc=1.0000  test_acc=0.0505  sum_w2=3311.5  elapsed=  1314.412s  d1000= 186.889s
+[seed 2] epoch   8000/40000  train_acc=1.0000  test_acc=0.1065  sum_w2=3977.9  elapsed=  1501.671s  d1000= 187.259s
+[seed 2] epoch   9000/40000  train_acc=1.0000  test_acc=0.3750  sum_w2=3674.6  elapsed=  1688.539s  d1000= 186.867s
+[seed 2] epoch  10000/40000  train_acc=1.0000  test_acc=0.9759  sum_w2=2163.5  elapsed=  1875.378s  d1000= 186.840s
+[seed 2] epoch  11000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1906.7  elapsed=  2063.161s  d1000= 187.783s
+[seed 2] epoch  12000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1389.5  elapsed=  2251.525s  d1000= 188.364s
+[seed 2] epoch  13000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1292.6  elapsed=  2444.828s  d1000= 193.303s
+[seed 2] epoch  14000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1261.4  elapsed=  2637.674s  d1000= 192.847s
+[seed 2] epoch  15000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1211.3  elapsed=  2827.942s  d1000= 190.268s
+[seed 2] epoch  16000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1176.2  elapsed=  3018.428s  d1000= 190.486s
+[seed 2] epoch  17000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1171.2  elapsed=  3207.315s  d1000= 188.887s
+[seed 2] epoch  18000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1173.9  elapsed=  3400.785s  d1000= 193.470s
+[seed 2] epoch  19000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1182.9  elapsed=  3591.590s  d1000= 190.805s
+[seed 2] epoch  20000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1217.9  elapsed=  3782.724s  d1000= 191.134s
+[seed 2] epoch  21000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1182.2  elapsed=  3976.191s  d1000= 193.467s
+[seed 2] epoch  22000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1345.1  elapsed=  4168.295s  d1000= 192.104s
+[seed 2] epoch  23000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1189.1  elapsed=  4357.408s  d1000= 189.113s
+[seed 2] epoch  24000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1233.0  elapsed=  4548.478s  d1000= 191.070s
+[seed 2] epoch  25000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1351.3  elapsed=  4742.555s  d1000= 194.077s
+[seed 2] epoch  26000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1251.2  elapsed=  4933.478s  d1000= 190.923s
+[seed 2] epoch  27000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1190.4  elapsed=  5125.753s  d1000= 192.275s
+[seed 2] epoch  28000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=942.5  elapsed=  5314.407s  d1000= 188.655s
+[seed 2] epoch  29000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1474.4  elapsed=  5502.689s  d1000= 188.282s
+[seed 2] epoch  30000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1184.8  elapsed=  5690.668s  d1000= 187.979s
+[seed 2] epoch  31000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1172.9  elapsed=  5878.678s  d1000= 188.010s
+[seed 2] epoch  32000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1196.9  elapsed=  6066.224s  d1000= 187.546s
+[seed 2] epoch  33000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1146.6  elapsed=  6253.566s  d1000= 187.342s
+[seed 2] epoch  34000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1359.4  elapsed=  6441.906s  d1000= 188.340s
+[seed 2] epoch  35000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1185.5  elapsed=  6631.437s  d1000= 189.531s
+[seed 2] epoch  36000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=889.1  elapsed=  6819.765s  d1000= 188.328s
+[seed 2] epoch  37000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1496.6  elapsed=  7007.847s  d1000= 188.082s
+[seed 2] epoch  38000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1194.7  elapsed=  7196.582s  d1000= 188.735s
+[seed 2] epoch  39000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1191.7  elapsed=  7384.741s  d1000= 188.160s
+[seed 2] epoch  39999/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1103.4  elapsed=  7573.681s  d1000= 188.940s
+[seed 2] done in 7574.1s  grok_epoch=9510  final_test_acc=1.0000
+[seed 3] epoch      0/40000  train_acc=0.0097  test_acc=0.0081  sum_w2=1048.7  elapsed=     6.615s  d1000=   6.615s
+[seed 3] epoch   1000/40000  train_acc=1.0000  test_acc=0.0021  sum_w2=5001.7  elapsed=   194.010s  d1000= 187.395s
+[seed 3] epoch   2000/40000  train_acc=1.0000  test_acc=0.0026  sum_w2=3487.9  elapsed=   381.633s  d1000= 187.623s
+[seed 3] epoch   3000/40000  train_acc=1.0000  test_acc=0.0068  sum_w2=4514.3  elapsed=   567.946s  d1000= 186.313s
+[seed 3] epoch   4000/40000  train_acc=1.0000  test_acc=0.0116  sum_w2=4379.6  elapsed=   754.987s  d1000= 187.042s
+[seed 3] epoch   5000/40000  train_acc=1.0000  test_acc=0.0152  sum_w2=3229.8  elapsed=   941.497s  d1000= 186.510s
+[seed 3] epoch   6000/40000  train_acc=1.0000  test_acc=0.0222  sum_w2=4354.5  elapsed=  1127.120s  d1000= 185.622s
+[seed 3] epoch   7000/40000  train_acc=1.0000  test_acc=0.0313  sum_w2=4343.0  elapsed=  1312.517s  d1000= 185.398s
+[seed 3] epoch   8000/40000  train_acc=1.0000  test_acc=0.0567  sum_w2=2909.7  elapsed=  1498.422s  d1000= 185.905s
+[seed 3] epoch   9000/40000  train_acc=1.0000  test_acc=0.1520  sum_w2=3738.3  elapsed=  1684.207s  d1000= 185.785s
+[seed 3] epoch  10000/40000  train_acc=1.0000  test_acc=0.3123  sum_w2=3473.1  elapsed=  1870.342s  d1000= 186.134s
+[seed 3] epoch  11000/40000  train_acc=1.0000  test_acc=0.8756  sum_w2=2159.6  elapsed=  2056.142s  d1000= 185.800s
+[seed 3] epoch  12000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1607.2  elapsed=  2242.396s  d1000= 186.254s
+[seed 3] epoch  13000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1417.7  elapsed=  2429.186s  d1000= 186.790s
+[seed 3] epoch  14000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1681.8  elapsed=  2614.875s  d1000= 185.689s
+[seed 3] epoch  15000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1434.0  elapsed=  2802.028s  d1000= 187.153s
+[seed 3] epoch  16000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1538.5  elapsed=  2989.141s  d1000= 187.113s
+[seed 3] epoch  17000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1328.8  elapsed=  3175.438s  d1000= 186.297s
+[seed 3] epoch  18000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1579.4  elapsed=  3362.062s  d1000= 186.625s
+[seed 3] epoch  19000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1314.3  elapsed=  3548.413s  d1000= 186.350s
+[seed 3] epoch  20000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1480.3  elapsed=  3734.879s  d1000= 186.466s
+[seed 3] epoch  21000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1320.4  elapsed=  3921.621s  d1000= 186.743s
+[seed 3] epoch  22000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1558.5  elapsed=  4107.948s  d1000= 186.327s
+[seed 3] epoch  23000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1326.6  elapsed=  4298.450s  d1000= 190.501s
+[seed 3] epoch  24000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1466.1  elapsed=  4488.279s  d1000= 189.830s
+[seed 3] epoch  25000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1288.2  elapsed=  4677.416s  d1000= 189.137s
+[seed 3] epoch  26000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1305.9  elapsed=  4866.669s  d1000= 189.253s
+[seed 3] epoch  27000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1425.7  elapsed=  5059.703s  d1000= 193.033s
+[seed 3] epoch  28000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1236.6  elapsed=  5251.491s  d1000= 191.788s
+[seed 3] epoch  29000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1404.0  elapsed=  5439.904s  d1000= 188.413s
+[seed 3] epoch  30000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=993.5  elapsed=  5627.576s  d1000= 187.672s
+[seed 3] epoch  31000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1654.4  elapsed=  5815.080s  d1000= 187.504s
+[seed 3] epoch  32000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1210.6  elapsed=  6002.493s  d1000= 187.413s
+[seed 3] epoch  33000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1583.4  elapsed=  6188.415s  d1000= 185.921s
+[seed 3] epoch  34000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1374.1  elapsed=  6374.961s  d1000= 186.546s
+[seed 3] epoch  35000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1552.3  elapsed=  6561.608s  d1000= 186.647s
+[seed 3] epoch  36000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1289.1  elapsed=  6748.583s  d1000= 186.975s
+[seed 3] epoch  37000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1585.0  elapsed=  6935.564s  d1000= 186.981s
+[seed 3] epoch  38000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1295.5  elapsed=  7121.677s  d1000= 186.113s
+[seed 3] epoch  39000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1361.7  elapsed=  7311.875s  d1000= 190.198s
+[seed 3] epoch  39999/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1320.7  elapsed=  7500.358s  d1000= 188.483s
+[seed 3] done in 7500.8s  grok_epoch=11019  final_test_acc=1.0000
+[seed 4] epoch      0/40000  train_acc=0.0086  test_acc=0.0082  sum_w2=1042.9  elapsed=     6.653s  d1000=   6.653s
+[seed 4] epoch   1000/40000  train_acc=1.0000  test_acc=0.0007  sum_w2=5002.0  elapsed=   193.627s  d1000= 186.974s
+[seed 4] epoch   2000/40000  train_acc=1.0000  test_acc=0.0008  sum_w2=3638.1  elapsed=   379.235s  d1000= 185.609s
+[seed 4] epoch   3000/40000  train_acc=1.0000  test_acc=0.0009  sum_w2=4740.9  elapsed=   565.185s  d1000= 185.950s
+[seed 4] epoch   4000/40000  train_acc=1.0000  test_acc=0.0011  sum_w2=4445.2  elapsed=   751.121s  d1000= 185.935s
+[seed 4] epoch   5000/40000  train_acc=0.9995  test_acc=0.0018  sum_w2=4314.4  elapsed=   936.969s  d1000= 185.848s
+[seed 4] epoch   6000/40000  train_acc=1.0000  test_acc=0.0017  sum_w2=4895.5  elapsed=  1123.278s  d1000= 186.309s
+[seed 4] epoch   7000/40000  train_acc=1.0000  test_acc=0.0019  sum_w2=4583.9  elapsed=  1309.034s  d1000= 185.756s
+[seed 4] epoch   8000/40000  train_acc=1.0000  test_acc=0.0015  sum_w2=3382.4  elapsed=  1494.729s  d1000= 185.696s
+[seed 4] epoch   9000/40000  train_acc=1.0000  test_acc=0.0023  sum_w2=4701.9  elapsed=  1682.358s  d1000= 187.628s
+[seed 4] epoch  10000/40000  train_acc=1.0000  test_acc=0.0025  sum_w2=4718.9  elapsed=  1868.718s  d1000= 186.360s
+[seed 4] epoch  11000/40000  train_acc=1.0000  test_acc=0.0032  sum_w2=3481.9  elapsed=  2055.378s  d1000= 186.660s
+[seed 4] epoch  12000/40000  train_acc=1.0000  test_acc=0.0028  sum_w2=4579.0  elapsed=  2242.426s  d1000= 187.048s
+[seed 4] epoch  13000/40000  train_acc=1.0000  test_acc=0.0034  sum_w2=4646.3  elapsed=  2428.757s  d1000= 186.332s
+[seed 4] epoch  14000/40000  train_acc=1.0000  test_acc=0.0035  sum_w2=3294.1  elapsed=  2615.765s  d1000= 187.008s
+[seed 4] epoch  15000/40000  train_acc=1.0000  test_acc=0.0044  sum_w2=4673.4  elapsed=  2802.553s  d1000= 186.787s
+[seed 4] epoch  16000/40000  train_acc=1.0000  test_acc=0.0043  sum_w2=4593.0  elapsed=  2990.522s  d1000= 187.969s
+[seed 4] epoch  17000/40000  train_acc=1.0000  test_acc=0.0055  sum_w2=3655.7  elapsed=  3176.459s  d1000= 185.937s
+[seed 4] epoch  18000/40000  train_acc=1.0000  test_acc=0.0070  sum_w2=4460.3  elapsed=  3364.744s  d1000= 188.286s
+[seed 4] epoch  19000/40000  train_acc=1.0000  test_acc=0.0103  sum_w2=4508.9  elapsed=  3551.760s  d1000= 187.016s
+[seed 4] epoch  20000/40000  train_acc=1.0000  test_acc=0.0178  sum_w2=2993.5  elapsed=  3739.131s  d1000= 187.371s
+[seed 4] epoch  21000/40000  train_acc=1.0000  test_acc=0.0483  sum_w2=4398.1  elapsed=  3926.867s  d1000= 187.736s
+[seed 4] epoch  22000/40000  train_acc=1.0000  test_acc=0.1292  sum_w2=3904.1  elapsed=  4113.955s  d1000= 187.088s
+[seed 4] epoch  23000/40000  train_acc=1.0000  test_acc=0.3260  sum_w2=2625.1  elapsed=  4302.069s  d1000= 188.114s
+[seed 4] epoch  24000/40000  train_acc=1.0000  test_acc=0.9959  sum_w2=2712.0  elapsed=  4489.981s  d1000= 187.911s
+[seed 4] epoch  25000/40000  train_acc=1.0000  test_acc=0.9991  sum_w2=1537.4  elapsed=  4676.446s  d1000= 186.465s
+[seed 4] epoch  26000/40000  train_acc=1.0000  test_acc=0.9999  sum_w2=1486.0  elapsed=  4864.717s  d1000= 188.271s
+[seed 4] epoch  27000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1202.6  elapsed=  5051.938s  d1000= 187.221s
+[seed 4] epoch  28000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1707.8  elapsed=  5238.780s  d1000= 186.843s
+[seed 4] epoch  29000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1289.5  elapsed=  5426.641s  d1000= 187.860s
+[seed 4] epoch  30000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1587.4  elapsed=  5614.861s  d1000= 188.221s
+[seed 4] epoch  31000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1350.9  elapsed=  5807.613s  d1000= 192.751s
+[seed 4] epoch  32000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1506.2  elapsed=  5999.183s  d1000= 191.570s
+[seed 4] epoch  33000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1383.1  elapsed=  6187.481s  d1000= 188.298s
+[seed 4] epoch  34000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1520.8  elapsed=  6376.006s  d1000= 188.525s
+[seed 4] epoch  35000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1485.1  elapsed=  6564.520s  d1000= 188.514s
+[seed 4] epoch  36000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1445.6  elapsed=  6752.701s  d1000= 188.181s
+[seed 4] epoch  37000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1634.5  elapsed=  6941.174s  d1000= 188.473s
+[seed 4] epoch  38000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1544.0  elapsed=  7129.748s  d1000= 188.574s
+[seed 4] epoch  39000/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1634.2  elapsed=  7319.128s  d1000= 189.380s
+[seed 4] epoch  39999/40000  train_acc=1.0000  test_acc=1.0000  sum_w2=1288.5  elapsed=  7507.525s  d1000= 188.397s
+[seed 4] done in 7508.0s  grok_epoch=23747  final_test_acc=1.0000
+
+========================================================================
+NANDA-UNIFIED BENCHMARK - AGGREGATE  (5 seeds x 40000 epochs)
+========================================================================
+Grok epoch (test acc > 0.9): mean=12836.8  std=5803.9  min=6921  max=23747  (5/5 seeds grokked)
+
+Grok epoch by threshold (first epoch test acc > threshold):
+  > 0.9  : mean=12836.8  std=5803.9  (5/5 seeds)  per seed=[12987, 6921, 9510, 11019, 23747]
+  > 0.95 : mean=12931.6  std=5787.4  (5/5 seeds)  per seed=[13133, 7031, 9622, 11069, 23803]
+  > 0.99 : mean=13119.4  std=5758.8  (5/5 seeds)  per seed=[13457, 7237, 9852, 11138, 23913]
+
+L2-Norm predictor (per seed):
+  seed 0: MA-crossover=113.4073099931767  MA-of-MA zero-cross=1802.223864069342  (grok=12987)
+  seed 1: MA-crossover=113.19719584752606  MA-of-MA zero-cross=1767.2366607262006  (grok=6921)
+  seed 2: MA-crossover=120.11793260285641  MA-of-MA zero-cross=1814.1997196140496  (grok=9510)
+  seed 3: MA-crossover=130.6065722584489  MA-of-MA zero-cross=1810.8384810470714  (grok=11019)
+  seed 4: MA-crossover=136.80423675510377  MA-of-MA zero-cross=1801.269217726741  (grok=23747)
+
+Dropout-Variance predictor (per seed):
+  seed 0: variance_peak_epoch=24200  peak/grok=1.8634  (grok=12987)
+  seed 1: variance_peak_epoch=25400  peak/grok=3.6700  (grok=6921)
+  seed 2: variance_peak_epoch=16700  peak/grok=1.7560  (grok=9510)
+  seed 3: variance_peak_epoch=18800  peak/grok=1.7061  (grok=11019)
+  seed 4: variance_peak_epoch=39000  peak/grok=1.6423  (grok=23747)
+
+Spectral predictor (Canatar task-model alignment, per seed):
+  seed 0: n/a (not computed for this seed)
+  seed 1: n/a (not computed for this seed)
+  seed 2: n/a (not computed for this seed)
+  seed 3: n/a (not computed for this seed)
+  seed 4: n/a (not computed for this seed)
+
+AGE predictor (NC1 variability collapse, per seed):
+  seed 0: n/a (not computed for this seed)
+  seed 1: n/a (not computed for this seed)
+  seed 2: n/a (not computed for this seed)
+  seed 3: n/a (not computed for this seed)
+  seed 4: n/a (not computed for this seed)
+
+Dropout gap at final epoch (per seed, by rate):
+  seed 0: p0.1=-0.056  p0.3=-0.494  p0.5=-0.788  p0.7=-0.919  p0.9=-0.981
+  seed 1: p0.1=-0.053  p0.3=-0.428  p0.5=-0.755  p0.7=-0.917  p0.9=-0.978
+  seed 2: p0.1=-0.011  p0.3=-0.286  p0.5=-0.674  p0.7=-0.888  p0.9=-0.972
+  seed 3: p0.1=-0.002  p0.3=-0.126  p0.5=-0.513  p0.7=-0.867  p0.9=-0.979
+  seed 4: p0.1=-0.010  p0.3=-0.295  p0.5=-0.657  p0.7=-0.879  p0.9=-0.976
+
+Limit-cycle check (post-grok test-acc oscillation):
+  seed 0: stable  post-grok min=0.620  std=0.007  final=1.000  dips<0.9=28
+  seed 1: stable  post-grok min=0.475  std=0.012  final=1.000  dips<0.9=75
+  seed 2: stable  post-grok min=0.534  std=0.010  final=1.000  dips<0.9=31
+  seed 3: stable  post-grok min=0.561  std=0.006  final=1.000  dips<0.9=18
+  seed 4: stable  post-grok min=0.841  std=0.003  final=1.000  dips<0.9=4
+
+  => 0/5 seeds show a post-grok limit cycle
+
+Wrote /Users/jonathanjohn/Documents/grokking-benchmark/08_Experiments/results/nanda_unified/aggregate.json
+========================================================================

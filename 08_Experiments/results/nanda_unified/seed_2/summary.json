@@ -1,0 +1,58 @@
+{
+  "seed": 2,
+  "epochs": 40000,
+  "modulus": 113,
+  "grok_epoch": 9510,
+  "grok_epochs_by_threshold": {
+    "0.9": 9510,
+    "0.95": 9622,
+    "0.99": 9852
+  },
+  "final_train_acc": 1.0,
+  "final_test_acc": 1.0,
+  "l2_norm_init": 32.3135871887207,
+  "l2_norm_final": 33.21746826171875,
+  "sum_w2_init": 1044.168190256707,
+  "sum_w2_final": 1103.4003915712237,
+  "token_embedding_share_init": 0.06929443185404631,
+  "l2_predictor": {
+    "ma_crossover_epoch": 120.11793260285641,
+    "ma_of_ma_zero_crossing_epoch": 1814.1997196140496,
+    "noise_floor": 0.00046546338614564725,
+    "windows": {
+      "fast": 50,
+      "slow": 200,
+      "ma_of_ma_fast": 20,
+      "skip_epochs": 100,
+      "quiet_epoch_cutoff": 90
+    }
+  },
+  "dropout_final_gap_by_rate": {
+    "0.1": -0.010739456315024043,
+    "0.3": -0.28593802438751537,
+    "0.5": -0.6737890144311445,
+    "0.7": -0.887571316702092,
+    "0.9": -0.9719207965096767
+  },
+  "dropout_variance_predictor": {
+    "variance_peak_epoch": 16700,
+    "variance_peak_value": 3.873481224204203e-05,
+    "grok_epoch": 9510,
+    "peak_to_grok_ratio": 1.7560462670872765,
+    "rate": 0.5,
+    "n_samples": 100,
+    "num_checkpoints": 401
+  },
+  "spectral_predictor": null,
+  "age_predictor": null,
+  "limit_cycle_check": {
+    "applicable": true,
+    "window_start_epoch": 11510,
+    "post_grok_min": 0.5336167356527576,
+    "post_grok_std": 0.00969668431368164,
+    "post_grok_final": 1.0,
+    "epochs_below_0.9_post_grok": 31,
+    "limit_cycle": false
+  },
+  "wall_time_sec": 7574.1
+}

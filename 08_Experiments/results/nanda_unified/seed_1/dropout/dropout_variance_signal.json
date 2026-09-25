@@ -1,0 +1,9 @@
+{
+  "variance_peak_epoch": 25400,
+  "variance_peak_value": 3.36352024156067e-05,
+  "grok_epoch": 6921,
+  "peak_to_grok_ratio": 3.6699898858546454,
+  "rate": 0.5,
+  "n_samples": 100,
+  "num_checkpoints": 401
+}

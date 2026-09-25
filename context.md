@@ -10418,3 +10418,35 @@ largest usable spacing is about 261 epochs; 250 sits 4.5% inside it. Caveat unch
 - **Why:** The user wants this file to be the complete "Bible" of the experiment. During thesis writing they will choose what to include or reject, so no history may be lost.
 - **What did not change:** No existing content was removed or altered. Only the new rule (top) and this note (bottom) were added.
 - **Files modified:** `context.md` only.
+
+---
+
+# Session Summary — 2026-09-25: 5-seed Nanda-Unified run finished (L2 Norm + Dropout only); results committed
+
+## What was investigated
+- Checked all results in `08_Experiments/results/nanda_unified/` after the 5-seed, 40000-epoch training finished.
+- Question asked: have the first four predictors (L2 Norm, Dropout, Spectral, AGE) been run?
+
+## Important Discoveries
+- **L2 Norm: run on all 5 seeds. Dropout (gap sweep + variance): run on all 5 seeds.**
+- **Spectral and AGE: NOT run on any seed.** `spectral/`, `age/` and `reports/` folders are empty in every seed. `spectral_predictor` and `age_predictor` are `null` in every `summary.json`; `run.log` prints "n/a (not computed for this seed)".
+- **Cause:** not a code bug. The runner's `--predictors` default is `l2,dropout_gap,dropout_variance` (`run_nanda_benchmark.py`), which excludes `spectral` and `age`. The training run used the default. Functions `_checkpoint_predictor_spectral` and `_checkpoint_predictor_age` already exist and are registered in `CHECKPOINT_PREDICTOR_FUNCS`.
+- **No retrain needed.** Both are checkpoint-only; the 801 saved checkpoints per seed (`checkpoints/model_epoch_*.pt`, gitignored via `*.pt`) are enough. Rerun with `--predictors l2,dropout_gap,dropout_variance,spectral,age`; finished predictors are skipped.
+- Time estimate (from runner comments): Spectral ~9.3 s per checkpoint, 401 checkpoints on the 100-epoch grid = ~1 h per seed, ~5 h for 5 seeds, plus AGE (no timing known yet).
+
+## Experimental findings (5 seeds, modulus 113, 40000 epochs)
+- Grok epochs (0.9 test-acc threshold): seed0=12987, seed1=6921, seed2=9510, seed3=11019, seed4=23747. Mean=12836.8, std=5803.9.
+- All 5 seeds reach final train acc = test acc = 1.0. Limit-cycle check: 0/5 seeds show a post-grok limit cycle.
+- L2 predictor, MA-crossover epoch / MA-of-MA zero-crossing epoch: s0 113.4/1802.2, s1 113.2/1767.2, s2 120.1/1814.2, s3 130.6/1810.8, s4 136.8/1801.3.
+- Dropout-variance peak epoch: s0 24200, s1 25400, s2 16700, s3 18800, s4 39000 (peak/grok ratios 1.86, 3.67, 1.76, 1.71, 1.64).
+- Wall time per seed: about 7500-7720 s (~2.1 h).
+
+## Current Project State
+- Completed: 5-seed training; L2 Norm and Dropout predictors computed on all 5 seeds; results committed.
+- Work in progress: computing Spectral and AGE from saved checkpoints (next step, no retrain).
+- Still pending: HTSR Alpha and later predictors. Code for finished predictors is unchanged.
+
+## Files Modified
+- `08_Experiments/results/nanda_unified/` — committed (aggregate.json, run.log, seed_0..4 summaries, training histories, l2_norm and dropout outputs). Checkpoints (*.pt, ~3.2 GB) are gitignored and NOT in git.
+- `context.md` — this section (append only).
+- `project_compilation.pdf` was already modified before this session; deliberately not included in this commit.
