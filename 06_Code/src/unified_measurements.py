@@ -25,11 +25,13 @@ class PredictorMeasurements:
         self.dropout_dir = os.path.join(self.output_dir, "dropout")
         self.spectral_dir = os.path.join(self.output_dir, "spectral")
         self.age_dir = os.path.join(self.output_dir, "age")
+        self.htsr_dir = os.path.join(self.output_dir, "htsr")
         self.reports_dir = os.path.join(self.output_dir, "reports")
         self.training_dir = os.path.join(self.output_dir, "training")
 
         for dir_path in [self.l2_norm_dir, self.dropout_dir, self.spectral_dir,
-                          self.age_dir, self.reports_dir, self.training_dir]:
+                          self.age_dir, self.htsr_dir, self.reports_dir,
+                          self.training_dir]:
             os.makedirs(dir_path, exist_ok=True)
 
     def save_training_data(self, train_acc, test_acc, loss):
@@ -194,6 +196,38 @@ class PredictorMeasurements:
                 np.array(age_history["nc1"], dtype=float))
         np.save(os.path.join(self.age_dir, "age_fn.npy"),
                 np.array(age_history["fn"], dtype=float))
+
+    # ========== HTSR ALPHA MEASUREMENTS ==========
+
+    def save_htsr_data(self, htsr_checkpoints, htsr_history):
+        """Save all HTSR Alpha (Predictor 5) measurements — Martin & Mahoney
+        power-law tail exponent of the weight-matrix spectra (see
+        src/predictors/htsr_alpha.py). Checkpoint-only signal, same
+        per-checkpoint layout as save_spectral_data / save_age_data.
+
+        htsr_checkpoints: list/array of epoch indices, one per checkpoint.
+        htsr_history: dict, all entries have one row per checkpoint:
+            alpha       : list[float]        mean alpha over layers
+            layer_alpha : list[list[float]]  [n_checkpoints, n_layers]
+            layer_xmin  : list[list[float]]  [n_checkpoints, n_layers]
+            layer_D     : list[list[float]]  [n_checkpoints, n_layers]
+            layer_lmax  : list[list[float]]  [n_checkpoints, n_layers]
+            layer_ntail : list[list[int]]    [n_checkpoints, n_layers]
+        The layer order is predictors.htsr_alpha.LAYER_NAMES.
+
+        Saves (all under self.htsr_dir): htsr_checkpoints.npy, htsr_alpha.npy,
+        htsr_layer_alpha.npy, htsr_layer_xmin.npy, htsr_layer_D.npy,
+        htsr_layer_lmax.npy, htsr_layer_ntail.npy
+        """
+        np.save(os.path.join(self.htsr_dir, "htsr_checkpoints.npy"),
+                np.array(htsr_checkpoints, dtype=int))
+        np.save(os.path.join(self.htsr_dir, "htsr_alpha.npy"),
+                np.array(htsr_history["alpha"], dtype=float))
+        for key in ["layer_alpha", "layer_xmin", "layer_D", "layer_lmax"]:
+            np.save(os.path.join(self.htsr_dir, f"htsr_{key}.npy"),
+                    np.array(htsr_history[key], dtype=float))
+        np.save(os.path.join(self.htsr_dir, "htsr_layer_ntail.npy"),
+                np.array(htsr_history["layer_ntail"], dtype=int))
 
     @staticmethod
     def _stack_ragged(list_of_lists, width):

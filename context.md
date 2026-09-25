@@ -10726,3 +10726,65 @@ Reading:
 
 ## Files modified
 - `context.md` — this section (append only).
+
+---
+
+# Session Summary — 2026-09-25: HTSR Alpha (Predictor 5) implemented and computed on the 5-seed Nanda-Unified run
+
+## How the session went (teaching part)
+- Jonathan asked "what next". Answer from context.md: Predictor 5, HTSR Alpha (scope decision already recorded: original-paper method only, no online detection rule).
+- Jonathan confirmed the source is Martin & Mahoney (HTSR theory / WeightWatcher), not a grokking-specific paper.
+- `06_Code/scripts/htsr_visualize.py` already existed. It is a TEACHING/visualisation script, not the predictor: it fits alpha with a fixed 0.6 quantile for xmin and a log-log regression on the CCDF. Both are shortcuts and NOT the Martin & Mahoney method. Jonathan marked it local-only in `.gitignore` (his own edit); the script is untracked and stays out of the repository.
+- Concept taught: Martin & Mahoney (via Clauset-Shalizi-Newman) fit alpha by MAXIMUM LIKELIHOOD and choose xmin AUTOMATICALLY (the tail start with the smallest Kolmogorov-Smirnov distance D). Regression on a log-log CCDF is unreliable because CCDF points are not independent (running counts), tail points are noisy, and log-transform distorts the error. Jonathan's answer was mostly right (unequal reliability, log distorts noise); correction given: dependence of CCDF points is the biggest issue and the bias direction is not a fixed rule.
+- Jonathan then said: "You write the code yourself and dump all the information of this session into context.md and commit it at the end." Claude implemented directly (CLAUDE.md Section 8).
+
+## Technical decisions (all follow the paper; none tuned)
+- **Fit engine:** the `powerlaw` package (v2.0.0, already installed), `powerlaw.Fit(evals, xmin=None)`: ML alpha, xmin chosen by minimum KS distance D. Same engine WeightWatcher uses. `weightwatcher` itself is installed but NOT used (the fit is written directly so every step is visible).
+- **Matrices analysed:** the 6 nn.Linear weight matrices of the shared `TransformerFourHead`, in this order: `query`, `key`, `value` (128x128), `mlp_in` (512x128), `mlp_out` (128x512), `output_head` (114x128). Embedding tables (nn.Embedding) and biases are NOT analysed (WeightWatcher analyses Linear/Conv layers only).
+- **Spectrum:** X = W^T W / N with N the larger dimension; eigenvalues = squared singular values / N; float64 on CPU (MPS-safe: weights moved off MPS before SVD). alpha itself does not depend on the scaling.
+- **Summary signal:** mean alpha over the 6 layers (Martin & Mahoney "average alpha"). Per-layer alpha, xmin, KS distance D, lambda_max and tail size are also saved, so the weighted alpha-hat = alpha * log10(lambda_max) (Martin et al. 2021, Nature Communications) can be rebuilt later without recomputing.
+- **Event reported in summary.json:** epoch of the LOWEST mean alpha, and its ratio to grok epoch ("as implemented", same extreme-value style as the other predictors). NO new detection rule, threshold or percentage level was added (scope decision). Formal scoring against grok is still to be done, like for the other predictors.
+- **Plumbing:** HTSR is a checkpoint-only predictor, registered in `CHECKPOINT_PREDICTOR_FUNCS["htsr"]` and `PREDICTOR_SUMMARY_KEY["htsr"] = "htsr_predictor"`. Evaluated on the same 401-checkpoint grid (eval_every 100) as Spectral and AGE. Computed with: `python 06_Code/scripts/run_nanda_benchmark.py --predictors htsr` (no retraining; about 8 minutes for 5 seeds, about 0.25 s per checkpoint).
+
+## Shared model vs predictor changes (CLAUDE.md Section 11)
+- Shared model file `transformer_four_head.py`: NOT changed.
+- Predictor files `l2_norm.py`, `dropout.py`, `spectral.py`, `age.py`: NOT changed. Their results in every `summary.json` are byte-for-byte equal in content to the committed ones (checked: only key `htsr_predictor` differs in all 5 seeds).
+- New predictor file: `06_Code/src/predictors/htsr_alpha.py`.
+- Shared measurements class `06_Code/src/unified_measurements.py`: added `htsr_dir` and `save_htsr_data`.
+- Runner `06_Code/scripts/run_nanda_benchmark.py`: added import, `_checkpoint_predictor_htsr`, registry entries, carry-forward of `htsr_predictor` in `train_one_seed`'s summary, and an HTSR print block in the aggregate output.
+
+## Results — Predictor 5, HTSR Alpha, 5 of 5 seeds (401 checkpoints per seed)
+
+| Seed | Grok | Mean alpha first -> last | Alpha at checkpoint nearest grok | Alpha-min epoch (x grok) | Alpha-min value |
+|---|---|---|---|---|---|
+| 0 | 12987 | 2.855 -> 1.248 | 1.461 | 34300 (2.64) | 1.2430 |
+| 1 | 6921 | 2.620 -> 1.282 | 1.569 | 16000 (2.31) | 1.2374 |
+| 2 | 9510 | 2.696 -> 1.253 | 1.523 | 24100 (2.53) | 1.2134 |
+| 3 | 11019 | 2.704 -> 1.249 | 1.481 | 19500 (1.77) | 1.2315 |
+| 4 | 23747 | 2.832 -> 1.294 | 1.581 | 39600 (1.67) | 1.2674 |
+
+- Per layer, first checkpoint: alpha about 2.0 to 3.0 in all 6 layers. Last checkpoint: about 1.15 to 1.39 in all 6 layers, in every seed.
+- Mean alpha falls steadily from about 2.7 to about 1.25 over training in every seed.
+
+## Observations (not a formal verdict; formal scoring still to be done)
+- In all 5 seeds the alpha-minimum epoch lies AFTER grok (ratios 1.67 to 2.64, none below 1). Same pattern as Dropout variance peak, Spectral and AGE: the extreme of the signal is reached long after test accuracy has jumped. Alpha-min ratio for seed 4 (latest grok) is the smallest, seed 0 the largest; no clear order with grok epoch (not tested).
+- The alpha-min epoch in seeds 0, 4 (34300, 39600) is close to the end of training. The signal is still drifting late, so the "minimum" is partly an end-of-run effect. Not investigated.
+- CAVEAT (important for the thesis): the fitted alpha is BELOW 2 in 85 to 94 percent of all layer-checkpoint fits (per seed), and mean alpha ends near 1.25. In Martin & Mahoney's interpretation, alpha between about 2 and 6 is the "well-trained, heavy-tailed" range; alpha below 2 is described as very heavy-tailed / possibly over-fitted or a poor power-law fit. Here the layers are small (128 x 128, at most 128 eigenvalues) and the automatic xmin often selects a small tail (minimum 4 eigenvalues; 1.2 to 4.4 percent of fits have a tail under 10 eigenvalues). So the alpha values are noisy and partly outside the range the method was designed for. The numbers are reported as computed; nothing was tuned to move alpha into 2 to 6.
+- This model is small and heavily weight-decayed; the grokked solution concentrates weight in a few Fourier directions, which produces a strongly peaked spectrum. That is a plausible reason for very low alpha but it is my reading, not tested.
+- Alpha at the checkpoint nearest grok is already well below the start value (1.46 to 1.58 vs 2.6 to 2.9), so alpha does move before or around grok. Whether it "leads" grok is not decided by the alpha-min rule; that needs the formal scoring step.
+
+## Current Project State
+- Completed: 5-seed training; L2 Norm, Dropout, Spectral, AGE, HTSR Alpha computed on all 5 seeds; analysis and verdict for the first four done.
+- Not yet done: formal analysis of HTSR Alpha in the same style as the earlier four (grok-lead, rank correlation across seeds, plots). `06_Code/scripts/analyze_nanda_unified.py` does not include HTSR yet.
+- Next predictors in order: Correlation Traps, Weight-PCA, Higher-MI, Commutator Defect. Code for finished predictors is unchanged. Nothing was deleted.
+- Open question, postponed (not solved): how to treat alpha < 2 in the write-up (report as-is with the caveat above, or additionally show the layer-wise alpha / D / tail size plots).
+
+## Files Modified
+- New: `06_Code/src/predictors/htsr_alpha.py`.
+- `06_Code/src/unified_measurements.py` — `htsr_dir`, `save_htsr_data`.
+- `06_Code/scripts/run_nanda_benchmark.py` — HTSR import, checkpoint-predictor function, registry, summary carry-forward, aggregate print block.
+- `08_Experiments/results/nanda_unified/seed_0..4/htsr/` (8 files each: htsr_checkpoints, htsr_alpha, htsr_layer_alpha, htsr_layer_xmin, htsr_layer_D, htsr_layer_lmax, htsr_layer_ntail .npy, htsr_signal.json) — new.
+- `08_Experiments/results/nanda_unified/seed_0..4/summary.json` — `htsr_predictor` block filled in (was absent); no other key changed.
+- `08_Experiments/results/nanda_unified/aggregate.json` — regenerated with HTSR.
+- `.gitignore` — Jonathan's edit: `06_Code/scripts/htsr_visualize.py` marked local-only (the file was never tracked, so it stays local and is NOT in the repository).
+- `context.md` — this section (append only).

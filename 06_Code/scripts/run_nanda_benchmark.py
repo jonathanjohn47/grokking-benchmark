@@ -80,6 +80,8 @@ from predictors.dropout import (                                          # noqa
 )
 from predictors.spectral import compute_spectral_metrics_for_checkpoint   # noqa: E402
 from predictors.age import compute_age_metrics_for_checkpoint             # noqa: E402
+from predictors.htsr_alpha import (                                       # noqa: E402
+    compute_htsr_metrics_for_checkpoint, LAYER_NAMES as HTSR_LAYER_NAMES)
 from unified_measurements import PredictorMeasurements                    # noqa: E402
 
 # ---------------------------------------------------------------------------
@@ -179,6 +181,7 @@ PREDICTOR_SUMMARY_KEY = {
     "dropout_variance": "dropout_variance_predictor",
     "spectral": "spectral_predictor",
     "age": "age_predictor",
+    "htsr": "htsr_predictor",
 }
 ALL_PREDICTORS = list(PREDICTOR_SUMMARY_KEY.keys())
 
@@ -697,6 +700,9 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
     # whatever recompute_from_checkpoints already wrote for this seed.
     age_block = (old_summary or {}).get("age_predictor")
 
+    # HTSR Alpha is checkpoint-only as well (CHECKPOINT_PREDICTOR_FUNCS["htsr"]).
+    htsr_block = (old_summary or {}).get("htsr_predictor")
+
     # per-seed summary + resume sentinel. Old blocks for predictors NOT
     # recomputed this call are carried forward, never dropped.
     summary = {
@@ -718,6 +724,7 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
         "dropout_variance_predictor": dropout_variance_block,
         "spectral_predictor": spectral_block,
         "age_predictor": age_block,
+        "htsr_predictor": htsr_block,
         "limit_cycle_check": limit_cycle_check(test_acc_history, grok_epoch),
         "wall_time_sec": round(time.time() - started, 1),
     }
@@ -946,6 +953,60 @@ def _checkpoint_predictor_age(model, test_loader, ckpt_dir, ckpt_epochs,
     return block
 
 
+def _checkpoint_predictor_htsr(model, test_loader, ckpt_dir, ckpt_epochs,
+                               measurements, grok_epoch, device):
+    """CHECKPOINT_PREDICTOR_FUNCS["htsr"] — HTSR Alpha (Martin & Mahoney;
+    see src/predictors/htsr_alpha.py). Loads each saved checkpoint into
+    `model`, computes compute_htsr_metrics_for_checkpoint(model) — the
+    power-law tail exponent alpha of every Linear weight matrix's spectrum
+    (ML fit, automatic xmin) and its mean over layers — collects the
+    per-checkpoint history, saves it via measurements.save_htsr_data, and
+    returns the htsr_predictor block for summary.json.
+
+    test_loader is IGNORED: alpha depends on the weights only. Signature
+    kept to match the shared CHECKPOINT_PREDICTOR_FUNCS shape.
+
+    alpha_min_epoch (epoch of the lowest mean alpha) is recorded in the
+    same "extreme value" form as the other checkpoint predictors, so the
+    head-to-head number alpha_min_to_grok_ratio is comparable. No new
+    detection rule or threshold is introduced here."""
+    htsr_checkpoints = []
+    history = {k: [] for k in ["alpha", "layer_alpha", "layer_xmin",
+                               "layer_D", "layer_lmax", "layer_ntail"]}
+
+    for epoch in ckpt_epochs:
+        state = torch.load(os.path.join(ckpt_dir, f"model_epoch_{epoch}.pt"), map_location=device)
+        model.load_state_dict(state)
+        m = compute_htsr_metrics_for_checkpoint(model)
+        htsr_checkpoints.append(epoch)
+        for k in history:
+            history[k].append(m[k])
+
+    measurements.save_htsr_data(htsr_checkpoints, history)
+
+    alpha_arr = np.asarray(history["alpha"], dtype=float)
+    alpha_min_idx = int(np.nanargmin(alpha_arr))
+    alpha_min_epoch = htsr_checkpoints[alpha_min_idx]
+
+    block = {
+        "htsr_checkpoints": htsr_checkpoints,
+        "layer_names": list(HTSR_LAYER_NAMES),
+        "alpha_history": [float(v) for v in alpha_arr],
+        "grok_epoch": grok_epoch,
+        "alpha_min_epoch": alpha_min_epoch,
+        "alpha_min_value": float(alpha_arr[alpha_min_idx]),
+        "alpha_first_last": {"first": float(alpha_arr[0]), "last": float(alpha_arr[-1])},
+        "layer_alpha_first": [float(v) for v in history["layer_alpha"][0]],
+        "layer_alpha_last": [float(v) for v in history["layer_alpha"][-1]],
+        "alpha_min_to_grok_ratio": (
+            float(alpha_min_epoch) / grok_epoch if grok_epoch else None),
+        "num_checkpoints": len(htsr_checkpoints),
+    }
+    with open(os.path.join(measurements.htsr_dir, "htsr_signal.json"), "w") as handle:
+        json.dump(block, handle, indent=2)
+    return block
+
+
 # Predictors this runner knows how to (re)compute from already-saved
 # checkpoints/model_epoch_*.pt alone, with NO retraining. Adding a future
 # predictor here (once it exists) is the ONLY change needed for it to gain
@@ -956,6 +1017,7 @@ CHECKPOINT_PREDICTOR_FUNCS = {
     "dropout_variance": _checkpoint_predictor_dropout_variance,
     "spectral": _checkpoint_predictor_spectral,
     "age": _checkpoint_predictor_age,
+    "htsr": _checkpoint_predictor_htsr,
 }
 CHECKPOINT_ONLY_PREDICTORS = set(CHECKPOINT_PREDICTOR_FUNCS.keys())
 
@@ -1087,6 +1149,19 @@ def aggregate(summaries, args):
         print(f"  seed {s['seed']}: NC1 {nc1['first']:.4f}->{nc1['last']:.4f}  "
               f"nc1_min_epoch={ap['nc1_min_epoch']}  "
               f"nc1_min/grok={ratio_str}  (grok={s['grok_epoch']})")
+
+    print("\nHTSR Alpha predictor (Martin & Mahoney power-law exponent, per seed):")
+    for s in summaries:
+        hp = s.get("htsr_predictor")
+        if hp is None:
+            print(f"  seed {s['seed']}: n/a (not computed for this seed)")
+            continue
+        al = hp["alpha_first_last"]
+        ratio = hp["alpha_min_to_grok_ratio"]
+        ratio_str = f"{ratio:.4f}" if ratio is not None else "None"
+        print(f"  seed {s['seed']}: alpha {al['first']:.3f}->{al['last']:.3f}  "
+              f"alpha_min_epoch={hp['alpha_min_epoch']}  "
+              f"alpha_min/grok={ratio_str}  (grok={s['grok_epoch']})")
 
     print("\nDropout gap at final epoch (per seed, by rate):")
     for s in summaries:

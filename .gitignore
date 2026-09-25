@@ -53,3 +53,6 @@ combined_code.pdf
 # ── compile_context_bundle.py + output artefact ─────────────────────
 tools/compile_context_bundle.py
 full_context_profile.pdf
+
+# htsr_visualize.py (local-only script)
+06_Code/scripts/htsr_visualize.py
