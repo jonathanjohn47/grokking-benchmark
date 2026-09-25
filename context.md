@@ -10871,3 +10871,52 @@ Grok epochs, seeds 0 to 4: 12987 / 6921 / 9510 / 11019 / 23747.
 - Deleted: `02_Progress_Reports/2026-09-25_Progress_Report_Nanda_Unified_Predictors_1-5.pdf` (replaced).
 - New: `02_Progress_Reports/2026-09-25_Progress_Report_Predictors_1-5.pdf`.
 - `context.md` — this section (append only).
+
+---
+
+# Session Summary — 2026-09-25 (end of day, part 3): Why test accuracy occasionally collapses after grok
+
+## Question (Jonathan)
+Figure 1 of the report (test accuracy of the 5 seeds) shows brief, repeated drops of test accuracy after grokking. Why? Will it cause problems (report, supervision meeting, colloquium)?
+
+## What the data shows (checked on seed 1 and seed 4 only; `training/` and `l2_norm/` arrays)
+- The collapses are SHORT: about 2 to 10 epochs each, then accuracy recovers to 1.0.
+- TRAIN accuracy collapses together with test accuracy (seed 1: train accuracy falls to 0.47 post-grok; test minimum 0.475). So this is not a generalisation failure and not overfitting: the model temporarily breaks on its own training data.
+- The training loss is tiny before a collapse (median post-grok about 1e-5 in seed 1, about 6e-7 in seed 4) and then spikes to about 0.4 to 3.5 (seed 1 max 3.53; seed 4 max 0.59), then comes back down.
+- Frequency differs by seed. Number of post-grok epochs with test accuracy below 0.9: 28, 75, 31, 18, 4 for seeds 0 to 4 (seed 1 is worst, seed 4 nearly clean). Limit-cycle check: 0 of 5 seeds show a sustained cycle; all 5 end at train = test = 1.0.
+- Weight norm sum(w^2) oscillates in a sawtooth after grok (visible in plot 02, column 1). At the first six dips of seed 1, sum(w^2) was LOWER at the dip than 300 epochs earlier (for example 1776 vs 1835, 1585 vs 1652, 1437 vs 1477). At the two dip events of seed 4 it was HIGHER (1606 vs 1414 and 1680 vs 1484). So the "weight norm is at the bottom of its cycle at each dip" picture is supported for seed 1 and NOT for seed 4. Correction: an earlier chat message described the lower-norm finding without this seed 4 exception.
+
+## Explanation (likely, NOT proven)
+- Full-batch AdamW with weight decay 1.0. After grokking the loss is nearly zero, so gradients are nearly zero. Weight decay keeps shrinking the weights. Adam rescales updates by its gradient history, so after a long quiet spell a small change in the loss produces a relatively large update. Weights shrink until the outputs start to go slightly wrong, the loss jumps, the gradient becomes large, and the weights are kicked. Accuracy collapses for a few epochs and then training pulls it back. Then the cycle repeats.
+- This matches the known "slingshot effect" of Adam-type optimisers (Thilak et al. 2022, "The Slingshot Mechanism"). Cite it as "consistent with", not "caused by".
+- Not tested: no run with lower learning rate, different weight decay or different Adam settings has been done. Seed 4 does not fit the low-weight-norm picture, so the mechanism may differ between seeds. An optional cheap check (one seed, lower learning rate or weight decay, see if dips vanish) was offered to Jonathan; not done, not decided.
+
+## Impact assessment
+- NOT affected: grok epoch (first epoch with test accuracy > 0.9; all dips come after it), final accuracies, limit-cycle check, and the five-predictor verdict (none of the numbers change).
+- Affected: the "extreme value" events of Dropout variance, Spectral alignment and AGE NC1 fall inside this noisy post-grok phase. This was already reported; the dips are the likely reason. HTSR alpha minimum sits on a flat plateau, a different reason.
+- Likely questions from the supervisor or colloquium: (1) "Is this a bug in your training?" Answer: no, it is a known Adam and weight-decay effect at these settings; dips are brief, all seeds recover, no sustained cycle. (2) "Did you prove the cause?" Answer: no; it is consistent with the slingshot explanation, not tested. (3) "Do the dips make the extreme-value predictors look worse than they are?" Answer: possibly; that is why the retrospective view (rank correlation 1.00 for the 50 percent points) and the scope limitation (no new detection rule) are documented.
+
+## Files Modified
+- `06_Code/`, results and predictor code: not changed.
+- `02_Progress_Reports/2026-09-25_Progress_Report_Predictors_1-5.pdf` — regenerated with this explanation in Sections 3 and 4.
+- `context.md` — this section (append only).
+
+---
+
+# Session Summary — 2026-09-25 (end of day, part 4): Jonathan's own account of the extra effort spent on the L2 Norm predictor
+
+## Statement (Jonathan, recorded in his words as closely as possible)
+- Jonathan says he over-worked on the L2 Norm predictor (the moving averages and the related detection rules) because it was his FIRST predictor and he was obsessed with making it work by any means.
+- He describes this as a NOVICE action, not carelessness.
+
+## Context for the record (from earlier entries, not new findings)
+- The L2 Norm predictor ended up with two detection rules, both with tuned settings: the moving-average crossover (fast window 50, slow window 200) and the MA-of-MA zero crossing (fast window 20, first 100 epochs skipped, quiet-epoch cutoff 90, plus a noise floor of about 0.00046 to 0.00048). These constants were moved from the runner into `06_Code/configs/nanda_unified.yaml` on 2026-09-25, when the arbitrary magic numbers were removed.
+- Result on the 5-seed run: both rules fire before grok in all 5 seeds but at almost the same epoch in every seed (about 113 to 136, and about 1800), independent of the grok epoch. L2 Norm fails as implemented.
+- Later scope decision (2026-09-25): predictors are evaluated with their published methods; no new detection rules, thresholds or predictor-specific tuning meant to improve performance are added. This is the working rule for Predictors 5 to 9, and HTSR Alpha was implemented under it.
+
+## How to use this in the thesis and supervision meetings
+- If asked why the L2 Norm predictor has more elaborate machinery than the others: it was the first predictor implemented, and effort went into trying to make it work before the benchmark rule "published method only, no tuning" was set. The extra effort did not rescue it, and it is reported with the same test as every other predictor.
+- This is Jonathan's own account of his motivation; it is recorded as such. It is a learning point about the project, not a change to any code or result.
+
+## Files Modified
+- `context.md` — this section (append only). No code or results changed.
