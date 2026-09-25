@@ -4,7 +4,7 @@ analyze_nanda_unified.py
 ========================
 
 Post-hoc analysis + plots for the 5-seed Nanda-Unified run (L2 Norm, Dropout,
-Spectral, AGE). Reads only saved results, trains nothing.
+Spectral, AGE, HTSR Alpha). Reads only saved results, trains nothing.
 
 For every predictor signal it asks one question: does the signal move BEFORE
 the model groks (test acc first > 0.9), and does the moment it moves follow
@@ -13,7 +13,7 @@ the grok epoch from seed to seed?
 Event epochs (all computed from the saved per-checkpoint arrays):
   * Implemented predictor outputs, taken straight from summary.json
     (L2 MA-crossover, L2 MA-of-MA zero crossing, dropout-variance peak,
-    spectral k90-min / alignment-max, AGE NC1-min).
+    spectral k90-min / alignment-max, AGE NC1-min, HTSR mean-alpha minimum).
   * "Fraction-of-change" epochs: first epoch at which a signal has covered
     10% / 50% / 90% of the way from its starting value to its final extreme.
     NC1 is measured in log10 because it falls by three orders of magnitude.
@@ -57,6 +57,8 @@ def load_seed(seed):
         "k90": ld("spectral", "spectral_k90.npy"),
         "age_ep": ld("age", "age_checkpoints.npy"),
         "nc1": ld("age", "age_nc1.npy"),
+        "htsr_ep": ld("htsr", "htsr_checkpoints.npy"),
+        "alpha": ld("htsr", "htsr_alpha.npy"),
     }
 
 
@@ -121,6 +123,10 @@ def build_events(runs):
         fr = fraction_epochs(r["age_ep"], np.log10(r["nc1"]))
         put("AGE: log10 NC1 10% of fall", s, fr[0.1])
         put("AGE: log10 NC1 50% of fall", s, fr[0.5])
+
+        # HTSR Alpha: published-style rule only (epoch of lowest mean alpha).
+        # No fraction-of-change level is added (scope decision: no new rules).
+        put("HTSR: mean alpha minimum (implemented)", s, sm["htsr_predictor"]["alpha_min_epoch"])
     return ev
 
 
@@ -192,6 +198,8 @@ def plot_signals(runs, ev, path):
         ("AGE  NC1 (log scale)", lambda r: (r["age_ep"], r["nc1"]),
          [("AGE: NC1 minimum (implemented)", "tab:red"),
           ("AGE: log10 NC1 50% of fall", "tab:pink")]),
+        ("HTSR  mean alpha", lambda r: (r["htsr_ep"], r["alpha"]),
+         [("HTSR: mean alpha minimum (implemented)", "tab:purple")]),
     ]
     n = len(runs)
     fig, axes = plt.subplots(n, len(cols), figsize=(4.4 * len(cols), 2.4 * n), sharex=True)
@@ -228,6 +236,7 @@ def plot_scatter(ev, grok, path):
         "Spectral: alignment 10% of rise",
         "AGE: NC1 minimum (implemented)",
         "AGE: log10 NC1 10% of fall",
+        "HTSR: mean alpha minimum (implemented)",
     ]
     fig, ax = plt.subplots(figsize=(7.5, 6.5))
     lim = 42000
@@ -235,7 +244,7 @@ def plot_scatter(ev, grok, path):
     ax.text(28000, 24500, "fires at grok", color="grey", rotation=33, fontsize=8)
     ax.fill_between([0, lim], [0, lim], 0, color="tab:green", alpha=0.06)
     ax.text(1500, 900, "below the line = fires BEFORE grok", color="tab:green", fontsize=8)
-    for name, mk in zip(show, "os^Dv<>"):
+    for name, mk in zip(show, "os^Dv<>P"):
         e = [ev[name][s] for s in range(len(grok))]
         ax.scatter(grok, e, marker=mk, s=55, label=name, alpha=0.85)
     ax.set(xlim=(0, lim), ylim=(0, lim), xlabel="grok epoch of the seed", ylabel="predictor event epoch")
@@ -255,6 +264,7 @@ def plot_leads(ev, grok, path):
         "Spectral: alignment 10% of rise",
         "AGE: NC1 minimum (implemented)",
         "AGE: log10 NC1 10% of fall",
+        "HTSR: mean alpha minimum (implemented)",
     ]
     n = len(grok)
     fig, ax = plt.subplots(figsize=(11, 4.8))

@@ -1,16 +1,16 @@
 # Graph Report - grokking-benchmark  (2026-09-25)
 
 ## Corpus Check
-- 143 files · ~968,950 words
+- 149 files · ~982,884 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 524 nodes · 628 edges · 42 communities (36 shown, 6 thin omitted)
-- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.8)
+- 548 nodes · 658 edges · 43 communities (38 shown, 5 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `9fae9b29`
+- Built from commit: `f0659392`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -41,6 +41,7 @@
 - [[_COMMUNITY_Community 26|Community 26]]
 - [[_COMMUNITY_Community 27|Community 27]]
 - [[_COMMUNITY_Community 28|Community 28]]
+- [[_COMMUNITY_Community 29|Community 29]]
 - [[_COMMUNITY_Community 30|Community 30]]
 - [[_COMMUNITY_Community 31|Community 31]]
 - [[_COMMUNITY_Community 42|Community 42]]
@@ -49,10 +50,10 @@
 - [[_COMMUNITY_Community 47|Community 47]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `PredictorMeasurements` - 16 edges
+1. `PredictorMeasurements` - 19 edges
 2. `Indian English Communication Skill` - 16 edges
 3. `train_one_seed()` - 13 edges
-4. `train_one_seed()` - 11 edges
+4. `train_one_seed()` - 12 edges
 5. `PredictorMeasurements` - 11 edges
 6. `L2 Norm Predictor — Easy Notes for Revision and Viva` - 11 edges
 7. `main()` - 10 edges
@@ -61,16 +62,16 @@
 10. `BenchmarkAnalyzer` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `train_one_seed()` --calls--> `PredictorMeasurements`  [INFERRED]
-  run_nanda_benchmark.py → src/unified_measurements.py
 - `recompute_from_checkpoints()` --calls--> `PredictorMeasurements`  [INFERRED]
-  run_nanda_benchmark.py → src/unified_measurements.py
+  run_nanda_benchmark.py → 06_Code/src/unified_measurements.py
+- `train_one_seed()` --calls--> `PredictorMeasurements`  [INFERRED]
+  run_nanda_benchmark.py → 06_Code/src/unified_measurements.py
 - `Apply moving average smoothing to reduce noise.     window_size: number of epoch` --rationale_for--> `apply_moving_average()`  [EXTRACTED]
   src/predictors/l2_norm.py → archive/src_p97_mainstream_old/predictors/l2_norm.py
 - `Compute two moving averages on a LOG-EPOCH-UNIFORM grid, so the window     cover` --rationale_for--> `compute_fast_slow_moving_averages()`  [EXTRACTED]
   src/predictors/l2_norm.py → archive/src_p97_mainstream_old/predictors/l2_norm.py
-- `train_one_seed()` --calls--> `compute_dropout_gap_multi_rate()`  [EXTRACTED]
-  run_nanda_benchmark.py → src/predictors/dropout.py
+- `train_one_seed()` --calls--> `PredictorMeasurements`  [INFERRED]
+  06_Code/scripts/run_nanda_benchmark.py → 06_Code/src/unified_measurements.py
 
 ## Import Cycles
 - None detected.
@@ -78,15 +79,15 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (42 total, 6 thin omitted)
+## Communities (43 total, 5 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.09
 Nodes (34): Transformer, compute_accuracy(), compute_dropout_gap_multi_rate(), compute_dropout_variance(), # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, Dropout-variance predictor signal (Salah & Yevick, arXiv:2507.11645):     at a f, aggregate() (+26 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.07
-Nodes (12): generate_pairs(), get_dataloaders(), ModularArithmeticDataset, Dataset, Transformer, generate_pairs(), get_dataloaders(), ModularArithmeticDataset (+4 more)
+Cohesion: 0.08
+Nodes (10): generate_pairs(), get_dataloaders(), ModularArithmeticDataset, Dataset, Transformer, TransformerFourHead, migrate_legacy_flat_run(), Earlier versions of this script saved directly into results/four_head/     inste (+2 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.17
@@ -120,13 +121,17 @@ Nodes (27): 1.1 What is grokking, 1.2 What a grokking predictor is supposed to d
 Cohesion: 0.40
 Nodes (4): data/modular_arithmetic.py, models/transformer.py, Python Project Compilation, train.py
 
+### Community 11 - "Community 11"
+Cohesion: 0.21
+Nodes (11): compute_htsr_for_model(), compute_htsr_metrics_for_checkpoint(), fit_powerlaw_alpha(), _layer_eigenvalues(), HTSR Alpha predictor (Predictor 5 of 9) — Heavy-Tailed Self-Regularization.  DEF, HTSR Alpha metrics for ONE frozen model checkpoint.      Returns a dict:, Thin wrapper kept parallel to compute_spectral_for_model and     compute_age_for, Eigenvalues of X = W^T W / N for one weight matrix (float64, CPU),     sorted as (+3 more)
+
 ### Community 14 - "Community 14"
 Cohesion: 0.09
 Nodes (40): aggregate(), apply_config_constants(), _checkpoint_predictor_age(), _checkpoint_predictor_dropout_variance(), _checkpoint_predictor_spectral(), checkpoints_dir_for(), dips_key(), dropout_variance_checkpoint_schedule() (+32 more)
 
 ### Community 19 - "Community 19"
-Cohesion: 0.08
-Nodes (14): PredictorMeasurements, Unified measurement collection for L2 Norm and Dropout predictors. Ensures consi, Save all Dropout measurements — full multi-rate sweep only.          There is no, Save all Spectral (Predictor 3) measurements — Canatar et al.         2021 task-, Collects and saves all measurements for both predictors., Save all AGE (Predictor 4) measurements — Papyan et al. 2020 NC1         variabi, [n_checkpoints] lists of <= `width` floats -> float array         [n_checkpoints, Generate standalone L2 Norm visualization graphs. (+6 more)
+Cohesion: 0.06
+Nodes (25): PredictorMeasurements, Unified measurement collection for L2 Norm and Dropout predictors. Ensures consi, Save all Dropout measurements — full multi-rate sweep only.          There is no, Save all Dropout measurements — full multi-rate sweep only.          There is no, Save all Spectral (Predictor 3) measurements — Canatar et al.         2021 task-, Save all Spectral (Predictor 3) measurements — Canatar et al.         2021 task-, Collects and saves all measurements for both predictors., Save all AGE (Predictor 4) measurements — Papyan et al. 2020 NC1         variabi (+17 more)
 
 ### Community 20 - "Community 20"
 Cohesion: 0.20
@@ -164,6 +169,10 @@ Nodes (9): PredictorMeasurements, Measurement collection for the L2 Norm predict
 Cohesion: 0.12
 Nodes (16): `comparisons/`, `dropout/`, Experiments, Four-Head Results, How to Use This Structure, Key Findings, `l2_norm/`, Last Updated (+8 more)
 
+### Community 29 - "Community 29"
+Cohesion: 0.36
+Nodes (3): generate_pairs(), get_dataloaders(), ModularArithmeticDataset
+
 ### Community 30 - "Community 30"
 Cohesion: 0.29
 Nodes (6): How to run, nanda_l2_p113 — L2-Norm predictor on (a + b) mod 113, Outputs, The four deliberate differences from `src/`, What this is, Why `p = 113`, `betas = (0.9, 0.98)`, and the small init
@@ -187,22 +196,22 @@ Nodes (9): _collect_representations_and_labels(), compute_age_for_model(), compu
 ## Knowledge Gaps
 - **127 isolated node(s):** `1.1 What is grokking`, `1.2 What a grokking predictor is supposed to do`, `2.1 What a kernel is`, `2.2 Why a trained network's hidden layer defines a kernel`, `2.3 The representation matrix and the Gram matrix` (+122 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **6 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `PredictorMeasurements` connect `Community 19` to `Community 0`?**
-  _High betweenness centrality (0.038) - this node is a cross-community bridge._
+- **Why does `PredictorMeasurements` connect `Community 19` to `Community 0`, `Community 14`?**
+  _High betweenness centrality (0.057) - this node is a cross-community bridge._
 - **Why does `train_one_seed()` connect `Community 0` to `Community 19`?**
-  _High betweenness centrality (0.023) - this node is a cross-community bridge._
-- **Are the 2 inferred relationships involving `PredictorMeasurements` (e.g. with `recompute_from_checkpoints()` and `train_one_seed()`) actually correct?**
-  _`PredictorMeasurements` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `First epoch at which y has covered `f` of the way from its start to     its fart`, `First epoch after the (smoothed) sum-of-squares peak at which it has     fallen`, `events[predictor_signal][seed] = epoch.` to the rest of the system?**
-  _243 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _High betweenness centrality (0.017) - this node is a cross-community bridge._
+- **Are the 4 inferred relationships involving `PredictorMeasurements` (e.g. with `recompute_from_checkpoints()` and `train_one_seed()`) actually correct?**
+  _`PredictorMeasurements` has 4 INFERRED edges - model-reasoned connections that need verification._
+- **What connects `Epoch indices (0-based, matching the training loop's `epoch`) at which     a mod`, `Subsample the evaluation grid from the SAVED checkpoint epochs.     Keeps saved`, `LEGACY — for Archive comparison only, not used in unified benchmark     (24 log-` to the rest of the system?**
+  _260 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.08717948717948718 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.07130124777183601 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07661290322580645 - nodes in this community are weakly interconnected._
 - **Should `Community 4` be split into smaller, more focused modules?**
   _Cohesion score 0.09420289855072464 - nodes in this community are weakly interconnected._

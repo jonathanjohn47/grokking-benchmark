@@ -10788,3 +10788,41 @@ Reading:
 - `08_Experiments/results/nanda_unified/aggregate.json` — regenerated with HTSR.
 - `.gitignore` — Jonathan's edit: `06_Code/scripts/htsr_visualize.py` marked local-only (the file was never tracked, so it stays local and is NOT in the repository).
 - `context.md` — this section (append only).
+
+---
+
+# Session Summary — 2026-09-25 (later): Formal scoring of HTSR Alpha (Predictor 5), same two tests as the first four
+
+## What was done
+- Extended `06_Code/scripts/analyze_nanda_unified.py` to include HTSR Alpha in its "as implemented" form only: event = epoch of the minimum of mean alpha (`summary.json` -> `htsr_predictor.alpha_min_epoch`). Added the HTSR row to the events table, a fifth HTSR column in plot `02_signals_vs_grok.png`, and HTSR entries in `03_event_vs_grok_scatter.png` and `04_lead_times.png`. Loads `htsr/htsr_checkpoints.npy` and `htsr/htsr_alpha.npy`.
+- NO fraction-of-change (10% / 50%) level was added for HTSR. Reason: scope decision (no new rules, no arbitrary thresholds). So HTSR has no "Result B" row.
+- Script re-run. The rows for L2 Norm, Dropout, Spectral and AGE are identical to the earlier verdict (nothing regressed). Outputs rewritten in `08_Experiments/results/nanda_unified/analysis/` (4 PNGs and `predictor_events.json`).
+
+## Test used (unchanged from the earlier verdict)
+1. The predictor must fire BEFORE grok in all 5 seeds (lead = grok epoch - event epoch, positive = early).
+2. The event epoch must move with the grok epoch across seeds (Spearman rho; n = 5: rho 0.9 gives p about 0.037, rho 1.0 gives p about 0.017, below 0.9 not significant).
+
+## Result — HTSR Alpha as implemented
+Grok epochs, seeds 0 to 4: 12987 / 6921 / 9510 / 11019 / 23747.
+
+| Predictor and rule | Event epoch, seeds 0 to 4 | Lead, seeds 0 to 4 | Before grok | rho | Pearson r |
+|---|---|---|---|---|---|
+| HTSR: mean alpha minimum | 34300 / 16000 / 24100 / 19500 / 39600 | -21313 / -9079 / -14590 / -8481 / -15853 | 0/5 | 0.90 | 0.88 |
+
+## Verdict (as agreed with Jonathan)
+- **HTSR Alpha fails as implemented.** Test 1 fails: the alpha minimum lies after grok in all 5 seeds (ratios 1.67 to 2.64). Same pattern as Dropout variance peak, Spectral and AGE. Consistent with the four earlier verdicts.
+- **Test 2 is only borderline.** rho 0.90 (p about 0.037 for n = 5) is just significant, and seed 4 (latest grok 23747, alpha-min 39600) is the extreme point in both variables and drives the correlation. Since Test 1 already fails, this does not rescue the predictor.
+- **Why (from plot 02):** mean alpha falls in a noisy staircase, drops at grok, then sits flat at about 1.25 to the end of training. The "minimum" lies somewhere on that flat plateau, decided by tiny wiggles, so it is late and arbitrary (seeds 0 and 4 have it near the end of the run).
+- **The signal is still informative, the extreme-value rule is what fails:** alpha at the checkpoint nearest grok is already about 1.46 to 1.58 (start about 2.6 to 2.9). No claim is made that HTSR is a usable predictor; that would need a different detection rule, which is out of scope (see the scope decision above) and stays a documented limitation.
+- Earlier caveat still applies: alpha is below 2 in 85 to 94 percent of fits (outside Martin & Mahoney's 2 to 6 range) because the layers are small and automatic xmin sometimes keeps very short tails.
+
+## Current Project State
+- Completed: L2 Norm, Dropout, Spectral, AGE, HTSR Alpha computed on 5 seeds; formal scoring done for all five (all fail as implemented).
+- Next predictors in the evaluation order: Correlation Traps, Weight-PCA, Higher-MI, Commutator Defect. Nothing was deleted; all finished predictor code is unchanged.
+- Still open (postponed, not solved): how to present the alpha < 2 caveat in the write-up (as-is with caveat, or extra per-layer alpha / D / tail-size plots).
+
+## Files Modified
+- `06_Code/scripts/analyze_nanda_unified.py` — HTSR added (events row, plot 02 column, scatter and lead plots; docstring updated).
+- `08_Experiments/results/nanda_unified/analysis/` — `01` to `04` PNGs and `predictor_events.json` regenerated with HTSR.
+- `context.md` — this section (append only).
+- Shared model file and all predictor files: not changed. `graphify-out/` files are rewritten by the graphify hook and are included by `git add .` per the commit rule.

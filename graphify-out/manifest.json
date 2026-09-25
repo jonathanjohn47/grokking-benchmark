@@ -85,8 +85,8 @@
     "semantic_hash": ""
   },
   "06_Code/scripts/run_nanda_benchmark.py": {
-    "mtime": 1790282893.02535,
-    "ast_hash": "b077afbe1b67a637a39e0c18e5bc2f67",
+    "mtime": 1790356801.8672166,
+    "ast_hash": "c6248e291ad99ba6f1e223422bd4b0c7",
     "semantic_hash": ""
   },
   "06_Code/scripts/scaffold.py": {
@@ -150,8 +150,8 @@
     "semantic_hash": ""
   },
   "06_Code/src/unified_measurements.py": {
-    "mtime": 1788638191.4790251,
-    "ast_hash": "aa8ec21ca20ea9b97fe88b888d4eae76",
+    "mtime": 1790356801.8665345,
+    "ast_hash": "9186ecd9ae682ff5c4488a79e0801a66",
     "semantic_hash": ""
   },
   "08_Experiments/nanda_l2_p113/__init__.py": {
@@ -1625,8 +1625,8 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/aggregate.json": {
-    "mtime": 1790342098.2154555,
-    "ast_hash": "4a7113ff0a17dc580895f5a11372cc18",
+    "mtime": 1790357401.5536137,
+    "ast_hash": "573e1ce670875b88090a8effed8a9c73",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_0/dropout/dropout_drc_snapshots.json": {
@@ -1650,8 +1650,8 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_0/summary.json": {
-    "mtime": 1790327492.0627131,
-    "ast_hash": "c8d8f269bb3f54b02d4c5bf421502cb5",
+    "mtime": 1790356933.979577,
+    "ast_hash": "8661df780fdbaf66bf9a5693f96db516",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_1/dropout/dropout_drc_snapshots.json": {
@@ -1675,8 +1675,8 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_1/summary.json": {
-    "mtime": 1790331294.0022814,
-    "ast_hash": "d038c30800f5651a51d830c53bc4b0eb",
+    "mtime": 1790357055.0675352,
+    "ast_hash": "581a2fd30d3a9ca388ff15f663cc7b7c",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_2/dropout/dropout_drc_snapshots.json": {
@@ -1700,8 +1700,8 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_2/summary.json": {
-    "mtime": 1790334854.4112608,
-    "ast_hash": "313e6487d444bd63cd74a770ea62cc65",
+    "mtime": 1790357172.3322668,
+    "ast_hash": "468336651892995fcad47ce033ece9f8",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_3/dropout/dropout_drc_snapshots.json": {
@@ -1725,8 +1725,8 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_3/summary.json": {
-    "mtime": 1790338416.2674322,
-    "ast_hash": "6c36b99231dc2395ba230662eddcaf23",
+    "mtime": 1790357290.164513,
+    "ast_hash": "b745a33048e0cd254c5acdd032d07af8",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_4/dropout/dropout_drc_snapshots.json": {
@@ -1750,8 +1750,8 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_4/summary.json": {
-    "mtime": 1790342098.2034748,
-    "ast_hash": "112d1e928f766b9ccf67e32579865b30",
+    "mtime": 1790357401.5426116,
+    "ast_hash": "08c82e3bfa1aac1b48d37a174b596a59",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_0/age/age_signal.json": {
@@ -1832,6 +1832,36 @@
   "08_Experiments/results/nanda_unified/analysis/04_lead_times.png": {
     "mtime": 1790344407.7696195,
     "ast_hash": "3284de6b9b0fa1cd73d58056eb4bfce2",
+    "semantic_hash": ""
+  },
+  "06_Code/src/predictors/htsr_alpha.py": {
+    "mtime": 1790356765.4537203,
+    "ast_hash": "14e1de452c279b589ed31599e465b6f3",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/seed_0/htsr/htsr_signal.json": {
+    "mtime": 1790356933.9767094,
+    "ast_hash": "a8da0f83a09ace728974602b956c7a59",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/seed_1/htsr/htsr_signal.json": {
+    "mtime": 1790357055.0649092,
+    "ast_hash": "5522f976feb5dd8fce84fe03cd33bb91",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/seed_2/htsr/htsr_signal.json": {
+    "mtime": 1790357172.3294885,
+    "ast_hash": "f4db7967c1b483032988ca617d0b6b23",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/seed_3/htsr/htsr_signal.json": {
+    "mtime": 1790357290.1616073,
+    "ast_hash": "c62df2a2f2ea3071c0c5825b07e1ac24",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/seed_4/htsr/htsr_signal.json": {
+    "mtime": 1790357401.5398417,
+    "ast_hash": "df573dace388785e9942595dc4113ca7",
     "semantic_hash": ""
   }
 }
