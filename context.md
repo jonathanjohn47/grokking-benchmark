@@ -11044,3 +11044,40 @@ Predictors 6 to 9 (Correlation Traps, Weight-PCA, Higher-MI, Commutator Defect):
 - `06_Code/scripts/compile_python_files.py` — `CONTEXT_FILE` constant, `entries` list, docstring.
 - `project_compilation.pdf` — regenerated.
 - `context.md` — this section (append only).
+
+# 2026-09-26 (later) — `compile_python_files.py` now also includes all results in the PDF
+
+## Session Summary
+
+- Extended `06_Code/scripts/compile_python_files.py` so `project_compilation.pdf` also contains everything in `08_Experiments/results`, placed after the code files.
+- Test run: "Done! 52 code files and 263 result files compiled." PDF is 611 pages, about 2.7 MB.
+
+## Technical Decisions
+
+- New constants: `RESULTS_DIR`, `RESULT_TEXT_EXT` (.json, .log, .md), `RESULT_EXTENSIONS` (adds .npy, .png), `NPY_FULL_LIMIT` = 40, `NPY_PREVIEW` = 6.
+- New functions: `collect_results()`, `compact_json()`, `summarize_npy()`, `read_result_text()`. `build_pdf(files, results)` now takes the results list.
+- Text files (.json, .log, .md) are shown as text. In JSON, each innermost list is put on one line (content unchanged) because the raw JSON is about 76,000 lines and would have needed about 900 pages.
+- `.npy` arrays (215 files) are NOT dumped in full. Each shows shape, dtype, min/max/mean and values (full if up to 40 elements, otherwise first 6 and last 6).
+- The 4 PNG plots in `analysis/` are embedded as images scaled to page width.
+- Model checkpoints (`*.pt`, about 3.2 GB) are not included. Cover page says so.
+- Contents list still lists only `context.md` and code files; result files are not listed individually (263 lines too long). Cover page shows the result file count.
+
+## User Instructions
+
+- User asked: "modify it so that all the results are also included in the pdf", then "karo commit".
+
+## Current Project State
+
+- Completed: PDF compile script includes `context.md`, code and results.
+- Open: if the user wants full `.npy` values in the PDF, that is not done (only summaries).
+- Predictor work unchanged: L2 Norm, Dropout, Spectral, AGE, HTSR Alpha done; next is Correlation Traps (6). No predictor or shared-model code changed.
+
+## Important Discoveries
+
+- Results folder (excluding `.pt`) is about 35 MB: 42 JSON, 215 NPY, 4 PNG, 1 log, 1 README.
+
+## Files Modified
+
+- `06_Code/scripts/compile_python_files.py` — results support (constants, four helper functions, image and text sections, docstring, `main()`).
+- `project_compilation.pdf` — regenerated.
+- `context.md` — this section (append only).

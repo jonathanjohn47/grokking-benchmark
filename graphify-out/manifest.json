@@ -60,8 +60,8 @@
     "semantic_hash": ""
   },
   "06_Code/scripts/compile_python_files.py": {
-    "mtime": 1789933070.8645895,
-    "ast_hash": "c0a15cf3577e3e9d5978e95bc88a83da",
+    "mtime": 1790406337.5563731,
+    "ast_hash": "43834113b9664c713aba5f2b8020d8c6",
     "semantic_hash": ""
   },
   "06_Code/scripts/debug_detection.py": {
@@ -815,8 +815,8 @@
     "semantic_hash": ""
   },
   "project_compilation.pdf": {
-    "mtime": 1790344810.2604494,
-    "ast_hash": "3f84f67acfb4912da81e5788df8d8dc7",
+    "mtime": 1790406382.2540936,
+    "ast_hash": "a6aaaffdfbc5eb5808836e6ae47f85fa",
     "semantic_hash": ""
   },
   "archive/Baseline_v4_24_Checkpoints/nanda_unified/aggregate.json": {
