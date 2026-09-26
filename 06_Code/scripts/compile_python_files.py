@@ -2,8 +2,8 @@
 compile_python_files.py
 =======================
 
-Compiles EVERY codeable file under the project root into one single PDF
-(`project_compilation.pdf`, written in the project root).
+Compiles context.md plus EVERY codeable file under the project root into
+one single PDF (`project_compilation.pdf`, written in the project root).
 
 The project root is found from this file's location
 (06_Code/scripts/ -> two levels up), so the script works on any machine.
@@ -18,6 +18,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 OUTPUT_FILE = ROOT / "project_compilation.pdf"
+CONTEXT_FILE = ROOT / "context.md"  # project memory, included at the start of the PDF
 
 # Codeable = source code, scripts and code-like config. Data, images,
 # weights (.npy/.png/.pt), papers (.pdf) and prose (.md) are not code.
@@ -141,7 +142,9 @@ def build_pdf(files):
         canvas_obj.drawRightString(A4[0] - 0.6 * inch, 0.4 * inch, f"p.{doc.page}")
         canvas_obj.restoreState()
 
-    relative = [f.relative_to(ROOT).as_posix() for f in files]
+    # context.md (project memory) goes first, then all code files.
+    entries = ([CONTEXT_FILE] if CONTEXT_FILE.is_file() else []) + list(files)
+    relative = [f.relative_to(ROOT).as_posix() for f in entries]
 
     story = [
         Spacer(1, 1.2 * inch),
@@ -156,7 +159,7 @@ def build_pdf(files):
         PageBreak(),
     ]
 
-    for index, (path, rel) in enumerate(zip(files, relative), 1):
+    for index, (path, rel) in enumerate(zip(entries, relative), 1):
         print(f"Processing: {rel}")
         code = wrap_code(read_code(path)) or "(empty file)"
         story.append(Paragraph(f"{index}. {esc(rel)}", file_header))
