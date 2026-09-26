@@ -10920,3 +10920,92 @@ Figure 1 of the report (test accuracy of the 5 seeds) shows brief, repeated drop
 
 ## Files Modified
 - `context.md` — this section (append only). No code or results changed.
+
+---
+
+# Session Summary — 2026-09-26: Push of everything to GitHub, history split, lost edit, and tally of context.md against the code and results
+
+This entry is APPENDED. It corrects or supersedes some older lines (listed in section F) without editing them. Source of truth used: `main` at `b87941d`, identical to `origin/main`, working tree clean.
+
+## A) Getting the repository onto GitHub (`git@github.com:jonathanjohn47/grokking-benchmark.git`, SSH)
+
+- **Goal (Jonathan):** push EVERYTHING, including `08_Experiments/results` (about 3.2 GB), because the professor must see the results on GitHub. Do not delete or ignore `08_Experiments/results`. `.venv/` stays ignored.
+- **`.gitignore` check:** no rule ignores `08_Experiments/results` (only `results/test_smoke/`, which is a different path). `.venv/` is ignored. Nothing was changed in `.gitignore`. `context.md`, `CLAUDE.md` and `graphify-out/` are listed in `.gitignore` but are tracked in git (they were added before the ignore lines), so they keep being committed.
+- **Problem 1 — `Permission denied (publickey)`:** `~/.ssh` had no key and the agent was empty. Fixed by generating an ed25519 key (`~/.ssh/id_ed25519`, NO passphrase, comment jonathanjohn1133@gmail.com), writing `~/.ssh/config` for `github.com` (`AddKeysToAgent yes`, `UseKeychain yes`, `IdentityFile ~/.ssh/id_ed25519`) and adding it to the agent with `ssh-add --apple-use-keychain`. Jonathan added the public key in GitHub Settings > SSH and GPG keys; `ssh -T git@github.com` then answered "Hi jonathanjohn47! You've successfully authenticated".
+- **Problem 2 — the push froze (slow uplink in Jammu, about 3 GB).** A direct `git push` of all 16 commits hung inside `git pack-objects`. Two pushes were running at the same time (one started by Jonathan's terminal with `caffeinate`, one by Claude) and were competing for the same loose objects. Both were killed. Leftover `tmp_obj_*` garbage files in `.git/objects` from earlier killed attempts were pruned (`git prune --expire=now`).
+- **Strategy that worked:** push ONE COMMIT AT A TIME (`git push origin <sha>:refs/heads/main`), so a stall costs one commit and nothing needs a force push. LFS was NOT used and no history was force-pushed.
+- **Problem 3 — one commit was too big.** The old commit `9dde96a` (all 4005 checkpoints, pack of about 2.8 GB) uploaded to about 68 percent (about 1.94 GB) and GitHub rejected it: `error: remote unpack failed: index-pack failed`. Fix: the checkpoint commit was SPLIT BY SEED into five commits of about 560 MB each (801 files each). This was done only on local, not-yet-pushed history (a separate git worktree and a temporary branch `split`), so no rewrite of anything that was already on GitHub and no force push. The resulting tree is byte-identical to the original local `main` (`git diff` between them is empty).
+- **Result:** all 18 commits are on GitHub. `origin/main` = `main` = `b87941d`. Push timing: per-commit push script ran about 05:16 to 05:35 IST on 2026-09-26 under `caffeinate -i -s`, with up to 5 retries per commit (none needed).
+- **Local cleanup:** `main` was reset to `origin/main` (safe, trees identical), the scratch worktree and the `split` branch were removed. The local branch **`backup-before-split` was kept on purpose** (Jonathan's instruction). It points at `533dc80` (the old, un-split history with the OLD commit IDs). It exists only locally and was NOT pushed. Do not delete it unless Jonathan says so.
+- **Size warning for the record:** GitHub advises keeping a repository below about 5 GB. The pack is now about 3 GB of binary weights that cannot be compressed. If GitHub ever complains, the options are: remove `08_Experiments/results/nanda_unified/seed_*/checkpoints` from history (needs a history rewrite and a force push) or move them to Git LFS. Not needed now; recorded so it is not a surprise.
+
+## B) Commit IDs changed after `18fc385` (IMPORTANT for reading older entries)
+
+Because the checkpoint commit was split, EVERY commit after `18fc385` has a NEW id on GitHub. Older entries in this file quote OLD ids. Mapping (old -> new, by commit message):
+
+| Old id (only in `backup-before-split`) | New id (on GitHub) | Message |
+|---|---|---|
+| `9dde96a` | `41fa455`, `2ee90d4`, `9de678b`, `e6a560c`, `0ed11bf` (seeds 0 to 4) + `9ea0c02` (context.md part) | Model checkpoints, split by seed |
+| `9fae9b2` | `baa1167` | Analyse 5-seed results, verdict |
+| `a429eee` | `0f65e9d` | Scope decision, start HTSR Alpha |
+| `3a3b08d` | `86137eb` | Graphify outputs and project_compilation.pdf |
+| `f065939` | `8503d85` | Add HTSR Alpha predictor |
+| `aa363e3` | `63f58be` | Score HTSR Alpha |
+| `01bc153` | `722f3a0` | Refresh graphify outputs after HTSR |
+| `6faec78` | `62bee4f` | Progress report PDF (first version) |
+| `e078201` | `711008a` | Refresh graphify manifest |
+| `a5c7f2b` | `b5cc811` | Progress report, supervisor's five-part format |
+| `d08811b` | `249cc26` | Refresh graphify outputs |
+| `f48d48f` | `57b3a2e` | Post-grok collapse explanation, L2 Norm effort note |
+| `533dc80` | `b87941d` | Refresh graphify outputs |
+
+Unchanged ids (pushed as they were, earlier in the same push): `c8b4897`, `81c3372`, `9ab101e`, `85fee1e`, `e1cfa3e`, `1c18fc5`, `18fc385`.
+
+## C) Incident: Jonathan's uncommitted edit to `context.md` was lost (my mistake)
+
+- At the start of this session `git status` showed `M context.md` (an uncommitted edit made before the session). While splitting the history, Claude ran a script whose branch switch was refused because of that uncommitted change; the script did not stop and ran `git checkout 9dde96a -- context.md` on `main`, which OVERWROTE the working-tree `context.md` and made one bad commit (`70fd11e`, never pushed, later removed by resetting to `backup-before-split`).
+- The lost edit was never staged or committed, so git cannot restore it. Jonathan searched the VS Code Timeline and found nothing (probably never saved). **The content of that edit is unknown and unrecovered.** The committed `context.md` (history up to `533dc80`) is intact and was not shortened; this file is again the committed version plus the appended sections.
+- Lesson recorded: never run a scripted branch switch or `git checkout <rev> -- <file>` while `context.md` has uncommitted changes; commit or stash first, and use `set -e`. Repository-changing scripts were afterwards run in a separate worktree.
+
+## D) Graphify state (checked against the code)
+
+- `graphify-out/GRAPH_REPORT.md` says: 149 files, about 984,518 words, 548 nodes, 658 edges, 43 communities (38 shown), 99 percent EXTRACTED / 1 percent INFERRED (6 edges), token cost 0. Report date 2026-09-25 (23:36).
+- The report says "Built from commit `aa363e3b`" — an OLD id (now `63f58be` on GitHub, "Score HTSR Alpha"), so it is one step behind HEAD `b87941d`. The commits after it only refreshed graphify files and added progress reports and the collapse note; no code changed. Rebuild log (`~/.cache/graphify-rebuild.log`): "No code-graph topology changes detected; outputs left untouched". So the graph still describes the code correctly.
+- Graphify commits so far in this thread: `85fee1e`, `86137eb`, `722f3a0`, `711008a`, `249cc26`, `b87941d` (new ids).
+- Side effect seen: the graphify git hook fires on every checkout or commit ("801 file(s) changed - rebuilding graph...") and rewrites files in `graphify-out/`. Inside a temporary worktree this dirtied the tree and blocked a `git cherry-pick` once; it was avoided with `-c core.hooksPath=/dev/null` for that worktree only. The hook itself was NOT changed.
+
+## E) Tally: `context.md` against the actual code and results (all checked on `b87941d`)
+
+Checked and CORRECT (no change needed): grok epochs and the 0.95 / 0.99 thresholds (12987 / 6921 / 9510 / 11019 / 23747; mean 12836.8, std 5803.9), final train and test accuracy 1.0 in all seeds, `n_limit_cycle` 0, post-grok dips per seed (28, 75, 31, 18, 4) and minimum test accuracies, wall time 7500 to 7720 s per seed, HTSR alpha-min epochs (34300, 16000, 24100, 19500, 39600), file counts per seed (`checkpoints` 801, `spectral` 8, `age` 4, `htsr` 8, `dropout` 11, `l2_norm` 15, `training` 3, `reports` 0 = empty), `analysis/` contents (4 PNGs + `predictor_events.json` with keys `grok_epochs` and `signals`), yaml sections (`evaluation`, `dropout`, `l2_norm`; L2 windows 50 / 200 / 20 / skip 100 / cutoff 90; dropout n_samples 100, rate 0.5), predictor files (`l2_norm.py`, `dropout.py`, `spectral.py`, `age.py`, `htsr_alpha.py`), the post-grok collapse entry (data numbers) and the L2 Norm effort note.
+
+Predictors 6 to 9 (Correlation Traps, Weight-PCA, Higher-MI, Commutator Defect): NO code exists yet in `06_Code/src/predictors/`. Consistent with the notes ("next, not started").
+
+## F) What was missing, outdated or wrong in the older text (older lines are left as they are)
+
+1. "Not pushed to `origin`" (end-of-day parts 1 and 2, 2026-09-25) — OUTDATED. Everything is now on GitHub (section A).
+2. "Checkpoints (*.pt, about 3.2 GB) are gitignored and NOT in git" (2026-09-25 entry "5-seed run finished") — already superseded by the later "model checkpoints committed" entry; now also pushed. They are in git because of `git add -f`; the `*.pt` line in `.gitignore` is unchanged (future `.pt` files stay ignored unless force-added).
+3. Old commit ids quoted anywhere after `18fc385` (for example `9dde96a`, `f065939`, `aa363e3`, `6faec78`, `533dc80`) — the ids changed on GitHub (section B).
+4. `Archive/Baseline_v4_24_Checkpoints/` (magic-number entry) and the root `README.md` say `Archive/`; the real folder on disk is lowercase `archive/` (subfolders `Baseline_v4_24_Checkpoints`, `Deprecated_Code`, `Old_Drafts`, `Unused`). Not renamed (Jonathan's choice, as noted before).
+5. `08_Experiments/results/README.md` is OUTDATED: it still describes the old p = 97 v4 run and lists "HTSR Alpha — next". It does not mention `nanda_unified/`. `08_Experiments/results/` now contains only `README.md` and `nanda_unified/`. Not edited (out of scope); flagged for Jonathan.
+6. Root `README.md` objective 2 still lists only L2 weight norm, dropout gap, age-based and spectral predictors (no HTSR Alpha or later ones). Already noted before; still open.
+7. Runner docstring in `run_nanda_benchmark.py` still says "ONLY L2-Norm and Dropout" and that Predictors 3-9 are not built. STALE (code runs L2, Dropout, Spectral, AGE and HTSR). Already noted; not changed. `dropout.py` still has default `n_samples=30` (the runner always passes 100). Not changed.
+8. Empty folders on disk: `08_Experiments/Logs/`, `runs/`, `06_Code/tests/`, and `seed_*/reports/` (no predictor writes there).
+9. The root still holds two Spectral PDFs, `project_compilation.pdf` and a `Claude outputs` folder, outside the professor's numbered layout. Unchanged.
+
+## G) Limits of this tally (honest)
+
+- Line by line, this session re-read the top rule and the entries from 2026-09-25 (magic-number cleanup) to the end of the file. Older entries (September 2026 v4 work, p = 97, folder reorganisation, and so on) were not re-read in full; only their headings and the specific claims listed above were checked. Older results of the v4 baseline were not re-verified against `archive/`.
+- The content of the lost uncommitted `context.md` edit (section C) cannot be reconstructed.
+
+## Current Project State
+
+- Completed: L2 Norm, Dropout, Spectral, AGE, HTSR Alpha computed and scored on 5 seeds (all fail as implemented); progress report written to the supervisor's format; the whole repository including `08_Experiments/results` and all 4005 checkpoints is on GitHub.
+- Postponed (still open, not solved): how to present HTSR alpha below 2; whether the retrospective 10 / 50 percent look goes into the thesis; whether to add seeds; README and results-README updates; the `Archive` vs `archive` naming.
+- Next predictors in order: Correlation Traps (6), Weight-PCA (7), Higher-MI (8), Commutator Defect (9). No predictor or shared-model code changed in this session.
+
+## Files Modified
+
+- `context.md` — this section (append only).
+- Git history: checkpoint commit split into 5 per-seed commits (local rewrite before push; tree identical). Local branch `backup-before-split` kept, not pushed.
+- `~/.ssh/id_ed25519`, `~/.ssh/id_ed25519.pub`, `~/.ssh/config` — new, outside the repository.
+- Code, configs, results and predictor files: not changed.
