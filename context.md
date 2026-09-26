@@ -11081,3 +11081,9 @@ Predictors 6 to 9 (Correlation Traps, Weight-PCA, Higher-MI, Commutator Defect):
 - `06_Code/scripts/compile_python_files.py` — results support (constants, four helper functions, image and text sections, docstring, `main()`).
 - `project_compilation.pdf` — regenerated.
 - `context.md` — this section (append only).
+
+# 2026-09-26 (later still) — `heavy_tail_demo.py` gitignored
+
+- User asked to put `06_Code/scripts/heavy_tail_demo.py` in `.gitignore` and push.
+- `.gitignore`: added `06_Code/scripts/heavy_tail_demo.py` under a "local-only script" comment, same pattern as `06_Code/scripts/htsr_visualize.py`. The file was untracked (never committed), so no `git rm --cached` was needed. The file itself is NOT deleted; it stays on disk, just not in git.
+- No code, predictor, shared-model or results changes. Files modified: `.gitignore`, `context.md` (this section, append only).

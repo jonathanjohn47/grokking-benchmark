@@ -56,3 +56,6 @@ full_context_profile.pdf
 
 # htsr_visualize.py (local-only script)
 06_Code/scripts/htsr_visualize.py
+
+# heavy_tail_demo.py (local-only script)
+06_Code/scripts/heavy_tail_demo.py
