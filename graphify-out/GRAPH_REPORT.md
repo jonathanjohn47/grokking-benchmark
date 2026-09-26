@@ -1,16 +1,16 @@
 # Graph Report - grokking-benchmark  (2026-09-26)
 
 ## Corpus Check
-- 149 files · ~984,554 words
+- 149 files · ~984,915 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 560 nodes · 680 edges · 43 communities (38 shown, 5 thin omitted)
+- 565 nodes · 692 edges · 44 communities (38 shown, 6 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e01390d6`
+- Built from commit: `13c75369`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -44,6 +44,7 @@
 - [[_COMMUNITY_Community 29|Community 29]]
 - [[_COMMUNITY_Community 30|Community 30]]
 - [[_COMMUNITY_Community 31|Community 31]]
+- [[_COMMUNITY_Community 32|Community 32]]
 - [[_COMMUNITY_Community 42|Community 42]]
 - [[_COMMUNITY_Community 43|Community 43]]
 - [[_COMMUNITY_Community 46|Community 46]]
@@ -62,16 +63,16 @@
 10. `BenchmarkAnalyzer` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `main()` --calls--> `Path`  [INFERRED]
+  tools/collage_images.py → 06_Code/scripts/compile_python_files.py
 - `recompute_from_checkpoints()` --calls--> `PredictorMeasurements`  [INFERRED]
   run_nanda_benchmark.py → 06_Code/src/unified_measurements.py
 - `train_one_seed()` --calls--> `PredictorMeasurements`  [INFERRED]
   run_nanda_benchmark.py → 06_Code/src/unified_measurements.py
 - `main()` --calls--> `Path`  [INFERRED]
-  tools/collage_images.py → 06_Code/scripts/compile_python_files.py
-- `main()` --calls--> `Path`  [INFERRED]
   tools/md_to_image.py → 06_Code/scripts/compile_python_files.py
-- `train_one_seed()` --calls--> `compute_dropout_gap_multi_rate()`  [EXTRACTED]
-  run_nanda_benchmark.py → src/predictors/dropout.py
+- `Apply moving average smoothing to reduce noise.     window_size: number of epoch` --rationale_for--> `apply_moving_average()`  [EXTRACTED]
+  src/predictors/l2_norm.py → archive/src_p97_mainstream_old/predictors/l2_norm.py
 
 ## Import Cycles
 - None detected.
@@ -79,15 +80,11 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (43 total, 5 thin omitted)
+## Communities (44 total, 6 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.14
-Nodes (27): aggregate(), _checkpoint_predictor_dropout_variance(), checkpoints_dir_for(), dropout_variance_checkpoint_schedule(), get_done_predictors(), grok_epoch_from(), has_saved_checkpoints(), is_predictor_done() (+19 more)
-
-### Community 1 - "Community 1"
-Cohesion: 0.08
-Nodes (12): TransformerFourHead, Transformer, compute_accuracy(), compute_dropout_gap_multi_rate(), compute_dropout_variance(), # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, Dropout-variance predictor signal (Salah & Yevick, arXiv:2507.11645):     at a f (+4 more)
+Cohesion: 0.09
+Nodes (34): Transformer, compute_accuracy(), compute_dropout_gap_multi_rate(), compute_dropout_variance(), # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, Dropout-variance predictor signal (Salah & Yevick, arXiv:2507.11645):     at a f, aggregate() (+26 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.17
@@ -138,8 +135,8 @@ Cohesion: 0.20
 Nodes (8): discover_run_dirs(), migrate_legacy_flat_run(), plot_comparison(), plot_single_run(), Recreates this run's own 8 plots, saved inside results/four_head/run_<N>/ itself, Builds 4 plots overlaying every discovered run together, saved     directly in r, Same migration as train_four_head.py — kept here too so this     script can be r, Finds every run_<N> folder inside base_dir, sorted by run number     (not alphab
 
 ### Community 21 - "Community 21"
-Cohesion: 0.12
-Nodes (21): Path, build_pdf(), collect_files(), is_code_file(), main(), compile_python_files.py =======================  Compiles context.md plus EVERY, Hard-wrap long lines (PDF has no horizontal scroll), keeping indent., Prefer a Unicode monospace font (arrows, Greek letters in comments);     fall ba (+13 more)
+Cohesion: 0.13
+Nodes (22): Path, build_pdf(), collect_files(), collect_results(), compact_json(), is_code_file(), main(), compile_python_files.py =======================  Compiles context.md, EVERY code (+14 more)
 
 ### Community 22 - "Community 22"
 Cohesion: 0.05
@@ -170,8 +167,8 @@ Cohesion: 0.12
 Nodes (16): `comparisons/`, `dropout/`, Experiments, Four-Head Results, How to Use This Structure, Key Findings, `l2_norm/`, Last Updated (+8 more)
 
 ### Community 29 - "Community 29"
-Cohesion: 0.11
-Nodes (8): generate_pairs(), get_dataloaders(), ModularArithmeticDataset, Dataset, Transformer, generate_pairs(), get_dataloaders(), ModularArithmeticDataset
+Cohesion: 0.07
+Nodes (12): generate_pairs(), get_dataloaders(), ModularArithmeticDataset, Dataset, Transformer, generate_pairs(), get_dataloaders(), ModularArithmeticDataset (+4 more)
 
 ### Community 30 - "Community 30"
 Cohesion: 0.29
@@ -180,6 +177,10 @@ Nodes (6): How to run, nanda_l2_p113 — L2-Norm predictor on (a + b) mod 113, O
 ### Community 31 - "Community 31"
 Cohesion: 0.10
 Nodes (11): PredictorMeasurements, Unified measurement collection for L2 Norm and Dropout predictors. Ensures consi, Collects and saves all measurements for both predictors., Generate standalone Dropout visualization graphs., Generate combined PDF report with all measurements., Create subdirectories for each predictor., Apply simple moving average smoothing., Save core training metrics. (+3 more)
+
+### Community 32 - "Community 32"
+Cohesion: 0.70
+Nodes (4): get_images(), horizontal_collage(), main(), vertical_collage()
 
 ### Community 43 - "Community 43"
 Cohesion: 0.40
@@ -196,22 +197,22 @@ Nodes (9): _collect_representations_and_labels(), compute_age_for_model(), compu
 ## Knowledge Gaps
 - **127 isolated node(s):** `1.1 What is grokking`, `1.2 What a grokking predictor is supposed to do`, `2.1 What a kernel is`, `2.2 Why a trained network's hidden layer defines a kernel`, `2.3 The representation matrix and the Gram matrix` (+122 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **6 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `PredictorMeasurements` connect `Community 19` to `Community 0`, `Community 14`?**
-  _High betweenness centrality (0.055) - this node is a cross-community bridge._
-- **Why does `train_one_seed()` connect `Community 0` to `Community 1`, `Community 19`?**
+  _High betweenness centrality (0.054) - this node is a cross-community bridge._
+- **Why does `train_one_seed()` connect `Community 0` to `Community 19`?**
   _High betweenness centrality (0.016) - this node is a cross-community bridge._
 - **Are the 4 inferred relationships involving `PredictorMeasurements` (e.g. with `recompute_from_checkpoints()` and `train_one_seed()`) actually correct?**
   _`PredictorMeasurements` has 4 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `compile_python_files.py =======================  Compiles context.md plus EVERY`, `Hard-wrap long lines (PDF has no horizontal scroll), keeping indent.`, `Prefer a Unicode monospace font (arrows, Greek letters in comments);     fall ba` to the rest of the system?**
-  _263 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `compile_python_files.py =======================  Compiles context.md, EVERY code`, `Put each innermost list on one line (content unchanged, far fewer pages).`, `Hard-wrap long lines (PDF has no horizontal scroll), keeping indent.` to the rest of the system?**
+  _264 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.1402116402116402 - nodes in this community are weakly interconnected._
-- **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.0812807881773399 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08717948717948718 - nodes in this community are weakly interconnected._
 - **Should `Community 4` be split into smaller, more focused modules?**
   _Cohesion score 0.09420289855072464 - nodes in this community are weakly interconnected._
+- **Should `Community 9` be split into smaller, more focused modules?**
+  _Cohesion score 0.07142857142857142 - nodes in this community are weakly interconnected._
