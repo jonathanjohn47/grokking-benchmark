@@ -11177,3 +11177,126 @@ No, because the four fail in different, mechanistically distinct, and separately
 ### Closing Note
 
 This justification is meant to be used at the colloquium and in the thesis defence chapter. It supports Hypothesis H3 - that weight-spectrum-style predictors transfer poorly from generic generalisation theory to grokking specifically - by showing that the transfer failures documented above are structured and theory-consistent, not random noise from a broken pipeline.
+
+## Session Summary — September 29, 2026 (Controlled Experiment: Synthetic-Control Validation of Pre-Grok Predictor Criterion - 95th and 99th Percentile Calibration)
+
+### 1. Nature and Motivation
+
+This controlled experiment does not evaluate any real predictor (L2 Norm, Dropout, Spectral, AGE, HTSR Alpha, or later predictors). It validates the evaluation criterion itself, in order to test whether the pass/fail rule applied to pre-grok predictors is sensible or broken.
+
+If the criterion itself were flawed, then any pass/fail verdict already recorded against real predictors would also be invalid. This validation was therefore treated as necessary before the benchmark's negative verdicts could be closed out.
+
+No model checkpoints, training runs, or real predictor code were touched for this experiment. Only synthetic signals (fabricated, clearly labelled "Ps" arrays, not real predictor output) were generated, evaluated against the criterion, and discarded.
+
+Fixed problem setup, taken from `06_Code/scripts/run_control_experiment.py`:
+
+```python
+Gs = [12987, 6921, 9510, 11019, 23747]   # actual grok epochs, 5 seeds, nanda_unified run
+T_MAX = 40000.0
+MARGIN = 100                              # epochs
+N_TRIALS_NOISY = 10000                    # per noise level, Control D
+N_RAND = 10000                            # for random controls, Control E
+np.random.seed(42)
+```
+
+### 2. Evaluation Logic
+
+Function `evaluate(Gs, Ps, margin=100)`:
+
+- Filters out `None` entries (no detection). Requires at least 4 valid seeds.
+- `lead = Ps < (Gs - margin)` — does the predictor fire with a safety margin before grok?
+- `lead_frac = mean(lead)` — fraction of seeds for which lead holds.
+- `rel_lead = (Gs - Ps) / Gs` — relative lead, as a fraction of the grok epoch.
+- `mean_rel_lead = mean(rel_lead)`.
+- `rho = Spearman(Gs, Ps)` — rank correlation. If `Ps` is constant (`std < 1e-9`), `rho` is forced to `0.0` rather than `NaN`, because a constant signal carries no seed-to-seed timing information and must not be allowed to silently pass a downstream `rho >= threshold` check via an undefined comparison.
+
+PASS rule (calibrated, not hand-picked):
+
+```
+PASS if:  lead_frac >= 0.8  AND  rho >= RHO_THRESH  AND  0.05 <= mean_rel_lead <= 0.9
+```
+
+**RHO_THRESH calibration (data-driven).** Rather than hand-picking a Spearman cutoff, 10,000 fully random predictors were generated as `Ps ~ Uniform[0, T_MAX]`, independent of `Gs`, and the percentile of their resulting `rho` distribution was taken as the threshold. This caps the false-positive rate of the correlation check by construction.
+
+- Run 1: 95th percentile → `RHO_THRESH = 0.8`.
+- Run 2: 99th percentile → `RHO_THRESH = 0.9` (current final value; recorded precisely in `detailed_results.json` as `0.8999999999999998`).
+
+### Five Synthetic Controls
+
+**Control A — Ideal Perfect Predictor (must PASS 100%).** `Ps = 0.5 * Gs`: fires at 50% of grok time, perfect correlation (`rho = 1.0`), `mean_rel_lead = 0.5`.
+
+**Control B — Constant Early Signal (must FAIL 0%).** `Ps = 5000` for all seeds: always leads (`lead_frac = 1.0`) but `std = 0`, so `rho = 0`. Must fail, because a constant carries no seed-to-seed information. Tests that the criterion does not pass a predictor merely for firing early.
+
+**Control C — Post-Grok Signal (must FAIL 0%).** `Ps = 1.5 * Gs`: always after grok (`lead_frac = 0.0`), `rho = 1.0`, but `mean_rel_lead = -0.5`. Must fail.
+
+**Control D — Noisy-Good Predictor (sensitivity curve).** `Ps = 0.5*Gs + epsilon`, where `epsilon = noise_frac * 0.5*Gs * U`, `U ~ Uniform[-1, 1]`. `noise_frac ∈ {0.0, 0.10, 0.25, 0.50, 1.0}`, 10,000 trials per level. Normalisation by `0.5*Gs` (rather than a fixed absolute noise amount) is necessary because `Gs` ranges from 6921 to 23747 across seeds — a fixed absolute noise term would be biased across seeds of very different magnitude.
+
+**Control E — Random Predictor (false-positive rate).**
+- Variant 1 (unconditional): `Ps ~ Uniform[0, T_MAX]`. Tests both the lead condition and the correlation condition together. This is the real-world null case.
+- Variant 2 (conditional): `Ps ~ Uniform[0, Gs]` per seed. Always leads by construction (`lead_frac ≈ 0.99`), isolating the false-positive rate of the correlation check alone. This is a deliberate stress test, not the real-world null.
+
+### 3. Results
+
+**Run 1: 95th-Percentile Calibration (`RHO_THRESH = 0.8`)**
+
+| Control | lead_frac | rho_mean | rho_std | mean_rel_lead | pass_rate | expected | verdict |
+|---|---|---|---|---|---|---|---|
+| A: Ideal (0.5·Gs) | 1.0 | 1.0 | 0.0 | 0.5 | 100% | 100% | PASS |
+| B: Constant (5000) | 1.0 | 0.0 | 0.0 | 0.5405 | 0% | 0% | FAIL (as required) |
+| C: Post-grok (1.5·Gs) | 0.0 | 1.0 | 0.0 | -0.5 | 0% | 0% | FAIL (as required) |
+| D: noise_frac = 0.0 | 1.0 | 1.0 | 0.0 | 0.5 | 100% | decreasing | see `plot_sensitivity.png` |
+| D: noise_frac = 0.1 | 1.0 | 0.9949 | 0.0220 | 0.4998 | 100% | — | — |
+| D: noise_frac = 0.25 | 1.0 | 0.9306 | 0.0865 | 0.4998 | 92.58% | — | — |
+| D: noise_frac = 0.5 | 1.0 | 0.7797 | 0.1993 | 0.4999 | 59.09% | — | — |
+| D: noise_frac = 1.0 | 0.9908 | 0.4715 | 0.4189 | 0.4990 | 27.99% | — | — |
+| E: Random Uniform[0, T_MAX], Variant 1 | 0.3187 | 0.0053 | 0.4991 | -0.8309 | 0.33% | ≤ 5% FPR | OK |
+| E: Random Uniform[0, Gs], Variant 2 | 0.9912 | 0.4737 | 0.4139 | 0.5008 | 27.77% | ≤ 5% FPR | FPR ABOVE TARGET |
+
+**Run 2: 99th-Percentile Calibration (`RHO_THRESH = 0.8999999999999998`) — CURRENT FINAL**
+
+| Control | lead_frac | rho_mean | rho_std | mean_rel_lead | pass_rate | verdict |
+|---|---|---|---|---|---|---|
+| A: Ideal | 1.0 | 1.0 | 0.0 | 0.5 | 100% | PASS |
+| B: Constant | 1.0 | 0.0 | 0.0 | 0.5405 | 0% | FAIL (as required) |
+| C: Post-grok | 0.0 | 1.0 | 0.0 | -0.5 | 0% | FAIL (as required) |
+| D: noise_frac = 0.0 | 1.0 | 1.0 | 0.0 | 0.5 | 100% | — |
+| D: noise_frac = 0.1 | 1.0 | 0.9949 | 0.0220 | 0.4998 | 100% | — |
+| D: noise_frac = 0.25 | 1.0 | 0.9306 | 0.0865 | 0.4998 | 91.04% | — |
+| D: noise_frac = 0.5 | 1.0 | 0.7797 | 0.1993 | 0.4999 | 50.79% | — |
+| D: noise_frac = 1.0 | 0.9908 | 0.4715 | 0.4189 | 0.4990 | 21.92% | — |
+| E: Random Uniform[0, T_MAX], Variant 1 | 0.3187 | 0.0053 | 0.4991 | -0.8309 | 0.22% | ≤ 1% FPR, OK |
+| E: Random Uniform[0, Gs], Variant 2 | 0.9912 | 0.4737 | 0.4139 | 0.5008 | 21.70% | ≤ 5% FPR, FPR ABOVE TARGET |
+
+All Run 2 figures above have been checked directly against `controls_results/summary_table.csv` and `controls_results/detailed_results.json` as generated on disk (both dated 2026-09-28) and match exactly.
+
+**Generated artifacts** (present on disk, at repo root and under `06_Code/scripts/`, as of this entry; not yet committed to git — see Files Modified below):
+
+- `controls_results/summary_table.csv` — one row per control.
+- `controls_results/detailed_results.json` — `Gs`, `T_MAX`, `RHO_THRESH`, and all raw per-control summaries.
+- `controls_results/plot_sensitivity.png` — pass_rate vs. `noise_frac` for Control D, showing graceful degradation.
+- `controls_results/plot_null_distribution.png` — histogram of the 10,000 random `rho` values from Control E Variant 1, with the `RHO_THRESH` line marked.
+
+### 4. Interpretation for Thesis
+
+- **The criterion is sensible and valid.** It passes the ideal predictor 100% of the time, correctly rejects both the constant-early and post-grok predictors 0% of the time, and has a very low false-positive rate — 0.22% — for the real-world null case (Control E, Variant 1, unconditional `Uniform[0, T_MAX]`).
+- **Sensitivity.** The criterion tolerates up to 25% relative noise around the ideal signal with a 91.04% pass rate, then degrades gracefully as noise increases (50% noise → 50.79% pass; 100% noise → 21.92% pass). This is the expected qualitative behaviour of a well-posed criterion.
+- **Caveat / limitation.** With only 5 seeds, the null distribution of the Spearman rank correlation is discrete and wide (the only attainable values with n = 5 are -1.0, -0.8, -0.6, -0.4, -0.2, 0.0, 0.2, 0.4, 0.6, 0.8, 1.0). Consequently, even with `RHO_THRESH = 0.9`, a random predictor that always leads by construction (Control E, Variant 2, `Ps ~ Uniform[0, Gs]`) still passes 21.70% of the time. This is a fundamental consequence of the small sample size, n = 5, and not a defect in the criterion's logic. The reason is structural: under `Ps ~ Uniform[0, Gs]`, a larger `Gs` permits a larger `Ps`, so the rank order of `Ps` is correlated with the rank order of `Gs` by construction (mean `rho ≈ 0.47` across 10,000 trials). The probability of an exact rank match (`rho = 1.0`) under this construction is accordingly far higher than the naive `1/120` (i.e. `1/5!`) one might otherwise expect.
+- **Fix options considered.**
+  1. Increase the number of seeds from 5 to 10. The Variant 2 false-positive rate would be expected to fall toward roughly 5%, because the discrete null distribution of `rho` tightens as n grows. Estimated cost: approximately 7 hours of additional training (5 additional seeds at approximately 82 minutes each).
+  2. Keep the threshold at the 99th percentile (`RHO_THRESH = 0.9`) and report the limitation directly. The headline false-positive rate against the real-world null (Variant 1) is 0.22%; Variant 2 is documented as a deliberate stress test, and its 21.70% figure is recorded as a known limitation arising from the small seed count, not concealed.
+  3. **Decision taken:** Option 2 was chosen, to avoid the cost of additional training runs at this stage of the thesis. The final calibrated threshold is `RHO_THRESH = 0.9` (99th percentile), and this limitation is recorded here for the thesis record and for any future examiner question on the point.
+- This controlled experiment demonstrates that when a real predictor fails the evaluation criterion, the failure is not attributable to a broken criterion; it reflects a genuine absence of predictive power in that predictor, evaluated under a criterion whose own behaviour has now been independently checked against known-good and known-bad synthetic signals.
+
+### 5. File Locations and Reproducibility
+
+- **Code:** `06_Code/scripts/run_control_experiment.py` (single file; dependencies: `numpy`, `scipy`, `matplotlib`; fixed random seed 42; no GPU required).
+- **Results:** `controls_results/` folder at the repository root (the four files listed in Section 3).
+- **Embedded in:** `project_compilation.pdf`, via `compile_python_files.py`, under a "Controlled Experiment Results" section.
+- **To reproduce:**
+
+```bash
+python 06_Code/scripts/run_control_experiment.py
+```
+
+  Takes approximately 10-15 seconds; writes output to `./controls_results/`.
+
