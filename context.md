@@ -11087,3 +11087,48 @@ Predictors 6 to 9 (Correlation Traps, Weight-PCA, Higher-MI, Commutator Defect):
 - User asked to put `06_Code/scripts/heavy_tail_demo.py` in `.gitignore` and push.
 - `.gitignore`: added `06_Code/scripts/heavy_tail_demo.py` under a "local-only script" comment, same pattern as `06_Code/scripts/htsr_visualize.py`. The file was untracked (never committed), so no `git rm --cached` was needed. The file itself is NOT deleted; it stays on disk, just not in git.
 - No code, predictor, shared-model or results changes. Files modified: `.gitignore`, `context.md` (this section, append only).
+
+# 2026-09-27 — Correction note: Spectral predictor (Predictor 3), `k_90` and "no rank collapse"
+
+## Session Summary
+
+- Documentation-only correction (Suggestion 4). No experiment was run, and no code or result file was touched, for this note.
+- Two statements in the earlier Spectral (Predictor 3) entries are corrected below. The earlier entries are NOT edited (`context.md` is append-only). Where they conflict with this section, read this section.
+- The Spectral predictor's verdict is unchanged: CLOSED, NEGATIVE. Only the explanation is corrected.
+
+## Status of the numbers in this note
+
+- The rank ≤ 128 argument (Correction 1) is mathematical. It follows from the definitions and does not require empirical verification.
+- All numerical percentages, all participation-ratio values and the ~3400 figure below come from a quick read-only check on saved `.npy` files, or are estimates. They are provisional: **unverified, to be recomputed**. No script for them exists in the project yet. They must be recomputed with a proper script before being quoted in the thesis or at the colloquium.
+
+## Correction 1 — `k_90` is not meaningful
+
+Setup (as in the Spectral predictor): N = 3830 samples; each representation is a vector h_i ∈ R^128; Phi ∈ R^(N×128) has the h_i as rows; Phi_c is Phi with columns centred; kernel K = Phi_c Phi_c^T ∈ R^(N×N); eigenpairs (eta_k, u_k) with eta_1 ≥ … ≥ eta_N ≥ 0; p_k is the target power on mode k; C(k) = sum_{j ≤ k} p_j; k_90 = min{k : C(k) ≥ 0.9}.
+
+- rank(K) = rank(Phi_c) ≤ 128. Therefore at least 3830 − 128 = 3702 eigenvalues of K are exactly zero. (Mathematical.)
+- The top 128 modes (nonzero eigenvalues) are the column-space part.
+- Quick read-only check suggests only ~14–22% of the target power lies in that column-space part, and ~80–86% lies in the zero-eigenvalue null space. **Unverified, to be recomputed.**
+- In the degenerate zero-eigenvalue null space, any orthonormal basis is a valid eigenbasis. Therefore the individual p_k values, and their ordering, for k > 128 depend on the arbitrary numerical basis choice of the eigen-solver. They are not model-meaningful.
+- C(128) is only ~0.15–0.20 (**unverified, to be recomputed**), which is below 0.9. Therefore k_90 necessarily falls inside this arbitrary null-space block.
+- Estimate only, NOT a computed result: if the null-space power were spread approximately evenly over the null-space modes, then k_90 ≈ 128 + (0.9 − C(128)) / (1 − C(128)) × 3702 ≈ 3400 for C(128) ≈ 0.15–0.20. **Unverified, to be recomputed.** The k_90 values recorded earlier (3448 → ~3350–3400) are of the same order as this estimate. That is a consistency remark, not a proof.
+- Conclusion: `k_90` does not tell us anything meaningful about the model. The earlier k_90 values and the "2–3% drop" must not be read as an effective-rank measurement of the model's representation.
+
+## Correction 2 — "no rank collapse" is wrong
+
+- The earlier Spectral entries recorded the explanation "no rank collapse" (for example at about lines 8749, 9162, 9350 and 9540 of this file; line numbers are as of 2026-09-27). The earlier entries are left as they are. This section corrects the interpretation.
+- Effective dimension is assessed with the participation ratio over the top 50 eigenvalues: PR = (sum_{k=1..50} eta_k)^2 / sum_{k=1..50} eta_k^2. PR = 1 means one dominant eigenvalue. PR = 50 means all 50 eigenvalues are equal.
+- Quick read-only check suggests PR falls from ~36 at epoch 1000 to ~9–16 around the grok epoch, and to ~3–9 at the end of training. **Unverified, to be recomputed.**
+- The drop appears approximately coincident with grokking. It does not clearly precede it.
+- Therefore the earlier "no rank collapse" explanation is contradicted by the quick check.
+- The negative verdict of the Spectral predictor remains unchanged. Only the explanation is corrected.
+- Related wording: where the earlier text says the centred Gram matrix "stays high-rank" (about line 8749), it must not be read as a statement about the full N = 3830 dimensions, because rank(K) ≤ 128 always (Correction 1).
+
+## Explicit statements
+
+- No experiment was run for this documentation update.
+- The numerical quick-check values (percentages, PR values, ~3400) are provisional and unverified.
+- The rank ≤ 128 argument is mathematical and does not require empirical verification.
+
+## Files Modified
+
+- `context.md` — this section (append only). No other file was changed.
