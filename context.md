@@ -11300,3 +11300,49 @@ python 06_Code/scripts/run_control_experiment.py
 
   Takes approximately 10-15 seconds; writes output to `./controls_results/`.
 
+
+# 2026-09-29 — New synthetic-control experiment for the predictor evaluation criterion itself, and PDF compiler extended to include it
+
+## Session Summary
+
+- New, separate line of work: instead of testing a predictor's real signal against real checkpoints, this validates the evaluation RULE used to score every predictor (lead_frac >= 0.8, rho >= RHO_THRESH, 0.05 <= mean_rel_lead <= 0.9) using five synthetic controls with known correct answers. No grokking model was trained or retrained.
+- New file: `06_Code/scripts/run_control_experiment.py`. Uses the 5 real seed grok epochs `Gs = [12987, 6921, 9510, 11019, 23747]`, `T_MAX = 40000`.
+- Controls implemented: A (ideal, Ps = 0.5*Gs, must pass 100%), B (constant Ps=5000, must fail 0%), C (post-grok, Ps=1.5*Gs, must fail 0%), D (noisy-good, Ps = 0.5*Gs + noise_frac*(0.5*Gs)*U[-1,1], noise_frac in {0, 0.10, 0.25, 0.50, 1.0}, 10,000 trials per level), E (random predictor, two variants: Variant 1 Ps ~ Uniform[0, T_MAX] unconditional, Variant 2 Ps ~ Uniform[0, Gs] per seed / conditional, always leads, 10,000 trials each).
+- `RHO_THRESH` is calibrated, not hardcoded: percentile of the Variant-1 (unconditional) random-rho null distribution, over 10,000 trials.
+- `06_Code/scripts/compile_python_files.py` extended in the same session to also compile the new `controls_results/` folder into `project_compilation.pdf`, as its own "Controlled Experiment Results" section, after the existing "Results" section.
+
+## Technical Decisions
+
+- Calibration started at the 95th percentile (RHO_THRESH = 0.80). Under that threshold, Control E Variant 1 (unconditional) FPR was 0.33% (fine), but Control E Variant 2 (conditional, always-leads) FPR was 27.7% — flagged by the script itself as "FPR ABOVE TARGET".
+- Jonathan asked for the threshold to move to the 99th percentile as a quick fix (no retraining). Changed. Result: RHO_THRESH = 0.90. Variant 1 FPR improved to 0.22%. Variant 2 FPR improved only to 21.7% — better, but nowhere near the 10-15% Jonathan had hoped for, and still far above 5%.
+- Root cause (explained to Jonathan, not yet fixed): Control E Variant 2 draws Ps ~ Uniform[0, Gs] per seed, so the sampling range itself scales with Gs. That bakes in a structural positive correlation between Gs and Ps independent of any real predictive signal. Raising RHO_THRESH shrinks this bias but cannot remove it, because the bias is in how Variant 2 is constructed, not in the threshold. A real fix would need the evaluation rule itself to be scale-aware (e.g., normalise rho or the null calibration by the same Gs-conditional sampling Variant 2 uses), not just a stricter cutoff.
+- Noisy-good (Control D) frac=0.25 pass_rate moved only from 92.6% (95th pct) to 91.0% (99th pct) — much smaller drop than Jonathan's ~60-70% guess. At n=5, Spearman rho is discrete (few possible values for 5 points), so it is not very sensitive to a 0.80 -> 0.90 threshold move in this range.
+- `compile_python_files.py`: added `CONTROLS_DIR = ROOT / "controls_results"`, added `.csv` to `RESULT_TEXT_EXT` (needed for `summary_table.csv`), generalised `collect_results()` to take a directory argument, and factored the per-file results rendering loop into a local `add_results_section()` helper inside `build_pdf()` so the same code renders both `08_Experiments/results` and `controls_results` as separate PDF sections. Cover page now also states the controlled-experiment file count.
+
+## User Instructions
+
+- Jonathan supplied the full spec for the synthetic-control experiment as a pasted prompt (exact formulas for all 5 controls, the evaluation function, the calibration method, expected-value table, and the 4 required output files). Followed as given; this was an explicit code-and-run request, so full code was written directly (Section 7/8 of this file's rules: code policy allows full code when explicitly asked).
+- Then asked, in Hinglish: "plot the controlled results" — the two PNGs already produced were shown, not regenerated.
+- Then asked: modify `compile_python_files.py` so it also compiles the controlled-experiment code, results and graphs into the PDF. Done as described above.
+- Then asked for the 95th -> 99th percentile fix as a pasted prompt, explicit that no retraining should happen. Done; results reported honestly, including that the Variant 2 FPR target (10-15%) was NOT reached (actual 21.7%), and that the frac=0.25 pass-rate drop was much smaller than expected.
+- Then asked to "commit everything" (this commit).
+
+## Current Project State
+
+- Completed: synthetic-control validation script exists, runs in ~10-15 seconds (no training), calibrated threshold is 0.90 (99th percentile). PDF compiler includes it as a separate section.
+- Open / not solved: Control E Variant 2's structural FPR bias (21.7%, target was <=5%) is diagnosed but not fixed. This is a caveat that should be stated honestly if this criterion or its calibration method is used in the thesis or defended at the colloquium — do not claim the criterion controls false positives to <=5% without noting the Variant 2 caveat.
+- Predictor work (L2 Norm, Dropout, Spectral, AGE, HTSR Alpha done; next is Correlation Traps) is UNCHANGED by this session — this was a criterion-validation exercise, not predictor work, and did not touch predictor code, `transformer.py`, or any checkpoint.
+- Other untracked files present at commit time and included because Jonathan said "commit everything": two literature PDFs (`04_Literature/Papers/2011.09468v4.pdf`, `04_Literature/Papers/2602.02859v1.pdf`) and two presentation PDFs (`09_Presentations/Final/2026-09-26_Alternative_Verification_Methods_Predictors_1-5.pdf`, `09_Presentations/Final/2026-09-26_Colloquium_Defence_Attack_Angles_Predictors_1-5.pdf`) added outside this session; not otherwise investigated or summarised here.
+
+## Important Discoveries
+
+- Raising the Spearman-null calibration percentile (95th -> 99th) is not sufficient to control the false-positive rate of a conditional (always-leads) random predictor, because that control's sampling range is itself a function of Gs. This is a caveat for the criterion, not a bug in the script.
+- At n=5 seeds, Spearman rho is a discrete, coarse statistic; small threshold changes (0.80 -> 0.90) do not move pass rates smoothly, unlike what a continuous-rho intuition would predict.
+
+## Files Modified
+
+- `06_Code/scripts/run_control_experiment.py` — new file; later edited in place to move `RHO_THRESH` calibration from the 95th to the 99th percentile (comments and plot label updated to match; `expected_pass_rate` / verdict cutoff for Control E Variant 1 tightened from <=5% to <=1%).
+- `06_Code/scripts/compile_python_files.py` — added `CONTROLS_DIR`, `.csv` in `RESULT_TEXT_EXT`, generalised `collect_results(base_dir)`, added `add_results_section()` helper, new "Controlled Experiment Results" PDF section, updated cover page and docstring, updated `main()` signature and final print line.
+- `controls_results/summary_table.csv`, `controls_results/detailed_results.json`, `controls_results/plot_sensitivity.png`, `controls_results/plot_null_distribution.png` — generated, then regenerated after the threshold fix (final values: RHO_THRESH = 0.90).
+- `project_compilation.pdf` — regenerated, now includes `run_control_experiment.py` in the code section and the 4 `controls_results` files in a new section.
+- `context.md` — this section (append only).

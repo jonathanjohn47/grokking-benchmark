@@ -2,9 +2,10 @@
 compile_python_files.py
 =======================
 
-Compiles context.md, EVERY codeable file under the project root, and all
-results (08_Experiments/results) into one single PDF
-(`project_compilation.pdf`, written in the project root).
+Compiles context.md, EVERY codeable file under the project root, all
+results (08_Experiments/results), and the synthetic-control validation
+results (controls_results) into one single PDF (`project_compilation.pdf`,
+written in the project root).
 
 The project root is found from this file's location
 (06_Code/scripts/ -> two levels up), so the script works on any machine.
@@ -41,7 +42,9 @@ SKIP_DIRS = {
 # Results: text files go in as text, plots as images, .npy arrays as a summary
 # (shape, dtype, stats, preview). Model checkpoints (*.pt, ~3.2 GB) are skipped.
 RESULTS_DIR = ROOT / "08_Experiments" / "results"
-RESULT_TEXT_EXT = {".json", ".log", ".md"}
+# Synthetic-control validation experiment (run_control_experiment.py) writes here.
+CONTROLS_DIR = ROOT / "controls_results"
+RESULT_TEXT_EXT = {".json", ".log", ".md", ".csv"}
 RESULT_EXTENSIONS = RESULT_TEXT_EXT | {".npy", ".png"}
 NPY_FULL_LIMIT = 40   # arrays up to this many elements are printed in full
 NPY_PREVIEW = 6      # otherwise: first and last N values
@@ -74,11 +77,11 @@ def collect_files():
     )
 
 
-def collect_results():
-    if not RESULTS_DIR.is_dir():
+def collect_results(base_dir: Path):
+    if not base_dir.is_dir():
         return []
     return sorted(
-        f for f in RESULTS_DIR.rglob("*")
+        f for f in base_dir.rglob("*")
         if f.is_file() and f.suffix.lower() in RESULT_EXTENSIONS
     )
 
@@ -159,7 +162,7 @@ def register_mono_font():
     return "Courier", False
 
 
-def build_pdf(files, results):
+def build_pdf(files, results, control_results):
     from reportlab.lib import colors
     from reportlab.lib.pagesizes import A4
     from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
@@ -210,6 +213,8 @@ def build_pdf(files, results):
         Paragraph(f"Total code files: <b>{len(files)}</b>", body),
         Paragraph(f"Result files (after the code): <b>{len(results)}</b> "
                   "from 08_Experiments/results (checkpoints *.pt not included)", body),
+        Paragraph(f"Controlled-experiment result files (after that): <b>{len(control_results)}</b> "
+                  "from controls_results (synthetic-control validation of the predictor criterion)", body),
         Spacer(1, 0.2 * inch),
         Paragraph("Contents", styles["Heading2"]),
         Preformatted(esc("\n".join(f"{i:>3}. {name}" for i, name in enumerate(relative, 1))), listing),
@@ -223,30 +228,42 @@ def build_pdf(files, results):
         story.append(Preformatted(esc(code), mono))
         story.append(PageBreak())
 
-    if results:
-        story.append(Paragraph("Results", title))
-        story.append(Paragraph(
-            f"{len(results)} files from {esc(RESULTS_DIR.relative_to(ROOT).as_posix())}. "
-            "Text files are shown as they are (JSON number lists put on one line). "
-            ".npy arrays are summarised (shape, dtype, min/max/mean, values). "
-            "Plots are embedded as images. Model checkpoints (*.pt) are not included.", body))
-        story.append(Spacer(1, 0.2 * inch))
-
     max_width = A4[0] - 1.2 * inch
     max_height = A4[1] - 2.0 * inch
-    for path in results:
-        rel = path.relative_to(RESULTS_DIR).as_posix()
-        print(f"Processing result: {rel}")
-        story.append(Paragraph(esc(rel), result_header))
-        ext = path.suffix.lower()
-        if ext == ".png":
-            img = Image(str(path))
-            scale = min(max_width / img.imageWidth, max_height / img.imageHeight, 1.0)
-            img.drawWidth, img.drawHeight = img.imageWidth * scale, img.imageHeight * scale
-            story.append(img)
-            continue
-        text = summarize_npy(path) if ext == ".npy" else read_result_text(path)
-        story.append(Preformatted(esc(wrap_code(text) or "(empty file)"), mono))
+
+    def add_results_section(section_title, files_list, base_dir, description):
+        if not files_list:
+            return
+        story.append(Paragraph(section_title, title))
+        story.append(Paragraph(
+            f"{len(files_list)} files from {esc(base_dir.relative_to(ROOT).as_posix())}. "
+            + description, body))
+        story.append(Spacer(1, 0.2 * inch))
+        for path in files_list:
+            rel = path.relative_to(base_dir).as_posix()
+            print(f"Processing result: {rel}")
+            story.append(Paragraph(esc(rel), result_header))
+            ext = path.suffix.lower()
+            if ext == ".png":
+                img = Image(str(path))
+                scale = min(max_width / img.imageWidth, max_height / img.imageHeight, 1.0)
+                img.drawWidth, img.drawHeight = img.imageWidth * scale, img.imageHeight * scale
+                story.append(img)
+                continue
+            text = summarize_npy(path) if ext == ".npy" else read_result_text(path)
+            story.append(Preformatted(esc(wrap_code(text) or "(empty file)"), mono))
+
+    add_results_section(
+        "Results", results, RESULTS_DIR,
+        "Text files are shown as they are (JSON number lists put on one line). "
+        ".npy arrays are summarised (shape, dtype, min/max/mean, values). "
+        "Plots are embedded as images. Model checkpoints (*.pt) are not included.")
+
+    add_results_section(
+        "Controlled Experiment Results", control_results, CONTROLS_DIR,
+        "Synthetic-control validation of the pre-grok predictor evaluation criterion "
+        "(run_control_experiment.py): summary_table.csv, detailed_results.json, "
+        "and the sensitivity / null-distribution plots.")
 
     doc = SimpleDocTemplate(
         str(OUTPUT_FILE), pagesize=A4,
@@ -259,18 +276,20 @@ def build_pdf(files, results):
 
 def main():
     files = collect_files()
-    results = collect_results()
+    results = collect_results(RESULTS_DIR)
+    control_results = collect_results(CONTROLS_DIR)
     if not files:
         print("No code files found.")
         return
 
     try:
-        build_pdf(files, results)
+        build_pdf(files, results, control_results)
     except ImportError:
         print("reportlab is not installed. Run: pip install reportlab")
         return
 
-    print(f"\nDone! {len(files)} code files and {len(results)} result files compiled.")
+    print(f"\nDone! {len(files)} code files, {len(results)} result files, "
+          f"and {len(control_results)} controlled-experiment result files compiled.")
     print(f"Output saved to:\n{OUTPUT_FILE}")
 
 

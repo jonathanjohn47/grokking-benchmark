@@ -1,0 +1,115 @@
+{
+  "Gs": [
+    12987.0,
+    6921.0,
+    9510.0,
+    11019.0,
+    23747.0
+  ],
+  "T_MAX": 40000.0,
+  "margin": 100.0,
+  "RHO_THRESH": 0.8999999999999998,
+  "n_rand_for_calibration": 10000,
+  "control_A": {
+    "Ps": [
+      6493.5,
+      3460.5,
+      4755.0,
+      5509.5,
+      11873.5
+    ],
+    "lead_frac": 1.0,
+    "rho": 0.9999999999999999,
+    "mean_rel_lead": 0.5,
+    "pass": true
+  },
+  "control_B": {
+    "Ps": [
+      5000.0,
+      5000.0,
+      5000.0,
+      5000.0,
+      5000.0
+    ],
+    "lead_frac": 1.0,
+    "rho": 0.0,
+    "mean_rel_lead": 0.5404967418731447,
+    "pass": false
+  },
+  "control_C": {
+    "Ps": [
+      19480.5,
+      10381.5,
+      14265.0,
+      16528.5,
+      35620.5
+    ],
+    "lead_frac": 0.0,
+    "rho": 0.9999999999999999,
+    "mean_rel_lead": -0.5,
+    "pass": false
+  },
+  "control_D": {
+    "noise_fracs": [
+      0.0,
+      0.1,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "n_trials_per_frac": 10000,
+    "summary": {
+      "0.0": {
+        "lead_frac_mean": 1.0,
+        "rho_mean": 0.9999999999999998,
+        "rho_std": 1.1102230246251565e-16,
+        "mean_rel_lead": 0.5,
+        "pass_rate": 1.0
+      },
+      "0.1": {
+        "lead_frac_mean": 1.0,
+        "rho_mean": 0.9949099999999999,
+        "rho_std": 0.021979351673786948,
+        "mean_rel_lead": 0.4998201767799403,
+        "pass_rate": 1.0
+      },
+      "0.25": {
+        "lead_frac_mean": 1.0,
+        "rho_mean": 0.9306399999999998,
+        "rho_std": 0.08647074881137552,
+        "mean_rel_lead": 0.49978450039272976,
+        "pass_rate": 0.9104
+      },
+      "0.5": {
+        "lead_frac_mean": 1.0,
+        "rho_mean": 0.7797,
+        "rho_std": 0.19934369816976902,
+        "mean_rel_lead": 0.4998650936441389,
+        "pass_rate": 0.5079
+      },
+      "1.0": {
+        "lead_frac_mean": 0.9907799999999999,
+        "rho_mean": 0.4714699999999999,
+        "rho_std": 0.4189260544535276,
+        "mean_rel_lead": 0.49902130852468307,
+        "pass_rate": 0.2192
+      }
+    }
+  },
+  "control_E_variant1_unconditional": {
+    "n_trials": 10000,
+    "lead_frac_mean": 0.31868,
+    "rho_mean": 0.005339999999999999,
+    "rho_std": 0.4990866501921284,
+    "mean_rel_lead": -0.8308510825335954,
+    "pass_rate": 0.0022
+  },
+  "control_E_variant2_conditional": {
+    "n_trials": 10000,
+    "lead_frac_mean": 0.9912400000000001,
+    "rho_mean": 0.4737,
+    "rho_std": 0.41394481516260107,
+    "mean_rel_lead": 0.5008446841862464,
+    "pass_rate": 0.217
+  }
+}

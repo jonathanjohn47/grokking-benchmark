@@ -1,0 +1,11 @@
+Control,lead_frac,rho_mean,rho_std,mean_rel_lead,pass_rate,expected_pass_rate,verdict
+A: Ideal (0.5*Gs),1.0000,1.0000,0.0000,0.5000,1.0000,100%,PASS
+B: Constant (5000),1.0000,0.0000,0.0000,0.5405,0.0000,0%,FAIL (as required)
+C: Post-grok (1.5*Gs),0.0000,1.0000,0.0000,-0.5000,0.0000,0%,FAIL (as required)
+D: Noisy-good (frac=0.0),1.0000,1.0000,0.0000,0.5000,1.0000,decreasing with noise_frac,see plot_sensitivity.png
+D: Noisy-good (frac=0.1),1.0000,0.9949,0.0220,0.4998,1.0000,decreasing with noise_frac,see plot_sensitivity.png
+D: Noisy-good (frac=0.25),1.0000,0.9306,0.0865,0.4998,0.9104,decreasing with noise_frac,see plot_sensitivity.png
+D: Noisy-good (frac=0.5),1.0000,0.7797,0.1993,0.4999,0.5079,decreasing with noise_frac,see plot_sensitivity.png
+D: Noisy-good (frac=1.0),0.9908,0.4715,0.4189,0.4990,0.2192,decreasing with noise_frac,see plot_sensitivity.png
+E: Random Uniform[0;T_MAX] (Variant 1; unconditional),0.3187,0.0053,0.4991,-0.8309,0.0022,<=1% (FPR; by calibration construction),OK
+E: Random Uniform[0;Gs] (Variant 2; conditional; always leads),0.9912,0.4737,0.4139,0.5008,0.2170,<=5% (FPR of rho check alone),FPR ABOVE TARGET
