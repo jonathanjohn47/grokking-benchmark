@@ -60,8 +60,8 @@
     "semantic_hash": ""
   },
   "06_Code/scripts/compile_python_files.py": {
-    "mtime": 1790406627.5968575,
-    "ast_hash": "6331d25357175fe103459e83624a8ca8",
+    "mtime": 1790624988.428796,
+    "ast_hash": "f92c107f7d4d1521ef4e3beb7b79801b",
     "semantic_hash": ""
   },
   "06_Code/scripts/debug_detection.py": {
@@ -815,8 +815,8 @@
     "semantic_hash": ""
   },
   "project_compilation.pdf": {
-    "mtime": 1790406609.665302,
-    "ast_hash": "fac3325660961166f0368b9671a212a7",
+    "mtime": 1790626075.0404353,
+    "ast_hash": "5027e74a8b6265aea8ca361a7ec999bf",
     "semantic_hash": ""
   },
   "archive/Baseline_v4_24_Checkpoints/nanda_unified/aggregate.json": {
@@ -1877,6 +1877,36 @@
   "09_Presentations/Final/2026-09-26_Colloquium_Defence_Attack_Angles_Predictors_1-5.pdf": {
     "mtime": 1790441291.6505446,
     "ast_hash": "b94a4a8b6ddacd6803e30c020e2620d0",
+    "semantic_hash": ""
+  },
+  "06_Code/scripts/run_control_experiment.py": {
+    "mtime": 1790626006.218916,
+    "ast_hash": "3cbf8f3fd63a72608d3e288b30172113",
+    "semantic_hash": ""
+  },
+  "controls_results/detailed_results.json": {
+    "mtime": 1790626024.612665,
+    "ast_hash": "d2f153038e98d5da507ebe30f5f9084d",
+    "semantic_hash": ""
+  },
+  "04_Literature/Papers/2011.09468v4.pdf": {
+    "mtime": 1790617888.8767183,
+    "ast_hash": "47fd9e22d265475e93f9344a1d1c5f51",
+    "semantic_hash": ""
+  },
+  "04_Literature/Papers/2602.02859v1.pdf": {
+    "mtime": 1790619458.438478,
+    "ast_hash": "07bdcc1c34ffa9b5183a8a2f8dbf2aab",
+    "semantic_hash": ""
+  },
+  "controls_results/plot_null_distribution.png": {
+    "mtime": 1790626024.61194,
+    "ast_hash": "b88f924e1391d2c771fe9c6b5c989f88",
+    "semantic_hash": ""
+  },
+  "controls_results/plot_sensitivity.png": {
+    "mtime": 1790626024.5263162,
+    "ast_hash": "3a3774257121cd475a570db6fb0590f3",
     "semantic_hash": ""
   }
 }

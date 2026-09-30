@@ -11346,3 +11346,36 @@ python 06_Code/scripts/run_control_experiment.py
 - `controls_results/summary_table.csv`, `controls_results/detailed_results.json`, `controls_results/plot_sensitivity.png`, `controls_results/plot_null_distribution.png` — generated, then regenerated after the threshold fix (final values: RHO_THRESH = 0.90).
 - `project_compilation.pdf` — regenerated, now includes `run_control_experiment.py` in the code section and the 4 `controls_results` files in a new section.
 - `context.md` — this section (append only).
+
+
+# 2026-09-30 — Correlation Traps removed from the predictor evaluation order
+
+## Session Summary
+
+- Jonathan corrected an earlier misreading, in this session, of what the Correlation Traps predictor (evaluation order item 6) actually measures. Checked directly against `04_Literature/Papers/2602.02859v1.pdf` (Prakash & Martin, "Late-Stage Generalization Collapse in Grokking").
+- Confirmed: Correlation Traps (SETOL theory, detected via the WeightWatcher tool) is defined in that paper as the primary signal for **anti-grokking** — the late-stage collapse of test accuracy back to chance, AFTER a model has already grokked, observed only over very long training horizons (up to 10^7 steps in the source paper, on an MLP/MNIST setup and a small transformer on modular addition). A Correlation Trap is an anomalously large eigenvalue in the empirical spectral density of a randomized weight matrix, beyond the Marchenko-Pastur bulk edge.
+- This is a different question than the one this benchmark's frozen protocol tests. The protocol (`lead_frac >= 0.8`, `rho >= RHO_THRESH`, `0.05 <= mean_rel_lead <= 0.9`, validated by the 2026-09-29 synthetic-control experiment) tests whether a signal leads the grok-ONSET epoch. Correlation Traps instead claims to signal a collapse AFTER grokking has already happened. Forcing it through the same ex-ante lead/lag test would not be testing the actual claim of the source paper.
+- Decision: remove Correlation Traps from this benchmark's 9-predictor line-up rather than mis-test it against the wrong target.
+
+## Technical Decisions
+
+- Correlation Traps removed from the predictor evaluation order. Order is now: L2 Norm -> Dropout -> Spectral -> AGE -> HTSR Alpha -> Weight-PCA -> Higher-MI -> Commutator Defect (8 predictors total).
+- No predictor or shared-model code was touched. Correlation Traps had no code in `06_Code/src/predictors/` yet (confirmed not-started in the 2026-09-25/26 tally), so this is a scope decision only, not a code deletion.
+- The anti-grokking phenomenon itself (what Correlation Traps actually detects) is not being pursued in this benchmark for now. Noted as a possible future-work item for the thesis discussion chapter: it would need training extended far beyond the current ~40000-epoch, 5-seed runs to see whether any post-grok collapse phase even occurs in this project's Nanda-unified setup.
+
+## User Instructions
+
+- Jonathan: "lekin correlation traps to anti grokking ke liye hota hai" (the correction that started this).
+- Then: "ye correlation traps ko pipeline me se hatao. iske agla konsa predictor hai?"
+- Then: "context.md me bhi changes karo aur commit krke push krdo."
+
+## Current Project State
+
+- Completed and closed (all negative verdicts): L2 Norm, Dropout, Spectral, AGE, HTSR Alpha. Evaluation criterion itself validated via synthetic controls (Run 2, 99th-percentile calibration, `RHO_THRESH = 0.9`; Control E Variant 2's structural false-positive-rate caveat still open, per the 2026-09-29 entry).
+- Removed from scope: Correlation Traps (6) — anti-grokking predictor, not applicable to this benchmark's grok-onset protocol as currently designed.
+- Next predictor in order: **Weight-PCA (7)**, then Higher-MI (8), then Commutator Defect (9). No literature paper is yet mapped to Weight-PCA in `04_Literature/README.md` — same "predictor -> paper map still needed" situation Dropout and Correlation Traps were in before their papers were found.
+
+## Files Modified
+
+- `context.md` — this section (append only).
+- `graphify-out/*`, `project_compilation.pdf` — already modified on disk before this session started (graphify hook auto-rebuild); committed alongside this entry, no manual edits made to them this session.
