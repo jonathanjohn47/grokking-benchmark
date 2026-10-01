@@ -82,6 +82,10 @@ from predictors.spectral import compute_spectral_metrics_for_checkpoint   # noqa
 from predictors.age import compute_age_metrics_for_checkpoint             # noqa: E402
 from predictors.htsr_alpha import (                                       # noqa: E402
     compute_htsr_metrics_for_checkpoint, LAYER_NAMES as HTSR_LAYER_NAMES)
+from predictors.weight_pca import (                                       # noqa: E402
+    compute_weight_pca_metrics_for_checkpoint,
+    find_global_minimum_epoch, find_steepest_drop_epoch,
+    find_threshold_crossing_epoch, LAYER_NAMES as WEIGHT_PCA_LAYER_NAMES)
 from unified_measurements import PredictorMeasurements                    # noqa: E402
 
 # ---------------------------------------------------------------------------
@@ -182,6 +186,7 @@ PREDICTOR_SUMMARY_KEY = {
     "spectral": "spectral_predictor",
     "age": "age_predictor",
     "htsr": "htsr_predictor",
+    "weight_pca": "weight_pca_predictor",
 }
 ALL_PREDICTORS = list(PREDICTOR_SUMMARY_KEY.keys())
 
@@ -1007,6 +1012,84 @@ def _checkpoint_predictor_htsr(model, test_loader, ckpt_dir, ckpt_epochs,
     return block
 
 
+def _checkpoint_predictor_weight_pca(model, test_loader, ckpt_dir, ckpt_epochs,
+                                     measurements, grok_epoch, device):
+    """CHECKPOINT_PREDICTOR_FUNCS["weight_pca"] — Weight-PCA / Spectral
+    Dynamics (Yunis et al. 2024, arXiv:2408.11804; see
+    src/predictors/weight_pca.py). Loads each saved checkpoint into `model`,
+    computes compute_weight_pca_metrics_for_checkpoint(model) — the
+    normalised effective rank (Eqn 1/2 of the source paper) of every Linear
+    weight matrix's singular-value spectrum, and its mean over layers —
+    collects the per-checkpoint history, saves it via
+    measurements.save_weight_pca_data, and returns the weight_pca_predictor
+    block for summary.json.
+
+    test_loader is IGNORED: the signal depends on the weights only, same as
+    HTSR Alpha. Signature kept to match the shared CHECKPOINT_PREDICTOR_FUNCS
+    shape.
+
+    Primary event rule fixed to global minimum for consistency with
+    AGE/HTSR, frozen protocol 2026-09-17. norm_eff_rank_min_epoch is the
+    ONLY field fed into the official PASS/FAIL table (via evaluate(Gs, Ps)
+    in analyze_nanda_unified.py). steepest_drop_epoch and
+    threshold_90_epoch are computed and saved for the thesis appendix /
+    sensitivity analysis ONLY — they are not scored.
+    """
+    weight_pca_checkpoints = []
+    history = {k: [] for k in ["norm_eff_rank", "layer_eff_rank",
+                               "layer_norm_eff_rank", "layer_rank"]}
+
+    for epoch in ckpt_epochs:
+        state = torch.load(os.path.join(ckpt_dir, f"model_epoch_{epoch}.pt"), map_location=device)
+        model.load_state_dict(state)
+        m = compute_weight_pca_metrics_for_checkpoint(model)
+        weight_pca_checkpoints.append(epoch)
+        for k in history:
+            history[k].append(m[k])
+
+    measurements.save_weight_pca_data(weight_pca_checkpoints, history)
+
+    signal_arr = np.asarray(history["norm_eff_rank"], dtype=float)
+
+    # PRIMARY event rule — this is the ONLY epoch scored against grok.
+    min_epoch, min_value, min_idx = find_global_minimum_epoch(
+        weight_pca_checkpoints, signal_arr)
+
+    # EXPLORATORY ONLY — saved for the record, excluded from PASS/FAIL.
+    steepest_epoch, steepest_drop = find_steepest_drop_epoch(
+        weight_pca_checkpoints, signal_arr)
+    threshold_epoch, threshold_value = find_threshold_crossing_epoch(
+        weight_pca_checkpoints, signal_arr, drop_pct=90.0)
+
+    block = {
+        "weight_pca_checkpoints": weight_pca_checkpoints,
+        "layer_names": list(WEIGHT_PCA_LAYER_NAMES),
+        "norm_eff_rank_history": [float(v) for v in signal_arr],
+        "grok_epoch": grok_epoch,
+        # --- PRIMARY (scored) ---
+        "norm_eff_rank_min_epoch": min_epoch,
+        "norm_eff_rank_min_value": min_value,
+        "norm_eff_rank_min_to_grok_ratio": (
+            float(min_epoch) / grok_epoch if grok_epoch else None),
+        # --- EXPLORATORY (NOT scored — thesis appendix / sensitivity analysis) ---
+        "exploratory": {
+            "steepest_drop_epoch": steepest_epoch,
+            "steepest_drop_size": steepest_drop,
+            "threshold_90_epoch": threshold_epoch,
+            "threshold_90_value": threshold_value,
+            "note": ("Not fed into the PASS/FAIL table. See "
+                     "src/predictors/weight_pca.py module docstring, "
+                     "'EVENT RULES', for definitions and the threshold=90 "
+                     "assumption to confirm."),
+        },
+        "norm_eff_rank_first_last": {"first": float(signal_arr[0]), "last": float(signal_arr[-1])},
+        "num_checkpoints": len(weight_pca_checkpoints),
+    }
+    with open(os.path.join(measurements.weight_pca_dir, "weight_pca_signal.json"), "w") as handle:
+        json.dump(block, handle, indent=2)
+    return block
+
+
 # Predictors this runner knows how to (re)compute from already-saved
 # checkpoints/model_epoch_*.pt alone, with NO retraining. Adding a future
 # predictor here (once it exists) is the ONLY change needed for it to gain
@@ -1018,6 +1101,7 @@ CHECKPOINT_PREDICTOR_FUNCS = {
     "spectral": _checkpoint_predictor_spectral,
     "age": _checkpoint_predictor_age,
     "htsr": _checkpoint_predictor_htsr,
+    "weight_pca": _checkpoint_predictor_weight_pca,
 }
 CHECKPOINT_ONLY_PREDICTORS = set(CHECKPOINT_PREDICTOR_FUNCS.keys())
 

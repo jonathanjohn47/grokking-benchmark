@@ -11379,3 +11379,96 @@ python 06_Code/scripts/run_control_experiment.py
 
 - `context.md` — this section (append only).
 - `graphify-out/*`, `project_compilation.pdf` — already modified on disk before this session started (graphify hook auto-rebuild); committed alongside this entry, no manual edits made to them this session.
+
+
+## Interpretation Note: If All Predictors Fail
+
+> **Interpretation Note - Negative Benchmark Outcome:**
+> If all 6 predictors (L2 Norm, Dropout Robustness, Spectral Signature, AGE/NC1, HTSR-alpha, Weight-PCA) result in CLOSED-NEGATIVE under the frozen unified protocol (nanda_unified.yaml, p=113, 5 seeds, grok = test acc > 0.9, Ps defined as global minimum, lead requirement Ps < Gs - 100, lead_frac >= 0.8, rho >= 0.9), the conclusion is:
+> 
+> None of the predictors published so far, even if they show correlation in their respective original setups, can be used as an actual early-warning predictor for grokking under a unified evaluation.
+> 
+> This does NOT mean the original papers are false in their own regime/scope. It means their signals do not transfer as predictive, leading indicators when tested under identical, stricter conditions. This negative result itself is the scientific contribution - establishing the first unified benchmark and showing the gap in current literature.
+
+---
+
+# 2026-10-02 — Weight-PCA (Predictor 6) implemented and run — CLOSED, negative
+
+## Session Summary
+
+- Weight-PCA (Spectral Dynamics / effective rank, Yunis et al. 2024, arXiv:2408.11804) implemented and run end-to-end this session: checkpoint-only recompute against the existing 5-seed Nanda-Unified checkpoints (401 of 801 saved checkpoints per seed, eval_every=100), no retraining.
+- Executed with a clean `torch==2.3.1` (CPU) install; scipy, numpy, matplotlib already present. No GPU used. Grok epochs matched exactly: `[12987, 6921, 9510, 11019, 23747]`.
+- Result: CLOSED, negative. Same pattern as the five predictors before it — the primary (global-minimum) event fires after grok in all 5 seeds.
+
+### 7. Weight-PCA (Yunis et al.) - IMPLEMENTED & RUN
+
+**Implementation:**
+- File: `06_Code/src/predictors/weight_pca.py` (new file)
+- Formula: `EffRank(W) = -sum_i p_i * log(p_i)`, `p_i = sigma_i / sum_j sigma_j` (entropy of the normalised singular-value distribution of weight matrix W); `NormEffRank(W) = EffRank(W) / R`. Bounded in `[0, log(R)/R]`, not `[0, 1]` — for this project's layer shapes (R = 114 to 512) that works out to roughly 0.01-0.05, matching the observed signal range (~0.016 to ~0.037).
+- Three event finders implemented:
+  (a) `find_global_minimum_epoch()` — PRIMARY, frozen protocol 2026-09-17
+  (b) `find_steepest_drop_epoch()` — exploratory
+  (c) `find_threshold_crossing_epoch(drop_pct=90)` — exploratory
+- Comment verbatim in code (`run_nanda_benchmark.py::_checkpoint_predictor_weight_pca`): "Primary event rule fixed to global minimum for consistency with AGE/HTSR, frozen protocol 2026-09-17."
+- Integration: `src/unified_measurements.py` — added `save_weight_pca_data()` + `weight_pca_dir`. `scripts/run_nanda_benchmark.py` — added `_checkpoint_predictor_weight_pca()`, writing one `weight_pca_signal.json` per seed (primary field `norm_eff_rank_min_epoch` at top level; (b)/(c) inside a separate `exploratory` block, NOT fed into the scored table). `scripts/analyze_nanda_unified.py` — added the primary event to `build_events()`, a sixth plot column, and `evaluate_frozen_protocol()` with hardcoded `RHO_THRESH = 0.8999999999999998` (copied from, not imported from, `run_control_experiment.py`, which has no `__main__` guard and must not be re-run casually).
+
+**Run Command:**
+```
+python 06_Code/scripts/run_nanda_benchmark.py --predictors weight_pca
+python 06_Code/scripts/analyze_nanda_unified.py
+```
+Checkpoint-only, no retraining — confirmed by console output: `[seed N] weight_pca recomputed from 401 of 801 saved checkpoints (eval_every=100, no retrain)` for all 5 seeds.
+
+**Results** (verified directly against `08_Experiments/results/nanda_unified/seed_<N>/weight_pca/weight_pca_signal.json` on disk, 2026-10-02 — a few figures in an earlier pasted transcription from `project_compilation.pdf` pp.314-325 were off in the 3rd-4th decimal or by a misplaced digit; the table below is the authoritative, disk-checked version):
+
+| Seed | Grok | NormEffRank first -> last | Min epoch (x grok) | Min value | Steepest drop epoch (size) | Threshold-90 epoch (value) |
+|---|---|---|---|---|---|---|
+| 0 | 12987 | 0.037304 -> 0.016613 | 37100 (2.86) | 0.016356 | 2200 (0.000862) | 17600 (0.018451) |
+| 1 | 6921  | 0.037303 -> 0.018590 | 27900 (4.03) | 0.018231 | 2100 (0.000781) | 11500 (0.020138) |
+| 2 | 9510  | 0.037310 -> 0.018456 | 32400 (3.41) | 0.017495 | 2200 (0.000840) | 13900 (0.019476) |
+| 3 | 11019 | 0.037305 -> 0.017421 | 29700 (2.70) | 0.016947 | 2100 (0.000819) | 14800 (0.018983) |
+| 4 | 23747 | 0.037308 -> 0.018220 | 36200 (1.52) | 0.017549 | 100  (0.000728) | 26600 (0.019525) |
+
+- Pattern across all 5 seeds: the global minimum occurs AFTER grok (min-epoch/grok ratio 1.52 to 4.03), same as L2 Norm, Dropout, Spectral, AGE and HTSR Alpha before it.
+- Official frozen-protocol scoring (`evaluate_frozen_protocol()`, primary field only — exploratory (b)/(c) excluded by design):
+  - `lead_frac = 0.0000` (need >= 0.8) — the primary event fires after grok in 5/5 seeds; 0/5 count as "before, with 100-epoch margin".
+  - `rho = 0.8000` (need >= 0.8999999999999998) — event epoch does rank-correlate with grok epoch across seeds, but below the calibrated threshold.
+  - `mean_rel_lead = -1.9029` (need in [0.05, 0.9]) — large and negative, confirming the event lands well after grok on average.
+  - **VERDICT = FAIL**, printed by `analyze_nanda_unified.py`. Note: this verdict line is console-only this run — it is not written to any file (`predictor_events.json` holds only the raw per-signal spearman/pearson/lead data, not the frozen-protocol lead_frac/rho/mean_rel_lead/verdict computed by `evaluate_frozen_protocol()`). Flagged to Jonathan; not yet fixed.
+
+**Verdict:**
+CLOSED-NEGATIVE. Same as L2, Dropout, Spectral, AGE, HTSR. NormEffRank declines steadily from ~0.037 to ~0.016-0.019 over training in every seed, but the minimum is reached well after grok, not before. Confirms Yunis et al.'s own framing — rank collapse "coincides" with grok, not demonstrated as a leading indicator in their paper either — under this project's stricter, unified, ex-ante protocol. No predictor so far qualifies as an actual early-warning signal.
+
+## Consolidated Predictor Status (6 of 8 in current evaluation order; Correlation Traps removed 2026-09-30)
+
+1. L2 Norm — CLOSED, negative
+2. Dropout — CLOSED, negative
+3. Spectral — CLOSED, negative
+4. AGE — CLOSED, negative
+5. HTSR Alpha — CLOSED, negative
+6. **Weight-PCA — CLOSED, negative** (this session)
+7. Higher-MI — NEXT, not started
+8. Commutator Defect — not started
+
+## User Instructions
+
+- Jonathan asked to run the Weight-PCA benchmark end-to-end, checkpoint-only, no retraining, using the already-implemented predictor code (specified exactly: verify environment, run `run_nanda_benchmark.py --predictors weight_pca`, run `analyze_nanda_unified.py`, do NOT re-run `run_control_experiment.py`, report the verdict).
+- Then asked to update `context.md` with the complete results: add/update subsection "### 7. Weight-PCA (Yunis et al.) - IMPLEMENTED & RUN" with implementation, run command, results and verdict, and update the predictor status summary to include Weight-PCA as the 6th predictor with status FAIL. Explicit again: do not re-run `run_control_experiment.py`.
+
+## Current Project State
+
+- Completed: L2 Norm, Dropout, Spectral, AGE, HTSR Alpha, Weight-PCA — all 6 CLOSED, negative, under the frozen unified protocol.
+- Next predictor in order: Higher-MI, then Commutator Defect.
+- `run_control_experiment.py` not touched this session (per explicit instruction, both times asked) — `RHO_THRESH = 0.8999999999999998` reused as already calibrated/frozen on 2026-09-29.
+- Open, not yet done: the official frozen-protocol verdict (lead_frac/rho/mean_rel_lead/VERDICT) is not persisted to any file by `analyze_nanda_unified.py` — only printed to console. A small addition (e.g. writing it alongside `predictor_events.json`) would be needed before `compile_python_files.py` can capture it in `project_compilation.pdf`.
+
+## Files Modified
+
+- New: `06_Code/src/predictors/weight_pca.py`.
+- `06_Code/src/unified_measurements.py` — `weight_pca_dir`, `save_weight_pca_data()`.
+- `06_Code/scripts/run_nanda_benchmark.py` — weight_pca import, `PREDICTOR_SUMMARY_KEY` entry, `_checkpoint_predictor_weight_pca()`, `CHECKPOINT_PREDICTOR_FUNCS` registration.
+- `06_Code/scripts/analyze_nanda_unified.py` — weight_pca loading in `load_seed()`, primary event in `build_events()`, sixth column in `plot_signals()`, entries in `plot_scatter()`/`plot_leads()`, `evaluate_frozen_protocol()` + `RHO_THRESH` constant, verdict print block in `main()`.
+- `08_Experiments/results/nanda_unified/seed_0..4/weight_pca/` (6 files each: `weight_pca_checkpoints.npy`, `weight_pca_norm_eff_rank.npy`, `weight_pca_layer_eff_rank.npy`, `weight_pca_layer_norm_eff_rank.npy`, `weight_pca_layer_rank.npy`, `weight_pca_signal.json`) — new, generated this session.
+- `08_Experiments/results/nanda_unified/aggregate.json` — regenerated with Weight-PCA.
+- `08_Experiments/results/nanda_unified/analysis/02_signals_vs_grok.png`, `predictor_events.json` — regenerated with Weight-PCA.
+- `context.md` — this section (append only).

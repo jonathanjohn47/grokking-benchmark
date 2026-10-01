@@ -59,6 +59,8 @@ def load_seed(seed):
         "nc1": ld("age", "age_nc1.npy"),
         "htsr_ep": ld("htsr", "htsr_checkpoints.npy"),
         "alpha": ld("htsr", "htsr_alpha.npy"),
+        "wpca_ep": ld("weight_pca", "weight_pca_checkpoints.npy"),
+        "norm_eff_rank": ld("weight_pca", "weight_pca_norm_eff_rank.npy"),
     }
 
 
@@ -127,6 +129,14 @@ def build_events(runs):
         # HTSR Alpha: published-style rule only (epoch of lowest mean alpha).
         # No fraction-of-change level is added (scope decision: no new rules).
         put("HTSR: mean alpha minimum (implemented)", s, sm["htsr_predictor"]["alpha_min_epoch"])
+
+        # Weight-PCA: PRIMARY rule only (global minimum of mean NormEffRank),
+        # frozen 2026-09-17, same precedent as HTSR above. The exploratory
+        # steepest-drop / threshold-90 epochs in weight_pca_predictor[
+        # "exploratory"] are deliberately NOT added here — they are thesis-
+        # appendix / sensitivity-analysis material, not part of the scored table.
+        put("Weight-PCA: effective-rank minimum (implemented)", s,
+            sm["weight_pca_predictor"]["norm_eff_rank_min_epoch"])
     return ev
 
 
@@ -134,6 +144,29 @@ def rank_corr(a, b):
     ra = np.argsort(np.argsort(a))
     rb = np.argsort(np.argsort(b))
     return float(np.corrcoef(ra, rb)[0, 1])
+
+
+# Frozen, synthetic-control-validated evaluation rule (context.md,
+# 2026-09-29 entry; run_control_experiment.py::evaluate / RHO_THRESH).
+# Copied here deliberately rather than imported — see comment above.
+RHO_THRESH = 0.8999999999999998  # 99th percentile, Run 2 calibration, frozen
+
+def evaluate_frozen_protocol(g_in, p_in, margin=100.0):
+    """Same logic as run_control_experiment.py::evaluate(). g_in, p_in:
+    arrays, length 5 (grok epoch, predictor event epoch per seed)."""
+    from scipy.stats import spearmanr
+    g_arr = np.asarray(g_in, dtype=float)
+    p_arr = np.asarray(p_in, dtype=float)
+    lead = p_arr < (g_arr - margin)
+    lead_frac = float(np.mean(lead))
+    rel_lead = (g_arr - p_arr) / g_arr
+    mean_rel_lead = float(np.mean(rel_lead))
+    if len(g_arr) >= 3 and np.std(p_arr) > 1e-9:
+        rho, _ = spearmanr(g_arr, p_arr)
+        rho = 0.0 if np.isnan(rho) else float(rho)
+    else:
+        rho = 0.0
+    return {"lead_frac": lead_frac, "rho": rho, "mean_rel_lead": mean_rel_lead}
 
 
 def summarise(ev, grok):
@@ -200,6 +233,8 @@ def plot_signals(runs, ev, path):
           ("AGE: log10 NC1 50% of fall", "tab:pink")]),
         ("HTSR  mean alpha", lambda r: (r["htsr_ep"], r["alpha"]),
          [("HTSR: mean alpha minimum (implemented)", "tab:purple")]),
+        ("Weight-PCA  mean NormEffRank", lambda r: (r["wpca_ep"], r["norm_eff_rank"]),
+         [("Weight-PCA: effective-rank minimum (implemented)", "tab:brown")]),
     ]
     n = len(runs)
     fig, axes = plt.subplots(n, len(cols), figsize=(4.4 * len(cols), 2.4 * n), sharex=True)
@@ -237,6 +272,7 @@ def plot_scatter(ev, grok, path):
         "AGE: NC1 minimum (implemented)",
         "AGE: log10 NC1 10% of fall",
         "HTSR: mean alpha minimum (implemented)",
+        "Weight-PCA: effective-rank minimum (implemented)",
     ]
     fig, ax = plt.subplots(figsize=(7.5, 6.5))
     lim = 42000
@@ -265,6 +301,7 @@ def plot_leads(ev, grok, path):
         "AGE: NC1 minimum (implemented)",
         "AGE: log10 NC1 10% of fall",
         "HTSR: mean alpha minimum (implemented)",
+        "Weight-PCA: effective-rank minimum (implemented)",
     ]
     n = len(grok)
     fig, ax = plt.subplots(figsize=(11, 4.8))
@@ -300,6 +337,19 @@ def main():
     plot_scatter(ev, grok, os.path.join(OUT, "03_event_vs_grok_scatter.png"))
     plot_leads(ev, grok, os.path.join(OUT, "04_lead_times.png"))
     print(f"\nWrote plots and predictor_events.json to {OUT}")
+
+    # Official frozen-protocol verdict for Weight-PCA (see
+    # evaluate_frozen_protocol() above): PASS if lead_frac >= 0.8 AND
+    # rho >= RHO_THRESH AND 0.05 <= mean_rel_lead <= 0.9.
+    p_arr = [ev["Weight-PCA: effective-rank minimum (implemented)"][s] for s in range(len(grok))]
+    result = evaluate_frozen_protocol(grok, p_arr)
+    passed = (result["lead_frac"] >= 0.8 and result["rho"] >= RHO_THRESH
+              and 0.05 <= result["mean_rel_lead"] <= 0.9)
+    print("\nWeight-PCA — official frozen-protocol verdict (effrank_min_epoch only):")
+    print(f"  lead_frac     = {result['lead_frac']:.4f}  (need >= 0.8)")
+    print(f"  rho           = {result['rho']:.4f}  (need >= {RHO_THRESH:.4f})")
+    print(f"  mean_rel_lead = {result['mean_rel_lead']:.4f}  (need in [0.05, 0.9])")
+    print(f"  VERDICT = {'PASS' if passed else 'FAIL'}")
 
 
 if __name__ == "__main__":

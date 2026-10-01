@@ -26,12 +26,13 @@ class PredictorMeasurements:
         self.spectral_dir = os.path.join(self.output_dir, "spectral")
         self.age_dir = os.path.join(self.output_dir, "age")
         self.htsr_dir = os.path.join(self.output_dir, "htsr")
+        self.weight_pca_dir = os.path.join(self.output_dir, "weight_pca")
         self.reports_dir = os.path.join(self.output_dir, "reports")
         self.training_dir = os.path.join(self.output_dir, "training")
 
         for dir_path in [self.l2_norm_dir, self.dropout_dir, self.spectral_dir,
-                          self.age_dir, self.htsr_dir, self.reports_dir,
-                          self.training_dir]:
+                          self.age_dir, self.htsr_dir, self.weight_pca_dir,
+                          self.reports_dir, self.training_dir]:
             os.makedirs(dir_path, exist_ok=True)
 
     def save_training_data(self, train_acc, test_acc, loss):
@@ -244,6 +245,36 @@ class PredictorMeasurements:
             if 0 < m < width:
                 out[i, m:] = row[m - 1]
         return out
+
+    # ========== WEIGHT-PCA MEASUREMENTS ==========
+
+    def save_weight_pca_data(self, weight_pca_checkpoints, weight_pca_history):
+        """Save all Weight-PCA (Predictor 7) measurements - Yunis et al. 2024
+        spectral dynamics / effective rank of the weight-matrix spectra (see
+        src/predictors/weight_pca.py). Checkpoint-only signal, same
+        per-checkpoint layout as save_htsr_data / save_spectral_data.
+
+        weight_pca_checkpoints: list/array of epoch indices, one per checkpoint.
+        weight_pca_history: dict, all entries have one row per checkpoint:
+            norm_eff_rank       : list[float]        mean NormEffRank over layers
+            layer_eff_rank      : list[list[float]]  [n_checkpoints, n_layers]
+            layer_norm_eff_rank : list[list[float]]  [n_checkpoints, n_layers]
+            layer_rank          : list[list[int]]    [n_checkpoints, n_layers]
+        The layer order is predictors.weight_pca.LAYER_NAMES.
+
+        Saves (all under self.weight_pca_dir): weight_pca_checkpoints.npy,
+        weight_pca_norm_eff_rank.npy, weight_pca_layer_eff_rank.npy,
+        weight_pca_layer_norm_eff_rank.npy, weight_pca_layer_rank.npy
+        """
+        np.save(os.path.join(self.weight_pca_dir, "weight_pca_checkpoints.npy"),
+                np.array(weight_pca_checkpoints, dtype=int))
+        np.save(os.path.join(self.weight_pca_dir, "weight_pca_norm_eff_rank.npy"),
+                np.array(weight_pca_history["norm_eff_rank"], dtype=float))
+        for key in ["layer_eff_rank", "layer_norm_eff_rank"]:
+            np.save(os.path.join(self.weight_pca_dir, f"weight_pca_{key}.npy"),
+                    np.array(weight_pca_history[key], dtype=float))
+        np.save(os.path.join(self.weight_pca_dir, "weight_pca_layer_rank.npy"),
+                np.array(weight_pca_history["layer_rank"], dtype=int))
 
     # ========== VISUALIZATION GENERATION ==========
 
