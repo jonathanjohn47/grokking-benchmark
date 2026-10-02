@@ -86,6 +86,10 @@ from predictors.weight_pca import (                                       # noqa
     compute_weight_pca_metrics_for_checkpoint,
     find_global_minimum_epoch, find_steepest_drop_epoch,
     find_threshold_crossing_epoch, LAYER_NAMES as WEIGHT_PCA_LAYER_NAMES)
+from predictors.higher_mi import (                                        # noqa: E402
+    compute_higher_mi_logit_triplet_for_checkpoint, o_information_three_way,
+    compute_temporal_o_information_signal, find_global_maximum_epoch,
+    find_zero_crossing_epoch, transfer_entropy_table)
 from unified_measurements import PredictorMeasurements                    # noqa: E402
 
 # ---------------------------------------------------------------------------
@@ -187,6 +191,7 @@ PREDICTOR_SUMMARY_KEY = {
     "age": "age_predictor",
     "htsr": "htsr_predictor",
     "weight_pca": "weight_pca_predictor",
+    "higher_mi": "higher_mi_predictor",
 }
 ALL_PREDICTORS = list(PREDICTOR_SUMMARY_KEY.keys())
 
@@ -708,6 +713,11 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
     # HTSR Alpha is checkpoint-only as well (CHECKPOINT_PREDICTOR_FUNCS["htsr"]).
     htsr_block = (old_summary or {}).get("htsr_predictor")
 
+    # Higher-MI is checkpoint-only too (CHECKPOINT_PREDICTOR_FUNCS["higher_mi"]) --
+    # train_one_seed never computes it live, it only carries forward whatever
+    # recompute_from_checkpoints already wrote for this seed.
+    higher_mi_block = (old_summary or {}).get("higher_mi_predictor")
+
     # per-seed summary + resume sentinel. Old blocks for predictors NOT
     # recomputed this call are carried forward, never dropped.
     summary = {
@@ -730,6 +740,7 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
         "spectral_predictor": spectral_block,
         "age_predictor": age_block,
         "htsr_predictor": htsr_block,
+        "higher_mi_predictor": higher_mi_block,
         "limit_cycle_check": limit_cycle_check(test_acc_history, grok_epoch),
         "wall_time_sec": round(time.time() - started, 1),
     }
@@ -1090,6 +1101,159 @@ def _checkpoint_predictor_weight_pca(model, test_loader, ckpt_dir, ckpt_epochs,
     return block
 
 
+def _checkpoint_predictor_higher_mi(model, test_loader, ckpt_dir, ckpt_epochs,
+                                    measurements, grok_epoch, device):
+    """CHECKPOINT_PREDICTOR_FUNCS["higher_mi"] — O-information (Pomarico et
+    al. 2025, arXiv:2507.23346; see src/predictors/higher_mi.py). Loads
+    each saved checkpoint into `model`, evaluates it on the FULL held-out
+    test set via compute_higher_mi_logit_triplet_for_checkpoint (the
+    project's 113->3 class reduction: correct / runner-up / rest-mean
+    logit per test example), and computes TWO O-information signals from
+    the resulting per-checkpoint histories:
+      - population O-information (PRIMARY): one Omega per checkpoint,
+        estimated across the ~8939 test examples AT that checkpoint.
+      - temporal/windowed O-information (EXPLORATORY CONTROL, W=100,
+        stride=10): one Omega per window of per-checkpoint MEAN logits,
+        to empirically test the population signal's conceptual risk
+        against the source paper's own (temporal) sense of
+        O-information. See higher_mi.py module docstring, "MAJOR
+        ADAPTATION" / "EXPLORATORY CONTROL", for the full reasoning.
+    Also computes the Transfer Entropy table (EXPLORATORY ONLY, no event
+    epoch — Table-I shape, tau = 1..10, both directions) on the same
+    per-checkpoint mean-logit trajectories.
+
+    IMPLEMENTATION NOTE — re-seeding test_loader, not reusing the one
+    passed in: the `test_loader` argument this function receives (built
+    once in recompute_from_checkpoints / main(), WITHOUT a
+    torch.manual_seed(seed) call first) is NOT the same train/test split
+    train_one_seed actually trained and evaluated this seed on —
+    get_dataloaders()'s random_split reads torch's GLOBAL RNG, whose
+    state at that call site has nothing to do with this seed. This is
+    harmless for every OTHER registered checkpoint predictor (spectral
+    and age ignore test_loader entirely and rebuild their own TRAIN
+    split with an explicit torch.manual_seed(seed) first — see their
+    own docstrings above — htsr and weight_pca ignore test_loader too).
+    It is NOT harmless here: Higher-MI's whole point is population
+    structure across the TEST set specifically, so evaluating it on a
+    resampled split that likely includes points the model WAS trained on
+    (pre-grok, where train_acc != test_acc, this would bias
+    correct/runner_up/rest_mean toward higher-confidence "seen" examples)
+    would quietly corrupt the signal, worst on the early checkpoints that
+    matter most for a LEADING-indicator claim. Fix, same precedent as
+    _checkpoint_predictor_spectral / _checkpoint_predictor_age's
+    train_loader rebuild: IGNORE the passed-in test_loader and rebuild a
+    freshly, correctly-seeded one here instead."""
+    seed = int(np.load(os.path.join(measurements.output_dir, "seed.npy"))[0])
+    p = model.output_head.out_features - 1
+    batch_size = int(0.3 * p * p)  # full-batch training split (matches get_dataloaders)
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    _, seeded_test_loader = get_dataloaders(number=p, batch_size=batch_size)
+
+    higher_mi_checkpoints = []
+    correct_mean_hist, runner_up_mean_hist, rest_mean_mean_hist = [], [], []
+    population_omega_hist, population_omega_std_hist = [], []
+
+    for epoch in ckpt_epochs:
+        state = torch.load(os.path.join(ckpt_dir, f"model_epoch_{epoch}.pt"), map_location=device)
+        model.load_state_dict(state)
+        triplet = compute_higher_mi_logit_triplet_for_checkpoint(model, seeded_test_loader, device)
+        omega_mean, omega_std = o_information_three_way(
+            triplet["correct"], triplet["runner_up"], triplet["rest_mean"])
+        higher_mi_checkpoints.append(epoch)
+        correct_mean_hist.append(float(triplet["correct"].mean()))
+        runner_up_mean_hist.append(float(triplet["runner_up"].mean()))
+        rest_mean_mean_hist.append(float(triplet["rest_mean"].mean()))
+        population_omega_hist.append(omega_mean)
+        population_omega_std_hist.append(omega_std)
+
+    higher_mi_checkpoints_arr = np.asarray(higher_mi_checkpoints)
+    population_omega_arr = np.asarray(population_omega_hist, dtype=float)
+
+    # EXPLORATORY CONTROL — windowed/temporal O-information on the SAME
+    # per-checkpoint mean trajectories, W=100/stride=10 (confirmed
+    # defaults). A run with fewer than 100 evaluated checkpoints (e.g. a
+    # smoke test) cannot form even one window — guarded, not crashed.
+    try:
+        temporal_epochs, temporal_omega, temporal_omega_std = compute_temporal_o_information_signal(
+            higher_mi_checkpoints_arr, correct_mean_hist, runner_up_mean_hist, rest_mean_mean_hist,
+            window=100, stride=10)
+    except ValueError as exc:
+        temporal_epochs = np.array([])
+        temporal_omega = np.array([])
+        temporal_omega_std = np.array([])
+        print(f"[higher_mi] temporal control signal skipped: {exc}", flush=True)
+
+    measurements.save_higher_mi_data(
+        higher_mi_checkpoints_arr, population_omega_arr, temporal_omega,
+        {
+            "correct_mean": correct_mean_hist,
+            "runner_up_mean": runner_up_mean_hist,
+            "rest_mean_mean": rest_mean_mean_hist,
+            "population_omega_std": population_omega_std_hist,
+            "temporal_checkpoints": temporal_epochs,
+            "temporal_omega_std": temporal_omega_std,
+        })
+
+    # PRIMARY event rule — this is the ONLY epoch scored against grok.
+    max_epoch, max_value, _ = find_global_maximum_epoch(
+        higher_mi_checkpoints_arr, population_omega_arr)
+
+    # EXPLORATORY ONLY — population signal's zero-crossing (may be None;
+    # see higher_mi.py docstring, "EVENT RULE", for why this is not PRIMARY).
+    zero_crossing_epoch = find_zero_crossing_epoch(higher_mi_checkpoints_arr, population_omega_arr)
+
+    # EXPLORATORY CONTROL — same two event rules, on the temporal signal.
+    if len(temporal_omega) > 0:
+        ctrl_max_epoch, ctrl_max_value, _ = find_global_maximum_epoch(temporal_epochs, temporal_omega)
+        ctrl_zero_crossing_epoch = find_zero_crossing_epoch(temporal_epochs, temporal_omega)
+    else:
+        ctrl_max_epoch = ctrl_max_value = ctrl_zero_crossing_epoch = None
+
+    # EXPLORATORY ONLY — Transfer Entropy table, tau=1..10, both
+    # directions, full (non-windowed) trajectory of per-checkpoint mean
+    # logits. No event epoch; not fed into the PASS/FAIL table.
+    te_table = transfer_entropy_table(correct_mean_hist, runner_up_mean_hist)
+
+    block = {
+        "higher_mi_checkpoints": higher_mi_checkpoints,
+        "population_omega_history": [float(v) for v in population_omega_arr],
+        "correct_mean_history": [float(v) for v in correct_mean_hist],
+        "runner_up_mean_history": [float(v) for v in runner_up_mean_hist],
+        "rest_mean_mean_history": [float(v) for v in rest_mean_mean_hist],
+        "grok_epoch": grok_epoch,
+        # --- PRIMARY (scored) ---
+        "population_omega_max_epoch": max_epoch,
+        "population_omega_max_value": max_value,
+        "population_omega_max_to_grok_ratio": (
+            float(max_epoch) / grok_epoch if grok_epoch else None),
+        # --- EXPLORATORY (NOT scored — thesis appendix / sensitivity analysis) ---
+        "exploratory": {
+            "population_omega_zero_crossing_epoch": zero_crossing_epoch,
+            "temporal_control": {
+                "window": 100,
+                "stride": 10,
+                "window_center_epochs": [float(v) for v in temporal_epochs],
+                "omega_history": [float(v) for v in temporal_omega],
+                "omega_max_epoch": ctrl_max_epoch,
+                "omega_max_value": ctrl_max_value,
+                "omega_zero_crossing_epoch": ctrl_zero_crossing_epoch,
+            },
+            "transfer_entropy": {str(tau): v for tau, v in te_table.items()},
+            "note": ("Not fed into the PASS/FAIL table. See "
+                     "src/predictors/higher_mi.py module docstring, "
+                     "'EVENT RULE' and 'EXPLORATORY CONTROL', for the "
+                     "reasoning behind every exploratory signal here."),
+        },
+        "population_omega_first_last": {
+            "first": float(population_omega_arr[0]), "last": float(population_omega_arr[-1])},
+        "num_checkpoints": len(higher_mi_checkpoints),
+    }
+    with open(os.path.join(measurements.higher_mi_dir, "higher_mi_signal.json"), "w") as handle:
+        json.dump(block, handle, indent=2)
+    return block
+
+
 # Predictors this runner knows how to (re)compute from already-saved
 # checkpoints/model_epoch_*.pt alone, with NO retraining. Adding a future
 # predictor here (once it exists) is the ONLY change needed for it to gain
@@ -1102,6 +1266,7 @@ CHECKPOINT_PREDICTOR_FUNCS = {
     "age": _checkpoint_predictor_age,
     "htsr": _checkpoint_predictor_htsr,
     "weight_pca": _checkpoint_predictor_weight_pca,
+    "higher_mi": _checkpoint_predictor_higher_mi,
 }
 CHECKPOINT_ONLY_PREDICTORS = set(CHECKPOINT_PREDICTOR_FUNCS.keys())
 

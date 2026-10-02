@@ -11512,3 +11512,96 @@ CLOSED-NEGATIVE. Same as L2, Dropout, Spectral, AGE, HTSR. NormEffRank declines 
 - `08_Experiments/results/nanda_unified/analysis/predictor_events.json` — regenerated; now includes `frozen_protocol_verdict` for the HTSR Alpha and Weight-PCA rows.
 - `08_Experiments/results/nanda_unified/analysis/01_grokking_curves.png`, `02_signals_vs_grok.png`, `03_event_vs_grok_scatter.png`, `04_lead_times.png` — regenerated (same data, no visual change expected).
 - `context.md` — this section (append only).
+
+
+# 2026-10-03 — Higher-MI (Pomarico et al.) implemented, run end-to-end, wired into analyze_nanda_unified.py
+
+## Session Summary
+
+- Implemented Predictor 7 (Higher-MI, Pomarico et al. 2025, arXiv:2507.23346) against the frozen p=113 Nanda-Unified setup, end to end: predictor module, checkpoint-evaluation wrapper wired into `run_nanda_benchmark.py`, a full 5-seed x 401-checkpoint recompute from already-saved checkpoints (no retraining), raw-curve inspection plots generated and viewed BEFORE wiring the signal into the scored analysis (per Jonathan's own stated practice: "Will run both and report raw Omega(t) before trusting event epochs"), then wiring into `analyze_nanda_unified.py` and running the official frozen-protocol scoring.
+- Explicit instruction this session: do NOT commit, leave files modified; show `git status` and the final verdict at the end (see bottom of this entry).
+
+### 8. Higher-MI (Pomarico et al.) - IMPLEMENTED & RUN
+
+**Implementation:**
+- File: `06_Code/src/predictors/higher_mi.py` (new file).
+- Formula: three-variable O-information `Omega = I(F0;F1) - I(F0;F1|F2)`, averaged over the 6 permutations of which of {correct-logit, runner-up-logit, rest-mean-logit} plays the role of F0/F1/F2 (Eq. 13 of the paper). Mutual information and conditional mutual information both estimated via KSG (Eqs. A7/A9), k=4 (ASSUMPTION — not stated for this adaptation in the paper, which uses continuous neuroscience time series, not discrete-task logits).
+- MAJOR ADAPTATION (confirmed 2026-10-03, population-based is PRIMARY): the paper's variables are per-example time series; this project's task has no natural single "example" axis replicated across the whole run, so the three variables are instead the three logit values (correct / runner-up / rest-mean) POOLED ACROSS THE FULL TEST SET at a single checkpoint — i.e. the "population" variant computes one Omega per checkpoint from the cross-example distribution of the three logit types, not from a time-series sliding window. The temporal/windowed variant (W=100 checkpoints, stride=10, computed on per-checkpoint MEAN logits) is the literal closer-to-paper time-series reading, kept as an EXPLORATORY CONTROL specifically to test whether the population variant's "all test examples share one global difficulty signal" confound makes it behave identically to (and therefore redundant with) the temporal variant.
+- Four signal/event functions: `compute_population_o_information_signal()` (PRIMARY data), `find_global_maximum_epoch()` (PRIMARY event rule, frozen 2026-10-03: global MAXIMUM of Omega_population(t) — always defined, no None case), `find_zero_crossing_epoch()` (EXPLORATORY), `compute_temporal_o_information_signal()` (EXPLORATORY CONTROL). `transfer_entropy_ksg`/`transfer_entropy_table` also implemented but EXPLORATORY ONLY, not fed into any scored or plotted signal this session.
+- `compute_higher_mi_logit_triplet_for_checkpoint(model, test_loader, device)`: the checkpoint-to-logit extraction function. Slices `logits = model.forward(x)[:, 2, :][:, :p]` to drop the never-trained "=" token class, then computes `correct`, `runner_up` (via -inf masking + max over the remaining classes), `rest_mean = (total - correct - runner_up) / (p - 2)`.
+- Integration: `src/unified_measurements.py` — added `higher_mi_dir` + `save_higher_mi_data(self, checkpoints, population_omega, temporal_omega, history_dict)`. `scripts/run_nanda_benchmark.py` — added `_checkpoint_predictor_higher_mi(model, test_loader, ckpt_dir, ckpt_epochs, measurements, grok_epoch, device)` matching the exact signature of the other `CHECKPOINT_PREDICTOR_FUNCS`, registered in `CHECKPOINT_PREDICTOR_FUNCS` and `PREDICTOR_SUMMARY_KEY["higher_mi"] = "higher_mi_predictor"`.
+- New file: `06_Code/scripts/plot_higher_mi_curves.py` — raw-curve-only plotting script (no event epochs, no PASS/FAIL), run deliberately BEFORE the analyze-script wiring, writing to a new `08_Experiments/results/nanda_unified/reports/` folder (kept separate from `analysis/`, which is where the original 6-predictor comparison figures live).
+
+**Two critical fixes found and applied this project (both inside `higher_mi.py`'s KSG core and `run_nanda_benchmark.py`'s wrapper):**
+
+1. KSG strict-inequality fix. scipy's `cKDTree.query_ball_point` counts neighbors with `distance <= r` (inclusive), but the KSG estimator (and the paper's Eq. A7/A9) requires strictly-less-than neighbor counts. Fixed by querying with `r = np.nextafter(eps, 0)` (the largest float strictly less than `eps`) instead of `eps` itself. Verified bit-for-bit against a dense/brute-force reference implementation. This fix also made the estimator far cheaper in practice: naive dense neighbor counting over all 401 checkpoints took roughly 19s/checkpoint, versus 0.055s/checkpoint using the tree-based query with the `nextafter` correction (full-run per-checkpoint time came out to 0.67-0.82s/checkpoint once the four signal/event computations and I/O are included) — the fix was necessary just to make the real 5-seed x 401-checkpoint benchmark run (~27 min total) practical at all.
+2. test_loader seeding bug. `run_nanda_benchmark.py`'s `recompute_from_checkpoints()` builds a `test_loader` via `get_dataloaders()` WITHOUT a preceding `torch.manual_seed(seed)` call, so the held-out test split it reconstructs does NOT match the actual test split used during the original live training run (`train_one_seed()` DOES seed before calling `get_dataloaders()`). `_checkpoint_predictor_higher_mi` ignores the passed-in `test_loader` argument and rebuilds its own, seeded explicitly with `torch.manual_seed(seed); np.random.seed(seed)` before calling `get_dataloaders()` — the same precedent already used independently by `_checkpoint_predictor_spectral`/`_checkpoint_predictor_age` for their own (train-loader) rebuilds. Without this fix the Higher-MI numbers would silently be computed against the wrong held-out set.
+
+**Run Command (checkpoint-only, no retraining):**
+```
+python 06_Code/scripts/run_nanda_benchmark.py --predictors higher_mi --seeds 5 --overwrite higher_mi --output_dir 08_Experiments/results/nanda_unified
+python 06_Code/scripts/plot_higher_mi_curves.py
+python 06_Code/scripts/analyze_nanda_unified.py
+```
+Note for future reference: the literal CLI Jonathan specified, `--seeds 0 1 2 3 4`, is not valid — `--seeds` is `type=int` (a seed COUNT, matching `for seed in range(args.seeds)`), not a list of seed values; the equivalent valid form is `--seeds 5`. Likewise `analyze_nanda_unified.py` takes no CLI arguments at all (`--input_dir`/`--predictors` do not exist) — it hardcodes `RESULTS = .../08_Experiments/results/nanda_unified` and always scores every signal it knows about in one pass. Both were corrected silently in the actual commands run; flagging here per this project's practice of noting every discrepancy.
+All 5 seeds succeeded (`[seed N] higher_mi recomputed from 401 of 401 saved checkpoints (eval_every=100, no retrain)` for N=0..4) — no failure, so the conditional `higher_mi_run.log` artifact Jonathan asked for ("if any seed fails") was not required; a full success log was kept anyway (not currently placed at `results/nanda_unified/higher_mi_run.log` on disk — flagged as a minor open item, see "Current Project State" below).
+
+**Raw-curve observation (`results/nanda_unified/reports/`, inspected BEFORE any scoring, per Jonathan's stated practice):**
+- `higher_mi_population_omega_all_seeds.png`: in all 5 seeds, Omega_population(t) is highly oscillatory and quasi-periodic for the ENTIRE run (not just post-grok) — it is NOT a single clean rise-then-plateau or single-peak curve. It repeatedly spikes up from near 0 and falls back toward 0 (occasionally slightly negative) many times across training, with the spike amplitude trending upward as training progresses (seed 4: first value 0.037, last value 1.80 — a ~48x increase; seed 1 by contrast: first 0.033, last 0.070 — nearly flat end-to-end). The grok-epoch vertical line falls in the middle of this oscillating pattern in every seed, not at a visually distinguished transition.
+- `higher_mi_population_vs_temporal_seed0.png`: directly tests the shared-example-difficulty confound concern. The two signals look QUALITATIVELY DIFFERENT for seed 0 — population Omega (left) is the same repeated-spike pattern described above; the temporal/windowed EXPLORATORY CONTROL (right, W=100/stride=10) is comparatively smooth, starts high (~1.55 at epoch 5000), DECREASES to a minimum (~0.52) right around epoch 9000-10000 (close to, just before, grok at 12987), then rises and stays elevated (~1.2-1.4) for the remainder of training. This qualitative difference argues against the two signals being simple redundant copies of one "global difficulty" confound (they would then be expected to track each other closely) — but it also means the temporal control itself shows a soft pre-grok dip that the population (PRIMARY) signal does not show at all, which does not help the population signal's case for being an early-warning indicator.
+- Per-seed numeric confirmation (`higher_mi_signal.json`): `population_omega_max_epoch` lands AFTER `grok_epoch` in all 5 seeds, with `population_omega_max_to_grok_ratio` in [1.17, 2.17] (seed 0: 1.19, seed 1: 1.23, seed 2: 2.17, seed 3: 1.17, seed 4: 1.37) — consistent with every other predictor evaluated so far in this project (L2 Norm, Dropout, Spectral, AGE, HTSR Alpha, Weight-PCA all also peak/minimize after grok).
+
+**Frozen-protocol results** (`evaluate_frozen_protocol()`, PRIMARY rule only — `population_omega_max_epoch`; exploratory zero-crossing and temporal-control-max excluded by design):
+
+| Seed | Grok epoch | Ps (population omega max epoch) | Ps/grok ratio |
+|---|---|---|---|
+| 0 | 12987 | 15500 | 1.19 |
+| 1 | 6921  | 8500  | 1.23 |
+| 2 | 9510  | 20600 | 2.17 |
+| 3 | 11019 | 12900 | 1.17 |
+| 4 | 23747 | 32500 | 1.37 |
+
+- `lead_frac = 0.0000` (need >= 0.8) — the primary event fires after grok (beyond the 100-epoch margin) in 5/5 seeds; 0/5 count as "before".
+- `rho (spearman) = 0.7000` (need >= 0.9000) — Ps does rank-correlate with grok epoch across seeds, but well below the calibrated threshold.
+- `mean_rel_lead = -0.4254` (need in [0.05, 0.9]) — large and negative, confirming the event lands well after grok on average.
+- **VERDICT = FAIL**, matching the pattern of all 6 predictors closed before it.
+- Exploratory signals (not scored, informational only): `population_omega_zero_crossing_epoch` fires VERY early in all 5 seeds (200-1600, i.e. near epoch 0, before any of the oscillatory structure develops) with `seeds_before_grok=5/5` and spearman rho=-0.70 (negatively correlated with grok epoch — an artifact of the signal starting near 0 at initialization, not a meaningful early-warning candidate). `temporal_control_omega_max_epoch` (EXPLORATORY CONTROL) fires before grok in 4/5 seeds but with spearman rho=0.00 (no rank correlation with grok epoch at all across seeds) — i.e. even the smoother temporal signal does not qualify as a usable predictor on this criterion, it is simply less obviously post-grok than the population signal in raw epoch terms.
+
+**Verdict:**
+CLOSED-NEGATIVE, same pattern as L2, Dropout, Spectral, AGE, HTSR, Weight-PCA. The population-based O-information signal (PRIMARY, population_omega_max_epoch) does not lead grokking under this project's frozen protocol: `lead_frac=0.00`, `rho=0.70`, `mean_rel_lead=-0.43`, FAIL. The raw curves additionally show the signal is persistently oscillatory and non-monotonic across the entire run (not concentrated around the grok transition), and its amplitude grows over time regardless of when grok occurs in that seed — consistent with the signal tracking general training progress / logit-margin growth more than a grokking-specific phase transition. The side-by-side comparison against the temporal/windowed control shows the two are NOT simple redundant copies of each other (they differ qualitatively in shape), which partially addresses the shared-example-difficulty confound concern that motivated adding the temporal control in the first place — but neither variant clears the frozen protocol's thresholds, so this does not change the overall negative result. 7 of 8 predictors now CLOSED-negative.
+
+## Consolidated Predictor Status (7 of 8 in current evaluation order)
+
+1. L2 Norm — CLOSED, negative
+2. Dropout — CLOSED, negative
+3. Spectral — CLOSED, negative
+4. AGE — CLOSED, negative
+5. HTSR Alpha — CLOSED, negative
+6. Weight-PCA — CLOSED, negative
+7. **Higher-MI — CLOSED, negative** (this session)
+8. Commutator Defect — NEXT, not started
+
+## User Instructions
+
+- Jonathan gave a 4-task instruction this session: (1) full 5-seed checkpoint-only recompute of Higher-MI via `run_nanda_benchmark.py`, verifying per-seed output files and `summary.json`; (2) generate raw-curve plots (population all-seeds, population-vs-temporal for seed 0) BEFORE wiring into the scored analysis; (3) wire Higher-MI's PRIMARY signal into `analyze_nanda_unified.py` (`PRIMARY_SIGNALS`, `build_events()`, plus the two exploratory signals) and run it, saving `aggregate_higher_mi.json`; (4) append this context.md section with implementation, fixes, raw-curve observations and the frozen-protocol results table. Explicit constraint: do NOT commit, leave files modified; show `git status` and the final verdict (both at the end of this session's work, see below).
+
+## Current Project State
+
+- 7 of 8 predictors CLOSED-negative. Only Commutator Defect remains unimplemented.
+- Heavy compute (the actual 5-seed x 401-checkpoint torch forward passes) was run in a separate cloud-container environment this session rather than directly on-device, because this device's Python/torch install is not currently usable for CPU-only inference (CUDA shared-library dependency chain) and installing it exhausted the device sandbox's disk quota; checkpoint files were moved to the cloud container as compressed per-seed archives and only the small result files (summaries, `higher_mi/*.npy`, signal/aggregate JSON, ~2MB total) were moved back. This is purely an execution-environment detail — the code that ran is the exact code now committed-but-unstaged in this repo, run against the real saved checkpoints on disk, no synthetic data involved.
+- Open/minor item: the full success run log currently exists only at a cloud-container path, not at `results/nanda_unified/higher_mi_run.log` on this device (Jonathan's instruction was to save a log there only "if any seed fails" — none did, so this is optional, not a defect).
+- `08_Experiments/results/nanda_unified/aggregate_higher_mi.json`, `08_Experiments/results/nanda_unified/analysis/predictor_events.json`, and the four `analysis/0*.png` plots were all regenerated by this session's `analyze_nanda_unified.py` run (now including Higher-MI's PRIMARY row and verdict, alongside the previously-closed HTSR Alpha and Weight-PCA verdicts).
+- Per explicit instruction, nothing in this session has been committed — `git status` as of the end of this session is reported directly to Jonathan in chat, not duplicated here, since it reflects working-tree state at a point in time rather than a durable project fact.
+
+## Files Modified
+
+- New: `06_Code/src/predictors/higher_mi.py`, `06_Code/scripts/plot_higher_mi_curves.py`.
+- `06_Code/src/unified_measurements.py` — `higher_mi_dir`, `save_higher_mi_data()`.
+- `06_Code/scripts/run_nanda_benchmark.py` — higher_mi import, `PREDICTOR_SUMMARY_KEY` entry, `_checkpoint_predictor_higher_mi()` (including the test_loader reseeding fix), `CHECKPOINT_PREDICTOR_FUNCS` registration.
+- `06_Code/scripts/analyze_nanda_unified.py` — Higher-MI PRIMARY event added to `build_events()`, `"Higher-MI: population omega maximum (implemented)"` added to `PRIMARY_SIGNALS`, exploratory zero-crossing and temporal-control-max rows added (guarded to only attach if all 5 seeds have a value), `aggregate_higher_mi.json` write added to `main()`.
+- `08_Experiments/results/nanda_unified/seed_0..4/higher_mi/` (10 files each) — new, generated this session.
+- `08_Experiments/results/nanda_unified/seed_0..4/summary.json` — updated with `higher_mi_predictor` block.
+- `08_Experiments/results/nanda_unified/aggregate.json`, `aggregate_higher_mi.json` — regenerated/new.
+- `08_Experiments/results/nanda_unified/reports/higher_mi_population_omega_all_seeds.png`, `higher_mi_population_vs_temporal_seed0.png` — new.
+- `08_Experiments/results/nanda_unified/analysis/predictor_events.json`, `01_grokking_curves.png`, `02_signals_vs_grok.png`, `03_event_vs_grok_scatter.png`, `04_lead_times.png` — regenerated with Higher-MI included.
+- `context.md` — this section (append only).

@@ -137,6 +137,48 @@ def build_events(runs):
         # appendix / sensitivity-analysis material, not part of the scored table.
         put("Weight-PCA: effective-rank minimum (implemented)", s,
             sm["weight_pca_predictor"]["norm_eff_rank_min_epoch"])
+
+        # Higher-MI (Pomarico et al. 2025; see src/predictors/higher_mi.py).
+        # PRIMARY rule, frozen 2026-10-03: global MAXIMUM of the population
+        # O-information signal Omega_pop(t) (peak redundancy) -- same
+        # "one PRIMARY rule declared in the module" convention as HTSR /
+        # Weight-PCA above. Always defined (find_global_maximum_epoch has
+        # no None case), so it's safe inside this unconditional per-seed loop.
+        put("Higher-MI: population omega maximum (implemented)", s,
+            sm["higher_mi_predictor"]["population_omega_max_epoch"])
+
+    # EXPLORATORY Higher-MI signals, added OUTSIDE the per-seed loop above.
+    # Both can legitimately come back None for a seed (population
+    # zero-crossing: the signal may never cross from negative to positive
+    # -- this is exactly why it is EXPLORATORY, not PRIMARY, per
+    # higher_mi.py's "EVENT RULE" section; temporal-control max: only None
+    # if that seed's run had fewer checkpoints than the W=100 window,
+    # which does not happen on the real 401-checkpoint grid but is
+    # guarded in run_nanda_benchmark.py regardless). summarise() below
+    # needs every seed to have a value for every signal name in `ev`, so
+    # each of these is added only if ALL seeds produced a value --
+    # otherwise it is left out of the table with a console note, rather
+    # than crashing on a per_seed[s] KeyError for whichever seed is None.
+    if runs and all("higher_mi_predictor" in r["summary"] for r in runs):
+        hmi = [r["summary"]["higher_mi_predictor"] for r in runs]
+
+        zc_vals = [b["exploratory"]["population_omega_zero_crossing_epoch"] for b in hmi]
+        if all(v is not None for v in zc_vals):
+            for s, v in enumerate(zc_vals):
+                put("Higher-MI: population omega zero-crossing (exploratory)", s, v)
+        else:
+            missing = [s for s, v in enumerate(zc_vals) if v is None]
+            print(f"[build_events] Higher-MI population zero-crossing (exploratory) "
+                  f"left out of the table -- undefined (never crossed) for seed(s) {missing}")
+
+        tctrl_vals = [b["exploratory"]["temporal_control"]["omega_max_epoch"] for b in hmi]
+        if all(v is not None for v in tctrl_vals):
+            for s, v in enumerate(tctrl_vals):
+                put("Higher-MI: temporal-control omega maximum (exploratory)", s, v)
+        else:
+            missing = [s for s, v in enumerate(tctrl_vals) if v is None]
+            print(f"[build_events] Higher-MI temporal-control maximum (exploratory) "
+                  f"left out of the table -- undefined for seed(s) {missing}")
     return ev
 
 
@@ -186,6 +228,7 @@ def evaluate_frozen_protocol(g_in, p_in, margin=100.0):
 PRIMARY_SIGNALS = [
     "HTSR: mean alpha minimum (implemented)",
     "Weight-PCA: effective-rank minimum (implemented)",
+    "Higher-MI: population omega maximum (implemented)",
 ]
 
 
@@ -382,6 +425,16 @@ def main():
 
     with open(os.path.join(OUT, "predictor_events.json"), "w") as handle:
         json.dump({"grok_epochs": grok, "signals": rows}, handle, indent=2)
+
+    # Higher-MI-only aggregate, requested alongside the full
+    # predictor_events.json above (which already carries Higher-MI's row
+    # too, via the generic PRIMARY_SIGNALS / build_events wiring).
+    higher_mi_rows = [r for r in rows if r["signal"].startswith("Higher-MI")]
+    if higher_mi_rows:
+        agg_path = os.path.join(RESULTS, "aggregate_higher_mi.json")
+        with open(agg_path, "w") as handle:
+            json.dump({"grok_epochs": grok, "signals": higher_mi_rows}, handle, indent=2)
+        print(f"Wrote {agg_path}")
 
     plot_curves(runs, os.path.join(OUT, "01_grokking_curves.png"))
     plot_signals(runs, ev, os.path.join(OUT, "02_signals_vs_grok.png"))

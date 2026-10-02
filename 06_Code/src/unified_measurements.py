@@ -27,12 +27,13 @@ class PredictorMeasurements:
         self.age_dir = os.path.join(self.output_dir, "age")
         self.htsr_dir = os.path.join(self.output_dir, "htsr")
         self.weight_pca_dir = os.path.join(self.output_dir, "weight_pca")
+        self.higher_mi_dir = os.path.join(self.output_dir, "higher_mi")
         self.reports_dir = os.path.join(self.output_dir, "reports")
         self.training_dir = os.path.join(self.output_dir, "training")
 
         for dir_path in [self.l2_norm_dir, self.dropout_dir, self.spectral_dir,
                           self.age_dir, self.htsr_dir, self.weight_pca_dir,
-                          self.reports_dir, self.training_dir]:
+                          self.higher_mi_dir, self.reports_dir, self.training_dir]:
             os.makedirs(dir_path, exist_ok=True)
 
     def save_training_data(self, train_acc, test_acc, loss):
@@ -275,6 +276,67 @@ class PredictorMeasurements:
                     np.array(weight_pca_history[key], dtype=float))
         np.save(os.path.join(self.weight_pca_dir, "weight_pca_layer_rank.npy"),
                 np.array(weight_pca_history["layer_rank"], dtype=int))
+
+    # ========== HIGHER-MI MEASUREMENTS ==========
+
+    def save_higher_mi_data(self, checkpoints, population_omega, temporal_omega, history_dict):
+        """Save all Higher-MI (Predictor 7) measurements -- O-information,
+        population-based (PRIMARY, ADAPTED) and temporal/windowed
+        (EXPLORATORY CONTROL) -- see src/predictors/higher_mi.py module
+        docstring for the full reasoning behind both signals.
+
+        Unlike every other checkpoint-only predictor so far (Spectral,
+        AGE, HTSR, Weight-PCA -- all ONE value per checkpoint), Higher-MI
+        has TWO signals on TWO DIFFERENT epoch axes, so this method takes
+        them explicitly rather than folding everything into one "history"
+        dict argument the way save_htsr_data / save_weight_pca_data do:
+
+        checkpoints: (C,) array of checkpoint epochs -- the population
+            signal's own axis (one Omega per checkpoint, no window).
+        population_omega: (C,) array -- PRIMARY signal, population
+            O-information at each checkpoint.
+        temporal_omega: (num_windows,) array -- EXPLORATORY CONTROL
+            signal, O-information over a W=100/stride=10 window of
+            per-checkpoint MEAN logits. num_windows < C: this is a
+            SEPARATE, SHORTER axis (history_dict["temporal_checkpoints"]
+            holds its own window-center epochs -- do not index it with
+            `checkpoints`).
+        history_dict: dict with the remaining per-checkpoint / per-window
+            arrays (all optional -- only the keys present are saved):
+                correct_mean, runner_up_mean, rest_mean_mean : (C,) --
+                    per-checkpoint MEAN logits (the inputs to the
+                    temporal control signal, and useful on their own for
+                    the Transfer Entropy table).
+                population_omega_std : (C,) -- KSG finite-sample std
+                    across the 6 permutation-orderings, diagnostic only.
+                temporal_checkpoints : (num_windows,) -- window-center
+                    epochs matching temporal_omega's own axis.
+                temporal_omega_std : (num_windows,) -- same diagnostic,
+                    for the temporal control signal.
+
+        Saves (all under self.higher_mi_dir):
+            higher_mi_checkpoints.npy, higher_mi_population_omega.npy,
+            higher_mi_temporal_omega.npy, higher_mi_correct_mean.npy,
+            higher_mi_runner_up_mean.npy, higher_mi_rest_mean_mean.npy,
+            higher_mi_population_omega_std.npy,
+            higher_mi_temporal_checkpoints.npy,
+            higher_mi_temporal_omega_std.npy (the last five only if their
+            key is present in history_dict).
+        """
+        np.save(os.path.join(self.higher_mi_dir, "higher_mi_checkpoints.npy"),
+                np.array(checkpoints, dtype=int))
+        np.save(os.path.join(self.higher_mi_dir, "higher_mi_population_omega.npy"),
+                np.array(population_omega, dtype=float))
+        np.save(os.path.join(self.higher_mi_dir, "higher_mi_temporal_omega.npy"),
+                np.array(temporal_omega, dtype=float))
+        for key in ["correct_mean", "runner_up_mean", "rest_mean_mean",
+                    "population_omega_std", "temporal_omega_std"]:
+            if key in history_dict:
+                np.save(os.path.join(self.higher_mi_dir, f"higher_mi_{key}.npy"),
+                        np.array(history_dict[key], dtype=float))
+        if "temporal_checkpoints" in history_dict:
+            np.save(os.path.join(self.higher_mi_dir, "higher_mi_temporal_checkpoints.npy"),
+                    np.array(history_dict["temporal_checkpoints"], dtype=float))
 
     # ========== VISUALIZATION GENERATION ==========
 
