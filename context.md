@@ -11472,3 +11472,43 @@ CLOSED-NEGATIVE. Same as L2, Dropout, Spectral, AGE, HTSR. NormEffRank declines 
 - `08_Experiments/results/nanda_unified/aggregate.json` — regenerated with Weight-PCA.
 - `08_Experiments/results/nanda_unified/analysis/02_signals_vs_grok.png`, `predictor_events.json` — regenerated with Weight-PCA.
 - `context.md` — this section (append only).
+
+# 2026-10-02 (later) — `predictor_events.json` now persists the frozen-protocol verdict (generalized fix)
+
+## Session Summary
+
+- Fixed the open item flagged in the previous entry ("# 2026-10-02 — Weight-PCA ... CLOSED, negative"): the official frozen-protocol verdict (`lead_frac` / `rho` / `mean_rel_lead` / PASS-FAIL) was computed in `analyze_nanda_unified.py::main()` but only ever printed to console, never written to `predictor_events.json`.
+- Jonathan asked for the cost of fixing this before deciding; cost was assessed as small (existing `evaluate_frozen_protocol()` function, just needed to be called earlier and its result attached to the row before the JSON dump; zero retraining, pure post-hoc recompute on saved checkpoints). Jonathan then asked to generalize the fix (not just patch it for Weight-PCA) so it also covers future predictors without repeat edits.
+- Implemented and verified end-to-end (see "Important Discoveries" for the verification caveat).
+
+## Technical Decisions
+
+- Added a `PRIMARY_SIGNALS` registry (list of signal names) in `analyze_nanda_unified.py`. Only signals in this list get a `frozen_protocol_verdict` computed and persisted.
+- Scope deliberately limited to **HTSR Alpha** and **Weight-PCA** only, not backfilled to L2 Norm, Dropout, Spectral, or AGE. Reason: `grep -n "PRIMARY" src/predictors/*.py` confirms only `htsr_alpha.py`'s single-rule-only convention and `weight_pca.py`'s explicit "PRIMARY" docstring label declare one rule as official. The other four predictors' modules never declared a single PRIMARY rule — each was closed using separate reasoning already recorded in its own dated entry in this file. Guessing which of their several candidate signals (e.g. L2 had 3 candidate epochs logged) was "the" scored one risked computing and persisting a verdict that contradicts an already-closed, already-recorded result. Left untouched, per this file's own append-only / never-rewrite-history rule.
+- Going forward: when Higher-MI and Commutator Defect are implemented, their own modules should declare a PRIMARY event rule using the same convention (frozen 2026-09-17, same as HTSR/Weight-PCA), and their `"<name>: ... (implemented)"` signal string should be added to `PRIMARY_SIGNALS`. No other code changes will be needed for their verdict to persist automatically.
+
+## Code Changes (`06_Code/scripts/analyze_nanda_unified.py`)
+
+- New `PRIMARY_SIGNALS` constant (just above `summarise()`).
+- `summarise()`: for any row whose `signal` is in `PRIMARY_SIGNALS`, now calls `evaluate_frozen_protocol()` and attaches the result (plus a `"passed"` boolean) as `row["frozen_protocol_verdict"]`. Since `rows` is what gets `json.dump`'d to `predictor_events.json`, the verdict is now persisted automatically, no separate write needed.
+- New `print_verdicts(rows)` function: prints the verdict for every row that has one. Called from `main()` right after `print_table(rows, grok)`.
+- Removed the old hardcoded end-of-`main()` block that only ever computed/printed the verdict for the literal string `"Weight-PCA: effective-rank minimum (implemented)"`.
+
+## Important Discoveries
+
+- The project's `.venv` (`06_Code/.venv`, Python 3.9.6, `home = /Applications/Xcode.app/...`) is a macOS venv and its interpreter symlinks do not resolve inside the Linux sandbox this session's device-bridge shell runs in — `./.venv/bin/python3` fails with "No such file or directory" there. Verification of this fix was therefore done by installing `scipy` into that sandbox's own ephemeral Python (not the project's `.venv`, nothing written to the repo) and running the real `analyze_nanda_unified.py` unmodified-otherwise against the real, already-saved seed data on disk. Flagging this so a future session doesn't assume the sandbox's python == the project's `.venv`.
+- Verification result: the recomputed Weight-PCA verdict exactly reproduced the already-recorded values from the previous entry (`lead_frac = 0.0000`, `rho = 0.8000`, `mean_rel_lead = -1.9029`, VERDICT = FAIL) — confirms no regression from the refactor. HTSR Alpha's verdict is now also computed automatically for the first time (`lead_frac = 0.0000`, `rho = 0.9000`, `mean_rel_lead = -1.1849`, VERDICT = FAIL), consistent with HTSR's prior closure ("post-grok, not leading") though this exact number had not previously been written down anywhere in this file.
+- Confirmed via `python3 -c "json.load(...)"` that `predictor_events.json` now contains a `frozen_protocol_verdict` key on the HTSR Alpha and Weight-PCA rows.
+
+## Current Project State
+
+- The "Open, not yet done" item from the previous entry (verdict not persisted to file) is now resolved for HTSR Alpha and Weight-PCA. It remains intentionally unresolved for L2 Norm, Dropout, Spectral, AGE (see Technical Decisions above).
+- Predictor status unchanged: 6 of 8 CLOSED-negative (L2 Norm, Dropout, Spectral, AGE, HTSR Alpha, Weight-PCA). Next predictor in order: **Higher-MI**, then **Commutator Defect**.
+- `08_Experiments/results/nanda_unified/analysis/predictor_events.json` and the four plot PNGs in that folder were regenerated by this run (same underlying data as before, plots visually unchanged — only the JSON gained the new `frozen_protocol_verdict` keys).
+
+## Files Modified
+
+- `06_Code/scripts/analyze_nanda_unified.py` — added `PRIMARY_SIGNALS`, modified `summarise()`, added `print_verdicts()`, removed the old hardcoded Weight-PCA-only verdict block from `main()`.
+- `08_Experiments/results/nanda_unified/analysis/predictor_events.json` — regenerated; now includes `frozen_protocol_verdict` for the HTSR Alpha and Weight-PCA rows.
+- `08_Experiments/results/nanda_unified/analysis/01_grokking_curves.png`, `02_signals_vs_grok.png`, `03_event_vs_grok_scatter.png`, `04_lead_times.png` — regenerated (same data, no visual change expected).
+- `context.md` — this section (append only).

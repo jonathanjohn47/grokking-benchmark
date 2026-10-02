@@ -169,6 +169,26 @@ def evaluate_frozen_protocol(g_in, p_in, margin=100.0):
     return {"lead_frac": lead_frac, "rho": rho, "mean_rel_lead": mean_rel_lead}
 
 
+# Signals with an explicitly frozen PRIMARY event rule (declared in the
+# predictor's own module docstring -- see e.g. weight_pca.py's "PRIMARY"
+# label / htsr_alpha.py's single-rule-only convention, both frozen
+# 2026-09-17, context.md). Only these are scored against the frozen
+# protocol and get a verdict persisted into predictor_events.json.
+#
+# L2 Norm, Dropout-Variance, Spectral and AGE predate this convention
+# (their own modules never declared one rule as PRIMARY) and were each
+# closed by separate reasoning recorded in context.md instead -- NOT
+# backfilled here, since guessing which of their several candidate
+# rules was "the" scored one risks contradicting an already-closed
+# verdict. When a predictor's own module declares a PRIMARY rule
+# (Higher-MI, Commutator Defect should follow the same convention),
+# add its "(implemented)" signal name here -- nothing else changes.
+PRIMARY_SIGNALS = [
+    "HTSR: mean alpha minimum (implemented)",
+    "Weight-PCA: effective-rank minimum (implemented)",
+]
+
+
 def summarise(ev, grok):
     rows = []
     g = np.array(grok, dtype=float)
@@ -176,7 +196,7 @@ def summarise(ev, grok):
         e = np.array([per_seed[s] for s in range(len(grok))])
         lead = g - e
         pear = float(np.corrcoef(e, g)[0, 1]) if e.std() > 0 else float("nan")
-        rows.append({
+        row = {
             "signal": name,
             "epochs": e.tolist(),
             "lead": lead.tolist(),
@@ -184,7 +204,18 @@ def summarise(ev, grok):
             "spearman": rank_corr(e, g),
             "pearson": pear,
             "epoch_cv": float(e.std() / e.mean()),
-        })
+        }
+        if name in PRIMARY_SIGNALS:
+            # Official frozen-protocol verdict (evaluate_frozen_protocol
+            # above): PASS iff lead_frac >= 0.8 AND rho >= RHO_THRESH AND
+            # 0.05 <= mean_rel_lead <= 0.9. Persisted here (not just
+            # printed) so it survives in predictor_events.json.
+            verdict = evaluate_frozen_protocol(grok, e.tolist())
+            verdict["passed"] = (verdict["lead_frac"] >= 0.8
+                                  and verdict["rho"] >= RHO_THRESH
+                                  and 0.05 <= verdict["mean_rel_lead"] <= 0.9)
+            row["frozen_protocol_verdict"] = verdict
+        rows.append(row)
     return rows
 
 
@@ -194,6 +225,25 @@ def print_table(rows, grok):
     for r in rows:
         ep = " ".join(f"{int(x):>6}" for x in r["epochs"])
         print(f"{r['signal']:<46}{ep:<38}{r['seeds_before_grok']:>5}/5{r['spearman']:>7.2f}{r['pearson']:>7.2f}")
+
+
+def print_verdicts(rows):
+    """Prints (and, via `rows` already being json.dump'd in main(), persists)
+    the official frozen-protocol verdict for every PRIMARY_SIGNALS entry
+    present in this run. Generalises the old hardcoded Weight-PCA-only
+    block so a future predictor needs only a PRIMARY_SIGNALS entry, no
+    changes here."""
+    scored = [r for r in rows if "frozen_protocol_verdict" in r]
+    if not scored:
+        return
+    print("\nOfficial frozen-protocol verdicts (PRIMARY rule only, see PRIMARY_SIGNALS):")
+    for r in scored:
+        v = r["frozen_protocol_verdict"]
+        print(f"\n{r['signal']}")
+        print(f"  lead_frac     = {v['lead_frac']:.4f}  (need >= 0.8)")
+        print(f"  rho           = {v['rho']:.4f}  (need >= {RHO_THRESH:.4f})")
+        print(f"  mean_rel_lead = {v['mean_rel_lead']:.4f}  (need in [0.05, 0.9])")
+        print(f"  VERDICT = {'PASS' if v['passed'] else 'FAIL'}")
 
 
 # ─────────────────────────── plots ───────────────────────────
@@ -328,6 +378,7 @@ def main():
     ev = build_events(runs)
     rows = summarise(ev, grok)
     print_table(rows, grok)
+    print_verdicts(rows)
 
     with open(os.path.join(OUT, "predictor_events.json"), "w") as handle:
         json.dump({"grok_epochs": grok, "signals": rows}, handle, indent=2)
@@ -336,20 +387,8 @@ def main():
     plot_signals(runs, ev, os.path.join(OUT, "02_signals_vs_grok.png"))
     plot_scatter(ev, grok, os.path.join(OUT, "03_event_vs_grok_scatter.png"))
     plot_leads(ev, grok, os.path.join(OUT, "04_lead_times.png"))
-    print(f"\nWrote plots and predictor_events.json to {OUT}")
-
-    # Official frozen-protocol verdict for Weight-PCA (see
-    # evaluate_frozen_protocol() above): PASS if lead_frac >= 0.8 AND
-    # rho >= RHO_THRESH AND 0.05 <= mean_rel_lead <= 0.9.
-    p_arr = [ev["Weight-PCA: effective-rank minimum (implemented)"][s] for s in range(len(grok))]
-    result = evaluate_frozen_protocol(grok, p_arr)
-    passed = (result["lead_frac"] >= 0.8 and result["rho"] >= RHO_THRESH
-              and 0.05 <= result["mean_rel_lead"] <= 0.9)
-    print("\nWeight-PCA — official frozen-protocol verdict (effrank_min_epoch only):")
-    print(f"  lead_frac     = {result['lead_frac']:.4f}  (need >= 0.8)")
-    print(f"  rho           = {result['rho']:.4f}  (need >= {RHO_THRESH:.4f})")
-    print(f"  mean_rel_lead = {result['mean_rel_lead']:.4f}  (need in [0.05, 0.9])")
-    print(f"  VERDICT = {'PASS' if passed else 'FAIL'}")
+    print(f"\nWrote plots and predictor_events.json (now including each"
+          f" PRIMARY_SIGNALS verdict) to {OUT}")
 
 
 if __name__ == "__main__":

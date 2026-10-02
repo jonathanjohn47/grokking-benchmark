@@ -320,7 +320,13 @@
       "seeds_before_grok": 0,
       "spearman": 0.8999999999999998,
       "pearson": 0.8772709381425577,
-      "epoch_cv": 0.3338421399740024
+      "epoch_cv": 0.3338421399740024,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": 0.8999999999999998,
+        "mean_rel_lead": -1.184866295669418,
+        "passed": false
+      }
     },
     {
       "signal": "Weight-PCA: effective-rank minimum (implemented)",
@@ -341,7 +347,13 @@
       "seeds_before_grok": 0,
       "spearman": 0.7999999999999999,
       "pearson": 0.7112969032808586,
-      "epoch_cv": 0.10931445431269328
+      "epoch_cv": 0.10931445431269328,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": 0.7999999999999999,
+        "mean_rel_lead": -1.902919954043249,
+        "passed": false
+      }
     }
   ]
 }
