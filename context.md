@@ -11605,3 +11605,36 @@ CLOSED-NEGATIVE, same pattern as L2, Dropout, Spectral, AGE, HTSR, Weight-PCA. T
 - `08_Experiments/results/nanda_unified/reports/higher_mi_population_omega_all_seeds.png`, `higher_mi_population_vs_temporal_seed0.png` — new.
 - `08_Experiments/results/nanda_unified/analysis/predictor_events.json`, `01_grokking_curves.png`, `02_signals_vs_grok.png`, `03_event_vs_grok_scatter.png`, `04_lead_times.png` — regenerated with Higher-MI included.
 - `context.md` — this section (append only).
+
+
+---
+
+# 2026-10-22 — Ideal Higher-MI Ω(t) schematic saved for the thesis (expectation figure)
+
+## Session Summary
+
+- Jonathan was studying Section 3.6 of `Higher_MI_Predictor_Complete_Explanation.pdf` (one test example (23,45)→68, seed 0, followed at checkpoints 5000, 12900, 20000). While discussing what a *working* Higher-MI predictor should look like, a schematic graph of the ideal behaviour was drawn and he asked to keep it for the thesis.
+- Saved the ideal-only graph as a separate thesis figure so the thesis can show "this is what we expected, but this is not what happened" next to the real measured curves.
+
+## Technical Decisions
+
+- **The figure is a SCHEMATIC, not measured data.** It must be labelled as such in the thesis (the title inside the image already says "schematic, not measured data").
+- Ideal expectation shown: Ω_pop(t) starts in the synergy zone (Ω < 0), rises smoothly in one climb into the redundancy zone (Ω > 0), and its peak falls BEFORE the grok epoch G (so it would work as an early warning, and the peak would shift with G across seeds).
+- The practical (right-hand) panel from the earlier chat image was deliberately NOT saved. The real measured curves already exist: `08_Experiments/results/nanda_unified/reports/higher_mi_population_omega_all_seeds.png` (and Figure 11.1 of the explanation PDF). Observed reality: Ω_pop stays near zero with spikes, first spike near epoch ~1900 in every seed, largest spike after G in 5 of 5 seeds → CLOSED, negative (lead_frac 0, rho 0.7, mean_rel_lead −0.4254).
+- The G = 13000 and the exact curve shape in the schematic are illustrative values chosen for drawing (seed-0's real G is 12987), not results.
+
+## User Instructions
+
+- Save only the ideal graph; context.md must record the file name and the reason.
+- Commit and push the whole project, but do NOT commit the PDFs generated inside `Claude outputs/`; they stay local only.
+
+## Current Project State
+
+- Higher-MI remains CLOSED, negative (predictor 7 of 8). Next predictor in order: Commutator Defect. No experimental result changed this session.
+
+## Files Modified
+
+- New: `05_Thesis_Document/Figures/ideal_higher_mi_omega_schematic.png` — the ideal-expectation figure (saved so the thesis can show the expected behaviour that did not occur).
+- New: `06_Code/scripts/plot_ideal_omega_schematic.py` — script that regenerates that figure.
+- `context.md` — this section (append only).
+- Not committed on purpose (kept local): all PDFs in `Claude outputs/` (including the new `Higher_MI_Predictor_Complete_Explanation.pdf`) and the root-level `Higher_MI_Pruned_Explanation_Jonathan_V45_STANDALONE_ALL_FIXED.pdf`. The tracked file `Claude outputs/HigherMI_Zero_Gap_Walkthrough.pdf` shows as deleted in the working tree and that deletion is also left uncommitted.
