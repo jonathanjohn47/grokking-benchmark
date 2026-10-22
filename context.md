@@ -11638,3 +11638,29 @@ CLOSED-NEGATIVE, same pattern as L2, Dropout, Spectral, AGE, HTSR, Weight-PCA. T
 - New: `06_Code/scripts/plot_ideal_omega_schematic.py` — script that regenerates that figure.
 - `context.md` — this section (append only).
 - Not committed on purpose (kept local): all PDFs in `Claude outputs/` (including the new `Higher_MI_Predictor_Complete_Explanation.pdf`) and the root-level `Higher_MI_Pruned_Explanation_Jonathan_V45_STANDALONE_ALL_FIXED.pdf`. The tracked file `Claude outputs/HigherMI_Zero_Gap_Walkthrough.pdf` shows as deleted in the working tree and that deletion is also left uncommitted.
+
+
+---
+
+## Session Summary — 2026-10-23 (CLAUDE.md commit and push)
+
+- User asked: commit `CLAUDE.md` and push.
+- `CLAUDE.md` had 270 uncommitted added lines (project instructions: read context.md first, indian-english skill, teacher-first mode, one-step-at-a-time pacing, direct implementation, shared-model rule, postponed-work wording, predictor order, math pronunciation rules). It is now committed.
+- No code, experiment, predictor or result changed. Shared model and predictor files untouched.
+
+## Technical Decisions
+
+- None new.
+
+## User Instructions
+
+- Commit `CLAUDE.md` only (plus this context.md entry, as required by CLAUDE.md Section 9). The PDFs in `Claude outputs/` and the root-level V45 PDF stay local, as instructed earlier. The deletion of `Claude outputs/HigherMI_Zero_Gap_Walkthrough.pdf` also stays uncommitted.
+
+## Current Project State
+
+- Higher-MI remains CLOSED, negative (predictor 7 of 8). Next predictor in order: Commutator Defect. Unchanged.
+
+## Files Modified
+
+- `CLAUDE.md` — committed (270 lines added earlier, no new edits this session).
+- `context.md` — this section (append only).

@@ -682,3 +682,273 @@ The objective is:
 The communication requirement is explicit:
 
 > **The user is Indian and prefers Indian English. The `indian-english` skill must be applied to every user-facing response.**
+
+# Mathematical Pronunciation and Symbol Reading Rules
+
+## 1. Highest-priority rule
+
+When speaking mathematics, statistics, information theory, physics, or technical notation aloud, use the **standard mathematical pronunciation used by mathematicians and researchers**.
+
+- Pronounce symbols by their established mathematical names, not by guessing from their appearance.
+- Read the notation in its mathematical context. Do not treat subscripts, primes, superscripts, Greek letters, or operators as ordinary prose.
+- Preserve the exact distinction between symbols. For example, \(x\), \(x'\), \(x''\), and \(x_i\) are different expressions.
+- Use natural spoken mathematical English. Do not read LaTeX commands, punctuation, braces, or formatting instructions literally.
+- Never silently change a symbol, omit a prime, confuse a subscript with a superscript, or substitute one Greek letter for another.
+- If a symbol genuinely has multiple conventional readings, use the reading appropriate to its context. If the context is insufficient, state the ambiguity briefly.
+- Apply these rules consistently in voice mode and text-to-speech. Correct mathematical pronunciation is part of technical accuracy.
+
+## 2. Greek alphabet — standard English mathematical pronunciation
+
+Use these conventional names when reading Greek letters aloud.
+
+| Symbol | Name to speak | Symbol | Name to speak |
+|---|---|---|---|
+| Α α | alpha | Ν ν | nu (new / noo) |
+| Β β | beta (bay-tuh) | Ξ ξ | xi (ksee / zye, depending on convention) |
+| Γ γ | gamma | Ο ο | omicron (oh-MY-kron) |
+| Δ δ | delta | Π π | pi |
+| Ε ε | epsilon | Ρ ρ | rho (row) |
+| Ζ ζ | zeta (ZAY-tuh) | Σ σ ς | sigma |
+| Η η | eta (AY-tuh) | Τ τ | tau (rhymes with cow) |
+| Θ θ | theta (THAY-tuh) | Υ υ | upsilon (OOP-sih-lon / UP-sih-lon) |
+| Ι ι | iota (eye-OH-tuh) | Φ φ | phi (fie or fee, depending on convention) |
+| Κ κ | kappa | Χ χ | chi (kye or kai, depending on convention) |
+| Λ λ | lambda | Ψ ψ | psi (sigh) |
+| Μ μ | mu (mew / moo) | Ω ω | omega (oh-MAY-guh) |
+
+**Important pronunciation notes:**
+
+- Both uppercase and lowercase forms generally use the same letter name.
+- \(\epsilon\) and \(\varepsilon\) are both called epsilon; their written forms may distinguish different variants.
+- \(\phi\) and \(\varphi\) are both called phi.
+- \(\theta\) is theta, never “the letter O” or an invented name.
+- \(\mu\) is mu, not “m.”
+- \(\nu\) is nu, not “v.”
+- \(\rho\) is rho, not “p.”
+- \(\chi\) is chi, not the English word “ex.”
+- \(\xi\) is xi, not “zee.”
+- \(\psi\) is psi, not “p-s-y.”
+- Greek-letter pronunciation varies by English-speaking region and academic tradition. Choose a standard convention and remain consistent.
+
+## 3. Primes, subscripts, and superscripts
+
+These rules are mandatory. Do not confuse one notation with another.
+
+| Written notation | Correct spoken form |
+|---|---|
+| \(x\) | x |
+| \(x'\) | x-prime |
+| \(x''\) | x-double-prime |
+| \(x'''\) | x-triple-prime |
+| \(x^{(4)}\) | x to the fourth derivative / x superscript four, depending on context |
+| \(x_i\) | x sub i |
+| \(x_j\) | x sub j |
+| \(x_{ij}\) | x sub i j |
+| \(x_{i,j}\) | x sub i comma j |
+| \(x^2\) | x squared |
+| \(x^3\) | x cubed |
+| \(x^n\) | x to the power n |
+| \(x^{-1}\) | x to the power minus one |
+| \(x^{i}\) | x to the power i |
+| \(x_i^2\) | x sub i squared |
+| \(x_i'\) | x sub i prime |
+| \(x'_i\) | x-prime sub i |
+| \(x_{i}^{(t)}\) | x sub i superscript t in parentheses; use the domain-specific reading if established |
+| \(\alpha_i\) | alpha sub i |
+| \(\epsilon_i\) | epsilon sub i |
+| \(\epsilon_{ij}\) | epsilon sub i j |
+| \(\hat{x}\) | x-hat |
+| \(\bar{x}\) | x-bar |
+| \(\tilde{x}\) | x-tilde |
+| \(\dot{x}\) | x-dot |
+| \(\ddot{x}\) | x-double-dot |
+| \(\vec{x}\) | vector x / x-vector |
+| \(\mathbf{x}\) | bold x / vector x, depending on context |
+| \(\lvert x\rvert\) | absolute value of x |
+| \(\lVert x\rVert\) | norm of x |
+
+### Non-negotiable distinctions
+
+- \(x'\) = **x-prime**, not “x dash” by default.
+- \(x_i\) = **x sub i**, not “x to the i.”
+- \(x^i\) = **x to the power i**, not “x sub i.”
+- \(x_{ij}\) = **x sub i j**; use “x sub i comma j” if the written notation includes a comma.
+- \(x^{-1}\) may mean the reciprocal or an inverse, depending on context. Read the notation correctly and explain the meaning only when relevant.
+- \(x^{(t)}\) is not automatically a power. Parenthesized superscripts often denote time steps, iterations, or derivatives.
+
+## 4. Common mathematical operators and symbols
+
+| Symbol | Correct spoken form |
+|---|---|
+| \(+\) | plus |
+| \(-\) | minus |
+| \(\pm\) | plus or minus |
+| \(\times\) | times |
+| \(\cdot\) | dot / multiplied by |
+| \(/\) | divided by / over |
+| \(=\) | equals |
+| \(\neq\) | does not equal |
+| \(\approx\) | approximately equal to |
+| \(\equiv\) | equivalent to / identically equal to, depending on context |
+| \(<\) | less than |
+| \(>\) | greater than |
+| \(\leq\) | less than or equal to |
+| \(\geq\) | greater than or equal to |
+| \(\propto\) | proportional to |
+| \(\infty\) | infinity |
+| \(\in\) | belongs to / is an element of |
+| \(\notin\) | does not belong to |
+| \(\subseteq\) | is a subset of |
+| \(\subset\) | is a subset of / is properly contained in, according to convention |
+| \(\cup\) | union |
+| \(\cap\) | intersection |
+| \(\varnothing\) | empty set |
+| \(\forall\) | for all |
+| \(\exists\) | there exists |
+| \(\nexists\) | there does not exist |
+| \(\Rightarrow\) | implies |
+| \(\Leftrightarrow\) | if and only if |
+| \(\therefore\) | therefore |
+| \(\because\) | because |
+| \(\lceil x\rceil\) | ceiling of x |
+| \(\lfloor x\rfloor\) | floor of x |
+| \(\nabla\) | nabla / del |
+| \(\partial\) | partial |
+| \(\hbar\) | h-bar |
+| \(\mathbb{R}\) | the real numbers |
+| \(\mathbb{Z}\) | the integers |
+| \(\mathbb{N}\) | the natural numbers |
+| \(\mathbb{Q}\) | the rational numbers |
+| \(\mathbb{C}\) | the complex numbers |
+
+Choose wording based on mathematical meaning. Do not mechanically use “equals” for every relation: an implication is “implies,” and an equivalence is “if and only if.”
+
+## 5. Calculus and analysis
+
+| Notation | Correct spoken form |
+|---|---|
+| \(\frac{dy}{dx}\) | d y by d x / derivative of y with respect to x |
+| \(\frac{\partial f}{\partial x}\) | partial derivative of f with respect to x |
+| \(\frac{d^2y}{dx^2}\) | second derivative of y with respect to x |
+| \(\int f(x)\,dx\) | integral of f of x with respect to x |
+| \(\iint f(x,y)\,dx\,dy\) | double integral of f of x and y |
+| \(\oint\) | contour integral / closed line integral, depending on context |
+| \(\lim_{x\to a} f(x)\) | limit of f of x as x approaches a |
+| \(\sum_{i=1}^{n}x_i\) | sum from i equals one to n of x sub i |
+| \(\prod_{i=1}^{n}x_i\) | product from i equals one to n of x sub i |
+| \(\nabla f\) | gradient of f |
+| \(\nabla^2 f\) | Laplacian of f / del squared f, depending on context |
+| \(\frac{\partial^2 f}{\partial x\,\partial y}\) | mixed second partial derivative with respect to x and y |
+| \(f'(x)\) | f-prime of x |
+| \(f''(x)\) | f-double-prime of x |
+| \(\Delta x\) | delta x / change in x |
+| \(dx\) | d x / differential of x |
+
+## 6. Probability and statistics
+
+| Notation | Correct spoken form |
+|---|---|
+| \(P(X)\) | probability of X |
+| \(P(X\mid Y)\) | probability of X given Y |
+| \(X\sim \mathcal{N}(\mu,\sigma^2)\) | X follows a normal distribution with mean mu and variance sigma squared |
+| \(\mathbb{E}[X]\) | expected value of X |
+| \(\operatorname{Var}(X)\) | variance of X |
+| \(\operatorname{Cov}(X,Y)\) | covariance of X and Y |
+| \(\sigma^2\) | sigma squared |
+| \(\sigma\) | sigma |
+| \(\mu_X\) | mu sub X |
+| \(\hat{\theta}\) | theta-hat |
+| \(\bar{x}\) | x-bar / sample mean, depending on context |
+| \(s^2\) | s squared |
+| \(H_0\) | H naught / H zero |
+| \(H_1\) | H one |
+| \(p\)-value | p-value |
+| \(\Pr(X=x)\) | probability that X equals x |
+| \(X\perp Y\) | X is independent of Y, if this notation is being used for independence |
+| \(X\perp\!\!\!\perp Y\) | X is independent of Y |
+| \(X\mid Y\) | X given Y |
+| \(F_X(x)\) | F sub X of x |
+| \(f_{X,Y}(x,y)\) | f sub X comma Y of x and y |
+
+Do not confuse \(\sigma\) (sigma) with \(s\), \(\mu\) (mu) with \(u\), or \(\theta\) (theta) with an ordinary Latin letter.
+
+## 7. Information theory and machine learning
+
+| Notation | Correct spoken form |
+|---|---|
+| \(H(X)\) | entropy of X |
+| \(H(X\mid Y)\) | conditional entropy of X given Y |
+| \(I(X;Y)\) | mutual information between X and Y |
+| \(I(X;Y\mid Z)\) | conditional mutual information between X and Y given Z |
+| \(D_{\mathrm{KL}}(P\|Q)\) | Kullback–Leibler divergence from P to Q |
+| \(p(x)\) | p of x |
+| \(p(x,y)\) | joint probability of x and y |
+| \(p(x\mid y)\) | conditional probability of x given y |
+| \(\hat{p}(x)\) | p-hat of x |
+| \(\mathcal{L}(\theta)\) | loss function of theta / script L of theta |
+| \(\nabla_\theta \mathcal{L}\) | gradient of the loss with respect to theta |
+| \(\arg\max_x f(x)\) | the value of x that maximizes f of x |
+| \(\arg\min_x f(x)\) | the value of x that minimizes f of x |
+| \(\mathbb{R}^d\) | d-dimensional real space |
+| \(\mathbf{x}\in\mathbb{R}^d\) | vector x belongs to d-dimensional real space |
+| \(k\)-NN | k nearest neighbors |
+| \(\epsilon_i\) | epsilon sub i |
+| \(N_x\) | N sub x |
+| \(N_y\) | N sub y |
+| \(N_{xy}\) | N sub x y / N sub x comma y, according to the notation used |
+| \(d(x,y)\) | distance between x and y, if d denotes a distance function |
+| \(k=4\) | k equals four |
+| \(\log_2 x\) | log base two of x |
+| \(\ln x\) | natural log of x |
+| \(\exp(x)\) | exponential of x |
+
+Technical terms must be pronounced correctly too. For example, “Kullback–Leibler divergence,” “mutual information,” “nearest-neighbor estimator,” and “marginal distribution” should not be replaced with invented pronunciations.
+
+## 8. Matrices, vectors, and linear algebra
+
+| Notation | Correct spoken form |
+|---|---|
+| \(\mathbf{v}\) | vector v |
+| \(\mathbf{A}\) | matrix A |
+| \(A^\top\) | A transpose |
+| \(A^{-1}\) | A inverse |
+| \(A_{ij}\) | A sub i j |
+| \(\det(A)\) | determinant of A |
+| \(\operatorname{tr}(A)\) | trace of A |
+| \(\langle x,y\rangle\) | inner product of x and y |
+| \(\|x\|_2\) | L-two norm of x |
+| \(\lambda\) | lambda |
+| \(\lambda_i\) | lambda sub i |
+| \(\mathbf{A}\mathbf{x}=\mathbf{b}\) | matrix A times vector x equals vector b |
+| \(A\perp B\) | A is perpendicular to B, when used geometrically |
+
+## 9. Reading equations aloud
+
+Read equations as complete mathematical statements, not as a disconnected sequence of characters.
+
+Examples:
+
+- \(x'=x+\epsilon\): “x-prime equals x plus epsilon.”
+- \(x_i=x'_i\): “x sub i equals x-prime sub i.”
+- \(I(X;Y)=H(X)+H(Y)-H(X,Y)\): “Mutual information between X and Y equals the entropy of X plus the entropy of Y minus the joint entropy of X and Y.”
+- \(\epsilon_i<\epsilon_j\): “Epsilon sub i is less than epsilon sub j.”
+- \(\sum_{i=1}^{n}x_i\): “The sum of x sub i from i equals one to n.”
+- \(\frac{\partial f}{\partial x}\): “The partial derivative of f with respect to x.”
+
+When a technical term has a clear semantic reading, prefer it over a literal symbol-by-symbol reading. When the user is learning notation itself, use the explicit symbol names.
+
+## 10. Voice-mode quality control
+
+Before speaking any technical answer, silently verify:
+
+1. Every Greek letter is identified correctly.
+2. Every prime, double-prime, subscript, superscript, hat, bar, and vector marker is preserved.
+3. Similar-looking Latin and Greek letters are not confused.
+4. Operators and mathematical relations are read according to their meaning.
+5. The spoken equation matches the written equation exactly.
+6. Pronunciation remains consistent throughout the explanation.
+7. No symbol is skipped or replaced just to make the sentence sound smoother.
+
+If speech synthesis cannot reliably pronounce a symbol, say its name explicitly. Do not guess, mumble, or substitute an incorrect reading.
+
+**Final priority:** Mathematical correctness comes before conversational fluency. Speak the notation correctly, explain the reasoning, complete the requested work, and stop. Do not append unnecessary questions or invitations to continue.
