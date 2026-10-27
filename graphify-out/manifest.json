@@ -1910,13 +1910,13 @@
     "semantic_hash": ""
   },
   "06_Code/scripts/plot_higher_mi_curves.py": {
-    "mtime": 1790975413.940562,
-    "ast_hash": "78c8daa8995d267f51e55dd4d97ba23d",
+    "mtime": 1793099666.51923,
+    "ast_hash": "e589c3a10618d2f9a8f68c1950318d01",
     "semantic_hash": ""
   },
   "06_Code/scripts/plot_ideal_omega_schematic.py": {
-    "mtime": 1792685994.4416006,
-    "ast_hash": "7790955af7617b302b4f96d7ed1428be",
+    "mtime": 1793099612.354294,
+    "ast_hash": "6a6a6858f860fae6bd47f87cb436828b",
     "semantic_hash": ""
   },
   "06_Code/src/predictors/higher_mi.py": {
@@ -2034,24 +2034,109 @@
     "ast_hash": "85bc93b8c08d4a924ddf4743998e2cca",
     "semantic_hash": ""
   },
-  "05_Thesis_Document/Figures/ideal_higher_mi_omega_schematic.png": {
-    "mtime": 1792685996.7966197,
-    "ast_hash": "cffa5db91f2775275bfb28807a20af0f",
-    "semantic_hash": ""
-  },
-  "08_Experiments/results/nanda_unified/reports/higher_mi_population_omega_all_seeds.png": {
-    "mtime": 1790975420.001058,
-    "ast_hash": "4e29740d5145876539337effdd6d6fc9",
-    "semantic_hash": ""
-  },
-  "08_Experiments/results/nanda_unified/reports/higher_mi_population_vs_temporal_seed0.png": {
-    "mtime": 1790975420.1363769,
-    "ast_hash": "3789354cb7f85ecf43340b0c7fe0c1e0",
-    "semantic_hash": ""
-  },
   "Claude outputs/02_signals_vs_grok_weight_pca.png": {
     "mtime": 1790880502.2355945,
     "ast_hash": "3548ebe174d28d4d778b2cf9dab30cb9",
+    "semantic_hash": ""
+  },
+  "Claude outputs/_hmi_data_tmp.json": {
+    "mtime": 1792708572.6633005,
+    "ast_hash": "eccf86ee69df084c4021a5dcc164774a",
+    "semantic_hash": ""
+  },
+  ".agents/skills/indian-english/SKILL.md": {
+    "mtime": 1793059899.0887148,
+    "ast_hash": "2c81e8b4d5f9dd5ee3bbf6fee5000c13",
+    "semantic_hash": ""
+  },
+  "05_Thesis_Document/Figures/README.md": {
+    "mtime": 1793099603.5052068,
+    "ast_hash": "b812d08da9a21e904bf97f5fa729eaec",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/reports/README.md": {
+    "mtime": 1793099603.5289054,
+    "ast_hash": "71f385f74f33de537974bba49a88b8ef",
+    "semantic_hash": ""
+  },
+  "AGENTS.md": {
+    "mtime": 1793059899.0879884,
+    "ast_hash": "22991cc8f87fb30dc72a4a659d16208c",
+    "semantic_hash": ""
+  },
+  "IBM_Plex_Serif/OFL.txt": {
+    "mtime": 1792789404.0,
+    "ast_hash": "992dcb568e1ffac11f740ee2fa1f028b",
+    "semantic_hash": ""
+  },
+  "Mukta/OFL.txt": {
+    "mtime": 1792789294.0,
+    "ast_hash": "4f6c28f9829b84567f6995aa9ea15697",
+    "semantic_hash": ""
+  },
+  "report_instructions.md": {
+    "mtime": 1793069904.4230692,
+    "ast_hash": "9fbfe7b610b7f1127f3397f3ed2937f2",
+    "semantic_hash": ""
+  },
+  "02_Progress_Reports/2026-10-27_Progress_Report_Higher_MI.pdf": {
+    "mtime": 1793099157.2519565,
+    "ast_hash": "c4fd8bf0bf0b08d87c9af310b80f03f0",
+    "semantic_hash": ""
+  },
+  "ChatGPT Outputs/Higher_MI_Method_and_Results_Textbook_Style.pdf": {
+    "mtime": 1793061067.944204,
+    "ast_hash": "9021ef1bafd0005ac63bf8c44bd3ee24",
+    "semantic_hash": ""
+  },
+  "ChatGPT Outputs/KSG_Estimator_From_First_Principles.pdf": {
+    "mtime": 1793073325.4501348,
+    "ast_hash": "1bbd0def869ed214c1c9e02f67a2a353",
+    "semantic_hash": ""
+  },
+  "Claude outputs/Higher_MI_First_Principles_Guide.pdf": {
+    "mtime": 1792709876.8383996,
+    "ast_hash": "ba403dc8a41e8631c1a1a0336331c35e",
+    "semantic_hash": ""
+  },
+  "Claude outputs/Higher_MI_Method_and_Results.pdf": {
+    "mtime": 1792793938.4454696,
+    "ast_hash": "e0dcecca6d80fefd722fd700fea9f1b6",
+    "semantic_hash": ""
+  },
+  "Claude outputs/Higher_MI_Visual_Guide.pdf": {
+    "mtime": 1792709175.4952457,
+    "ast_hash": "b9a4c835fdabaeaa711ddd14a1837f80",
+    "semantic_hash": ""
+  },
+  "Claude outputs/KSG_Estimator_From_First_Principles.pdf": {
+    "mtime": 1793073170.4317954,
+    "ast_hash": "1bbd0def869ed214c1c9e02f67a2a353",
+    "semantic_hash": ""
+  },
+  "Higher_MI_Textbook_LaTeX/Higher_MI_Method_and_Results_Textbook_Style.pdf": {
+    "mtime": 1793097718.3531296,
+    "ast_hash": "e9d4e1efc49e438e9b0ea62edda451f6",
+    "semantic_hash": ""
+  },
+  "Higher_MI_Textbook_LaTeX/main.pdf": {
+    "mtime": 1793097718.6432233,
+    "ast_hash": "52909cde9326f206442610d993124a47",
+    "semantic_hash": ""
+  },
+  "05_Thesis_Document/Figures/schematics/schematic_not_measured_ideal_higher_mi_omega.png": {
+    "mtime": 1793099700.549975,
+    "ast_hash": "1df4330f1c8e3156bfbb05f0d8d050bb",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/reports/measured/measured_higher_mi_population_omega_all_seeds.png": {
+    "mtime": 1793099699.7100813,
+    "ast_hash": "d3b592c4f2b073c5c9de99dc63aac553",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/reports/measured/measured_higher_mi_population_vs_temporal_seed0.png": {
+    "mtime": 1793099699.8274012,
+    "ast_hash": "ad9832364baabbfd8629a7ffd0bdcaef",
     "semantic_hash": ""
   }
 }

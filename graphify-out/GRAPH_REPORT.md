@@ -1,16 +1,16 @@
-# Graph Report - grokking-benchmark  (2026-10-23)
+# Graph Report - grokking-benchmark  (2026-10-27)
 
 ## Corpus Check
-- 167 files · ~1,093,297 words
+- 173 files · ~1,512,085 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 676 nodes · 809 edges · 64 communities (49 shown, 15 thin omitted)
+- 752 nodes · 881 edges · 76 communities (60 shown, 16 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ff47a288`
+- Built from commit: `9764a525`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -66,18 +66,29 @@
 - [[_COMMUNITY_Community 56|Community 56]]
 - [[_COMMUNITY_Community 57|Community 57]]
 - [[_COMMUNITY_Community 58|Community 58]]
+- [[_COMMUNITY_Community 64|Community 64]]
+- [[_COMMUNITY_Community 65|Community 65]]
+- [[_COMMUNITY_Community 66|Community 66]]
+- [[_COMMUNITY_Community 67|Community 67]]
+- [[_COMMUNITY_Community 68|Community 68]]
+- [[_COMMUNITY_Community 69|Community 69]]
+- [[_COMMUNITY_Community 70|Community 70]]
+- [[_COMMUNITY_Community 71|Community 71]]
+- [[_COMMUNITY_Community 72|Community 72]]
+- [[_COMMUNITY_Community 73|Community 73]]
+- [[_COMMUNITY_Community 74|Community 74]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `PredictorMeasurements` - 19 edges
 2. `Indian English Communication Skill` - 16 edges
 3. `train_one_seed()` - 15 edges
-4. `PredictorMeasurements` - 11 edges
-5. `L2 Norm Predictor — Easy Notes for Revision and Viva` - 11 edges
-6. `main()` - 10 edges
+4. `Mathematical Pronunciation and Symbol Reading Rules` - 11 edges
+5. `PredictorMeasurements` - 11 edges
+6. `L2 Norm Predictor — Easy Notes for Revision and Viva` - 11 edges
 7. `main()` - 10 edges
-8. `BenchmarkAnalyzer` - 10 edges
-9. `Literature` - 10 edges
-10. `PredictorMeasurements` - 9 edges
+8. `main()` - 10 edges
+9. `BenchmarkAnalyzer` - 10 edges
+10. `Literature` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `train_one_seed()` --calls--> `PredictorMeasurements`  [INFERRED]
@@ -97,7 +108,7 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (64 total, 15 thin omitted)
+## Communities (76 total, 16 thin omitted)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.06
@@ -148,8 +159,8 @@ Cohesion: 0.15
 Nodes (17): compute_weight_pca_for_model(), compute_weight_pca_metrics_for_checkpoint(), effective_rank(), find_global_minimum_epoch(), find_steepest_drop_epoch(), find_threshold_crossing_epoch(), _layer_singular_values(), Weight-PCA predictor (Predictor 7 of 8) — Spectral Dynamics / Rank Minimization (+9 more)
 
 ### Community 14 - "Community 14"
-Cohesion: 0.08
-Nodes (41): compute_accuracy(), compute_dropout_gap_multi_rate(), compute_dropout_variance(), # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, Dropout-variance predictor signal (Salah & Yevick, arXiv:2507.11645):     at a f, aggregate(), apply_config_constants(), _checkpoint_predictor_dropout_variance() (+33 more)
+Cohesion: 0.06
+Nodes (50): compute_accuracy(), compute_dropout_gap_multi_rate(), compute_dropout_variance(), # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, Dropout-variance predictor signal (Salah & Yevick, arXiv:2507.11645):     at a f, _collect_representations_and_labels(), compute_spectral_for_model(), compute_spectral_metrics_for_checkpoint() (+42 more)
 
 ### Community 15 - "Community 15"
 Cohesion: 0.33
@@ -228,8 +239,8 @@ Cohesion: 0.40
 Nodes (4): data/modular_arithmetic.py, models/transformer.py, Python Project Compilation, train.py
 
 ### Community 46 - "Community 46"
-Cohesion: 0.24
-Nodes (9): _collect_representations_and_labels(), compute_spectral_for_model(), compute_spectral_metrics_for_checkpoint(), Spectral predictor (Predictor 3 of 9) — FAITHFUL Canatar et al. 2021.  Paper: Ab, Canatar et al. 2021 task-model-alignment metrics for ONE frozen     model checkp, Thin wrapper kept for run_nanda_benchmark.py's import. One frozen     checkpoint, Run the model over the full training split and capture, per example,     the hid, _checkpoint_predictor_spectral() (+1 more)
+Cohesion: 0.17
+Nodes (12): 10. Voice-mode quality control, 1. Highest-priority rule, 2. Greek alphabet — standard English mathematical pronunciation, 3. Primes, subscripts, and superscripts, 4. Common mathematical operators and symbols, 5. Calculus and analysis, 6. Probability and statistics, 7. Information theory and machine learning (+4 more)
 
 ### Community 47 - "Community 47"
 Cohesion: 0.24
@@ -243,24 +254,64 @@ Nodes (4): load_seed_higher_mi(), main(), plot_population_all_seeds(), plot_popu
 Cohesion: 0.67
 Nodes (3): compute_accuracy(), compute_dropout_gap_multi_rate(), # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate
 
+### Community 64 - "Community 64"
+Cohesion: 0.18
+Nodes (10): 10. GIT COMMIT RULE, 11. IMPORTANT PROJECT RULE — SHARED MODEL ARCHITECTURE, 12. PENDING / POSTPONED WORK, 15. NON-NEGOTIABLE PROJECT RULES, 1. MANDATORY PRECURSOR — READ `context.md` FIRST, 2. MANDATORY COMMUNICATION SKILL — `indian-english`, 3. PROJECT IDENTITY, 4. CORE ROLE — TEACHER FIRST (+2 more)
+
+### Community 65 - "Community 65"
+Cohesion: 0.22
+Nodes (9): 5. LEARNING PACE — ONE STEP AT A TIME, Code explanations, Default teaching style, Progressive disclosure, Questions, Reduce cognitive load, Roadmaps, Stop rule (+1 more)
+
+### Community 66 - "Community 66"
+Cohesion: 0.29
+Nodes (7): 9. PROJECT MEMORY — `context.md`, Current Project State, Files Modified, Important Discoveries, Session Summary, Technical Decisions, User Instructions
+
+### Community 67 - "Community 67"
+Cohesion: 0.33
+Nodes (6): 13. PROJECT-SPECIFIC RULES, Experiment prerequisite, External services, Hardware target, Predictor evaluation order, Spreadsheet policy
+
+### Community 68 - "Community 68"
+Cohesion: 0.33
+Nodes (6): 14. HOW TO EXPLAIN TECHNICAL CHANGES, What are we doing now?, What changed?, What did not change?, What happens later?, Why did we change it?
+
+### Community 69 - "Community 69"
+Cohesion: 0.40
+Nodes (5): 16. FINAL COMMUNICATION CHECK, American-English check, Skill check, Style check, User check
+
+### Community 70 - "Community 70"
+Cohesion: 0.40
+Nodes (5): 6. MANDATORY PROJECT WORKFLOW, Step 1 — Read `context.md`, Step 2 — Inspect Graphify, Step 3 — Understand before changing, Step 4 — Mentor mode
+
+### Community 71 - "Community 71"
+Cohesion: 0.40
+Nodes (4): Figure organisation, General rule, Measured experiment figures, Schematics and hypothetical figures
+
+### Community 72 - "Community 72"
+Cohesion: 0.67
+Nodes (3): 8. DIRECT IMPLEMENTATION — Codex DOES THE WORK ITSELF, Default rule, When implementing directly
+
+### Community 73 - "Community 73"
+Cohesion: 0.67
+Nodes (3): Communication priority, MANDATORY COMMUNICATION SKILL, Mandatory pre-send check
+
 ## Knowledge Gaps
-- **130 isolated node(s):** `Purpose`, `1. Non-negotiable rule`, `2. What Indian English means here`, `3. Do not confuse Indian English with simple English`, `4. Preferred Indian teaching voice` (+125 more)
+- **189 isolated node(s):** `Purpose`, `1. Non-negotiable rule`, `2. What Indian English means here`, `3. Do not confuse Indian English with simple English`, `4. Preferred Indian teaching voice` (+184 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **15 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **16 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `train_one_seed()` connect `Community 14` to `Community 19`, `Community 22`?**
-  _High betweenness centrality (0.032) - this node is a cross-community bridge._
+  _High betweenness centrality (0.026) - this node is a cross-community bridge._
 - **Why does `PredictorMeasurements` connect `Community 19` to `Community 14`?**
-  _High betweenness centrality (0.024) - this node is a cross-community bridge._
+  _High betweenness centrality (0.019) - this node is a cross-community bridge._
 - **Why does `compute_sum_of_squared_weights()` connect `Community 22` to `Community 14`?**
-  _High betweenness centrality (0.009) - this node is a cross-community bridge._
+  _High betweenness centrality (0.007) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `PredictorMeasurements` (e.g. with `recompute_from_checkpoints()` and `train_one_seed()`) actually correct?**
   _`PredictorMeasurements` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `First epoch at which y has covered `f` of the way from its start to     its fart`, `First epoch after the (smoothed) sum-of-squares peak at which it has     fallen`, `events[predictor_signal][seed] = epoch.` to the rest of the system?**
-  _289 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `Purpose`, `1. Non-negotiable rule`, `2. What Indian English means here` to the rest of the system?**
+  _348 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 1` be split into smaller, more focused modules?**
   _Cohesion score 0.058823529411764705 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**

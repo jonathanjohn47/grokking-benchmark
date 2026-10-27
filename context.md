@@ -11741,3 +11741,10 @@ CLOSED-NEGATIVE, same pattern as L2, Dropout, Spectral, AGE, HTSR, Weight-PCA. T
 
 - `context.md` — this append-only commit record.
 - All other current tracked, deleted, and untracked project files are included by the user's instruction to commit everything.
+
+## Post-Commit Hook Update — 2026-10-27
+
+- Commit `9764a52` (`Organize Higher-MI figures and add progress materials`) was created and pushed to `origin/main`.
+- Its post-commit Graphify hook rebuilt the project graph against the committed files and refreshed six tracked outputs under `graphify-out/`.
+- Those regenerated Graphify outputs are being committed and pushed in a follow-up commit so the worktree can be verified clean.
+- This graph refresh changes project documentation and generated graph metadata only. It does not change experiment data, scores, or predictor conclusions.
