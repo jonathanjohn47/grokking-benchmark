@@ -10,12 +10,12 @@ analyze_nanda_unified.py's scored table, per Jonathan's own stated practice:
 two plots are exactly that raw look, nothing more -- no event-epoch lines,
 no PASS/FAIL, no frozen-protocol scoring here.
 
-Plot 1 (higher_mi_population_omega_all_seeds.png): Omega_population(t) vs.
+Plot 1 (measured_higher_mi_population_omega_all_seeds.png): Omega_population(t) vs.
 epoch, one subplot per seed, with a vertical line at that seed's
 grok_epoch -- same "stacked per-seed subplot" convention as
 analyze_nanda_unified.py's own plot_signals.
 
-Plot 2 (higher_mi_population_vs_temporal_seed0.png): seed 0's population
+Plot 2 (measured_higher_mi_population_vs_temporal_seed0.png): seed 0's population
 signal side by side with its temporal/windowed EXPLORATORY CONTROL signal
 (W=100, stride=10) -- the direct comparison meant to test the population
 signal's shared-example-difficulty confound risk (see higher_mi.py module
@@ -23,7 +23,7 @@ docstring, "MAJOR ADAPTATION" / "EXPLORATORY CONTROL").
 
 Usage (from the repo root):
     python 06_Code/scripts/plot_higher_mi_curves.py
-Outputs go to 08_Experiments/results/nanda_unified/reports/.
+Outputs go to 08_Experiments/results/nanda_unified/reports/measured/.
 """
 import json
 import os
@@ -35,7 +35,7 @@ import matplotlib.pyplot as plt
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 RESULTS = os.path.join(REPO_ROOT, "08_Experiments", "results", "nanda_unified")
-REPORTS = os.path.join(RESULTS, "reports")
+REPORTS = os.path.join(RESULTS, "reports", "measured")
 
 
 def load_seed_higher_mi(seed):
@@ -103,11 +103,11 @@ def main():
     seeds = sorted(int(n.split("_")[1]) for n in os.listdir(RESULTS) if n.startswith("seed_"))
     runs = [load_seed_higher_mi(s) for s in seeds]
 
-    p1 = os.path.join(REPORTS, "higher_mi_population_omega_all_seeds.png")
+    p1 = os.path.join(REPORTS, "measured_higher_mi_population_omega_all_seeds.png")
     plot_population_all_seeds(runs, p1)
     print(f"Wrote {p1}")
 
-    p2 = os.path.join(REPORTS, "higher_mi_population_vs_temporal_seed0.png")
+    p2 = os.path.join(REPORTS, "measured_higher_mi_population_vs_temporal_seed0.png")
     plot_population_vs_temporal_seed0(runs[0], p2)
     print(f"Wrote {p2}")
 

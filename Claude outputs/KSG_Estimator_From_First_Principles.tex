@@ -1,0 +1,368 @@
+\documentclass[11pt,letterpaper,oneside]{report}
+\usepackage[margin=0.82in,headheight=15pt,headsep=0.22in,footskip=0.38in]{geometry}
+\usepackage{newtxtext,newtxmath}
+\usepackage{amsmath}
+\usepackage{array,booktabs,tabularx,longtable}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\setstretch{1.04}
+\setlength{\parindent}{1.5em}
+\setlength{\parskip}{2.5pt}
+\setlist[enumerate]{leftmargin=2.2em,itemsep=2pt,topsep=4pt}
+\setlist[itemize]{leftmargin=2.0em,itemsep=2pt,topsep=4pt}
+\definecolor{notegray}{gray}{0.94}
+
+\titleformat{\chapter}[display]
+  {\normalfont\bfseries\centering}
+  {\fontsize{25}{29}\selectfont\thechapter}
+  {8pt}
+  {\Huge}
+  [\vspace{0.8ex}\titlerule]
+\titlespacing*{\chapter}{0pt}{-22pt}{20pt}
+\titleformat{\section}
+  {\normalfont\bfseries\large}
+  {\thesection}
+  {0.8em}
+  {\MakeUppercase}
+\titlespacing*{\section}{0pt}{12pt}{4pt}
+\titleformat{\subsection}
+  {\normalfont\bfseries\normalsize}
+  {\thesubsection}
+  {0.8em}
+  {}
+\titlespacing*{\subsection}{0pt}{8pt}{3pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\thepage}
+\fancyhead[R]{\small\itshape KSG Estimator: A First-Principles Guide}
+\renewcommand{\headrulewidth}{0pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyhead[L]{\small\thepage}\fancyhead[R]{\small\itshape KSG Estimator: A First-Principles Guide}\renewcommand{\headrulewidth}{0pt}}
+
+\newcommand{\KSG}{\textsc{KSG}}
+\newcommand{\epsk}{\varepsilon_k}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\Ans}{\hfill\textbf{Ans.}}
+\newcommand{\Note}[1]{\par\noindent\colorbox{notegray}{\parbox{0.965\linewidth}{\textbf{Note.} #1}}\par}
+
+\begin{document}
+\chapter{KSG Estimator: A First-Principles Guide}
+
+\section{What This Guide Covers}
+
+You already know information theory up to O-information. This guide starts at the next practical question: when we have a finite list of paired observations, how can we estimate mutual information without first choosing histogram bins or writing down a probability-density formula?
+
+The answer developed by Kraskov, St\"ogbauer and Grassberger is a nearest-neighbour estimator. It uses the local spacing of sample points to set an adaptive scale, counts nearby points in the relevant coordinate spaces, and combines those counts through the digamma function. The same geometric idea can estimate conditional mutual information, which is the other quantity needed in your O-information calculation.
+
+The guide moves from one geometric picture to the estimator, then to a fully worked small example, conditional mutual information, implementation checks, and the connection with the project's Higher-MI code. It does not repeat the general development of information theory.
+
+\Note{\KSG{} is an \emph{estimator}: it gives an estimate from finite data. It is not a new definition of mutual information, and its output is not guaranteed to equal the unknown population value exactly.}
+
+\section{The Data Problem KSG Solves}
+
+Suppose each observation gives two real numbers, one value of $X$ and its paired value of $Y$. With $T$ observations, the data are
+\[
+  (x_1,y_1),\ (x_2,y_2),\ldots,(x_T,y_T).
+\]
+Together, these points form a cloud in the joint $X$--$Y$ plane. If nearby points in the plane are also packed closely along each axis, the local pattern may be compatible with weak dependence. If the cloud lies along a narrow curve, knowing $X$ may sharply constrain $Y$, even if that curve is not a straight line.
+
+A histogram approach divides the plane into rectangular bins. Its answer can change when the bin width or grid position changes. \KSG{} avoids selecting one global bin width. Around each sample point, it first finds a local radius based on the $k$th nearest neighbour in the joint plane. Dense parts of the data receive small radii; sparse parts receive larger radii. This is the sense in which the scale adapts to the observed data.
+
+\paragraph{The key idea.} Use one joint-space radius for a point, then ask how many observations fall inside that radius after looking only at $X$, and only at $Y$. Those marginal counts describe how the joint neighbourhood projects onto each axis.
+
+\section{Distance and the Neighbourhood}
+
+\subsection{The maximum norm}
+
+The common \KSG-1 setup uses the maximum norm, also called the Chebyshev norm. For two points $u=(x,y)$ and $v=(x',y')$,
+\begin{equation}
+  \lVert u-v\rVert_\infty = \max\bigl(|x-x'|,|y-y'|\bigr).
+\end{equation}
+In words, this distance is whichever coordinate differs more. In three dimensions,
+\begin{equation}
+  \lVert (x,y,z)-(x',y',z')\rVert_\infty
+  =\max\bigl(|x-x'|,|y-y'|,|z-z'|\bigr).
+\end{equation}
+Under this metric, a ball is an axis-aligned square in two dimensions and an axis-aligned cube in three dimensions.
+
+For observation $i$, let $\epsk(i)$ be its distance to its $k$th nearest \emph{other} observation in the joint space $(X,Y)$. The sample point itself is excluded from the neighbour ranking. If $k=4$, the radius reaches the fourth other point.
+
+\subsection{Projecting the radius onto each variable}
+
+Once $\epsk(i)$ is found, keep that same numerical radius and look in the one-dimensional marginal spaces:
+\begin{align}
+  n_x(i) &= \#\{j\ne i: |x_j-x_i|<\epsk(i)\},\\
+  n_y(i) &= \#\{j\ne i: |y_j-y_i|<\epsk(i)\}.
+\end{align}
+The symbol $\#$ means “number of points in the set”. Both counts exclude the centre point $i$.
+
+\Note{The marginal searches use the joint-space radius; they do not independently find a $k$th neighbour in $X$ and another $k$th neighbour in $Y$. That shared radius is central to the estimator.}
+
+\subsection{Why the boundary is strict}
+
+The marginal count uses distance strictly less than $\epsk(i)$. A point at exactly the radius is on the boundary and is not counted. This detail matters under the maximum norm: the coordinate that determines the joint distance often equals the radius exactly. Counting it with an inclusive comparison changes the neighbour count and therefore changes the estimate.
+
+In the project's implementation, the spatial-tree query normally includes points at the radius. The code therefore queries at the immediately smaller floating-point number, using $\texttt{nextafter}(\epsk,0)$, and subtracts the centre point from the result. This implements the required strict count. The implementation was checked against a direct pairwise calculation in the project history.
+
+\section{KSG-1 for Mutual Information}
+
+\subsection{The estimator equation}
+
+For paired continuous observations, the KSG-1 estimate is
+\begin{equation}
+  \widehat I_{\mathrm{KSG1}}(X;Y)
+  = \psi(k)+\psi(T)
+  -\frac{1}{T}\sum_{i=1}^{T}
+    \left[\psi\bigl(n_x(i)+1\bigr)+\psi\bigl(n_y(i)+1\bigr)\right].
+  \label{eq:ksg1}
+\end{equation}
+Here $T$ is the sample count, $k$ is the selected neighbour count, and $\psi$ is the digamma function. The summation gives one contribution per centre point; the estimator averages those contributions over all $T$ observations.
+
+The added $1$ inside $\psi(n_x+1)$ and $\psi(n_y+1)$ belongs to this KSG-1 formula. The marginal counts themselves exclude the centre point. Do not replace the equation with a version that counts the centre point and then keeps the same $+1$; that would be a different convention.
+
+\subsection{What the digamma function is doing}
+
+The digamma function is the logarithmic derivative of the gamma function:
+\begin{equation}
+  \psi(u)=\frac{\dd}{\dd u}\ln\Gamma(u).
+\end{equation}
+You do not need to evaluate the gamma function to use \KSG. For positive integers, its values can be written using harmonic numbers:
+\begin{equation}
+  \psi(m+1)=H_m-\gamma,
+  \qquad H_m=\sum_{r=1}^{m}\frac{1}{r},
+\end{equation}
+where $\gamma$ is Euler's constant. This identity also makes the small worked calculation below possible by hand.
+
+Conceptually, the digamma terms turn local neighbour counts into smooth log-density-like corrections. The joint radius is shared across spaces, so scale terms that would appear when separately estimating differential entropies largely cancel. The remaining expression depends on how the local counts compare between the joint cloud and its projections.
+
+\subsection{How to read the terms}
+
+The terms $\psi(k)$ and $\psi(T)$ are global corrections determined by the neighbour setting and total sample size. For each observation, $\psi(n_x+1)+\psi(n_y+1)$ records how many points fit within the same radius on each marginal axis. The final minus sign means that larger marginal counts reduce the estimate when $k$ and $T$ are held fixed.
+
+This is not a rule that “more neighbours always means less information”. The counts, radii and averaging all change together. The equation is a calibrated estimator, not a one-count score.
+
+\section{A Fully Worked Small Example}
+
+This example uses a deliberately chosen synthetic dataset only to show the mechanics. These coordinates are not measurements from the thesis, are not learned values, and are not meant to represent a particular dependence pattern. We choose $k=1$ and five points so every distance and count can be inspected.
+
+\begin{center}
+\begin{tabular}{c|rr}
+\toprule
+Point & $x$ & $y$\\
+\midrule
+A & $0$ & $0$\\
+B & $1$ & $0.2$\\
+C & $0.2$ & $1.4$\\
+D & $2$ & $2.1$\\
+E & $4.5$ & $1$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+For each centre, calculate its maximum-norm distance to every other point, then select the smallest distance because $k=1$.
+
+\begin{enumerate}[label=\textbf{Point \Alph*.}]
+\item Centre A: distances to B, C, D, E are $\max(1,0.2)=1$, $\max(0.2,1.4)=1.4$, $\max(2,2.1)=2.1$, and $\max(4.5,1)=4.5$. Thus $\epsk(A)=1$, set by B. In $X$, the strict distances are $|1-0|=1$ (boundary), $|0.2-0|=0.2$ (inside), $|2-0|=2$ (outside), and $|4.5-0|=4.5$ (outside), so $n_x(A)=1$. In $Y$, the distances are $0.2$ (inside), $1.4$ (outside), $2.1$ (outside), and $1$ (boundary), so $n_y(A)=1$.
+\item Centre B: distances to A, C, D, E are $1$, $1.2$, $1.9$, and $3.5$. Thus $\epsk(B)=1$, set by A. In $X$, the distances to A, C, D, E are $1$, $0.8$, $1$, and $3.5$; only $0.8$ is strictly inside, so $n_x(B)=1$. In $Y$, the distances are $0.2$, $1.2$, $1.9$, and $0.8$; two are strictly inside, so $n_y(B)=2$.
+\item Centre C: distances to A, B, D, E are $1.4$, $1.2$, $1.8$, and $4.3$. Thus $\epsk(C)=1.2$, set by B. In $X$, distances $0.2$ and $0.8$ are inside while $1.8$ and $4.3$ are outside, so $n_x(C)=2$. In $Y$, the distances are $1.4$ (outside), $1.2$ (boundary), $0.7$ (inside), and $0.4$ (inside), so $n_y(C)=2$.
+\item Centre D: distances to A, B, C, E are $2.1$, $1.9$, $1.8$, and $2.5$. Thus $\epsk(D)=1.8$, set by C. In $X$, the distances to A, B, C, E are $2$, $1$, $1.8$, and $2.5$; only $1$ is inside, so $n_x(D)=1$. In $Y$, the distances are $2.1$, $1.9$, $0.7$, and $1.1$; the last two are inside, so $n_y(D)=2$.
+\item Centre E: distances to A, B, C, D are $4.5$, $3.5$, $4.3$, and $2.5$. Thus $\epsk(E)=2.5$, set by D. In $X$, the distances are $4.5$, $3.5$, $4.3$, and $2.5$; the last is on the boundary and none is strictly inside, so $n_x(E)=0$. In $Y$, the distances are $1$, $0.8$, $0.4$, and $1.1$; all four are strictly inside, so $n_y(E)=4$.
+\end{enumerate}
+
+The results can be collected as follows.
+\begin{center}
+\begin{tabular}{c|c|rr}
+\toprule
+Centre & Nearest point setting $\epsk(i)$ & $n_x(i)$ & $n_y(i)$\\
+\midrule
+A & B, radius $1$ & $1$ & $1$\\
+B & A, radius $1$ & $1$ & $2$\\
+C & B, radius $1.2$ & $2$ & $2$\\
+D & C, radius $1.8$ & $1$ & $2$\\
+E & D, radius $2.5$ & $0$ & $4$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Now substitute every count into Equation~\ref{eq:ksg1}. Since $k=1$ and $T=5$,
+\begin{align*}
+\widehat I_{\mathrm{KSG1}}
+={}&\psi(1)+\psi(5)\\
+&-\frac{1}{5}\Bigl[
+  \psi(1+1)+\psi(1+1)\\
+&\hspace{3.8em}+\psi(1+1)+\psi(2+1)\\
+&\hspace{3.8em}+\psi(2+1)+\psi(2+1)\\
+&\hspace{3.8em}+\psi(1+1)+\psi(2+1)\\
+&\hspace{3.8em}+\psi(0+1)+\psi(4+1)\Bigr].
+\end{align*}
+Using $\psi(1)=-\gamma$, $\psi(2)=1-\gamma$, $\psi(3)=\frac{3}{2}-\gamma$, and $\psi(5)=\frac{25}{12}-\gamma$,
+\begin{align*}
+\widehat I_{\mathrm{KSG1}}
+={}&-\gamma+\left(\frac{25}{12}-\gamma\right)\\
+&-\frac{1}{5}\Bigl[
+ (1-\gamma)+(1-\gamma)\\
+&\hspace{3.8em}+(1-\gamma)+\left(\frac{3}{2}-\gamma\right)\\
+&\hspace{3.8em}+\left(\frac{3}{2}-\gamma\right)+\left(\frac{3}{2}-\gamma\right)\\
+&\hspace{3.8em}+(1-\gamma)+\left(\frac{3}{2}-\gamma\right)\\
+&\hspace{3.8em}+(-\gamma)+\left(\frac{25}{12}-\gamma\right)\Bigr]\\
+={}&-\gamma+\frac{25}{12}-\gamma
+ -\frac{1}{5}\left(4+6+\frac{25}{12}-10\gamma\right)\\
+={}&\frac{25}{12}-\frac{29}{12}\\
+={}&-\frac{1}{3}\\
+\approx{}&-0.3333\text{ nats}.
+\end{align*}
+
+The negative estimate is not an arithmetic error. True mutual information is non-negative, but a finite-sample estimate can fall below zero because of sampling variation and bias. Here the sample is intentionally tiny and $k=1$, so a poor estimate is unsurprising. This example shows how the counts feed the formula; it is not evidence that the chosen synthetic variables have negative true mutual information.
+
+\Note{The boundary examples are deliberate. For A, B, C, D and E, the neighbour that sets the joint radius can sit exactly at that radius in a marginal coordinate. The strict inequality is what excludes it.}
+
+\section{From Counts to an Estimate: The Practical Procedure}
+
+For a dataset with $T$ paired observations, the KSG-1 calculation follows this order:
+\begin{enumerate}[label=\textbf{Step \arabic*.}]
+\item Choose $k$, a distance convention, and a consistent preprocessing rule.
+\item For each $i$, find the distance $\epsk(i)$ to the $k$th nearest \emph{other} point in $(X,Y)$ under the maximum norm.
+\item Count $n_x(i)$ and $n_y(i)$ using strict marginal distances below that same radius.
+\item Evaluate $\psi(k)+\psi(T)-\psi(n_x(i)+1)-\psi(n_y(i)+1)$ for each centre point.
+\item Average the $T$ pointwise contributions.
+\end{enumerate}
+
+The result estimates the dependence represented by the paired sample. The estimator does not know what the variables mean; it only receives coordinate values and their pairing.
+
+\section{Conditional Mutual Information}
+
+\subsection{What changes when $Z$ is given}
+
+For $I(X;Y\mid Z)$, each observation is a triplet $(x_i,y_i,z_i)$. The radius is now based on the $k$th neighbour in the full joint space $(X,Y,Z)$:
+\begin{equation}
+  \epsk(i)=\text{distance to the $k$th other point in }(X,Y,Z).
+\end{equation}
+Using this same radius, count in the $Z$, $(X,Z)$ and $(Y,Z)$ spaces:
+\begin{align}
+  n_z(i)&=\#\{j\ne i:|z_j-z_i|<\epsk(i)\},\\
+  n_{xz}(i)&=\#\{j\ne i:\lVert(x_j,z_j)-(x_i,z_i)\rVert_\infty<\epsk(i)\},\\
+  n_{yz}(i)&=\#\{j\ne i:\lVert(y_j,z_j)-(y_i,z_i)\rVert_\infty<\epsk(i)\}.
+\end{align}
+
+The Frenzel--Pompe nearest-neighbour estimate is
+\begin{equation}
+  \widehat I(X;Y\mid Z)
+  =\psi(k)+\frac{1}{T}\sum_{i=1}^{T}
+  \left[\psi\bigl(n_z(i)+1\bigr)
+  -\psi\bigl(n_{xz}(i)+1\bigr)
+  -\psi\bigl(n_{yz}(i)+1\bigr)\right].
+  \label{eq:cmi}
+\end{equation}
+This form has no $\psi(T)$ term. Do not copy the mutual-information equation and simply add $Z$ to its counts. Conditional mutual information uses a different arrangement of projected spaces.
+
+\subsection{A three-dimensional picture}
+
+Think of each observation as a point in an $X$--$Y$--$Z$ cube. The $k$th neighbour in that cube sets the radius. Then project the same cube onto $Z$, onto the $X$--$Z$ plane, and onto the $Y$--$Z$ plane. The three local counts enter Equation~\ref{eq:cmi} with one positive and two negative signs.
+
+The estimator asks how much dependence between $X$ and $Y$ remains after nearby structure shared with $Z$ is accounted for. It still works from local geometry; it does not construct a full three-variable density table.
+
+\section{KSG-1, KSG-2, and Formula Discipline}
+
+The original KSG paper gives two related estimators, commonly called Algorithm 1 and Algorithm 2, or KSG-1 and KSG-2. They differ in how marginal neighbourhoods are constructed and counted. Consequently, their count definitions and final digamma expressions differ. A $-1/k$ term appears in the common KSG-2 expression, not in the KSG-1 equation used in this guide.
+
+For this guide and the project's Higher-MI code, the pairwise mutual-information calculation uses the KSG-1 form in Equation~\ref{eq:ksg1}. The conditional mutual-information calculation uses the Frenzel--Pompe form in Equation~\ref{eq:cmi}. Both use a joint-space radius and strict marginal counts under the implementation convention described above.
+
+\Note{When reading a library or paper, check the estimator variant, whether counts include the centre point, whether the radius is open or closed, and whether the displayed count has a $+1$. A formula copied without its count convention can be wrong even if it looks familiar.}
+
+\section{Choosing $k$ and Understanding the Trade-off}
+
+The parameter $k$ controls the local scale. A small $k$ uses a tight neighbourhood. It can preserve fine structure, but the estimate is more sensitive to individual observations. A larger $k$ averages over a broader region, which can reduce fluctuation but smooth over local structure and introduce more bias. There is no value of $k$ that is best for every dataset.
+
+The project uses $k=4$. In the Higher-MI project history, this is explicitly recorded as a practical assumption for the O-information computation, rather than a value uniquely required by the theory. Changing $k$ can change the estimate, so it should be fixed before scoring and, where feasible, accompanied by a sensitivity analysis.
+
+Useful sensitivity checks include computing the same scientific quantity for a small, predeclared set of $k$ values and checking whether the conclusion changes. This is not permission to select whichever $k$ gives the desired result. The choice and the full set of results should be reported.
+
+\section{Assumptions, Failure Modes, and Checks}
+
+\subsection{What the sample should represent}
+
+The standard interpretation assumes the observations behave like samples from the joint distribution of interest. If rows are strongly dependent, repeated, or generated by a time process with serial dependence, the effective sample size may be much smaller than the row count. KSG still returns a number, but its usual uncertainty intuition may no longer apply.
+
+\subsection{Ties and discrete variables}
+
+Nearest-neighbour estimators are designed for continuous-valued data. Exact duplicates and large numbers of ties make the $k$th distance ambiguous and can produce marginal counts that do not behave as expected. Adding tiny random jitter is sometimes used for mixed or discrete data, but it changes the data and must be documented. It is not an automatic repair.
+
+\subsection{Scaling and distance}
+
+The maximum norm compares coordinate differences directly. If one variable is measured on a much larger numerical scale than another, that variable may dominate which point is considered nearest. Preprocessing therefore matters. The true continuous mutual information is invariant under suitable invertible transformations of a variable, but a finite-sample nearest-neighbour estimate can still change because the neighbour geometry changes. State any standardisation, rank transform, or noise addition.
+
+\subsection{Dimensionality and sample size}
+
+As the joint dimension grows, points become sparse and local neighbourhoods cover larger regions. This can make estimates less stable and more biased. KSG is not immune to the curse of dimensionality. The three-dimensional CMI problem is usually more demanding than a two-dimensional MI problem at the same sample size.
+
+\subsection{A practical validation checklist}
+
+Before interpreting a KSG value, check the following:
+\begin{enumerate}[label=\textbf{Check \arabic*.}]
+\item The rows are paired correctly: $x_i$ and $y_i$ must belong to the same observation.
+\item The self-point is excluded from the $k$th-neighbour search, so the query requests $k+1$ points if the search includes the centre.
+\item The selected metric and strict-versus-inclusive boundary rule match the formula.
+\item All variables have the intended scaling and the data contain no unnoticed duplicates or non-finite values.
+\item Independent simulated variables give estimates fluctuating around zero across repeated samples, rather than a stable positive result.
+\item A known correlated continuous distribution gives sensible estimates as $T$ grows; for a bivariate Gaussian with correlation $\rho$, the population value is $-\frac{1}{2}\ln(1-\rho^2)$.
+\item A nonlinear dependence check is included if the scientific claim concerns dependence that linear correlation could miss.
+\item The chosen $k$, estimator variant, preprocessing, sample count and uncertainty method are reported.
+\end{enumerate}
+
+\section{How KSG Enters Your Higher-MI Calculation}
+
+At one model checkpoint, the project's three values for each test example are:
+\begin{align}
+  F_0 &= \text{logit of the correct answer},\\
+  F_1 &= \text{largest logit among the incorrect answers},\\
+  F_2 &= \text{mean logit of the remaining incorrect answers}.
+\end{align}
+Across test examples, these form a sample of triplets $(F_{0,i},F_{1,i},F_{2,i})$. The project calls KSG on these arrays to estimate
+\begin{equation}
+  \widehat\Omega
+  =\widehat I(F_0;F_1)-\widehat I(F_0;F_1\mid F_2).
+\end{equation}
+So the KSG estimator is the numerical engine for the two information terms. It does not decide what $F_0$, $F_1$ or $F_2$ should mean; that is the benchmark's feature-design choice.
+
+The project evaluates all six orderings of $(F_0,F_1,F_2)$ and averages the six estimates. The exact O-information quantity is symmetric in its variables, but finite-sample KSG estimates can show small order-related differences. Averaging the six estimates is the project's symmetry-handling choice, not a requirement for every KSG use case.
+
+\Note{The KSG sample in the population-based calculation is the set of test examples at one fixed checkpoint. It is not the sequence of training checkpoints. This distinction is about what the project treats as one observation; KSG itself only sees the supplied rows.}
+
+\section{Reading a KSG Result Carefully}
+
+A KSG estimate answers a narrow statistical question about the supplied sample and representation. It does not by itself establish causation, predict grokking, or show that one signal is useful. For O-information, the sign describes the balance in the chosen three-variable relation under the adopted sign convention. For a predictor claim, the curve and event rule must be evaluated separately against the grok epoch and across seeds.
+
+Keep these statements separate:
+\begin{itemize}
+\item “KSG estimated this dependence value from these observations.”
+\item “The chosen variables and sampling axis represent the scientific quantity of interest.”
+\item “The resulting time rule predicts a later event.”
+\end{itemize}
+Only the first statement is the estimator's direct job. The other two need scientific justification and benchmark evidence.
+
+\section{Short Review}
+
+\begin{enumerate}
+\item KSG sets a local radius from the $k$th other neighbour in the full joint space.
+\item With the maximum norm, the radius is the largest coordinate difference and forms a square or cube.
+\item The same radius is projected into marginal spaces; strict counts are made there.
+\item KSG-1 combines those counts using digamma terms and averages over sample points.
+\item Conditional MI uses a joint $(X,Y,Z)$ radius and counts in $Z$, $(X,Z)$ and $(Y,Z)$.
+\item $k$, distance, boundary convention, scaling, ties and sample dependence all affect the estimate.
+\item In the Higher-MI project, KSG estimates MI and CMI for the three chosen logit summaries; it does not validate the summary design or the predictor rule.
+\end{enumerate}
+
+\section{References}
+
+\begin{enumerate}[label={[\arabic*]}]
+\item A. Kraskov, H. St\"ogbauer, and P. Grassberger, “Estimating Mutual Information,” \emph{Physical Review E}, vol. 69, 066138, 2004. DOI: \href{https://doi.org/10.1103/PhysRevE.69.066138}{10.1103/PhysRevE.69.066138}. This is the original source for the KSG-1 and KSG-2 mutual-information estimators.
+\item S. Frenzel and B. Pompe, “Partial Mutual Information for Coupling Analysis of Multivariate Time Series,” \emph{Physical Review Letters}, vol. 99, 204101, 2007. DOI: \href{https://doi.org/10.1103/PhysRevLett.99.204101}{10.1103/PhysRevLett.99.204101}. This gives a nearest-neighbour estimator for conditional/partial mutual information.
+\item W. Gao, S. Oh, and P. Viswanath, “Demystifying Fixed $k$-Nearest Neighbor Information Estimators,” \emph{IEEE Transactions on Information Theory}, vol. 63, no. 10, pp. 6679--6713, 2017. DOI: \href{https://doi.org/10.1109/TIT.2017.2756958}{10.1109/TIT.2017.2756958}. This analyses statistical properties of fixed-$k$ estimators.
+\end{enumerate}
+
+\end{document}

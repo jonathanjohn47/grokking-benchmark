@@ -3,7 +3,7 @@
 Purpose: thesis figure showing what a working Higher-MI predictor was expected to look like:
 Omega starts in the synergy zone (<0), rises smoothly into the redundancy zone (>0),
 and peaks BEFORE the grok epoch G. The real measured curves are in
-08_Experiments/results/nanda_unified/reports/higher_mi_population_omega_all_seeds.png.
+08_Experiments/results/nanda_unified/reports/measured/measured_higher_mi_population_omega_all_seeds.png.
 """
 import os
 import numpy as np
@@ -12,7 +12,13 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-OUT = os.path.join(ROOT, "05_Thesis_Document", "Figures", "ideal_higher_mi_omega_schematic.png")
+OUT = os.path.join(
+    ROOT,
+    "05_Thesis_Document",
+    "Figures",
+    "schematics",
+    "schematic_not_measured_ideal_higher_mi_omega.png",
+)
 
 t = np.linspace(0, 40000, 401)
 G = 13000

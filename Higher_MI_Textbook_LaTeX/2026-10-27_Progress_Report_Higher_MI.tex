@@ -1,0 +1,524 @@
+\documentclass[11pt,a4paper,oneside]{report}
+\usepackage[margin=0.80in,headheight=15pt,headsep=0.22in,footskip=0.35in]{geometry}
+\usepackage{newtxtext,newtxmath}
+\usepackage{amsmath}
+\usepackage{array,booktabs,tabularx,longtable}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+
+% --- H.K. Dass Textbook Typography & Indentation ---
+\setstretch{1.06}
+\setlength{\parindent}{1.8em}
+\setlength{\parskip}{2.5pt}
+\setlength{\fboxrule}{0.6pt}
+\setlength{\fboxsep}{7pt}
+
+\setlist[enumerate]{leftmargin=2.8em,labelsep=0.5em,itemsep=2pt,topsep=3pt}
+\setlist[itemize]{leftmargin=2.4em,labelsep=0.5em,itemsep=2pt,topsep=3pt}
+
+% --- Running Headers (H.K. Dass Style) ---
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textbf{\thepage}}
+\fancyhead[C]{\small\textbf{HIGHER-MI PREDICTOR: METHOD AND RESULTS}}
+\fancyhead[R]{\small\itshape Section \nouppercase{\rightmark}}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[C]{\small\textbf{\thepage}}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+
+\renewcommand{\sectionmark}[1]{\markright{\thesection}}
+
+% --- Chapter & Article Headings (H.K. Dass Style) ---
+\titleformat{\chapter}[display]
+  {\normalfont\bfseries\centering}
+  {\hrule height 1.4pt \vspace{8pt}\large CHAPTER \thechapter}
+  {4pt}
+  {\LARGE\MakeUppercase}
+  [\vspace{8pt}\hrule height 0.6pt]
+\titlespacing*{\chapter}{0pt}{-28pt}{18pt}
+
+\titleformat{\section}
+  {\normalfont\bfseries\large}
+  {\thesection.}
+  {0.6em}
+  {\MakeUppercase}
+\titlespacing*{\section}{0pt}{14pt}{5pt}
+
+\titleformat{\subsection}
+  {\normalfont\bfseries\normalsize}
+  {\thesubsection.}
+  {0.6em}
+  {}
+\titlespacing*{\subsection}{0pt}{10pt}{3pt}
+
+% --- Custom Macros ---
+\newcommand{\Fzero}{F_{0}}
+\newcommand{\Fone}{F_{1}}
+\newcommand{\Ftwo}{F_{2}}
+\newcommand{\Omegapop}{\Omega_{\mathrm{pop}}}
+\newcommand{\Omegatemp}{\Omega_{\mathrm{temp}}}
+\newcommand{\Ans}{\hfill\textbf{Ans.}}
+
+\newcommand{\formulaBox}[1]{%
+  \begin{center}
+  \vspace{2pt}
+  \fbox{\begin{minipage}{0.92\textwidth}#1\end{minipage}}
+  \vspace{2pt}
+  \end{center}
+}
+
+\begin{document}
+
+\chapter{Higher-MI Predictor: Method and Benchmark Results}
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{>{\bfseries}p{1.65in} X}
+\toprule
+Thesis Title & \emph{A Unified Benchmark of Grokking Predictors in Neural Networks}\\
+Student & Jonathan John (M.Sc.\ Artificial Intelligence, IU Internationale Hochschule)\\
+Supervisor & Prof.\ Dr.-Ing.\ Sheikh Faisal Rashid\\
+Reporting Period & 3 October 2026 -- 27 October 2026\\
+Repository File & \texttt{02\_Progress\_Reports/2026-10-27\_Progress\_Report\_Higher\_MI.pdf}\\
+Predictor Status & Predictor 7 of 8 (Higher-MI) --- \textbf{CLOSED, NEGATIVE}\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{Objectives Completed}
+
+\noindent\textbf{1.1.1. Scope of This Report.}\quad Grokking is the delayed rise of test accuracy long after a neural network has already fitted its training examples. In this report, we explain how the seventh predictor in our benchmark, called \emph{Higher-MI} (higher-order mutual information using O-information, based on Pomarico et al., 2025, \texttt{arXiv:2507.23346}), is calculated from the model's output scores, how it was verified, and how its timing compares with the grok epoch.
+
+\medskip
+\noindent\textbf{1.1.2. Summary of Milestones Completed.}\quad During this reporting period, the following six tasks were completed:
+\begin{enumerate}[label=\textbf{(\roman*)}]
+\item \textbf{Saving official verdicts in the analysis script:} Updated \texttt{06\_Code/scripts/analyze\_nanda\_unified.py} so that the official scores and pass/fail verdicts are written automatically into \texttt{predictor\_events.json} instead of being printed only to the terminal.
+\item \textbf{Implementation of Predictor 7 (Higher-MI):} Wrote \texttt{06\_Code/src/predictors/higher\_mi.py} and connected it with \texttt{06\_Code/src/unified\_measurements.py} and \texttt{06\_Code/scripts/run\_nanda\_benchmark.py}.
+\item \textbf{Verification and bug fixes:} Found and fixed two bugs before scoring: a boundary-counting error in the nearest-neighbour estimator and a missing random seed when rebuilding the test split during checkpoint evaluation.
+\item \textbf{Evaluation across all saved checkpoints:} Calculated the primary population O-information curve $\Omegapop(t)$ and the exploratory temporal sliding-window control $\Omegatemp(t)$ across all 401 saved checkpoints for each of the five seeds (Seeds 0 to 4, from epoch 0 to epoch 40,000, without retraining the models).
+\item \textbf{Curve plots and expectation diagram:} Plotted the raw curves using \texttt{06\_Code/scripts/plot\_higher\_mi\_curves.py} before scoring, and created a diagram of the expected ideal curve in \texttt{05\_Thesis\_Document/Figures/ideal\_higher\_mi\_omega\_schematic.png}.
+\item \textbf{Official benchmark scoring:} Scored Higher-MI using the fixed benchmark rules and saved the final numbers in \texttt{08\_Experiments/results/nanda\_unified/aggregate\_higher\_mi.json}.
+\end{enumerate}
+
+\formulaBox{
+\textbf{PRINCIPAL BENCHMARK RESULT}\\[3pt]
+In all five runs, the global maximum of the population O-information curve occurs \emph{after} the grok epoch $G$. All three benchmark conditions fail:
+\[
+\text{Early-warning fraction} = \frac{0}{5} = 0.00, \qquad \rho = 0.70, \qquad \text{Mean relative lead} = -0.4254.
+\]
+Therefore, Predictor 7 (Higher-MI) is \textbf{CLOSED, NEGATIVE}. Seven of the eight predictors in our benchmark are now closed, all with negative results.
+}
+
+\noindent\textbf{Note.}\quad This conclusion applies only to this benchmark adaptation and early-warning test. It does not disprove the findings of Pomarico et al.\ (2025) in their original three-class tensor-network study.
+
+\section{Work Accomplished}
+
+\subsection{The Benchmark Task, Saved Checkpoints, and Grok Epoch}
+
+\noindent\textbf{1. Modular Addition Task.}\quad The model is trained to add two whole numbers modulo $113$. If the two input numbers are $a$ and $b$, the correct answer $c$ is given by
+\begin{equation}
+\boxed{c = (a + b) \bmod 113}
+\end{equation}
+where $a, b, c \in \{0, 1, 2, \ldots, 112\}$. To make this clear, let us look at two simple cases:
+\[
+(23 + 45) \bmod 113 = 68, \qquad (100 + 20) \bmod 113 = 120 - 113 = 7.
+\]
+
+Since there are $113$ choices for $a$ and $113$ choices for $b$, there are $113^2 = 12{,}769$ possible input pairs in total. For each random seed, these pairs are divided into two separate sets as shown below:
+
+\begin{center}
+\begin{tabularx}{0.90\textwidth}{>{\bfseries}p{1.2in} >{\centering\arraybackslash}p{1.3in} X}
+\toprule
+Set & Number of Pairs & Purpose in the Experiment\\
+\midrule
+Training set & 3,830 (30\%) & Used to update the model's weights during training.\\
+Test set & 8,939 (70\%) & Kept aside to measure accuracy on unseen input pairs.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent\textbf{2. Model Architecture and Saved Checkpoints.}\quad All predictors in our benchmark are tested on the exact same saved model states:
+\begin{enumerate}[label=\textbf{(\roman*)}]
+\item \textbf{Shared model:} A 1-layer, 4-head transformer ($d_{\mathrm{model}} = 128$, head width $32$, MLP width $512$ with ReLU activation, no LayerNorm, learned positional embeddings), trained full-batch using AdamW (learning rate $10^{-3}$, $\beta = (0.9, 0.98)$, weight decay $1.0$).
+\item \textbf{Training epochs and checkpoints:} One epoch means one complete pass through all $3{,}830$ training pairs. The model is trained for $40{,}000$ epochs, and its weights are saved every $100$ epochs. This gives $401$ saved checkpoints, from epoch $0$ to epoch $40{,}000$.
+\item \textbf{Five random seeds:} Five runs are used, with seeds numbered $0, 1, 2, 3,$ and $4$. Each seed fixes the starting weights and the $30\% / 70\%$ data split.
+\item \textbf{Code safety:} Neither the shared model code (\texttt{06\_Code/src/models/transformer\_four\_head.py}) nor any earlier predictor file was changed during this work.
+\end{enumerate}
+
+\noindent\textbf{3. Definition of the Grok Epoch ($G$).}\quad In every run, training accuracy reaches $0.99$ or higher by about epoch $205$, whereas test accuracy stays low for thousands of epochs. The \emph{grok epoch} $G$ is defined as the first epoch at which test accuracy goes above $0.90$:
+\begin{equation}
+\boxed{G = \min\bigl\{t : \operatorname{Acc}_{\mathrm{test}}(t) > 0.90\bigr\}}
+\end{equation}
+From the saved runs, the values of $G$ for the five seeds are:
+\[
+\begin{array}{c|ccccc}
+\textbf{Seed} & 0 & 1 & 2 & 3 & 4\\ \hline
+\rule{0pt}{2.4ex}\mathbf{G} & 12{,}987 & 6{,}921 & 9{,}510 & 11{,}019 & 23{,}747
+\end{array}
+\]
+We observe that $G$ changes a lot from seed to seed (from $6{,}921$ in Seed 1 to $23{,}747$ in Seed 4). Therefore, a useful early-warning signal must satisfy two simple conditions:
+\begin{enumerate}[label=\textbf{(\roman*)}]
+\item It must occur \emph{before} $G$ in each run.
+\item It must occur later in a run whose $G$ is later.
+\end{enumerate}
+
+\subsection{Logits and the Three Summary Variables}
+
+\noindent\textbf{1. Meaning of Logits.}\quad For one input pair $(a, b)$, the network produces one real score for each of the $113$ possible answers. This raw output score is called a \emph{logit}.
+\begin{enumerate}[label=\textbf{(\roman*)}]
+\item A logit is not a probability. It can be negative or greater than $1$, and the $113$ logits do not add up to $1$.
+\item The answer class with the largest logit is the model's chosen answer.
+\item Softmax is not used here; we work directly with the raw logits.
+\end{enumerate}
+
+\noindent\textbf{2. Reducing 113 Logits to Three Quantities ($\Fzero, \Fone, \Ftwo$).}\quad In the source paper by Pomarico et al.\ (2025), the task had only $3$ answer classes, so there were only $3$ output scores. In our task, there are $113$ possible answers. To apply three-variable O-information, we reduce the $113$ logits for each test example into three simple quantities.
+
+Let $c$ be the correct answer for a given test input, and let $\ell[j]$ be the logit for answer $j \in \{0, 1, \ldots, 112\}$. Let $r$ be the wrong answer that has the largest logit (called the \emph{runner-up}):
+\begin{equation}
+r = \underset{j \neq c}{\operatorname{arg\,max}}\ \ell[j].
+\end{equation}
+We then define the three summary variables $\Fzero, \Fone,$ and $\Ftwo$ as follows:
+\begin{align}
+\Fzero &= \ell[c] && \text{[Score of the correct answer]}\label{eq:f0}\\
+\Fone  &= \ell[r] = \max_{j \neq c}\ell[j] && \text{[Highest wrong-answer score]}\label{eq:f1}\\
+\Ftwo  &= \frac{1}{111}\sum_{j \notin \{c, r\}} \ell[j] = \frac{\sum_{j=0}^{112}\ell[j] - \Fzero - \Fone}{111} && \text{[Mean of the other 111 wrong scores]}\label{eq:f2}
+\end{align}
+
+\noindent\textbf{Note on the \texttt{=} Token.}\quad The model's final layer actually has $114$ outputs because token $113$ stands for the equals sign \texttt{=} in the input $[a, b, \text{\texttt{=}}]$. Since \texttt{=} is never a valid answer, its score is removed before calculating $\Fzero, \Fone,$ and $\Ftwo$.
+
+\medskip
+\noindent\textbf{3. Condition for a Correct Answer and the Margin ($m$).}\quad The model gives the right answer if and only if the correct answer's logit is larger than every wrong answer's logit. Since $\Fone$ is the largest wrong-answer logit, we have
+\begin{equation}
+\text{Prediction is correct} \quad \Longleftrightarrow \quad \Fzero > \Fone.
+\end{equation}
+The difference between these two scores is called the \emph{margin} $m$:
+\begin{equation}
+\boxed{m = \Fzero - \Fone}
+\end{equation}
+Here:
+\begin{enumerate}[label=\textbf{(\roman*)}]
+\item If $m > 0$, then $\Fzero > \Fone$, so the model's prediction is \textbf{correct}.
+\item If $m < 0$, then $\Fzero < \Fone$, so the model's prediction is \textbf{wrong}.
+\item If $m = 0$, the correct answer and the runner-up are tied.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Example 1.}\quad \textit{For the test input $(23, 45)$ in Seed 0, the correct answer is $c = (23 + 45) \bmod 113 = 68$. At epoch $5{,}000$, its margin is $m = -36.4$ (wrong class $58$ is highest). At epoch $12{,}900$, its margin is $m = +5.4$ with runner-up class $54$. At epoch $20{,}000$, its margin is $m = +15.8$. State at which of these epochs the model's prediction is correct.}
+
+\smallskip
+\noindent\textbf{Solution.}\quad We know that the margin is given by
+\[
+m = \Fzero - \Fone,
+\]
+and the prediction is correct whenever $m > 0$. Checking each epoch in turn:
+\begin{enumerate}[label=\textbf{(\roman*)}]
+\item At epoch $5{,}000$: $m = -36.4 < 0 \implies \Fzero < \Fone$. Hence, the prediction is \textbf{wrong}.
+\item At epoch $12{,}900$: $m = +5.4 > 0 \implies \Fzero > \Fone$. Hence, the prediction is \textbf{correct}.
+\item At epoch $20{,}000$: $m = +15.8 > 0 \implies \Fzero > \Fone$. Hence, the prediction is \textbf{correct}.
+\end{enumerate}
+Thus, the model predicts the wrong answer at epoch $5{,}000$, and predicts the correct answer ($68$) at epochs $12{,}900$ and $20{,}000$.\Ans
+
+\subsection{Mutual Information, O-Information, and the KSG Estimator}
+
+\noindent\textbf{1. Mutual Information and Conditional Mutual Information.}
+\begin{enumerate}[label=\textbf{(\roman*)}]
+\item \textbf{Mutual information $I(X; Y)$:} Measures how much knowing one variable $X$ tells us about another variable $Y$. If $X$ and $Y$ are completely independent, $I(X; Y) = 0$. If knowing $X$ helps us predict $Y$, then $I(X; Y) > 0$. Because natural logarithms ($\ln$) are used, the unit of measurement is called a \emph{nat}.
+\item \textbf{Conditional mutual information $I(X; Y \mid Z)$:} Measures how much dependence still remains between $X$ and $Y$ when a third variable $Z$ is already known.
+\end{enumerate}
+
+\noindent\textbf{2. Redundancy, Synergy, and O-Information.}\quad When we look at three variables together, their shared behaviour can be of two types:
+\begin{enumerate}[label=\textbf{(\roman*)}]
+\item \textbf{Redundancy:} The variables carry repeated or overlapping information.
+\item \textbf{Synergy:} The variables carry information that appears only when they are looked at together (for example, in the exclusive-OR rule $Z = X \oplus Y$ for two binary bits, neither $X$ alone nor $Y$ alone tells us $Z$, but knowing both $(X, Y)$ tells us $Z$ completely).
+\end{enumerate}
+For our three summaries $(\Fzero, \Fone, \Ftwo)$, \emph{O-information} is defined as:
+\begin{equation}
+\boxed{\Omega(\Fzero, \Fone, \Ftwo) = I(\Fzero; \Fone) - I(\Fzero; \Fone \mid \Ftwo)}
+\end{equation}
+From this formula, we see that:
+\begin{enumerate}[label=\textbf{(\roman*)}]
+\item When $\Omega > 0$, we have $I(\Fzero; \Fone) > I(\Fzero; \Fone \mid \Ftwo)$, which means \textbf{redundancy} is stronger.
+\item When $\Omega < 0$, we have $I(\Fzero; \Fone) < I(\Fzero; \Fone \mid \Ftwo)$, which means \textbf{synergy} is stronger.
+\end{enumerate}
+
+\noindent\textbf{Note 1.}\quad The value of $\Omega$ describes how the three scores relate to one another across examples; it is \emph{not} a measure of test accuracy, and it is not the same as simple linear correlation. For instance, at epoch $20{,}000$ in Seed 0, the linear correlation between $\Fzero$ and $\Fone$ across test examples is $0.998$, whereas $\Omegapop$ is about $0.36\text{ nats}$.
+
+\medskip
+\noindent\textbf{3. Estimating O-Information by the KSG Method.}\quad We do not know the exact probability formula for $(\Fzero, \Fone, \Ftwo)$; we only have a sample of $T = 8{,}939$ triplets at each checkpoint. Estimating probabilities by putting data into histogram bins gives different answers depending on the bin size. Instead, we use the nearest-neighbour method of Kraskov, St\"ogbauer, and Grassberger (called the \emph{KSG estimator}) with $k = 4$ nearest neighbours.
+
+\formulaBox{
+\textbf{WORKING RULE 1: KSG ESTIMATOR FOR O-INFORMATION ($k = 4$)}
+\begin{enumerate}[label=\textbf{Step \arabic*.}, leftmargin=3.4em]
+\item For each test example $i \in \{1, 2, \ldots, T\}$, treat $(\Fzero, \Fone, \Ftwo)$ as a point in three-dimensional space. Find the distance $\varepsilon_i$ from point $i$ to its $4$-th nearest neighbour using the maximum (Chebyshev) distance:
+\[
+\varepsilon_i = \max\bigl\{|F_{0,i} - F_{0,j}|,\ |F_{1,i} - F_{1,j}|,\ |F_{2,i} - F_{2,j}|\bigr\}.
+\]
+\item Using $\varepsilon_i$ as the radius around point $i$, count how many other points lie \emph{strictly inside} distance $\varepsilon_i$ in each single coordinate ($N_{x,i}, N_{y,i}, N_{z,i}$) and in each pair of coordinates ($N_{xz,i}, N_{yz,i}$).
+\item Substitute these counts into the digamma ($\psi$) formulas:
+\begin{align}
+I(X; Y) &= \psi(k) + \psi(T) - \bigl\langle \psi(N_x + 1) + \psi(N_y + 1) \bigr\rangle,\label{eq:ksg_mi}\\
+I(X; Y \mid Z) &= \psi(k) + \bigl\langle \psi(N_z + 1) - \psi(N_{xz} + 1) - \psi(N_{yz} + 1) \bigr\rangle,\label{eq:ksg_cmi}
+\end{align}
+where $\langle \cdot \rangle$ means the average over all $T = 8{,}939$ points.
+\item Calculate $\Omega = I(X; Y) - I(X; Y \mid Z)$ for all $3! = 6$ orderings of $(\Fzero, \Fone, \Ftwo)$ and take their average.
+\end{enumerate}
+}
+
+\noindent\textbf{Note 2 (Why the Six Orderings Are Averaged).}\quad Mathematically, O-information is unchanged if we swap the order of $\Fzero, \Fone,$ and $\Ftwo$. In a finite sample of $8{,}939$ points, however, the KSG estimate changes slightly when the order of variables is changed. Averaging over all $6$ orderings removes this small difference (for example, at Seed 0, epoch $12{,}900$, the average across the $6$ orderings is $0.4044\text{ nats}$, with a small standard deviation of $0.0099\text{ nats}$).
+
+\medskip
+\noindent\textbf{4. Primary Population Curve and Exploratory Controls.}\quad Four quantities were implemented in \texttt{06\_Code/src/predictors/higher\_mi.py}:
+\begin{enumerate}[label=\textbf{(\roman*)}]
+\item \textbf{Population O-information $\Omegapop(t)$ (Primary signal):} At a single checkpoint $t$, the $8{,}939$ test pairs give $8{,}939$ triplets $(\Fzero, \Fone, \Ftwo)$, from which we get one value $\Omegapop(t)$. Repeating this at all $401$ checkpoints gives the curve $\Omegapop(t)$. The primary predictor event $P$ is the checkpoint where $\Omegapop(t)$ reaches its highest value (global maximum):
+\begin{equation}
+\boxed{P = \underset{t}{\operatorname{arg\,max}}\ \Omegapop(t)}
+\end{equation}
+\item \textbf{Population zero-crossing (Exploratory):} The first checkpoint where $\Omegapop(t)$ crosses from negative to zero or positive.
+\item \textbf{Temporal sliding-window O-information $\Omegatemp(t)$ (Exploratory control):} At each checkpoint, we first average $\Fzero, \Fone,$ and $\Ftwo$ across all $8{,}939$ test pairs to get one mean triplet $(\overline{\Fzero}, \overline{\Fone}, \overline{\Ftwo})$. We then take windows of $W = 100$ consecutive checkpoints (covering $9{,}900$ epochs), moving forward by $10$ checkpoints at a time. This gives $31$ window centres from epoch $5{,}000$ to epoch $35{,}000$.
+\item \textbf{Transfer Entropy (Exploratory):} Calculated over the $401$-checkpoint mean-logit curves in both directions ($\mathrm{TE}_{\Fzero \to \Fone}(\tau)$ and $\mathrm{TE}_{\Fone \to \Fzero}(\tau)$) for lags $\tau = 1, 2, \ldots, 10$.
+\end{enumerate}
+
+\section{Challenges Encountered}
+
+\noindent\textbf{1. Boundary Counting Bug ($\le$ vs.\ $<$) in the KSG Estimator.}\quad In Working Rule 1 (Step 2), we must count only points whose distance is \emph{strictly less} than $\varepsilon_i$ ($< \varepsilon_i$). The point that sets the $4$-th nearest-neighbour distance lies exactly on the boundary ($= \varepsilon_i$) and must not be counted. However, Scipy's fast tree search \texttt{cKDTree.query\_ball\_point(x, r)} counts all points with distance $\le r$ (inclusive).
+\begin{enumerate}[label=\textbf{(\roman*)}]
+\item \textbf{Effect of the bug:} In a $500$-point test check, using $\le \varepsilon_i$ changed the count on $248$ out of $500$ points and changed the resulting $\Omega$ value by about $2.6$ times.
+\item \textbf{How it was fixed:} We passed the radius \texttt{r = np.nextafter(eps, 0)}, which is the largest floating-point number strictly smaller than $\varepsilon_i$. This matched a direct strict-inequality ($<$) check bit-for-bit, while reducing the run time from about $19\text{ seconds}$ per checkpoint (over $10\text{ hours}$ for $5$ seeds) to $0.7\text{ seconds}$ per checkpoint (about $27\text{ minutes}$ in total for all $5 \times 401 = 2{,}005$ checkpoints).
+\end{enumerate}
+
+\noindent\textbf{Example 2.}\quad \textit{Suppose that for point $i$, the distance to its $4$-th nearest neighbour in 3D space is $\varepsilon_i = 0.420$. When we look at the first coordinate $X$ alone, there are $12$ other points with $|x_i - x_j| < 0.420$, and $1$ boundary point with $|x_i - x_j| = 0.420$. Find the correct count $N_{x,i}$ for equation~\eqref{eq:ksg_mi}, and state what count an unadjusted \texttt{query\_ball\_point} call would give.}
+
+\smallskip
+\noindent\textbf{Solution.}\quad By Step 2 of Working Rule 1, only points lying \emph{strictly inside} radius $\varepsilon_i$ are counted:
+\[
+N_{x,i} = \text{number of points with } |x_i - x_j| < 0.420 = 12.
+\]
+An unadjusted \texttt{query\_ball\_point} call uses $\le 0.420$, so it includes the boundary point and gives $12 + 1 = 13$, which is $1$ too high. Using \texttt{r = np.nextafter(0.420, 0)} excludes the boundary point and gives the correct count $N_{x,i} = 12$.\Ans
+
+\medskip
+\noindent\textbf{2. Missing Random Seed When Rebuilding the Test Set.}\quad In \texttt{06\_Code/scripts/run\_nanda\_benchmark.py}, the helper function \texttt{recompute\_from\_checkpoints()} originally called \texttt{get\_dataloaders()} without resetting \texttt{torch.manual\_seed(seed)}. Because \texttt{get\_dataloaders()} uses a random split, this produced a different $70\%$ test set from the one used when the model was trained. We fixed this inside \texttt{\_checkpoint\_predictor\_higher\_mi()} by setting both \texttt{torch.manual\_seed(seed)} and \texttt{np.random.seed(seed)} before building the data loader, so the exact same $8{,}939$ held-out test pairs were used for each seed.
+
+\medskip
+\noindent\textbf{3. Methodological and Practical Limitations.}
+\begin{enumerate}[label=\textbf{(\roman*)}]
+\item \textbf{Shared example difficulty:} Because $\Fzero, \Fone,$ and $\Ftwo$ at checkpoint $t$ are measured across the $8{,}939$ test examples, easy and hard examples can make the three scores move together even if grokking is not the cause. The temporal sliding-window control was added to check this.
+\item \textbf{Repeated oscillations and early spike at epoch 1,900:} Instead of rising smoothly once, $\Omegapop(t)$ goes up and down repeatedly across all $40{,}000$ epochs, and all five seeds show their first spike above $0.20\text{ nats}$ at epoch $1{,}900$ regardless of when they grok.
+\item \textbf{Information loss and grid spacing:} Reducing $113$ logits to $3$ numbers leaves out the detailed shape of the other $111$ wrong answers; checkpoints are saved every $100$ epochs; and with $n = 5$ seeds, Spearman's rank correlation $\rho$ can take only $11$ possible values.
+\item \textbf{Computation environment:} Because running $2{,}005$ forward passes exceeded the local sandbox limits, the checkpoint evaluation was run in a clean cloud container on the exact saved checkpoints, and the output files (\texttt{.npy} and \texttt{.json}, about $2\text{ MB}$) were copied back into \texttt{08\_Experiments/results/nanda\_unified/}.
+\end{enumerate}
+
+\section{Results Obtained}
+
+\noindent\textbf{1. Expected vs.\ Observed Population O-Information Curves.}\quad Figure~\ref{fig:schematic} shows the ideal curve we would expect if $\Omegapop(t)$ worked as an early warning, while Figure~\ref{fig:pop_all} shows the actual measured curves across all five seeds.
+\begin{enumerate}[label=\textbf{(\roman*)}]
+\item \textbf{Starting values near zero:} At epoch $0$, $\Omegapop(0)$ is slightly positive ($+0.0024$ to $+0.0399\text{ nats}$), not strongly negative as in the source paper. Across all $401$ checkpoints, the lowest values reached are only mildly negative ($-0.1296$ to $-0.0163\text{ nats}$).
+\item \textbf{Common early spike and repeated waves:} Every seed first goes above $0.20\text{ nats}$ at epoch $1{,}900$, and then rises and falls roughly every $1{,}400$ to $1{,}600$ epochs both before and after grokking.
+\item \textbf{Global maximum occurs after grokking:} In all five seeds, the highest point $P$ occurs \emph{after} the grok epoch $G$.
+\end{enumerate}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.66\textwidth]{/Users/jonathanjohn/Documents/grokking-benchmark/05_Thesis_Document/Figures/schematics/schematic_not_measured_ideal_higher_mi_omega.png}
+\vspace{-4pt}
+\caption{Ideal schematic diagram (not measured data) showing what a working Higher-MI early-warning curve would look like: starting negative in the synergy zone ($\Omega < 0$), rising smoothly into the redundancy zone ($\Omega > 0$), and reaching its peak $P$ before the grok epoch $G$.}
+\label{fig:schematic}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.92\textwidth]{/Users/jonathanjohn/Documents/grokking-benchmark/08_Experiments/results/nanda_unified/reports/measured/measured_higher_mi_population_omega_all_seeds.png}
+\vspace{-4pt}
+\caption{Measured population O-information $\Omegapop(t)$ across all $401$ checkpoints for Seeds $0$ to $4$ (the red dashed line marks the grok epoch $G$). In every seed, the curve oscillates throughout training, first spikes above $0.20\text{ nats}$ at epoch $1{,}900$, and reaches its global maximum after $G$.}
+\label{fig:pop_all}
+\end{figure}
+
+\noindent\textbf{2. Table of Measured Epochs and Scores Across All Five Seeds.}\quad Table~\ref{tab:seed_results} gives the grok epoch $G$, the starting, ending, and minimum values of $\Omegapop(t)$, the peak epoch $P$, the peak value $\Omegapop(P)$, the timing lag $P - G$, the ratio $P/G$, the relative lead $(G - P)/G$, and the two exploratory event times for each seed.
+
+\begin{table}[htbp]
+\centering
+\caption{Measured Grok Epochs, Population O-Information Peaks, and Timing Results Across Five Seeds}
+\label{tab:seed_results}
+\vspace{4pt}
+\footnotesize
+\begin{tabular}{c r c r r r r r c}
+\toprule
+\textbf{Seed} & \textbf{$G$} & \textbf{$\Omegapop$: Start $\to$ End (Min)} & \textbf{$P$} & \textbf{$\Omegapop(P)$} & \textbf{$P - G$} & \textbf{$P/G$} & \textbf{$(G-P)/G$} & \textbf{Zero-Cross / Temp.\ Max}\\
+\midrule
+0 & 12,987 & $0.0388 \to 0.6484\ (-0.1092)$ & 15,500 & 1.2689 & $+2{,}513$ & 1.19 & $-0.1935$ & 500 / 5,000\\
+1 & 6,921  & $0.0332 \to 0.0704\ (-0.1296)$ & 8,500  & 1.3089 & $+1{,}579$ & 1.23 & $-0.2281$ & 1,600 / 5,000\\
+2 & 9,510  & $0.0024 \to 0.2037\ (-0.0834)$ & 20,600 & 1.5917 & $+11{,}090$ & 2.17 & $-1.1661$ & 300 / 19,000\\
+3 & 11,019 & $0.0399 \to 0.2978\ (-0.0238)$ & 12,900 & 2.3403 & $+1{,}881$ & 1.17 & $-0.1707$ & 1,100 / 5,000\\
+4 & 23,747 & $0.0374 \to 1.7972\ (-0.0163)$ & 32,500 & 2.3347 & $+8{,}753$ & 1.37 & $-0.3686$ & 200 / 14,000\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\textbf{Example 3.}\quad \textit{From Table~\ref{tab:seed_results}, Seed 0 has grok epoch $G = 12{,}987$ and peak epoch $P = 15{,}500$. Find (i) the timing lag $P - G$, (ii) the ratio $P/G$, and (iii) the relative lead $(G - P)/G$, and state whether $P$ occurs before grokking.}
+
+\smallskip
+\noindent\textbf{Solution.}\quad We are given $G = 12{,}987$ and $P = 15{,}500$.
+\begin{enumerate}[label=\textbf{(\roman*)}]
+\item \textbf{Timing lag:}
+\[
+P - G = 15{,}500 - 12{,}987 = +2{,}513\text{ epochs}.
+\]
+Since $P - G > 0$, the peak occurs $2{,}513$ epochs \emph{after} grokking.
+\item \textbf{Ratio $P/G$:}
+\[
+\frac{P}{G} = \frac{15{,}500}{12{,}987} \approx 1.1935 \approx 1.19.
+\]
+\item \textbf{Relative lead:}
+\[
+\frac{G - P}{G} = \frac{12{,}987 - 15{,}500}{12{,}987} = \frac{-2{,}513}{12{,}987} \approx -0.1935.
+\]
+\end{enumerate}
+Because the relative lead is negative ($-0.1935$), the event occurs after grokking and does not give an early warning.\Ans
+
+\medskip
+\noindent\textbf{3. The Three Fixed Benchmark Conditions and Spearman Rank Calculation.}\quad Under our frozen benchmark rules, a predictor passes only if it satisfies all three conditions below:
+
+\formulaBox{
+\textbf{WORKING RULE 2: THE THREE BENCHMARK SCORING CONDITIONS}
+\begin{enumerate}[label=\textbf{Condition (\roman*):}, leftmargin=4.2em]
+\item \textbf{Early-warning fraction ($\operatorname{lead\_frac} \ge 0.80$):} The fraction of seeds in which $P_s < G_s - 100$ must be at least $0.80$ (at least $4$ out of $5$ seeds must fire before grokking).
+\item \textbf{Spearman's rank correlation ($\rho \ge 0.90$):} The rank correlation between the five $G_s$ values and the five $P_s$ values must be at least $0.90$:
+\begin{equation}
+\boxed{\rho = 1 - \frac{6\sum_{s=1}^{n} d_s^2}{n(n^2 - 1)}}
+\label{eq:spearman}
+\end{equation}
+\item \textbf{Mean relative lead ($\operatorname{mean\_rel\_lead} \in [0.05, 0.90]$):} The average of $(G_s - P_s)/G_s$ across the five seeds must lie between $0.05$ and $0.90$.
+\end{enumerate}
+}
+
+\noindent\textbf{Example 4.}\quad \textit{Using the values of $G$ and $P$ in Table~\ref{tab:seed_results}, prepare the rank table for the five seeds, calculate Spearman's rank correlation $\rho$ using equation~\eqref{eq:spearman}, and find the mean relative lead.}
+
+\smallskip
+\noindent\textbf{Solution.}\quad Let us rank the five values of $G$ and the five values of $P$ from smallest (rank $1$) to largest (rank $5$):
+
+\begin{center}
+\begin{tabular}{c r c r c c c}
+\toprule
+\textbf{Seed ($s$)} & \textbf{Grok Epoch ($G_s$)} & \textbf{Rank $R_G$} & \textbf{Peak Epoch ($P_s$)} & \textbf{Rank $R_P$} & \textbf{$d_s = R_G - R_P$} & \textbf{$d_s^2$}\\
+\midrule
+0 & 12,987 & 4 & 15,500 & 3 & $+1$ & 1\\
+1 & 6,921  & 1 & 8,500  & 1 & $\phantom{+}0$ & 0\\
+2 & 9,510  & 2 & 20,600 & 4 & $-2$ & 4\\
+3 & 11,019 & 3 & 12,900 & 2 & $+1$ & 1\\
+4 & 23,747 & 5 & 32,500 & 5 & $\phantom{+}0$ & 0\\
+\midrule
+\multicolumn{6}{r}{\textbf{Total ($\sum d_s^2$):}} & \textbf{6}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent Putting $n = 5$ and $\sum d_s^2 = 6$ into equation~\eqref{eq:spearman}, we get:
+\begin{align*}
+\rho &= 1 - \frac{6 \times 6}{5(5^2 - 1)}\\
+     &= 1 - \frac{36}{5 \times 24} = 1 - \frac{36}{120} = 1 - 0.30 = \mathbf{0.70}.
+\end{align*}
+Next, averaging the five relative leads $(G_s - P_s)/G_s$ from Table~\ref{tab:seed_results}, we get:
+\[
+\operatorname{mean\_rel\_lead} = \frac{-0.1935 - 0.2281 - 1.1661 - 0.1707 - 0.3686}{5} = \frac{-2.1270}{5} = \mathbf{-0.4254}.
+\]
+Both $\rho = 0.70$ (required $\ge 0.90$) and $\operatorname{mean\_rel\_lead} = -0.4254$ (required $0.05$ to $0.90$) fail their conditions.\Ans
+
+\medskip
+\noindent\textbf{4. Summary Table of Official and Exploratory Results.}\quad Table~\ref{tab:scoring_summary} compares the primary signal and the two exploratory signals against the benchmark requirements.
+
+\begin{table}[htbp]
+\centering
+\caption{Summary of Benchmark Scoring for Primary and Exploratory Signals}
+\label{tab:scoring_summary}
+\vspace{4pt}
+\small
+\begin{tabularx}{0.96\textwidth}{>{\raggedright\arraybackslash}X c c c c}
+\toprule
+\textbf{Signal Variant} & \textbf{Required} & \textbf{Early-Warning Frac.} & \textbf{Spearman $\rho$ (Pearson $r$)} & \textbf{Mean Rel.\ Lead / Verdict}\\
+\midrule
+\textbf{Primary: $\Omegapop$ global max} & \textbf{All 3 pass} & $\mathbf{0/5 = 0.00}$ ($\ge 0.80$) & $\mathbf{0.70}$ ($r = 0.90$; $\ge 0.90$) & $\mathbf{-0.4254}$ (\textbf{FAIL --- CLOSED})\\
+Exploratory: $\Omegapop$ zero-crossing & --- & $5/5 = 1.00$ & $-0.70$ ($r = -0.66$) & $+0.9181$ (Early noise near init)\\
+Exploratory: $\Omegatemp$ max ($W=100$) & --- & $4/5 = 0.80$ & $\phantom{-}0.00$ ($r = \phantom{-}0.30$) & $+0.1703$ (3 seeds tie at 5,000)\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\noindent\textbf{5. Temporal Sliding-Window Control and Transfer Entropy.}\quad Figure~\ref{fig:pop_vs_temp} compares the population curve $\Omegapop(t)$ with the temporal control curve $\Omegatemp(t)$ on Seed 0.
+\begin{enumerate}[label=\textbf{(\roman*)}]
+\item \textbf{Shape of the temporal curve:} In Seed 0, $\Omegatemp(t)$ is smooth instead of spiky. It starts near $1.55\text{ nats}$ at epoch $5{,}000$, drops to about $0.52\text{ nats}$ near epoch $10{,}000$ (before grokking at $12{,}987$), and then stays between $1.20$ and $1.45\text{ nats}$. It is never negative in any seed.
+\item \textbf{Why the temporal curve also fails:} Because each window of $100$ checkpoints spans $9{,}900$ epochs and three of the five seeds tie at the very first window centre (epoch $5{,}000$), $\Omegatemp(t)$ gets a rank correlation of $\rho = 0.00$.
+\item \textbf{Transfer Entropy ($\tau = 1, \ldots, 10$):} At lag $\tau = 1$, $\mathrm{TE}_{\Fzero \to \Fone}$ ($0.3299$ to $0.6125\text{ nats}$) is slightly larger than $\mathrm{TE}_{\Fone \to \Fzero}$ ($0.2752$ to $0.3812\text{ nats}$) in all five seeds. This simply reflects the common upward drift of the mean logits during training rather than an early warning of grokking.
+\end{enumerate}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth,trim=0 0 0 28,clip]{/Users/jonathanjohn/Documents/grokking-benchmark/08_Experiments/results/nanda_unified/reports/measured/measured_higher_mi_population_vs_temporal_seed0.png}
+\vspace{-4pt}
+\caption{Comparison on Seed 0 between Primary Population O-information $\Omegapop(t)$ (left, measured across $8{,}939$ test pairs at each checkpoint) and Exploratory Temporal O-information $\Omegatemp(t)$ (right, measured in $100$-checkpoint sliding windows on test-mean logits).}
+\label{fig:pop_vs_temp}
+\end{figure}
+
+\noindent\textbf{6. Overall Status of All Eight Predictors in the Benchmark.}\quad Table~\ref{tab:all_predictors} shows the status of all eight predictors in our evaluation order (Correlation Traps was removed on 30 September 2026 because it looks at post-grok collapse rather than pre-grok warning).
+
+\begin{table}[htbp]
+\centering
+\caption{Consolidated Status of All Eight Grokking Predictors in the Unified Benchmark}
+\label{tab:all_predictors}
+\vspace{4pt}
+\footnotesize
+\begin{tabularx}{\textwidth}{c l l X l}
+\toprule
+\textbf{\#} & \textbf{Predictor} & \textbf{Source Paper} & \textbf{Primary Event Rule and Key Benchmark Numbers} & \textbf{Status}\\
+\midrule
+1 & L2 Norm & Nanda et al.\ (2023) & MA crossover / zero-crossing: fires at epochs 113--136 or $\sim 1800$ ($5/5$ before grok), $\rho = 0.70 / 0.00$ & CLOSED -- negative\\
+2 & Dropout Variance & Salah \& Yevick (2025) & Variance peak: $0/5$ before grok (epochs 16,700--39,000), $\rho = 0.40$ & CLOSED -- negative\\
+3 & Spectral Alignment & Canatar et al.\ (2021) & Alignment max / $k_{90}$ min: $0/5$ before grok, $\rho = -0.30 / 0.30$ & CLOSED -- negative\\
+4 & AGE (NC1 Collapse) & Papyan et al.\ (2020) & NC1 minimum: $0/5$ before grok (epochs 29,300--37,800), $\rho = -0.40$ & CLOSED -- negative\\
+5 & HTSR Alpha & Martin \& Mahoney (2021) & Mean $\alpha$ min: $\operatorname{lead\_frac} = 0.00$ ($0/5$), $\rho = 0.90$, $\operatorname{mean\_rel\_lead} = -1.1849$ & CLOSED -- negative\\
+6 & Weight-PCA & Yunis et al.\ (2024) & NormEffRank min: $\operatorname{lead\_frac} = 0.00$ ($0/5$), $\rho = 0.80$, $\operatorname{mean\_rel\_lead} = -1.9029$ & CLOSED -- negative\\
+7 & \textbf{Higher-MI} & \textbf{Pomarico et al.\ (2025)} & \textbf{Pop.\ $\Omega$ max: $\operatorname{lead\_frac} = 0.00$ ($0/5$), $\rho = 0.70$, $\operatorname{mean\_rel\_lead} = -0.4254$} & \textbf{CLOSED -- negative}\\
+8 & Commutator Defect & Pending & Final predictor in evaluation order & Next -- not started\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Plans for the Next Reporting Period}
+
+\noindent\textbf{1. Remaining Technical Work.}
+\begin{enumerate}[label=\textbf{(\roman*)}]
+\item \textbf{Predictor 8 (Commutator Defect):} Implement and test Commutator Defect on the same five-seed saved checkpoints and score it under the fixed benchmark rules to complete all eight predictors.
+\item \textbf{Combined comparison plots:} Update the multi-predictor figures in \texttt{08\_Experiments/results/nanda\_unified/analysis/} (\texttt{02\_signals\_vs\_grok.png}, \texttt{03\_event\_vs\_grok\_scatter.png}, and \texttt{04\_lead\_times.png}) to include Higher-MI and Commutator Defect alongside Predictors 1 to 6.
+\item \textbf{Thesis chapters:} Start writing the Results and Discussion chapters in \texttt{05\_Thesis\_Document/}, comparing all predictors side by side and explaining why quantities that change near grokking still fail when tested as strict early-warning signals.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{2. Points for the Next Supervision Meeting.}
+\begin{enumerate}[label=\textbf{(\roman*)}]
+\item Review the choices made to adapt Higher-MI to 113-class modular addition (reducing the $113$ logits to $(\Fzero, \Fone, \Ftwo)$ and comparing population vs.\ temporal sampling).
+\item Discuss the common first spike in $\Omegapop(t)$ at epoch $1{,}900$ across all five seeds.
+\item Confirm the layout of the thesis Results chapter now that seven of the eight predictors have closed negative.
+\end{enumerate}
+
+\section*{Questions for Review}
+\addcontentsline{toc}{section}{Questions for Review}
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+\item State the meaning of each of the three summary variables $\Fzero, \Fone,$ and $\Ftwo$, and explain why the logit for the token \texttt{=} is excluded.
+\item Write down the formula for the margin $m$ in terms of $\Fzero$ and $\Fone$. Under what condition on $m$ is the model's prediction correct? \hfill\textbf{[Ans.\ $m = \Fzero - \Fone$; correct when $m > 0$]}
+\item Write down the formula for O-information $\Omega(\Fzero, \Fone, \Ftwo)$ and state what $\Omega > 0$ and $\Omega < 0$ mean.
+\item Why must the KSG neighbour count in each coordinate use a strict inequality ($< \varepsilon_i$) instead of $\le \varepsilon_i$?
+\item For Seed 3, the grok epoch is $G = 11{,}019$ and the peak epoch is $P = 12{,}900$. Find the timing lag $P - G$, the ratio $P/G$, and the relative lead $(G - P)/G$. \hfill\textbf{[Ans.\ $+1{,}881\text{ epochs}$; $1.17$; $-0.1707$]}
+\item Explain why the global-maximum rule for $\Omegapop(t)$ fails all three benchmark conditions across the five seeds.
+\end{enumerate}
+
+\end{document}

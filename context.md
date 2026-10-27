@@ -11664,3 +11664,80 @@ CLOSED-NEGATIVE, same pattern as L2, Dropout, Spectral, AGE, HTSR, Weight-PCA. T
 
 - `CLAUDE.md` — committed (270 lines added earlier, no new edits this session).
 - `context.md` — this section (append only).
+
+---
+
+# 2026-10-27 — Higher-MI diagrams separated by evidence type
+
+## Session Summary
+
+- Reorganized the three Higher-MI diagrams so their filenames and folders distinguish experimental measurements from a conceptual expectation schematic.
+- The ideal-behaviour curve remains a hypothetical schematic. It was moved to `05_Thesis_Document/Figures/schematics/schematic_not_measured_ideal_higher_mi_omega.png`.
+- The two measured plots were moved to `08_Experiments/results/nanda_unified/reports/measured/` and renamed with the `measured_` prefix.
+
+## Technical Decisions
+
+- `06_Code/scripts/plot_ideal_omega_schematic.py` now writes the schematic under `Figures/schematics/` with `schematic_not_measured` in the filename.
+- `06_Code/scripts/plot_higher_mi_curves.py` now writes checkpoint-derived plots under `reports/measured/` with `measured_` in each filename.
+- Updated both source TeX files in `Higher_MI_Textbook_LaTeX/` to reference the reorganized figure paths.
+- Added folder README files that state which figures are measured, which are hypothetical, and how to regenerate each set.
+- The earlier 2026-10-22 path entry is retained as historical record; the new paths above are current.
+
+## Current Project State
+
+- No checkpoint values, Higher-MI scores, or predictor verdicts changed in this organization pass.
+- Higher-MI remains CLOSED, negative; Commutator Defect remains the next predictor.
+
+## Files Modified
+
+- `06_Code/scripts/plot_ideal_omega_schematic.py` — new schematic output path and filename.
+- `06_Code/scripts/plot_higher_mi_curves.py` — new measured output directory and filenames.
+- `05_Thesis_Document/Figures/schematics/schematic_not_measured_ideal_higher_mi_omega.png` — moved schematic.
+- `05_Thesis_Document/Figures/README.md` — figure classification and regeneration guide.
+- `08_Experiments/results/nanda_unified/reports/measured/measured_higher_mi_population_omega_all_seeds.png` — moved measured plot.
+- `08_Experiments/results/nanda_unified/reports/measured/measured_higher_mi_population_vs_temporal_seed0.png` — moved measured control comparison.
+- `08_Experiments/results/nanda_unified/reports/README.md` — measured-report folder guide.
+- `Higher_MI_Textbook_LaTeX/main.tex` and `Higher_MI_Textbook_LaTeX/2026-10-27_Progress_Report_Higher_MI.tex` — updated figure paths.
+- `context.md` — this append-only entry.
+
+## Verification Addendum — 2026-10-27
+
+- Re-ran `06_Code/scripts/plot_higher_mi_curves.py` and `06_Code/scripts/plot_ideal_omega_schematic.py` successfully. The regenerated PNGs are present in their evidence-type folders.
+- Checked project references for the old figure paths. The active LaTeX references point to the reorganized paths; the older path in this file is retained only as historical record.
+- Confirmed that no checkpoint measurements, scores, or predictor conclusions changed. Higher-MI remains CLOSED, negative, and Commutator Defect remains next in the evaluation order.
+- Graphify outputs were refreshed during project graph inspection. This changed generated graph/report/cache files only; it did not change experiment data or results.
+
+### Additional Files Touched During Verification
+
+- `graphify-out/.graphify_labels.json`
+- `graphify-out/GRAPH_REPORT.md`
+- `graphify-out/cache/stat-index.json`
+- `graphify-out/graph.html`
+- `graphify-out/graph.json`
+- `graphify-out/manifest.json`
+- `context.md` — this append-only verification addendum.
+
+---
+
+# 2026-10-27 — Commit and push all current project changes
+
+## Session Summary
+
+- User explicitly asked to commit and push everything currently in the project worktree.
+- The scope includes all tracked modifications, deletions, and untracked files present at the time of staging, including generated reports and PDFs that an earlier instruction had kept local. The latest instruction supersedes that earlier exclusion for this commit.
+- No experiment was run and no Higher-MI measurements or conclusions were changed for this commit.
+
+## Technical Decisions
+
+- Follow the project commit procedure: update this file first, then run `git add .`, commit, push, and verify the final worktree state.
+- Branch: `main`; remote: `origin` (`git@github.com:jonathanjohn47/grokking-benchmark.git`).
+
+## Current Project State
+
+- Higher-MI remains CLOSED, negative. Commutator Defect remains next in the predictor order.
+- Commit and push are being performed now; final commit and worktree status will be reported in the conversation.
+
+## Files Modified
+
+- `context.md` — this append-only commit record.
+- All other current tracked, deleted, and untracked project files are included by the user's instruction to commit everything.
