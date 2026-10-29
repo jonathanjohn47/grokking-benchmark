@@ -11748,3 +11748,53 @@ CLOSED-NEGATIVE, same pattern as L2, Dropout, Spectral, AGE, HTSR, Weight-PCA. T
 - Its post-commit Graphify hook rebuilt the project graph against the committed files and refreshed six tracked outputs under `graphify-out/`.
 - Those regenerated Graphify outputs are being committed and pushed in a follow-up commit so the worktree can be verified clean.
 - This graph refresh changes project documentation and generated graph metadata only. It does not change experiment data, scores, or predictor conclusions.
+
+
+---
+
+# 2026-10-30 — Higher-MI spike grid diagnosis settled (DRIFTING verdict)
+
+## Session Summary
+
+- Addressed the open thesis/supervision agenda item for Predictor 7 (Higher-MI population O-information, $\Omega_{pop}$): settling whether the oscillatory spikes are locked to the checkpoint grid (an artifact shared across runs) or follow each model's own trajectory (model-specific dynamics).
+- Built and ran `06_Code/scripts/check_spike_grid.py` against `08_Experiments/results/nanda_unified`.
+- Located per-seed $\Omega_{pop}$ series at `08_Experiments/results/nanda_unified/seed_*/higher_mi/higher_mi_signal.json` using JSON key `population_omega_history` (401 points, checkpoints 0 to 40000 step 100).
+- Confirmed all 5 seeds pass the sanity assertions: series length equals 401, max value is in $[0.5, 5.0]$ nats (measured $1.2689$ to $2.3403$), and grok/event epochs match the frozen benchmark records (Seed 0: grok 12987, event 15500; Seed 1: grok 6921, event 8500; Seed 2: grok 9510, event 20600; Seed 3: grok 11019, event 12900; Seed 4: grok 23747, event 32500).
+- Peak detection (local maximum $> 0.20$ nats, separation $\ge 3$ checkpoints / 300 epochs) identified 126 total peaks across the 5 seeds: Seed 0 (27 peaks), Seed 1 (24 peaks), Seed 2 (13 peaks), Seed 3 (33 peaks), Seed 4 (29 peaks).
+- **Test 1 (Coincidence across all seeds within $\pm 3$ checkpoints / $\pm 300$ epochs):** 15 / 126 peaks (11.90% pooled; per-seed: Seed 0: 11.1%, Seed 1: 12.5%, Seed 2: 23.1%, Seed 3: 9.1%, Seed 4: 10.3%). Only the first 3 peaks (epochs 1900, ~3500, ~5000) coincide across all seeds; zero peaks coincide across all seeds from epoch 5500 onwards.
+- **Test 2 (Period and spread):** Median inter-peak gaps: Seed 0 (14.0 ckpts / 1400 epochs), Seed 1 (16.0 ckpts / 1600 epochs), Seed 2 (26.5 ckpts / 2650 epochs), Seed 3 (15.0 ckpts / 1500 epochs), Seed 4 (14.5 ckpts / 1450 epochs). Spread across seeds: 12.50 checkpoints.
+- **Verdict by exact decision rules:** Since coincidence is $11.90\% \le 30\%$, the verdict is **`DRIFTING (spikes belong to the model)`**.
+- Investigated the evaluation wrapper and DataLoader rebuilding in `06_Code/scripts/run_nanda_benchmark.py`: confirmed that `_checkpoint_predictor_higher_mi` (lines 1146–1152) explicitly seeds `torch.manual_seed(seed)` and `np.random.seed(seed)` before building `seeded_test_loader` (which has `shuffle=False` and iterates deterministically). Noted that `recompute_from_checkpoints` line 1291 builds an unseeded loader used by `dropout_variance`; proposed a patch for `recompute_from_checkpoints` without applying it.
+- Explained the early alignment mechanism: during epochs 0–5200 (pre-grok), all seeds undergo rapid memorization (train accuracy $\ge 99\%$ by epoch 205, L2 norm peak at epoch ~1050), yielding shared geometric reorganizations at epoch 1900, ~3500, and ~5000 before circuit assembly bifurcates.
+
+## Technical Decisions
+
+- Diagnostic script `06_Code/scripts/check_spike_grid.py` accepts results root via CLI, executes assertions, implements peak detection with both scipy and pure Python fallback, evaluates Tests 1 and 2, outputs JSON, writes markdown report, and generates a 5-panel diagnostic figure.
+- Preserved existing training code, checkpoint evaluations, and frozen predictor results untouched.
+
+## Current Project State
+
+- Cause of the Higher-MI $\Omega_{pop}$ spikes is settled: **DRIFTING (spikes belong to the model)**. Early pre-grok alignment is explained by shared memorization/weight decay dynamics, while post-grok spikes desynchronize with model-specific representation trajectories.
+- Predictor 7 (Higher-MI) remains CLOSED, negative (FAIL).
+- Next predictor in sequence: Commutator Defect (Predictor 8 of 8).
+
+## Files Modified
+
+- New: `06_Code/scripts/check_spike_grid.py` — diagnostic CLI script.
+- New: `08_Experiments/results/nanda_unified/reports/spike_grid_check.json` — per-seed peak epochs and test statistics for hand verification.
+- New: `08_Experiments/results/nanda_unified/reports/spike_grid_check.md` — diagnostic summary report.
+- New: `08_Experiments/results/nanda_unified/reports/spike_grid_check.png` — 5-panel visualization of $\Omega_{pop}(t)$ with detected peaks and grok epochs.
+- `context.md` — this append-only entry.
+
+
+## Commit Addendum — 2026-10-30
+
+### Files Included in Commit
+- `06_Code/scripts/check_spike_grid.py`: Diagnostic CLI script implementing sanity assertions, scipy/fallback peak detection, coincidence and period tests, and plot generation.
+- `08_Experiments/results/nanda_unified/reports/spike_grid_check.json`: Hand-verifiable peak epochs and diagnostic metrics for all 5 seeds.
+- `08_Experiments/results/nanda_unified/reports/spike_grid_check.md`: Structured markdown report recording test results, per-seed statistics, and the final DRIFTING verdict.
+- `08_Experiments/results/nanda_unified/reports/spike_grid_check.png`: 5-panel diagnostic figure visualizing $\Omega_{pop}(t)$ traces, detected peaks, and grokking epochs.
+- `08_Experiments/results/nanda_unified/reports/measured/measured_higher_mi_population_omega_all_seeds.png`: Refreshed measured plot for Higher-MI population O-information across all seeds.
+- `08_Experiments/results/nanda_unified/reports/measured/measured_higher_mi_population_vs_temporal_seed0.png`: Refreshed measured plot comparing population vs temporal O-information on Seed 0.
+- `project_compilation.pdf`: Updated compiled project document reflecting current thesis state and findings.
+- `context.md`: This append-only record.
