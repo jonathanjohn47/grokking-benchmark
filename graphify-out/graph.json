@@ -21,14 +21,304 @@
   },
   "nodes": [
     {
+      "label": "check_spike_grid.py",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_check_spike_grid",
+      "community": 77,
+      "norm_label": "check_spike_grid.py"
+    },
+    {
+      "label": "detect_peaks()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "scripts_check_spike_grid_detect_peaks",
+      "community": 77,
+      "norm_label": "detect_peaks()"
+    },
+    {
+      "label": "load_seed_series()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L55",
+      "_origin": "ast",
+      "id": "scripts_check_spike_grid_load_seed_series",
+      "community": 77,
+      "norm_label": "load_seed_series()"
+    },
+    {
+      "label": "run_checks()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L118",
+      "_origin": "ast",
+      "id": "scripts_check_spike_grid_run_checks",
+      "community": 77,
+      "norm_label": "run_checks()"
+    },
+    {
+      "label": "plot_spike_grid()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L208",
+      "_origin": "ast",
+      "id": "scripts_check_spike_grid_plot_spike_grid",
+      "community": 77,
+      "norm_label": "plot_spike_grid()"
+    },
+    {
+      "label": "write_json_output()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L263",
+      "_origin": "ast",
+      "id": "scripts_check_spike_grid_write_json_output",
+      "community": 77,
+      "norm_label": "write_json_output()"
+    },
+    {
+      "label": "write_markdown_report()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L306",
+      "_origin": "ast",
+      "id": "scripts_check_spike_grid_write_markdown_report",
+      "community": 77,
+      "norm_label": "write_markdown_report()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L393",
+      "_origin": "ast",
+      "id": "scripts_check_spike_grid_main",
+      "community": 77,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Detect local maxima above min_height with at least min_distance separation.",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L31",
+      "_origin": "ast",
+      "id": "scripts_check_spike_grid_rationale_31",
+      "community": 77,
+      "norm_label": "detect local maxima above min_height with at least min_distance separation."
+    },
+    {
+      "label": "Find and load per-seed Omega series.     Asserts 401 points and maximum in range",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L56",
+      "_origin": "ast",
+      "id": "scripts_check_spike_grid_rationale_56",
+      "community": 77,
+      "norm_label": "find and load per-seed omega series.     asserts 401 points and maximum in range"
+    },
+    {
+      "label": "Performs peak detection, Test 1 (Coincidence), and Test 2 (Period).     Computes",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L119",
+      "_origin": "ast",
+      "id": "scripts_check_spike_grid_rationale_119",
+      "community": 77,
+      "norm_label": "performs peak detection, test 1 (coincidence), and test 2 (period).     computes"
+    },
+    {
+      "label": "Generates spike_grid_check.png with 5 subplots showing detected peaks.",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L209",
+      "_origin": "ast",
+      "id": "scripts_check_spike_grid_rationale_209",
+      "community": 77,
+      "norm_label": "generates spike_grid_check.png with 5 subplots showing detected peaks."
+    },
+    {
+      "label": "Saves full numeric details to JSON so every number can be checked by hand.",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L264",
+      "_origin": "ast",
+      "id": "scripts_check_spike_grid_rationale_264",
+      "community": 77,
+      "norm_label": "saves full numeric details to json so every number can be checked by hand."
+    },
+    {
+      "label": "Writes the short diagnostic report in Markdown format.",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L307",
+      "_origin": "ast",
+      "id": "scripts_check_spike_grid_rationale_307",
+      "community": 77,
+      "norm_label": "writes the short diagnostic report in markdown format."
+    },
+    {
+      "label": "spike_grid_check.md",
+      "file_type": "document",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "reports_spike_grid_check",
+      "community": 76,
+      "norm_label": "spike_grid_check.md"
+    },
+    {
+      "label": "Higher-MI Spike Grid Diagnosis Report",
+      "file_type": "document",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "reports_spike_grid_check_higher_mi_spike_grid_diagnosis_report",
+      "community": 76,
+      "norm_label": "higher-mi spike grid diagnosis report"
+    },
+    {
+      "label": "1. Cross-Check with Recorded Values",
+      "file_type": "document",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "reports_spike_grid_check_1_cross_check_with_recorded_values",
+      "community": 76,
+      "norm_label": "1. cross-check with recorded values"
+    },
+    {
+      "label": "2. Summary Table: Peaks per Seed",
+      "file_type": "document",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "reports_spike_grid_check_2_summary_table_peaks_per_seed",
+      "community": 76,
+      "norm_label": "2. summary table: peaks per seed"
+    },
+    {
+      "label": "3. Test Results",
+      "file_type": "document",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "reports_spike_grid_check_3_test_results",
+      "community": 76,
+      "norm_label": "3. test results"
+    },
+    {
+      "label": "Test 1: Coincidence Across Seeds",
+      "file_type": "document",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "reports_spike_grid_check_test_1_coincidence_across_seeds",
+      "community": 76,
+      "norm_label": "test 1: coincidence across seeds"
+    },
+    {
+      "label": "Test 2: Period and Spread Across Seeds",
+      "file_type": "document",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "reports_spike_grid_check_test_2_period_and_spread_across_seeds",
+      "community": 76,
+      "norm_label": "test 2: period and spread across seeds"
+    },
+    {
+      "label": "4. Verdict",
+      "file_type": "document",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L46",
+      "_origin": "ast",
+      "id": "reports_spike_grid_check_4_verdict",
+      "community": 76,
+      "norm_label": "4. verdict"
+    },
+    {
+      "label": "Physical Mechanism and Observations:",
+      "file_type": "document",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L57",
+      "_origin": "ast",
+      "id": "reports_spike_grid_check_physical_mechanism_and_observations",
+      "community": 76,
+      "norm_label": "physical mechanism and observations:"
+    },
+    {
+      "label": "5. Full Peak Epoch Lists per Seed",
+      "file_type": "document",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L62",
+      "_origin": "ast",
+      "id": "reports_spike_grid_check_5_full_peak_epoch_lists_per_seed",
+      "community": 76,
+      "norm_label": "5. full peak epoch lists per seed"
+    },
+    {
+      "label": "Seed 0 (27 peaks)",
+      "file_type": "document",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L64",
+      "_origin": "ast",
+      "id": "reports_spike_grid_check_seed_0_27_peaks",
+      "community": 76,
+      "norm_label": "seed 0 (27 peaks)"
+    },
+    {
+      "label": "Seed 1 (24 peaks)",
+      "file_type": "document",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L69",
+      "_origin": "ast",
+      "id": "reports_spike_grid_check_seed_1_24_peaks",
+      "community": 76,
+      "norm_label": "seed 1 (24 peaks)"
+    },
+    {
+      "label": "Seed 2 (13 peaks)",
+      "file_type": "document",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L74",
+      "_origin": "ast",
+      "id": "reports_spike_grid_check_seed_2_13_peaks",
+      "community": 76,
+      "norm_label": "seed 2 (13 peaks)"
+    },
+    {
+      "label": "Seed 3 (33 peaks)",
+      "file_type": "document",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L79",
+      "_origin": "ast",
+      "id": "reports_spike_grid_check_seed_3_33_peaks",
+      "community": 76,
+      "norm_label": "seed 3 (33 peaks)"
+    },
+    {
+      "label": "Seed 4 (29 peaks)",
+      "file_type": "document",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L84",
+      "_origin": "ast",
+      "id": "reports_spike_grid_check_seed_4_29_peaks",
+      "community": 76,
+      "norm_label": "seed 4 (29 peaks)"
+    },
+    {
       "label": "SKILL.md",
       "file_type": "document",
       "source_file": ".agents/skills/indian-english/SKILL.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "indian_english_skill",
       "community": 26,
-      "norm_label": "skill.md"
+      "norm_label": "skill.md",
+      "id": "indian_english_skill"
     },
     {
       "label": "Indian English Communication Skill",
@@ -36,9 +326,9 @@
       "source_file": ".agents/skills/indian-english/SKILL.md",
       "source_location": "L6",
       "_origin": "ast",
-      "id": "indian_english_skill_indian_english_communication_skill",
       "community": 26,
-      "norm_label": "indian english communication skill"
+      "norm_label": "indian english communication skill",
+      "id": "indian_english_skill_indian_english_communication_skill"
     },
     {
       "label": "Purpose",
@@ -46,9 +336,9 @@
       "source_file": ".agents/skills/indian-english/SKILL.md",
       "source_location": "L8",
       "_origin": "ast",
-      "id": "indian_english_skill_purpose",
       "community": 26,
-      "norm_label": "purpose"
+      "norm_label": "purpose",
+      "id": "indian_english_skill_purpose"
     },
     {
       "label": "1. Non-negotiable rule",
@@ -56,9 +346,9 @@
       "source_file": ".agents/skills/indian-english/SKILL.md",
       "source_location": "L28",
       "_origin": "ast",
-      "id": "indian_english_skill_1_non_negotiable_rule",
       "community": 26,
-      "norm_label": "1. non-negotiable rule"
+      "norm_label": "1. non-negotiable rule",
+      "id": "indian_english_skill_1_non_negotiable_rule"
     },
     {
       "label": "2. What Indian English means here",
@@ -66,9 +356,9 @@
       "source_file": ".agents/skills/indian-english/SKILL.md",
       "source_location": "L59",
       "_origin": "ast",
-      "id": "indian_english_skill_2_what_indian_english_means_here",
       "community": 26,
-      "norm_label": "2. what indian english means here"
+      "norm_label": "2. what indian english means here",
+      "id": "indian_english_skill_2_what_indian_english_means_here"
     },
     {
       "label": "3. Do not confuse Indian English with simple English",
@@ -76,9 +366,9 @@
       "source_file": ".agents/skills/indian-english/SKILL.md",
       "source_location": "L86",
       "_origin": "ast",
-      "id": "indian_english_skill_3_do_not_confuse_indian_english_with_simple_english",
       "community": 26,
-      "norm_label": "3. do not confuse indian english with simple english"
+      "norm_label": "3. do not confuse indian english with simple english",
+      "id": "indian_english_skill_3_do_not_confuse_indian_english_with_simple_english"
     },
     {
       "label": "4. Preferred Indian teaching voice",
@@ -86,9 +376,9 @@
       "source_file": ".agents/skills/indian-english/SKILL.md",
       "source_location": "L124",
       "_origin": "ast",
-      "id": "indian_english_skill_4_preferred_indian_teaching_voice",
       "community": 26,
-      "norm_label": "4. preferred indian teaching voice"
+      "norm_label": "4. preferred indian teaching voice",
+      "id": "indian_english_skill_4_preferred_indian_teaching_voice"
     },
     {
       "label": "5. Indian idioms and expressions",
@@ -96,9 +386,9 @@
       "source_file": ".agents/skills/indian-english/SKILL.md",
       "source_location": "L152",
       "_origin": "ast",
-      "id": "indian_english_skill_5_indian_idioms_and_expressions",
       "community": 26,
-      "norm_label": "5. indian idioms and expressions"
+      "norm_label": "5. indian idioms and expressions",
+      "id": "indian_english_skill_5_indian_idioms_and_expressions"
     },
     {
       "label": "6. Avoid stereotypical or incorrect Indian English",
@@ -106,9 +396,9 @@
       "source_file": ".agents/skills/indian-english/SKILL.md",
       "source_location": "L167",
       "_origin": "ast",
-      "id": "indian_english_skill_6_avoid_stereotypical_or_incorrect_indian_english",
       "community": 26,
-      "norm_label": "6. avoid stereotypical or incorrect indian english"
+      "norm_label": "6. avoid stereotypical or incorrect indian english",
+      "id": "indian_english_skill_6_avoid_stereotypical_or_incorrect_indian_english"
     },
     {
       "label": "7. Avoid American corporate language",
@@ -116,9 +406,9 @@
       "source_file": ".agents/skills/indian-english/SKILL.md",
       "source_location": "L195",
       "_origin": "ast",
-      "id": "indian_english_skill_7_avoid_american_corporate_language",
       "community": 26,
-      "norm_label": "7. avoid american corporate language"
+      "norm_label": "7. avoid american corporate language",
+      "id": "indian_english_skill_7_avoid_american_corporate_language"
     },
     {
       "label": "8. Technical communication",
@@ -126,9 +416,9 @@
       "source_file": ".agents/skills/indian-english/SKILL.md",
       "source_location": "L235",
       "_origin": "ast",
-      "id": "indian_english_skill_8_technical_communication",
       "community": 26,
-      "norm_label": "8. technical communication"
+      "norm_label": "8. technical communication",
+      "id": "indian_english_skill_8_technical_communication"
     },
     {
       "label": "9. Sentence construction",
@@ -136,9 +426,9 @@
       "source_file": ".agents/skills/indian-english/SKILL.md",
       "source_location": "L260",
       "_origin": "ast",
-      "id": "indian_english_skill_9_sentence_construction",
       "community": 26,
-      "norm_label": "9. sentence construction"
+      "norm_label": "9. sentence construction",
+      "id": "indian_english_skill_9_sentence_construction"
     },
     {
       "label": "10. Do not overuse enthusiasm",
@@ -146,9 +436,9 @@
       "source_file": ".agents/skills/indian-english/SKILL.md",
       "source_location": "L286",
       "_origin": "ast",
-      "id": "indian_english_skill_10_do_not_overuse_enthusiasm",
       "community": 26,
-      "norm_label": "10. do not overuse enthusiasm"
+      "norm_label": "10. do not overuse enthusiasm",
+      "id": "indian_english_skill_10_do_not_overuse_enthusiasm"
     },
     {
       "label": "11. Professional tone",
@@ -156,9 +446,9 @@
       "source_file": ".agents/skills/indian-english/SKILL.md",
       "source_location": "L310",
       "_origin": "ast",
-      "id": "indian_english_skill_11_professional_tone",
       "community": 26,
-      "norm_label": "11. professional tone"
+      "norm_label": "11. professional tone",
+      "id": "indian_english_skill_11_professional_tone"
     },
     {
       "label": "12. When rewriting user text",
@@ -166,9 +456,9 @@
       "source_file": ".agents/skills/indian-english/SKILL.md",
       "source_location": "L341",
       "_origin": "ast",
-      "id": "indian_english_skill_12_when_rewriting_user_text",
       "community": 26,
-      "norm_label": "12. when rewriting user text"
+      "norm_label": "12. when rewriting user text",
+      "id": "indian_english_skill_12_when_rewriting_user_text"
     },
     {
       "label": "13. Final quality check",
@@ -176,9 +466,9 @@
       "source_file": ".agents/skills/indian-english/SKILL.md",
       "source_location": "L354",
       "_origin": "ast",
-      "id": "indian_english_skill_13_final_quality_check",
       "community": 26,
-      "norm_label": "13. final quality check"
+      "norm_label": "13. final quality check",
+      "id": "indian_english_skill_13_final_quality_check"
     },
     {
       "label": "Core instruction",
@@ -186,9 +476,9 @@
       "source_file": ".agents/skills/indian-english/SKILL.md",
       "source_location": "L373",
       "_origin": "ast",
-      "id": "indian_english_skill_core_instruction",
       "community": 26,
-      "norm_label": "core instruction"
+      "norm_label": "core instruction",
+      "id": "indian_english_skill_core_instruction"
     },
     {
       "label": "README.md",
@@ -196,9 +486,9 @@
       "source_file": "05_Thesis_Document/Figures/README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "figures_readme",
       "community": 71,
-      "norm_label": "readme.md"
+      "norm_label": "readme.md",
+      "id": "figures_readme"
     },
     {
       "label": "Figure organisation",
@@ -206,9 +496,9 @@
       "source_file": "05_Thesis_Document/Figures/README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "figures_readme_figure_organisation",
       "community": 71,
-      "norm_label": "figure organisation"
+      "norm_label": "figure organisation",
+      "id": "figures_readme_figure_organisation"
     },
     {
       "label": "Measured experiment figures",
@@ -216,9 +506,9 @@
       "source_file": "05_Thesis_Document/Figures/README.md",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "figures_readme_measured_experiment_figures",
       "community": 71,
-      "norm_label": "measured experiment figures"
+      "norm_label": "measured experiment figures",
+      "id": "figures_readme_measured_experiment_figures"
     },
     {
       "label": "Schematics and hypothetical figures",
@@ -226,9 +516,9 @@
       "source_file": "05_Thesis_Document/Figures/README.md",
       "source_location": "L14",
       "_origin": "ast",
-      "id": "figures_readme_schematics_and_hypothetical_figures",
       "community": 71,
-      "norm_label": "schematics and hypothetical figures"
+      "norm_label": "schematics and hypothetical figures",
+      "id": "figures_readme_schematics_and_hypothetical_figures"
     },
     {
       "label": "General rule",
@@ -236,9 +526,9 @@
       "source_file": "05_Thesis_Document/Figures/README.md",
       "source_location": "L22",
       "_origin": "ast",
-      "id": "figures_readme_general_rule",
       "community": 71,
-      "norm_label": "general rule"
+      "norm_label": "general rule",
+      "id": "figures_readme_general_rule"
     },
     {
       "label": "plot_higher_mi_curves.py",
@@ -246,9 +536,9 @@
       "source_file": "06_Code/scripts/plot_higher_mi_curves.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "scripts_plot_higher_mi_curves",
       "community": 49,
-      "norm_label": "plot_higher_mi_curves.py"
+      "norm_label": "plot_higher_mi_curves.py",
+      "id": "scripts_plot_higher_mi_curves"
     },
     {
       "label": "load_seed_higher_mi()",
@@ -256,9 +546,9 @@
       "source_file": "06_Code/scripts/plot_higher_mi_curves.py",
       "source_location": "L41",
       "_origin": "ast",
-      "id": "scripts_plot_higher_mi_curves_load_seed_higher_mi",
       "community": 49,
-      "norm_label": "load_seed_higher_mi()"
+      "norm_label": "load_seed_higher_mi()",
+      "id": "scripts_plot_higher_mi_curves_load_seed_higher_mi"
     },
     {
       "label": "plot_population_all_seeds()",
@@ -266,9 +556,9 @@
       "source_file": "06_Code/scripts/plot_higher_mi_curves.py",
       "source_location": "L56",
       "_origin": "ast",
-      "id": "scripts_plot_higher_mi_curves_plot_population_all_seeds",
       "community": 49,
-      "norm_label": "plot_population_all_seeds()"
+      "norm_label": "plot_population_all_seeds()",
+      "id": "scripts_plot_higher_mi_curves_plot_population_all_seeds"
     },
     {
       "label": "plot_population_vs_temporal_seed0()",
@@ -276,9 +566,9 @@
       "source_file": "06_Code/scripts/plot_higher_mi_curves.py",
       "source_location": "L79",
       "_origin": "ast",
-      "id": "scripts_plot_higher_mi_curves_plot_population_vs_temporal_seed0",
       "community": 49,
-      "norm_label": "plot_population_vs_temporal_seed0()"
+      "norm_label": "plot_population_vs_temporal_seed0()",
+      "id": "scripts_plot_higher_mi_curves_plot_population_vs_temporal_seed0"
     },
     {
       "label": "main()",
@@ -286,9 +576,9 @@
       "source_file": "06_Code/scripts/plot_higher_mi_curves.py",
       "source_location": "L101",
       "_origin": "ast",
-      "id": "scripts_plot_higher_mi_curves_main",
       "community": 49,
-      "norm_label": "main()"
+      "norm_label": "main()",
+      "id": "scripts_plot_higher_mi_curves_main"
     },
     {
       "label": "plot_ideal_omega_schematic.py",
@@ -296,9 +586,9 @@
       "source_file": "06_Code/scripts/plot_ideal_omega_schematic.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "scripts_plot_ideal_omega_schematic",
       "community": 57,
-      "norm_label": "plot_ideal_omega_schematic.py"
+      "norm_label": "plot_ideal_omega_schematic.py",
+      "id": "scripts_plot_ideal_omega_schematic"
     },
     {
       "label": "Schematic (NOT real data) of the ideal Higher-MI population O-information curve.",
@@ -306,9 +596,9 @@
       "source_file": "06_Code/scripts/plot_ideal_omega_schematic.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "scripts_plot_ideal_omega_schematic_rationale_1",
       "community": 57,
-      "norm_label": "schematic (not real data) of the ideal higher-mi population o-information curve."
+      "norm_label": "schematic (not real data) of the ideal higher-mi population o-information curve.",
+      "id": "scripts_plot_ideal_omega_schematic_rationale_1"
     },
     {
       "label": "README.md",
@@ -316,9 +606,9 @@
       "source_file": "08_Experiments/results/nanda_unified/reports/README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "reports_readme",
       "community": 74,
-      "norm_label": "readme.md"
+      "norm_label": "readme.md",
+      "id": "reports_readme"
     },
     {
       "label": "Higher-MI report figures",
@@ -326,9 +616,9 @@
       "source_file": "08_Experiments/results/nanda_unified/reports/README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "reports_readme_higher_mi_report_figures",
       "community": 74,
-      "norm_label": "higher-mi report figures"
+      "norm_label": "higher-mi report figures",
+      "id": "reports_readme_higher_mi_report_figures"
     },
     {
       "label": "Measured",
@@ -336,9 +626,9 @@
       "source_file": "08_Experiments/results/nanda_unified/reports/README.md",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "reports_readme_measured",
       "community": 74,
-      "norm_label": "measured"
+      "norm_label": "measured",
+      "id": "reports_readme_measured"
     },
     {
       "label": "AGENTS.md",
@@ -346,9 +636,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "agents",
       "community": 64,
-      "norm_label": "agents.md"
+      "norm_label": "agents.md",
+      "id": "agents"
     },
     {
       "label": "1. MANDATORY PRECURSOR \u2014 READ `context.md` FIRST",
@@ -356,9 +646,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "agents_1_mandatory_precursor_read_context_md_first",
       "community": 64,
-      "norm_label": "1. mandatory precursor \u2014 read `context.md` first"
+      "norm_label": "1. mandatory precursor \u2014 read `context.md` first",
+      "id": "agents_1_mandatory_precursor_read_context_md_first"
     },
     {
       "label": "Required procedure",
@@ -366,9 +656,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L18",
       "_origin": "ast",
-      "id": "agents_required_procedure",
       "community": 64,
-      "norm_label": "required procedure"
+      "norm_label": "required procedure",
+      "id": "agents_required_procedure"
     },
     {
       "label": "2. MANDATORY COMMUNICATION SKILL \u2014 `indian-english`",
@@ -376,9 +666,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L40",
       "_origin": "ast",
-      "id": "agents_2_mandatory_communication_skill_indian_english",
       "community": 64,
-      "norm_label": "2. mandatory communication skill \u2014 `indian-english`"
+      "norm_label": "2. mandatory communication skill \u2014 `indian-english`",
+      "id": "agents_2_mandatory_communication_skill_indian_english"
     },
     {
       "label": "MANDATORY COMMUNICATION SKILL",
@@ -386,9 +676,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L42",
       "_origin": "ast",
-      "id": "agents_mandatory_communication_skill",
       "community": 73,
-      "norm_label": "mandatory communication skill"
+      "norm_label": "mandatory communication skill",
+      "id": "agents_mandatory_communication_skill"
     },
     {
       "label": "Communication priority",
@@ -396,9 +686,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L59",
       "_origin": "ast",
-      "id": "agents_communication_priority",
       "community": 73,
-      "norm_label": "communication priority"
+      "norm_label": "communication priority",
+      "id": "agents_communication_priority"
     },
     {
       "label": "Mandatory pre-send check",
@@ -406,9 +696,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L81",
       "_origin": "ast",
-      "id": "agents_mandatory_pre_send_check",
       "community": 73,
-      "norm_label": "mandatory pre-send check"
+      "norm_label": "mandatory pre-send check",
+      "id": "agents_mandatory_pre_send_check"
     },
     {
       "label": "3. PROJECT IDENTITY",
@@ -416,9 +706,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L103",
       "_origin": "ast",
-      "id": "agents_3_project_identity",
       "community": 64,
-      "norm_label": "3. project identity"
+      "norm_label": "3. project identity",
+      "id": "agents_3_project_identity"
     },
     {
       "label": "4. CORE ROLE \u2014 TEACHER FIRST",
@@ -426,9 +716,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L111",
       "_origin": "ast",
-      "id": "agents_4_core_role_teacher_first",
       "community": 64,
-      "norm_label": "4. core role \u2014 teacher first"
+      "norm_label": "4. core role \u2014 teacher first",
+      "id": "agents_4_core_role_teacher_first"
     },
     {
       "label": "5. LEARNING PACE \u2014 ONE STEP AT A TIME",
@@ -436,9 +726,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L137",
       "_origin": "ast",
-      "id": "agents_5_learning_pace_one_step_at_a_time",
       "community": 65,
-      "norm_label": "5. learning pace \u2014 one step at a time"
+      "norm_label": "5. learning pace \u2014 one step at a time",
+      "id": "agents_5_learning_pace_one_step_at_a_time"
     },
     {
       "label": "Default teaching style",
@@ -446,9 +736,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L143",
       "_origin": "ast",
-      "id": "agents_default_teaching_style",
       "community": 65,
-      "norm_label": "default teaching style"
+      "norm_label": "default teaching style",
+      "id": "agents_default_teaching_style"
     },
     {
       "label": "Progressive disclosure",
@@ -456,9 +746,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L153",
       "_origin": "ast",
-      "id": "agents_progressive_disclosure",
       "community": 65,
-      "norm_label": "progressive disclosure"
+      "norm_label": "progressive disclosure",
+      "id": "agents_progressive_disclosure"
     },
     {
       "label": "Reduce cognitive load",
@@ -466,9 +756,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L167",
       "_origin": "ast",
-      "id": "agents_reduce_cognitive_load",
       "community": 65,
-      "norm_label": "reduce cognitive load"
+      "norm_label": "reduce cognitive load",
+      "id": "agents_reduce_cognitive_load"
     },
     {
       "label": "Questions",
@@ -476,9 +766,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L182",
       "_origin": "ast",
-      "id": "agents_questions",
       "community": 65,
-      "norm_label": "questions"
+      "norm_label": "questions",
+      "id": "agents_questions"
     },
     {
       "label": "Roadmaps",
@@ -486,9 +776,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L188",
       "_origin": "ast",
-      "id": "agents_roadmaps",
       "community": 65,
-      "norm_label": "roadmaps"
+      "norm_label": "roadmaps",
+      "id": "agents_roadmaps"
     },
     {
       "label": "Code explanations",
@@ -496,9 +786,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L196",
       "_origin": "ast",
-      "id": "agents_code_explanations",
       "community": 65,
-      "norm_label": "code explanations"
+      "norm_label": "code explanations",
+      "id": "agents_code_explanations"
     },
     {
       "label": "Stop rule",
@@ -506,9 +796,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L204",
       "_origin": "ast",
-      "id": "agents_stop_rule",
       "community": 65,
-      "norm_label": "stop rule"
+      "norm_label": "stop rule",
+      "id": "agents_stop_rule"
     },
     {
       "label": "User override",
@@ -516,9 +806,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L212",
       "_origin": "ast",
-      "id": "agents_user_override",
       "community": 65,
-      "norm_label": "user override"
+      "norm_label": "user override",
+      "id": "agents_user_override"
     },
     {
       "label": "6. MANDATORY PROJECT WORKFLOW",
@@ -526,9 +816,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L225",
       "_origin": "ast",
-      "id": "agents_6_mandatory_project_workflow",
       "community": 70,
-      "norm_label": "6. mandatory project workflow"
+      "norm_label": "6. mandatory project workflow",
+      "id": "agents_6_mandatory_project_workflow"
     },
     {
       "label": "Step 1 \u2014 Read `context.md`",
@@ -536,9 +826,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L227",
       "_origin": "ast",
-      "id": "agents_step_1_read_context_md",
       "community": 70,
-      "norm_label": "step 1 \u2014 read `context.md`"
+      "norm_label": "step 1 \u2014 read `context.md`",
+      "id": "agents_step_1_read_context_md"
     },
     {
       "label": "Step 2 \u2014 Inspect Graphify",
@@ -546,9 +836,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L239",
       "_origin": "ast",
-      "id": "agents_step_2_inspect_graphify",
       "community": 70,
-      "norm_label": "step 2 \u2014 inspect graphify"
+      "norm_label": "step 2 \u2014 inspect graphify",
+      "id": "agents_step_2_inspect_graphify"
     },
     {
       "label": "Step 3 \u2014 Understand before changing",
@@ -556,9 +846,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L271",
       "_origin": "ast",
-      "id": "agents_step_3_understand_before_changing",
       "community": 70,
-      "norm_label": "step 3 \u2014 understand before changing"
+      "norm_label": "step 3 \u2014 understand before changing",
+      "id": "agents_step_3_understand_before_changing"
     },
     {
       "label": "Step 4 \u2014 Mentor mode",
@@ -566,9 +856,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L291",
       "_origin": "ast",
-      "id": "agents_step_4_mentor_mode",
       "community": 70,
-      "norm_label": "step 4 \u2014 mentor mode"
+      "norm_label": "step 4 \u2014 mentor mode",
+      "id": "agents_step_4_mentor_mode"
     },
     {
       "label": "7. CODE POLICY",
@@ -576,9 +866,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L314",
       "_origin": "ast",
-      "id": "agents_7_code_policy",
       "community": 64,
-      "norm_label": "7. code policy"
+      "norm_label": "7. code policy",
+      "id": "agents_7_code_policy"
     },
     {
       "label": "8. DIRECT IMPLEMENTATION \u2014 Codex DOES THE WORK ITSELF",
@@ -586,9 +876,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L332",
       "_origin": "ast",
-      "id": "agents_8_direct_implementation_codex_does_the_work_itself",
       "community": 72,
-      "norm_label": "8. direct implementation \u2014 codex does the work itself"
+      "norm_label": "8. direct implementation \u2014 codex does the work itself",
+      "id": "agents_8_direct_implementation_codex_does_the_work_itself"
     },
     {
       "label": "Default rule",
@@ -596,9 +886,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L340",
       "_origin": "ast",
-      "id": "agents_default_rule",
       "community": 72,
-      "norm_label": "default rule"
+      "norm_label": "default rule",
+      "id": "agents_default_rule"
     },
     {
       "label": "When implementing directly",
@@ -606,9 +896,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L352",
       "_origin": "ast",
-      "id": "agents_when_implementing_directly",
       "community": 72,
-      "norm_label": "when implementing directly"
+      "norm_label": "when implementing directly",
+      "id": "agents_when_implementing_directly"
     },
     {
       "label": "9. PROJECT MEMORY \u2014 `context.md`",
@@ -616,9 +906,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L361",
       "_origin": "ast",
-      "id": "agents_9_project_memory_context_md",
       "community": 66,
-      "norm_label": "9. project memory \u2014 `context.md`"
+      "norm_label": "9. project memory \u2014 `context.md`",
+      "id": "agents_9_project_memory_context_md"
     },
     {
       "label": "Session Summary",
@@ -626,9 +916,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L381",
       "_origin": "ast",
-      "id": "agents_session_summary",
       "community": 66,
-      "norm_label": "session summary"
+      "norm_label": "session summary",
+      "id": "agents_session_summary"
     },
     {
       "label": "Technical Decisions",
@@ -636,9 +926,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L389",
       "_origin": "ast",
-      "id": "agents_technical_decisions",
       "community": 66,
-      "norm_label": "technical decisions"
+      "norm_label": "technical decisions",
+      "id": "agents_technical_decisions"
     },
     {
       "label": "User Instructions",
@@ -646,9 +936,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L397",
       "_origin": "ast",
-      "id": "agents_user_instructions",
       "community": 66,
-      "norm_label": "user instructions"
+      "norm_label": "user instructions",
+      "id": "agents_user_instructions"
     },
     {
       "label": "Current Project State",
@@ -656,9 +946,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L404",
       "_origin": "ast",
-      "id": "agents_current_project_state",
       "community": 66,
-      "norm_label": "current project state"
+      "norm_label": "current project state",
+      "id": "agents_current_project_state"
     },
     {
       "label": "Important Discoveries",
@@ -666,9 +956,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L411",
       "_origin": "ast",
-      "id": "agents_important_discoveries",
       "community": 66,
-      "norm_label": "important discoveries"
+      "norm_label": "important discoveries",
+      "id": "agents_important_discoveries"
     },
     {
       "label": "Files Modified",
@@ -676,9 +966,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L419",
       "_origin": "ast",
-      "id": "agents_files_modified",
       "community": 66,
-      "norm_label": "files modified"
+      "norm_label": "files modified",
+      "id": "agents_files_modified"
     },
     {
       "label": "10. GIT COMMIT RULE",
@@ -686,9 +976,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L432",
       "_origin": "ast",
-      "id": "agents_10_git_commit_rule",
       "community": 64,
-      "norm_label": "10. git commit rule"
+      "norm_label": "10. git commit rule",
+      "id": "agents_10_git_commit_rule"
     },
     {
       "label": "11. IMPORTANT PROJECT RULE \u2014 SHARED MODEL ARCHITECTURE",
@@ -696,9 +986,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L453",
       "_origin": "ast",
-      "id": "agents_11_important_project_rule_shared_model_architecture",
       "community": 64,
-      "norm_label": "11. important project rule \u2014 shared model architecture"
+      "norm_label": "11. important project rule \u2014 shared model architecture",
+      "id": "agents_11_important_project_rule_shared_model_architecture"
     },
     {
       "label": "12. PENDING / POSTPONED WORK",
@@ -706,9 +996,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L487",
       "_origin": "ast",
-      "id": "agents_12_pending_postponed_work",
       "community": 64,
-      "norm_label": "12. pending / postponed work"
+      "norm_label": "12. pending / postponed work",
+      "id": "agents_12_pending_postponed_work"
     },
     {
       "label": "13. PROJECT-SPECIFIC RULES",
@@ -716,9 +1006,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L511",
       "_origin": "ast",
-      "id": "agents_13_project_specific_rules",
       "community": 67,
-      "norm_label": "13. project-specific rules"
+      "norm_label": "13. project-specific rules",
+      "id": "agents_13_project_specific_rules"
     },
     {
       "label": "Experiment prerequisite",
@@ -726,9 +1016,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L513",
       "_origin": "ast",
-      "id": "agents_experiment_prerequisite",
       "community": 67,
-      "norm_label": "experiment prerequisite"
+      "norm_label": "experiment prerequisite",
+      "id": "agents_experiment_prerequisite"
     },
     {
       "label": "Predictor evaluation order",
@@ -736,9 +1026,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L525",
       "_origin": "ast",
-      "id": "agents_predictor_evaluation_order",
       "community": 67,
-      "norm_label": "predictor evaluation order"
+      "norm_label": "predictor evaluation order",
+      "id": "agents_predictor_evaluation_order"
     },
     {
       "label": "Spreadsheet policy",
@@ -746,9 +1036,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L543",
       "_origin": "ast",
-      "id": "agents_spreadsheet_policy",
       "community": 67,
-      "norm_label": "spreadsheet policy"
+      "norm_label": "spreadsheet policy",
+      "id": "agents_spreadsheet_policy"
     },
     {
       "label": "Hardware target",
@@ -756,9 +1046,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L549",
       "_origin": "ast",
-      "id": "agents_hardware_target",
       "community": 67,
-      "norm_label": "hardware target"
+      "norm_label": "hardware target",
+      "id": "agents_hardware_target"
     },
     {
       "label": "External services",
@@ -766,9 +1056,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L563",
       "_origin": "ast",
-      "id": "agents_external_services",
       "community": 67,
-      "norm_label": "external services"
+      "norm_label": "external services",
+      "id": "agents_external_services"
     },
     {
       "label": "14. HOW TO EXPLAIN TECHNICAL CHANGES",
@@ -776,9 +1066,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L574",
       "_origin": "ast",
-      "id": "agents_14_how_to_explain_technical_changes",
       "community": 68,
-      "norm_label": "14. how to explain technical changes"
+      "norm_label": "14. how to explain technical changes",
+      "id": "agents_14_how_to_explain_technical_changes"
     },
     {
       "label": "What changed?",
@@ -786,9 +1076,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L578",
       "_origin": "ast",
-      "id": "agents_what_changed",
       "community": 68,
-      "norm_label": "what changed?"
+      "norm_label": "what changed?",
+      "id": "agents_what_changed"
     },
     {
       "label": "What did not change?",
@@ -796,9 +1086,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L582",
       "_origin": "ast",
-      "id": "agents_what_did_not_change",
       "community": 68,
-      "norm_label": "what did not change?"
+      "norm_label": "what did not change?",
+      "id": "agents_what_did_not_change"
     },
     {
       "label": "Why did we change it?",
@@ -806,9 +1096,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L586",
       "_origin": "ast",
-      "id": "agents_why_did_we_change_it",
       "community": 68,
-      "norm_label": "why did we change it?"
+      "norm_label": "why did we change it?",
+      "id": "agents_why_did_we_change_it"
     },
     {
       "label": "What are we doing now?",
@@ -816,9 +1106,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L590",
       "_origin": "ast",
-      "id": "agents_what_are_we_doing_now",
       "community": 68,
-      "norm_label": "what are we doing now?"
+      "norm_label": "what are we doing now?",
+      "id": "agents_what_are_we_doing_now"
     },
     {
       "label": "What happens later?",
@@ -826,9 +1116,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L594",
       "_origin": "ast",
-      "id": "agents_what_happens_later",
       "community": 68,
-      "norm_label": "what happens later?"
+      "norm_label": "what happens later?",
+      "id": "agents_what_happens_later"
     },
     {
       "label": "15. NON-NEGOTIABLE PROJECT RULES",
@@ -836,9 +1126,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L614",
       "_origin": "ast",
-      "id": "agents_15_non_negotiable_project_rules",
       "community": 64,
-      "norm_label": "15. non-negotiable project rules"
+      "norm_label": "15. non-negotiable project rules",
+      "id": "agents_15_non_negotiable_project_rules"
     },
     {
       "label": "16. FINAL COMMUNICATION CHECK",
@@ -846,9 +1136,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L645",
       "_origin": "ast",
-      "id": "agents_16_final_communication_check",
       "community": 69,
-      "norm_label": "16. final communication check"
+      "norm_label": "16. final communication check",
+      "id": "agents_16_final_communication_check"
     },
     {
       "label": "Skill check",
@@ -856,9 +1146,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L649",
       "_origin": "ast",
-      "id": "agents_skill_check",
       "community": 69,
-      "norm_label": "skill check"
+      "norm_label": "skill check",
+      "id": "agents_skill_check"
     },
     {
       "label": "Style check",
@@ -866,9 +1156,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L655",
       "_origin": "ast",
-      "id": "agents_style_check",
       "community": 69,
-      "norm_label": "style check"
+      "norm_label": "style check",
+      "id": "agents_style_check"
     },
     {
       "label": "American-English check",
@@ -876,9 +1166,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L659",
       "_origin": "ast",
-      "id": "agents_american_english_check",
       "community": 69,
-      "norm_label": "american-english check"
+      "norm_label": "american-english check",
+      "id": "agents_american_english_check"
     },
     {
       "label": "User check",
@@ -886,9 +1176,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L663",
       "_origin": "ast",
-      "id": "agents_user_check",
       "community": 69,
-      "norm_label": "user check"
+      "norm_label": "user check",
+      "id": "agents_user_check"
     },
     {
       "label": "Mathematical Pronunciation and Symbol Reading Rules",
@@ -896,9 +1186,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L686",
       "_origin": "ast",
-      "id": "agents_mathematical_pronunciation_and_symbol_reading_rules",
       "community": 46,
-      "norm_label": "mathematical pronunciation and symbol reading rules"
+      "norm_label": "mathematical pronunciation and symbol reading rules",
+      "id": "agents_mathematical_pronunciation_and_symbol_reading_rules"
     },
     {
       "label": "1. Highest-priority rule",
@@ -906,9 +1196,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L688",
       "_origin": "ast",
-      "id": "agents_1_highest_priority_rule",
       "community": 46,
-      "norm_label": "1. highest-priority rule"
+      "norm_label": "1. highest-priority rule",
+      "id": "agents_1_highest_priority_rule"
     },
     {
       "label": "2. Greek alphabet \u2014 standard English mathematical pronunciation",
@@ -916,9 +1206,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L700",
       "_origin": "ast",
-      "id": "agents_2_greek_alphabet_standard_english_mathematical_pronunciation",
       "community": 46,
-      "norm_label": "2. greek alphabet \u2014 standard english mathematical pronunciation"
+      "norm_label": "2. greek alphabet \u2014 standard english mathematical pronunciation",
+      "id": "agents_2_greek_alphabet_standard_english_mathematical_pronunciation"
     },
     {
       "label": "3. Primes, subscripts, and superscripts",
@@ -926,9 +1216,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L733",
       "_origin": "ast",
-      "id": "agents_3_primes_subscripts_and_superscripts",
       "community": 46,
-      "norm_label": "3. primes, subscripts, and superscripts"
+      "norm_label": "3. primes, subscripts, and superscripts",
+      "id": "agents_3_primes_subscripts_and_superscripts"
     },
     {
       "label": "Non-negotiable distinctions",
@@ -936,9 +1226,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L770",
       "_origin": "ast",
-      "id": "agents_non_negotiable_distinctions",
       "community": 46,
-      "norm_label": "non-negotiable distinctions"
+      "norm_label": "non-negotiable distinctions",
+      "id": "agents_non_negotiable_distinctions"
     },
     {
       "label": "4. Common mathematical operators and symbols",
@@ -946,9 +1236,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L779",
       "_origin": "ast",
-      "id": "agents_4_common_mathematical_operators_and_symbols",
       "community": 46,
-      "norm_label": "4. common mathematical operators and symbols"
+      "norm_label": "4. common mathematical operators and symbols",
+      "id": "agents_4_common_mathematical_operators_and_symbols"
     },
     {
       "label": "5. Calculus and analysis",
@@ -956,9 +1246,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L826",
       "_origin": "ast",
-      "id": "agents_5_calculus_and_analysis",
       "community": 46,
-      "norm_label": "5. calculus and analysis"
+      "norm_label": "5. calculus and analysis",
+      "id": "agents_5_calculus_and_analysis"
     },
     {
       "label": "6. Probability and statistics",
@@ -966,9 +1256,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L847",
       "_origin": "ast",
-      "id": "agents_6_probability_and_statistics",
       "community": 46,
-      "norm_label": "6. probability and statistics"
+      "norm_label": "6. probability and statistics",
+      "id": "agents_6_probability_and_statistics"
     },
     {
       "label": "7. Information theory and machine learning",
@@ -976,9 +1266,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L875",
       "_origin": "ast",
-      "id": "agents_7_information_theory_and_machine_learning",
       "community": 46,
-      "norm_label": "7. information theory and machine learning"
+      "norm_label": "7. information theory and machine learning",
+      "id": "agents_7_information_theory_and_machine_learning"
     },
     {
       "label": "8. Matrices, vectors, and linear algebra",
@@ -986,9 +1276,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L907",
       "_origin": "ast",
-      "id": "agents_8_matrices_vectors_and_linear_algebra",
       "community": 46,
-      "norm_label": "8. matrices, vectors, and linear algebra"
+      "norm_label": "8. matrices, vectors, and linear algebra",
+      "id": "agents_8_matrices_vectors_and_linear_algebra"
     },
     {
       "label": "9. Reading equations aloud",
@@ -996,9 +1286,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L925",
       "_origin": "ast",
-      "id": "agents_9_reading_equations_aloud",
       "community": 46,
-      "norm_label": "9. reading equations aloud"
+      "norm_label": "9. reading equations aloud",
+      "id": "agents_9_reading_equations_aloud"
     },
     {
       "label": "10. Voice-mode quality control",
@@ -1006,9 +1296,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L940",
       "_origin": "ast",
-      "id": "agents_10_voice_mode_quality_control",
       "community": 46,
-      "norm_label": "10. voice-mode quality control"
+      "norm_label": "10. voice-mode quality control",
+      "id": "agents_10_voice_mode_quality_control"
     },
     {
       "label": "report_instructions.md",
@@ -1016,9 +1306,9 @@
       "source_file": "report_instructions.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "report_instructions",
       "community": 75,
-      "norm_label": "report_instructions.md"
+      "norm_label": "report_instructions.md",
+      "id": "report_instructions"
     },
     {
       "label": "analyze_nanda_unified.py",
@@ -2006,7 +2296,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L820",
       "_origin": "ast",
-      "community": 14,
+      "community": 78,
       "norm_label": "_checkpoint_predictor_spectral()",
       "id": "scripts_run_nanda_benchmark_checkpoint_predictor_spectral"
     },
@@ -2206,7 +2496,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L822",
       "_origin": "ast",
-      "community": 14,
+      "community": 78,
       "norm_label": "checkpoint_predictor_funcs[\"spectral\"] \u2014 canatar et al. 2021     task-model alig",
       "id": "scripts_run_nanda_benchmark_rationale_822"
     },
@@ -3426,7 +3716,7 @@
       "source_file": "06_Code/src/predictors/spectral.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 14,
+      "community": 78,
       "norm_label": "spectral.py",
       "id": "predictors_spectral"
     },
@@ -3436,7 +3726,7 @@
       "source_file": "06_Code/src/predictors/spectral.py",
       "source_location": "L81",
       "_origin": "ast",
-      "community": 14,
+      "community": 78,
       "norm_label": "_collect_representations_and_labels()",
       "id": "predictors_spectral_collect_representations_and_labels"
     },
@@ -3446,7 +3736,7 @@
       "source_file": "06_Code/src/predictors/spectral.py",
       "source_location": "L114",
       "_origin": "ast",
-      "community": 14,
+      "community": 78,
       "norm_label": "compute_spectral_metrics_for_checkpoint()",
       "id": "predictors_spectral_compute_spectral_metrics_for_checkpoint"
     },
@@ -3456,7 +3746,7 @@
       "source_file": "06_Code/src/predictors/spectral.py",
       "source_location": "L179",
       "_origin": "ast",
-      "community": 14,
+      "community": 78,
       "norm_label": "compute_spectral_for_model()",
       "id": "predictors_spectral_compute_spectral_for_model"
     },
@@ -3466,7 +3756,7 @@
       "source_file": "06_Code/src/predictors/spectral.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 14,
+      "community": 78,
       "norm_label": "spectral predictor (predictor 3 of 9) \u2014 faithful canatar et al. 2021.  paper: ab",
       "id": "predictors_spectral_rationale_1"
     },
@@ -3476,7 +3766,7 @@
       "source_file": "06_Code/src/predictors/spectral.py",
       "source_location": "L82",
       "_origin": "ast",
-      "community": 14,
+      "community": 78,
       "norm_label": "run the model over the full training split and capture, per example,     the hid",
       "id": "predictors_spectral_rationale_82"
     },
@@ -3486,7 +3776,7 @@
       "source_file": "06_Code/src/predictors/spectral.py",
       "source_location": "L115",
       "_origin": "ast",
-      "community": 14,
+      "community": 78,
       "norm_label": "canatar et al. 2021 task-model-alignment metrics for one frozen     model checkp",
       "id": "predictors_spectral_rationale_115"
     },
@@ -3496,7 +3786,7 @@
       "source_file": "06_Code/src/predictors/spectral.py",
       "source_location": "L180",
       "_origin": "ast",
-      "community": 14,
+      "community": 78,
       "norm_label": "thin wrapper kept for run_nanda_benchmark.py's import. one frozen     checkpoint",
       "id": "predictors_spectral_rationale_180"
     },
@@ -7545,6 +7835,342 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "scripts_check_spike_grid",
+      "target": "scripts_check_spike_grid_detect_peaks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L55",
+      "weight": 1.0,
+      "source": "scripts_check_spike_grid",
+      "target": "scripts_check_spike_grid_load_seed_series",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L393",
+      "weight": 1.0,
+      "source": "scripts_check_spike_grid",
+      "target": "scripts_check_spike_grid_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L208",
+      "weight": 1.0,
+      "source": "scripts_check_spike_grid",
+      "target": "scripts_check_spike_grid_plot_spike_grid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L118",
+      "weight": 1.0,
+      "source": "scripts_check_spike_grid",
+      "target": "scripts_check_spike_grid_run_checks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L263",
+      "weight": 1.0,
+      "source": "scripts_check_spike_grid",
+      "target": "scripts_check_spike_grid_write_json_output",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L306",
+      "weight": 1.0,
+      "source": "scripts_check_spike_grid",
+      "target": "scripts_check_spike_grid_write_markdown_report",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "scripts_check_spike_grid_rationale_31",
+      "target": "scripts_check_spike_grid_detect_peaks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L130",
+      "weight": 1.0,
+      "source": "scripts_check_spike_grid_run_checks",
+      "target": "scripts_check_spike_grid_detect_peaks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L413",
+      "weight": 1.0,
+      "source": "scripts_check_spike_grid_main",
+      "target": "scripts_check_spike_grid_load_seed_series",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "scripts_check_spike_grid_rationale_56",
+      "target": "scripts_check_spike_grid_load_seed_series",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L414",
+      "weight": 1.0,
+      "source": "scripts_check_spike_grid_main",
+      "target": "scripts_check_spike_grid_run_checks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L119",
+      "weight": 1.0,
+      "source": "scripts_check_spike_grid_rationale_119",
+      "target": "scripts_check_spike_grid_run_checks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L425",
+      "weight": 1.0,
+      "source": "scripts_check_spike_grid_main",
+      "target": "scripts_check_spike_grid_plot_spike_grid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L209",
+      "weight": 1.0,
+      "source": "scripts_check_spike_grid_rationale_209",
+      "target": "scripts_check_spike_grid_plot_spike_grid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L423",
+      "weight": 1.0,
+      "source": "scripts_check_spike_grid_main",
+      "target": "scripts_check_spike_grid_write_json_output",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L264",
+      "weight": 1.0,
+      "source": "scripts_check_spike_grid_rationale_264",
+      "target": "scripts_check_spike_grid_write_json_output",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L424",
+      "weight": 1.0,
+      "source": "scripts_check_spike_grid_main",
+      "target": "scripts_check_spike_grid_write_markdown_report",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/check_spike_grid.py",
+      "source_location": "L307",
+      "weight": 1.0,
+      "source": "scripts_check_spike_grid_rationale_307",
+      "target": "scripts_check_spike_grid_write_markdown_report",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "reports_spike_grid_check",
+      "target": "reports_spike_grid_check_higher_mi_spike_grid_diagnosis_report",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "reports_spike_grid_check_higher_mi_spike_grid_diagnosis_report",
+      "target": "reports_spike_grid_check_1_cross_check_with_recorded_values",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "reports_spike_grid_check_higher_mi_spike_grid_diagnosis_report",
+      "target": "reports_spike_grid_check_2_summary_table_peaks_per_seed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "reports_spike_grid_check_higher_mi_spike_grid_diagnosis_report",
+      "target": "reports_spike_grid_check_3_test_results",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "reports_spike_grid_check_higher_mi_spike_grid_diagnosis_report",
+      "target": "reports_spike_grid_check_4_verdict",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "reports_spike_grid_check_higher_mi_spike_grid_diagnosis_report",
+      "target": "reports_spike_grid_check_5_full_peak_epoch_lists_per_seed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "reports_spike_grid_check_3_test_results",
+      "target": "reports_spike_grid_check_test_1_coincidence_across_seeds",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "reports_spike_grid_check_3_test_results",
+      "target": "reports_spike_grid_check_test_2_period_and_spread_across_seeds",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "reports_spike_grid_check_4_verdict",
+      "target": "reports_spike_grid_check_physical_mechanism_and_observations",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "reports_spike_grid_check_5_full_peak_epoch_lists_per_seed",
+      "target": "reports_spike_grid_check_seed_0_27_peaks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L69",
+      "weight": 1.0,
+      "source": "reports_spike_grid_check_5_full_peak_epoch_lists_per_seed",
+      "target": "reports_spike_grid_check_seed_1_24_peaks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L74",
+      "weight": 1.0,
+      "source": "reports_spike_grid_check_5_full_peak_epoch_lists_per_seed",
+      "target": "reports_spike_grid_check_seed_2_13_peaks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "reports_spike_grid_check_5_full_peak_epoch_lists_per_seed",
+      "target": "reports_spike_grid_check_seed_3_33_peaks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "08_Experiments/results/nanda_unified/reports/spike_grid_check.md",
+      "source_location": "L84",
+      "weight": 1.0,
+      "source": "reports_spike_grid_check_5_full_peak_epoch_lists_per_seed",
+      "target": "reports_spike_grid_check_seed_4_29_peaks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": ".claude/skills/indian-english/SKILL.md",
       "source_location": "L6",
       "weight": 1.0,
@@ -7708,9 +8334,9 @@
       "source_file": "05_Thesis_Document/Figures/README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "figures_readme",
-      "target": "figures_readme_figure_organisation",
-      "confidence_score": 1.0
+      "target": "figures_readme_figure_organisation"
     },
     {
       "relation": "contains",
@@ -7718,9 +8344,9 @@
       "source_file": "05_Thesis_Document/Figures/README.md",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "figures_readme_figure_organisation",
-      "target": "figures_readme_general_rule",
-      "confidence_score": 1.0
+      "target": "figures_readme_general_rule"
     },
     {
       "relation": "contains",
@@ -7728,9 +8354,9 @@
       "source_file": "05_Thesis_Document/Figures/README.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "figures_readme_figure_organisation",
-      "target": "figures_readme_measured_experiment_figures",
-      "confidence_score": 1.0
+      "target": "figures_readme_measured_experiment_figures"
     },
     {
       "relation": "contains",
@@ -7738,9 +8364,9 @@
       "source_file": "05_Thesis_Document/Figures/README.md",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "figures_readme_figure_organisation",
-      "target": "figures_readme_schematics_and_hypothetical_figures",
-      "confidence_score": 1.0
+      "target": "figures_readme_schematics_and_hypothetical_figures"
     },
     {
       "relation": "contains",
@@ -7831,9 +8457,9 @@
       "source_file": "08_Experiments/results/nanda_unified/reports/README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "reports_readme",
-      "target": "reports_readme_higher_mi_report_figures",
-      "confidence_score": 1.0
+      "target": "reports_readme_higher_mi_report_figures"
     },
     {
       "relation": "contains",
@@ -7841,9 +8467,9 @@
       "source_file": "08_Experiments/results/nanda_unified/reports/README.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "reports_readme_higher_mi_report_figures",
-      "target": "reports_readme_measured",
-      "confidence_score": 1.0
+      "target": "reports_readme_measured"
     },
     {
       "relation": "contains",
@@ -7851,9 +8477,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L432",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents",
-      "target": "agents_10_git_commit_rule",
-      "confidence_score": 1.0
+      "target": "agents_10_git_commit_rule"
     },
     {
       "relation": "contains",
@@ -7861,9 +8487,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L453",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents",
-      "target": "agents_11_important_project_rule_shared_model_architecture",
-      "confidence_score": 1.0
+      "target": "agents_11_important_project_rule_shared_model_architecture"
     },
     {
       "relation": "contains",
@@ -7871,9 +8497,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L487",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents",
-      "target": "agents_12_pending_postponed_work",
-      "confidence_score": 1.0
+      "target": "agents_12_pending_postponed_work"
     },
     {
       "relation": "contains",
@@ -7881,9 +8507,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L511",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents",
-      "target": "agents_13_project_specific_rules",
-      "confidence_score": 1.0
+      "target": "agents_13_project_specific_rules"
     },
     {
       "relation": "contains",
@@ -7891,9 +8517,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L574",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents",
-      "target": "agents_14_how_to_explain_technical_changes",
-      "confidence_score": 1.0
+      "target": "agents_14_how_to_explain_technical_changes"
     },
     {
       "relation": "contains",
@@ -7901,9 +8527,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L614",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents",
-      "target": "agents_15_non_negotiable_project_rules",
-      "confidence_score": 1.0
+      "target": "agents_15_non_negotiable_project_rules"
     },
     {
       "relation": "contains",
@@ -7911,9 +8537,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L645",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents",
-      "target": "agents_16_final_communication_check",
-      "confidence_score": 1.0
+      "target": "agents_16_final_communication_check"
     },
     {
       "relation": "contains",
@@ -7921,9 +8547,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents",
-      "target": "agents_1_mandatory_precursor_read_context_md_first",
-      "confidence_score": 1.0
+      "target": "agents_1_mandatory_precursor_read_context_md_first"
     },
     {
       "relation": "contains",
@@ -7931,9 +8557,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents",
-      "target": "agents_2_mandatory_communication_skill_indian_english",
-      "confidence_score": 1.0
+      "target": "agents_2_mandatory_communication_skill_indian_english"
     },
     {
       "relation": "contains",
@@ -7941,9 +8567,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L103",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents",
-      "target": "agents_3_project_identity",
-      "confidence_score": 1.0
+      "target": "agents_3_project_identity"
     },
     {
       "relation": "contains",
@@ -7951,9 +8577,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L111",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents",
-      "target": "agents_4_core_role_teacher_first",
-      "confidence_score": 1.0
+      "target": "agents_4_core_role_teacher_first"
     },
     {
       "relation": "contains",
@@ -7961,9 +8587,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L137",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents",
-      "target": "agents_5_learning_pace_one_step_at_a_time",
-      "confidence_score": 1.0
+      "target": "agents_5_learning_pace_one_step_at_a_time"
     },
     {
       "relation": "contains",
@@ -7971,9 +8597,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L225",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents",
-      "target": "agents_6_mandatory_project_workflow",
-      "confidence_score": 1.0
+      "target": "agents_6_mandatory_project_workflow"
     },
     {
       "relation": "contains",
@@ -7981,9 +8607,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L314",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents",
-      "target": "agents_7_code_policy",
-      "confidence_score": 1.0
+      "target": "agents_7_code_policy"
     },
     {
       "relation": "contains",
@@ -7991,9 +8617,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L332",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents",
-      "target": "agents_8_direct_implementation_codex_does_the_work_itself",
-      "confidence_score": 1.0
+      "target": "agents_8_direct_implementation_codex_does_the_work_itself"
     },
     {
       "relation": "contains",
@@ -8001,9 +8627,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L361",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents",
-      "target": "agents_9_project_memory_context_md",
-      "confidence_score": 1.0
+      "target": "agents_9_project_memory_context_md"
     },
     {
       "relation": "contains",
@@ -8011,9 +8637,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L42",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents",
-      "target": "agents_mandatory_communication_skill",
-      "confidence_score": 1.0
+      "target": "agents_mandatory_communication_skill"
     },
     {
       "relation": "contains",
@@ -8021,9 +8647,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L686",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents",
-      "target": "agents_mathematical_pronunciation_and_symbol_reading_rules",
-      "confidence_score": 1.0
+      "target": "agents_mathematical_pronunciation_and_symbol_reading_rules"
     },
     {
       "relation": "contains",
@@ -8031,9 +8657,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_1_mandatory_precursor_read_context_md_first",
-      "target": "agents_required_procedure",
-      "confidence_score": 1.0
+      "target": "agents_required_procedure"
     },
     {
       "relation": "contains",
@@ -8041,9 +8667,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L59",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_mandatory_communication_skill",
-      "target": "agents_communication_priority",
-      "confidence_score": 1.0
+      "target": "agents_communication_priority"
     },
     {
       "relation": "contains",
@@ -8051,9 +8677,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L81",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_mandatory_communication_skill",
-      "target": "agents_mandatory_pre_send_check",
-      "confidence_score": 1.0
+      "target": "agents_mandatory_pre_send_check"
     },
     {
       "relation": "contains",
@@ -8061,9 +8687,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L196",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_5_learning_pace_one_step_at_a_time",
-      "target": "agents_code_explanations",
-      "confidence_score": 1.0
+      "target": "agents_code_explanations"
     },
     {
       "relation": "contains",
@@ -8071,9 +8697,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L143",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_5_learning_pace_one_step_at_a_time",
-      "target": "agents_default_teaching_style",
-      "confidence_score": 1.0
+      "target": "agents_default_teaching_style"
     },
     {
       "relation": "contains",
@@ -8081,9 +8707,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L153",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_5_learning_pace_one_step_at_a_time",
-      "target": "agents_progressive_disclosure",
-      "confidence_score": 1.0
+      "target": "agents_progressive_disclosure"
     },
     {
       "relation": "contains",
@@ -8091,9 +8717,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L182",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_5_learning_pace_one_step_at_a_time",
-      "target": "agents_questions",
-      "confidence_score": 1.0
+      "target": "agents_questions"
     },
     {
       "relation": "contains",
@@ -8101,9 +8727,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L167",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_5_learning_pace_one_step_at_a_time",
-      "target": "agents_reduce_cognitive_load",
-      "confidence_score": 1.0
+      "target": "agents_reduce_cognitive_load"
     },
     {
       "relation": "contains",
@@ -8111,9 +8737,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L188",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_5_learning_pace_one_step_at_a_time",
-      "target": "agents_roadmaps",
-      "confidence_score": 1.0
+      "target": "agents_roadmaps"
     },
     {
       "relation": "contains",
@@ -8121,9 +8747,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L204",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_5_learning_pace_one_step_at_a_time",
-      "target": "agents_stop_rule",
-      "confidence_score": 1.0
+      "target": "agents_stop_rule"
     },
     {
       "relation": "contains",
@@ -8131,9 +8757,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L212",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_5_learning_pace_one_step_at_a_time",
-      "target": "agents_user_override",
-      "confidence_score": 1.0
+      "target": "agents_user_override"
     },
     {
       "relation": "contains",
@@ -8141,9 +8767,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L227",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_6_mandatory_project_workflow",
-      "target": "agents_step_1_read_context_md",
-      "confidence_score": 1.0
+      "target": "agents_step_1_read_context_md"
     },
     {
       "relation": "contains",
@@ -8151,9 +8777,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L239",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_6_mandatory_project_workflow",
-      "target": "agents_step_2_inspect_graphify",
-      "confidence_score": 1.0
+      "target": "agents_step_2_inspect_graphify"
     },
     {
       "relation": "contains",
@@ -8161,9 +8787,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L271",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_6_mandatory_project_workflow",
-      "target": "agents_step_3_understand_before_changing",
-      "confidence_score": 1.0
+      "target": "agents_step_3_understand_before_changing"
     },
     {
       "relation": "contains",
@@ -8171,9 +8797,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L291",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_6_mandatory_project_workflow",
-      "target": "agents_step_4_mentor_mode",
-      "confidence_score": 1.0
+      "target": "agents_step_4_mentor_mode"
     },
     {
       "relation": "contains",
@@ -8181,9 +8807,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L340",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_8_direct_implementation_codex_does_the_work_itself",
-      "target": "agents_default_rule",
-      "confidence_score": 1.0
+      "target": "agents_default_rule"
     },
     {
       "relation": "contains",
@@ -8191,9 +8817,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L352",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_8_direct_implementation_codex_does_the_work_itself",
-      "target": "agents_when_implementing_directly",
-      "confidence_score": 1.0
+      "target": "agents_when_implementing_directly"
     },
     {
       "relation": "contains",
@@ -8201,9 +8827,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L404",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_9_project_memory_context_md",
-      "target": "agents_current_project_state",
-      "confidence_score": 1.0
+      "target": "agents_current_project_state"
     },
     {
       "relation": "contains",
@@ -8211,9 +8837,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L419",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_9_project_memory_context_md",
-      "target": "agents_files_modified",
-      "confidence_score": 1.0
+      "target": "agents_files_modified"
     },
     {
       "relation": "contains",
@@ -8221,9 +8847,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L411",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_9_project_memory_context_md",
-      "target": "agents_important_discoveries",
-      "confidence_score": 1.0
+      "target": "agents_important_discoveries"
     },
     {
       "relation": "contains",
@@ -8231,9 +8857,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L381",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_9_project_memory_context_md",
-      "target": "agents_session_summary",
-      "confidence_score": 1.0
+      "target": "agents_session_summary"
     },
     {
       "relation": "contains",
@@ -8241,9 +8867,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L389",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_9_project_memory_context_md",
-      "target": "agents_technical_decisions",
-      "confidence_score": 1.0
+      "target": "agents_technical_decisions"
     },
     {
       "relation": "contains",
@@ -8251,9 +8877,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L397",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_9_project_memory_context_md",
-      "target": "agents_user_instructions",
-      "confidence_score": 1.0
+      "target": "agents_user_instructions"
     },
     {
       "relation": "contains",
@@ -8261,9 +8887,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L513",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_13_project_specific_rules",
-      "target": "agents_experiment_prerequisite",
-      "confidence_score": 1.0
+      "target": "agents_experiment_prerequisite"
     },
     {
       "relation": "contains",
@@ -8271,9 +8897,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L563",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_13_project_specific_rules",
-      "target": "agents_external_services",
-      "confidence_score": 1.0
+      "target": "agents_external_services"
     },
     {
       "relation": "contains",
@@ -8281,9 +8907,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L549",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_13_project_specific_rules",
-      "target": "agents_hardware_target",
-      "confidence_score": 1.0
+      "target": "agents_hardware_target"
     },
     {
       "relation": "contains",
@@ -8291,9 +8917,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L525",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_13_project_specific_rules",
-      "target": "agents_predictor_evaluation_order",
-      "confidence_score": 1.0
+      "target": "agents_predictor_evaluation_order"
     },
     {
       "relation": "contains",
@@ -8301,9 +8927,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L543",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_13_project_specific_rules",
-      "target": "agents_spreadsheet_policy",
-      "confidence_score": 1.0
+      "target": "agents_spreadsheet_policy"
     },
     {
       "relation": "contains",
@@ -8311,9 +8937,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L590",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_14_how_to_explain_technical_changes",
-      "target": "agents_what_are_we_doing_now",
-      "confidence_score": 1.0
+      "target": "agents_what_are_we_doing_now"
     },
     {
       "relation": "contains",
@@ -8321,9 +8947,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L578",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_14_how_to_explain_technical_changes",
-      "target": "agents_what_changed",
-      "confidence_score": 1.0
+      "target": "agents_what_changed"
     },
     {
       "relation": "contains",
@@ -8331,9 +8957,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L582",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_14_how_to_explain_technical_changes",
-      "target": "agents_what_did_not_change",
-      "confidence_score": 1.0
+      "target": "agents_what_did_not_change"
     },
     {
       "relation": "contains",
@@ -8341,9 +8967,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L594",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_14_how_to_explain_technical_changes",
-      "target": "agents_what_happens_later",
-      "confidence_score": 1.0
+      "target": "agents_what_happens_later"
     },
     {
       "relation": "contains",
@@ -8351,9 +8977,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L586",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_14_how_to_explain_technical_changes",
-      "target": "agents_why_did_we_change_it",
-      "confidence_score": 1.0
+      "target": "agents_why_did_we_change_it"
     },
     {
       "relation": "contains",
@@ -8361,9 +8987,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L659",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_16_final_communication_check",
-      "target": "agents_american_english_check",
-      "confidence_score": 1.0
+      "target": "agents_american_english_check"
     },
     {
       "relation": "contains",
@@ -8371,9 +8997,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L649",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_16_final_communication_check",
-      "target": "agents_skill_check",
-      "confidence_score": 1.0
+      "target": "agents_skill_check"
     },
     {
       "relation": "contains",
@@ -8381,9 +9007,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L655",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_16_final_communication_check",
-      "target": "agents_style_check",
-      "confidence_score": 1.0
+      "target": "agents_style_check"
     },
     {
       "relation": "contains",
@@ -8391,9 +9017,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L663",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_16_final_communication_check",
-      "target": "agents_user_check",
-      "confidence_score": 1.0
+      "target": "agents_user_check"
     },
     {
       "relation": "contains",
@@ -8401,9 +9027,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L940",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_mathematical_pronunciation_and_symbol_reading_rules",
-      "target": "agents_10_voice_mode_quality_control",
-      "confidence_score": 1.0
+      "target": "agents_10_voice_mode_quality_control"
     },
     {
       "relation": "contains",
@@ -8411,9 +9037,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L688",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_mathematical_pronunciation_and_symbol_reading_rules",
-      "target": "agents_1_highest_priority_rule",
-      "confidence_score": 1.0
+      "target": "agents_1_highest_priority_rule"
     },
     {
       "relation": "contains",
@@ -8421,9 +9047,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L700",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_mathematical_pronunciation_and_symbol_reading_rules",
-      "target": "agents_2_greek_alphabet_standard_english_mathematical_pronunciation",
-      "confidence_score": 1.0
+      "target": "agents_2_greek_alphabet_standard_english_mathematical_pronunciation"
     },
     {
       "relation": "contains",
@@ -8431,9 +9057,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L733",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_mathematical_pronunciation_and_symbol_reading_rules",
-      "target": "agents_3_primes_subscripts_and_superscripts",
-      "confidence_score": 1.0
+      "target": "agents_3_primes_subscripts_and_superscripts"
     },
     {
       "relation": "contains",
@@ -8441,9 +9067,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L779",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_mathematical_pronunciation_and_symbol_reading_rules",
-      "target": "agents_4_common_mathematical_operators_and_symbols",
-      "confidence_score": 1.0
+      "target": "agents_4_common_mathematical_operators_and_symbols"
     },
     {
       "relation": "contains",
@@ -8451,9 +9077,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L826",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_mathematical_pronunciation_and_symbol_reading_rules",
-      "target": "agents_5_calculus_and_analysis",
-      "confidence_score": 1.0
+      "target": "agents_5_calculus_and_analysis"
     },
     {
       "relation": "contains",
@@ -8461,9 +9087,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L847",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_mathematical_pronunciation_and_symbol_reading_rules",
-      "target": "agents_6_probability_and_statistics",
-      "confidence_score": 1.0
+      "target": "agents_6_probability_and_statistics"
     },
     {
       "relation": "contains",
@@ -8471,9 +9097,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L875",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_mathematical_pronunciation_and_symbol_reading_rules",
-      "target": "agents_7_information_theory_and_machine_learning",
-      "confidence_score": 1.0
+      "target": "agents_7_information_theory_and_machine_learning"
     },
     {
       "relation": "contains",
@@ -8481,9 +9107,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L907",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_mathematical_pronunciation_and_symbol_reading_rules",
-      "target": "agents_8_matrices_vectors_and_linear_algebra",
-      "confidence_score": 1.0
+      "target": "agents_8_matrices_vectors_and_linear_algebra"
     },
     {
       "relation": "contains",
@@ -8491,9 +9117,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L925",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_mathematical_pronunciation_and_symbol_reading_rules",
-      "target": "agents_9_reading_equations_aloud",
-      "confidence_score": 1.0
+      "target": "agents_9_reading_equations_aloud"
     },
     {
       "relation": "contains",
@@ -8501,9 +9127,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L770",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_3_primes_subscripts_and_superscripts",
-      "target": "agents_non_negotiable_distinctions",
-      "confidence_score": 1.0
+      "target": "agents_non_negotiable_distinctions"
     },
     {
       "relation": "contains",
@@ -16568,5 +17194,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "9764a5250d932da688f89267f6ba36dd01fe2fef"
+  "built_at_commit": "ff88bb87aee3a74fdc7731769e5d1a49200e3074"
 }

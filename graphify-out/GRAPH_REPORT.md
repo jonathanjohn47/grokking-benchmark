@@ -1,16 +1,16 @@
-# Graph Report - grokking-benchmark  (2026-10-27)
+# Graph Report - grokking-benchmark  (2026-10-30)
 
 ## Corpus Check
-- 173 files · ~1,512,085 words
+- 176 files · ~1,528,565 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 752 nodes · 881 edges · 76 communities (60 shown, 16 thin omitted)
+- 781 nodes · 914 edges · 79 communities (63 shown, 16 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `9764a525`
+- Built from commit: `ff88bb87`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -77,6 +77,9 @@
 - [[_COMMUNITY_Community 72|Community 72]]
 - [[_COMMUNITY_Community 73|Community 73]]
 - [[_COMMUNITY_Community 74|Community 74]]
+- [[_COMMUNITY_Community 76|Community 76]]
+- [[_COMMUNITY_Community 77|Community 77]]
+- [[_COMMUNITY_Community 78|Community 78]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `PredictorMeasurements` - 19 edges
@@ -108,7 +111,7 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (76 total, 16 thin omitted)
+## Communities (79 total, 16 thin omitted)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.06
@@ -159,8 +162,8 @@ Cohesion: 0.15
 Nodes (17): compute_weight_pca_for_model(), compute_weight_pca_metrics_for_checkpoint(), effective_rank(), find_global_minimum_epoch(), find_steepest_drop_epoch(), find_threshold_crossing_epoch(), _layer_singular_values(), Weight-PCA predictor (Predictor 7 of 8) — Spectral Dynamics / Rank Minimization (+9 more)
 
 ### Community 14 - "Community 14"
-Cohesion: 0.06
-Nodes (50): compute_accuracy(), compute_dropout_gap_multi_rate(), compute_dropout_variance(), # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, Dropout-variance predictor signal (Salah & Yevick, arXiv:2507.11645):     at a f, _collect_representations_and_labels(), compute_spectral_for_model(), compute_spectral_metrics_for_checkpoint() (+42 more)
+Cohesion: 0.08
+Nodes (41): compute_accuracy(), compute_dropout_gap_multi_rate(), compute_dropout_variance(), # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, Dropout-variance predictor signal (Salah & Yevick, arXiv:2507.11645):     at a f, aggregate(), apply_config_constants(), _checkpoint_predictor_dropout_variance() (+33 more)
 
 ### Community 15 - "Community 15"
 Cohesion: 0.33
@@ -294,8 +297,20 @@ Nodes (3): 8. DIRECT IMPLEMENTATION — Codex DOES THE WORK ITSELF, Default rule
 Cohesion: 0.67
 Nodes (3): Communication priority, MANDATORY COMMUNICATION SKILL, Mandatory pre-send check
 
+### Community 76 - "Community 76"
+Cohesion: 0.13
+Nodes (14): 1. Cross-Check with Recorded Values, 2. Summary Table: Peaks per Seed, 3. Test Results, 4. Verdict, 5. Full Peak Epoch Lists per Seed, Higher-MI Spike Grid Diagnosis Report, Physical Mechanism and Observations:, Seed 0 (27 peaks) (+6 more)
+
+### Community 77 - "Community 77"
+Cohesion: 0.21
+Nodes (13): detect_peaks(), load_seed_series(), main(), plot_spike_grid(), Performs peak detection, Test 1 (Coincidence), and Test 2 (Period).     Computes, Generates spike_grid_check.png with 5 subplots showing detected peaks., Saves full numeric details to JSON so every number can be checked by hand., Writes the short diagnostic report in Markdown format. (+5 more)
+
+### Community 78 - "Community 78"
+Cohesion: 0.24
+Nodes (9): _collect_representations_and_labels(), compute_spectral_for_model(), compute_spectral_metrics_for_checkpoint(), Spectral predictor (Predictor 3 of 9) — FAITHFUL Canatar et al. 2021.  Paper: Ab, Canatar et al. 2021 task-model-alignment metrics for ONE frozen     model checkp, Thin wrapper kept for run_nanda_benchmark.py's import. One frozen     checkpoint, Run the model over the full training split and capture, per example,     the hid, _checkpoint_predictor_spectral() (+1 more)
+
 ## Knowledge Gaps
-- **189 isolated node(s):** `Purpose`, `1. Non-negotiable rule`, `2. What Indian English means here`, `3. Do not confuse Indian English with simple English`, `4. Preferred Indian teaching voice` (+184 more)
+- **199 isolated node(s):** `1. Cross-Check with Recorded Values`, `2. Summary Table: Peaks per Seed`, `Test 1: Coincidence Across Seeds`, `Test 2: Period and Spread Across Seeds`, `Physical Mechanism and Observations:` (+194 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **16 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -303,15 +318,15 @@ Nodes (3): Communication priority, MANDATORY COMMUNICATION SKILL, Mandatory pre-
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `train_one_seed()` connect `Community 14` to `Community 19`, `Community 22`?**
-  _High betweenness centrality (0.026) - this node is a cross-community bridge._
+  _High betweenness centrality (0.024) - this node is a cross-community bridge._
 - **Why does `PredictorMeasurements` connect `Community 19` to `Community 14`?**
-  _High betweenness centrality (0.019) - this node is a cross-community bridge._
+  _High betweenness centrality (0.018) - this node is a cross-community bridge._
 - **Why does `compute_sum_of_squared_weights()` connect `Community 22` to `Community 14`?**
   _High betweenness centrality (0.007) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `PredictorMeasurements` (e.g. with `recompute_from_checkpoints()` and `train_one_seed()`) actually correct?**
   _`PredictorMeasurements` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Purpose`, `1. Non-negotiable rule`, `2. What Indian English means here` to the rest of the system?**
-  _348 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `Detect local maxima above min_height with at least min_distance separation.`, `Find and load per-seed Omega series.     Asserts 401 points and maximum in range`, `Performs peak detection, Test 1 (Coincidence), and Test 2 (Period).     Computes` to the rest of the system?**
+  _364 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 1` be split into smaller, more focused modules?**
   _Cohesion score 0.058823529411764705 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**

@@ -815,8 +815,8 @@
     "semantic_hash": ""
   },
   "project_compilation.pdf": {
-    "mtime": 1790976273.738818,
-    "ast_hash": "34314eb30e31b06965dccf8c575ab065",
+    "mtime": 1793313063.1399782,
+    "ast_hash": "605168fc4c572575fb49d5e72248689d",
     "semantic_hash": ""
   },
   "archive/Baseline_v4_24_Checkpoints/nanda_unified/aggregate.json": {
@@ -2130,13 +2130,33 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/reports/measured/measured_higher_mi_population_omega_all_seeds.png": {
-    "mtime": 1793099699.7100813,
-    "ast_hash": "d3b592c4f2b073c5c9de99dc63aac553",
+    "mtime": 1793313508.8126814,
+    "ast_hash": "73f33166792b4b55d73c16ab47e53631",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/reports/measured/measured_higher_mi_population_vs_temporal_seed0.png": {
-    "mtime": 1793099699.8274012,
-    "ast_hash": "ad9832364baabbfd8629a7ffd0bdcaef",
+    "mtime": 1793313508.9318428,
+    "ast_hash": "ef5f6f79fd8217c62b43ae4f41578502",
+    "semantic_hash": ""
+  },
+  "06_Code/scripts/check_spike_grid.py": {
+    "mtime": 1793304153.9469604,
+    "ast_hash": "cb354c3b6fede2508f6f2aa1115415ba",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/reports/spike_grid_check.json": {
+    "mtime": 1793304160.4056854,
+    "ast_hash": "81873425bcc77bf3bad3841af502c3e7",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/reports/spike_grid_check.md": {
+    "mtime": 1793304160.4059582,
+    "ast_hash": "0e2def1d78c941a521ee2542449f0deb",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/reports/spike_grid_check.png": {
+    "mtime": 1793304161.055998,
+    "ast_hash": "20fc1102cece5634f4a29ee43d367881",
     "semantic_hash": ""
   }
 }
