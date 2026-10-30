@@ -1,16 +1,16 @@
 # Graph Report - grokking-benchmark  (2026-10-30)
 
 ## Corpus Check
-- 176 files · ~1,528,565 words
+- 177 files · ~5,780,572 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 781 nodes · 914 edges · 79 communities (63 shown, 16 thin omitted)
+- 1071 nodes · 1205 edges · 78 communities (62 shown, 16 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ff88bb87`
+- Built from commit: `ec4daf38`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -79,19 +79,18 @@
 - [[_COMMUNITY_Community 74|Community 74]]
 - [[_COMMUNITY_Community 76|Community 76]]
 - [[_COMMUNITY_Community 77|Community 77]]
-- [[_COMMUNITY_Community 78|Community 78]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `PredictorMeasurements` - 19 edges
-2. `Indian English Communication Skill` - 16 edges
-3. `train_one_seed()` - 15 edges
-4. `Mathematical Pronunciation and Symbol Reading Rules` - 11 edges
-5. `PredictorMeasurements` - 11 edges
-6. `L2 Norm Predictor — Easy Notes for Revision and Viva` - 11 edges
-7. `main()` - 10 edges
+1. `Project Compilation — Full NPY Data Dump` - 287 edges
+2. `PredictorMeasurements` - 19 edges
+3. `Indian English Communication Skill` - 16 edges
+4. `train_one_seed()` - 15 edges
+5. `Mathematical Pronunciation and Symbol Reading Rules` - 11 edges
+6. `PredictorMeasurements` - 11 edges
+7. `L2 Norm Predictor — Easy Notes for Revision and Viva` - 11 edges
 8. `main()` - 10 edges
-9. `BenchmarkAnalyzer` - 10 edges
-10. `Literature` - 10 edges
+9. `main()` - 10 edges
+10. `BenchmarkAnalyzer` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `train_one_seed()` --calls--> `PredictorMeasurements`  [INFERRED]
@@ -111,7 +110,7 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (79 total, 16 thin omitted)
+## Communities (78 total, 16 thin omitted)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.06
@@ -162,8 +161,8 @@ Cohesion: 0.15
 Nodes (17): compute_weight_pca_for_model(), compute_weight_pca_metrics_for_checkpoint(), effective_rank(), find_global_minimum_epoch(), find_steepest_drop_epoch(), find_threshold_crossing_epoch(), _layer_singular_values(), Weight-PCA predictor (Predictor 7 of 8) — Spectral Dynamics / Rank Minimization (+9 more)
 
 ### Community 14 - "Community 14"
-Cohesion: 0.08
-Nodes (41): compute_accuracy(), compute_dropout_gap_multi_rate(), compute_dropout_variance(), # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, Dropout-variance predictor signal (Salah & Yevick, arXiv:2507.11645):     at a f, aggregate(), apply_config_constants(), _checkpoint_predictor_dropout_variance() (+33 more)
+Cohesion: 0.05
+Nodes (59): compute_accuracy(), compute_dropout_gap_multi_rate(), _collect_representations_and_labels(), compute_age_for_model(), compute_age_metrics_for_checkpoint(), AGE predictor (Predictor 4 of 9) — Adaptive Grokking Epoch via Neural Collapse., Papyan et al. 2020 NC1 variability-collapse metrics for ONE frozen     model che, Thin wrapper kept parallel to     src/predictors/spectral.py::compute_spectral_f (+51 more)
 
 ### Community 15 - "Community 15"
 Cohesion: 0.33
@@ -190,8 +189,8 @@ Cohesion: 0.20
 Nodes (8): discover_run_dirs(), migrate_legacy_flat_run(), plot_comparison(), plot_single_run(), Recreates this run's own 8 plots, saved inside results/four_head/run_<N>/ itself, Builds 4 plots overlaying every discovered run together, saved     directly in r, Same migration as train_four_head.py — kept here too so this     script can be r, Finds every run_<N> folder inside base_dir, sorted by run number     (not alphab
 
 ### Community 21 - "Community 21"
-Cohesion: 0.13
-Nodes (24): Path, get_images(), horizontal_collage(), main(), vertical_collage(), build_pdf(), collect_files(), collect_results() (+16 more)
+Cohesion: 0.12
+Nodes (26): Path, get_images(), horizontal_collage(), main(), vertical_collage(), build_pdf(), collect_files(), collect_results() (+18 more)
 
 ### Community 22 - "Community 22"
 Cohesion: 0.08
@@ -246,8 +245,8 @@ Cohesion: 0.17
 Nodes (12): 10. Voice-mode quality control, 1. Highest-priority rule, 2. Greek alphabet — standard English mathematical pronunciation, 3. Primes, subscripts, and superscripts, 4. Common mathematical operators and symbols, 5. Calculus and analysis, 6. Probability and statistics, 7. Information theory and machine learning (+4 more)
 
 ### Community 47 - "Community 47"
-Cohesion: 0.24
-Nodes (9): _collect_representations_and_labels(), compute_age_for_model(), compute_age_metrics_for_checkpoint(), AGE predictor (Predictor 4 of 9) — Adaptive Grokking Epoch via Neural Collapse., Papyan et al. 2020 NC1 variability-collapse metrics for ONE frozen     model che, Thin wrapper kept parallel to     src/predictors/spectral.py::compute_spectral_f, Run the model over the full training split and capture, per example,     the hid, _checkpoint_predictor_age() (+1 more)
+Cohesion: 0.01
+Nodes (287): 100. `08_Experiments/results/nanda_unified/seed_1/spectral/spectral_alignment.npy`, 101. `08_Experiments/results/nanda_unified/seed_1/spectral/spectral_checkpoints.npy`, 102. `08_Experiments/results/nanda_unified/seed_1/spectral/spectral_cumulative_power.npy`, 103. `08_Experiments/results/nanda_unified/seed_1/spectral/spectral_eigenvalues.npy`, 104. `08_Experiments/results/nanda_unified/seed_1/spectral/spectral_entropy.npy`, 105. `08_Experiments/results/nanda_unified/seed_1/spectral/spectral_k90.npy`, 106. `08_Experiments/results/nanda_unified/seed_1/spectral/spectral_k95.npy`, 107. `08_Experiments/results/nanda_unified/seed_1/training/loss_history.npy` (+279 more)
 
 ### Community 49 - "Community 49"
 Cohesion: 0.70
@@ -305,12 +304,8 @@ Nodes (14): 1. Cross-Check with Recorded Values, 2. Summary Table: Peaks per See
 Cohesion: 0.21
 Nodes (13): detect_peaks(), load_seed_series(), main(), plot_spike_grid(), Performs peak detection, Test 1 (Coincidence), and Test 2 (Period).     Computes, Generates spike_grid_check.png with 5 subplots showing detected peaks., Saves full numeric details to JSON so every number can be checked by hand., Writes the short diagnostic report in Markdown format. (+5 more)
 
-### Community 78 - "Community 78"
-Cohesion: 0.24
-Nodes (9): _collect_representations_and_labels(), compute_spectral_for_model(), compute_spectral_metrics_for_checkpoint(), Spectral predictor (Predictor 3 of 9) — FAITHFUL Canatar et al. 2021.  Paper: Ab, Canatar et al. 2021 task-model-alignment metrics for ONE frozen     model checkp, Thin wrapper kept for run_nanda_benchmark.py's import. One frozen     checkpoint, Run the model over the full training split and capture, per example,     the hid, _checkpoint_predictor_spectral() (+1 more)
-
 ## Knowledge Gaps
-- **199 isolated node(s):** `1. Cross-Check with Recorded Values`, `2. Summary Table: Peaks per Seed`, `Test 1: Coincidence Across Seeds`, `Test 2: Period and Spread Across Seeds`, `Physical Mechanism and Observations:` (+194 more)
+- **485 isolated node(s):** `Index`, `1. `08_Experiments/results/nanda_unified/seed_0/age/age_checkpoints.npy``, `2. `08_Experiments/results/nanda_unified/seed_0/age/age_fn.npy``, `3. `08_Experiments/results/nanda_unified/seed_0/age/age_nc1.npy``, `4. `08_Experiments/results/nanda_unified/seed_0/dropout/dropout_eval_acc_by_rate.npy`` (+480 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **16 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -318,16 +313,16 @@ Nodes (9): _collect_representations_and_labels(), compute_spectral_for_model(), 
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `train_one_seed()` connect `Community 14` to `Community 19`, `Community 22`?**
-  _High betweenness centrality (0.024) - this node is a cross-community bridge._
+  _High betweenness centrality (0.010) - this node is a cross-community bridge._
 - **Why does `PredictorMeasurements` connect `Community 19` to `Community 14`?**
-  _High betweenness centrality (0.018) - this node is a cross-community bridge._
-- **Why does `compute_sum_of_squared_weights()` connect `Community 22` to `Community 14`?**
   _High betweenness centrality (0.007) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `PredictorMeasurements` (e.g. with `recompute_from_checkpoints()` and `train_one_seed()`) actually correct?**
   _`PredictorMeasurements` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Detect local maxima above min_height with at least min_distance separation.`, `Find and load per-seed Omega series.     Asserts 401 points and maximum in range`, `Performs peak detection, Test 1 (Coincidence), and Test 2 (Period).     Computes` to the rest of the system?**
-  _364 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `compile_python_files.py =======================  Compiles context.md, EVERY code`, `Put each innermost list on one line (content unchanged, far fewer pages).`, `Dump every .npy array in results and control_results completely to Markdown.` to the rest of the system?**
+  _651 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 1` be split into smaller, more focused modules?**
   _Cohesion score 0.058823529411764705 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
   _Cohesion score 0.09659090909090909 - nodes in this community are weakly interconnected._
+- **Should `Community 4` be split into smaller, more focused modules?**
+  _Cohesion score 0.07142857142857142 - nodes in this community are weakly interconnected._

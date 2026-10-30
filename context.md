@@ -11848,3 +11848,11 @@ CLOSED-NEGATIVE, same pattern as L2, Dropout, Spectral, AGE, HTSR, Weight-PCA. T
 - `project_compilation.pdf` — refreshed project compilation PDF.
 - `project_compilation_npy_dump.md` — new full Markdown dump of all 285 `.npy` arrays.
 - `context.md` — this append-only entry.
+
+
+## Post-Commit Hook Update — 2026-10-30
+
+- Commit `ec4daf3` (`Add full NPY markdown dump to project compilation pipeline`) was created on branch `main`.
+- Its post-commit Graphify hook rebuilt the project graph against the committed files and refreshed six tracked outputs under `graphify-out/`.
+- Those regenerated Graphify outputs are being committed and pushed in a follow-up commit so the worktree can be verified clean.
+- This graph refresh changes project documentation and generated graph metadata only. It does not change experiment data, scores, or predictor conclusions.

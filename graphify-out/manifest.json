@@ -60,8 +60,8 @@
     "semantic_hash": ""
   },
   "06_Code/scripts/compile_python_files.py": {
-    "mtime": 1790624988.428796,
-    "ast_hash": "f92c107f7d4d1521ef4e3beb7b79801b",
+    "mtime": 1793319295.913913,
+    "ast_hash": "4f079fb7f901dd822199b27461bf49b6",
     "semantic_hash": ""
   },
   "06_Code/scripts/debug_detection.py": {
@@ -815,8 +815,8 @@
     "semantic_hash": ""
   },
   "project_compilation.pdf": {
-    "mtime": 1793313063.1399782,
-    "ast_hash": "605168fc4c572575fb49d5e72248689d",
+    "mtime": 1793319322.175703,
+    "ast_hash": "97112d368334b58624be766035302a40",
     "semantic_hash": ""
   },
   "archive/Baseline_v4_24_Checkpoints/nanda_unified/aggregate.json": {
@@ -2157,6 +2157,11 @@
   "08_Experiments/results/nanda_unified/reports/spike_grid_check.png": {
     "mtime": 1793304161.055998,
     "ast_hash": "20fc1102cece5634f4a29ee43d367881",
+    "semantic_hash": ""
+  },
+  "project_compilation_npy_dump.md": {
+    "mtime": 1793319319.7409737,
+    "ast_hash": "4cb6b55817a819b8525d30aa274fc3fe",
     "semantic_hash": ""
   }
 }
