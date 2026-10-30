@@ -11806,3 +11806,45 @@ CLOSED-NEGATIVE, same pattern as L2, Dropout, Spectral, AGE, HTSR, Weight-PCA. T
 - Its post-commit Graphify hook rebuilt the project graph against the committed files and refreshed six tracked outputs under `graphify-out/`.
 - Those regenerated Graphify outputs are being committed and pushed in a follow-up commit so the worktree can be verified clean.
 - This graph refresh changes project documentation and generated graph metadata only. It does not change experiment data, scores, or predictor conclusions.
+
+
+---
+
+# 2026-10-30 — Full NPY Markdown Dump added to project compilation
+
+## Session Summary
+
+- Modified `06_Code/scripts/compile_python_files.py` to produce a full, uncompressed Markdown data dump (`project_compilation_npy_dump.md`) alongside `project_compilation.pdf`.
+- Implemented `dump_npy_to_md()` function in `06_Code/scripts/compile_python_files.py` to iterate through all 285 `.npy` result files across `08_Experiments/results` and `controls_results`.
+- Output dump contains:
+  1. Header with generation timestamp, project root path, and total file count.
+  2. Complete navigation index table with relative paths (as anchor links), shapes, dtypes, and element counts.
+  3. Per-file detailed section with shape, dtype, total elements, statistical summaries (min, max, mean for numeric types), and 100% complete array data serialized in JSON code blocks without truncation or abbreviation.
+- Verified execution: 285 `.npy` files successfully extracted and dumped in 1.74s into `project_compilation_npy_dump.md` (~76.76 MB).
+- Re-compiled `project_compilation.pdf` with updated cover page noting the presence of `project_compilation_npy_dump.md`.
+
+## Technical Decisions
+
+- The user explicitly instructed that size is not a constraint and all array data should be completely dumped.
+- Array data formatting uses Python's standard `json.dumps()` for fast and clean serialization (~1.7s total write time). For 2D matrices, rows are formatted across lines for readability while remaining valid JSON.
+- Added `project_compilation_npy_dump.md` to the exclusion list in `is_code_file()` so the compilation script does not redundantly treat the dump file as source code.
+- Maintained the existing PDF summary behavior while linking to the full markdown dump.
+
+## User Instructions
+
+- User requested: "iss file ko modify karo ki jab pdf create ho rha ho, to saath me ek MD file bhi create ho jisme saara ka saara npy data dump ho jaye. Size ki chinta nahi karna, mai manage kar lunga."
+- Followed by: "commit and push everything".
+
+## Current Project State
+
+- Compilation script updated and verified working.
+- `project_compilation_npy_dump.md` generated at root (~76.76 MB).
+- `project_compilation.pdf` updated and synchronized.
+- Predictor order and experimental findings remain unchanged. Higher-MI remains CLOSED negative; Commutator Defect remains next in sequence.
+
+## Files Modified
+
+- `06_Code/scripts/compile_python_files.py` — added `dump_npy_to_md()`, updated `main()`, `is_code_file()`, and docstrings.
+- `project_compilation.pdf` — refreshed project compilation PDF.
+- `project_compilation_npy_dump.md` — new full Markdown dump of all 285 `.npy` arrays.
+- `context.md` — this append-only entry.

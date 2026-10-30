@@ -7,6 +7,10 @@ results (08_Experiments/results), and the synthetic-control validation
 results (controls_results) into one single PDF (`project_compilation.pdf`,
 written in the project root).
 
+Alongside the PDF, it generates a full Markdown data dump
+(`project_compilation_npy_dump.md`) containing the complete, unabbreviated
+contents of every .npy array in the results.
+
 The project root is found from this file's location
 (06_Code/scripts/ -> two levels up), so the script works on any machine.
 
@@ -14,13 +18,16 @@ Usage:
     python 06_Code/scripts/compile_python_files.py
 """
 
+import json
 import re
 import textwrap
+import time
 from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 OUTPUT_FILE = ROOT / "project_compilation.pdf"
+OUTPUT_NPY_FILE = ROOT / "project_compilation_npy_dump.md"
 CONTEXT_FILE = ROOT / "context.md"  # project memory, included at the start of the PDF
 
 # Codeable = source code, scripts and code-like config. Data, images,
@@ -58,7 +65,7 @@ def should_skip(path: Path):
 
 
 def is_code_file(path: Path):
-    if path == OUTPUT_FILE:
+    if path in (OUTPUT_FILE, OUTPUT_NPY_FILE):
         return False
     if path.name in CODE_NAMES:
         return True
@@ -112,6 +119,84 @@ def summarize_npy(path: Path):
         lines.append(f"first {NPY_PREVIEW}: {flat[:NPY_PREVIEW].tolist()}")
         lines.append(f"last {NPY_PREVIEW}: {flat[-NPY_PREVIEW:].tolist()}")
     return "\n".join(lines)
+
+
+def dump_npy_to_md(results, control_results, output_file: Path = OUTPUT_NPY_FILE):
+    """Dump every .npy array in results and control_results completely to Markdown."""
+    import numpy as np
+
+    npy_files = [p for p in results if p.suffix.lower() == ".npy"] + \
+                [p for p in control_results if p.suffix.lower() == ".npy"]
+    if not npy_files:
+        print("No .npy files found to dump.")
+        return
+
+    print(f"\nDumping {len(npy_files)} .npy files to Markdown: {output_file.name}")
+    t0 = time.time()
+
+    with open(output_file, "w", encoding="utf-8") as out:
+        out.write("# Project Compilation — Full NPY Data Dump\n\n")
+        out.write(f"- **Generated:** {date.today().isoformat()}\n")
+        out.write(f"- **Project root:** `{ROOT}`\n")
+        out.write(f"- **Total .npy files:** {len(npy_files)}\n\n")
+        out.write(
+            "This document contains the complete, unabbreviated array contents of all `.npy` files "
+            "from the experiment and validation results.\n\n"
+        )
+
+        out.write("## Index\n\n")
+        out.write("| # | Relative Path | Shape | Dtype | Elements |\n")
+        out.write("|---|---------------|-------|-------|----------|\n")
+
+        file_info = []
+        for i, path in enumerate(npy_files, 1):
+            rel = path.relative_to(ROOT).as_posix()
+            try:
+                arr = np.load(path, allow_pickle=True)
+                shape = str(arr.shape)
+                dtype = str(arr.dtype)
+                size = str(arr.size)
+                file_info.append((i, path, rel, arr))
+            except Exception as exc:
+                shape, dtype, size = "ERROR", "ERROR", str(exc)
+                file_info.append((i, path, rel, None))
+            out.write(f"| {i} | [`{rel}`](#{i}-{rel.replace('/', '-').replace('.', '-')}) | `{shape}` | `{dtype}` | `{size}` |\n")
+
+        out.write("\n---\n\n")
+
+        for i, path, rel, arr in file_info:
+            anchor = f"{i}-{rel.replace('/', '-').replace('.', '-')}"
+            out.write(f'<a id="{anchor}"></a>\n\n')
+            out.write(f"## {i}. `{rel}`\n\n")
+            if arr is None:
+                out.write("> **Error:** Could not load array from file.\n\n")
+                continue
+
+            out.write(f"- **Relative Path:** `{rel}`\n")
+            out.write(f"- **Shape:** `{arr.shape}`\n")
+            out.write(f"- **Dtype:** `{arr.dtype}`\n")
+            out.write(f"- **Elements:** `{arr.size}`\n")
+            if arr.size and arr.dtype.kind in "biuf":
+                out.write(f"- **Min:** `{arr.min():.6g}` | **Max:** `{arr.max():.6g}` | **Mean:** `{arr.mean():.6g}`\n")
+            out.write("\n```json\n")
+
+            if arr.ndim == 2:
+                out.write("[\n  ")
+                out.write(",\n  ".join(json.dumps(row.tolist()) for row in arr))
+                out.write("\n]\n")
+            elif arr.ndim <= 1:
+                out.write(json.dumps(arr.tolist()))
+                out.write("\n")
+            else:
+                out.write(json.dumps(arr.tolist()))
+                out.write("\n")
+
+            out.write("```\n\n---\n\n")
+
+    elapsed = time.time() - t0
+    size_mb = output_file.stat().st_size / (1024 * 1024)
+    print(f"NPY Markdown dump complete ({len(npy_files)} files, {size_mb:.2f} MB in {elapsed:.2f}s).")
+    print(f"Saved to:\n  {output_file}\n")
 
 
 def read_result_text(path: Path):
@@ -212,7 +297,8 @@ def build_pdf(files, results, control_results):
         Paragraph(f"Project root: {esc(str(ROOT))}", body),
         Paragraph(f"Total code files: <b>{len(files)}</b>", body),
         Paragraph(f"Result files (after the code): <b>{len(results)}</b> "
-                  "from 08_Experiments/results (checkpoints *.pt not included)", body),
+                  "from 08_Experiments/results (checkpoints *.pt not included; "
+                  ".npy summarized here, full dump in project_compilation_npy_dump.md)", body),
         Paragraph(f"Controlled-experiment result files (after that): <b>{len(control_results)}</b> "
                   "from controls_results (synthetic-control validation of the predictor criterion)", body),
         Spacer(1, 0.2 * inch),
@@ -282,6 +368,9 @@ def main():
         print("No code files found.")
         return
 
+    # Generate full NPY markdown dump alongside PDF
+    dump_npy_to_md(results, control_results)
+
     try:
         build_pdf(files, results, control_results)
     except ImportError:
@@ -290,7 +379,7 @@ def main():
 
     print(f"\nDone! {len(files)} code files, {len(results)} result files, "
           f"and {len(control_results)} controlled-experiment result files compiled.")
-    print(f"Output saved to:\n{OUTPUT_FILE}")
+    print(f"Outputs saved to:\n  PDF:    {OUTPUT_FILE}\n  NPY MD: {OUTPUT_NPY_FILE}")
 
 
 if __name__ == "__main__":
