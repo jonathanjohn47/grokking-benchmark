@@ -2163,5 +2163,15 @@
     "mtime": 1793319319.7409737,
     "ast_hash": "4cb6b55817a819b8525d30aa274fc3fe",
     "semantic_hash": ""
+  },
+  "11_Predictor_Issues_and_Lacunas/07_Higher_MI_Issues/Higher_MI_Attack_Points.md": {
+    "mtime": 1793500694.4732208,
+    "ast_hash": "65a31cb3b64a1d5cc216c5af38390add",
+    "semantic_hash": ""
+  },
+  "Grokbot outputs/Higher_MI_Attack_Points.pdf": {
+    "mtime": 1793497617.2111452,
+    "ast_hash": "11f3289508b11defc910f9d3adac37c5",
+    "semantic_hash": ""
   }
 }
