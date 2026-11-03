@@ -11933,3 +11933,226 @@ These rules may not be changed after any D curve is seen. Any sensitivity analys
 - Its post-commit Graphify hook refreshed `graphify-out/manifest.json`.
 - That regenerated Graphify output is being committed and pushed in a follow-up commit so the worktree can be verified clean.
 - This graph refresh changes generated graph metadata only. It does not change experiment data, scores, or predictor conclusions.
+
+
+---
+
+## 2026-11-04 — Commutator Defect (predictor 8): Stage 2 done (predictor file written)
+
+### What was done
+
+- New file (untracked, not committed): `06_Code/src/predictors/commutator_defect.py`.
+- Public function:
+  `compute_commutator_defect(model, train_inputs, train_labels, eta=1e-3, k_pairs=5, batch_size=512, seed=20261103) -> dict`.
+
+### What the function does
+
+- Makes a deep copy of the model on CPU in float64, puts it in eval mode. The caller's model is left untouched.
+- Draws K = 5 pairs (A, B), 512 examples each, with replacement from the training split, using a fresh `torch.Generator` seeded `20261103`. Every call redraws the same 5 pairs, so the D curve changes only because the model changes, not because the batches change.
+- Plain gradient steps only (no optimiser, no weight decay, no clipping), on the same loss as training: `CrossEntropyLoss` on `logits[:, 2, :]` (see `run_nanda_benchmark.py` line 531).
+- Updates:
+  - `theta_AB = (theta0 − eta g_A) − eta g_B(theta0 − eta g_A)`
+  - `theta_BA` likewise with A and B swapped
+  - `D = ||theta_AB − theta_BA|| / (||eta g_A|| · ||eta g_B||)`, with `g_A` and `g_B` taken at `theta0`.
+
+### Return value
+
+- `median`, `q25`, `q75` (NaN-ignoring via `nanquantile`; `None` if all values are NaN)
+- the 5 raw D values
+- `grad_norm_A`, `grad_norm_B` (unscaled)
+- plus `eta`, `k_pairs`, `batch_size`, `seed`
+
+### Review fix
+
+- Median was changed from `torch.nanmedian` to `torch.nanquantile(…, 0.5)`, because `nanmedian` picks the lower middle value when a NaN leaves an even count. With all 5 values present, both give the same result.
+
+### Numerical safety
+
+- A zero or non-finite gradient norm yields `D = NaN` for that pair instead of crashing.
+
+### Not yet done / next
+
+- Not wired into `unified_measurements.py`, `run_nanda_benchmark.py`, or `analyze_nanda_unified.py` (Stage 4 still pending).
+- Next: Stage 3 sanity checks (A = B gives 0; halving eta keeps D about the same; same seed gives identical output; the 2-parameter toy gives 1.5811).
+
+
+---
+
+## 2026-11-04 — Commutator Defect: Stage 3 sanity checks and numerator fix
+
+### Stage 3 (before numerator fix)
+
+Script: `06_Code/scripts/sanity_commutator_defect.py`. Seed 0, train split rebuilt as Spectral/AGE (3,830 examples). Checkpoints 1000, 6000, 12000.
+
+| Check | Result (pre-fix) |
+|---|---|
+| 1. Same batch twice → D = 0 | PASS (D = 0.0) |
+| 2. Halve η (rel diff < 0.05 on all 3 epochs) | FAIL at 6000 (0.699) and 12000 (0.098) |
+| 3. Same seed → identical dicts; caller untouched | PASS |
+| 4. 2-param toy → D = √2.5 | PASS (err ~1e−15) |
+
+Eta sweep on the old (weight-subtraction) numerator at epoch 6000: 82.7 / 140.6 / 277.8 / 675.5 — roughly ~1/η, i.e. noise.
+
+### Rounding diagnosis
+
+`||theta_AB − theta_BA||` was formed by subtracting two full parameter vectors (entries ~0.1). On flat-gradient checkpoints (epoch 6000, ‖g‖ ~ 7e−6) the true gap is ~1e−15, below float64 rounding of those vectors (~1e−14). So D was dominated by rounding there. Epoch 1000 (larger ‖g‖) was fine. The 2-param toy was fine. This was not a wrong formula — it was a bad arithmetic path to the same formula.
+
+### Fix (Stage 3b) — frozen definition unchanged
+
+Algebraically identical rewrite used in `defect_one_pair`:
+
+```
+theta_AB − theta_BA
+  = eta * [ (g_A(theta0 − eta g_B) − g_A(theta0))
+            − (g_B(theta0 − eta g_A) − g_B(theta0)) ]
+
+numer = eta * ||(g_A_after_B − g_A) − (g_B_after_A − g_B)||
+```
+
+Denom still `(eta·‖g_A‖)·(eta·‖g_B‖)`. NaN rules unchanged. `theta_AB` / `theta_BA` are no longer built for the numerator (only for the toy print, separately). Teacher-style comment in the source explains why: theta0 cancels exactly; subtracting gradients avoids rounding swamping a ~1e−15 gap.
+
+### Results after the fix
+
+| Check | Result (post-fix) |
+|---|---|
+| 1. Same batch twice | PASS (D = 0.0) |
+| 2. Halve η | PASS at 1000 (6.6e−7) and 6000 (2.9e−5); **FAIL at 12000 (0.0978)** |
+| 3. Reproducible | PASS |
+| 4. 2-param toy | PASS (exact √2.5 at η=0.1) |
+
+Eta sweep (new numerator, medians):
+
+| epoch | η=1e−3 | η=5e−4 | η=2.5e−4 | η=1e−4 |
+|---|---|---|---|---|
+| 1000 | 51.6200 | 51.6201 | 51.6201 | 51.6203 |
+| 6000 | 59.4207 | 59.4224 | 59.4483 | 59.4306 |
+| 12000 | 112.1278 | 101.1634 | 91.6211 | 91.6207 |
+
+Old vs new at η=1e−3:
+
+| epoch | old median | new median | \|old−new\|/\|old\| |
+|---|---|---|---|
+| 1000 | 51.6219 | 51.6200 | 3.5e−5 (close, as expected) |
+| 6000 | 82.7452 | 59.4207 | 0.28 (large — old was noise) |
+| 12000 | 112.1278 | 112.1278 | 9e−10 (agree) |
+
+**Epoch 12000 Check 2 still fails.** Gradients there are not tiny (‖g‖ ~ 9e−3). Old and new numerators agree. Per-pair values show pairs 1–2 stable (~91.6, ~87.1) while pairs 0 and 4 move a lot with η (141→247→81 and 126→192→93). As η→0 the median settles near 91.62. This is residual higher-order η dependence in some pairs, not the rounding bug. Thresholds and η were **not** tweaked (per Stage 3b stop rule).
+
+### Timing
+
+~0.27–0.31 s per `compute_commutator_defect` call. Stage 5 estimate for 2,005 snapshots: ~0.15–0.17 hours single-threaded.
+
+### Onboarding PDF slip
+
+`Grokbot outputs/Commutator_Defect_Explained.pdf` section 4.5 hand value θ_BA = (0.19, 0.04) was a slip. The correct value is **(0.19, 0.07)**. θ_AB = (0.18, 0.09) was already correct. D = √2.5 is unchanged.
+
+### Not done
+
+Stage 4 wiring (`unified_measurements.py`, `run_nanda_benchmark.py`, `analyze_nanda_unified.py`) still pending. No commit in this session.
+
+
+---
+
+## 2026-11-04 — Commutator Defect: Stage 3c (default eta → 1e-4) and Stage 3 commit
+
+### Session Summary
+
+- Stage 3c: changed the default probe `eta` from `1e-3` to `1e-4` in `compute_commutator_defect` / `defect_one_pair`.
+- Reason (documented in source comment): at late epochs (e.g. 12000) `eta=1e-3` leaves higher-order eta dependence in some pairs; the eta sweep shows the median converging near 91.62 by `eta<=2.5e-4`, so `1e-4` measures the small-eta limit.
+- Sanity script Check 2 now compares `eta=1e-4` vs `eta=5e-5` at epochs 1000, 6000, 12000 (same pass rule: `|D1-D2|/D1 < 0.05`). Checks 1, 3, 4 unchanged.
+- Eta sweep extended to include `5e-5`. Per-pair D (all 5 pairs) printed at epoch 12000 for every eta.
+- Float-rounding guard: at epoch 1000, median at `5e-5` must match median at `1e-4` to within `1e-4` relative — PASS (`2.05e-5`).
+- All 4 sanity checks PASS after Stage 3c. Stage 3 committed (predictor file, sanity script, context.md, Stage 3 sanity report PDF). Stage 4 wiring still not started.
+
+### Technical Decisions
+
+- Default probe eta = `1e-4` (was `1e-3`). Frozen D definition, denominator, NaN rules, and thresholds unchanged.
+- Numerator remains the Stage 3b gradient-difference form (algebraically identical to `||theta_AB - theta_BA||`).
+- Wiring files (`unified_measurements.py`, `run_nanda_benchmark.py`, `analyze_nanda_unified.py`) untouched.
+
+### Stage 3c sanity results (seed 0; checkpoints 1000 / 6000 / 12000)
+
+| Check | Result |
+|---|---|
+| 1. Same batch twice → D = 0 | PASS (D = 0.0) |
+| 2. Halve η (`1e-4` vs `5e-5`, rel < 0.05) | PASS at 1000 (`2.05e-5`), 6000 (`0.00215`), **12000 (`1.64e-6`)** |
+| 3. Same seed → identical dicts; caller untouched | PASS (default-eta median at 6000 = 59.4306) |
+| 4. 2-param toy → D = √2.5 | PASS |
+
+Eta sweep medians (new numerator, including `5e-5`):
+
+| epoch | η=1e−3 | η=5e−4 | η=2.5e−4 | η=1e−4 | η=5e−5 |
+|---|---|---|---|---|---|
+| 1000 | 51.6200 | 51.6201 | 51.6201 | 51.6203 | 51.6192 |
+| 6000 | 59.4207 | 59.4224 | 59.4483 | 59.4306 | 59.5586 |
+| 12000 | 112.1278 | 101.1634 | 91.6211 | 91.6207 | 91.6205 |
+
+Per-pair D at epoch 12000:
+
+| eta | pair0 | pair1 | pair2 | pair3 | pair4 |
+|---|---|---|---|---|---|
+| 1e−3 | 141.901 | 91.623 | 87.092 | 112.128 | 125.845 |
+| 5e−4 | 247.368 | 91.622 | 87.091 | 101.163 | 192.336 |
+| 2.5e−4 | 80.751 | 91.621 | 87.090 | 101.161 | 93.004 |
+| 1e−4 | 80.751 | 91.621 | 87.090 | 101.160 | 93.004 |
+| 5e−5 | 80.751 | 91.621 | 87.089 | 101.159 | 93.004 |
+
+Pairs 0 and 4 settle by `eta<=2.5e-4`. Median stays near 91.62 from `2.5e-4` through `5e-5`.
+
+### Timing
+
+~0.35 s per `compute_commutator_defect` call (avg over 8 timed Check 2/3 calls). Stage 5 estimate for 2,005 snapshots: ~0.20 hours single-threaded.
+
+### Files Modified / Added
+
+- `06_Code/src/predictors/commutator_defect.py` — predictor measurement; gradient-diff numerator; default eta `1e-4`
+- `06_Code/scripts/sanity_commutator_defect.py` — Stage 3 / 3b / 3c sanity checks
+- `context.md` — Stage 2 / 3 / 3b / 3c history (append-only)
+- `Grokbot outputs/Commutator_Defect_Stage3_Sanity_Report.pdf` — Stage 3 sanity report
+
+### Current Project State
+
+- Commutator Defect Stages 1–3 complete (frozen rules, predictor file, sanity + eta default).
+- Stage 4 wiring still pending. Do not start until asked.
+
+
+---
+
+## 2026-11-04 — Commutator Defect Stage 3 (commit record)
+
+### Numerator (gradient-difference form)
+
+The numerator now uses the gradient difference
+
+```
+eta * ||(g_A(θ_B) - g_A(θ0)) - (g_B(θ_A) - g_B(θ0))||
+```
+
+because subtracting weight vectors was drowning a ~1e−15 gap in float rounding. The frozen definition of D is unchanged; only the arithmetic path changed. Denominator and NaN rules are unchanged.
+
+### Default eta
+
+The default eta changed from `1e-3` to `1e-4`, because at epoch 12000, `eta=1e-3` left higher-order eta dependence in pairs 0 and 4. The median settles near 91.62 for `eta <= 2.5e-4`.
+
+### Sanity checks
+
+All 4 sanity checks pass:
+
+- Check 1: same batch twice → D = 0
+- Check 2: compares `eta=1e-4` against `5e-5` at epochs 1000, 6000, 12000 (rel diff < 0.05) — all PASS, including epoch 12000
+- Check 3: reproducible + caller model untouched
+- Check 4: 2-parameter toy → D = √2.5
+
+The float-rounding guard also passes at epoch 1000 (`|D(5e-5) − D(1e-4)| / D(1e-4) ≈ 2.05e−5 < 1e−4`).
+
+### Note on epoch 6000
+
+At epoch 6000, D changes by about 0.2% between `eta=1e-4` and `5e-5` (`|D1−D2|/D1 ≈ 0.00215`). That is a small noise floor, far below the 10× alarm threshold.
+
+### Timing
+
+~0.35 s per `compute_commutator_defect` call; about 0.20 h for 2005 snapshots (single-threaded Stage 5 estimate).
+
+### Next step
+
+Stage 4 (wiring into `unified_measurements.py`, `run_nanda_benchmark.py`, `analyze_nanda_unified.py`). Not started in this commit.
