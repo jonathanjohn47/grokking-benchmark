@@ -11856,3 +11856,72 @@ CLOSED-NEGATIVE, same pattern as L2, Dropout, Spectral, AGE, HTSR, Weight-PCA. T
 - Its post-commit Graphify hook rebuilt the project graph against the committed files and refreshed six tracked outputs under `graphify-out/`.
 - Those regenerated Graphify outputs are being committed and pushed in a follow-up commit so the worktree can be verified clean.
 - This graph refresh changes project documentation and generated graph metadata only. It does not change experiment data, scores, or predictor conclusions.
+
+
+---
+
+## 2026-11-03: Commutator Defect (predictor 8): frozen rules, set before any code or results
+
+Definition
+- From snapshot weights θ_k, using two batches A and B:
+  θ_AB = θ_k − η g_A(θ_k) − η g_B(θ_k − η g_A(θ_k))
+  θ_BA = θ_k − η g_B(θ_k) − η g_A(θ_k − η g_B(θ_k))
+  D = ||θ_AB − θ_BA|| / (||η g_A(θ_k)|| · ||η g_B(θ_k)||)
+- g_X = gradient of the training loss on batch X, over all model parameters. Plain gradient steps (no AdamW, no optimiser state). η = 1e-3 (a probe step size only; training is not changed).
+
+Measurement
+- A and B: 512 examples each, drawn with replacement from the seeded training split (3,830 examples). This is an adaptation, because training was full-batch, so A = B would give D = 0.
+- K = 5 fresh (A, B) pairs per snapshot. Store the median D̃, the 25th and 75th percentiles, the 5 raw values, and ||g_A||, ||g_B||.
+- Every 100 epochs: 401 snapshots per seed, 5 seeds, from the existing saved checkpoints (no retraining).
+- CPU, float64 (an adaptation: the gap is about η² in size, and MPS has no float64).
+- Fixed torch.Generator seed for drawing batches: 20261103. Re-seed from seed.npy and rebuild the training split, as Spectral and AGE do.
+
+Event (alarm) rule: Xu (2026), unchanged
+- b = median of the first 3 values of D̃.
+- Event epoch = the first snapshot, from index 2 onwards, where D̃ > 10 · max(b, 0.1) AND D̃ > 20.
+- Never fires = a miss for that seed.
+
+Grok rule: unchanged. Grok epoch = the first epoch with test accuracy > 0.9. Grok epochs = [12987, 6921, 9510, 11019, 23747].
+
+PASS criteria: unchanged, the same as all other predictors.
+- lead_frac ≥ 0.8, where a lead means event < grok − 100 (a miss counts as no lead)
+- Spearman rho(event, grok) ≥ 0.9
+- 0.05 ≤ mean relative lead ≤ 0.9
+- Miss and negative-lead handling: taken from analyze_nanda_unified.py::evaluate_frozen_protocol and the frozen evaluate() rule it documents as identical (run_control_experiment.py::evaluate, recorded 2026-09-29). (a) Miss: a seed whose predictor never fires is stored as None and is dropped before Spearman rho and mean relative lead are computed; those two statistics use only the seeds that fired. If fewer than 4 of the 5 seeds fire, the set fails immediately (lead_frac = 0.0, rho = nan, mean_rel_lead = 0.0). (b) Negative relative lead: when the event is after grok, rel_lead = (G − P) / G is negative; negative values are kept in the mean as signed numbers (not dropped, not absolute-valued). mean_rel_lead = mean(rel_lead) over the seeds used above. A negative mean fails the 0.05 ≤ mean_rel_lead ≤ 0.9 band.
+
+Sources
+- Main: Y. Xu (2026), "Low-Dimensional and Transversely Curved Optimization Dynamics in Grokking", arXiv:2602.16746 (formula, η, K = 5, onset rule).
+- Extra: Y. Xu (2026), arXiv:2602.16967 (only the 25th/75th percentile reporting).
+- Theory: Smith, Dherin, Barrett & De (2021), arXiv:2101.12176 (the order of steps matters at second order in η).
+- Note: Xu's paper text says K = 9, while his code uses K = 5. We use 5.
+
+Exploratory only (not scored): a weights-only ||W_Q W_K − W_K W_Q||.
+
+These rules may not be changed after any D curve is seen. Any sensitivity analysis (for example, of the floor of 20) must be labelled secondary.
+
+
+---
+
+# 2026-11-03 — Commit: freeze Commutator Defect rules (Stage 1)
+
+## Session Summary
+
+- Appended Stage 1 frozen rules for Commutator Defect (predictor 8 of 8) to `context.md` before any implementation or D-curve results.
+- Recorded definition (θ_AB / θ_BA / D), measurement adaptations (A/B = 512 with replacement, K = 5, CPU float64, batch Generator seed 20261103), Xu onset rule, unchanged grok and PASS criteria, and miss / negative-lead handling aligned with the frozen evaluate path.
+- No predictor code, analysis script, or experiment results were changed.
+- User asked to commit and push.
+
+## Technical Decisions
+
+- Rules are frozen before code or results; sensitivity analysis after any D curve must be labelled secondary.
+- Batch drawing seed frozen as torch.Generator seed 20261103; training split rebuild follows Spectral / AGE (re-seed from seed.npy).
+
+## Current Project State
+
+- Predictors 1–7 CLOSED (negative or out of order as already recorded). Commutator Defect Stage 1 (rules) is now frozen in `context.md`. Implementation and measurement not started.
+- Commit and push of this freeze record (and related untracked explanation PDF if present) are being performed now.
+
+## Files Modified
+
+- `context.md` — frozen Commutator Defect rules section (2026-11-03) plus this commit record.
+- `Grokbot outputs/Commutator_Defect_Explained.pdf` — explanation PDF present in the worktree and included in this commit if still untracked.
