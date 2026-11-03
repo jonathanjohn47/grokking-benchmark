@@ -2173,5 +2173,10 @@
     "mtime": 1793497617.2111452,
     "ast_hash": "11f3289508b11defc910f9d3adac37c5",
     "semantic_hash": ""
+  },
+  "Grokbot outputs/Commutator_Defect_Explained.pdf": {
+    "mtime": 1793529164.913249,
+    "ast_hash": "e09a096eb5c4cc098fff36d41c659d31",
+    "semantic_hash": ""
   }
 }

@@ -11925,3 +11925,11 @@ These rules may not be changed after any D curve is seen. Any sensitivity analys
 
 - `context.md` — frozen Commutator Defect rules section (2026-11-03) plus this commit record.
 - `Grokbot outputs/Commutator_Defect_Explained.pdf` — explanation PDF present in the worktree and included in this commit if still untracked.
+
+
+## Post-Commit Hook Update — 2026-11-03
+
+- Commit `554c448` (`docs: freeze Commutator Defect Stage 1 rules`) was created and pushed to `origin/main`.
+- Its post-commit Graphify hook refreshed `graphify-out/manifest.json`.
+- That regenerated Graphify output is being committed and pushed in a follow-up commit so the worktree can be verified clean.
+- This graph refresh changes generated graph metadata only. It does not change experiment data, scores, or predictor conclusions.
