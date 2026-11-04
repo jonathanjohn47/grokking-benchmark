@@ -12357,3 +12357,21 @@ Same frozen rule applied for reporting only. Never used for the official PASS/FA
 - **Stage 6:** 11 figures under `08_Experiments/results/nanda_unified/figures/commutator_defect/`.
 - **Stage 7:** official frozen verdict **FAIL** (PRIMARY eta=1e-3): lead_frac=1.0 PASS, Spearman rho=0.6325 FAIL, mean relative lead=0.9535 FAIL. SECONDARY eta=1e-4 also FAIL, unscored. Other 7 predictors' verdicts unchanged.
 - **Next:** Stage 8 issues checklist.
+
+
+---
+
+## 2026-11-04 — Commutator Defect: Stage 8 issues checklist
+
+- Created `11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md`.
+- Structure copied from `Higher_MI_Attack_Points.md` (Big worries / Moderate worries / Small slips / What checks out / summary table / bottom line).
+- **16** open ❌ items (result-level + source/protocol-level + process). None can flip FAIL → PASS.
+- No code or results changed. No commit.
+
+
+---
+
+## 2026-11-04 — Commutator Defect Stage 8 commit record
+
+- Committing Stage 8 issues checklist only: `11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md` (16 ❌ items; FAIL robust) plus this `context.md` update.
+- `graphify-out/` left out. No code or experiment results changed.
