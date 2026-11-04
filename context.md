@@ -12375,3 +12375,29 @@ Same frozen rule applied for reporting only. Never used for the official PASS/FA
 
 - Committing Stage 8 issues checklist only: `11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md` (16 ❌ items; FAIL robust) plus this `context.md` update.
 - `graphify-out/` left out. No code or experiment results changed.
+
+
+---
+
+## 2026-11-04 — Supervisor progress report: Commutator Defect (closed negative)
+
+### Session Summary
+
+- Wrote the supervisor progress report for Commutator Defect (Predictor 8 of 8, CLOSED, NEGATIVE) matching the Higher-MI report layout, tone, and figure/table style.
+- Output files:
+  - `02_Progress_Reports/2026-11-04_Progress_Report_Commutator_Defect.docx`
+  - `02_Progress_Reports/2026-11-04_Progress_Report_Commutator_Defect.pdf` (4 pages, A4)
+- Five supervisor sections covered: objectives; eight stages with the Xu definition of \(D\) and alarm rule; challenges (float64 numerator, η dependence, post-hoc η revert, full-batch A/B); Stage 7 FAIL results + Seed-0 and overview figures + Stage 8 attack-points summary + all-eight closed-negative conclusion; next-period plans.
+- Small post-write fixes before commit: checkpoint wording `epochs 0, 100, …, 39,900 and 39,999 (401 checkpoints)`; Table 1 header `Lead (P < G − 100)`; Reference [4] = Nanda et al., ICLR 2023, arXiv:2301.05217; D-tilde rendered as Office Math objects (no DH/D5 extraction artefacts).
+- No code, experiment results, scores, or verdicts were changed. `graphify-out/` left out of this commit.
+
+### Current Project State
+
+- All 8 predictors are CLOSED, NEGATIVE under the frozen protocol.
+- Next work (from the report plans): unified write-up in `05_Thesis_Document`; fix plotting bugs (Weight-PCA missing from scatter; Higher-MI missing from plots 02–04); persist frozen verdicts for L2 / Dropout / Spectral / AGE.
+
+### Files Modified / Added
+
+- `02_Progress_Reports/2026-11-04_Progress_Report_Commutator_Defect.docx` — new
+- `02_Progress_Reports/2026-11-04_Progress_Report_Commutator_Defect.pdf` — new
+- `context.md` — this session record
