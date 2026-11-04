@@ -12401,3 +12401,12 @@ Same frozen rule applied for reporting only. Never used for the official PASS/FA
 - `02_Progress_Reports/2026-11-04_Progress_Report_Commutator_Defect.docx` — new
 - `02_Progress_Reports/2026-11-04_Progress_Report_Commutator_Defect.pdf` — new
 - `context.md` — this session record
+
+
+---
+
+## 2026-11-04 — Graphify refresh after progress-report commit
+
+- Post-commit Graphify hook left `graphify-out/` dirty after `b2e787e` (progress report).
+- Committing the regenerated Graphify index only (`GRAPH_REPORT.md`, `graph.json`, `graph.html`, `manifest.json`, labels, stat-index). No code or experiment results changed.
+- Pushing `main` to `origin` (progress-report commit + this Graphify refresh).

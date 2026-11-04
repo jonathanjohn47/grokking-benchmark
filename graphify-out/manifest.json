@@ -85,8 +85,8 @@
     "semantic_hash": ""
   },
   "06_Code/scripts/run_nanda_benchmark.py": {
-    "mtime": 1790969951.8631887,
-    "ast_hash": "2b3ea9c998c98e61e55419e3fa7450ba",
+    "mtime": 1793747838.2928836,
+    "ast_hash": "c8040ae6fd12edb4011f5705105fa42a",
     "semantic_hash": ""
   },
   "06_Code/scripts/scaffold.py": {
@@ -150,8 +150,8 @@
     "semantic_hash": ""
   },
   "06_Code/src/unified_measurements.py": {
-    "mtime": 1790969451.0630295,
-    "ast_hash": "40a7086bbf47f62e3a7ee5bb4d80c9b0",
+    "mtime": 1793747776.1322656,
+    "ast_hash": "54cada6e15883aa9318c4e3985998c91",
     "semantic_hash": ""
   },
   "08_Experiments/nanda_l2_p113/__init__.py": {
@@ -1625,8 +1625,8 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/aggregate.json": {
-    "mtime": 1790975386.731045,
-    "ast_hash": "f3f05ac21e5f4e818b880478b79f8b9f",
+    "mtime": 1793749836.379831,
+    "ast_hash": "c9243e15add68ee28a3a3335cd4da7bb",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_0/dropout/dropout_drc_snapshots.json": {
@@ -1650,8 +1650,8 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_0/summary.json": {
-    "mtime": 1790975326.019613,
-    "ast_hash": "fb32e21cf70488df7cc4d4ad8265bb78",
+    "mtime": 1793748863.889038,
+    "ast_hash": "32f89def0c741dd11c5e9257cd5cda42",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_1/dropout/dropout_drc_snapshots.json": {
@@ -1675,8 +1675,8 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_1/summary.json": {
-    "mtime": 1790975333.237916,
-    "ast_hash": "6cbff197b50e78e892a33657ea1593e7",
+    "mtime": 1793749108.1011581,
+    "ast_hash": "1b4919ff964e13e4656d8d2b1d0ad5f3",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_2/dropout/dropout_drc_snapshots.json": {
@@ -1700,8 +1700,8 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_2/summary.json": {
-    "mtime": 1790975339.6507542,
-    "ast_hash": "ec7361c5083a5d73f9e9d4d02c7426d4",
+    "mtime": 1793749354.7504528,
+    "ast_hash": "e3aad5f04fb04c79726c9a02e87a768f",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_3/dropout/dropout_drc_snapshots.json": {
@@ -1725,8 +1725,8 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_3/summary.json": {
-    "mtime": 1790975372.0543041,
-    "ast_hash": "9215df8e0150fd1c2a4e627b54e196f7",
+    "mtime": 1793749595.434162,
+    "ast_hash": "bada2d5d5bf27e84e8daa6fa9fa9252e",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_4/dropout/dropout_drc_snapshots.json": {
@@ -1750,8 +1750,8 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_4/summary.json": {
-    "mtime": 1790975379.037081,
-    "ast_hash": "3d3778341b352747b4466a82fb820bf2",
+    "mtime": 1793749836.3106897,
+    "ast_hash": "50071bfb682475278c267950f7b7afca",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_0/age/age_signal.json": {
@@ -1805,33 +1805,33 @@
     "semantic_hash": ""
   },
   "06_Code/scripts/analyze_nanda_unified.py": {
-    "mtime": 1790973949.2685695,
-    "ast_hash": "b9fd1f98396ff45df33db3c284f8214c",
+    "mtime": 1793747882.504418,
+    "ast_hash": "ff9741b00485c12fdc20bfb561817acb",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/analysis/predictor_events.json": {
-    "mtime": 1790975666.8375072,
-    "ast_hash": "5fb0d6d7d82303c2499b3d1a8b25bd0b",
+    "mtime": 1793750593.0699186,
+    "ast_hash": "e668beb4bde28dd001d5d01ff9061ca1",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/analysis/01_grokking_curves.png": {
-    "mtime": 1790975667.0966184,
-    "ast_hash": "41d00f888767abd8ca249ae3d998c17b",
+    "mtime": 1793750593.3299177,
+    "ast_hash": "320bfeeee955fb97384a72d8ffe397e2",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/analysis/02_signals_vs_grok.png": {
-    "mtime": 1790975668.4324286,
-    "ast_hash": "3548ebe174d28d4d778b2cf9dab30cb9",
+    "mtime": 1793750594.6181145,
+    "ast_hash": "3479acb89862b1179d5627797d9d2aab",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/analysis/03_event_vs_grok_scatter.png": {
-    "mtime": 1790975668.5571764,
-    "ast_hash": "1c5112c591d9d84c96bf6a184dca7511",
+    "mtime": 1793750594.7567747,
+    "ast_hash": "94a47383793ec3a99e57d451a054f51c",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/analysis/04_lead_times.png": {
-    "mtime": 1790975668.663936,
-    "ast_hash": "412d1948f1c8787446f0aef9b4883172",
+    "mtime": 1793750594.8655105,
+    "ast_hash": "1514bd386fc01738ec252ed8f63989d1",
     "semantic_hash": ""
   },
   "06_Code/src/predictors/htsr_alpha.py": {
@@ -1930,8 +1930,8 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/aggregate_higher_mi.json": {
-    "mtime": 1790975666.8383348,
-    "ast_hash": "60fa736f7b986d9b8a4ef282e10ac7e1",
+    "mtime": 1793750593.0704165,
+    "ast_hash": "af7e596188ac3ff073934df6a1dfa480",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/seed_0/higher_mi/higher_mi_signal.json": {
@@ -2177,6 +2177,146 @@
   "Grokbot outputs/Commutator_Defect_Explained.pdf": {
     "mtime": 1793529164.913249,
     "ast_hash": "e09a096eb5c4cc098fff36d41c659d31",
+    "semantic_hash": ""
+  },
+  "06_Code/scripts/sanity_commutator_defect.py": {
+    "mtime": 1793747544.623092,
+    "ast_hash": "2d8f8266202426349398fd6265f4f656",
+    "semantic_hash": ""
+  },
+  "06_Code/src/predictors/commutator_defect.py": {
+    "mtime": 1793747765.7159846,
+    "ast_hash": "34d7f43661139f89a43035c529765635",
+    "semantic_hash": ""
+  },
+  "Grokbot outputs/Commutator_Defect_Stage3_Sanity_Report.pdf": {
+    "mtime": 1793746679.1540716,
+    "ast_hash": "5bd0e837f06f5033201bb3add0a07b23",
+    "semantic_hash": ""
+  },
+  "06_Code/scripts/plot_commutator_defect_stage6.py": {
+    "mtime": 1793750285.6130037,
+    "ast_hash": "0f1d5585d9f747d675636c4f03de6c1d",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/aggregate_commutator_defect.json": {
+    "mtime": 1793750634.2005193,
+    "ast_hash": "ad6ce4fe1b9f3921a2fc9c8022ecb9ed",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/seed_0/commutator_defect/commutator_defect_signal.json": {
+    "mtime": 1793748863.878095,
+    "ast_hash": "70e59ca54069c1b5bc259dcc5888405e",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/seed_0/commutator_defect_eta1e-4/commutator_defect_signal.json": {
+    "mtime": 1793748863.87197,
+    "ast_hash": "bf3359aeeca4da709c156ade54facb87",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/seed_1/commutator_defect/commutator_defect_signal.json": {
+    "mtime": 1793749108.0885139,
+    "ast_hash": "fef4bea96766d63287ecdb2f4a883db6",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/seed_1/commutator_defect_eta1e-4/commutator_defect_signal.json": {
+    "mtime": 1793749108.0821924,
+    "ast_hash": "445b037abf3e1c5e1addba2d2cd3a13e",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/seed_2/commutator_defect/commutator_defect_signal.json": {
+    "mtime": 1793749354.7378516,
+    "ast_hash": "80373218a1ecf0bf99a0a3a0ddb39059",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/seed_2/commutator_defect_eta1e-4/commutator_defect_signal.json": {
+    "mtime": 1793749354.7304194,
+    "ast_hash": "63848009893e9e1ccf1109e0e59c78e3",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/seed_3/commutator_defect/commutator_defect_signal.json": {
+    "mtime": 1793749595.4220605,
+    "ast_hash": "1265e86503db1f5c3ea2f077182d3950",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/seed_3/commutator_defect_eta1e-4/commutator_defect_signal.json": {
+    "mtime": 1793749595.4150934,
+    "ast_hash": "4f4eca3ec8532bd7a1b5a549ca7ac570",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/seed_4/commutator_defect/commutator_defect_signal.json": {
+    "mtime": 1793749836.2972398,
+    "ast_hash": "afa4421e1a9869c672db15cdcdff162b",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/seed_4/commutator_defect_eta1e-4/commutator_defect_signal.json": {
+    "mtime": 1793749836.2896216,
+    "ast_hash": "87afa090df28274c1d116374818dec6e",
+    "semantic_hash": ""
+  },
+  "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md": {
+    "mtime": 1793752454.0622475,
+    "ast_hash": "f1c3a7d255921102869a5eaacdaca531",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/figures/commutator_defect/commutator_defect_overview_primary.png": {
+    "mtime": 1793750309.267734,
+    "ast_hash": "0fe43535f2f3c058f6930f622b0ec653",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/figures/commutator_defect/commutator_defect_seed0.png": {
+    "mtime": 1793750305.94638,
+    "ast_hash": "ee74ff723ec1826f85ce9b6407922a10",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/figures/commutator_defect/commutator_defect_seed0_eta1e-4.png": {
+    "mtime": 1793750307.7469459,
+    "ast_hash": "db18e912c65d26172959f74b18f2f77e",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/figures/commutator_defect/commutator_defect_seed1.png": {
+    "mtime": 1793750306.2895153,
+    "ast_hash": "27a5b55dde60857ef4e15b50c4889ab2",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/figures/commutator_defect/commutator_defect_seed1_eta1e-4.png": {
+    "mtime": 1793750308.0542245,
+    "ast_hash": "ea6213b37fc2d78bce12779fd27be5e8",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/figures/commutator_defect/commutator_defect_seed2.png": {
+    "mtime": 1793750306.68032,
+    "ast_hash": "27004838497024c6c6aaf6eeb77888da",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/figures/commutator_defect/commutator_defect_seed2_eta1e-4.png": {
+    "mtime": 1793750308.4439507,
+    "ast_hash": "412384fa3b06fda10180d6cbb73b90d3",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/figures/commutator_defect/commutator_defect_seed3.png": {
+    "mtime": 1793750307.011673,
+    "ast_hash": "5e5aef47cf866feccdf7ec5dd3e6ab9b",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/figures/commutator_defect/commutator_defect_seed3_eta1e-4.png": {
+    "mtime": 1793750308.7789514,
+    "ast_hash": "11e68e3ce8d4c80784b6d2380f058803",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/figures/commutator_defect/commutator_defect_seed4.png": {
+    "mtime": 1793750307.3717597,
+    "ast_hash": "e5dfe7893e8f394a020efb46b90ebd93",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified/figures/commutator_defect/commutator_defect_seed4_eta1e-4.png": {
+    "mtime": 1793750309.133438,
+    "ast_hash": "fd67016c49b9955c29bf0aa104ef7689",
+    "semantic_hash": ""
+  },
+  "02_Progress_Reports/2026-11-04_Progress_Report_Commutator_Defect.pdf": {
+    "mtime": 1793753333.1705892,
+    "ast_hash": "09b30cd52625268e7d8cf710ae3632df",
     "semantic_hash": ""
   }
 }

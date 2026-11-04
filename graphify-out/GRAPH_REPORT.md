@@ -1,16 +1,16 @@
-# Graph Report - grokking-benchmark  (2026-11-01)
+# Graph Report - grokking-benchmark  (2026-11-04)
 
 ## Corpus Check
-- 178 files · ~5,781,881 words
+- 193 files · ~6,069,544 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1100 nodes · 1233 edges · 79 communities (63 shown, 16 thin omitted)
+- 1174 nodes · 1361 edges · 87 communities (70 shown, 17 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `500a14e2`
+- Built from commit: `26d913ed`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -80,17 +80,25 @@
 - [[_COMMUNITY_Community 76|Community 76]]
 - [[_COMMUNITY_Community 77|Community 77]]
 - [[_COMMUNITY_Community 78|Community 78]]
+- [[_COMMUNITY_Community 79|Community 79]]
+- [[_COMMUNITY_Community 80|Community 80]]
+- [[_COMMUNITY_Community 81|Community 81]]
+- [[_COMMUNITY_Community 82|Community 82]]
+- [[_COMMUNITY_Community 83|Community 83]]
+- [[_COMMUNITY_Community 84|Community 84]]
+- [[_COMMUNITY_Community 85|Community 85]]
+- [[_COMMUNITY_Community 86|Community 86]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `Project Compilation — Full NPY Data Dump` - 287 edges
 2. `PredictorMeasurements` - 19 edges
 3. `Indian English Communication Skill` - 16 edges
 4. `train_one_seed()` - 15 edges
-5. `Mathematical Pronunciation and Symbol Reading Rules` - 11 edges
-6. `PredictorMeasurements` - 11 edges
-7. `L2 Norm Predictor — Easy Notes for Revision and Viva` - 11 edges
-8. `Moderate worries` - 10 edges
-9. `main()` - 10 edges
+5. `compute_commutator_defect()` - 14 edges
+6. `Tensor` - 11 edges
+7. `Mathematical Pronunciation and Symbol Reading Rules` - 11 edges
+8. `PredictorMeasurements` - 11 edges
+9. `L2 Norm Predictor — Easy Notes for Revision and Viva` - 11 edges
 10. `main()` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
@@ -102,8 +110,8 @@
   06_Code/scripts/collage_images.py → 06_Code/scripts/compile_python_files.py
 - `main()` --calls--> `Path`  [INFERRED]
   06_Code/scripts/md_to_image.py → 06_Code/scripts/compile_python_files.py
-- `train_one_seed()` --calls--> `compute_per_module_sum_of_squared_weights()`  [EXTRACTED]
-  06_Code/scripts/run_nanda_benchmark.py → 06_Code/src/predictors/l2_norm.py
+- `train_one_seed()` --calls--> `compute_dropout_variance()`  [EXTRACTED]
+  06_Code/scripts/run_nanda_benchmark.py → 06_Code/src/predictors/dropout.py
 
 ## Import Cycles
 - None detected.
@@ -111,7 +119,7 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (79 total, 16 thin omitted)
+## Communities (87 total, 17 thin omitted)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.06
@@ -162,8 +170,8 @@ Cohesion: 0.15
 Nodes (17): compute_weight_pca_for_model(), compute_weight_pca_metrics_for_checkpoint(), effective_rank(), find_global_minimum_epoch(), find_steepest_drop_epoch(), find_threshold_crossing_epoch(), _layer_singular_values(), Weight-PCA predictor (Predictor 7 of 8) — Spectral Dynamics / Rank Minimization (+9 more)
 
 ### Community 14 - "Community 14"
-Cohesion: 0.05
-Nodes (61): compute_accuracy(), compute_dropout_gap_multi_rate(), compute_dropout_variance(), # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, Dropout-variance predictor signal (Salah & Yevick, arXiv:2507.11645):     at a f, compute_htsr_for_model(), compute_htsr_metrics_for_checkpoint(), fit_powerlaw_alpha() (+53 more)
+Cohesion: 0.22
+Nodes (17): aggregate(), apply_config_constants(), checkpoints_dir_for(), get_done_predictors(), has_saved_checkpoints(), is_predictor_done(), load_config(), load_summary() (+9 more)
 
 ### Community 15 - "Community 15"
 Cohesion: 0.33
@@ -306,25 +314,53 @@ Cohesion: 0.21
 Nodes (13): detect_peaks(), load_seed_series(), main(), plot_spike_grid(), Performs peak detection, Test 1 (Coincidence), and Test 2 (Period).     Computes, Generates spike_grid_check.png with 5 subplots showing detected peaks., Saves full numeric details to JSON so every number can be checked by hand., Writes the short diagnostic report in Markdown format. (+5 more)
 
 ### Community 78 - "Community 78"
+Cohesion: 0.09
+Nodes (48): Module, Module, Any, _answer_token_loss(), _clone_detached(), compute_commutator_defect(), defect_one_pair(), _flatten() (+40 more)
+
+### Community 79 - "Community 79"
+Cohesion: 0.21
+Nodes (11): compute_htsr_for_model(), compute_htsr_metrics_for_checkpoint(), fit_powerlaw_alpha(), _layer_eigenvalues(), HTSR Alpha predictor (Predictor 5 of 9) — Heavy-Tailed Self-Regularization.  DEF, HTSR Alpha metrics for ONE frozen model checkpoint.      Returns a dict:, Thin wrapper kept parallel to compute_spectral_for_model and     compute_age_for, Eigenvalues of X = W^T W / N for one weight matrix (float64, CPU),     sorted as (+3 more)
+
+### Community 80 - "Community 80"
+Cohesion: 0.08
+Nodes (23): ❌ 10. Weight decay matters in Xu; our probe uses plain loss, ❌ 11. Full-batch training forced artificial A / B batches, ❌ 12. Probe uses plain gradient steps; training uses AdamW, ❌ 13. Paper says K = 9; code uses K = 5; we froze K = 5, ❌ 14. The floor of 20 and the 10× factor may not transfer, ❌ 15. Single-author preprints, not peer reviewed, ❌ 16. A post-hoc η change to 1e−4 was reverted (Stage 3c → 3d), ❌ 1. The alarm fires during memorisation, not before grok (+15 more)
+
+### Community 81 - "Community 81"
+Cohesion: 0.22
+Nodes (11): grok_epoch_from(), grok_epochs_by_threshold(), _num_or_none(), Epoch indices (0-based, matching the training loop's `epoch`) at which     a mod, Subsample the evaluation grid from the SAVED checkpoint epochs.     Keeps saved, First epoch at which test accuracy exceeds `threshold` (default: the     primary, {"0.9": epoch, "0.95": epoch, "0.99": epoch} for every threshold in     GROK_THR, Train seed from scratch. predictors_to_compute (a set, subset of     ALL_PREDICT (+3 more)
+
+### Community 82 - "Community 82"
 Cohesion: 0.24
 Nodes (9): _collect_representations_and_labels(), compute_age_for_model(), compute_age_metrics_for_checkpoint(), AGE predictor (Predictor 4 of 9) — Adaptive Grokking Epoch via Neural Collapse., Papyan et al. 2020 NC1 variability-collapse metrics for ONE frozen     model che, Thin wrapper kept parallel to     src/predictors/spectral.py::compute_spectral_f, Run the model over the full training split and capture, per example,     the hid, _checkpoint_predictor_age() (+1 more)
 
+### Community 83 - "Community 83"
+Cohesion: 0.24
+Nodes (9): _collect_representations_and_labels(), compute_spectral_for_model(), compute_spectral_metrics_for_checkpoint(), Spectral predictor (Predictor 3 of 9) — FAITHFUL Canatar et al. 2021.  Paper: Ab, Canatar et al. 2021 task-model-alignment metrics for ONE frozen     model checkp, Thin wrapper kept for run_nanda_benchmark.py's import. One frozen     checkpoint, Run the model over the full training split and capture, per example,     the hid, _checkpoint_predictor_spectral() (+1 more)
+
+### Community 84 - "Community 84"
+Cohesion: 0.29
+Nodes (7): compute_accuracy(), compute_dropout_gap_multi_rate(), compute_dropout_variance(), # NOTE: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate, Dropout-variance predictor signal (Salah & Yevick, arXiv:2507.11645):     at a f, _checkpoint_predictor_dropout_variance(), CHECKPOINT_PREDICTOR_FUNCS["dropout_variance"] — loads each saved     checkpoint
+
+### Community 85 - "Community 85"
+Cohesion: 0.50
+Nodes (4): dips_key(), limit_cycle_check(), Detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test, Key under which limit_cycle_check stores its dip count. With the     primary gro
+
 ## Knowledge Gaps
-- **509 isolated node(s):** `❌ 1. Ω may be tracking a harmless shift in the scores`, `❌ 2. Your Ω isn't the paper's Ω`, `❌ 3. You tested a claim the paper never made`, `❌ 4. The test examples might not be the original ones`, `❌ 5. The rule could look chosen after the fact` (+504 more)
+- **530 isolated node(s):** `❌ 1. The alarm fires during memorisation, not before grok`, `❌ 2. Spearman ρ and mean relative lead both fail the frozen band`, `❌ 3. D̃ spikes track the recurring gradient-norm spikes, not grok`, `❌ 4. D can rise just because gradients shrink`, `❌ 5. The "first 3 values" baseline sits on the initial transient` (+525 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **16 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **17 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `PredictorMeasurements` connect `Community 19` to `Community 14`?**
-  _High betweenness centrality (0.012) - this node is a cross-community bridge._
-- **Why does `train_one_seed()` connect `Community 14` to `Community 19`, `Community 22`?**
-  _High betweenness centrality (0.012) - this node is a cross-community bridge._
+- **Why does `train_one_seed()` connect `Community 81` to `Community 14`, `Community 19`, `Community 84`, `Community 85`, `Community 22`?**
+  _High betweenness centrality (0.014) - this node is a cross-community bridge._
+- **Why does `PredictorMeasurements` connect `Community 19` to `Community 81`, `Community 14`?**
+  _High betweenness centrality (0.009) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `PredictorMeasurements` (e.g. with `recompute_from_checkpoints()` and `train_one_seed()`) actually correct?**
   _`PredictorMeasurements` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `❌ 1. Ω may be tracking a harmless shift in the scores`, `❌ 2. Your Ω isn't the paper's Ω`, `❌ 3. You tested a claim the paper never made` to the rest of the system?**
-  _675 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `❌ 1. The alarm fires during memorisation, not before grok`, `❌ 2. Spearman ρ and mean relative lead both fail the frozen band`, `❌ 3. D̃ spikes track the recurring gradient-norm spikes, not grok` to the rest of the system?**
+  _713 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 1` be split into smaller, more focused modules?**
   _Cohesion score 0.058823529411764705 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
