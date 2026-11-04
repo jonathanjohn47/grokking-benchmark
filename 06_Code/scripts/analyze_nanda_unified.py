@@ -61,6 +61,14 @@ def load_seed(seed):
         "alpha": ld("htsr", "htsr_alpha.npy"),
         "wpca_ep": ld("weight_pca", "weight_pca_checkpoints.npy"),
         "norm_eff_rank": ld("weight_pca", "weight_pca_norm_eff_rank.npy"),
+        "cd_ep": ld("commutator_defect", "commutator_defect_checkpoints.npy")
+            if os.path.exists(os.path.join(d, "commutator_defect",
+                                           "commutator_defect_checkpoints.npy"))
+            else None,
+        "cd_median": ld("commutator_defect", "commutator_defect_median.npy")
+            if os.path.exists(os.path.join(d, "commutator_defect",
+                                           "commutator_defect_median.npy"))
+            else None,
     }
 
 
@@ -95,11 +103,14 @@ def l2_decline_epoch(sum_w2, fraction=0.5):
 
 
 def build_events(runs):
-    """events[predictor_signal][seed] = epoch."""
+    """events[predictor_signal][seed] = epoch (or None for a miss)."""
     ev = {}
 
     def put(name, seed, epoch):
-        ev.setdefault(name, {})[seed] = float(epoch)
+        # None is a deliberate miss (Commutator Defect Xu onset never fired).
+        ev.setdefault(name, {})[seed] = (
+            None if epoch is None else float(epoch)
+        )
 
     for s, r in enumerate(runs):
         sm = r["summary"]
@@ -146,6 +157,12 @@ def build_events(runs):
         # no None case), so it's safe inside this unconditional per-seed loop.
         put("Higher-MI: population omega maximum (implemented)", s,
             sm["higher_mi_predictor"]["population_omega_max_epoch"])
+
+        # Commutator Defect (Xu 2026): PRIMARY Xu onset on median D̃.
+        # event_epoch may be None (miss) — kept as None, not coerced.
+        if "commutator_defect_predictor" in sm and sm["commutator_defect_predictor"] is not None:
+            put("Commutator Defect: Xu onset on median D (implemented)", s,
+                sm["commutator_defect_predictor"].get("event_epoch"))
 
     # EXPLORATORY Higher-MI signals, added OUTSIDE the per-seed loop above.
     # Both can legitimately come back None for a seed (population
@@ -194,11 +211,28 @@ def rank_corr(a, b):
 RHO_THRESH = 0.8999999999999998  # 99th percentile, Run 2 calibration, frozen
 
 def evaluate_frozen_protocol(g_in, p_in, margin=100.0):
-    """Same logic as run_control_experiment.py::evaluate(). g_in, p_in:
-    arrays, length 5 (grok epoch, predictor event epoch per seed)."""
+    """Same logic as run_control_experiment.py::evaluate().
+
+    g_in, p_in: length-5 sequences (grok epoch, predictor event epoch).
+    p_in entries may be None (no detection / miss).
+
+    Miss handling (matches run_control_experiment.py::evaluate):
+      - drop None pairs before Spearman rho and mean relative lead
+      - if fewer than 4 of 5 seeds fire -> FAIL immediately
+        (lead_frac=0.0, rho=nan, mean_rel_lead=0.0)
+      - negative relative leads stay signed (not dropped, not abs-valued)
+    """
     from scipy.stats import spearmanr
-    g_arr = np.asarray(g_in, dtype=float)
-    p_arr = np.asarray(p_in, dtype=float)
+    valid = [(g, p) for g, p in zip(g_in, p_in) if p is not None]
+    if len(valid) < 4:
+        return {
+            "lead_frac": 0.0,
+            "rho": float("nan"),
+            "mean_rel_lead": 0.0,
+            "n_firing": len(valid),
+        }
+    g_arr = np.asarray([g for g, _ in valid], dtype=float)
+    p_arr = np.asarray([p for _, p in valid], dtype=float)
     lead = p_arr < (g_arr - margin)
     lead_frac = float(np.mean(lead))
     rel_lead = (g_arr - p_arr) / g_arr
@@ -208,7 +242,12 @@ def evaluate_frozen_protocol(g_in, p_in, margin=100.0):
         rho = 0.0 if np.isnan(rho) else float(rho)
     else:
         rho = 0.0
-    return {"lead_frac": lead_frac, "rho": rho, "mean_rel_lead": mean_rel_lead}
+    return {
+        "lead_frac": lead_frac,
+        "rho": rho,
+        "mean_rel_lead": mean_rel_lead,
+        "n_firing": len(valid),
+    }
 
 
 # Signals with an explicitly frozen PRIMARY event rule (declared in the
@@ -229,6 +268,7 @@ PRIMARY_SIGNALS = [
     "HTSR: mean alpha minimum (implemented)",
     "Weight-PCA: effective-rank minimum (implemented)",
     "Higher-MI: population omega maximum (implemented)",
+    "Commutator Defect: Xu onset on median D (implemented)",
 ]
 
 
@@ -236,27 +276,59 @@ def summarise(ev, grok):
     rows = []
     g = np.array(grok, dtype=float)
     for name, per_seed in ev.items():
-        e = np.array([per_seed[s] for s in range(len(grok))])
-        lead = g - e
-        pear = float(np.corrcoef(e, g)[0, 1]) if e.std() > 0 else float("nan")
+        # Preserve None misses (do not coerce to NaN for the verdict path).
+        epochs_raw = [per_seed.get(s) for s in range(len(grok))]
+        firing = [(gi, ei) for gi, ei in zip(g, epochs_raw) if ei is not None]
+        if firing:
+            e_fire = np.array([ei for _, ei in firing], dtype=float)
+            g_fire = np.array([gi for gi, _ in firing], dtype=float)
+            lead_vals = [
+                None if ei is None else float(gi - ei)
+                for gi, ei in zip(g, epochs_raw)
+            ]
+            seeds_before = int(sum(
+                1 for gi, ei in zip(g, epochs_raw)
+                if ei is not None and (gi - ei) > 0
+            ))
+            pear = (
+                float(np.corrcoef(e_fire, g_fire)[0, 1])
+                if e_fire.std() > 0 and len(e_fire) >= 2 else float("nan")
+            )
+            spear = rank_corr(e_fire, g_fire) if len(e_fire) >= 2 else float("nan")
+            epoch_cv = (
+                float(e_fire.std() / e_fire.mean())
+                if e_fire.mean() != 0 else float("nan")
+            )
+        else:
+            lead_vals = [None] * len(grok)
+            seeds_before = 0
+            pear = float("nan")
+            spear = float("nan")
+            epoch_cv = float("nan")
         row = {
             "signal": name,
-            "epochs": e.tolist(),
-            "lead": lead.tolist(),
-            "seeds_before_grok": int((lead > 0).sum()),
-            "spearman": rank_corr(e, g),
+            "epochs": epochs_raw,
+            "lead": lead_vals,
+            "seeds_before_grok": seeds_before,
+            "spearman": spear,
             "pearson": pear,
-            "epoch_cv": float(e.std() / e.mean()),
+            "epoch_cv": epoch_cv,
         }
         if name in PRIMARY_SIGNALS:
             # Official frozen-protocol verdict (evaluate_frozen_protocol
             # above): PASS iff lead_frac >= 0.8 AND rho >= RHO_THRESH AND
-            # 0.05 <= mean_rel_lead <= 0.9. Persisted here (not just
-            # printed) so it survives in predictor_events.json.
-            verdict = evaluate_frozen_protocol(grok, e.tolist())
-            verdict["passed"] = (verdict["lead_frac"] >= 0.8
-                                  and verdict["rho"] >= RHO_THRESH
-                                  and 0.05 <= verdict["mean_rel_lead"] <= 0.9)
+            # 0.05 <= mean_rel_lead <= 0.9. None misses are dropped inside
+            # evaluate_frozen_protocol (same as run_control_experiment).
+            verdict = evaluate_frozen_protocol(grok, epochs_raw)
+            rho_ok = (
+                not (isinstance(verdict["rho"], float) and np.isnan(verdict["rho"]))
+                and verdict["rho"] >= RHO_THRESH
+            )
+            verdict["passed"] = (
+                verdict["lead_frac"] >= 0.8
+                and rho_ok
+                and 0.05 <= verdict["mean_rel_lead"] <= 0.9
+            )
             row["frozen_protocol_verdict"] = verdict
         rows.append(row)
     return rows
@@ -264,10 +336,17 @@ def summarise(ev, grok):
 
 def print_table(rows, grok):
     print(f"\ngrok epochs: {grok}")
-    print(f"{'signal':<46}{'event epoch per seed':<38}{'before':>7}{'rho':>7}{'r':>7}")
+    print(f"{'signal':<52}{'event epoch per seed':<38}{'before':>7}{'rho':>7}{'r':>7}")
     for r in rows:
-        ep = " ".join(f"{int(x):>6}" for x in r["epochs"])
-        print(f"{r['signal']:<46}{ep:<38}{r['seeds_before_grok']:>5}/5{r['spearman']:>7.2f}{r['pearson']:>7.2f}")
+        ep = " ".join(
+            f"{'None':>6}" if x is None else f"{int(x):>6}"
+            for x in r["epochs"]
+        )
+        print(
+            f"{r['signal']:<52}{ep:<38}"
+            f"{r['seeds_before_grok']:>5}/{len(grok)}"
+            f"{r['spearman']:>7.2f}{r['pearson']:>7.2f}"
+        )
 
 
 def print_verdicts(rows):
@@ -328,19 +407,40 @@ def plot_signals(runs, ev, path):
          [("HTSR: mean alpha minimum (implemented)", "tab:purple")]),
         ("Weight-PCA  mean NormEffRank", lambda r: (r["wpca_ep"], r["norm_eff_rank"]),
          [("Weight-PCA: effective-rank minimum (implemented)", "tab:brown")]),
+        ("Commutator Defect  median D",
+         lambda r: (r["cd_ep"], r["cd_median"])
+         if r.get("cd_ep") is not None else (None, None),
+         [("Commutator Defect: Xu onset on median D (implemented)", "tab:gray")]),
+    ]
+    # Drop panels whose data is missing on every seed (e.g. Commutator not
+    # yet recomputed for this results tree).
+    cols = [
+        col for col in cols
+        if not all(col[1](r)[0] is None for r in runs)
     ]
     n = len(runs)
     fig, axes = plt.subplots(n, len(cols), figsize=(4.4 * len(cols), 2.4 * n), sharex=True)
+    if len(cols) == 1:
+        axes = np.asarray(axes).reshape(n, 1)
     for s, r in enumerate(runs):
         for c, (title, getter, marks) in enumerate(cols):
             ax = axes[s, c]
             x, y = getter(r)
+            if x is None or y is None:
+                ax.set_visible(False)
+                continue
             ax.plot(x, y, color="black", lw=0.9)
-            if c == 3:
+            if "NC1" in title:
                 ax.set_yscale("log")
             ax.axvline(r["grok"], color="crimson", ls="--", lw=1.2, label="grok")
             for name, colour in marks:
-                ax.axvline(ev[name][s], color=colour, lw=1.1, label=name.split(":")[1].strip()[:26])
+                if name not in ev or s not in ev[name]:
+                    continue
+                epoch = ev[name][s]
+                if epoch is None:
+                    continue  # miss — no vertical line
+                ax.axvline(epoch, color=colour, lw=1.1,
+                           label=name.split(":")[1].strip()[:26])
             if s == 0:
                 ax.set_title(title, fontsize=10)
             if c == 0:
@@ -366,16 +466,27 @@ def plot_scatter(ev, grok, path):
         "AGE: log10 NC1 10% of fall",
         "HTSR: mean alpha minimum (implemented)",
         "Weight-PCA: effective-rank minimum (implemented)",
+        "Commutator Defect: Xu onset on median D (implemented)",
     ]
+    show = [name for name in show if name in ev]
     fig, ax = plt.subplots(figsize=(7.5, 6.5))
     lim = 42000
     ax.plot([0, lim], [0, lim], color="grey", ls="--", lw=1)
     ax.text(28000, 24500, "fires at grok", color="grey", rotation=33, fontsize=8)
     ax.fill_between([0, lim], [0, lim], 0, color="tab:green", alpha=0.06)
     ax.text(1500, 900, "below the line = fires BEFORE grok", color="tab:green", fontsize=8)
-    for name, mk in zip(show, "os^Dv<>P"):
-        e = [ev[name][s] for s in range(len(grok))]
-        ax.scatter(grok, e, marker=mk, s=55, label=name, alpha=0.85)
+    markers = "os^Dv<>PXh"
+    for name, mk in zip(show, markers):
+        # Skip None misses — a miss has no (grok, event) point.
+        pairs = [
+            (grok[s], ev[name][s])
+            for s in range(len(grok))
+            if ev[name].get(s) is not None
+        ]
+        if not pairs:
+            continue
+        gx, ey = zip(*pairs)
+        ax.scatter(gx, ey, marker=mk, s=55, label=name, alpha=0.85)
     ax.set(xlim=(0, lim), ylim=(0, lim), xlabel="grok epoch of the seed", ylabel="predictor event epoch")
     ax.set_title("Does the predictor fire before grok, and does it follow grok?")
     ax.legend(fontsize=7, loc="upper left")
@@ -395,12 +506,18 @@ def plot_leads(ev, grok, path):
         "AGE: log10 NC1 10% of fall",
         "HTSR: mean alpha minimum (implemented)",
         "Weight-PCA: effective-rank minimum (implemented)",
+        "Commutator Defect: Xu onset on median D (implemented)",
     ]
+    names = [nm for nm in names if nm in ev]
     n = len(grok)
     fig, ax = plt.subplots(figsize=(11, 4.8))
-    width = 0.8 / n
+    width = 0.8 / max(n, 1)
     for s in range(n):
-        leads = [grok[s] - ev[nm][s] for nm in names]
+        leads = []
+        for nm in names:
+            epoch = ev[nm].get(s)
+            # Miss -> NaN bar (matplotlib skips); do not pretend lead=0.
+            leads.append(float("nan") if epoch is None else grok[s] - epoch)
         ax.bar(np.arange(len(names)) + s * width, leads, width, label=f"seed {s}")
     ax.axhline(0, color="black", lw=1)
     ax.set_xticks(np.arange(len(names)) + 0.4 - width / 2)

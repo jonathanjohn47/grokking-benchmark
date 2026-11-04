@@ -90,7 +90,19 @@ from predictors.higher_mi import (                                        # noqa
     compute_higher_mi_logit_triplet_for_checkpoint, o_information_three_way,
     compute_temporal_o_information_signal, find_global_maximum_epoch,
     find_zero_crossing_epoch, transfer_entropy_table)
+from predictors.commutator_defect import (                                # noqa: E402
+    compute_commutator_defect, find_commutator_defect_event_epoch)
 from unified_measurements import PredictorMeasurements                    # noqa: E402
+
+# Secondary unscored Commutator Defect sensitivity (eta=1e-4). Off by
+# default; enable via --commutator_secondary_eta. Never feeds the PRIMARY
+# verdict; writes only under commutator_defect_eta1e-4/.
+COMMUTATOR_RUN_SECONDARY_ETA = False
+COMMUTATOR_SECONDARY_ETA = 1e-4
+COMMUTATOR_PRIMARY_ETA = 1e-3
+COMMUTATOR_BATCH_SEED = 20261103
+COMMUTATOR_K_PAIRS = 5
+COMMUTATOR_BATCH_SIZE = 512
 
 # ---------------------------------------------------------------------------
 # Science constants live in configs/nanda_unified.yaml (the single source of
@@ -192,6 +204,7 @@ PREDICTOR_SUMMARY_KEY = {
     "htsr": "htsr_predictor",
     "weight_pca": "weight_pca_predictor",
     "higher_mi": "higher_mi_predictor",
+    "commutator_defect": "commutator_defect_predictor",
 }
 ALL_PREDICTORS = list(PREDICTOR_SUMMARY_KEY.keys())
 
@@ -718,6 +731,12 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
     # recompute_from_checkpoints already wrote for this seed.
     higher_mi_block = (old_summary or {}).get("higher_mi_predictor")
 
+    # Commutator Defect is checkpoint-only
+    # (CHECKPOINT_PREDICTOR_FUNCS["commutator_defect"]) — train_one_seed
+    # never computes it live, it only carries forward whatever
+    # recompute_from_checkpoints already wrote for this seed.
+    commutator_defect_block = (old_summary or {}).get("commutator_defect_predictor")
+
     # per-seed summary + resume sentinel. Old blocks for predictors NOT
     # recomputed this call are carried forward, never dropped.
     summary = {
@@ -741,6 +760,7 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
         "age_predictor": age_block,
         "htsr_predictor": htsr_block,
         "higher_mi_predictor": higher_mi_block,
+        "commutator_defect_predictor": commutator_defect_block,
         "limit_cycle_check": limit_cycle_check(test_acc_history, grok_epoch),
         "wall_time_sec": round(time.time() - started, 1),
     }
@@ -1254,6 +1274,159 @@ def _checkpoint_predictor_higher_mi(model, test_loader, ckpt_dir, ckpt_epochs,
     return block
 
 
+def _run_commutator_defect_pass(
+    model, train_inputs, train_labels, ckpt_dir, ckpt_epochs, device, eta,
+):
+    """Per-checkpoint Commutator Defect measurement at one probe eta.
+
+    Returns (checkpoints, history_dict) ready for save_commutator_defect_data.
+    """
+    checkpoints = []
+    hist = {
+        "median": [], "q25": [], "q75": [],
+        "values": [], "grad_norm_A": [], "grad_norm_B": [],
+        "eta": float(eta),
+        "k_pairs": int(COMMUTATOR_K_PAIRS),
+        "batch_size": int(COMMUTATOR_BATCH_SIZE),
+        "seed": int(COMMUTATOR_BATCH_SEED),
+    }
+    for epoch in ckpt_epochs:
+        state = torch.load(
+            os.path.join(ckpt_dir, f"model_epoch_{epoch}.pt"),
+            map_location=device,
+        )
+        model.load_state_dict(state)
+        result = compute_commutator_defect(
+            model, train_inputs, train_labels,
+            eta=float(eta),
+            k_pairs=COMMUTATOR_K_PAIRS,
+            batch_size=COMMUTATOR_BATCH_SIZE,
+            seed=COMMUTATOR_BATCH_SEED,
+        )
+        checkpoints.append(epoch)
+        hist["median"].append(result["median"])
+        hist["q25"].append(result["q25"])
+        hist["q75"].append(result["q75"])
+        hist["values"].append(result["values"])
+        hist["grad_norm_A"].append(result["grad_norm_A"])
+        hist["grad_norm_B"].append(result["grad_norm_B"])
+    return checkpoints, hist
+
+
+def _checkpoint_predictor_commutator_defect(
+    model, test_loader, ckpt_dir, ckpt_epochs, measurements, grok_epoch, device,
+):
+    """CHECKPOINT_PREDICTOR_FUNCS["commutator_defect"] — Xu (2026)
+    Commutator Defect (see src/predictors/commutator_defect.py).
+
+    PRIMARY scored run: frozen eta=1e-3, K=5, batch_size=512,
+    batch-draw seed=20261103. Saves under measurements.commutator_defect_dir
+    and returns the commutator_defect_predictor block for summary.json.
+
+    test_loader is IGNORED — the probe draws A/B from the TRAINING split.
+    recompute_from_checkpoints builds an unseeded loader; this function
+    re-seeds from seed.npy and rebuilds the training split exactly as
+    Spectral / AGE do (must give 3,830 examples for p=113).
+
+    Optional SECONDARY unscored sensitivity (eta=1e-4): enabled by the
+    module flag COMMUTATOR_RUN_SECONDARY_ETA / --commutator_secondary_eta.
+    Writes only under measurements.commutator_defect_eta1e4_dir and into
+    block["secondary_eta_1e-4"]. Never overwrites the primary arrays and
+    never feeds the PRIMARY verdict.
+    """
+    seed = int(np.load(os.path.join(measurements.output_dir, "seed.npy"))[0])
+    p = model.output_head.out_features - 1
+    batch_size = int(0.3 * p * p)  # full-batch training split
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    train_loader, _ = get_dataloaders(number=p, batch_size=batch_size)
+    train_inputs, train_labels = next(iter(train_loader))
+    n_train = int(train_inputs.shape[0])
+    if n_train != 3830:
+        raise RuntimeError(
+            f"Commutator Defect expected 3830 training examples after "
+            f"seeded rebuild, got {n_train}"
+        )
+
+    # --- PRIMARY (scored): frozen eta=1e-3 ---
+    checkpoints, hist = _run_commutator_defect_pass(
+        model, train_inputs, train_labels, ckpt_dir, ckpt_epochs, device,
+        eta=COMMUTATOR_PRIMARY_ETA,
+    )
+    measurements.save_commutator_defect_data(
+        checkpoints, hist, output_dir=measurements.commutator_defect_dir,
+    )
+
+    event_epoch = find_commutator_defect_event_epoch(checkpoints, hist["median"])
+    block = {
+        "commutator_defect_checkpoints": checkpoints,
+        "median_history": hist["median"],
+        "q25_history": hist["q25"],
+        "q75_history": hist["q75"],
+        "values_history": hist["values"],
+        "grad_norm_A_history": hist["grad_norm_A"],
+        "grad_norm_B_history": hist["grad_norm_B"],
+        "eta": float(COMMUTATOR_PRIMARY_ETA),
+        "k_pairs": int(COMMUTATOR_K_PAIRS),
+        "batch_size": int(COMMUTATOR_BATCH_SIZE),
+        "batch_draw_seed": int(COMMUTATOR_BATCH_SEED),
+        "grok_epoch": grok_epoch,
+        # PRIMARY event (Xu onset). None = miss for this seed.
+        "event_epoch": event_epoch,
+        "event_to_grok_ratio": (
+            float(event_epoch) / grok_epoch
+            if (event_epoch is not None and grok_epoch) else None
+        ),
+        "num_checkpoints": len(checkpoints),
+        "note": (
+            "PRIMARY scored run uses eta=1e-3 (frozen Stage 1 / Xu 2026). "
+            "Secondary eta=1e-4 is unscored sensitivity only."
+        ),
+    }
+
+    # --- SECONDARY (unscored): eta=1e-4, separate dir, never for verdict ---
+    if COMMUTATOR_RUN_SECONDARY_ETA:
+        sec_ckpts, sec_hist = _run_commutator_defect_pass(
+            model, train_inputs, train_labels, ckpt_dir, ckpt_epochs, device,
+            eta=COMMUTATOR_SECONDARY_ETA,
+        )
+        measurements.save_commutator_defect_data(
+            sec_ckpts, sec_hist,
+            output_dir=measurements.commutator_defect_eta1e4_dir,
+        )
+        sec_event = find_commutator_defect_event_epoch(sec_ckpts, sec_hist["median"])
+        block["secondary_eta_1e-4"] = {
+            "eta": float(COMMUTATOR_SECONDARY_ETA),
+            "median_history": sec_hist["median"],
+            "event_epoch": sec_event,
+            "output_dir": "commutator_defect_eta1e-4",
+            "note": (
+                "Unscored sensitivity. Same Xu onset rule. Never used for "
+                "the PRIMARY PASS/FAIL verdict."
+            ),
+        }
+        with open(
+            os.path.join(
+                measurements.commutator_defect_eta1e4_dir,
+                "commutator_defect_signal.json",
+            ),
+            "w",
+        ) as handle:
+            json.dump(block["secondary_eta_1e-4"], handle, indent=2)
+
+    with open(
+        os.path.join(
+            measurements.commutator_defect_dir, "commutator_defect_signal.json",
+        ),
+        "w",
+    ) as handle:
+        # Primary signal.json must not embed the secondary arrays (keep
+        # the two runs separate on disk). Write a copy without secondary.
+        primary_json = {k: v for k, v in block.items() if k != "secondary_eta_1e-4"}
+        json.dump(primary_json, handle, indent=2)
+    return block
+
+
 # Predictors this runner knows how to (re)compute from already-saved
 # checkpoints/model_epoch_*.pt alone, with NO retraining. Adding a future
 # predictor here (once it exists) is the ONLY change needed for it to gain
@@ -1267,6 +1440,7 @@ CHECKPOINT_PREDICTOR_FUNCS = {
     "htsr": _checkpoint_predictor_htsr,
     "weight_pca": _checkpoint_predictor_weight_pca,
     "higher_mi": _checkpoint_predictor_higher_mi,
+    "commutator_defect": _checkpoint_predictor_commutator_defect,
 }
 CHECKPOINT_ONLY_PREDICTORS = set(CHECKPOINT_PREDICTOR_FUNCS.keys())
 
@@ -1412,6 +1586,20 @@ def aggregate(summaries, args):
               f"alpha_min_epoch={hp['alpha_min_epoch']}  "
               f"alpha_min/grok={ratio_str}  (grok={s['grok_epoch']})")
 
+    print("\nCommutator Defect predictor (Xu onset, per seed):")
+    for s in summaries:
+        cd = s.get("commutator_defect_predictor")
+        if cd is None:
+            print(f"  seed {s['seed']}: n/a (not computed for this seed)")
+            continue
+        event = cd.get("event_epoch")
+        event_str = "None (miss)" if event is None else str(event)
+        ratio = cd.get("event_to_grok_ratio")
+        ratio_str = f"{ratio:.4f}" if ratio is not None else "None"
+        print(f"  seed {s['seed']}: event_epoch={event_str}  "
+              f"event/grok={ratio_str}  eta={cd.get('eta')}  "
+              f"(grok={s['grok_epoch']})")
+
     print("\nDropout gap at final epoch (per seed, by rate):")
     for s in summaries:
         gaps = s.get("dropout_final_gap_by_rate")
@@ -1477,6 +1665,12 @@ def main():
                              f"(plus the final epoch). Must be a multiple of the save spacing "
                              f"({SAVE_EVERY}); fallbacks if too slow: {EVAL_EVERY_FALLBACK}, {EVAL_EVERY_FALLBACK_COARSE}. "
                              f"0 = use every saved checkpoint (legacy 24-point directories).")
+    parser.add_argument(
+        "--commutator_secondary_eta", action="store_true",
+        help="also run unscored Commutator Defect sensitivity at eta=1e-4 "
+             "into commutator_defect_eta1e-4/ (never overwrites primary "
+             "eta=1e-3; never feeds the PRIMARY verdict)",
+    )
     args = parser.parse_args()
 
     if not os.path.isabs(args.output_dir):
@@ -1491,6 +1685,10 @@ def main():
     overwrite_predictors = {p.strip() for p in args.overwrite.split(",") if p.strip()}
     unknown_ow = overwrite_predictors - set(ALL_PREDICTORS)
     assert not unknown_ow, f"--overwrite: unknown predictor(s) {unknown_ow}, valid: {ALL_PREDICTORS}"
+
+    # Optional secondary eta=1e-4 pass for Commutator Defect (unscored).
+    global COMMUTATOR_RUN_SECONDARY_ETA
+    COMMUTATOR_RUN_SECONDARY_ETA = bool(args.commutator_secondary_eta)
 
     cfg = load_config(args.config)
     apply_config_constants(cfg)

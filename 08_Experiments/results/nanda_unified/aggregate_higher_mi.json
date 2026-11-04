@@ -31,6 +31,7 @@
         "lead_frac": 0.0,
         "rho": 0.7,
         "mean_rel_lead": -0.4254174785536472,
+        "n_firing": 5,
         "passed": false
       }
     },

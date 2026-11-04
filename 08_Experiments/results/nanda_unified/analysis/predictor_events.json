@@ -46,7 +46,7 @@
       ],
       "seeds_before_grok": 5,
       "spearman": 0.0,
-      "pearson": 0.29096313726150946,
+      "pearson": 0.2909631372615096,
       "epoch_cv": 0.009285688183577633
     },
     {
@@ -67,7 +67,7 @@
       ],
       "seeds_before_grok": 5,
       "spearman": 0.8999999999999998,
-      "pearson": 0.9770973255766838,
+      "pearson": 0.9770973255766837,
       "epoch_cv": 0.4695279499891297
     },
     {
@@ -325,6 +325,7 @@
         "lead_frac": 0.0,
         "rho": 0.8999999999999998,
         "mean_rel_lead": -1.184866295669418,
+        "n_firing": 5,
         "passed": false
       }
     },
@@ -352,6 +353,7 @@
         "lead_frac": 0.0,
         "rho": 0.7999999999999999,
         "mean_rel_lead": -1.902919954043249,
+        "n_firing": 5,
         "passed": false
       }
     },
@@ -379,6 +381,35 @@
         "lead_frac": 0.0,
         "rho": 0.7,
         "mean_rel_lead": -0.4254174785536472,
+        "n_firing": 5,
+        "passed": false
+      }
+    },
+    {
+      "signal": "Commutator Defect: Xu onset on median D (implemented)",
+      "epochs": [
+        600.0,
+        500.0,
+        500.0,
+        400.0,
+        600.0
+      ],
+      "lead": [
+        12387.0,
+        6421.0,
+        9010.0,
+        10619.0,
+        23147.0
+      ],
+      "seeds_before_grok": 5,
+      "spearman": 0.7,
+      "pearson": 0.5930270950870185,
+      "epoch_cv": 0.14390989949130545,
+      "frozen_protocol_verdict": {
+        "lead_frac": 1.0,
+        "rho": 0.6324555320336759,
+        "mean_rel_lead": 0.9534825077369792,
+        "n_firing": 5,
         "passed": false
       }
     },

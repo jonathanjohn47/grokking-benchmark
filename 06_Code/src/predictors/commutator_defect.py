@@ -32,7 +32,7 @@ From snapshot weights theta_k, with two mini-batches A and B:
 
 g_X is the gradient of the training loss on batch X, over ALL trainable
 parameters. Steps are plain gradient steps only — no AdamW, no momentum,
-no weight decay, no clipping. eta = 1e-4 is a probe step size; training
+no weight decay, no clipping. eta = 1e-3 is a probe step size; training
 itself is not changed.
 
 Because Nanda-Unified training is full-batch, A = B would give D = 0.
@@ -63,6 +63,7 @@ EXPLORATORY (not implemented here, not scored)
 from __future__ import annotations
 
 import copy
+import math
 from typing import Any, Dict, List, Optional, Tuple
 
 import torch
@@ -198,7 +199,7 @@ def defect_one_pair(
     theta0: Dict[str, torch.Tensor],
     grad_a_fn,
     grad_b_fn,
-    eta: float = 1e-4,
+    eta: float = 1e-3,
 ) -> Dict[str, float]:
     """Xu (2026) commutator defect D for one (A, B) pair.
 
@@ -212,7 +213,7 @@ def defect_one_pair(
         Each returns the gradient of the probe loss on its batch, at the
         given parameter dict, in the same key order as theta0.
     eta:
-        Probe step size. Default 1e-4 (see compute_commutator_defect).
+        Probe step size. Default 1e-3 (frozen Stage 1 / Xu 2026).
 
     Returns
     -------
@@ -317,11 +318,10 @@ def compute_commutator_defect(
     model: nn.Module,
     train_inputs: torch.Tensor,
     train_labels: torch.Tensor,
-    # At late epochs (e.g. 12000) eta=1e-3 leaves higher-order eta
-    # dependence in some pairs; the eta sweep shows the median
-    # converging near 91.62 by eta<=2.5e-4, so 1e-4 measures the
-    # small-eta limit.
-    eta: float = 1e-4,
+    # eta = 1e-3 is the frozen Stage 1 value (Xu 2026); it must not
+    # change after D values have been seen. eta = 1e-4 is kept ONLY as
+    # a secondary, unscored sensitivity run in Stage 5.
+    eta: float = 1e-3,
     k_pairs: int = 5,
     batch_size: int = 512,
     seed: int = 20261103,
@@ -337,8 +337,8 @@ def compute_commutator_defect(
         Full seeded training split tensors (for p = 113 this is 3,830
         examples). Batches A and B are drawn from these with replacement.
     eta:
-        Probe step size. Default 1e-4 (small-eta limit). Does not change
-        training.
+        Probe step size. Frozen default 1e-3 (Xu 2026 / Stage 1). Does
+        not change training.
     k_pairs:
         Number of fresh (A, B) pairs. Frozen default K = 5.
     batch_size:
@@ -431,3 +431,31 @@ def compute_commutator_defect(
         "batch_size": int(batch_size),
         "seed": int(seed),
     }
+
+
+def find_commutator_defect_event_epoch(
+    checkpoints,
+    median_series,
+) -> Optional[int]:
+    """Xu (2026) onset rule on the median series D̃ (frozen Stage 1).
+
+    b = median of the first 3 values of D̃.
+    Event = first index >= 2 where D̃ > 10 * max(b, 0.1) AND D̃ > 20.
+    Returns the corresponding checkpoint epoch, or None if it never fires
+    (a miss for that seed).
+    """
+    d_tilde = [float(v) if v is not None else float("nan") for v in median_series]
+    if len(d_tilde) < 3:
+        return None
+    first_three = torch.tensor(d_tilde[:3], dtype=torch.float64)
+    if torch.any(~torch.isfinite(first_three)):
+        return None
+    b = float(torch.median(first_three).item())
+    threshold = 10.0 * max(b, 0.1)
+    for index in range(2, len(d_tilde)):
+        value = d_tilde[index]
+        if (not math.isfinite(value)):
+            continue
+        if value > threshold and value > 20.0:
+            return int(checkpoints[index])
+    return None

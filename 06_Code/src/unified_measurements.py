@@ -28,12 +28,20 @@ class PredictorMeasurements:
         self.htsr_dir = os.path.join(self.output_dir, "htsr")
         self.weight_pca_dir = os.path.join(self.output_dir, "weight_pca")
         self.higher_mi_dir = os.path.join(self.output_dir, "higher_mi")
+        # Primary (scored) Commutator Defect: frozen eta=1e-3.
+        self.commutator_defect_dir = os.path.join(self.output_dir, "commutator_defect")
+        # Secondary (unscored) sensitivity: eta=1e-4. Separate dir so it
+        # never overwrites or mixes with the primary run.
+        self.commutator_defect_eta1e4_dir = os.path.join(
+            self.output_dir, "commutator_defect_eta1e-4")
         self.reports_dir = os.path.join(self.output_dir, "reports")
         self.training_dir = os.path.join(self.output_dir, "training")
 
         for dir_path in [self.l2_norm_dir, self.dropout_dir, self.spectral_dir,
                           self.age_dir, self.htsr_dir, self.weight_pca_dir,
-                          self.higher_mi_dir, self.reports_dir, self.training_dir]:
+                          self.higher_mi_dir, self.commutator_defect_dir,
+                          self.commutator_defect_eta1e4_dir,
+                          self.reports_dir, self.training_dir]:
             os.makedirs(dir_path, exist_ok=True)
 
     def save_training_data(self, train_acc, test_acc, loss):
@@ -338,7 +346,52 @@ class PredictorMeasurements:
             np.save(os.path.join(self.higher_mi_dir, "higher_mi_temporal_checkpoints.npy"),
                     np.array(history_dict["temporal_checkpoints"], dtype=float))
 
-    # ========== VISUALIZATION GENERATION ==========
+    # ========== COMMUTATOR DEFECT MEASUREMENTS ==========
+
+    def save_commutator_defect_data(self, checkpoints, history, output_dir=None):
+        """Save Commutator Defect (Predictor 8) measurements — Xu (2026).
+
+        Checkpoint-only signal, same per-checkpoint layout as
+        save_spectral_data / save_age_data. Default output_dir is the
+        PRIMARY scored run (eta=1e-3) under self.commutator_defect_dir.
+        Pass output_dir=self.commutator_defect_eta1e4_dir for the
+        SECONDARY unscored eta=1e-4 sensitivity run — never mix the two.
+
+        checkpoints: list/array of epoch indices, one per checkpoint.
+        history: dict of per-checkpoint lists (all length = len(checkpoints)):
+            median       : list[float|None]   D̃ per snapshot
+            q25, q75     : list[float|None]
+            values       : list[list[float]]  K=5 raw D values per snapshot
+            grad_norm_A  : list[list[float]]  ||g_A|| per pair per snapshot
+            grad_norm_B  : list[list[float]]  ||g_B|| per pair per snapshot
+            eta, k_pairs, batch_size, seed : scalars (probe settings)
+
+        Saves under output_dir (prefix commutator_defect_*):
+            commutator_defect_checkpoints.npy
+            commutator_defect_median.npy / _q25.npy / _q75.npy
+            commutator_defect_values.npy          [n_checkpoints, K]
+            commutator_defect_grad_norm_A.npy     [n_checkpoints, K]
+            commutator_defect_grad_norm_B.npy     [n_checkpoints, K]
+            commutator_defect_eta.npy / _k_pairs.npy / _batch_size.npy / _seed.npy
+        """
+        out = output_dir if output_dir is not None else self.commutator_defect_dir
+        os.makedirs(out, exist_ok=True)
+        np.save(os.path.join(out, "commutator_defect_checkpoints.npy"),
+                np.array(checkpoints, dtype=int))
+        for key in ("median", "q25", "q75"):
+            # None -> NaN so the array stays float.
+            arr = np.array(
+                [np.nan if v is None else v for v in history[key]],
+                dtype=float,
+            )
+            np.save(os.path.join(out, f"commutator_defect_{key}.npy"), arr)
+        for key in ("values", "grad_norm_A", "grad_norm_B"):
+            np.save(os.path.join(out, f"commutator_defect_{key}.npy"),
+                    np.array(history[key], dtype=float))
+        for key in ("eta", "k_pairs", "batch_size", "seed"):
+            np.save(os.path.join(out, f"commutator_defect_{key}.npy"),
+                    np.array(history[key]))
+
 
     def generate_l2_norm_visualizations(self, l2_norm_history, epoch_grid, fast_ma, slow_ma,
                                        fast_ma_of_slow_ma, ma_of_ma_diff, test_acc_history,

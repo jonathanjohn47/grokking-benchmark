@@ -36,6 +36,9 @@ mlruns/
 outputs/
 logs/
 
+# ── Matplotlib font cache (local machine only) ───────────────────────
+.mplconfig/
+
 # ── macOS ────────────────────────────────────────────────────────────
 .DS_Store
 

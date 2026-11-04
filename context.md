@@ -12156,3 +12156,204 @@ At epoch 6000, D changes by about 0.2% between `eta=1e-4` and `5e-5` (`|D1−D2|
 ### Next step
 
 Stage 4 (wiring into `unified_measurements.py`, `run_nanda_benchmark.py`, `analyze_nanda_unified.py`). Not started in this commit.
+
+
+---
+
+## 2026-11-04 — Commutator Defect: Stage 3d, frozen eta restored
+
+Stage 3c's change of eta to `1e-4` was a post-hoc deviation from the frozen rules (made after seeing D values) and is reverted.
+
+- **PRIMARY scored run** uses `eta = 1e-3` (frozen Stage 1 value, Xu 2026). It must not change after D values have been seen.
+- **SECONDARY unscored sensitivity run** uses `eta = 1e-4`, scored with the same frozen rule but never used for the verdict. Kept for Stage 5 only.
+
+The gradient-difference numerator from Stage 3b is unchanged.
+
+### Epoch-12000 eta dependence (not fixed by changing eta)
+
+The epoch-12000 eta dependence (pairs 0 and 4 jump non-monotonically: 141, 247, 81) is most likely the probe step crossing activation kinks; it is a property of Xu's measurement and will be logged as a ❌ item in Stage 8, not fixed by changing eta. Thresholds and eta were not tweaked to force a pass.
+
+### Check 2 after restore (eta = 1e-3 vs 5e-4)
+
+| epoch | median(1e−3) | median(5e−4) | \|D1−D2\|/D1 | result |
+|---|---|---|---|---|
+| 1000 | 51.620025 | 51.620060 | 6.62e−7 | PASS |
+| 6000 | 59.420702 | 59.422436 | 2.92e−5 | PASS |
+| 12000 | 112.127825 | 101.163446 | 0.0978 | FAIL (known caveat, logged for Stage 8) |
+
+Per-pair at epoch 12000 (`eta=1e-3`): [141.901, 91.623, 87.092, 112.128, 125.845]
+Per-pair at epoch 12000 (`eta=5e-4`): [247.368, 91.622, 87.091, 101.163, 192.336]
+
+Checks 1, 3, 4 still PASS. Timing ~0.27 s/call (~0.15 h for 2005 snapshots).
+
+### Files touched (not committed)
+
+- `06_Code/src/predictors/commutator_defect.py` — default eta restored to `1e-3`
+- `06_Code/scripts/sanity_commutator_defect.py` — Check 2 back to `1e-3` vs `5e-4`; caveat label
+- `context.md` — this section
+
+Wiring files untouched. No commit in Stage 3d.
+
+
+---
+
+## 2026-11-04 — Commutator Defect: Stage 4 wiring
+
+Wired Commutator Defect into the pipeline. **No commit. No full 5-seed recompute** (that is Stage 5).
+
+### What was wired
+
+1. **`06_Code/src/unified_measurements.py`**
+   - `commutator_defect/` (PRIMARY, eta=1e-3) and `commutator_defect_eta1e-4/` (SECONDARY, unscored) dirs.
+   - `save_commutator_defect_data(...)` stores per snapshot: median, q25, q75, values (K=5), grad_norm_A, grad_norm_B, eta, k_pairs, batch_size, seed.
+
+2. **`06_Code/scripts/run_nanda_benchmark.py`**
+   - `_checkpoint_predictor_commutator_defect` with frozen defaults (eta=1e-3, K=5, batch=512, batch-draw seed=20261103).
+   - Re-seeds from `seed.npy` and rebuilds the training split exactly as Spectral/AGE (3,830 examples).
+   - Registered in `CHECKPOINT_PREDICTOR_FUNCS` and `PREDICTOR_SUMMARY_KEY` as `commutator_defect` → `commutator_defect_predictor`.
+   - Optional `--commutator_secondary_eta` / `COMMUTATOR_RUN_SECONDARY_ETA` runs unscored eta=1e-4 into `commutator_defect_eta1e-4/` only. Never overwrites primary; never feeds the PRIMARY verdict.
+   - Eval grid remains every 100 epochs → 401 snapshots per seed (full Stage 5).
+
+3. **`06_Code/scripts/analyze_nanda_unified.py`**
+   - Signal `"Commutator Defect: Xu onset on median D (implemented)"` added to `PRIMARY_SIGNALS`.
+   - `build_events` reads `event_epoch` from the summary block (may be `None` = miss).
+   - `evaluate_frozen_protocol` now drops `None` before Spearman rho / mean relative lead (same filter as `run_control_experiment.py::evaluate`); < 4 firing seeds → immediate FAIL; negative relative leads stay signed.
+   - PASS rules unchanged: `lead_frac >= 0.8`, `rho >= 0.9`, `0.05 <= mean_rel_lead <= 0.9`.
+   - Plots / scatter / tables guard `None` (skip miss points; no fake lead=0).
+
+4. **Shared model** (`transformer_four_head.py`) untouched.
+
+5. **`find_commutator_defect_event_epoch`** added in `commutator_defect.py` (Xu onset: b = median of first 3 of D̃; first index ≥ 2 with D̃ > 10·max(b, 0.1) AND D̃ > 20).
+
+### Smoke test (seed 0, epochs 1000 / 6000 / 12000 → TEMP dir)
+
+- Primary medians: [51.6200, 59.4207, 112.1278] at eta=1e-3.
+- Secondary medians: [51.6203, 59.4306, 91.6207] at eta=1e-4, separate dir; primary `signal.json` has no secondary payload.
+- On this 3-point grid the Xu onset correctly returns `None` (b≈59.4 → threshold≈594; max D≈112 never crosses). Full 401-point grid is Stage 5.
+- Synthetic Xu onset: firing series → epoch 300; flat series → `None`.
+- Fake 5-seed table with 2 misses (`n_firing=3`) → FAIL (`lead_frac=0`, `rho=nan`, `mean_rel_lead=0`). One-miss control (`n_firing=4`) is allowed through the count gate.
+
+### Next
+
+Stage 5: full 5-seed recompute on the 401-checkpoint grid (PRIMARY eta=1e-3; optional secondary eta=1e-4). Not started.
+
+
+---
+
+## 2026-11-04 — Commutator Defect: Stage 5 recompute done
+
+Full checkpoint recompute for Commutator Defect only (all 5 seeds), every 100 epochs = 401 snapshots/seed, PRIMARY eta=1e-3 + SECONDARY eta=1e-4 (`--commutator_secondary_eta`). No code / defaults / thresholds / rules changed. No Stage 6/7 scoring or plots.
+
+**Command:** `.venv/bin/python -u 06_Code/scripts/run_nanda_benchmark.py --seeds 5 --predictors commutator_defect --commutator_secondary_eta --eval_every 100 --output_dir 08_Experiments/results/nanda_unified`
+
+**Log:** `08_Experiments/results/nanda_unified/logs/commutator_stage5_recompute.log`
+
+**Wall-clock:** START Wed Nov 4 05:00:26 IST 2026 → END Wed Nov 4 05:20:36 IST 2026 EXIT=0 (**20 min 10 s** / ~1210 s). Exit code 0. No Traceback / Error / Warning lines in the log.
+
+### Verification table (per seed × eta)
+
+| seed | eta | n | first | last | NaN in raw D | NaN medians | first-3 medians | b | threshold (=max(10·max(b,0.1), 20)) | max median (epoch) | event | grok |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0 | 1e-3 | 401 | 0 | 39999 | 0 | 0 | 59.9578, 12.9032, 43.9147 | 43.9147 | 439.1467 | 1679.9294 (600) | 600 | 12987 |
+| 0 | 1e-4 | 401 | 0 | 39999 | 0 | 0 | 60.7429, 28.6646, 54.6993 | 54.6993 | 546.9933 | 3570.0704 (2500) | 2500 | 12987 |
+| 1 | 1e-3 | 401 | 0 | 39999 | 0 | 0 | 48.7689, 12.3964, 48.5087 | 48.5087 | 485.0866 | 2367.3170 (2400) | 500 | 6921 |
+| 1 | 1e-4 | 401 | 0 | 39999 | 0 | 0 | 140.5456, 18.7079, 72.2999 | 72.2999 | 722.9990 | 840.0005 (500) | 400 | 6921 |
+| 2 | 1e-3 | 401 | 0 | 39999 | 0 | 0 | 67.5065, 12.5636, 39.6937 | 39.6937 | 396.9368 | 696.5085 (4200) | 500 | 9510 |
+| 2 | 1e-4 | 401 | 0 | 39999 | 0 | 0 | 135.7254, 24.3825, 50.4112 | 50.4112 | 504.1125 | 2414.2029 (500) | 500 | 9510 |
+| 3 | 1e-3 | 401 | 0 | 39999 | 0 | 0 | 60.4642, 12.9316, 30.3944 | 30.3944 | 303.9444 | 5044.0040 (8400) | 400 | 11019 |
+| 3 | 1e-4 | 401 | 0 | 39999 | 0 | 0 | 249.2702, 25.6796, 68.4177 | 68.4177 | 684.1767 | 2756.9390 (500) | 500 | 11019 |
+| 4 | 1e-3 | 401 | 0 | 39999 | 0 | 0 | 51.6783, 12.7003, 31.7818 | 31.7818 | 317.8184 | 2451.6660 (14500) | 600 | 23747 |
+| 4 | 1e-4 | 401 | 0 | 39999 | 0 | 0 | 206.4255, 24.8583, 49.9175 | 49.9175 | 499.1747 | 1144.7364 (8200) | 400 | 23747 |
+
+All 10 runs have exactly 401 snapshots. Zero NaNs in raw D values and zero NaN medians. PRIMARY events (eta=1e-3): [600, 500, 500, 400, 600]. SECONDARY is unscored. Stage 6/7 (analyze scoring / plots) not started.
+
+
+---
+
+## 2026-11-04 — Commutator Defect: Stage 6 plots
+
+Eleven figures in `08_Experiments/results/nanda_unified/figures/commutator_defect/`:
+
+1. `commutator_defect_overview_primary.png`
+2. `commutator_defect_seed0.png`
+3. `commutator_defect_seed0_eta1e-4.png`
+4. `commutator_defect_seed1.png`
+5. `commutator_defect_seed1_eta1e-4.png`
+6. `commutator_defect_seed2.png`
+7. `commutator_defect_seed2_eta1e-4.png`
+8. `commutator_defect_seed3.png`
+9. `commutator_defect_seed3_eta1e-4.png`
+10. `commutator_defect_seed4.png`
+11. `commutator_defect_seed4_eta1e-4.png`
+
+**Main reading:** alarms fire at epochs 400–600, during memorisation (D̃ rises from ~13 to ~1,700 as train accuracy reaches 1), with no build-up before grok; large pre-grok D̃ spikes coincide with the recurring gradient-norm spikes (‖g‖ cycling between ~1e−6 and ~1), which also continue after grok.
+
+
+---
+
+## 2026-11-04 — Commutator Defect: Stage 7 frozen verdict
+
+Official frozen scoring of Commutator Defect only. No code / defaults / thresholds / rules changed. No commit.
+
+**Command:** `.venv/bin/python 06_Code/scripts/analyze_nanda_unified.py` (no CLI args) on `08_Experiments/results/nanda_unified`.
+
+**Verdict JSON:** `08_Experiments/results/nanda_unified/aggregate_commutator_defect.json` (same naming pattern as `aggregate_higher_mi.json`).
+
+### PRIMARY (eta=1e-3) — official frozen verdict
+
+| seed | event | grok | lead (event < grok − 100) | relative lead (grok − event)/grok |
+|---|---|---|---|---|
+| 0 | 600 | 12987 | yes | 0.953800 |
+| 1 | 500 | 6921 | yes | 0.927756 |
+| 2 | 500 | 9510 | yes | 0.947424 |
+| 3 | 400 | 11019 | yes | 0.963699 |
+| 4 | 600 | 23747 | yes | 0.974734 |
+
+| metric | value | rule | result |
+|---|---|---|---|
+| n_firing | 5 | ≥ 4 (None dropped first) | PASS |
+| lead_frac | 1.0000 | ≥ 0.8 | PASS |
+| Spearman rho | 0.6325 | ≥ 0.9 | FAIL |
+| mean relative lead | 0.9535 | in [0.05, 0.9] | FAIL |
+| **OVERALL** | | | **FAIL** |
+
+### SECONDARY (eta=1e-4) — UNSCORED, not part of the verdict
+
+Same frozen rule applied for reporting only. Never used for the official PASS/FAIL.
+
+| seed | event | grok | lead (event < grok − 100) | relative lead (grok − event)/grok |
+|---|---|---|---|---|
+| 0 | 2500 | 12987 | yes | 0.807500 |
+| 1 | 400 | 6921 | yes | 0.942205 |
+| 2 | 500 | 9510 | yes | 0.947424 |
+| 3 | 500 | 11019 | yes | 0.954624 |
+| 4 | 400 | 23747 | yes | 0.983156 |
+
+| metric | value | rule | result |
+|---|---|---|---|
+| n_firing | 5 | ≥ 4 | PASS |
+| lead_frac | 1.0000 | ≥ 0.8 | PASS |
+| Spearman rho | 0.1581 | ≥ 0.9 | FAIL |
+| mean relative lead | 0.9270 | in [0.05, 0.9] | FAIL |
+| **OVERALL (unscored)** | | | **FAIL** |
+
+### Unchanged-check (other 7 predictors)
+
+- Event epochs for L2 Norm, Dropout, Spectral, AGE, HTSR Alpha, Weight-PCA, Higher-MI: **identical** before/after.
+- Frozen scored numbers (`lead_frac`, `rho`, `mean_rel_lead`, `passed`) for HTSR / Weight-PCA / Higher-MI: **identical**.
+- `aggregate_higher_mi.json` scored content: **identical** (only additive change: `n_firing: 5` now appears inside `frozen_protocol_verdict`, because `evaluate_frozen_protocol` already returns that field).
+- Two L2 Pearson floats differ only at ULP (~1e−16); not a score change.
+- Stage 6 Commutator Defect figures under `figures/commutator_defect/` and Higher-MI measured plots under `reports/measured/`: **untouched** by this run.
+- Shared `analysis/0*.png` plots were regenerated (Commutator panel/points newly included); that does not change the other predictors' scored numbers.
+
+
+---
+
+## 2026-11-04 — Commutator Defect Stages 3d–7 commit record
+
+- **Stage 3d:** frozen eta restored to `1e-3` (PRIMARY); gradient-difference numerator kept; `1e-4` kept as SECONDARY unscored sensitivity only.
+- **Stage 4:** wired into `unified_measurements.py`, `run_nanda_benchmark.py`, `analyze_nanda_unified.py` (Xu onset; None-drop / <4-fire FAIL).
+- **Stage 5:** full 5-seed recompute — 2,005 snapshots × 2 etas (401 checkpoints/seed × 5 seeds × primary+secondary).
+- **Stage 6:** 11 figures under `08_Experiments/results/nanda_unified/figures/commutator_defect/`.
+- **Stage 7:** official frozen verdict **FAIL** (PRIMARY eta=1e-3): lead_frac=1.0 PASS, Spearman rho=0.6325 FAIL, mean relative lead=0.9535 FAIL. SECONDARY eta=1e-4 also FAIL, unscored. Other 7 predictors' verdicts unchanged.
+- **Next:** Stage 8 issues checklist.

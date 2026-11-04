@@ -14,8 +14,9 @@ recompute_from_checkpoints builds an unseeded loader; Spectral/AGE ignore
 that and rebuild with the seeded split. We copy Spectral/AGE here.
 
 Stage 3b adds: eta sweep table + old-vs-new numerator comparison.
-Stage 3c: default eta 1e-4; Check 2 compares 1e-4 vs 5e-5; sweep
-includes 5e-5 and prints per-pair D at epoch 12000.
+Stage 3c briefly set default eta to 1e-4 (reverted in 3d).
+Stage 3d: restore frozen default eta=1e-3; Check 2 compares 1e-3 vs
+5e-4; sweep (1e-3 … 5e-5) kept as information only.
 """
 
 from __future__ import annotations
@@ -154,18 +155,18 @@ def check1_same_batch_zero(model_6000, train_inputs, train_labels) -> bool:
 
 
 def check2_halving_eta(models_by_epoch, train_inputs, train_labels, timings) -> bool:
-    print("\n=== Check 2 — Halving eta keeps D the same (1e-4 vs 5e-5) ===")
+    print("\n=== Check 2 — Halving eta keeps D the same (1e-3 vs 5e-4) ===")
     all_ok = True
     for epoch, model in models_by_epoch.items():
         t0 = time.perf_counter()
         out1 = compute_commutator_defect(
-            model, train_inputs, train_labels, eta=1e-4,
+            model, train_inputs, train_labels, eta=1e-3,
         )
         timings.append(time.perf_counter() - t0)
 
         t0 = time.perf_counter()
         out2 = compute_commutator_defect(
-            model, train_inputs, train_labels, eta=5e-5,
+            model, train_inputs, train_labels, eta=5e-4,
         )
         timings.append(time.perf_counter() - t0)
 
@@ -178,11 +179,23 @@ def check2_halving_eta(models_by_epoch, train_inputs, train_labels, timings) -> 
             rel = abs(d1 - d2) / abs(d1)
             ok = rel < 0.05
         all_ok = all_ok and ok
-        print(
-            f"  epoch {epoch}: median(eta=1e-4)={d1!r}  "
-            f"median(eta=5e-5)={d2!r}  |D1-D2|/D1={rel:.6g}  "
-            f"{'PASS' if ok else 'FAIL'}"
+
+        vals1 = ", ".join(
+            f"{v:.6f}" if v == v else "nan" for v in out1["values"]
         )
+        vals2 = ", ".join(
+            f"{v:.6f}" if v == v else "nan" for v in out2["values"]
+        )
+        label = "PASS" if ok else "FAIL"
+        if (not ok) and epoch == 12000:
+            label = "FAIL (known caveat, logged for Stage 8)"
+        print(
+            f"  epoch {epoch}: median(eta=1e-3)={d1!r}  "
+            f"median(eta=5e-4)={d2!r}  |D1-D2|/D1={rel:.6g}  "
+            f"{label}"
+        )
+        print(f"    per-pair eta=1e-3: [{vals1}]")
+        print(f"    per-pair eta=5e-4: [{vals2}]")
     print(f"  Check 2: {'PASS' if all_ok else 'FAIL'}")
     return all_ok
 
@@ -323,7 +336,7 @@ def _old_style_median(model, train_inputs, train_labels, eta: float = 1e-3):
 
 
 def eta_sweep_table(models_by_epoch, train_inputs, train_labels) -> None:
-    print("\n=== Eta sweep (new numerator) — medians ===")
+    print("\n=== Eta sweep (information only; new numerator) — medians ===")
     etas = (1e-3, 5e-4, 2.5e-4, 1e-4, 5e-5)
     header = f"  {'epoch':>6} |" + "".join(
         f"{('eta=' + format(e, 'g')):>14}" for e in etas
@@ -409,7 +422,7 @@ def old_vs_new_table(models_by_epoch, train_inputs, train_labels) -> None:
 
 
 def main() -> int:
-    print("Commutator Defect — Stage 3c sanity checks (default eta=1e-4)")
+    print("Commutator Defect — Stage 3d sanity checks (frozen eta=1e-3 restored)")
     print(f"SEED_DIR = {SEED_DIR}")
 
     seed, train_inputs, train_labels = _load_train_split()

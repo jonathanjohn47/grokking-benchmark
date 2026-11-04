@@ -1,0 +1,151 @@
+{
+  "grok_epochs": [
+    12987,
+    6921,
+    9510,
+    11019,
+    23747
+  ],
+  "signals": [
+    {
+      "signal": "Commutator Defect: Xu onset on median D (implemented)",
+      "epochs": [
+        600.0,
+        500.0,
+        500.0,
+        400.0,
+        600.0
+      ],
+      "lead": [
+        12387.0,
+        6421.0,
+        9010.0,
+        10619.0,
+        23147.0
+      ],
+      "seeds_before_grok": 5,
+      "spearman": 0.7,
+      "pearson": 0.5930270950870185,
+      "epoch_cv": 0.14390989949130545,
+      "frozen_protocol_verdict": {
+        "lead_frac": 1.0,
+        "rho": 0.6324555320336759,
+        "mean_rel_lead": 0.9534825077369792,
+        "n_firing": 5,
+        "passed": false
+      }
+    }
+  ],
+  "primary_eta": 0.001,
+  "primary_detailed": {
+    "signal": "Commutator Defect: Xu onset on median D (implemented)",
+    "eta": 0.001,
+    "per_seed": [
+      {
+        "seed": 0,
+        "event_epoch": 600,
+        "grok_epoch": 12987,
+        "lead": true,
+        "relative_lead": 0.9537999537999537
+      },
+      {
+        "seed": 1,
+        "event_epoch": 500,
+        "grok_epoch": 6921,
+        "lead": true,
+        "relative_lead": 0.9277561046091606
+      },
+      {
+        "seed": 2,
+        "event_epoch": 500,
+        "grok_epoch": 9510,
+        "lead": true,
+        "relative_lead": 0.9474237644584648
+      },
+      {
+        "seed": 3,
+        "event_epoch": 400,
+        "grok_epoch": 11019,
+        "lead": true,
+        "relative_lead": 0.9636990652509302
+      },
+      {
+        "seed": 4,
+        "event_epoch": 600,
+        "grok_epoch": 23747,
+        "lead": true,
+        "relative_lead": 0.9747336505663874
+      }
+    ],
+    "n_firing": 5,
+    "lead_frac": 1.0,
+    "rho": 0.6324555320336759,
+    "mean_rel_lead": 0.9534825077369792,
+    "rules": {
+      "n_firing_ge_4": true,
+      "lead_frac_ge_0.8": true,
+      "rho_ge_0.9": false,
+      "mean_rel_lead_in_0.05_0.9": false
+    },
+    "passed": false,
+    "role": "PRIMARY",
+    "scored": true
+  },
+  "secondary_eta": 0.0001,
+  "secondary_unscored": {
+    "signal": "Commutator Defect: Xu onset on median D (eta=1e-4, SECONDARY)",
+    "eta": 0.0001,
+    "per_seed": [
+      {
+        "seed": 0,
+        "event_epoch": 2500,
+        "grok_epoch": 12987,
+        "lead": true,
+        "relative_lead": 0.8074998074998075
+      },
+      {
+        "seed": 1,
+        "event_epoch": 400,
+        "grok_epoch": 6921,
+        "lead": true,
+        "relative_lead": 0.9422048836873285
+      },
+      {
+        "seed": 2,
+        "event_epoch": 500,
+        "grok_epoch": 9510,
+        "lead": true,
+        "relative_lead": 0.9474237644584648
+      },
+      {
+        "seed": 3,
+        "event_epoch": 500,
+        "grok_epoch": 11019,
+        "lead": true,
+        "relative_lead": 0.9546238315636628
+      },
+      {
+        "seed": 4,
+        "event_epoch": 400,
+        "grok_epoch": 23747,
+        "lead": true,
+        "relative_lead": 0.9831557670442582
+      }
+    ],
+    "n_firing": 5,
+    "lead_frac": 1.0,
+    "rho": 0.15811388300841897,
+    "mean_rel_lead": 0.9269816108507044,
+    "rules": {
+      "n_firing_ge_4": true,
+      "lead_frac_ge_0.8": true,
+      "rho_ge_0.9": false,
+      "mean_rel_lead_in_0.05_0.9": false
+    },
+    "passed": false,
+    "role": "SECONDARY",
+    "scored": false,
+    "note": "Unscored sensitivity run. Same frozen rule applied for reporting only. Not part of the official verdict."
+  },
+  "note": "PRIMARY eta=1e-3 is the official frozen verdict. SECONDARY eta=1e-4 is unscored sensitivity only."
+}
