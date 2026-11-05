@@ -21,14 +21,374 @@
   },
   "nodes": [
     {
+      "label": "test_probe.md",
+      "file_type": "document",
+      "source_file": "06_Code/test_probe.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "06_code_test_probe",
+      "community": 83,
+      "norm_label": "test_probe.md"
+    },
+    {
+      "label": "L2_Norm_Attack_Points.md",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points",
+      "community": 81,
+      "norm_label": "l2_norm_attack_points.md"
+    },
+    {
+      "label": "L2 Norm Predictor: Points an Examiner Could Attack",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_l2_norm_predictor_points_an_examiner_could_attack",
+      "community": 81,
+      "norm_label": "l2 norm predictor: points an examiner could attack"
+    },
+    {
+      "label": "Big worries",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_big_worries",
+      "community": 81,
+      "norm_label": "big worries"
+    },
+    {
+      "label": "\u274c 1. L2 was never scored under the frozen protocol",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_1_l2_was_never_scored_under_the_frozen_protocol",
+      "community": 81,
+      "norm_label": "\u274c 1. l2 was never scored under the frozen protocol"
+    },
+    {
+      "label": "\u274c 2. You tested a claim the paper never made",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_2_you_tested_a_claim_the_paper_never_made",
+      "community": 81,
+      "norm_label": "\u274c 2. you tested a claim the paper never made"
+    },
+    {
+      "label": "\u274c 3. The MA-crossover event comes from a setting you chose",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_3_the_ma_crossover_event_comes_from_a_setting_you_chose",
+      "community": 81,
+      "norm_label": "\u274c 3. the ma-crossover event comes from a setting you chose"
+    },
+    {
+      "label": "\u274c 4. The MA-of-MA event runs on a fixed clock",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_4_the_ma_of_ma_event_runs_on_a_fixed_clock",
+      "community": 81,
+      "norm_label": "\u274c 4. the ma-of-ma event runs on a fixed clock"
+    },
+    {
+      "label": "\u274c 5. The only rule that passes looks into the future",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_5_the_only_rule_that_passes_looks_into_the_future",
+      "community": 81,
+      "norm_label": "\u274c 5. the only rule that passes looks into the future"
+    },
+    {
+      "label": "\u274c 6. The \"causal\" smoothing also uses the future",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_6_the_causal_smoothing_also_uses_the_future",
+      "community": 81,
+      "norm_label": "\u274c 6. the \"causal\" smoothing also uses the future"
+    },
+    {
+      "label": "\u274c 7. The rules were picked after looking at the curves",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L33",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_7_the_rules_were_picked_after_looking_at_the_curves",
+      "community": 81,
+      "norm_label": "\u274c 7. the rules were picked after looking at the curves"
+    },
+    {
+      "label": "Moderate worries",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L38",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_moderate_worries",
+      "community": 81,
+      "norm_label": "moderate worries"
+    },
+    {
+      "label": "\u274c 8. Weight decay forces the fall",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L40",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_8_weight_decay_forces_the_fall",
+      "community": 81,
+      "norm_label": "\u274c 8. weight decay forces the fall"
+    },
+    {
+      "label": "\u274c 9. The model isn't exactly Nanda's",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_9_the_model_isn_t_exactly_nanda_s",
+      "community": 81,
+      "norm_label": "\u274c 9. the model isn't exactly nanda's"
+    },
+    {
+      "label": "\u274c 10. Every weight is lumped together",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L46",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_10_every_weight_is_lumped_together",
+      "community": 81,
+      "norm_label": "\u274c 10. every weight is lumped together"
+    },
+    {
+      "label": "\u274c 11. Window sizes were never tested",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L49",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_11_window_sizes_were_never_tested",
+      "community": 81,
+      "norm_label": "\u274c 11. window sizes were never tested"
+    },
+    {
+      "label": "\u274c 12. A near-pass that shows how fragile the cutoffs are",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L52",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_12_a_near_pass_that_shows_how_fragile_the_cutoffs_are",
+      "community": 81,
+      "norm_label": "\u274c 12. a near-pass that shows how fragile the cutoffs are"
+    },
+    {
+      "label": "\u274c 13. Five seeds can't tell weak from useless",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L55",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_13_five_seeds_can_t_tell_weak_from_useless",
+      "community": 81,
+      "norm_label": "\u274c 13. five seeds can't tell weak from useless"
+    },
+    {
+      "label": "\u274c 14. No comparison runs",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L58",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_14_no_comparison_runs",
+      "community": 81,
+      "norm_label": "\u274c 14. no comparison runs"
+    },
+    {
+      "label": "Small slips",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L63",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_small_slips",
+      "community": 81,
+      "norm_label": "small slips"
+    },
+    {
+      "label": "\u274c 15. \"Before grok\" counts the wrong thing",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_15_before_grok_counts_the_wrong_thing",
+      "community": 81,
+      "norm_label": "\u274c 15. \"before grok\" counts the wrong thing"
+    },
+    {
+      "label": "\u274c 16. The halfway rule can crash",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L68",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_16_the_halfway_rule_can_crash",
+      "community": 81,
+      "norm_label": "\u274c 16. the halfway rule can crash"
+    },
+    {
+      "label": "\u274c 17. Leftover code that does nothing",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L71",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_17_leftover_code_that_does_nothing",
+      "community": 81,
+      "norm_label": "\u274c 17. leftover code that does nothing"
+    },
+    {
+      "label": "\u274c 18. The 30% split is hard-coded",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L74",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_18_the_30_split_is_hard_coded",
+      "community": 81,
+      "norm_label": "\u274c 18. the 30% split is hard-coded"
+    },
+    {
+      "label": "\u274c 19. Old numbers in `context.md`",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L77",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_19_old_numbers_in_context_md",
+      "community": 81,
+      "norm_label": "\u274c 19. old numbers in `context.md`"
+    },
+    {
+      "label": "\u274c 20. Documents disagree on run counts and order",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L80",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_20_documents_disagree_on_run_counts_and_order",
+      "community": 81,
+      "norm_label": "\u274c 20. documents disagree on run counts and order"
+    },
+    {
+      "label": "\u274c 21. Spearman ties are mishandled",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L83",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_21_spearman_ties_are_mishandled",
+      "community": 81,
+      "norm_label": "\u274c 21. spearman ties are mishandled"
+    },
+    {
+      "label": "What checks out",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L88",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_what_checks_out",
+      "community": 81,
+      "norm_label": "what checks out"
+    },
+    {
+      "label": "Not verified",
+      "file_type": "document",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L94",
+      "_origin": "ast",
+      "id": "01_l2_norm_issues_l2_norm_attack_points_not_verified",
+      "community": 81,
+      "norm_label": "not verified"
+    },
+    {
+      "label": "Textbook_Common_Concepts_v2_audit.md",
+      "file_type": "document",
+      "source_file": "12_Study/Textbook_Common_Concepts_v2_audit.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "12_study_textbook_common_concepts_v2_audit",
+      "community": 82,
+      "norm_label": "textbook_common_concepts_v2_audit.md"
+    },
+    {
+      "label": "Audit of the original Common Concepts textbook (25 pages, pdfTeX)",
+      "file_type": "document",
+      "source_file": "12_Study/Textbook_Common_Concepts_v2_audit.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "12_study_textbook_common_concepts_v2_audit_audit_of_the_original_common_concepts_textbook_25_pages_pdftex",
+      "community": 82,
+      "norm_label": "audit of the original common concepts textbook (25 pages, pdftex)"
+    },
+    {
+      "label": "Count by type",
+      "file_type": "document",
+      "source_file": "12_Study/Textbook_Common_Concepts_v2_audit.md",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "12_study_textbook_common_concepts_v2_audit_count_by_type",
+      "community": 82,
+      "norm_label": "count by type"
+    },
+    {
+      "label": "Worst five",
+      "file_type": "document",
+      "source_file": "12_Study/Textbook_Common_Concepts_v2_audit.md",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "12_study_textbook_common_concepts_v2_audit_worst_five",
+      "community": 82,
+      "norm_label": "worst five"
+    },
+    {
+      "label": "All problems",
+      "file_type": "document",
+      "source_file": "12_Study/Textbook_Common_Concepts_v2_audit.md",
+      "source_location": "L31",
+      "_origin": "ast",
+      "id": "12_study_textbook_common_concepts_v2_audit_all_problems",
+      "community": 82,
+      "norm_label": "all problems"
+    },
+    {
+      "label": "Problems in the source material itself (not visible in the PDF)",
+      "file_type": "document",
+      "source_file": "12_Study/Textbook_Common_Concepts_v2_audit.md",
+      "source_location": "L145",
+      "_origin": "ast",
+      "id": "12_study_textbook_common_concepts_v2_audit_problems_in_the_source_material_itself_not_visible_in_the_pdf",
+      "community": 82,
+      "norm_label": "problems in the source material itself (not visible in the pdf)"
+    },
+    {
+      "label": "Scope decisions in v2",
+      "file_type": "document",
+      "source_file": "12_Study/Textbook_Common_Concepts_v2_audit.md",
+      "source_location": "L160",
+      "_origin": "ast",
+      "id": "12_study_textbook_common_concepts_v2_audit_scope_decisions_in_v2",
+      "community": 82,
+      "norm_label": "scope decisions in v2"
+    },
+    {
       "label": "Commutator_Defect_Attack_Points.md",
       "file_type": "document",
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points",
       "community": 80,
-      "norm_label": "commutator_defect_attack_points.md"
+      "norm_label": "commutator_defect_attack_points.md",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points"
     },
     {
       "label": "Commutator Defect Predictor: Points an Examiner Could Attack",
@@ -36,9 +396,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_commutator_defect_predictor_points_an_examiner_could_attack",
       "community": 80,
-      "norm_label": "commutator defect predictor: points an examiner could attack"
+      "norm_label": "commutator defect predictor: points an examiner could attack",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_commutator_defect_predictor_points_an_examiner_could_attack"
     },
     {
       "label": "Big worries",
@@ -46,9 +406,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L15",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_big_worries",
       "community": 80,
-      "norm_label": "big worries"
+      "norm_label": "big worries",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_big_worries"
     },
     {
       "label": "\u274c 1. The alarm fires during memorisation, not before grok",
@@ -56,9 +416,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L17",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_1_the_alarm_fires_during_memorisation_not_before_grok",
       "community": 80,
-      "norm_label": "\u274c 1. the alarm fires during memorisation, not before grok"
+      "norm_label": "\u274c 1. the alarm fires during memorisation, not before grok",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_1_the_alarm_fires_during_memorisation_not_before_grok"
     },
     {
       "label": "\u274c 2. Spearman \u03c1 and mean relative lead both fail the frozen band",
@@ -66,9 +426,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L20",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_2_spearman_\u03c1_and_mean_relative_lead_both_fail_the_frozen_band",
       "community": 80,
-      "norm_label": "\u274c 2. spearman \u03c1 and mean relative lead both fail the frozen band"
+      "norm_label": "\u274c 2. spearman \u03c1 and mean relative lead both fail the frozen band",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_2_spearman_\u03c1_and_mean_relative_lead_both_fail_the_frozen_band"
     },
     {
       "label": "\u274c 3. D\u0303 spikes track the recurring gradient-norm spikes, not grok",
@@ -76,9 +436,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L23",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_3_d_spikes_track_the_recurring_gradient_norm_spikes_not_grok",
       "community": 80,
-      "norm_label": "\u274c 3. d spikes track the recurring gradient-norm spikes, not grok"
+      "norm_label": "\u274c 3. d spikes track the recurring gradient-norm spikes, not grok",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_3_d_spikes_track_the_recurring_gradient_norm_spikes_not_grok"
     },
     {
       "label": "\u274c 4. D can rise just because gradients shrink",
@@ -86,9 +446,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L26",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_4_d_can_rise_just_because_gradients_shrink",
       "community": 80,
-      "norm_label": "\u274c 4. d can rise just because gradients shrink"
+      "norm_label": "\u274c 4. d can rise just because gradients shrink",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_4_d_can_rise_just_because_gradients_shrink"
     },
     {
       "label": "\u274c 5. The \"first 3 values\" baseline sits on the initial transient",
@@ -96,9 +456,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L29",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_5_the_first_3_values_baseline_sits_on_the_initial_transient",
       "community": 80,
-      "norm_label": "\u274c 5. the \"first 3 values\" baseline sits on the initial transient"
+      "norm_label": "\u274c 5. the \"first 3 values\" baseline sits on the initial transient",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_5_the_first_3_values_baseline_sits_on_the_initial_transient"
     },
     {
       "label": "Moderate worries",
@@ -106,9 +466,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L34",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_moderate_worries",
       "community": 80,
-      "norm_label": "moderate worries"
+      "norm_label": "moderate worries",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_moderate_worries"
     },
     {
       "label": "\u274c 6. \u03b7 dependence at epoch 12000; Check 2 fails at the frozen \u03b7",
@@ -116,9 +476,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L36",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_6_\u03b7_dependence_at_epoch_12000_check_2_fails_at_the_frozen_\u03b7",
       "community": 80,
-      "norm_label": "\u274c 6. \u03b7 dependence at epoch 12000; check 2 fails at the frozen \u03b7"
+      "norm_label": "\u274c 6. \u03b7 dependence at epoch 12000; check 2 fails at the frozen \u03b7",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_6_\u03b7_dependence_at_epoch_12000_check_2_fails_at_the_frozen_\u03b7"
     },
     {
       "label": "\u274c 7. Float64 rounding made the naive numerator noise (fixed, but a Xu hazard)",
@@ -126,9 +486,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L39",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_7_float64_rounding_made_the_naive_numerator_noise_fixed_but_a_xu_hazard",
       "community": 80,
-      "norm_label": "\u274c 7. float64 rounding made the naive numerator noise (fixed, but a xu hazard)"
+      "norm_label": "\u274c 7. float64 rounding made the naive numerator noise (fixed, but a xu hazard)",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_7_float64_rounding_made_the_naive_numerator_noise_fixed_but_a_xu_hazard"
     },
     {
       "label": "\u274c 8. Xu's own lead fraction was only 43% at lr 1e\u22123",
@@ -136,9 +496,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L42",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_8_xu_s_own_lead_fraction_was_only_43_at_lr_1e_3",
       "community": 80,
-      "norm_label": "\u274c 8. xu's own lead fraction was only 43% at lr 1e\u22123"
+      "norm_label": "\u274c 8. xu's own lead fraction was only 43% at lr 1e\u22123",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_8_xu_s_own_lead_fraction_was_only_43_at_lr_1e_3"
     },
     {
       "label": "\u274c 9. Non-grokking runs also show 30\u201350\u00d7 rises in Xu's data",
@@ -146,9 +506,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L45",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_9_non_grokking_runs_also_show_30_50_rises_in_xu_s_data",
       "community": 80,
-      "norm_label": "\u274c 9. non-grokking runs also show 30\u201350\u00d7 rises in xu's data"
+      "norm_label": "\u274c 9. non-grokking runs also show 30\u201350\u00d7 rises in xu's data",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_9_non_grokking_runs_also_show_30_50_rises_in_xu_s_data"
     },
     {
       "label": "\u274c 10. Weight decay matters in Xu; our probe uses plain loss",
@@ -156,9 +516,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L48",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_10_weight_decay_matters_in_xu_our_probe_uses_plain_loss",
       "community": 80,
-      "norm_label": "\u274c 10. weight decay matters in xu; our probe uses plain loss"
+      "norm_label": "\u274c 10. weight decay matters in xu; our probe uses plain loss",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_10_weight_decay_matters_in_xu_our_probe_uses_plain_loss"
     },
     {
       "label": "\u274c 11. Full-batch training forced artificial A / B batches",
@@ -166,9 +526,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L51",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_11_full_batch_training_forced_artificial_a_b_batches",
       "community": 80,
-      "norm_label": "\u274c 11. full-batch training forced artificial a / b batches"
+      "norm_label": "\u274c 11. full-batch training forced artificial a / b batches",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_11_full_batch_training_forced_artificial_a_b_batches"
     },
     {
       "label": "\u274c 12. Probe uses plain gradient steps; training uses AdamW",
@@ -176,9 +536,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L54",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_12_probe_uses_plain_gradient_steps_training_uses_adamw",
       "community": 80,
-      "norm_label": "\u274c 12. probe uses plain gradient steps; training uses adamw"
+      "norm_label": "\u274c 12. probe uses plain gradient steps; training uses adamw",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_12_probe_uses_plain_gradient_steps_training_uses_adamw"
     },
     {
       "label": "Small slips",
@@ -186,9 +546,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L59",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_small_slips",
       "community": 80,
-      "norm_label": "small slips"
+      "norm_label": "small slips",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_small_slips"
     },
     {
       "label": "\u274c 13. Paper says K = 9; code uses K = 5; we froze K = 5",
@@ -196,9 +556,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L61",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_13_paper_says_k_9_code_uses_k_5_we_froze_k_5",
       "community": 80,
-      "norm_label": "\u274c 13. paper says k = 9; code uses k = 5; we froze k = 5"
+      "norm_label": "\u274c 13. paper says k = 9; code uses k = 5; we froze k = 5",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_13_paper_says_k_9_code_uses_k_5_we_froze_k_5"
     },
     {
       "label": "\u274c 14. The floor of 20 and the 10\u00d7 factor may not transfer",
@@ -206,9 +566,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L64",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_14_the_floor_of_20_and_the_10_factor_may_not_transfer",
       "community": 80,
-      "norm_label": "\u274c 14. the floor of 20 and the 10\u00d7 factor may not transfer"
+      "norm_label": "\u274c 14. the floor of 20 and the 10\u00d7 factor may not transfer",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_14_the_floor_of_20_and_the_10_factor_may_not_transfer"
     },
     {
       "label": "\u274c 15. Single-author preprints, not peer reviewed",
@@ -216,9 +576,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L67",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_15_single_author_preprints_not_peer_reviewed",
       "community": 80,
-      "norm_label": "\u274c 15. single-author preprints, not peer reviewed"
+      "norm_label": "\u274c 15. single-author preprints, not peer reviewed",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_15_single_author_preprints_not_peer_reviewed"
     },
     {
       "label": "\u274c 16. A post-hoc \u03b7 change to 1e\u22124 was reverted (Stage 3c \u2192 3d)",
@@ -226,9 +586,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L70",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_16_a_post_hoc_\u03b7_change_to_1e_4_was_reverted_stage_3c_3d",
       "community": 80,
-      "norm_label": "\u274c 16. a post-hoc \u03b7 change to 1e\u22124 was reverted (stage 3c \u2192 3d)"
+      "norm_label": "\u274c 16. a post-hoc \u03b7 change to 1e\u22124 was reverted (stage 3c \u2192 3d)",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_16_a_post_hoc_\u03b7_change_to_1e_4_was_reverted_stage_3c_3d"
     },
     {
       "label": "What checks out",
@@ -236,9 +596,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L75",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_what_checks_out",
       "community": 80,
-      "norm_label": "what checks out"
+      "norm_label": "what checks out",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_what_checks_out"
     },
     {
       "label": "Summary table",
@@ -246,9 +606,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L85",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_summary_table",
       "community": 80,
-      "norm_label": "summary table"
+      "norm_label": "summary table",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_summary_table"
     },
     {
       "label": "Bottom line",
@@ -256,9 +616,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L108",
       "_origin": "ast",
-      "id": "08_commutator_defect_issues_commutator_defect_attack_points_bottom_line",
       "community": 80,
-      "norm_label": "bottom line"
+      "norm_label": "bottom line",
+      "id": "08_commutator_defect_issues_commutator_defect_attack_points_bottom_line"
     },
     {
       "label": "sanity_commutator_defect.py",
@@ -6026,7 +6386,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L199",
       "_origin": "ast",
-      "community": 81,
+      "community": 14,
       "norm_label": "save_checkpoint_schedule()",
       "id": "scripts_run_nanda_benchmark_save_checkpoint_schedule"
     },
@@ -6036,7 +6396,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L215",
       "_origin": "ast",
-      "community": 81,
+      "community": 14,
       "norm_label": "select_eval_epochs()",
       "id": "scripts_run_nanda_benchmark_select_eval_epochs"
     },
@@ -6046,7 +6406,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L242",
       "_origin": "ast",
-      "community": 86,
+      "community": 14,
       "norm_label": "dropout_variance_checkpoint_schedule()",
       "id": "scripts_run_nanda_benchmark_dropout_variance_checkpoint_schedule"
     },
@@ -6056,7 +6416,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L268",
       "_origin": "ast",
-      "community": 81,
+      "community": 14,
       "norm_label": "_num_or_none()",
       "id": "scripts_run_nanda_benchmark_num_or_none"
     },
@@ -6166,7 +6526,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L391",
       "_origin": "ast",
-      "community": 81,
+      "community": 14,
       "norm_label": "grok_epoch_from()",
       "id": "scripts_run_nanda_benchmark_grok_epoch_from"
     },
@@ -6176,7 +6536,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L401",
       "_origin": "ast",
-      "community": 81,
+      "community": 14,
       "norm_label": "grok_epochs_by_threshold()",
       "id": "scripts_run_nanda_benchmark_grok_epochs_by_threshold"
     },
@@ -6186,7 +6546,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L407",
       "_origin": "ast",
-      "community": 85,
+      "community": 14,
       "norm_label": "limit_cycle_check()",
       "id": "scripts_run_nanda_benchmark_limit_cycle_check"
     },
@@ -6196,7 +6556,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L439",
       "_origin": "ast",
-      "community": 85,
+      "community": 14,
       "norm_label": "dips_key()",
       "id": "scripts_run_nanda_benchmark_dips_key"
     },
@@ -6206,7 +6566,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L446",
       "_origin": "ast",
-      "community": 81,
+      "community": 14,
       "norm_label": "train_one_seed()",
       "id": "scripts_run_nanda_benchmark_train_one_seed"
     },
@@ -6216,7 +6576,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L756",
       "_origin": "ast",
-      "community": 84,
+      "community": 14,
       "norm_label": "_checkpoint_predictor_dropout_variance()",
       "id": "scripts_run_nanda_benchmark_checkpoint_predictor_dropout_variance"
     },
@@ -6226,7 +6586,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L820",
       "_origin": "ast",
-      "community": 83,
+      "community": 14,
       "norm_label": "_checkpoint_predictor_spectral()",
       "id": "scripts_run_nanda_benchmark_checkpoint_predictor_spectral"
     },
@@ -6236,7 +6596,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L903",
       "_origin": "ast",
-      "community": 82,
+      "community": 14,
       "norm_label": "_checkpoint_predictor_age()",
       "id": "scripts_run_nanda_benchmark_checkpoint_predictor_age"
     },
@@ -6306,7 +6666,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L200",
       "_origin": "ast",
-      "community": 81,
+      "community": 14,
       "norm_label": "epoch indices (0-based, matching the training loop's `epoch`) at which     a mod",
       "id": "scripts_run_nanda_benchmark_rationale_200"
     },
@@ -6316,7 +6676,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L216",
       "_origin": "ast",
-      "community": 81,
+      "community": 14,
       "norm_label": "subsample the evaluation grid from the saved checkpoint epochs.     keeps saved",
       "id": "scripts_run_nanda_benchmark_rationale_216"
     },
@@ -6326,7 +6686,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L243",
       "_origin": "ast",
-      "community": 86,
+      "community": 14,
       "norm_label": "legacy \u2014 for archive comparison only, not used in unified benchmark     (24 log-",
       "id": "scripts_run_nanda_benchmark_rationale_243"
     },
@@ -6366,7 +6726,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L392",
       "_origin": "ast",
-      "community": 81,
+      "community": 14,
       "norm_label": "first epoch at which test accuracy exceeds `threshold` (default: the     primary",
       "id": "scripts_run_nanda_benchmark_rationale_392"
     },
@@ -6376,7 +6736,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L402",
       "_origin": "ast",
-      "community": 81,
+      "community": 14,
       "norm_label": "{\"0.9\": epoch, \"0.95\": epoch, \"0.99\": epoch} for every threshold in     grok_thr",
       "id": "scripts_run_nanda_benchmark_rationale_402"
     },
@@ -6386,7 +6746,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L408",
       "_origin": "ast",
-      "community": 85,
+      "community": 14,
       "norm_label": "detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test",
       "id": "scripts_run_nanda_benchmark_rationale_408"
     },
@@ -6396,7 +6756,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L440",
       "_origin": "ast",
-      "community": 85,
+      "community": 14,
       "norm_label": "key under which limit_cycle_check stores its dip count. with the     primary gro",
       "id": "scripts_run_nanda_benchmark_rationale_440"
     },
@@ -6406,7 +6766,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L448",
       "_origin": "ast",
-      "community": 81,
+      "community": 14,
       "norm_label": "train seed from scratch. predictors_to_compute (a set, subset of     all_predict",
       "id": "scripts_run_nanda_benchmark_rationale_448"
     },
@@ -6416,7 +6776,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L758",
       "_origin": "ast",
-      "community": 84,
+      "community": 14,
       "norm_label": "checkpoint_predictor_funcs[\"dropout_variance\"] \u2014 loads each saved     checkpoint",
       "id": "scripts_run_nanda_benchmark_rationale_758"
     },
@@ -6426,7 +6786,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L822",
       "_origin": "ast",
-      "community": 83,
+      "community": 14,
       "norm_label": "checkpoint_predictor_funcs[\"spectral\"] \u2014 canatar et al. 2021     task-model alig",
       "id": "scripts_run_nanda_benchmark_rationale_822"
     },
@@ -6436,7 +6796,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L905",
       "_origin": "ast",
-      "community": 82,
+      "community": 14,
       "norm_label": "checkpoint_predictor_funcs[\"age\"] \u2014 age, adaptive grokking epoch via     neural",
       "id": "scripts_run_nanda_benchmark_rationale_905"
     },
@@ -6816,7 +7176,7 @@
       "source_file": "06_Code/src/predictors/age.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 82,
+      "community": 14,
       "norm_label": "age.py",
       "id": "predictors_age"
     },
@@ -6826,7 +7186,7 @@
       "source_file": "06_Code/src/predictors/age.py",
       "source_location": "L82",
       "_origin": "ast",
-      "community": 82,
+      "community": 14,
       "norm_label": "_collect_representations_and_labels()",
       "id": "predictors_age_collect_representations_and_labels"
     },
@@ -6836,7 +7196,7 @@
       "source_file": "06_Code/src/predictors/age.py",
       "source_location": "L119",
       "_origin": "ast",
-      "community": 82,
+      "community": 14,
       "norm_label": "compute_age_metrics_for_checkpoint()",
       "id": "predictors_age_compute_age_metrics_for_checkpoint"
     },
@@ -6846,7 +7206,7 @@
       "source_file": "06_Code/src/predictors/age.py",
       "source_location": "L157",
       "_origin": "ast",
-      "community": 82,
+      "community": 14,
       "norm_label": "compute_age_for_model()",
       "id": "predictors_age_compute_age_for_model"
     },
@@ -6856,7 +7216,7 @@
       "source_file": "06_Code/src/predictors/age.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 82,
+      "community": 14,
       "norm_label": "age predictor (predictor 4 of 9) \u2014 adaptive grokking epoch via neural collapse.",
       "id": "predictors_age_rationale_1"
     },
@@ -6866,7 +7226,7 @@
       "source_file": "06_Code/src/predictors/age.py",
       "source_location": "L83",
       "_origin": "ast",
-      "community": 82,
+      "community": 14,
       "norm_label": "run the model over the full training split and capture, per example,     the hid",
       "id": "predictors_age_rationale_83"
     },
@@ -6876,7 +7236,7 @@
       "source_file": "06_Code/src/predictors/age.py",
       "source_location": "L120",
       "_origin": "ast",
-      "community": 82,
+      "community": 14,
       "norm_label": "papyan et al. 2020 nc1 variability-collapse metrics for one frozen     model che",
       "id": "predictors_age_rationale_120"
     },
@@ -6886,7 +7246,7 @@
       "source_file": "06_Code/src/predictors/age.py",
       "source_location": "L158",
       "_origin": "ast",
-      "community": 82,
+      "community": 14,
       "norm_label": "thin wrapper kept parallel to     src/predictors/spectral.py::compute_spectral_f",
       "id": "predictors_age_rationale_158"
     },
@@ -6896,7 +7256,7 @@
       "source_file": "06_Code/src/predictors/dropout.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 84,
+      "community": 14,
       "norm_label": "dropout.py",
       "id": "06_code_src_predictors_dropout_py_predictors_dropout"
     },
@@ -6906,7 +7266,7 @@
       "source_file": "06_Code/src/predictors/dropout.py",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 84,
+      "community": 14,
       "norm_label": "compute_accuracy()",
       "id": "06_code_src_predictors_dropout_py_predictors_dropout_compute_accuracy"
     },
@@ -6916,7 +7276,7 @@
       "source_file": "06_Code/src/predictors/dropout.py",
       "source_location": "L25",
       "_origin": "ast",
-      "community": 84,
+      "community": 14,
       "norm_label": "compute_dropout_gap_multi_rate()",
       "id": "06_code_src_predictors_dropout_py_predictors_dropout_compute_dropout_gap_multi_rate"
     },
@@ -6926,7 +7286,7 @@
       "source_file": "06_Code/src/predictors/dropout.py",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 84,
+      "community": 14,
       "norm_label": "compute_dropout_variance()",
       "id": "predictors_dropout_compute_dropout_variance"
     },
@@ -6936,7 +7296,7 @@
       "source_file": "06_Code/src/predictors/dropout.py",
       "source_location": "L72",
       "_origin": "ast",
-      "community": 84,
+      "community": 14,
       "norm_label": "dropout-variance predictor signal (salah & yevick, arxiv:2507.11645):     at a f",
       "id": "predictors_dropout_rationale_72"
     },
@@ -6946,7 +7306,7 @@
       "source_file": "06_Code/src/predictors/dropout.py",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 84,
+      "community": 14,
       "norm_label": "# note: the old single-rate compute_dropout_gap(model, data_loader, dropout_rate",
       "id": "predictors_dropout_rationale_20"
     },
@@ -7646,7 +8006,7 @@
       "source_file": "06_Code/src/predictors/spectral.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 83,
+      "community": 14,
       "norm_label": "spectral.py",
       "id": "predictors_spectral"
     },
@@ -7656,7 +8016,7 @@
       "source_file": "06_Code/src/predictors/spectral.py",
       "source_location": "L81",
       "_origin": "ast",
-      "community": 83,
+      "community": 14,
       "norm_label": "_collect_representations_and_labels()",
       "id": "predictors_spectral_collect_representations_and_labels"
     },
@@ -7666,7 +8026,7 @@
       "source_file": "06_Code/src/predictors/spectral.py",
       "source_location": "L114",
       "_origin": "ast",
-      "community": 83,
+      "community": 14,
       "norm_label": "compute_spectral_metrics_for_checkpoint()",
       "id": "predictors_spectral_compute_spectral_metrics_for_checkpoint"
     },
@@ -7676,7 +8036,7 @@
       "source_file": "06_Code/src/predictors/spectral.py",
       "source_location": "L179",
       "_origin": "ast",
-      "community": 83,
+      "community": 14,
       "norm_label": "compute_spectral_for_model()",
       "id": "predictors_spectral_compute_spectral_for_model"
     },
@@ -7686,7 +8046,7 @@
       "source_file": "06_Code/src/predictors/spectral.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 83,
+      "community": 14,
       "norm_label": "spectral predictor (predictor 3 of 9) \u2014 faithful canatar et al. 2021.  paper: ab",
       "id": "predictors_spectral_rationale_1"
     },
@@ -7696,7 +8056,7 @@
       "source_file": "06_Code/src/predictors/spectral.py",
       "source_location": "L82",
       "_origin": "ast",
-      "community": 83,
+      "community": 14,
       "norm_label": "run the model over the full training split and capture, per example,     the hid",
       "id": "predictors_spectral_rationale_82"
     },
@@ -7706,7 +8066,7 @@
       "source_file": "06_Code/src/predictors/spectral.py",
       "source_location": "L115",
       "_origin": "ast",
-      "community": 83,
+      "community": 14,
       "norm_label": "canatar et al. 2021 task-model-alignment metrics for one frozen     model checkp",
       "id": "predictors_spectral_rationale_115"
     },
@@ -7716,7 +8076,7 @@
       "source_file": "06_Code/src/predictors/spectral.py",
       "source_location": "L180",
       "_origin": "ast",
-      "community": 83,
+      "community": 14,
       "norm_label": "thin wrapper kept for run_nanda_benchmark.py's import. one frozen     checkpoint",
       "id": "predictors_spectral_rationale_180"
     },
@@ -11765,12 +12125,342 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_l2_norm_predictor_points_an_examiner_could_attack",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_l2_norm_predictor_points_an_examiner_could_attack",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_big_worries",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_l2_norm_predictor_points_an_examiner_could_attack",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_moderate_worries",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L94",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_l2_norm_predictor_points_an_examiner_could_attack",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_not_verified",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_l2_norm_predictor_points_an_examiner_could_attack",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_small_slips",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L88",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_l2_norm_predictor_points_an_examiner_could_attack",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_what_checks_out",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_big_worries",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_1_l2_was_never_scored_under_the_frozen_protocol",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_big_worries",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_2_you_tested_a_claim_the_paper_never_made",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_big_worries",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_3_the_ma_crossover_event_comes_from_a_setting_you_chose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_big_worries",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_4_the_ma_of_ma_event_runs_on_a_fixed_clock",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_big_worries",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_5_the_only_rule_that_passes_looks_into_the_future",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_big_worries",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_6_the_causal_smoothing_also_uses_the_future",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_big_worries",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_7_the_rules_were_picked_after_looking_at_the_curves",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_moderate_worries",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_10_every_weight_is_lumped_together",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L49",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_moderate_worries",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_11_window_sizes_were_never_tested",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_moderate_worries",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_12_a_near_pass_that_shows_how_fragile_the_cutoffs_are",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L55",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_moderate_worries",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_13_five_seeds_can_t_tell_weak_from_useless",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L58",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_moderate_worries",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_14_no_comparison_runs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_moderate_worries",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_8_weight_decay_forces_the_fall",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_moderate_worries",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_9_the_model_isn_t_exactly_nanda_s",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_small_slips",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_15_before_grok_counts_the_wrong_thing",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_small_slips",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_16_the_halfway_rule_can_crash",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_small_slips",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_17_leftover_code_that_does_nothing",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L74",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_small_slips",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_18_the_30_split_is_hard_coded",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L77",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_small_slips",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_19_old_numbers_in_context_md",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_small_slips",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_20_documents_disagree_on_run_counts_and_order",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md",
+      "source_location": "L83",
+      "weight": 1.0,
+      "source": "01_l2_norm_issues_l2_norm_attack_points_small_slips",
+      "target": "01_l2_norm_issues_l2_norm_attack_points_21_spearman_ties_are_mishandled",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "12_Study/Textbook_Common_Concepts_v2_audit.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "12_study_textbook_common_concepts_v2_audit",
+      "target": "12_study_textbook_common_concepts_v2_audit_audit_of_the_original_common_concepts_textbook_25_pages_pdftex",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "12_Study/Textbook_Common_Concepts_v2_audit.md",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "12_study_textbook_common_concepts_v2_audit_audit_of_the_original_common_concepts_textbook_25_pages_pdftex",
+      "target": "12_study_textbook_common_concepts_v2_audit_all_problems",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "12_Study/Textbook_Common_Concepts_v2_audit.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "12_study_textbook_common_concepts_v2_audit_audit_of_the_original_common_concepts_textbook_25_pages_pdftex",
+      "target": "12_study_textbook_common_concepts_v2_audit_count_by_type",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "12_Study/Textbook_Common_Concepts_v2_audit.md",
+      "source_location": "L145",
+      "weight": 1.0,
+      "source": "12_study_textbook_common_concepts_v2_audit_audit_of_the_original_common_concepts_textbook_25_pages_pdftex",
+      "target": "12_study_textbook_common_concepts_v2_audit_problems_in_the_source_material_itself_not_visible_in_the_pdf",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "12_Study/Textbook_Common_Concepts_v2_audit.md",
+      "source_location": "L160",
+      "weight": 1.0,
+      "source": "12_study_textbook_common_concepts_v2_audit_audit_of_the_original_common_concepts_textbook_25_pages_pdftex",
+      "target": "12_study_textbook_common_concepts_v2_audit_scope_decisions_in_v2",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "12_Study/Textbook_Common_Concepts_v2_audit.md",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "12_study_textbook_common_concepts_v2_audit_audit_of_the_original_common_concepts_textbook_25_pages_pdftex",
+      "target": "12_study_textbook_common_concepts_v2_audit_worst_five",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_commutator_defect_predictor_points_an_examiner_could_attack",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_commutator_defect_predictor_points_an_examiner_could_attack"
     },
     {
       "relation": "contains",
@@ -11778,9 +12468,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_commutator_defect_predictor_points_an_examiner_could_attack",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_big_worries",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_big_worries"
     },
     {
       "relation": "contains",
@@ -11788,9 +12478,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L108",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_commutator_defect_predictor_points_an_examiner_could_attack",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_bottom_line",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_bottom_line"
     },
     {
       "relation": "contains",
@@ -11798,9 +12488,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_commutator_defect_predictor_points_an_examiner_could_attack",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_moderate_worries",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_moderate_worries"
     },
     {
       "relation": "contains",
@@ -11808,9 +12498,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L59",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_commutator_defect_predictor_points_an_examiner_could_attack",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_small_slips",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_small_slips"
     },
     {
       "relation": "contains",
@@ -11818,9 +12508,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L85",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_commutator_defect_predictor_points_an_examiner_could_attack",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_summary_table",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_summary_table"
     },
     {
       "relation": "contains",
@@ -11828,9 +12518,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_commutator_defect_predictor_points_an_examiner_could_attack",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_what_checks_out",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_what_checks_out"
     },
     {
       "relation": "contains",
@@ -11838,9 +12528,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_big_worries",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_1_the_alarm_fires_during_memorisation_not_before_grok",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_1_the_alarm_fires_during_memorisation_not_before_grok"
     },
     {
       "relation": "contains",
@@ -11848,9 +12538,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_big_worries",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_2_spearman_\u03c1_and_mean_relative_lead_both_fail_the_frozen_band",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_2_spearman_\u03c1_and_mean_relative_lead_both_fail_the_frozen_band"
     },
     {
       "relation": "contains",
@@ -11858,9 +12548,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_big_worries",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_3_d_spikes_track_the_recurring_gradient_norm_spikes_not_grok",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_3_d_spikes_track_the_recurring_gradient_norm_spikes_not_grok"
     },
     {
       "relation": "contains",
@@ -11868,9 +12558,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_big_worries",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_4_d_can_rise_just_because_gradients_shrink",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_4_d_can_rise_just_because_gradients_shrink"
     },
     {
       "relation": "contains",
@@ -11878,9 +12568,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_big_worries",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_5_the_first_3_values_baseline_sits_on_the_initial_transient",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_5_the_first_3_values_baseline_sits_on_the_initial_transient"
     },
     {
       "relation": "contains",
@@ -11888,9 +12578,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L48",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_moderate_worries",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_10_weight_decay_matters_in_xu_our_probe_uses_plain_loss",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_10_weight_decay_matters_in_xu_our_probe_uses_plain_loss"
     },
     {
       "relation": "contains",
@@ -11898,9 +12588,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L51",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_moderate_worries",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_11_full_batch_training_forced_artificial_a_b_batches",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_11_full_batch_training_forced_artificial_a_b_batches"
     },
     {
       "relation": "contains",
@@ -11908,9 +12598,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L54",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_moderate_worries",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_12_probe_uses_plain_gradient_steps_training_uses_adamw",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_12_probe_uses_plain_gradient_steps_training_uses_adamw"
     },
     {
       "relation": "contains",
@@ -11918,9 +12608,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_moderate_worries",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_6_\u03b7_dependence_at_epoch_12000_check_2_fails_at_the_frozen_\u03b7",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_6_\u03b7_dependence_at_epoch_12000_check_2_fails_at_the_frozen_\u03b7"
     },
     {
       "relation": "contains",
@@ -11928,9 +12618,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L39",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_moderate_worries",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_7_float64_rounding_made_the_naive_numerator_noise_fixed_but_a_xu_hazard",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_7_float64_rounding_made_the_naive_numerator_noise_fixed_but_a_xu_hazard"
     },
     {
       "relation": "contains",
@@ -11938,9 +12628,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L42",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_moderate_worries",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_8_xu_s_own_lead_fraction_was_only_43_at_lr_1e_3",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_8_xu_s_own_lead_fraction_was_only_43_at_lr_1e_3"
     },
     {
       "relation": "contains",
@@ -11948,9 +12638,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L45",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_moderate_worries",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_9_non_grokking_runs_also_show_30_50_rises_in_xu_s_data",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_9_non_grokking_runs_also_show_30_50_rises_in_xu_s_data"
     },
     {
       "relation": "contains",
@@ -11958,9 +12648,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L61",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_small_slips",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_13_paper_says_k_9_code_uses_k_5_we_froze_k_5",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_13_paper_says_k_9_code_uses_k_5_we_froze_k_5"
     },
     {
       "relation": "contains",
@@ -11968,9 +12658,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L64",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_small_slips",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_14_the_floor_of_20_and_the_10_factor_may_not_transfer",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_14_the_floor_of_20_and_the_10_factor_may_not_transfer"
     },
     {
       "relation": "contains",
@@ -11978,9 +12668,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L67",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_small_slips",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_15_single_author_preprints_not_peer_reviewed",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_15_single_author_preprints_not_peer_reviewed"
     },
     {
       "relation": "contains",
@@ -11988,9 +12678,9 @@
       "source_file": "11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md",
       "source_location": "L70",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "08_commutator_defect_issues_commutator_defect_attack_points_small_slips",
-      "target": "08_commutator_defect_issues_commutator_defect_attack_points_16_a_post_hoc_\u03b7_change_to_1e_4_was_reverted_stage_3c_3d",
-      "confidence_score": 1.0
+      "target": "08_commutator_defect_issues_commutator_defect_attack_points_16_a_post_hoc_\u03b7_change_to_1e_4_was_reverted_stage_3c_3d"
     },
     {
       "relation": "imports_from",
@@ -25657,5 +26347,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "26d913ed3ea8d23bb80dc077c8565c57ab7f14b6"
+  "built_at_commit": "e47b3cc30d8930c2482b70d3ccbf410f3721151c"
 }
