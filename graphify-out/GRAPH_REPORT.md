@@ -1,16 +1,16 @@
 # Graph Report - grokking-benchmark  (2026-11-05)
 
 ## Corpus Check
-- 196 files · ~6,076,464 words
+- 198 files · ~6,077,067 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1210 nodes · 1394 edges · 84 communities (68 shown, 16 thin omitted)
+- 1212 nodes · 1394 edges · 86 communities (70 shown, 16 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e47b3cc3`
+- Built from commit: `10783278`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -115,7 +115,7 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (84 total, 16 thin omitted)
+## Communities (86 total, 16 thin omitted)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.06
@@ -340,7 +340,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `train_one_seed()` connect `Community 14` to `Community 19`, `Community 22`?**
   _High betweenness centrality (0.010) - this node is a cross-community bridge._
 - **Why does `PredictorMeasurements` connect `Community 19` to `Community 14`?**
-  _High betweenness centrality (0.005) - this node is a cross-community bridge._
+  _High betweenness centrality (0.006) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `PredictorMeasurements` (e.g. with `recompute_from_checkpoints()` and `train_one_seed()`) actually correct?**
   _`PredictorMeasurements` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `❌ 1. L2 was never scored under the frozen protocol`, `❌ 2. You tested a claim the paper never made`, `❌ 3. The MA-crossover event comes from a setting you chose` to the rest of the system?**

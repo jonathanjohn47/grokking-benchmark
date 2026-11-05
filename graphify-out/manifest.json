@@ -2315,17 +2315,17 @@
     "semantic_hash": ""
   },
   "02_Progress_Reports/2026-11-04_Progress_Report_Commutator_Defect.pdf": {
-    "mtime": 1793754002.810385,
+    "mtime": 1793853228.9730148,
     "ast_hash": "ef64ebc07783c60743be2a1bf8a14bf8",
     "semantic_hash": ""
   },
   "06_Code/test_probe.md": {
-    "mtime": 1793830674.8257263,
+    "mtime": 1793853228.9731612,
     "ast_hash": "6fc6e380b8a0db1a52dbc1a8ceecc142",
     "semantic_hash": ""
   },
   "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.md": {
-    "mtime": 1793828963.9954243,
+    "mtime": 1793853228.9733543,
     "ast_hash": "4ac3a650e38f38c09a86858d417e5eb0",
     "semantic_hash": ""
   },
@@ -2335,13 +2335,33 @@
     "semantic_hash": ""
   },
   "11_Predictor_Issues_and_Lacunas/01_L2_Norm_Issues/L2_Norm_Attack_Points.pdf": {
-    "mtime": 1793828963.0713704,
+    "mtime": 1793853228.9736736,
     "ast_hash": "c752d15701f0fbbfbe6e8d9cae2f49f0",
     "semantic_hash": ""
   },
   "12_Study/Textbook_Common_Concepts_v2.pdf": {
     "mtime": 1793852904.540933,
     "ast_hash": "5b527bc5ba9933935c1ae66972e3840c",
+    "semantic_hash": ""
+  },
+  "add_reason_to_context.py": {
+    "mtime": 1793883975.0273645,
+    "ast_hash": "88e06c843d96cccd47f1640fc50d3dfc",
+    "semantic_hash": ""
+  },
+  "split_context.py": {
+    "mtime": 1793883529.131323,
+    "ast_hash": "3c96028f6492ab4ec898e74046bb78bf",
+    "semantic_hash": ""
+  },
+  "12_Study/Textbook_Common_Concepts_v3.pdf": {
+    "mtime": 1793881414.575965,
+    "ast_hash": "9d908321641933d9d03b811c5e85b5c9",
+    "semantic_hash": ""
+  },
+  "12_Study/Textbook_Common_Concepts_v4.pdf": {
+    "mtime": 1793883234.158835,
+    "ast_hash": "c1b2496d7f72d33ff9300d9f1731fe89",
     "semantic_hash": ""
   }
 }
