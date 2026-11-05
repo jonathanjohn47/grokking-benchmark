@@ -12410,3 +12410,19 @@ Same frozen rule applied for reporting only. Never used for the official PASS/FA
 - Post-commit Graphify hook left `graphify-out/` dirty after `b2e787e` (progress report).
 - Committing the regenerated Graphify index only (`GRAPH_REPORT.md`, `graph.json`, `graph.html`, `manifest.json`, labels, stat-index). No code or experiment results changed.
 - Pushing `main` to `origin` (progress-report commit + this Graphify refresh).
+
+---
+
+## Session Summary — 5 November 2026 (Textbook Common Concepts v3)
+
+- Jonathan asked (Hinglish, 5 Nov 2026) to regenerate the common-concepts textbook with every predictor-specific item removed. Keep only ideas shared by every predictor. Apply the 5 C's: Clean, Clear, Consistent, Coherent, Chronological.
+- Source of truth for the wording is the attached `Textbook_Common_Concepts_v3.tex`. No new scientific content was written. Strip decisions are recorded in `12_Study/v3_strip_notes.md`.
+- Files added under the existing `12_Study/` folder (same place as Textbook v2):
+  - `12_Study/Textbook_Common_Concepts_v3.tex`
+  - `12_Study/Textbook_Common_Concepts_v3.pdf`
+  - `12_Study/v3_strip_notes.md`
+- Compile: XeLaTeX twice (TeX Live). A4, 2.2 cm margins, 11 pt, DejaVu Serif and DejaVu Sans Mono Scale=0.85. Italic DejaVu Serif was installed on the build machine so the italic face embeds (the core package only had Book and Bold). No source wording was changed for that.
+- QA: xelatex finished with no Overfull hbox and no Missing character. Remaining log notes are hyperref PDF-string warnings on maths in headings, and one Underfull hbox in the reference list (badness 4366). `pdffonts`: every font emb=yes. `pdftotext` has no L2, Dropout, Spectral, AGE, HTSR, Weight-PCA, Higher-MI, Commutator, Omnigrok, crossover, halfway, or MA-of-MA. Worked examples use illustrative event lists A/B/C. Glossary is definition-first.
+- What did not change: Textbook v2 files, predictor code, shared model, experiment results. Predictor-specific books are still postponed; this book names none of the eight predictors.
+- Next: pull request for v3 only. Do not merge from this session unless Jonathan asks.
+
