@@ -12492,3 +12492,18 @@ This makes 5 the minimum sufficient for significance; it is not claimed to give 
 - QA: xelatex finished with no Overfull hbox and no Missing character. Remaining log notes are hyperref PDF-string warnings on maths in headings, and one Underfull hbox in the reference list (badness 4366). `pdffonts`: every font emb=yes. `pdftotext` has no L2, Dropout, Spectral, AGE, HTSR, Weight-PCA, Higher-MI, Commutator, Omnigrok, crossover, halfway, or MA-of-MA. Worked examples use illustrative event lists A/B/C. Glossary is definition-first.
 - What did not change: Textbook v2 files, predictor code, shared model, experiment results. Predictor-specific books are still postponed; this book names none of the eight predictors.
 - Next: pull request for v3 only. Do not merge from this session unless Jonathan asks.
+
+---
+
+## Session Summary — 5 November 2026 (Textbook Common Concepts v4)
+
+- Jonathan asked (5 Nov 2026) to regenerate the common-concepts textbook because v3 sentences were too thin. Keep the H.K. Dass maths layout and the 5 C's (Clean, Clear, Consistent, Coherent, Chronological). Keep zero predictor-specific content. Use much fuller explanatory prose.
+- Source of truth for the wording is the attached `Textbook_Common_Concepts_v4.tex`. No new scientific claims were written. What was expanded is recorded in `12_Study/v4_expansion_notes.md`.
+- Files added under the existing `12_Study/` folder (same place as Textbook v2 and v3):
+  - `12_Study/Textbook_Common_Concepts_v4.tex`
+  - `12_Study/Textbook_Common_Concepts_v4.pdf`
+  - `12_Study/v4_expansion_notes.md`
+- Compile: XeLaTeX twice (TeX Live). A4, 2.2 cm margins, 11 pt, DejaVu Serif and DejaVu Sans Mono Scale=0.85. Italic DejaVu Serif is embedded. No source wording was changed for layout.
+- QA: xelatex finished with no Overfull hbox and no Missing character. Remaining log notes match v3: hyperref PDF-string warnings on maths in headings, and one Underfull hbox in the reference list (badness 4366). `pdffonts`: every font emb=yes. PDF is 55 pages. `pdftotext` has no L2, Dropout, Spectral, AGE, HTSR, Weight-PCA, Higher-MI, Commutator, Omnigrok, crossover, halfway, or MA-of-MA as words. A low-resolution raster check of all 55 pages found no ink inside the page edge.
+- What did not change: Textbook v2 files, predictor code, shared model, experiment results. Predictor-specific books are still postponed; this book names none of the eight predictors.
+- Next: pull request for v4 only. Do not merge from this session unless Jonathan asks.

@@ -1,0 +1,1373 @@
+% Textbook_Common_Concepts_v4.tex
+% Compile with: xelatex (run twice for the contents page).
+% v4 (5 November 2026): v3 content and derivations kept; every topic now opens with a
+% plain-language explanation and has a longer "why it matters and how to read it" part.
+% Still no predictor-specific content. Every event list is illustrative and belongs to no predictor.
+\documentclass[11pt,a4paper,oneside,openany]{report}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{fontspec,amsmath,amssymb}
+\usepackage{array,booktabs,longtable}
+\usepackage[hidelinks]{hyperref}
+\setmainfont{DejaVu Serif}
+\setmonofont{DejaVu Sans Mono}[Scale=0.85]
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\linespread{1.1}
+\setlength{\emergencystretch}{2em}
+\allowdisplaybreaks
+
+% Module headings: "Module N" on one line, title on the next. No doubled numbers.
+\renewcommand{\chaptername}{Module}
+\makeatletter
+\renewcommand{\@makechapterhead}[1]{%
+  {\parindent 0pt \raggedright
+   {\large\bfseries Module \thechapter\par}\vspace{2pt}
+   {\LARGE\bfseries #1\par}\vspace{14pt}}}
+\renewcommand{\@makeschapterhead}[1]{%
+  {\parindent 0pt \raggedright {\LARGE\bfseries #1\par}\vspace{14pt}}}
+\makeatother
+
+% Fixed vocabulary (see the Notation and glossary chapter).
+\newcommand{\leadfrac}{\mathrm{lead\_frac}}
+\newcommand{\acctest}{\mathrm{acc}_{\mathrm{test}}}
+\newcommand{\acctrain}{\mathrm{acc}_{\mathrm{train}}}
+\newcommand{\rbar}{\bar{r}}
+\newcommand{\Ntrain}{N_{\mathrm{train}}}
+\newcommand{\Ntest}{N_{\mathrm{test}}}
+\newcommand{\Dtrain}{D_{\mathrm{train}}}
+\newcommand{\Dtest}{D_{\mathrm{test}}}
+\newcommand{\yfinal}{y_{\mathrm{final}}}
+\newcommand{\yrun}{\bar{y}_{\mathrm{run}}}
+\newcommand{\None}{\texttt{None}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\gl}[1]{\textbf{#1}}   % glossary entry reference, e.g. \gl{N12}
+\newcommand{\why}[1]{\because\ \parbox[t]{5.0cm}{\raggedright\small #1}}
+
+% Topic field labels.
+\newcommand{\fplain}{\textbf{In plain words:} }
+\newcommand{\fdef}{\textbf{Definition:} }
+\newcommand{\fread}{\par\textbf{Why it matters and how to read it:} }
+\newcommand{\fans}{\par\textbf{Reading the answer:} }
+\newcommand{\fwhy}{\par\textbf{Why it matters:} }
+\newcommand{\fex}{\par\textbf{Worked example:} }
+\newcommand{\fself}{\par\textbf{Self-check:} }
+\newcommand{\fviva}{\par\textbf{Likely viva question:} }
+
+% H.K. Dass layout blocks.
+\newcommand{\dass}[1]{\par\medskip{\bfseries Derivation (H.K. Dass layout): #1}\par\nopagebreak}
+\newcommand{\dgiven}{\par\textbf{Given:}\par\nopagebreak}
+\newcommand{\dlet}{\par\textbf{Let:}\par\nopagebreak}
+\newcommand{\dfind}{\par\textbf{To find:} }
+\newcommand{\dsol}{\par\textbf{Solution:}\nopagebreak\vspace{-\parskip}\vspace{-6pt}}
+\newenvironment{dlist}{\begin{enumerate}\setlength{\itemsep}{1pt}\setlength{\parskip}{1pt}}{\end{enumerate}}
+\newenvironment{glist}{\begin{itemize}\setlength{\itemsep}{2pt}\setlength{\parskip}{1pt}}{\end{itemize}}
+
+\begin{document}
+
+\begin{titlepage}
+\raggedright
+{\LARGE\bfseries Concepts Shared by All Predictors: Colloquium Textbook\par}
+\vspace{6pt}
+\textbf{Thesis:} A Unified Benchmark of Grokking Predictors in Neural Networks · Common concepts (not predictor-specific) · Prepared 5 November 2026
+\vspace{14pt}
+
+This is the study book for the concepts shared by every predictor in your benchmark: 7 modules and 29 topics, in the order you'd meet them, from grokking itself to research honesty. It doesn't describe any single predictor; those come later, in their own books. Every event list used in a worked example is made up for illustration and belongs to no predictor of yours. Every term is defined in the Notation and glossary chapter before it's used.
+
+Every topic is laid out the same way. \textbf{In plain words} says what the idea is, why it's in your thesis, and what mistake it prevents, in everyday language. \textbf{Definition} then states it exactly. \textbf{Why it matters and how to read it} explains how to think about the definition and what to look for. The \textbf{Worked example} does the maths in H.K.\ Dass layout, one step per line, and \textbf{Reading the answer} says what the result means. Each topic ends with a \textbf{Self-check} (answers in brackets) and a \textbf{Likely viva question}. You should be able to read each topic on its own, without asking anyone what a sentence means.
+
+\vspace{10pt}
+Jonathan John · M.Sc.\ AI
+
+\end{titlepage}
+
+\tableofcontents
+\clearpage
+\chapter*{Notation and glossary}
+\addcontentsline{toc}{chapter}{Notation and glossary}
+
+Every symbol and term in this book is defined here, once, in dependency order: each entry uses only entries above it. The modules use only these names. Entries are numbered \gl{A1}, \gl{N1}, \gl{N2}, \ldots\ so the text can point back to them. For each entry you get what it is, its type, where it's evaluated, its sign or direction where that matters, and its role in the benchmark. Read it once from start to finish before Module~1; after that, come back to an entry whenever the text points to it. The modules explain each idea again in full sentences, so the glossary is a reference, not something to learn by heart.
+
+\section*{Part A. How to read the maths}
+
+\begin{glist}
+\item[\gl{A1}] \textbf{Set, $\in$, $\#$.} A set is a collection of objects written in braces, e.g.\ $\{0, 1, 2\}$. $x \in S$ means ``$x$ belongs to the set $S$''. $\#S$ is an integer: the number of objects in $S$.
+\item[\gl{A2}] \textbf{$\min\{\ldots\}$.} The smallest number in a set of numbers.
+\item[\gl{A3}] \textbf{$\lfloor x \rfloor$ (floor).} For a scalar $x \ge 0$, the largest integer that is $\le x$. Python's \code{int()} gives the same result for $x \ge 0$.
+\item[\gl{A4}] \textbf{mod.} For whole numbers $x \ge 0$ and $y > 0$, $x \bmod y$ is the remainder when $x$ is divided by $y$: a whole number from $0$ to $y - 1$. For example, $150 \bmod 113 = 37$. ($x$ and $y$ are placeholders in this entry only.)
+\item[\gl{A5}] \textbf{$=$ and $\approx$.} $=$ means exactly equal. $\approx$ means approximately equal. In a derivation $\approx$ appears once, on the line where digits or terms are dropped, and that line says what was dropped.
+\item[\gl{A6}] \textbf{$\because$ and $\therefore$.} $\because$ means ``because''; every line of a solution ends with one. $\therefore$ means ``therefore''; it opens the conclusion.
+\item[\gl{A7}] \textbf{Derivation layout (H.K.\ Dass).} \emph{Given}: a numbered list of facts, each naming where it comes from (a glossary entry, a section, or a file of yours). \emph{Let}: each symbol used, defined once. \emph{To find}: what is computed or shown. \emph{Solution}: one aligned block, one step per line. Then a $\therefore$ sentence in plain words and a boxed answer.
+\item[\gl{A8}] \textbf{d.p.} Decimal places. ``0.991 (3 d.p.)'' means the value rounded to 3 decimal places.
+\item[\gl{A9}] \textbf{Your files.} \code{nanda\_\allowbreak{}unified.yaml}: the configuration (config) file of the final setup. \code{analyze\_\allowbreak{}nanda\_\allowbreak{}unified.py}: the analysis script. \code{summary.json}: the saved results file. \code{context.md}: your project log.
+\item[\gl{A10}] \textbf{Citations [1]--[5].} Numbers in square brackets point to the Recommended reading list at the end. ``Power et al.'' is [1]; ``Nanda et al.''\ or ``Nanda'' is [2].
+\item[\gl{A11}] \textbf{Viva, examiner, attack point, audit finding.} The viva is your oral exam (colloquium). The examiner asks the questions. An attack point is a weakness in your work that an examiner could raise there. An audit finding is an issue found in the 3 November 2026 audit of your code.
+\end{glist}
+
+\section*{Part B. The task and the data}
+
+\begin{glist}
+\item[\gl{N1}] \textbf{$p$, the modulus.} Integer, prime, $p = 113$. Set in \code{nanda\_\allowbreak{}unified.yaml} and never changed. Role: sets the size of the task.
+\item[\gl{N2}] \textbf{$a$, $b$, the inputs.} Two integers, each in $\{0, 1, \ldots, p-1\} = \{0, \ldots, 112\}$. Role: the two numbers the model reads.
+\item[\gl{N3}] \textbf{$c$, the correct answer.} Integer, $c = (a+b) \bmod p$, so $c \in \{0, \ldots, 112\}$. Role: the label the model must output.
+\item[\gl{N4}] \textbf{Pair and $N$.} A pair is one example: the inputs $(a, b)$ together with their answer $c$. $N$ is an integer, the number of all pairs: $N = p^2 = 12{,}769$ (worked out in Section~2.1).
+\item[\gl{N5}] \textbf{The model, its weights $\theta$, and training.} The model is a one-layer, four-head transformer (a standard type of neural network; ``one-layer, four-head'' names its size, and its insides aren't needed here). It's a function: it reads a pair's inputs $(a, b)$ and a weight vector $\theta$, and returns 113 scores, one per possible answer. $\theta$ is a vector with $M$ entries $\theta_1, \ldots, \theta_M$: every trainable number of the model. $M$ is a positive integer whose value this book doesn't need. Training means changing $\theta$ again and again so that the model's answers on training pairs get better. Nanda's model also has a weight matrix called $W_O$ (the attention output matrix); yours doesn't. That's a known gap.
+\item[\gl{N6}] \textbf{$f$, the train fraction.} Scalar, $f = 0.3$. It's hard-coded in \code{get\_\allowbreak{}dataloaders} as \code{train\_\allowbreak{}size = int(0.3 * len(...))}; the config entry \code{train\_\allowbreak{}fraction} doesn't change it. Role: the share of pairs used for training.
+\item[\gl{N7}] \textbf{$\Dtrain$, $\Dtest$, $\Ntrain$, $\Ntest$.} $\Dtrain$ is the training set: a set of $\Ntrain = 3{,}830$ pairs that are used to change the weights. $\Dtest$ is the test set: the other $\Ntest = 8{,}939$ pairs, never used to change the weights. $\Ntrain$ and $\Ntest$ are integers (worked out in Section~2.2). Role: $\Dtest$ measures whether the model has learned the rule.
+\item[\gl{N8}] \textbf{Seed $i$ and run.} A seed is an integer label $i \in \{0, 1, 2, 3, 4\}$ that fixes the random numbers of one run (the initial weights and the data split). A run is one full training of the model with one seed. Role: 5 seeds give 5 independent, repeatable runs.
+\end{glist}
+
+\section*{Part C. The model and its training}
+
+\begin{glist}
+\item[\gl{N9}] \textbf{Epoch $t$ and full batch.} An epoch is one full pass over $\Dtrain$. $t$ is an integer epoch counter, $t \in \{0, 1, \ldots, 40{,}000\}$; $t = 0$ means before any training. Every run lasts 40{,}000 epochs. Your runs are full batch: all 3{,}830 training pairs are used together each time $\theta$ is changed, so $\theta$ changes once per epoch.
+\item[\gl{N10}] \textbf{$\theta_t$, the weights after epoch $t$.} Vector with $M$ entries, $\theta_t = (\theta_{t,1}, \ldots, \theta_{t,M})$: the value of $\theta$ (\gl{N5}) at the end of epoch $t$. $\theta_0$ is the initial weights. Role: everything the model computes at epoch $t$ comes from $\theta_t$.
+\item[\gl{N11}] \textbf{$z$, the logits.} Vector with $p = 113$ entries $z_0, \ldots, z_{112}$, computed by the model for one pair at $\theta_t$. Entry $z_k$ is the score for answer $k \in \{0, \ldots, 112\}$; a larger $z_k$ means the model favours $k$ more.
+\item[\gl{N12}] \textbf{$\hat k$, the predicted answer.} Integer in $\{0, \ldots, 112\}$: the $k$ with the largest $z_k$, at $\theta_t$. The model is correct on a pair when $\hat k = c$.
+\item[\gl{N13}] \textbf{$q_k$, the softmax probability.} Scalar in $(0, 1)$, computed from $z$ at $\theta_t$:
+$q_k = e^{z_k} / \sum_{j=0}^{112} e^{z_j}$, where $j$ is a summation index over the 113 answers. The 113 values $q_k$ add up to 1. $q_c$ is the probability the model gives the correct answer. (The letter $q$ is used so it doesn't clash with the modulus $p$.)
+\item[\gl{N14}] \textbf{$\ell$, the loss of one pair (cross-entropy).} Scalar, $\ell = -\ln q_c$, at $\theta_t$. Sign: $\ell \ge 0$; $\ell = 0$ when $q_c = 1$, and $\ell$ grows as $q_c$ falls. Role: punishes a low probability on the correct answer.
+\item[\gl{N15}] \textbf{$L(\theta_t)$, the training loss.} Scalar: the average of $\ell$ over the 3{,}830 pairs of $\Dtrain$, at $\theta_t$. Role: the number training tries to make small.
+\item[\gl{N16}] \textbf{$g(\theta_t)$, the gradient.} Vector with $M$ entries; entry $m$ is $\partial L / \partial \theta_m$, the partial derivative (how fast $L$ changes when only $\theta_m$ changes), evaluated at $\theta_t$. Direction: $g(\theta_t)$ points uphill (the direction in which $L$ grows fastest), so a step along $-g(\theta_t)$ goes downhill.
+\item[\gl{N17}] \textbf{$\eta$, the learning rate.} Scalar, $\eta > 0$, the same at every epoch. Role: the step size of each update. Its value is in the config; this book doesn't need it.
+\item[\gl{N18}] \textbf{AdamW, $\beta_1$, $\beta_2$, $u_t$.} AdamW is the optimiser: the method that turns gradients into weight updates [3]. It keeps running averages of the gradient and of the squared gradient; $\beta_1 = 0.9$ and $\beta_2 = 0.98$ are scalars that set how much of the past those averages keep. $u_t$ is the AdamW step: a vector with $M$ entries, computed at epoch $t$ from $g(\theta_0), \ldots, g(\theta_t)$ and $\beta_1, \beta_2$. Direction: like $g$, it points roughly uphill, so $-\eta u_t$ is a step downhill.
+\item[\gl{N19}] \textbf{$\lambda$, the weight decay.} Scalar, $\lambda = 1.0$, the same at every epoch. Sign: $\lambda \ge 0$. Role: shrinks every weight a little at each update.
+\item[\gl{N20}] \textbf{The weight update, decoupled, confound.} $\theta_{t+1} = \theta_t - \eta\, u_t - \eta \lambda\, \theta_t$. The middle term is the AdamW step downhill. The last term is the decoupled weight decay: decoupled means it's applied directly to $\theta_t$, separately from $u_t$. It pulls every weight towards 0 (Section~2.4). A confound is a second cause that can produce the same effect as the one you're testing; weight decay is one for any quantity computed from the size of the weights.
+\item[\gl{N21}] \textbf{Checkpoint.} A saved copy of $\theta_t$ at one epoch $t$. Checkpoints are saved every 50 epochs and evaluated every 100 epochs; evaluating a checkpoint means computing from it the quantities that need saved weights. Role: some quantities are computed afterwards from checkpoints.
+\end{glist}
+
+\section*{Part D. The outcome}
+
+\begin{glist}
+\item[\gl{N22}] \textbf{$\acctrain(t)$, $\acctest(t)$.} Scalars in $[0, 1]$: the fraction of pairs in $\Dtrain$ (or $\Dtest$) on which $\hat k = c$, using $\theta_t$. Direction: higher is better. Role: $\acctest$ measures how well the model does on pairs it was never trained on.
+\item[\gl{N23}] \textbf{Memorisation and generalisation.} Memorisation: getting the training pairs right by storing them, so $\acctrain(t)$ is high while $\acctest(t)$ stays low. Generalisation: getting new pairs right because the rule $(a + b) \bmod p$ has been learned, so $\acctest(t)$ is high too.
+\item[\gl{N24}] \textbf{Grokking.} In one run, $\acctrain(t)$ reaches about 1 early, and much later $\acctest(t)$ suddenly jumps to high values. It is a switch from memorisation to generalisation.
+\item[\gl{N25}] \textbf{Circuit and Nanda's three phases.} A circuit is a set of weights in $\theta_t$ that together compute the general rule $(a+b) \bmod p$. Nanda's three phases [2]: memorisation; circuit formation (the circuit is built while $\acctest$ stays low); cleanup (the weights used for memorising are removed, and $\acctest$ jumps).
+\item[\gl{N26}] \textbf{Grok threshold and grok epoch $G_i$.} The grok threshold is the scalar 0.9 (the first entry of \code{grok\_\allowbreak{}thresholds} in the config). $G_i$ is an integer epoch: $G_i = \min\{t : \acctest(t) > 0.9\}$ in the run of seed $i$. So $\acctest(t) \le 0.9$ at every epoch $t < G_i$. Values: $(G_0, G_1, G_2, G_3, G_4) = (12987, 6921, 9510, 11019, 23747)$. Role: the epoch the benchmark tries to warn about in advance. ``Grok'' on its own (``before grok'') means the grok epoch $G_i$ of that run. The $G_i$ are an outcome of training: they don't depend on how any warning is computed.
+\end{glist}
+
+\section*{Part E. Predictors and events}
+
+\begin{glist}
+\item[\gl{N27}] \textbf{Signal $y_t$, $\yfinal$.} A signal is a scalar computed at epoch $t$ during training, from $\theta_t$ or from the model's outputs. Example: the training loss $L(\theta_t)$ (\gl{N15}) is a signal. $\yfinal$ is its value at the last epoch, $t = 40{,}000$.
+\item[\gl{N28}] \textbf{Moving average, window $w$, causal, centred, ex-ante.} A moving average replaces each point of a signal curve by the average of $w$ neighbouring points; $w$ is a positive integer, the window. A causal moving average at epoch $t$ uses only points at or before $t$. A centred one uses points on both sides of $t$, so it uses later points too. \code{uniform\_\allowbreak{}filter1d} (a smoothing function available in your code) is centred. An ex-ante trigger is a rule that uses only the past.
+\item[\gl{N29}] \textbf{Rule, fire, event epoch $P_i$, miss, \None.} A rule (event rule) is a fixed procedure that reads a signal curve and names one epoch. If it names an epoch in the run of seed $i$, the rule fires, and that epoch is the event epoch $P_i$: a scalar epoch (it need not be a whole number). If it never names an epoch, that's a miss, and the code stores \None\ instead of a number.
+\item[\gl{N30}] \textbf{Rule settings and \code{skip\_\allowbreak{}epochs}.} The fixed numbers a rule uses, such as a window $w$ (\gl{N28}) or a threshold level. \code{skip\_\allowbreak{}epochs} is one such integer setting: the number of first epochs a rule ignores. Changing any setting changes the rule.
+\item[\gl{N31}] \textbf{Predictor.} A (signal, rule) pair. If the rule or one of its settings changes, it's a different predictor. Your benchmark has eight predictors. This book names none of them: everything in it applies to all eight.
+\item[\gl{N32}] \textbf{Illustrative event list.} A made-up list of event epochs $(P_0, \ldots, P_4)$, one per seed, written down only to show how a calculation works. It isn't the output of any of your predictors. The book introduces List A (Section~4.1), List B (Section~5.2) and List C (Section~6.2), plus a few one-line lists inside single sections.
+\item[\gl{N33}] \textbf{Firing set $F$ and $n$.} $F$ is the set of seeds whose rule fired: $F \subseteq \{0, 1, 2, 3, 4\}$. $n = \#F$ is an integer from 0 to 5. Seeds with \None\ are dropped before anything is computed. If $n < 4$, the predictor is rejected automatically, whatever its other numbers are.
+\item[\gl{N34}] \textbf{Lead and the 100-epoch margin.} Seed $i \in F$ leads if $P_i < G_i - 100$: the event comes more than 100 epochs before grok. 100 is the margin, an integer number of epochs.
+\item[\gl{N35}] \textbf{The \code{seeds\_\allowbreak{}before\_\allowbreak{}grok} count.} A count in your saved results that calls a seed early if $G_i - P_i > 0$, not if $P_i < G_i - 100$. So it ignores the margin of \gl{N34}. That's an audit finding.
+\item[\gl{N36}] \textbf{$\leadfrac$, the lead fraction.} Scalar in $[0, 1]$:
+$\leadfrac = \#\{i \in F : P_i < G_i - 100\} / n$, the share of firing seeds that lead.
+\item[\gl{N37}] \textbf{$r_i$ and $\rbar$, relative lead.} $r_i = (G_i - P_i)/G_i$ is a scalar for seed $i \in F$. Sign: $r_i > 0$ when the event is before grok, $r_i < 0$ when after; $r_i$ near 1 means the event is very early compared with grok. $\rbar = \frac{1}{n} \sum_{i \in F} r_i$ is the mean relative lead, a scalar.
+\item[\gl{N38}] \textbf{Rank $R(X_i)$ and ties.} For a list of $n$ numbers $X_i$, $R(X_i)$ is the position of $X_i$ when the list is sorted from smallest to largest; the smallest has rank 1. A tie is two or more equal values; tied values all get the average of the positions they occupy.
+\item[\gl{N39}] \textbf{Mean $\bar X$ and Pearson correlation $C(X, Y)$.} For two lists $X_i, Y_i$ of scalars over the same $n$ seeds, $\bar X = \frac{1}{n}\sum X_i$ (a scalar, the mean), and
+$C(X, Y) = \dfrac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sqrt{\sum (X_i - \bar X)^2 \, \sum (Y_i - \bar Y)^2}}$,
+a scalar in $[-1, 1]$. It measures how close the points are to a straight line; $+1$ means a rising line. It is undefined if either list is constant (the denominator is 0); code then typically returns NaN, ``not a number''.
+\item[\gl{N40}] \textbf{Spearman's $\rho$, $d_i$, fixed clock.} Scalar in $[-1, 1]$: $\rho = C\big(R(P), R(G)\big)$, the Pearson correlation of the ranks, over the $n$ seeds in $F$. $+1$ means later grok always comes with a later event. With no ties it equals $\rho = 1 - \dfrac{6 \sum_{i \in F} d_i^2}{n(n^2 - 1)}$, where $d_i = R(G_i) - R(P_i)$ is an integer, the rank difference of seed $i$. A fixed clock is an event at about the same epoch in every run, whatever $G_i$ is; its $\rho$ is undefined (all events tied) or set by luck, by the order of tiny differences.
+\item[\gl{N41}] \textbf{Adjacent swap.} Two seeds whose ranks are next to each other (e.g.\ 2 and 3) appear in the opposite order in $P$ and in $G$.
+\item[\gl{N42}] \textbf{$n!$, chance and p-value.} $n! = n \times (n-1) \times \cdots \times 1$ is the number of orderings of $n$ items. ``By chance'' means all $n!$ orderings of the events are equally likely. The p-value of a $\rho$ is the probability, by chance, of a $\rho$ at least that large. A $\rho$ is called significant when its p-value is small.
+\end{glist}
+
+\section*{Part F. Judging predictors, and research honesty}
+
+\begin{glist}
+\item[\gl{N43}] \textbf{PASS rule, FAIL, verdict.} A predictor gets the verdict PASS only if all three hold: $\leadfrac \ge 0.8$, $\rho \ge 0.9$ and $0.05 \le \rbar \le 0.9$. Otherwise its verdict is FAIL. A predictor rejected automatically for $n < 4$ (\gl{N33}) also gets FAIL. The function \code{evaluate\_\allowbreak{}frozen\_\allowbreak{}protocol} in \code{analyze\_\allowbreak{}nanda\_\allowbreak{}unified.py} (\gl{A9}) applies this rule; scoring a predictor means running it. In the code the $\rho$ cutoff is written as 0.8999999999999998 so that a $\rho$ of 0.9 isn't lost to floating-point rounding.
+\item[\gl{N44}] \textbf{Frozen protocol.} The fixed set of rules used to score every predictor: \code{nanda\_\allowbreak{}unified.yaml}, $p = 113$, 5 seeds, 40{,}000 epochs, grok threshold 0.9, and the PASS rule (\gl{N43}). It was written on 29 September 2026 and isn't changed while predictors are scored.
+\item[\gl{N45}] \textbf{Closed-negative.} A predictor whose study is finished with a FAIL verdict. The first seven of your eight predictors are closed-negative.
+\item[\gl{N46}] \textbf{Pre-registration, criterion validation, synthetic predictor, calibration, post-hoc.} Pre-registration: writing down the test before running it. A synthetic predictor is a made-up list of event epochs built from the known $G_i$, used to test the test. Criterion validation: checking that the PASS rule passes a good synthetic predictor and fails a bad one. Calibration: setting a threshold of the test using data. Post-hoc: decided after the results were seen.
+\item[\gl{N47}] \textbf{Look-ahead (hindsight) bias.} Using information from later epochs (e.g.\ $\yfinal$) to decide when an earlier event happened. A rule free of it could be run live during training.
+\item[\gl{N48}] \textbf{Researcher degrees of freedom.} Choices of rule settings (\gl{N30}), such as windows, thresholds or \code{skip\_\allowbreak{}epochs}, made after looking at the results.
+\item[\gl{N49}] \textbf{Sensitivity analysis and near-miss.} Sensitivity analysis: changing one setting a little and checking whether the verdict changes. A near-miss is a FAIL that misses a threshold by a small amount.
+\item[\gl{N50}] \textbf{Baseline (control) and noise floor.} A control run is one where grokking doesn't happen, or a setting is switched off (e.g.\ $\lambda = 0$). The noise floor is how much a signal wobbles for no reason.
+\item[\gl{N51}] \textbf{Negative result and reproducibility.} A negative result is a clear ``this doesn't work''. Reproducibility means someone else can rerun your work and get the same numbers.
+\end{glist}
+\chapter{The grokking phenomenon}
+
+This module is about the thing being predicted. Before you can judge any warning, you need to be clear on what it's a warning of. Section~1.1 says what grokking looks like on the two accuracy curves of a run. Section~1.2 names the two states a run passes through, memorisation and generalisation, and shows with your own grok epochs that every run spends thousands of epochs in the first. Section~1.3 gives Nanda's account of what happens inside the weights between the two states, which is the reason anyone expects an early warning to exist at all.
+
+\section{Grokking}
+\fplain Picture the two accuracy curves of one run drawn on the same axes, with epochs along the bottom. The training-accuracy curve climbs to the top almost at once: within a few hundred epochs the model answers every training pair correctly. The test-accuracy curve does something odd. It stays low for thousands of epochs, long after training accuracy has stopped improving, and then it climbs quickly to high values. That late climb is grokking. Your thesis exists because of it: if the climb comes so long after the training curve has settled, you can ask whether anything measurable during training gives warning that it's coming. This section fixes what grokking is, so that you never confuse it with a model that's simply learning slowly.
+
+\fdef Grokking (\gl{N24}) is what happens when, in one run, training accuracy $\acctrain(t)$ reaches about 1 early, and much later test accuracy $\acctest(t)$ suddenly jumps to high values.
+\fread It's the event your whole benchmark tries to predict. Every predictor is judged by whether it signals before the jump, measured by the grok epoch $G_i$ (\gl{N26}).
+
+Two features make grokking different from ordinary learning. The first is the order: training accuracy is high first, and test accuracy is high only much later. The second is the gap: for a long stretch of epochs the model already gets the training pairs right, so the training-accuracy curve shows no sign that anything is still changing, yet test accuracy is still going to jump. That's why you always need both curves. Training accuracy on its own can't show grokking, because it's already about 1 before anything interesting happens. Test accuracy on its own can't show it either, because without the training curve you couldn't tell a late jump after training has finished from a slow climb while training is still going on.
+
+\fex In your runs, $\acctrain(t)$ reaches 1 within a few hundred epochs, but $\acctest(t)$ only passes 0.9 at epochs 6921 to 23747, depending on the seed. There's no calculation here.
+
+\fself (1) Why is grokking surprising? (The model already gets every training pair right, so the training-accuracy curve is flat, yet $\acctest$ keeps improving thousands of epochs later.) (2) Which two curves do you need to see it? ($\acctrain(t)$ and $\acctest(t)$ on the same epoch axis: the first shows training has already succeeded, the second shows the late jump.)
+\fviva ``Define grokking precisely. How is it different from ordinary slow learning?'' (In slow learning $\acctrain$ and $\acctest$ rise together. In grokking there's a long gap with $\acctrain \approx 1$ and $\acctest$ low, then $\acctest$ jumps past 0.9 at $G_i$.)
+
+\section{Memorisation vs generalisation}
+\fplain There are two quite different ways a model can get a training pair right. It can store that pair's answer on its own, with no link to any other pair, or it can have learned the rule that produces every answer, here $(a+b) \bmod p$. On the training pairs you can't tell the two apart: both give the right answer. The test pairs tell them apart, because a stored answer only helps on the pair that was stored, while the rule works on every pair. This section gives the two ways their names, memorisation and generalisation, and shows from your own grok epochs that every run spends thousands of epochs before grok. The mistake it prevents is reading a high training accuracy as proof that the model has learned the task.
+
+\fdef Memorisation (\gl{N23}) is getting the training pairs right by storing them: $\acctrain$ is high while $\acctest$ stays low. Generalisation is getting new pairs right because the rule $(a+b) \bmod p$ has been learned: $\acctest$ is high too.
+\fread Grokking is the switch from memorisation to generalisation. So any warning must be about that switch. A signal that only reacts to memorisation tells you nothing about when the switch will come.
+
+This matters as soon as you look at a signal that changes early in training. Early in training every run is memorising, so a signal that changes there may only be reacting to memorisation. Such a signal tells you that memorisation is happening or finishing, which you can already see from $\acctrain$, and nothing about when the switch to generalisation will come. The test that says which state a run is in uses only the two accuracies: $\acctrain$ high and $\acctest$ low means memorising; both high means generalising. Because $G_i$ is the first epoch with $\acctest > 0.9$ (\gl{N26}), any epoch below the smallest $G_i$ is before grok in every run, and you can say so without looking at a single curve. The derivation does exactly that for epoch 1{,}000.
+
+\fex The derivation uses only the five grok epochs to show that, at epoch 1{,}000, every run is still memorising.
+
+\dass{every run is still memorising at epoch 1{,}000}
+\dgiven
+\begin{dlist}
+\item $(G_0, G_1, G_2, G_3, G_4) = (12987, 6921, 9510, 11019, 23747)$ (\gl{N26}).
+\item $\acctest(t) \le 0.9$ at every epoch $t < G_i$, in the run of seed $i$ (\gl{N26}).
+\item $\acctrain(t)$ reaches 1 within a few hundred epochs in every run (Section~1.1).
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $G_i$: the grok epoch of seed $i$. Integer epoch, positive. Role: when that run starts to generalise.
+\item $G_{\min}$: the smallest of the five $G_i$. Integer epoch. Role: the earliest grok over all runs.
+\item $t_1 = 1000$: the epoch being checked. Integer epoch.
+\end{dlist}
+\dfind Whether $\acctest(t_1) \le 0.9$ in every run.
+\dsol
+\begin{align*}
+G_{\min} &= \min\{12987, 6921, 9510, 11019, 23747\} && \why{definition of $G_{\min}$ (Let 2) with Given 1} \\
+         &= 6921 && \why{seed 1 has the smallest value (\gl{A2})} \\
+t_1 = 1000 &< 6921 = G_{\min} && \why{comparing the two numbers} \\
+t_1 &< G_i \text{ for } i = 0, \ldots, 4 && \why{every $G_i$ is at least $G_{\min}$} \\
+\acctest(t_1) &\le 0.9 \text{ in every run} && \why{Given 2}
+\end{align*}
+$\therefore$ At epoch 1{,}000, $\acctest$ is at most 0.9 in all five runs, while $\acctrain$ has already reached 1 (Given 3). Every run is memorising, not yet generalising.
+\[\boxed{\acctest(1000) \le 0.9 \text{ in all five runs: memorising}}\]
+
+\fans The calculation needed no curve at all, only the five grok epochs and the definition of $G_i$. That's the habit to keep: when you're asked which state a run is in at some epoch, compare the epoch with that run's $G_i$. Different runs can be in different states at the same epoch, because their $G_i$ differ; the self-check below shows one such epoch.
+
+\fself At epoch 8{,}000, which runs have generalised? (Only seed 1: $G_1 = 6921 < 8000$, so its $\acctest$ has passed 0.9. Every other $G_i$ is above 8{,}000, so those four runs are still before grok.)
+\fviva ``Is your signal detecting the switch to generalisation, or just the end of memorisation?''
+
+\section{Circuit formation and cleanup}
+\fplain Section~1.2 described grokking from the outside, through the two accuracy curves. Nanda et al.\ [2] looked inside the weights of a model like yours and gave an account of what happens in the long gap between the rise of training accuracy and the jump in test accuracy. Their account has three phases. The reason it matters for your thesis is simple. If the general rule were only built at the moment test accuracy jumps, there would be nothing to detect beforehand, and early warning would be hopeless. Nanda's account says the rule is built gradually, before the jump, while test accuracy still looks flat. That's the premise behind every predictor in your benchmark.
+
+\fdef Nanda et al.\ [2] describe three phases (\gl{N25}): memorisation; circuit formation, where a circuit that computes $(a+b) \bmod p$ is built while $\acctest$ stays low; and cleanup, where the weights used for memorising are removed and $\acctest$ jumps.
+\fread It explains why a hidden signal could exist before $G_i$: the circuit is being built before the jump. That's the premise of the whole benchmark.
+
+Read the three phases in order. In memorisation, the weights store the training pairs. In circuit formation, a circuit (\gl{N25}), a set of weights that together compute $(a+b) \bmod p$, is built up while the weights used for memorising are still there; the model's answers on test pairs don't yet change much, so $\acctest$ stays low. In cleanup, the weights used for memorising are removed, and $\acctest$ jumps. The phase a warning would need to detect is circuit formation, because it's the only one that is both before the jump and invisible on the accuracy curves. Keep clear what this account does and doesn't give you. It explains why a hidden signal could exist before $G_i$. It doesn't say which quantity shows it, or how early; that's exactly what your benchmark tests.
+
+\fex Nanda report that cleanup happens at the same time as the jump in $\acctest$, so the circuit already exists before the jump. In your runs that jump is at $G_i$, between epochs 6921 and 23747. There's no calculation here.
+
+\fself Which phase would a good early-warning signal need to detect? (Circuit formation: it comes before cleanup and the jump, and it can't be seen on the accuracy curves, so a signal that detects it would be a real early warning.)
+\fviva ``Nanda says the transition can't be predicted ahead of time. Why did you expect it could?''
+
+\chapter{Your training setup}
+
+This module describes the experiment that every predictor shares: the task, the data split, the model and its loss, the optimiser, the time axis, and the seeds. None of it depends on which predictor you're studying. Read it in order, because each section uses a number worked out in the one before: 12{,}769 pairs (Section~2.1) are split into 3{,}830 and 8{,}939 (Section~2.2); the model turns one pair into 113 scores and a loss (Section~2.3); AdamW and weight decay change the weights once per epoch (Sections~2.4 and~2.5); and five seeds give five runs (Section~2.6).
+
+\section{Modular addition task}
+\fplain Every run in your benchmark learns the same small task: add two numbers and keep only the remainder after dividing by 113. For example, $100 + 50 = 150$, and the remainder of 150 after dividing by 113 is 37. The task is tiny and completely known: you can list every possible question and its answer. That's what makes it useful. Because the full list is known, you can choose exactly which pairs the model sees in training and which are kept back for testing (Section~2.2), and you can say exactly what ``learning the rule'' means. This section counts the pairs and works out one answer, so that every later number has a source.
+
+\fdef The model learns $c = (a + b) \bmod p$ (\gl{N3}) for all inputs $a, b \in \{0, \ldots, p-1\}$, with $p = 113$ (\gl{N1}).
+\fread It's the standard grokking task of Power et al.\ [1] and Nanda et al.\ [2], so your results can be compared with theirs.
+
+Two numbers come from this section and are used everywhere after it. The first is $N = 12{,}769$, the number of all pairs: the pool that the training and test sets are cut from. The second is $p = 113$, the number of possible answers. Because $c$ is a remainder after dividing by $p$, it always lies in $\{0, \ldots, 112\}$, so the model must pick one of 113 answers and produces 113 scores per pair (Section~2.3). So $p$ plays two roles: it's the number of values each input can take, and it's the number of possible answers.
+
+\fex The derivation counts the pairs and works out one answer.
+
+\dass{number of pairs and one answer}
+\dgiven
+\begin{dlist}
+\item $p = 113$ (\gl{N1}, \code{nanda\_\allowbreak{}unified.yaml}).
+\item Each of $a$ and $b$ takes $p$ values, $0$ to $p-1$ (\gl{N2}).
+\item Example inputs $a = 100$, $b = 50$.
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $p$: the modulus. Integer, the same in every seed and epoch. Positive. Role: size of the task.
+\item $N$: the number of all pairs. Integer, fixed before training. Positive. Role: the pool the split is cut from.
+\item $a, b$: the inputs of one pair. Integers in $\{0, \ldots, 112\}$. Role: what the model reads.
+\item $c$: the correct answer of that pair. Integer in $\{0, \ldots, 112\}$. Role: its label.
+\end{dlist}
+\dfind $N$ and $c$ for $a = 100$, $b = 50$.
+\dsol
+\begin{align*}
+N &= p \times p && \why{$p$ choices of $a$ times $p$ choices of $b$ (Given 2)} \\
+  &= 113 \times 113 && \why{substitution of Given 1} \\
+  &= 12769 && \why{multiplication} \\
+c &= (a + b) \bmod p && \why{definition of $c$ (\gl{N3})} \\
+  &= (100 + 50) \bmod 113 && \why{substitution of Given 1 and Given 3} \\
+  &= 150 \bmod 113 && \why{addition} \\
+  &= 150 - 1 \times 113 && \why{113 fits once into 150 (\gl{A4})} \\
+  &= 37 && \why{subtraction}
+\end{align*}
+$\therefore$ There are 12{,}769 pairs, and the pair $(100, 50)$ has the answer 37.
+\[\boxed{N = 12769, \quad c = 37}\]
+
+\fself How many possible answers does the model choose between? ($p = 113$: the integers 0 to 112, one logit each, because $(a+b) \bmod 113$ is always a remainder from 0 to 112.)
+\fviva ``Why $p = 113$ and not another prime?'' (It matches Nanda et al.\ 2023 [2].)
+
+\section{Train/test split (30\%)}
+\fplain If you test a model on the same pairs it was trained on, you learn nothing about whether it has the rule: it could simply have stored those answers. So the 12{,}769 pairs are cut, once per seed, into two groups. The smaller group is used for training. The larger group is never used to change the weights; it's used only to check the model's answers. Everything about grokking is measured on that second group, so this section is where the meaning of $G_i$ is protected: if any pair crossed from one group to the other, test accuracy would no longer measure generalisation.
+
+\fdef A fraction $f = 0.3$ (\gl{N6}) of the $N$ pairs forms the training set $\Dtrain$; the other 70\% form the test set $\Dtest$ (\gl{N7}), which is never used to change the weights.
+\fread $G_i$ is measured on $\Dtest$, so the split must be fixed per seed and no test pair may leak into training. In your code the 30\% is hard-coded in \code{get\_\allowbreak{}dataloaders}; the config's \code{train\_\allowbreak{}fraction} doesn't change it. That's an audit finding.
+
+Two things follow from this. First, the split is part of the run: it's drawn from the seed's random numbers (\gl{N8}), so the same seed always gives the same split. That's what lets you rebuild it later to evaluate a saved checkpoint (Section~2.5). Second, the sizes are set by one number, the train fraction $f = 0.3$. Because that number is hard-coded, anyone who edits the config and expects a different split would silently get 30\% anyway. Note also the sizes themselves: the test set is more than twice the size of the training set, so test accuracy is computed over 8{,}939 pairs.
+
+\fex The derivation computes the two set sizes.
+
+\dass{sizes of the training and test sets}
+\dgiven
+\begin{dlist}
+\item $N = 12769$ (Section~2.1).
+\item $f = 0.3$, hard-coded as \code{train\_\allowbreak{}size = int(0.3 * len(...))} (\gl{N6}).
+\item \code{int()} of a positive number equals its floor (\gl{A3}).
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $N$: the number of all pairs. Integer, fixed before training. Role: the pool being split.
+\item $f$: the train fraction. Scalar in $(0, 1)$. Role: share of pairs used for training.
+\item $\Ntrain$: the size of $\Dtrain$. Integer, fixed per seed before training. Role: pairs used to change the weights.
+\item $\Ntest$: the size of $\Dtest$. Integer, fixed per seed before training. Role: pairs that measure generalisation.
+\end{dlist}
+\dfind $\Ntrain$ and $\Ntest$.
+\dsol
+\begin{align*}
+\Ntrain &= \lfloor f \times N \rfloor && \why{\code{int(0.3 * len(...))} and Given 3} \\
+        &= \lfloor 0.3 \times 12769 \rfloor && \why{substitution of Given 1 and Given 2} \\
+        &= \lfloor 3830.7 \rfloor && \why{multiplication} \\
+        &= 3830 && \why{floor drops the 0.7 (\gl{A3})} \\
+\Ntest  &= N - \Ntrain && \why{every pair not in $\Dtrain$ is in $\Dtest$} \\
+        &= 12769 - 3830 && \why{substitution of Given 1 and the line above} \\
+        &= 8939 && \why{subtraction}
+\end{align*}
+$\therefore$ Each run trains on 3{,}830 pairs and tests on 8{,}939 pairs.
+\[\boxed{\Ntrain = 3830, \quad \Ntest = 8939}\]
+
+\fself What goes wrong if a training pair appears in $\Dtest$? (The model can get that pair right by memorising it, so $\acctest$ overstates generalisation. With enough leaked pairs $\acctest$ could pass 0.9 too soon, and $G_i$ would come too early.)
+\fviva ``How do you guarantee the test set is truly unseen, and that it's the same split when you reload a checkpoint?'' (The seed fixes the split; rebuilding it with the same seed gives the same $\Dtest$.)
+
+\section{Transformer, logits and cross-entropy loss}
+\fplain This section follows one pair through the model. The model reads the two inputs and gives back 113 numbers, one score for each possible answer; the answer with the biggest score is its answer. To train it, you need a single number that says how good those scores are, and that number is the loss. The section goes in three steps: scores (the logits), then probabilities (the softmax), then the loss (cross-entropy). You don't need the inside of the model for any of this. What you do need is to know what comes out of it, because every predictor in the benchmark is computed either from the weights $\theta_t$ or from these outputs.
+
+\fdef The model (\gl{N5}) is a one-layer, four-head transformer. For one pair it reads $(a, b)$ and the weights $\theta_t$ (\gl{N10}) and returns the logits $z$ (\gl{N11}), a vector with 113 entries, one score per possible answer. The softmax turns them into probabilities $q_k = e^{z_k} / \sum_{j=0}^{112} e^{z_j}$ (\gl{N13}). The loss of the pair is the cross-entropy $\ell = -\ln q_c$ (\gl{N14}), and the training loss $L(\theta_t)$ is the average of $\ell$ over $\Dtrain$ (\gl{N15}).
+\fread Every predictor is computed from this shared model's weights $\theta_t$ or its outputs.
+
+Read the chain one link at a time. The logits $z_k$ can be any real numbers, positive or negative, so they aren't probabilities. The softmax fixes that: each $e^{z_k}$ is positive, and dividing by their sum makes the 113 values add up to 1. A bigger logit always gives a bigger probability, so the softmax never changes which answer the model picks ($\hat k$, \gl{N12}); it only turns scores into shares. The loss then looks at just one of the 113 probabilities, $q_c$, the share given to the correct answer. If $q_c$ is close to 1 the loss is close to 0; as $q_c$ falls towards 0 the loss grows without limit. So the loss rewards putting a high probability on the right answer. The training loss $L(\theta_t)$ averages this over all 3{,}830 training pairs, and training is the process of making that average small. The two worked examples show how large the loss is at a poor and at a good answer, and that only the differences between logits matter, not their overall level.
+
+\fex Two derivations: the loss at two probabilities, and why adding one constant to all logits leaves the loss unchanged.
+
+\dass{the loss at $q_c = 0.25$ and at $q_c = 0.99$}
+\dgiven
+\begin{dlist}
+\item $\ell = -\ln q_c$ (\gl{N14}).
+\item Two example probabilities of the correct answer: $0.25$ and $0.99$.
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $q_c$: the probability the model gives the correct answer $c$ of one pair, at $\theta_t$. Scalar in $(0, 1)$. Role: what the loss judges.
+\item $\ell_{0.25}$: the loss of that pair when $q_c = 0.25$. Scalar $\ge 0$. Role: loss of a poor answer.
+\item $\ell_{0.99}$: the loss of that pair when $q_c = 0.99$. Scalar $\ge 0$. Role: loss of a confident correct answer.
+\end{dlist}
+\dfind $\ell_{0.25}$ and $\ell_{0.99}$.
+\dsol
+\begin{align*}
+\ell_{0.25} &= -\ln 0.25 && \why{Given 1 with $q_c = 0.25$} \\
+            &= -(-1.3863\ldots) && \why{$\ln 0.25 = -1.3863\ldots$} \\
+            &= 1.3863\ldots && \why{$-(-x) = x$} \\
+\ell_{0.99} &= -\ln 0.99 && \why{Given 1 with $q_c = 0.99$} \\
+            &= -(-0.01005\ldots) && \why{$\ln 0.99 = -0.01005\ldots$} \\
+            &= 0.01005\ldots && \why{$-(-x) = x$}
+\end{align*}
+$\therefore$ A probability of 0.25 on the correct answer costs about 1.39; a probability of 0.99 costs about 0.01. (Here ``\ldots'' means the digits go on; the boxed values are rounded.)
+\[\boxed{\ell_{0.25} = 1.39 \text{ (2 d.p.)}, \quad \ell_{0.99} = 0.01 \text{ (2 d.p.)}}\]
+
+\dass{adding the same constant to all logits doesn't change the loss}
+\dgiven
+\begin{dlist}
+\item $q_k = e^{z_k} / \sum_{j=0}^{112} e^{z_j}$ (\gl{N13}).
+\item $\ell = -\ln q_c$ (\gl{N14}).
+\item $e^{x+y} = e^x e^y$ for scalars $x, y$ (rule of exponents).
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $z$: the logits of one pair at $\theta_t$. Vector with 113 entries $z_0, \ldots, z_{112}$. Role: the model's scores.
+\item $c$: the correct answer of that pair. Integer in $\{0, \ldots, 112\}$. Role: picks which probability the loss uses.
+\item $s$: a constant. Scalar, any sign, the same for all 113 entries. Role: the shift being tested.
+\item $z'$: the shifted logits, $z'_k = z_k + s$ for every $k$. Vector with 113 entries. Role: the changed input.
+\item $q'_c$: the softmax probability of $c$ computed from $z'$. Scalar in $(0, 1)$.
+\item $\ell'$: the loss computed from $z'$, $\ell' = -\ln q'_c$. Scalar $\ge 0$.
+\end{dlist}
+\dfind Show that $\ell' = \ell$.
+\dsol
+\begin{align*}
+q'_c &= \frac{e^{z'_c}}{\sum_{j} e^{z'_j}} && \why{Given 1 applied to $z'$} \\
+     &= \frac{e^{z_c + s}}{\sum_{j} e^{z_j + s}} && \why{substitution $z'_k = z_k + s$ (Let 4)} \\
+     &= \frac{e^{s} e^{z_c}}{\sum_{j} e^{z_j + s}} && \why{Given 3 on the numerator} \\
+     &= \frac{e^{s} e^{z_c}}{\sum_{j} e^{s} e^{z_j}} && \why{Given 3 on each term of the denominator} \\
+     &= \frac{e^{s} e^{z_c}}{e^{s} \sum_{j} e^{z_j}} && \why{$e^s$ is the same scalar in every term, so it comes out of the sum} \\
+     &= \frac{e^{z_c}}{\sum_{j} e^{z_j}} && \why{$e^s / e^s = 1$, since $e^s > 0$} \\
+     &= q_c && \why{Given 1} \\
+\ell' &= -\ln q'_c && \why{definition of $\ell'$ (Let 6)} \\
+      &= -\ln q_c && \why{$q'_c = q_c$, shown above} \\
+      &= \ell && \why{Given 2}
+\end{align*}
+$\therefore$ Adding the same number to all 113 logits leaves every probability, and so the loss, unchanged.
+\[\boxed{\ell' = \ell}\]
+
+\fans The first result shows how sharply the loss separates answers: going from $q_c = 0.25$ to $q_c = 0.99$ cuts the loss from about 1.39 to about 0.01. The second shows that the scores only matter relative to each other: raising all 113 logits by the same amount changes no probability, so the loss can't see it.
+
+\fself Why does adding the same constant to all 113 logits not change the loss? (The derivation above: the shift multiplies the top and every term of the bottom of the softmax by the same $e^s$, so it cancels. Every $q_k$, and so the loss, is unchanged.)
+\fviva ``Is your model exactly Nanda's?'' (No. It lacks the attention output matrix $W_O$ (\gl{N5}). That's a known gap.)
+
+\section{AdamW and weight decay}
+\fplain Training changes the weights a little at every epoch. Two things decide each change. One is the gradient, which says in which direction the training loss grows; the optimiser, AdamW, turns the gradients into a step the other way, downhill. The other is weight decay, which shrinks every weight a little towards zero at every update, whatever the data says. This section writes the update as one equation and then rewrites it so that the shrink shows up as a single factor. It matters because the shrink happens in every run, at every epoch, and you have to be able to say whether a change in a signal comes from grokking or just from this steady shrinking.
+
+\fdef AdamW (\gl{N18}) is the optimiser that turns gradients into weight updates. Weight decay $\lambda$ (\gl{N19}) shrinks every weight a little at each update. The full update is the equation $\theta_{t+1} = \theta_t - \eta\, u_t - \eta\lambda\, \theta_t$ (\gl{N20}).
+\fread You use $\lambda = 1.0$ with $\beta_1 = 0.9$, $\beta_2 = 0.98$, as in Nanda. Weight decay is believed to drive grokking. It also shrinks the weights on its own, in every run, so any signal computed from the size of the weights can move because of the optimiser rather than because grokking is coming. That's a confound (\gl{N20}).
+
+Read the update equation of \gl{N20} term by term. $\theta_t$ is where the weights are now. $-\eta\, u_t$ is the AdamW step: $u_t$ is built from the gradients so far and points roughly uphill, so subtracting it moves the weights downhill, towards lower training loss. $-\eta\lambda\, \theta_t$ is the decay. It's proportional to the weights themselves, so a large weight is pulled in more than a small one, and every weight is pulled towards 0. ``Decoupled'' means this pull is applied directly to $\theta_t$, separately from $u_t$, so its size doesn't depend on the gradient at all. The derivation below shows that, with your $\lambda = 1.0$, the decay is the same as multiplying every weight by one fixed number before the AdamW step.
+
+\fex The derivation rewrites the update to show the decay as a shrink factor.
+
+\dass{the weight decay as a shrink factor}
+\dgiven
+\begin{dlist}
+\item $\theta_{t+1} = \theta_t - \eta\, u_t - \eta\lambda\, \theta_t$ (\gl{N20}).
+\item $\lambda = 1.0$ (\gl{N19}, \code{nanda\_\allowbreak{}unified.yaml}).
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $\theta_t$: the weights after epoch $t$. Vector with $M$ entries. Role: what's being updated.
+\item $\theta_{t+1}$: the weights after epoch $t+1$. Vector with $M$ entries.
+\item $u_t$: the AdamW step at epoch $t$. Vector with $M$ entries, roughly uphill, so $-\eta u_t$ is downhill.
+\item $\eta$: the learning rate. Scalar $> 0$.
+\item $\lambda$: the weight decay. Scalar $\ge 0$.
+\end{dlist}
+\dfind $\theta_{t+1}$ written as a scaled copy of $\theta_t$ plus the AdamW step, for $\lambda = 1.0$.
+\dsol
+\begin{align*}
+\theta_{t+1} &= \theta_t - \eta\, u_t - \eta\lambda\, \theta_t && \why{Given 1} \\
+             &= \theta_t - \eta\lambda\, \theta_t - \eta\, u_t && \why{reordering the two subtracted terms} \\
+             &= (1 - \eta\lambda)\, \theta_t - \eta\, u_t && \why{factoring the scalar out of $\theta_t - \eta\lambda\theta_t$} \\
+             &= (1 - \eta \times 1.0)\, \theta_t - \eta\, u_t && \why{substitution of Given 2} \\
+             &= (1 - \eta)\, \theta_t - \eta\, u_t && \why{$\eta \times 1.0 = \eta$}
+\end{align*}
+$\therefore$ At every update the weights are first scaled by $(1 - \eta)$, which is below 1, and then moved by the AdamW step. The scaling pulls every weight towards 0 whatever the data does.
+\[\boxed{\theta_{t+1} = (1 - \eta)\, \theta_t - \eta\, u_t}\]
+
+\fans Each update now reads as two moves in a row: first multiply every weight by the same number $(1 - \eta)$, which is below 1 because $\eta > 0$; then take the AdamW step. The first move doesn't look at the data at all. So if a signal computed from the size of the weights falls steadily, the factor $(1 - \eta)$ alone could explain it, and you need some other evidence before calling it a sign that grokking is coming.
+
+\fself Why could a weight-based signal move because of the optimiser rather than because grokking is coming? (The factor $(1 - \eta)$ shrinks $\theta_t$ at every update, in every run.)
+\fviva ``Did you vary $\lambda$? If not, how can you separate your signal from the effect of weight decay?''
+
+\section{Epochs and checkpoints}
+\fplain Every time in the benchmark is measured in epochs. An epoch is one full pass over the training pairs, and because your runs use all 3{,}830 training pairs at once, an epoch is also exactly one weight update. So ``epoch $t$'' and ``after the $t$-th update'' mean the same thing. Alongside the time axis there's the question of what is saved. The weights are saved as checkpoints, but not at every epoch. This section explains how often, and why that sets a limit on how precisely anything computed from checkpoints can place an epoch.
+
+\fdef An epoch (\gl{N9}) is one full pass over $\Dtrain$. Your runs are full batch, so one epoch is one weight update. A checkpoint (\gl{N21}) is a saved copy of $\theta_t$ at one epoch.
+\fread All runs last 40{,}000 epochs. $G_i$ and every event epoch are reported in epochs, and several predictors are computed afterwards from checkpoints. Checkpoints are saved every 50 epochs and evaluated every 100, so a quantity computed from checkpoint evaluations can only place an epoch to within 100 epochs.
+
+That limit is the time resolution. If something changes between two checkpoint evaluations, all you know from the evaluations is that it happened somewhere in that gap of 100 epochs. It matters because the lead margin in Section~4.2 is also 100 epochs, so the uncertainty from the evaluation spacing is as large as the margin itself. The derivation below shows the gap for seed 0's grok epoch.
+
+\fex The derivation finds the two checkpoint evaluations around $G_0$, assuming evaluations fall on multiples of 100.
+
+\dass{checkpoint evaluations around $G_0$}
+\dgiven
+\begin{dlist}
+\item $G_0 = 12987$ (\gl{N26}).
+\item Checkpoint evaluations every 100 epochs, taken here to be at multiples of 100 (\gl{N21}).
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $G_0$: the grok epoch of seed 0. Integer epoch.
+\item $t_-$: the last evaluated epoch at or before $G_0$. Integer, a multiple of 100.
+\item $t_+$: the first evaluated epoch after $G_0$. Integer, a multiple of 100.
+\end{dlist}
+\dfind $t_-$ and $t_+$.
+\dsol
+\begin{align*}
+t_- &= 100 \times \left\lfloor \frac{G_0}{100} \right\rfloor && \why{largest multiple of 100 that's $\le G_0$ (\gl{A3})} \\
+    &= 100 \times \lfloor 129.87 \rfloor && \why{substitution of Given 1, and $12987/100 = 129.87$} \\
+    &= 100 \times 129 && \why{floor} \\
+    &= 12900 && \why{multiplication} \\
+t_+ &= t_- + 100 && \why{evaluations are 100 epochs apart (Given 2)} \\
+    &= 13000 && \why{addition}
+\end{align*}
+$\therefore$ From checkpoint evaluations alone you'd only know that seed 0 groks between epochs 12{,}900 and 13{,}000.
+\[\boxed{t_- = 12900, \quad t_+ = 13000}\]
+Your $G_i$ values (e.g.\ 12987) aren't multiples of 50 or 100, so they come from an accuracy curve recorded more often than the checkpoints. Check which curve \code{analyze\_\allowbreak{}nanda\_\allowbreak{}unified.py} reads.
+
+\fself Why must the data split be rebuilt with the same seed when re-reading a checkpoint? (A checkpoint holds only the weights. To evaluate it on test pairs you must rebuild the same $\Dtest$; with a different split the rebuilt $\Dtest$ would contain pairs the checkpoint was trained on, and $\acctest$ would come out too high.)
+\fviva ``What's your time resolution, and could it change any verdict?'' (The lead margin of 100 epochs, Section~4.2, is the same size as the evaluation spacing.)
+
+\section{Seeds and why five}
+\fplain One training run gives you one story: one grok epoch and, for a predictor, one event. You can't learn from one story whether a warning moves with grok or just happens to sit before it. So the benchmark repeats the run with different random starting points. Each repeat is fixed by a seed, a label that sets the random numbers, so the same seed always gives the same run. This section introduces the five seeds and computes the mean grok epoch, which gives you a feel for the time scale everything else is measured against.
+
+\fdef A seed $i$ (\gl{N8}) fixes the random numbers of one run (the initial weights and the data split), so each seed is one independent, repeatable run.
+\fread Your benchmark uses 5 seeds, $i \in \{0, 1, 2, 3, 4\}$. Different seeds grok at different epochs, and that spread is what lets you test whether a predictor tracks when grok happens, not just that it happens.
+
+Think about what a seed changes: the initial weights $\theta_0$ and which pairs land in $\Dtrain$. Everything else, the task, the model, the optimiser and the 40{,}000 epochs, is the same in every run. So the differences between seeds come only from these random draws, and a good warning should respond to them in the same way grok does: if seed 4 groks late, its warning should come late too. The mean grok epoch below is a summary only; no PASS condition uses it. It tells you that a typical run groks around epoch 12{,}800, roughly a third of the way through the 40{,}000 epochs.
+
+\fex The derivation computes the mean grok epoch.
+
+\dass{the mean grok epoch over the five seeds}
+\dgiven
+\begin{dlist}
+\item $(G_0, G_1, G_2, G_3, G_4) = (12987, 6921, 9510, 11019, 23747)$ (\gl{N26}).
+\item The mean of 5 numbers is their sum divided by 5.
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $G_i$: the grok epoch of seed $i$. Integer epoch, positive.
+\item $\bar G$: the mean grok epoch. Scalar epoch, positive. Role: a typical grok time.
+\end{dlist}
+\dfind $\bar G$.
+\dsol
+\begin{align*}
+\bar G &= \frac{G_0 + G_1 + G_2 + G_3 + G_4}{5} && \why{Given 2} \\
+       &= \frac{12987 + 6921 + 9510 + 11019 + 23747}{5} && \why{substitution of Given 1} \\
+       &= \frac{64184}{5} && \why{addition} \\
+       &= 12836.8 && \why{division}
+\end{align*}
+$\therefore$ The five runs grok at epoch 12{,}836.8 on average, ranging from 6{,}921 (seed 1) to 23{,}747 (seed 4).
+\[\boxed{\bar G = 12836.8}\]
+
+\fself Why is one seed not enough to judge a predictor? (One run gives one grok epoch and one event epoch. One point can't show whether the event moves with grok; you need several runs that grok at different epochs.)
+\fviva ``Five is very few. What can and can't you conclude from five seeds?'' (See Module 5.)
+
+\chapter{Measuring the outcome}
+
+Module~2 set up the experiment; this module says how its outcome is measured. There's exactly one outcome per run, the grok epoch $G_i$, and it's computed from test accuracy alone. No predictor is involved in computing it, so it's the fixed target that every predictor is compared with. Section~3.1 explains test accuracy and what the 0.9 threshold means as a count of pairs; Section~3.2 defines $G_i$ and measures how far apart your five values are.
+
+\section{Test accuracy}
+\fplain Test accuracy is the simplest number in the book: out of the 8{,}939 test pairs, what fraction does the model answer correctly? It's also the most important one, because grokking is defined from it and from nothing else. This section turns the 0.9 threshold into a plain count of pairs, so that when you read ``test accuracy above 0.9'' you can picture what it means: at least 8{,}046 test pairs right.
+
+\fdef Test accuracy $\acctest(t)$ (\gl{N22}) is the fraction of the 8{,}939 test pairs on which the predicted answer $\hat k$ (\gl{N12}) equals the correct answer $c$, using $\theta_t$.
+\fread It's the only thing that defines grok in your benchmark.
+
+Accuracy only asks whether the model's chosen answer $\hat k$ equals the correct $c$; it ignores how confident the model is. That's why it's used rather than test loss. The loss changes whenever the probabilities change, even on pairs whose answer is already right, so it can drift without a single answer changing. Accuracy moves only when an answer changes from wrong to right or back, which is exactly what generalisation is about. Each test pair is $1/8939$ of the total, about 0.0001, so one more pair right moves test accuracy by about one ten-thousandth.
+
+\fex The derivation finds how many test pairs must be right for $\acctest$ to pass the grok threshold 0.9.
+
+\dass{correct test pairs needed for $\acctest > 0.9$}
+\dgiven
+\begin{dlist}
+\item $\Ntest = 8939$ (Section~2.2).
+\item $\acctest(t) = (\text{number of correct test pairs}) / \Ntest$ (\gl{N22}).
+\item Grok needs $\acctest(t) > 0.9$ (\gl{N26}).
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $K$: the number of test pairs with $\hat k = c$ at $\theta_t$. Integer from 0 to 8939. Role: the count behind $\acctest$.
+\item $K_{\min}$: the smallest $K$ with $K / \Ntest > 0.9$. Integer.
+\end{dlist}
+\dfind $K_{\min}$.
+\dsol
+\begin{align*}
+\frac{K}{\Ntest} &> 0.9 && \why{Given 2 put into Given 3} \\
+K &> 0.9 \times \Ntest && \why{multiplying both sides by $\Ntest > 0$} \\
+K &> 0.9 \times 8939 && \why{substitution of Given 1} \\
+K &> 8045.1 && \why{multiplication} \\
+K_{\min} &= 8046 && \why{$K$ is an integer; 8046 is the first integer above 8045.1}
+\end{align*}
+$\therefore$ At least 8{,}046 of the 8{,}939 test pairs must be right. For example, 8{,}100 right gives $8100/8939 = 0.906$ (3 d.p.), which passes.
+\[\boxed{K_{\min} = 8046}\]
+
+\fself Why not use test loss instead? (Loss also changes when the model just gets more or less confident on pairs it already gets right; accuracy only changes when answers change, and a change of answers on unseen pairs is what generalisation means.)
+\fviva ``Why accuracy and not loss to define grokking?''
+
+\section{The grok epoch $G_i$}
+\fplain The test-accuracy curve of one run is thousands of numbers. To compare a warning with grok, you need grok as a single epoch. The grok epoch $G_i$ is that epoch: the first time test accuracy goes above 0.9 in the run of seed $i$. This section gives the five values and measures how far apart they are. That spread is what makes the rest of the benchmark possible: if all five runs grokked at the same epoch, there'd be no way to tell a warning that follows grok from one that just fires at a fixed time.
+
+\fdef The grok epoch of seed $i$ is $G_i = \min\{t : \acctest(t) > 0.9\}$ (\gl{N26}): the first epoch at which test accuracy goes above 0.9.
+\fread It's the target every predictor is compared with, and it's the same for all predictors. Recomputing it from the saved curves reproduces your saved values.
+
+Two details of the definition are worth reading slowly. ``First epoch'' means later dips don't matter: once $\acctest$ has gone above 0.9, $G_i$ is fixed, even if accuracy wobbles afterwards. And ``above 0.9'' is strict: an epoch with $\acctest$ exactly 0.9 doesn't count. The threshold 0.9 is fixed in the config before any predictor is scored, so it can't be moved to suit one predictor, and the $G_i$ come from training alone, so they're the same whichever predictor you're judging.
+
+\fex $(G_0, G_1, G_2, G_3, G_4) = (12987, 6921, 9510, 11019, 23747)$. The derivation measures their spread.
+
+\dass{the spread of the grok epochs}
+\dgiven
+\begin{dlist}
+\item $(G_0, \ldots, G_4) = (12987, 6921, 9510, 11019, 23747)$ (\gl{N26}).
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $G_{\max}$: the largest $G_i$. Integer epoch.
+\item $G_{\min}$: the smallest $G_i$. Integer epoch.
+\item $\Delta$: the range, $G_{\max} - G_{\min}$. Integer number of epochs, $\ge 0$. Role: how far apart the grok times are.
+\end{dlist}
+\dfind $\Delta$.
+\dsol
+\begin{align*}
+G_{\max} &= 23747 && \why{seed 4 has the largest value in Given 1} \\
+G_{\min} &= 6921 && \why{seed 1 has the smallest value in Given 1} \\
+\Delta &= G_{\max} - G_{\min} && \why{definition of $\Delta$ (Let 3)} \\
+       &= 23747 - 6921 && \why{substitution of the two lines above} \\
+       &= 16826 && \why{subtraction}
+\end{align*}
+$\therefore$ The grok epochs spread over 16{,}826 epochs. That spread is what a predictor's events must follow (Module 5).
+\[\boxed{\Delta = 16826}\]
+
+\fans The latest run groks more than three times later than the earliest ($23747/6921$ is about 3.4). So the five runs really do differ in when they grok, and a warning that tracks grok has plenty of room to show it.
+
+\fself Would $G_i$ change much with a 0.95 threshold? Why does it matter that the threshold is fixed? (It moves $G_i$ later by however long $\acctest$ takes to go from 0.9 to 0.95. Fixing it stops it being picked after the fact to suit a predictor.)
+\fviva ``Why 0.9? Is your result sensitive to that choice?''
+\chapter{What a predictor is}
+
+From here on, the book is about warnings. This module says what a predictor is, what it outputs (one event epoch per seed, or a miss), and the two numbers that say whether those events come early enough: the lead fraction (Sections~4.2 and~4.3) and the mean relative lead (Section~4.4). Section~4.5 then shows how misses are handled. Every example uses List A, a made-up event list, so nothing in this module is about any one of your predictors.
+
+\section{Predictor and event epoch $P_i$}
+\fplain Everything so far was about the runs and their outcome. Now comes the thing being tested. A predictor is a warning system with two parts: something you measure during training, called the signal, and a fixed rule that looks at the signal's curve and names one epoch. That named epoch is the event, the predictor's warning for that run. If the rule never names an epoch, that run is a miss. This section fixes the vocabulary and introduces List A, a made-up set of event epochs that the next modules use to show every calculation without referring to any real predictor of yours.
+
+\fdef A predictor (\gl{N31}) is a (signal, rule) pair: a signal $y_t$ (\gl{N27}) tracked during training, plus a rule (\gl{N29}) that names one epoch $P_i$, the event epoch, as the warning in the run of seed $i$. If the rule never names an epoch, that's a miss, stored as \None.
+\fread Each of your eight predictors is a (signal, rule) pair. If the rule or one of its settings (\gl{N30}) changes, it's a different predictor, so every verdict belongs to one exact rule.
+
+This is stricter than it sounds. The same signal with a different window, or with a different number of skipped epochs, is a new predictor and needs its own verdict. The reason is that the verdict is about the events, and the events come from the rule: change the rule and you change the events. For scoring, a predictor's whole output is therefore five numbers, one $P_i$ per seed, some of which may be \None. All the scoring in Modules~4 to~6 works on those five numbers and the five $G_i$; nothing else about the signal is used.
+
+\fex Suppose some rule fires at the epochs below. This is \textbf{List A}, an illustrative event list (\gl{N32}); it belongs to no predictor of yours. Modules 4 to 6 use it to show every calculation.
+\[
+\text{List A:}\quad (P_0, P_1, P_2, P_3, P_4) = (3500,\ 6850,\ 2900,\ 4100,\ 7800).
+\]
+All five seeds fire, so there's no \None. There's no calculation here.
+Look at List A next to the grok epochs. Seed 1's event (6850) is very close to its grok epoch (6921), and the order of the events doesn't match the order of the grok epochs. Both features matter later (Sections~4.2 and~5.1).
+
+\fself What should the code do if the rule never fires? (Store \None; the seed is then dropped from the firing set $F$, \gl{N33}.)
+\fviva ``Which exact rule is the official one for this predictor?'' (Each predictor needs one named rule, with its settings, fixed before scoring. Two candidate rules are two predictors.)
+
+\section{Lead and the 100-epoch margin}
+\fplain A warning is only useful if it comes early enough to be a warning. An event at epoch 6{,}900 in a run that groks at 6{,}921 is before grok, but only by 21 epochs, less than the 100-epoch gap between two checkpoint evaluations. The benchmark therefore asks for more than ``before'': the event must come more than 100 epochs before grok. A seed whose event clears that bar is said to lead. This section applies the test to two seeds of List A, one that clears it easily and one that's before grok but too close.
+
+\fdef A firing seed $i$ leads (\gl{N34}) only if its event comes more than 100 epochs before grok: $P_i < G_i - 100$.
+\fread The margin stops an event that fires at grok, or just before it, from counting as a warning.
+
+To read the condition $P_i < G_i - 100$, first compute the cutoff $G_i - 100$ for that seed, then ask whether the event is below it. The cutoff is different for every seed, because each seed has its own grok epoch. Note what the test doesn't care about: an event at epoch 3{,}500 and one at epoch 50 both lead in seed 0. How early the event is gets measured separately, by the relative lead (Section~4.4). Note also the point from Section~2.5: the margin is the same size as the evaluation spacing, so for a quantity computed from checkpoint evaluations, an event close to the cutoff can lead or not depending on where the evaluations fall.
+
+\fex The derivation checks seeds 0 and 1 of List A (Section~4.1). One leads; the other fires before grok but inside the margin.
+
+\dass{do seeds 0 and 1 of List A lead?}
+\dgiven
+\begin{dlist}
+\item $G_0 = 12987$ and $G_1 = 6921$ (\gl{N26}).
+\item $P_0 = 3500$ and $P_1 = 6850$ (List A, Section~4.1).
+\item Seed $i$ leads if $P_i < G_i - 100$ (\gl{N34}).
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $G_i$: the grok epoch of seed $i$. Integer epoch.
+\item $P_i$: the event epoch of seed $i$ in List A. Scalar epoch.
+\item $T_i$: the latest allowed event epoch for seed $i$, $T_i = G_i - 100$. Scalar epoch. Role: the cutoff an event must be below.
+\end{dlist}
+\dfind Whether $P_0 < T_0$ and whether $P_1 < T_1$.
+\dsol
+\begin{align*}
+T_0 &= G_0 - 100 && \why{definition of $T_i$ (Let 3) with $i = 0$} \\
+    &= 12987 - 100 && \why{substitution of Given 1} \\
+    &= 12887 && \why{subtraction} \\
+P_0 = 3500 &< 12887 = T_0 && \why{Given 2 and the line above: seed 0 leads} \\
+T_1 &= G_1 - 100 && \why{definition of $T_i$ (Let 3) with $i = 1$} \\
+    &= 6921 - 100 && \why{substitution of Given 1} \\
+    &= 6821 && \why{subtraction} \\
+P_1 = 6850 &> 6821 = T_1 && \why{Given 2 and the line above: seed 1 doesn't lead}
+\end{align*}
+$\therefore$ Seed 0 leads. Seed 1 fires before grok ($6850 < 6921$), but only 71 epochs before, inside the 100-epoch margin, so it doesn't lead.
+\[\boxed{P_0 < T_0: \text{ seed 0 leads}; \quad P_1 > T_1: \text{ seed 1 doesn't lead}}\]
+
+\fans Seed 1 is the case to remember. It's before grok, so a quick look would call it early, but it misses the cutoff by 29 epochs ($6850 - 6821 = 29$).
+
+\fself Does the \code{seeds\_\allowbreak{}before\_\allowbreak{}grok} count use the same margin? (No. It counts $G_i - P_i > 0$ (\gl{N35}), so seed 1 of List A would count as early there but doesn't lead under the protocol. That's an audit finding.)
+\fviva ``Why 100 epochs?''
+
+\section{Lead fraction}
+\fplain Section~4.2 judged one seed at a time. A predictor needs one score across all its seeds, and the lead fraction is that score: of the seeds where the rule fired, what share led? It's the first of the three PASS conditions. This section works it out for List A, which turns out to sit exactly on the threshold.
+
+\fdef The lead fraction (\gl{N36}) is the share of firing seeds that lead: $\leadfrac = \#\{i \in F : P_i < G_i - 100\} / n$, where $F$ is the firing set and $n = \#F$ (\gl{N33}).
+\fread PASS needs $\leadfrac \ge 0.8$. With $n = 5$ that's at least 4 of 5 seeds; with $n = 4$ it's 4 of 4.
+
+Notice the bottom of the fraction: it's $n$, the number of seeds that fired, not always 5. That choice matters when there are misses, and Section~4.5 looks at it closely. With five firing seeds the lead fraction can only be 0, 0.2, 0.4, 0.6, 0.8 or 1, so ``at least 0.8'' means ``at most one seed fails to lead''. The threshold allows one bad seed, but not two.
+
+\fex The derivation computes $\leadfrac$ for List A, where all 5 seeds fire.
+
+\dass{$\leadfrac$ of List A}
+\dgiven
+\begin{dlist}
+\item $(G_0, \ldots, G_4) = (12987, 6921, 9510, 11019, 23747)$ (\gl{N26}).
+\item $(P_0, \ldots, P_4) = (3500, 6850, 2900, 4100, 7800)$ (List A, Section~4.1).
+\item All 5 seeds fire, so $F = \{0, 1, 2, 3, 4\}$ (Given 2 has no \None).
+\item $(G_0 - 100, \ldots, G_4 - 100) = (12887, 6821, 9410, 10919, 23647)$ (subtracting 100 from each entry of Given 1).
+\item $\leadfrac = \#\{i \in F : P_i < G_i - 100\} / n$ (\gl{N36}).
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $G_i$, $P_i$: grok epoch and event epoch of seed $i$. Scalars.
+\item $n$: the number of firing seeds. Integer.
+\item $\mathcal{L}$: the set of seeds in $F$ that lead. Set of seed labels. Role: the count on top of $\leadfrac$.
+\end{dlist}
+\dfind $\leadfrac$.
+\dsol
+\begin{align*}
+n &= \#F && \why{definition of $n$ (\gl{N33})} \\
+  &= 5 && \why{Given 3} \\
+P_0 = 3500 &< 12887 = G_0 - 100 && \why{Given 2 and 4: seed 0 leads} \\
+P_1 = 6850 &> 6821 = G_1 - 100 && \why{Given 2 and 4: seed 1 doesn't lead (Section~4.2)} \\
+P_2 = 2900 &< 9410 = G_2 - 100 && \why{Given 2 and 4: seed 2 leads} \\
+P_3 = 4100 &< 10919 = G_3 - 100 && \why{Given 2 and 4: seed 3 leads} \\
+P_4 = 7800 &< 23647 = G_4 - 100 && \why{Given 2 and 4: seed 4 leads} \\
+\mathcal{L} &= \{0, 2, 3, 4\} && \why{the four seeds that lead, from the lines above} \\
+\#\mathcal{L} &= 4 && \why{counting (\gl{A1})} \\
+\leadfrac &= \frac{\#\mathcal{L}}{n} && \why{Given 5} \\
+          &= \frac{4}{5} && \why{substitution of the lines above} \\
+          &= 0.8 && \why{division}
+\end{align*}
+$\therefore$ Four of the five seeds lead, so List A sits exactly on the lead condition $\leadfrac \ge 0.8$ and meets it.
+\[\boxed{\leadfrac = 0.8}\]
+
+\fans List A meets the condition with no room to spare. If one more seed had failed to lead, its lead fraction would drop to $3/5 = 0.6$ and the condition would fail.
+
+\fself If one seed misses and one fires after grok, what is $\leadfrac$? (The miss is dropped, so $n = 4$, and 3 of those 4 lead: $\leadfrac = 3/4 = 0.75$, a fail.)
+\fviva ``Is 4 out of 5 strong evidence?''
+
+\section{Relative lead and mean relative lead}
+\fplain The lead test of Section~4.2 is yes-or-no: it doesn't say how early the event is. The relative lead adds that. It measures the warning time $G_i - P_i$ as a share of the grok epoch, so that seeds with very different grok epochs can be compared on one scale. A relative lead of 0.5 means the event came when half the time to grok had passed; 0.9 means it came when only a tenth had passed. This section computes it for one seed and then averages it over List A.
+
+\fdef The relative lead of seed $i$ (\gl{N37}) is $r_i = (G_i - P_i) / G_i$: how early the event is, as a fraction of the grok epoch. The mean relative lead is $\rbar = \frac{1}{n}\sum_{i \in F} r_i$.
+\fread PASS needs $0.05 \le \rbar \le 0.9$. Below 0.05 the event is too late to be useful. Above 0.9 it's so early that it's probably unrelated to grok.
+
+The upper limit is the less obvious one. An event at epoch 100 in every run would lead in every seed and give relative leads close to 1, which looks like a superb warning. But an event that fires that early in every run, thousands of epochs before any grok, is unlikely to be reacting to this run's grok; the upper limit stops such events scoring well. Two reading tips. First, $r_i = 1 - P_i/G_i$ (shown in the second derivation), so $r_i$ depends only on the ratio of event to grok. Second, $\rbar$ is an average, so one late seed can be hidden by four early ones; List A's seed 1 is an example.
+
+\fex Two derivations: $r_0$ for List A, then $\rbar$ over all five seeds of List A.
+
+\dass{relative lead of seed 0, List A}
+\dgiven
+\begin{dlist}
+\item $G_0 = 12987$ (\gl{N26}).
+\item $P_0 = 3500$ (List A, Section~4.1).
+\item $r_i = (G_i - P_i)/G_i$ (\gl{N37}).
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $G_0$: grok epoch of seed 0. Integer epoch, positive.
+\item $P_0$: event epoch of seed 0 in List A. Scalar epoch, positive.
+\item $r_0$: relative lead of seed 0. Scalar; positive because $P_0 < G_0$.
+\end{dlist}
+\dfind $r_0$.
+\dsol
+\begin{align*}
+r_0 &= \frac{G_0 - P_0}{G_0} && \why{Given 3 with $i = 0$} \\
+    &= \frac{12987 - 3500}{12987} && \why{substitution of Given 1 and Given 2} \\
+    &= \frac{9487}{12987} && \why{subtraction} \\
+    &\approx 0.7305 && \why{division, rounded to 4 d.p.}
+\end{align*}
+$\therefore$ Seed 0's event comes when only about 27\% of the time to grok has passed, leaving about 73\% of it as warning.
+\[\boxed{r_0 = 0.7305 \text{ (4 d.p.)}}\]
+
+\dass{mean relative lead of List A}
+\dgiven
+\begin{dlist}
+\item $(G_0, \ldots, G_4) = (12987, 6921, 9510, 11019, 23747)$ (\gl{N26}).
+\item $(P_0, \ldots, P_4) = (3500, 6850, 2900, 4100, 7800)$ (List A, Section~4.1).
+\item $n = 5$ and $F = \{0, 1, 2, 3, 4\}$ (Section~4.3).
+\item $\rbar = \frac{1}{n}\sum_{i \in F} r_i$ with $r_i = (G_i - P_i)/G_i$ (\gl{N37}).
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $r_i$: relative lead of seed $i$. Scalar.
+\item $\rbar$: mean relative lead. Scalar. Role: the third PASS condition.
+\item $S$: the sum $\sum_{i=0}^{4} P_i/G_i$. Scalar, positive. Role: the part of $\rbar$ that depends on the events.
+\end{dlist}
+\dfind $\rbar$.
+\dsol
+\begin{align*}
+r_i &= \frac{G_i - P_i}{G_i} && \why{Given 4} \\
+    &= \frac{G_i}{G_i} - \frac{P_i}{G_i} && \why{splitting the fraction} \\
+    &= 1 - \frac{P_i}{G_i} && \why{$G_i / G_i = 1$} \\
+\rbar &= \frac{1}{5}\sum_{i=0}^{4}\left(1 - \frac{P_i}{G_i}\right) && \why{Given 4 with Given 3, and the line above} \\
+      &= \frac{1}{5}\left(5 - \sum_{i=0}^{4}\frac{P_i}{G_i}\right) && \why{the five 1s add up to 5} \\
+      &= 1 - \frac{1}{5}\sum_{i=0}^{4}\frac{P_i}{G_i} && \why{multiplying out $\tfrac{1}{5}$} \\
+      &= 1 - \frac{S}{5} && \why{definition of $S$ (Let 3)} \\
+S &= \tfrac{3500}{12987} + \tfrac{6850}{6921} + \tfrac{2900}{9510} + \tfrac{4100}{11019} + \tfrac{7800}{23747} && \why{Let 3 with Given 1 and 2} \\
+  &\approx 0.26950 + 0.98974 + 0.30494 + 0.37208 + 0.32846 && \why{each fraction rounded to 5 d.p.; later digits dropped} \\
+  &= 2.26472 && \why{addition} \\
+\rbar &= 1 - \frac{2.26472}{5} && \why{substitution of $S$ into the line $\rbar = 1 - S/5$} \\
+      &= 1 - 0.452944 && \why{division by 5} \\
+      &= 0.547056 && \why{subtraction}
+\end{align*}
+$\therefore$ The mean relative lead of List A is 0.547 to 3 d.p., inside $[0.05, 0.9]$, so List A meets this condition. Seed 1 contributes only $r_1 = 1 - 0.98974 = 0.01026$, because its event is just before grok.
+\[\boxed{\rbar = 0.547 \text{ (3 d.p.)}, \quad 0.05 \le \rbar \le 0.9}\]
+
+\fans Four of List A's seeds have relative leads between about 0.63 and 0.73; seed 1 has about 0.01. The average, 0.547, is comfortably inside the allowed range, even though one seed gives almost no warning at all.
+
+\fself What $\rbar$ does an event at exactly half the grok epoch give? ($P_i = 0.5\,G_i$ gives $r_i = 0.5$ in every seed, so $\rbar = 0.5$.)
+\fviva ``Why have an upper limit at all?'' (Without it, an event at epoch 1 in every run would score $\rbar \approx 1$ and look like the best possible warning.)
+
+\section{Misses and \None}
+\fplain Sometimes a rule never fires in a run: the signal never does the thing the rule looks for. That's a miss, and the code stores \None. The question is what a miss should count as. One answer is ``no warning, so no lead''. Your protocol gives a different answer: a miss is left out, and the scores are computed on the seeds that did fire. This section shows what that choice does to the lead fraction, because an examiner can ask about it for any predictor.
+
+\fdef A miss (\gl{N29}) is a seed where the rule never fires; the code stores \None. Seeds with \None\ are dropped before $\leadfrac$, $\rho$ and $\rbar$ are computed (\gl{N33}). If fewer than 4 seeds fire ($n < 4$), the predictor fails automatically.
+\fread How misses are handled changes $\leadfrac$. Because a miss is dropped rather than counted as ``no lead'', four leads and one miss give $\leadfrac = 4/4$, not $4/5$. That's a possible attack point for every predictor.
+
+The protection against dropping too many seeds is the automatic fail for $n < 4$: a predictor that fires in fewer than four seeds fails whatever its other numbers are. So the protocol tolerates at most one miss. Keep two cases apart when you explain this. A miss has no event; it's dropped. A late event is an event that fails the margin; it's kept and counts as not leading. A late event lowers the lead fraction; a miss doesn't.
+
+\fex The derivation works through one miss and four leads.
+
+\dass{one miss and four leads}
+\dgiven
+\begin{dlist}
+\item One seed returns \None; the other four fire and all four lead (illustrative case).
+\item Seeds with \None\ are dropped; $n < 4$ is an automatic fail (\gl{N33}).
+\item $\leadfrac = \#\{i \in F : P_i < G_i - 100\}/n$ (\gl{N36}).
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $F$: the firing set. Set of seed labels.
+\item $n$: the number of firing seeds, $n = \#F$. Integer.
+\item $\mathcal{L}$: the seeds in $F$ that lead. Set of seed labels.
+\end{dlist}
+\dfind Whether the predictor fails automatically, and its $\leadfrac$.
+\dsol
+\begin{align*}
+n &= 5 - 1 && \why{one of the 5 seeds is dropped (Given 1, 2)} \\
+  &= 4 && \why{subtraction} \\
+n &\ge 4 && \why{so the automatic fail of Given 2 doesn't apply} \\
+\#\mathcal{L} &= 4 && \why{all four firing seeds lead (Given 1)} \\
+\leadfrac &= \frac{\#\mathcal{L}}{n} && \why{Given 3} \\
+          &= \frac{4}{4} && \why{substitution} \\
+          &= 1.0 && \why{division}
+\end{align*}
+$\therefore$ The predictor isn't failed automatically, and its lead fraction is 1.0, the same as if all five seeds had led.
+\[\boxed{n = 4, \quad \leadfrac = 1.0}\]
+
+\fans Under the other convention, counting the miss as ``no lead'', the same seeds would give $4/5 = 0.8$. Here both conventions meet the threshold, but they give different numbers, and with one miss and one late seed they'd give $3/4 = 0.75$ and $3/5 = 0.6$.
+
+\fself Can you compute $\rho$ with 4 seeds? (Yes: $\rho$ is then computed on the 4 firing seeds, with $n = 4$ in \gl{N40}; the missed seed takes no part in the ranking.)
+\fviva ``How do you treat a seed where the signal never appears?''
+
+\chapter{Spearman's $\rho$ and small samples}
+
+Being early isn't enough. A useful warning must also move with grok: in runs that grok later, it should fire later. This module measures that with Spearman's $\rho$ (Section~5.1), explains why ranks are used rather than raw epochs (Section~5.2), and then shows two consequences of having only five seeds: $\rho$ can take only 21 values (Section~5.3), and a high $\rho$ is not rare by luck alone (Section~5.4).
+
+\section{Spearman rank correlation $\rho$}
+\fplain Suppose a rule fired at epoch 2{,}000 in every run. It would lead in every seed, but it would be a fixed clock: it would fire at 2{,}000 whether the run grokked at 7{,}000 or at 24{,}000, so it tells you nothing about when grok comes. To catch that, the benchmark asks a second question: do the events come in the same order as the grok epochs? If seed 1 groks first, does its event come first; if seed 4 groks last, does its event come last? Spearman's $\rho$ answers that with one number. This section explains how it's computed from ranks and works it out for List A.
+
+\fdef Spearman's $\rho$ (\gl{N40}) is a number from $-1$ to $1$ that says whether two lists go up together in order, using only their ranks (\gl{N38}). With no ties, $\rho = 1 - 6\sum_{i \in F} d_i^2 / \big(n(n^2-1)\big)$, where $d_i = R(G_i) - R(P_i)$ is the rank difference of seed $i$.
+\fread PASS needs $\rho \ge 0.9$: seeds that grok later must also have later events. That shows the event tracks this run's grok, not a fixed clock (an event at about the same epoch in every run, whatever $G_i$ is).
+
+To compute $\rho$ you set the epoch values aside and keep only their order. Each list, the five $G_i$ and the five $P_i$, is sorted, and each seed gets its position, its rank, from 1 (earliest) to 5 (latest). If the two lists of ranks are identical, every $d_i$ is 0 and $\rho = 1$. The more the ranks disagree, the bigger the squared differences $d_i^2$ and the lower $\rho$ goes; fully reversed order gives $\rho = -1$. Squaring makes a big disagreement count much more than small ones: one seed three places out costs 9, while one seed a single place out costs only 1.
+
+\fex The derivation computes $\rho$ for List A (Section~4.1). Its five $P_i$ are all different, so there are no ties.
+
+\dass{$\rho$ of List A}
+\dgiven
+\begin{dlist}
+\item $(G_0, \ldots, G_4) = (12987, 6921, 9510, 11019, 23747)$ (\gl{N26}).
+\item $(P_0, \ldots, P_4) = (3500, 6850, 2900, 4100, 7800)$ (List A, Section~4.1).
+\item $n = 5$ (Section~4.3).
+\item Rank: position from smallest, starting at 1 (\gl{N38}).
+\item $\rho = 1 - 6\sum d_i^2 / \big(n(n^2-1)\big)$ with $d_i = R(G_i) - R(P_i)$, when there are no ties (\gl{N40}).
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $R(G_i)$: rank of $G_i$ among the five grok epochs. Integer from 1 to 5.
+\item $R(P_i)$: rank of $P_i$ among the five event epochs. Integer from 1 to 5.
+\item $d_i$: rank difference of seed $i$. Integer; positive when seed $i$ ranks higher in $G$ than in $P$.
+\item $\rho$: Spearman's rho of List A. Scalar in $[-1, 1]$.
+\end{dlist}
+\dfind $\rho$.
+\dsol
+\begin{align*}
+\text{sorted } G &: 6921 < 9510 < 11019 < 12987 < 23747 && \why{sorting Given 1: seeds 1, 2, 3, 0, 4} \\
+(R(G_0), \ldots, R(G_4)) &= (4, 1, 2, 3, 5) && \why{position of each seed in the line above} \\
+\text{sorted } P &: 2900 < 3500 < 4100 < 6850 < 7800 && \why{sorting Given 2: seeds 2, 0, 3, 1, 4} \\
+(R(P_0), \ldots, R(P_4)) &= (2, 4, 1, 3, 5) && \why{position of each seed in the line above} \\
+(d_0, \ldots, d_4) &= (4-2,\ 1-4,\ 2-1,\ 3-3,\ 5-5) && \why{$d_i = R(G_i) - R(P_i)$ (Given 5)} \\
+  &= (2, -3, 1, 0, 0) && \why{subtraction} \\
+\sum d_i^2 &= 2^2 + (-3)^2 + 1^2 + 0^2 + 0^2 && \why{squaring each $d_i$} \\
+  &= 4 + 9 + 1 + 0 + 0 && \why{$(-3)^2 = 9$} \\
+  &= 14 && \why{addition} \\
+\rho &= 1 - \frac{6 \sum d_i^2}{n(n^2 - 1)} && \why{Given 5} \\
+     &= 1 - \frac{6 \times 14}{5(5^2 - 1)} && \why{substitution of $\sum d_i^2 = 14$ and Given 3} \\
+     &= 1 - \frac{6 \times 14}{5 \times 24} && \why{$5^2 - 1 = 25 - 1 = 24$} \\
+     &= 1 - \frac{84}{5 \times 24} && \why{$6 \times 14 = 84$} \\
+     &= 1 - \frac{84}{120} && \why{$5 \times 24 = 120$} \\
+     &= 1 - 0.7 && \why{$84 / 120 = 0.7$} \\
+     &= 0.3 && \why{subtraction}
+\end{align*}
+$\therefore$ List A ranks the seeds with $\rho = 0.3$, far below 0.9, so it fails the $\rho$ condition. Its events don't follow the order of the grok epochs.
+\[\boxed{\rho = 0.3 < 0.9}\]
+
+\fans Most of List A's 14 comes from two seeds. Seed 1 groks first but its event is fourth ($d_1 = -3$, costing 9), and seed 0 groks fourth but its event is second ($d_0 = 2$, costing 4). One badly placed seed can pull $\rho$ far below 0.9 on its own.
+
+\fself What $\rho$ does an event at a fixed epoch (the same in all seeds) get? (All $P_i$ tie, so every $R(P_i)$ is 3, the $R(P)$ list is constant, and $C$ in \gl{N39} is undefined. Either way it can't reach 0.9, so it fails. Check whether your code returns NaN, ``not a number'', or 0 here.)
+\fviva ``Why Spearman and not Pearson?''
+
+\section{Pearson vs Spearman}
+\fplain There's a more familiar correlation, Pearson's, that works on the raw numbers rather than their ranks. It asks how close the points lie to a straight line. With many points that's often fine, but with five points one unusual value can decide the answer. Your grok epochs have exactly that feature: seed 4 groks at 23{,}747, nearly twice the next largest (12{,}987). This section compares the two correlations and shows how $\rho$ is computed when two events tie, using List B.
+
+\fdef Pearson's correlation $C(X, Y)$ (\gl{N39}) measures how close the points $(X_i, Y_i)$ are to a straight line, using the raw values. Spearman's $\rho$ is Pearson's correlation of the ranks, $\rho = C\big(R(P), R(G)\big)$, so it uses only order. When there are ties, this is how $\rho$ is computed.
+\fread With 5 seeds, seed 4 ($G_4 = 23747$) is far from the rest and dominates Pearson's $C$. Spearman isn't pulled by one extreme value, because 23747 only counts as rank 5. Any event list that rises with $G$ in exactly the same order has $\rho = 1$, even if the relationship is curved.
+
+Spearman is Pearson applied to ranks. Replacing values by ranks keeps the order and throws away the distances, so 23{,}747 becomes simply ``5'', the same rank it would get if it were 13{,}000. That's also why Spearman doesn't care about the shape of the relationship: a straight line, a curve or a step all give $\rho = 1$, as long as the order matches. Ties need a rule, because two equal values can't both be ``third''. The rule (\gl{N38}) gives each the average of the positions they share, so two values in positions 3 and 4 both get 3.5. With ties the short formula with $d_i^2$ is no longer exact, so $\rho$ is computed as Pearson's correlation of the ranks.
+
+\fex Suppose a rule fires at the epochs of \textbf{List B}, an illustrative event list (\gl{N32}) with a tie between seeds 0 and 3:
+\[
+\text{List B:}\quad (P_0, P_1, P_2, P_3, P_4) = (4000,\ 2000,\ 3000,\ 4000,\ 9000).
+\]
+The derivation computes its $\rho$ with the tie.
+
+\dass{$\rho$ of List B, with a tie}
+\dgiven
+\begin{dlist}
+\item $(P_0, \ldots, P_4) = (4000, 2000, 3000, 4000, 9000)$ (List B, above).
+\item $(R(G_0), \ldots, R(G_4)) = (4, 1, 2, 3, 5)$ (Section~5.1).
+\item Tied values get the average of the positions they occupy (\gl{N38}).
+\item $\rho = C\big(R(P), R(G)\big)$, with $C$ from \gl{N39}; $n = 5$.
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $X_i = R(P_i)$: rank of the event of seed $i$. Scalar (can be a half).
+\item $Y_i = R(G_i)$: rank of the grok epoch of seed $i$. Integer.
+\item $\bar X$, $\bar Y$: the means of the $X_i$ and of the $Y_i$. Scalars.
+\item $\rho$: Spearman's rho with the tie. Scalar in $[-1, 1]$.
+\end{dlist}
+\dfind $\rho$.
+\dsol
+\begin{align*}
+\text{sorted } P &: 2000 < 3000 < 4000 = 4000 < 9000 && \why{sorting Given 1: seeds 1, 2, then 0 and 3 tied, then 4} \\
+(X_0, \ldots, X_4) &= (3.5, 1, 2, 3.5, 5) && \why{seeds 0 and 3 tie for positions 3 and 4 (Given 3)} \\
+\bar X &= \frac{3.5 + 1 + 2 + 3.5 + 5}{5} && \why{definition of the mean (\gl{N39})} \\
+       &= \frac{15}{5} && \why{addition} \\
+       &= 3 && \why{division} \\
+\bar Y &= \frac{4 + 1 + 2 + 3 + 5}{5} && \why{Given 2 and the definition of the mean} \\
+       &= 3 && \why{$15/5 = 3$} \\
+(X_i - \bar X) &= (0.5, -2, -1, 0.5, 2) && \why{subtracting $\bar X = 3$} \\
+(Y_i - \bar Y) &= (1, -2, -1, 0, 2) && \why{subtracting $\bar Y = 3$} \\
+\sum (X_i - \bar X)(Y_i - \bar Y) &= 0.5 + 4 + 1 + 0 + 4 && \why{multiplying the two lines above entry by entry} \\
+  &= 9.5 && \why{addition} \\
+\sum (X_i - \bar X)^2 &= 0.25 + 4 + 1 + 0.25 + 4 && \why{squaring each entry} \\
+  &= 9.5 && \why{addition} \\
+\sum (Y_i - \bar Y)^2 &= 1 + 4 + 1 + 0 + 4 && \why{squaring each entry} \\
+  &= 10 && \why{addition} \\
+\rho &= \frac{9.5}{\sqrt{9.5 \times 10}} && \why{Given 4 with the three sums above} \\
+     &= \frac{9.5}{\sqrt{95}} && \why{multiplication} \\
+     &\approx 0.975 && \why{$\sqrt{95} = 9.7468\ldots$, division, rounded to 3 d.p.}
+\end{align*}
+$\therefore$ With the tie, $\rho = 0.975$. If seed 0's event were a little later than seed 3's, the ranks would be $(4, 1, 2, 3, 5)$ and $\rho = 1$; if a little earlier, seeds 0 and 3 would swap and $\rho = 0.9$. So a tie gives a value between the two, outside the steps of Section~5.3. Ties change the answer, which is why they matter.
+\[\boxed{\rho = 0.975 \text{ (3 d.p.)}}\]
+
+\fself Which one would seed 4 distort, and why? (Pearson's $C$ on raw values: $G_4 = 23747$ is far above the others, so it dominates the sums in \gl{N39}.)
+\fviva ``Your Pearson values look strong; why don't you trust them?'' (With five seeds, one extreme seed can decide Pearson's value, even its sign. On ranks, that seed can move the result by at most its rank.)
+
+\section{Only 21 possible values with 5 seeds}
+\fplain With only five seeds, $\rho$ can't take just any value between $-1$ and 1. It moves in steps of 0.1. That sounds like a technical detail, but it changes how you should read the PASS threshold: with five seeds, ``$\rho \ge 0.9$'' means ``the order is perfect, or exactly two neighbouring seeds are swapped'', and nothing in between. This section derives the steps and shows what a single swap costs.
+
+\fdef With $n = 5$ and no ties, $\rho = 1 - \sum d_i^2 / 20$, and $\sum d_i^2$ is an even number from 0 to 40. So $\rho$ can only be $-1, -0.9, \ldots, 0.9, 1$: 21 values, in steps of 0.1.
+\fread $\rho \ge 0.9$ means ``perfect order, or exactly one adjacent swap'' (\gl{N41}). It also explains the coded cutoff 0.8999999999999998 (\gl{N43}): it keeps a $\rho$ of exactly 0.9 from failing through floating-point rounding. The criterion-validation record in \code{context.md} says $\rho$ has only 11 values in steps of 0.2; that's wrong, and the list it gives leaves out 0.9.
+
+The derivation has three parts. First, with $n = 5$ the general formula simplifies to $\rho = 1 - D/20$, so $\rho$ is fixed by one whole number, $D$. Second, $D$ is always even, so $\rho$ changes in steps of $2/20 = 0.1$. Third, $D$ is at most 40, reached when the order is fully reversed, which gives $\rho = -1$. Then the threshold can be read directly: $\rho \ge 0.9$ means $D \le 2$, and the only orderings with $D = 0$ or $D = 2$ are the perfect order and a single swap of neighbours.
+
+\fex The derivation finds the formula for $n = 5$, why $\sum d_i^2$ is even, its largest value, and the $\rho$ of one adjacent swap.
+
+\dass{the possible values of $\rho$ with five seeds}
+\dgiven
+\begin{dlist}
+\item $\rho = 1 - 6\sum d_i^2 / \big(n(n^2-1)\big)$, no ties (\gl{N40}).
+\item $n = 5$, and each list of ranks is $1, 2, 3, 4, 5$ in some order (\gl{N38}).
+\item $d_i = R(G_i) - R(P_i)$ is an integer (\gl{N40}).
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $D$: the sum of squared rank differences, $D = \sum_{i} d_i^2$. Integer $\ge 0$. Role: the only thing $\rho$ depends on.
+\item $D_{\max}$: the largest possible $D$. Integer.
+\item $\rho_{\mathrm{swap}}$: the $\rho$ when exactly one adjacent pair is swapped. Scalar.
+\end{dlist}
+\dfind The formula for $\rho$ at $n = 5$, the possible $D$, and $\rho_{\mathrm{swap}}$.
+\dsol
+\begin{align*}
+\rho &= 1 - \frac{6D}{5(5^2 - 1)} && \why{Given 1 with $n = 5$ (Given 2) and Let 1} \\
+     &= 1 - \frac{6D}{5 \times 24} && \why{$5^2 - 1 = 24$} \\
+     &= 1 - \frac{6D}{120} && \why{$5 \times 24 = 120$} \\
+     &= 1 - \frac{D}{20} && \why{dividing top and bottom by 6} \\
+\sum_i d_i &= \sum_i R(G_i) - \sum_i R(P_i) && \why{Given 3, summed over the 5 seeds} \\
+           &= 15 - 15 && \why{each rank list adds up to $1+2+3+4+5 = 15$ (Given 2)} \\
+           &= 0 && \why{subtraction} \\
+d_i^2 - d_i &= d_i(d_i - 1) && \why{factoring out $d_i$} \\
+D - \sum_i d_i &= \sum_i d_i(d_i - 1) && \why{summing the line above over the 5 seeds} \\
+D - 0 &= \sum_i d_i(d_i - 1) && \why{$\sum_i d_i = 0$, shown above} \\
+D &= \text{an even number} && \why{$d_i(d_i-1)$ is a product of two consecutive integers, so even} \\
+D_{\max} &= 4^2 + 2^2 + 0^2 + (-2)^2 + (-4)^2 && \why{fully reversed order, $d = (4, 2, 0, -2, -4)$} \\
+         &= 16 + 4 + 0 + 4 + 16 && \why{squaring} \\
+         &= 40 && \why{addition} \\
+\#\{0, 2, 4, \ldots, 40\} &= \frac{40}{2} + 1 && \why{even numbers from 0 to 40} \\
+                         &= 21 && \why{arithmetic} \\
+\rho_{\mathrm{swap}} &= 1 - \frac{1^2 + (-1)^2}{20} && \why{one adjacent swap: two seeds have $d_i = \pm 1$, the rest 0} \\
+                     &= 1 - \frac{2}{20} && \why{$1^2 = (-1)^2 = 1$, addition} \\
+                     &= 0.9 && \why{$2/20 = 0.1$, subtraction}
+\end{align*}
+$\therefore$ With five seeds $\rho = 1 - D/20$ with $D$ even from 0 to 40; listing all 120 orderings shows every even value occurs, so $\rho$ has 21 possible values. One adjacent swap gives exactly 0.9; two separate adjacent swaps give $D = 4$ and $\rho = 0.8$, a fail. (List A in Section~5.1 has $D = 14$, so $\rho = 1 - 14/20 = 0.3$, the same answer.)
+\[\boxed{\rho = 1 - \frac{D}{20}, \quad 21 \text{ values}, \quad \rho_{\mathrm{swap}} = 0.9}\]
+
+\fself Can $\rho = 0.85$ happen with 5 seeds and no ties? (No: $1 - D/20 = 0.85$ needs $D = 3$, which is odd, and $D$ is always even.)
+\fviva ``Isn't the $\rho$ test very coarse with five seeds?''
+
+\section{Significance with small $n$}
+\fplain Even an event list that has nothing to do with grok will sometimes put the seeds in the right order, just by luck. With five seeds there are only 120 possible orders, so luck isn't rare. This section asks how often pure chance would give a $\rho$ as high as the PASS threshold. The answer tells you how much a single PASS from five seeds can prove.
+
+\fdef Significance (\gl{N42}) asks whether a correlation could easily appear by chance, that is, if all $n!$ orderings of the events were equally likely. The p-value is the probability, by chance, of a $\rho$ at least as large as the one observed.
+\fread With $n = 5$, only $\rho = 1$, and at the edge $\rho = 0.9$, are unlikely by chance. Smaller values, such as List A's $\rho = 0.3$, are easy to get by chance.
+
+The method is counting. ``By chance'' means each of the 120 orders of the five events is equally likely. You count the orders that give the $\rho$ you care about and divide by 120. Only one order gives $\rho = 1$. Four more give exactly 0.9, one for each pair of neighbouring positions that can be swapped. So $\rho \ge 0.9$ comes from 5 of the 120 orders. The p-value of an observed $\rho$ is this kind of share: the chance of a $\rho$ at least as large. A small p-value means luck is an unlikely explanation; on its own it doesn't mean the warning is useful.
+
+\fex The derivation computes the chance of $\rho = 1$ and of $\rho \ge 0.9$.
+
+\dass{chance probabilities of $\rho = 1$ and $\rho \ge 0.9$}
+\dgiven
+\begin{dlist}
+\item $n = 5$; by chance, all $n!$ orderings are equally likely (\gl{N42}).
+\item $\rho = 1$ only for the one ordering with $D = 0$; $\rho = 0.9$ only for orderings with exactly one adjacent swap (Section~5.3).
+\item With 5 positions there are 4 adjacent pairs: (1,2), (2,3), (3,4), (4,5).
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $n!$: the number of orderings of 5 seeds. Integer.
+\item $\Pr(\rho = 1)$: chance probability of $\rho = 1$. Scalar in $[0, 1]$.
+\item $\Pr(\rho \ge 0.9)$: chance probability of $\rho \ge 0.9$, the p-value of $\rho = 0.9$. Scalar in $[0, 1]$.
+\end{dlist}
+\dfind $\Pr(\rho = 1)$ and $\Pr(\rho \ge 0.9)$.
+\dsol
+\begin{align*}
+n! &= 5 \times 4 \times 3 \times 2 \times 1 && \why{definition of $n!$ with $n = 5$} \\
+   &= 120 && \why{multiplication} \\
+\Pr(\rho = 1) &= \frac{1}{120} && \why{one ordering out of 120 (Given 1, 2)} \\
+\Pr(\rho \ge 0.9) &= \frac{1 + 4}{120} && \why{the perfect order plus 4 single adjacent swaps (Given 2, 3)} \\
+                  &= \frac{5}{120} && \why{addition} \\
+                  &= \frac{1}{24} && \why{dividing top and bottom by 5} \\
+                  &\approx 0.042 && \why{division, rounded to 3 d.p.}
+\end{align*}
+$\therefore$ A random event list would reach $\rho = 1$ once in 120 tries, and $\rho \ge 0.9$ about once in 24.
+\[\boxed{\Pr(\rho = 1) = \tfrac{1}{120}, \quad \Pr(\rho \ge 0.9) = \tfrac{1}{24}}\]
+
+\fans About 1 in 24 is roughly 4\%. That's small, but not tiny: if you scored 24 event lists with no link to grok at all, you'd expect about one of them to reach $\rho \ge 0.9$. Section~7.3 shows how quickly this adds up when many versions of a rule are tried.
+
+\fself Why does your protocol use a threshold rather than a p-value? (With 120 orderings the p-values are coarse too; a fixed threshold is simpler to pre-register. By the same count, 14 of the 120 orderings give $\rho \ge 0.7$, a p-value of about 0.12.)
+\fviva ``How confident can you be in a PASS from five points?''
+\chapter{The frozen protocol and the PASS rule}
+
+Modules~3 to~5 built the measurements one at a time. This module puts them together into the fixed test that every predictor faces. Section~6.1 says what is fixed and when it was fixed; Section~6.2 states the PASS rule and scores two illustrative lists with it; Section~6.3 shows how the test itself is checked, by feeding it a made-up predictor that must pass.
+
+\section{The frozen protocol}
+\fplain A test is only fair if it's the same for everyone and is decided before the results are in. The frozen protocol is your benchmark's fixed test: the same task, seeds, epochs, grok threshold and PASS rule for every predictor, written down on one date and not changed afterwards. This section says what's in it and why its date matters.
+
+\fdef The frozen protocol (\gl{N44}) is the fixed set of rules used to score every predictor: the config \code{nanda\_\allowbreak{}unified.yaml}, $p = 113$, 5 seeds, 40{,}000 epochs, grok threshold 0.9, and the PASS rule of Section~6.2. It's written down and not changed while predictors are scored.
+\fread It makes all predictors comparable, and it stops thresholds being tuned to make a favourite predictor pass. It was written on 29 September 2026. Any result that was already known by that date weakens the claim that the thresholds were chosen blind, so the dates in \code{context.md} matter.
+
+The word ``frozen'' is the important part. If a threshold could be adjusted after seeing a predictor's numbers, it would be easy to move it until a favourite predictor passed, and the PASS would mean nothing. Freezing protects against that, but only for results that came after the freeze; that's why an examiner will ask what was already known on 29 September 2026. The protocol is applied in code, by one function, so every predictor is scored by the same lines. A verdict that the function produced and saved can be checked by anyone; one that was never saved can't.
+
+\fex The verdict function \code{evaluate\_\allowbreak{}frozen\_\allowbreak{}protocol} in \code{analyze\_\allowbreak{}nanda\_\allowbreak{}unified.py} (\gl{A9}) applies the three conditions of Section~6.2. There's no calculation here.
+
+\fself Does every predictor have a saved frozen-protocol verdict in a results file, or were some only recomputed later? (Check the saved results; a verdict that was never saved can't be checked by an examiner.)
+\fviva ``Was the protocol fixed before you saw any results?''
+
+\section{The PASS rule}
+\fplain The PASS rule combines the three measurements of Modules~4 and~5 into one verdict. A predictor passes only if it is early enough in enough seeds (the lead fraction), follows the order of grok (Spearman's $\rho$), and is early by a sensible amount, neither too late nor absurdly early (the mean relative lead). All three must hold; failing any one is a FAIL. This section summarises List A's verdict, then scores List C, a list built to look like a fixed clock.
+
+\fdef A predictor passes (\gl{N43}) only if all three hold:
+\[\leadfrac \ge 0.8, \qquad \rho \ge 0.9, \qquad 0.05 \le \rbar \le 0.9.\]
+Otherwise its verdict is FAIL.
+\fread Each condition blocks a different failure: $\leadfrac$ blocks firing late, $\rho$ blocks firing on a fixed clock, and the upper limit on $\rbar$ blocks firing absurdly early.
+
+Think of each condition as a check against a different way a warning can be useless. A rule that fires late, or not early enough, in more than one seed is caught by the lead fraction. A rule that fires at about the same epoch in every run, and so says nothing about when grok comes, is caught by $\rho$. A rule that fires so early it's probably unrelated to grok is caught by the upper limit on $\rbar$, and one that on average fires only just before grok is caught by the lower limit. Because the conditions catch different failures, passing two of them is no comfort: List A and List C below each pass two and fail one.
+
+\fex List A (Section~4.1): $\leadfrac = 0.8$ (passes, Section~4.3), $\rho = 0.3$ (fails, Section~5.1), $\rbar = 0.547$ (passes, Section~4.4), so FAIL. One failed condition is enough. The derivation scores a second illustrative list. Suppose a rule fires at the epochs of \textbf{List C} (\gl{N32}), all close to epoch 2000:
+\[
+\text{List C:}\quad (P_0, P_1, P_2, P_3, P_4) = (2020,\ 1990,\ 2000,\ 2030,\ 2010).
+\]
+
+\dass{the verdict of List C}
+\dgiven
+\begin{dlist}
+\item $(G_0, \ldots, G_4) = (12987, 6921, 9510, 11019, 23747)$ and $(R(G_0), \ldots, R(G_4)) = (4, 1, 2, 3, 5)$ (\gl{N26}, Section~5.1).
+\item $(P_0, \ldots, P_4) = (2020, 1990, 2000, 2030, 2010)$, all five fire (List C, above).
+\item Every $P_i$ is at most 2030 and every $G_i - 100$ is at least $6921 - 100 = 6821$, so all five seeds lead (\gl{N34}).
+\item $\rho = 1 - D/20$ for $n = 5$ with no ties (Section~5.3).
+\item $\rbar = 1 - \frac{1}{5}\sum_{i=0}^{4} P_i/G_i$ when $n = 5$ (Section~4.4).
+\item PASS rule (\gl{N43}).
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $R(P_i)$: rank of $P_i$ among the five events. Integer from 1 to 5. $R(P)$ is the list $(R(P_0), \ldots, R(P_4))$.
+\item $d_i = R(G_i) - R(P_i)$: rank difference of seed $i$. Integer. $d$ is the list $(d_0, \ldots, d_4)$.
+\item $D = \sum d_i^2$. Integer.
+\item $\leadfrac$, $\rho$, $\rbar$: the three PASS quantities of List C. Scalars.
+\item $S$: the sum $\sum_{i=0}^{4} P_i/G_i$ for List C. Scalar, positive.
+\end{dlist}
+\dfind The three PASS quantities and the verdict.
+\dsol
+\begin{align*}
+\leadfrac &= \frac{5}{5} && \why{Given 3, $n = 5$} \\
+          &= 1.0 && \why{division} \\
+\text{sorted } P &: 1990 < 2000 < 2010 < 2020 < 2030 && \why{sorting Given 2: seeds 1, 2, 4, 0, 3} \\
+R(P) &= (4, 1, 2, 5, 3) && \why{position of each seed in the line above} \\
+d &= (4-4,\ 1-1,\ 2-2,\ 3-5,\ 5-3) && \why{Let 2 with Given 1} \\
+  &= (0, 0, 0, -2, 2) && \why{subtraction} \\
+D &= 0^2 + 0^2 + 0^2 + (-2)^2 + 2^2 && \why{Let 3} \\
+  &= 0 + 0 + 0 + 4 + 4 && \why{squaring} \\
+  &= 8 && \why{addition} \\
+\rho &= 1 - \frac{8}{20} && \why{Given 4} \\
+     &= 0.6 && \why{$8/20 = 0.4$, subtraction} \\
+\rbar &= 1 - \frac{S}{5} && \why{Given 5 and Let 5} \\
+S &= \tfrac{2020}{12987} + \tfrac{1990}{6921} + \tfrac{2000}{9510} + \tfrac{2030}{11019} + \tfrac{2010}{23747} && \why{Let 5 with Given 1 and 2} \\
+  &\approx 0.15554 + 0.28753 + 0.21030 + 0.18423 + 0.08464 && \why{each fraction rounded to 5 d.p.; later digits dropped} \\
+  &= 0.92224 && \why{addition} \\
+\rbar &= 1 - \frac{0.92224}{5} && \why{substitution of $S$ into the line $\rbar = 1 - S/5$} \\
+      &= 1 - 0.184448 && \why{division by 5} \\
+      &= 0.815552 && \why{subtraction}
+\end{align*}
+$\therefore$ List C has $\leadfrac = 1.0$ (passes), $\rho = 0.6$ (fails) and $\rbar = 0.816$ to 3 d.p.\ (passes). One failed condition is enough, so the verdict is FAIL. List C fires at about epoch 2000 in every seed whatever $G_i$ is: it's close to a fixed clock, and its $\rho$ of 0.6 comes only from the order of differences of a few tens of epochs.
+\[\boxed{\leadfrac = 1.0, \ \rho = 0.6, \ \rbar = 0.816: \ \text{FAIL}}\]
+
+\fans List C shows the fixed-clock failure. Its events span only 40 epochs (1{,}990 to 2{,}030) while the grok epochs span 16{,}826. Its lead fraction is perfect and its mean relative lead is inside the range, so two conditions are met, but $\rho$ catches it.
+
+\fself Build a made-up event list that passes all three for your five $G_i$. (Section~6.3 does this with $P_i = 0.5\,G_i$.)
+\fviva ``Justify each threshold. Where do 0.8, 0.9, 0.05 and 0.9 come from?''
+
+\section{Pre-registration and criterion validation}
+\fplain Before trusting a test, you should check that it can tell good from bad. One way is to feed it made-up predictors whose quality you know in advance: one built to be perfect, which should pass, and one built to be useless, which should fail. If the perfect one fails, the test is too strict; if the useless one passes, it's too loose. This section does that check for the PASS rule, and explains why writing the test down before running it matters.
+
+\fdef Pre-registration (\gl{N46}) is writing down your test before running it. Criterion validation is checking that the test passes a good synthetic predictor and fails a bad one, where a synthetic predictor is a made-up list of event epochs built from your $G_i$.
+\fread Your \code{context.md} records a calibration of the $\rho$ cutoff. It used this run's own grok epochs, after some results were already known, so an examiner can call it post-hoc.
+
+These two ideas answer different worries. Pre-registration answers ``did you choose the test to suit the results?''. Criterion validation answers ``can this test pass anything at all, and does it fail what it should?''. The synthetic predictor $P_i = 0.5\,G_i$ is built from the grok epochs themselves, so it follows their order exactly and always leaves half the time to grok as warning: it's the clearest case of a good warning. No real predictor could produce it, because it needs $G_i$ in advance; its only job is to test the test.
+
+\fex The derivation scores the synthetic ``perfect'' predictor $P_i = 0.5\,G_i$.
+
+\dass{the synthetic predictor $P_i = 0.5\,G_i$}
+\dgiven
+\begin{dlist}
+\item $(G_0, \ldots, G_4) = (12987, 6921, 9510, 11019, 23747)$, all different (\gl{N26}).
+\item Synthetic events $P_i = 0.5\,G_i$ for every seed, so all five fire.
+\item Lead: $P_i < G_i - 100$ (\gl{N34}); $r_i = (G_i - P_i)/G_i$ (\gl{N37}).
+\item PASS rule (\gl{N43}).
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $P_i$: synthetic event epoch of seed $i$. Scalar epoch.
+\item $r_i$: its relative lead. Scalar.
+\item $\leadfrac$, $\rho$, $\rbar$: the three PASS quantities. Scalars.
+\end{dlist}
+\dfind The three PASS quantities and the verdict.
+\dsol
+\begin{align*}
+G_i - P_i &= G_i - 0.5\,G_i && \why{Given 2} \\
+          &= 0.5\,G_i && \why{subtraction} \\
+          &\ge 0.5 \times 6921 && \why{the smallest $G_i$ is 6921 (Given 1)} \\
+          &= 3460.5 && \why{multiplication} \\
+          &> 100 && \why{comparison, so $P_i < G_i - 100$ in every seed} \\
+\leadfrac &= \frac{5}{5} && \why{all five seeds lead (Given 3, line above)} \\
+          &= 1.0 && \why{division} \\
+R(P_i) &= R(G_i) && \why{$P_i = 0.5\,G_i$ keeps the order of the $G_i$} \\
+d_i &= 0 && \why{$d_i = R(G_i) - R(P_i)$} \\
+\rho &= 1 - \frac{0}{20} && \why{Section~5.3 with $D = 0$} \\
+     &= 1 && \why{arithmetic} \\
+r_i &= \frac{0.5\,G_i}{G_i} && \why{Given 3 and the second line} \\
+    &= 0.5 && \why{$G_i / G_i = 1$} \\
+\rbar &= \frac{5 \times 0.5}{5} && \why{all five $r_i$ equal 0.5} \\
+      &= 0.5 && \why{division}
+\end{align*}
+$\therefore$ The perfect synthetic predictor gets $\leadfrac = 1.0$, $\rho = 1$ and $\rbar = 0.5$, so it must PASS. A synthetic event at a fixed epoch, e.g.\ $P_i = 2000$ in every seed, has all events tied, so $\rho$ is undefined (Section~5.1) and can't reach 0.9; it must FAIL.
+\[\boxed{\leadfrac = 1.0, \ \rho = 1, \ \rbar = 0.5: \ \text{PASS}}\]
+
+\fself What would a synthetic control that should fail look like? (The fixed $P_i = 2000$ above; or an event placed after grok, $P_i = G_i + 100$, which has no leads.)
+\fviva ``How do you know your criterion isn't too strict to pass anything?'' (The perfect synthetic predictor passes it.)
+
+\chapter{Research honesty}
+
+A predictor can pass the PASS rule and still not be a fair result. This module covers the ways that can happen, in the order you'd check them: a rule that uses information from the future (Section~7.1), smoothing that looks ahead (Section~7.2), trying many versions of a rule and keeping the best (Section~7.3), and a verdict that hangs on one decimal (Section~7.4). It then covers what a fair comparison needs, controls and a noise floor (Section~7.5), and ends with why a careful negative result still counts (Section~7.6).
+
+\section{Hindsight (look-ahead) bias}
+\fplain A warning is only a warning if you could have acted on it at the time. Suppose a rule, to decide whether its event has happened at epoch 3{,}000, needs to know what the signal does at epoch 30{,}000. That rule couldn't have been run during training: at epoch 3{,}000 the later values don't exist yet. Such a rule has look-ahead, or hindsight. It can look excellent on paper and still be useless. This section shows how to spot it, using a simple made-up rule that compares the signal with its whole-run average.
+
+\fdef Look-ahead bias (\gl{N47}) is using information from later epochs, such as the final value $\yfinal$ of a signal at epoch 40{,}000 (\gl{N27}), to decide when an earlier event happened.
+\fread A rule with look-ahead can pass the PASS rule and still be useless, because a live monitor couldn't run it during training: the information it needs doesn't exist yet. Any rule that uses $\yfinal$, the run's largest or smallest value, or an average over the whole run, has this problem, so such a result can only be reported as a hindsight check, not as a benchmark result.
+
+The test is to imagine running the rule live: at each epoch, give it only the values up to that epoch and see whether it can decide. If it needs any value from after the epoch it's deciding about, it looks ahead. Look-ahead is easy to hide inside a single number. The final value $\yfinal$, the run's largest or smallest value, and the whole-run average each look like one harmless constant, but each is computed from the whole curve, including the end. The derivation makes that visible by splitting the whole-run average into a part from before the candidate event and a part from after it.
+
+\fex Suppose a rule fires at the first epoch where the signal falls below its average over the whole run. The derivation shows that this average needs epochs after the event.
+
+\dass{a whole-run average needs future epochs}
+\dgiven
+\begin{dlist}
+\item A signal $y_t$, recorded here at every epoch $t = 0, 1, \ldots, 40{,}000$, so $40{,}001$ values (\gl{N27}, \gl{N9}; illustrative).
+\item The rule compares $y_t$ with the whole-run average $\yrun$ and fires at the first epoch where $y_t < \yrun$ (illustrative rule).
+\item The candidate event epoch $\tau$ is before the end of the run: $\tau < 40{,}000$.
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $y_t$: the signal at epoch $t$. Scalar.
+\item $\yrun$: the whole-run average, $\yrun = \frac{1}{40001}\sum_{t=0}^{40000} y_t$. Scalar. Role: the level the rule compares against.
+\item $\tau$: an epoch at which the rule might fire. Integer epoch.
+\end{dlist}
+\dfind $\yrun$ split into a past part (epochs up to $\tau$) and a future part (epochs after $\tau$).
+\dsol
+\begin{align*}
+\yrun &= \frac{1}{40001}\sum_{t=0}^{40000} y_t && \why{definition of $\yrun$ (Let 2)} \\
+      &= \frac{1}{40001}\left(\sum_{t=0}^{\tau} y_t + \sum_{t=\tau+1}^{40000} y_t\right) && \why{splitting the sum at $\tau$} \\
+      &= \frac{1}{40001}\sum_{t=0}^{\tau} y_t + \frac{1}{40001}\sum_{t=\tau+1}^{40000} y_t && \why{multiplying out $\tfrac{1}{40001}$}
+\end{align*}
+$\therefore$ The second term adds up the $40{,}000 - \tau$ values after $\tau$, and $40{,}000 - \tau \ge 1$ by Given 3. So $\yrun$ isn't known at epoch $\tau$: the rule looks ahead. For $\tau = 3000$, 37{,}000 of the 40{,}001 values are from the future.
+\[\boxed{\yrun \text{ uses } y_{\tau+1}, \ldots, y_{40000}, \text{ which come after } \tau}\]
+
+\fans The second term is never empty, because the candidate event is before the end of the run. So at the moment the rule claims to fire, it's using numbers that don't exist yet.
+
+\fself How would you test whether a rule is look-ahead free? (Cut the curve at epoch $t$, rerun the rule, and check that the event before $t$ doesn't move.)
+\fviva ``Could this signal be used during training, before you know the outcome?''
+
+\section{Causal vs centred moving average}
+\fplain Signal curves are often noisy, so rules usually smooth them first by averaging each point with its neighbours. The question is which neighbours. If you average a point with the ones before it, the smoothed curve uses only the past. If you average it with neighbours on both sides, each smoothed point already contains a little of the future. That small difference decides whether a rule can be run live. This section writes both kinds out for a window of 3 points.
+
+\fdef A causal moving average at epoch $t$ (\gl{N28}) uses only points at or before $t$. A centred one uses points on both sides of $t$.
+\fread A centred average includes later epochs in each smoothed value, so any event found on a centred curve is slightly look-ahead. \code{uniform\_\allowbreak{}filter1d} is centred (with the edges padded by copying). A rule that smooths with it can't be called an ex-ante trigger (one that uses only the past).
+
+The look-ahead in a centred average is small but real: each smoothed value uses about half a window of points from after it, so the look-ahead grows with the window $w$. A causal average pays for its honesty with a delay: because it only sees the past, it reacts to a change only after the change has started, so events found on a causal curve tend to come later than on a centred one. Before you call a rule an ex-ante trigger, you need to know which kind of average it smooths with.
+
+\fex The derivation writes both averages for a window of 3 points.
+
+\dass{causal and centred averages, window 3}
+\dgiven
+\begin{dlist}
+\item A signal $y_t$, one scalar per point $t$ (\gl{N27}).
+\item Window $w = 3$; causal uses points $\le t$, centred uses both sides (\gl{N28}).
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $y_t$: the signal at point $t$. Scalar.
+\item $\bar y_t^{\,\mathrm{causal}}$: the causal average at $t$. Scalar. Uses $y_{t-2}, y_{t-1}, y_t$.
+\item $\bar y_t^{\,\mathrm{centred}}$: the centred average at $t$. Scalar. Uses $y_{t-1}, y_t, y_{t+1}$.
+\end{dlist}
+\dfind Both averages, and which needs a later point.
+\dsol
+\begin{align*}
+\bar y_t^{\,\mathrm{causal}} &= \frac{y_{t-2} + y_{t-1} + y_t}{3} && \why{the 3 points ending at $t$ (Given 2)} \\
+\bar y_t^{\,\mathrm{centred}} &= \frac{y_{t-1} + y_t + y_{t+1}}{3} && \why{one point each side of $t$ (Given 2)}
+\end{align*}
+$\therefore$ The centred average at $t$ contains $y_{t+1}$, a point from the future; the causal one doesn't.
+\[\boxed{\bar y_t^{\,\mathrm{centred}} \text{ needs } y_{t+1}; \ \bar y_t^{\,\mathrm{causal}} \text{ doesn't}}\]
+
+\fself Which one shifts events later? (The causal one: it only reacts after the change has happened, so its events come later than the centred version's.)
+\fviva ``Is your smoothing causal?'' (Check which function each rule uses; \code{uniform\_\allowbreak{}filter1d} is centred.)
+
+\section{Researcher degrees of freedom}
+\fplain Every rule has settings: a window, a threshold, how many early epochs to skip. If you try several settings and keep the one that scores best, you've given luck several chances. Section~5.4 showed that an event list with no link to grok reaches $\rho \ge 0.9$ about once in 24 tries. This section shows what happens to that chance when you try 12 versions of a rule and keep the best.
+
+\fdef Researcher degrees of freedom (\gl{N48}) are choices of rule settings (\gl{N30}), such as windows, thresholds or \code{skip\_\allowbreak{}epochs}, made after looking at the results.
+\fread Each extra version of a rule that you try is another chance to pass by luck. If settings were changed after looking at the curves, an examiner can say the rule was fitted to the data.
+
+The danger isn't in trying things; it's in trying things after looking at the results and then reporting only the best. If the settings are chosen and written down before the curves are seen, each rule gets one chance. If they're tuned on the curves, the reported rule has had many chances, and its PASS is much weaker evidence than it looks. The calculation below treats the 12 versions as independent. They usually aren't (nearby settings tend to give similar events), so the real chance is usually lower than the answer; what the calculation shows is the direction: more versions tried means more chance of a lucky pass.
+
+\fex Suppose you try 3 windows, 2 thresholds and 2 \code{skip\_\allowbreak{}epochs} values for one signal, and keep whichever version looks best. The derivation counts the versions and estimates the chance that at least one reaches $\rho \ge 0.9$ by luck alone, treating the versions as independent. They usually aren't, so read the result as a rough picture, not an exact value.
+
+\dass{the chance that at least one version reaches $\rho \ge 0.9$ by luck}
+\dgiven
+\begin{dlist}
+\item 3 windows, 2 thresholds, 2 \code{skip\_\allowbreak{}epochs} values (illustrative).
+\item By chance, one version reaches $\rho \ge 0.9$ with probability $\frac{1}{24}$ (Section~5.4).
+\item The versions are treated as independent (simplifying assumption).
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $V$: the number of versions tried. Integer. Role: how many chances there are.
+\item $\Pr_{\mathrm{none}}$: chance that no version reaches $\rho \ge 0.9$. Scalar in $[0, 1]$.
+\item $\Pr_{\mathrm{any}}$: chance that at least one version does. Scalar in $[0, 1]$.
+\end{dlist}
+\dfind $V$ and $\Pr_{\mathrm{any}}$.
+\dsol
+\begin{align*}
+V &= 3 \times 2 \times 2 && \why{every combination of the settings in Given 1} \\
+  &= 12 && \why{multiplication} \\
+\Pr_{\mathrm{none}} &= \left(1 - \tfrac{1}{24}\right)^{12} && \why{each of the 12 versions misses with probability $1 - \frac{1}{24}$ (Given 2, 3)} \\
+                    &= \left(\tfrac{23}{24}\right)^{12} && \why{$1 - \frac{1}{24} = \frac{23}{24}$} \\
+\Pr_{\mathrm{any}} &= 1 - \left(\tfrac{23}{24}\right)^{12} && \why{``at least one'' is the opposite of ``none''} \\
+                   &\approx 1 - 0.600 && \why{$(23/24)^{12} = 0.6000\ldots$, rounded to 3 d.p.} \\
+                   &= 0.400 && \why{subtraction}
+\end{align*}
+$\therefore$ One version has about a 4\% chance of reaching $\rho \ge 0.9$ by luck; picking the best of 12 raises that to about 40\%. That's why settings must be fixed before you look.
+\[\boxed{V = 12, \quad \Pr_{\mathrm{any}} \approx 0.400}\]
+
+\fans Twelve versions isn't many: three windows, two thresholds and two skip values. Yet the chance of at least one lucky $\rho \ge 0.9$ goes from about 4\% to about 40\%, roughly ten times as large.
+
+\fself Which settings in your config say ``not from a paper''? (Check each window and skip value in \code{nanda\_\allowbreak{}unified.yaml} for a citation.)
+\fviva ``How many rules did you try before this one?''
+
+\section{Sensitivity analysis}
+\fplain Every threshold in the PASS rule is a fixed number, and a predictor can land just on the wrong side of one. When that happens you want to know whether the verdict is solid or whether it would flip if the threshold, or one of the rule's settings, moved a little. Changing one thing slightly and seeing whether the verdict changes is sensitivity analysis. This section works through a made-up near-miss.
+
+\fdef Sensitivity analysis (\gl{N49}) is changing one setting a little and checking whether the verdict changes.
+\fread If a verdict flips when a threshold or window moves a little, it's fragile. Near-misses show where that can happen.
+
+Sensitivity analysis works in both directions. For a FAIL that misses by a little, it shows how close the predictor came. That's honest to report, but it doesn't turn the FAIL into a PASS: the thresholds are frozen. For a PASS, it shows whether the pass survives small changes; a PASS that disappears when a window changes slightly is much weaker than one that holds across a range of windows. Vary first the setting or threshold the result is closest to.
+
+\fex Suppose a rule fires at $P_i = 0.09\,G_i$ in every seed (an illustrative list, \gl{N32}). All five seeds lead and the order of the $G_i$ is kept, so $\leadfrac = 1.0$ and $\rho = 1$, as in Section~6.3. The derivation measures how far it misses the upper limit on $\rbar$.
+
+\dass{how far the list $P_i = 0.09\,G_i$ misses}
+\dgiven
+\begin{dlist}
+\item $P_i = 0.09\,G_i$ for every seed (illustrative list above).
+\item $r_i = (G_i - P_i)/G_i$ and $\rbar = \frac{1}{n}\sum_{i \in F} r_i$ (\gl{N37}), with $n = 5$.
+\item Upper limit on $\rbar$: 0.9 (\gl{N43}).
+\end{dlist}
+\dlet
+\begin{dlist}
+\item $r_i$: the relative lead of seed $i$. Scalar.
+\item $\rbar$: the mean relative lead of this list. Scalar.
+\item $\delta$: the miss, $\delta = \rbar - 0.9$. Scalar; positive means above the limit.
+\end{dlist}
+\dfind $\delta$.
+\dsol
+\begin{align*}
+r_i &= \frac{G_i - 0.09\,G_i}{G_i} && \why{Given 2 with Given 1} \\
+    &= \frac{0.91\,G_i}{G_i} && \why{subtraction} \\
+    &= 0.91 && \why{$G_i / G_i = 1$} \\
+\rbar &= \frac{5 \times 0.91}{5} && \why{all five $r_i$ equal 0.91 (Given 2)} \\
+      &= 0.91 && \why{division} \\
+\delta &= \rbar - 0.9 && \why{definition of $\delta$ (Let 3)} \\
+       &= 0.91 - 0.9 && \why{substitution of the line above} \\
+       &= 0.01 && \why{subtraction}
+\end{align*}
+$\therefore$ This list fails only by 0.01. An upper limit of 0.92 instead of 0.9 would turn it into a PASS. A verdict that hangs on the second decimal of a threshold needs a sensitivity check.
+\[\boxed{\delta = 0.01}\]
+
+\fans This list is a perfect warning on two counts and fails the third by one hundredth: a near-miss. The honest report is FAIL, with a note that the verdict depends on the second decimal of one threshold.
+
+\fself Which threshold would you vary first for a near-miss like this? (The one it misses by the least: here the upper limit 0.9 on $\rbar$.)
+\fviva ``Would your verdict survive a different window size?''
+
+\section{Baselines, controls and noise floor}
+\fplain To say a signal changes because grokking is coming, you need to know what the signal does when grokking isn't coming. Without that comparison, a change could be due to the optimiser, to the steady shrinking of the weights, or just to noise. A control run supplies the comparison, and the noise floor tells you how big a change has to be before it's worth noticing. This section explains both.
+
+\fdef A control run (\gl{N50}) is one where grokking doesn't happen, or a setting is switched off. The noise floor is how much a signal wobbles for no reason.
+\fread Without them you can't say a change in a signal is because of grokking. A noise floor is only useful if a rule actually uses it to decide when an event is real.
+
+Section~2.4 gave one reason this is needed: weight decay shrinks the weights in every run, whether it groks or not. A control with weight decay switched off is one way to separate the two causes. The noise floor works on a smaller scale. A signal wobbles from epoch to epoch for reasons that have nothing to do with grokking; if a rule fires on a change smaller than that wobble, the event may be just noise. Measuring the wobble is only half the job; the rule also has to use it, for example by ignoring changes smaller than it.
+
+\fex A run with weight decay $\lambda = 0$ (\gl{N19}), which often doesn't grok, would show what any signal $y_t$ does without grokking. There's no calculation here.
+
+\fself How would you estimate the noise floor from the saved curves? (For example, take a stretch of a signal's curve and measure how much it moves from one point to the next; the typical size of those moves is a first estimate of the noise floor.)
+\fviva ``Where's your control condition?''
+
+\section{Negative results and reproducibility}
+\fplain Most of your predictors failed. That isn't the same as the thesis failing. A careful ``this doesn't work'', from a fair test that anyone can rerun, is a result: it tells the next researcher which ideas not to rely on. This section explains what makes a negative result worth reporting and how reproducibility supports it.
+
+\fdef A negative result (\gl{N51}) is a clear ``this doesn't work''. Reproducibility means someone else can rerun your work and get the same numbers.
+\fread Seven of your eight predictors are closed-negative (\gl{N45}), so the thesis's value is in showing the tests were fair and repeatable: fixed seeds, saved data, frozen thresholds.
+
+A negative result is only as good as the test behind it. If the test was too strict, the failures say nothing; that's why criterion validation (Section~6.3) matters, because it shows that a good predictor would have passed. If the test was changed along the way, the failures can't be compared; that's why the protocol is frozen (Section~6.1). And if nobody can rerun the work, nobody can check it; that's why fixed seeds and saved data matter. Together they turn ``seven predictors failed'' into ``seven predictors were fairly tested and failed''.
+
+\fex Recomputing from the saved accuracy curves gives the same $G_i$, and rebuilding the split with the same seed reproduces the saved accuracies. There's no calculation here.
+
+\fself What makes a negative result publishable rather than just a failure?
+\fviva ``If almost nothing passes, what is the contribution of the thesis?''
+
+\chapter*{Recommended reading}
+\addcontentsline{toc}{chapter}{Recommended reading}
+\begin{sloppypar}
+\begin{enumerate}
+\item[{[1]}] Power, A., Burda, Y., Edwards, H., Babuschkin, I., Misra, V. (2022). \emph{Grokking: Generalization Beyond Overfitting on Small Algorithmic Datasets.} arXiv:2201.02177. (Modules 1--2.)
+\item[{[2]}] Nanda, N., Chan, L., Lieberum, T., Smith, J., Steinhardt, J. (2023). \emph{Progress Measures for Grokking via Mechanistic Interpretability.} ICLR 2023. (Modules 1--2; your setup.)
+\item[{[3]}] Loshchilov, I., Hutter, F. (2019). \emph{Decoupled Weight Decay Regularization.} ICLR 2019. (AdamW, Module 2.)
+\item[{[4]}] Spearman, C. (1904), the original paper, or any introductory statistics chapter on Spearman rank correlation. (Module 5.)
+\item[{[5]}] Nosek, B.\,A.\ et al.\ (2018). \emph{The Preregistration Revolution.} PNAS 115(11). (Modules 6--7.)
+\end{enumerate}
+\end{sloppypar}
+
+\end{document}
