@@ -12453,3 +12453,28 @@ Lead fraction and Spearman rho are stable across 100, 200, 250 grids, so conclus
 If examiner asks for higher resolution, we can rerun with --eval_every 50 without retraining.
 ---
 
+# 2026-11-09 — Why the benchmark uses 5 seeds (justification recorded)
+
+## Context
+- Jonathan asked on 2026-11-09 why the protocol uses exactly 5 seeds. A full search of git history of context.md, AGENTS.md and nanda_unified.yaml found no committed text that ever justified 5 seeds. The runner default `--seeds 5` first appears in commit 96812a4 (2026-09-04). Commit 85fee1e (2026-09-25) removed `limit_cycle_diagnostic_runs: 5`, which was a separate oscillation check, not the seed count. Commit 1a5c259 (2026-09-26) records a lost uncommitted context.md edit whose content is unknown. This entry records the justification now.
+
+## Colloquium answer (strongest reason, one line to speak)
+"Five seeds is the smallest number that keeps the PASS rule statistically meaningful while tolerating one miss: Spearman's rho can reach p < 0.05 only with at least 4 ranked seeds (n = 4: P(rho = 1) = 1/24 ≈ 0.042; n = 3: 1/6 ≈ 0.167), the protocol auto-fails any predictor with fewer than 4 firing seeds, so 5 seeds is the minimum that still leaves 4 after one miss. It is also exactly the seed count Nanda et al. (2023) report for the same modular-addition task ('over 5 random seeds')."
+This makes 5 the minimum sufficient for significance; it is not claimed to give high statistical power.
+
+## Supporting reasons
+1. Same seed count as the reproduced paper: Nanda et al. 2023 report results "over 5 random seeds" (https://arxiv.org/abs/2301.05217).
+2. Grok timing varies by seed (G = 12987, 6921, 9510, 11019, 23747; latest/earliest ≈ 3.4), so a single run cannot show whether a warning moves with grok.
+3. Henderson et al. 2018 ran "five experiment trials" and warn that results averaged over "small number of trials (N < 5) … can be potentially misleading" (https://arxiv.org/abs/1709.06560).
+4. Five seeds is a common lower convention: Bouthillier et al. 2021 varied each variance source "with 5 different seeds" (https://arxiv.org/abs/2103.03098); Power et al. 2022 used 3 seeds (7 in §3.1.1) (https://arxiv.org/abs/2201.02177).
+5. Exact null with n = 5: P(rho ≥ 0.9) = 5/120 ≈ 0.042 one-sided, so the frozen threshold rho ≥ 0.9 is just significant one-sided.
+6. Compute: about 2 h per seed on Apple MPS; going to 10 seeds was estimated at about 7 extra hours per experiment (see the 2026-09-29 calibration entry).
+
+## Known weaknesses (state openly in viva)
+- rho ≥ 0.9 is not significant two-sided at n = 5 (P(|rho| ≥ 0.9) = 10/120 ≈ 0.083).
+- An always-leading random predictor (P ~ Uniform[0, G], real G values) passes the full PASS rule 21.7% of the time at n = 5; simulated ≈ 6.1% at n = 6, ≈ 1.5% at n = 10, ≈ 0.2% at n = 15.
+- Colas et al. 2018 (https://arxiv.org/abs/1806.08295) and Agarwal et al. 2021 (https://arxiv.org/abs/2108.13264) treat ≈5 runs as a lower bound; power analyses often want ≥10.
+- One extreme seed (seed 4, G = 23747) can dominate a rank correlation.
+
+## Files Modified
+- context.md (this entry) only.
