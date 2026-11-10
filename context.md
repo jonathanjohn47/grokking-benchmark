@@ -11371,6 +11371,8 @@ python 06_Code/scripts/run_control_experiment.py
 
 ## Current Project State
 
+SUPERSEDED as a current-status block on 10 November 2026. The lines below are kept. Do not read "Next predictor: Weight-PCA" as the present task. The present status is the consolidated 10 November 2026 entry at the end of this file.
+
 - Completed and closed (all negative verdicts): L2 Norm, Dropout, Spectral, AGE, HTSR Alpha. Evaluation criterion itself validated via synthetic controls (Run 2, 99th-percentile calibration, `RHO_THRESH = 0.9`; Control E Variant 2's structural false-positive-rate caveat still open, per the 2026-09-29 entry).
 - Removed from scope: Correlation Traps (6) — anti-grokking predictor, not applicable to this benchmark's grok-onset protocol as currently designed.
 - Next predictor in order: **Weight-PCA (7)**, then Higher-MI (8), then Commutator Defect (9). No literature paper is yet mapped to Weight-PCA in `04_Literature/README.md` — same "predictor -> paper map still needed" situation Dropout and Correlation Traps were in before their papers were found.
@@ -11382,6 +11384,8 @@ python 06_Code/scripts/run_control_experiment.py
 
 
 ## Interpretation Note: If All Predictors Fail
+
+SUPERSEDED on 10 November 2026. The quoted rule below (six predictors, global minimum, lead requirement P_s < G_s - 100) is no longer the rule that runs. The scored set is eight predictors, and the lead test is P_i < c * G_i with c = 0.8. The original note is kept in full.
 
 > **Interpretation Note - Negative Benchmark Outcome:**
 > If all 6 predictors (L2 Norm, Dropout Robustness, Spectral Signature, AGE/NC1, HTSR-alpha, Weight-PCA) result in CLOSED-NEGATIVE under the frozen unified protocol (nanda_unified.yaml, p=113, 5 seeds, grok = test acc > 0.9, Ps defined as global minimum, lead requirement Ps < Gs - 100, lead_frac >= 0.8, rho >= 0.9), the conclusion is:
@@ -12511,6 +12515,8 @@ This makes 5 the minimum sufficient for significance; it is not claimed to give 
 
 # 2026-11-10 — Fractional lead rule (c sweep), re-score of saved results
 
+SUPERSEDED as the status of record by the consolidated 10 November 2026 entry and by the official-scorer entry below. In particular, the sentence that L2, Dropout, Spectral and AGE were not backfilled is no longer the current state. This section is kept.
+
 ## Session Summary
 - Replaced the default lead test in the frozen PASS rule. Old comparison, still available: seed i leads if P_i < G_i - 100. New default: seed i leads if P_i < c * G_i, with c = 0.8 as the config parameter (`evaluation.lead_fraction_c` in `06_Code/configs/nanda_unified.yaml`).
 - Sensitivity was scored at c = 0.7 and c = 0.9 as well as the margin-100 comparison. No model was retrained. Frozen verdict files, including `predictor_events.json`, were not overwritten.
@@ -12577,6 +12583,8 @@ The margin100 rate matches the previously recorded figure of about 21.7 percent.
 
 # 2026-11-10 — All eight predictors scored under the fractional lead rule
 
+SUPERSEDED as the status of record by the official-scorer entry and by the consolidated 10 November 2026 entry. Those later entries are the ones that count. This section is kept. It records a side re-score, not the official pipeline.
+
 ## Session Summary
 - Pull request #8 was merged into main (merge commit a79daee). There was no conflict in context.md.
 - Jonathan then asked for verdicts for all eight predictors, including L2 Norm, Dropout, Spectral and AGE. These four did not have a frozen-protocol verdict before. The numbers in the new file are their first frozen-protocol verdicts. Every stored row was scored, including the two Higher-MI exploratory rows.
@@ -12627,6 +12635,8 @@ Saved P_i are in lead_fraction_all_eight_2026-11-10.json (same order as grok see
 
 # 2026-11-10 — Official scorer now verdicts all eight predictors
 
+The numbers in this section still stand. The status summary is SUPERSEDED by the consolidated 10 November 2026 entry at the end of this file, which gathers the whole day. This section is kept.
+
 ## Session Summary
 - Jonathan asked that the verdicts come from `06_Code/scripts/analyze_nanda_unified.py`, not from a side re-score script.
 - The deliberate skip of L2 Norm, Dropout, Spectral and AGE is removed. Every stored event row is scored with the fractional lead rule. c is read from `evaluation.lead_fraction_c` (default 0.8). `--lead-c` overrides it.
@@ -12663,3 +12673,65 @@ Every predictor FAILs. Every row FAILs. c = 0.7 and c = 0.9 do not change any ro
 ## What did not change
 - Predictor modules, the shared model, and the L2 crossover detector.
 - The earlier side-file `lead_fraction_all_eight_2026-11-10.json` was not overwritten. The official verdict file is `frozen_protocol_verdicts.json`.
+
+
+# 2026-11-10 — Consolidated status for the day
+
+This entry is the status of record for 10 November 2026. Earlier sections from this day, and the older "current project state" and "all 6 predictors / P_s < G_s - 100" note, are marked SUPERSEDED above and are not deleted.
+
+## 1. Pull requests already merged before the lead-rule work
+
+- PR #1, L2 Norm viva attack-points PDF. Merged.
+- PR #2, colloquium syllabus of concepts shared by all predictors. Merged.
+- PR #4, common-concepts textbook v3. Merged.
+- PR #5, common-concepts textbook v4. Merged.
+- PR #7, the fixed-values list of the base experiment. Merged.
+
+## 2. Literature check on the lead margin
+
+Power et al. 2022 and Nanda et al. 2023 do not set a lead margin. Nanda gives phases of training, not a pass line for how early a predictor must fire: memorisation from 0 to about 1.4k epochs, circuit formation from about 1.4k to 9.4k, and cleanup from about 9.4k to 14k.
+
+## 3. Lead rule
+
+The lead test changed from the fixed margin, seed i leads if P_i < G_i - 100, to the fraction rule, seed i leads if P_i < c * G_i, with c = 0.8. The reason for a fraction, rather than a fixed number of epochs, is that lead time scales with G (Xu, arXiv:2602.16967; Golwala, arXiv:2604.20923). No paper fixes c. c = 0.8 is still our own choice. The sweep at c = 0.7 and c = 0.9 is what backs that choice: the verdicts do not move. This closes the fixed-margin part of critical own-choice value 1. It does not close the choice of c.
+
+## 4. PR #8 and PR #9
+
+Both are merged. The official scorer is `06_Code/scripts/analyze_nanda_unified.py`. It scores all 8 predictors from saved event epochs: L2 Norm, Dropout, Spectral, AGE, HTSR Alpha, Weight-PCA, Higher-MI, and Commutator Defect. A predictor PASSES only if at least one pre-declared row PASSES. Rows marked exploratory are reported and do not count.
+
+Official verdict file: `08_Experiments/results/nanda_unified/analysis/frozen_protocol_verdicts.json` (c = 0.8). The c = 0.7 and c = 0.9 runs are in `analysis/c_0.7/` and `analysis/c_0.9/`.
+
+At c = 0.8 every predictor FAILs, and every stored row FAILs. The same FAIL holds at c = 0.7 and at c = 0.9. No row verdict changes across those three values.
+
+| Predictor | Pre-declared rows passing | Verdict at c = 0.7, 0.8 and 0.9 |
+|---|---|---|
+| L2 Norm | 0/3 | FAIL |
+| Dropout | 0/3 | FAIL |
+| Spectral | 0/5 | FAIL |
+| AGE | 0/3 | FAIL |
+| HTSR Alpha | 0/1 | FAIL |
+| Weight-PCA | 0/1 | FAIL |
+| Higher-MI | 0/1 | FAIL |
+| Commutator Defect | 0/1 | FAIL |
+
+pytest `06_Code/tests/test_frozen_protocol_verdicts.py` loads the saved seeds, runs the official scorer at c = 0.8, and asserts each predictor verdict. Result: 3 passed.
+
+## 5. L2 MA crossover epochs
+
+The saved times 113.41, 113.20, 120.12, 130.61 and 136.80 are real epochs on the log-uniform grid. They are not an index bug and not a unit bug. Recomputing the crossover from the saved moving averages lands on the same grid point for every seed. The detector was not changed.
+
+## 6. Open issue: noise stress test
+
+P_i drawn uniformly from 0 to G_i still passes the full rule too often. At c = 0.8 the pass rate is 0.149 (10000 trials). The target for that stress test is 0.05 or less. This is still open. The older margin-100 figure was about 0.217.
+
+## 7. Still pending
+
+- The unified thesis write-up.
+- Plot bugs, if any remain. They were not fixed on 10 November 2026. The scorer did regenerate the four analysis plots, which is not the same as a bug fix.
+- The 16 Commutator Defect attack points.
+- The stale "all 6 predictors / global minimum / P_s < G_s - 100" line. It is marked SUPERSEDED above and is still sitting in the file on purpose.
+- The remaining critical own-choice values. The fixed 100-epoch margin is no longer the lead test. The choice of c, and the other own-choice thresholds (lead fraction 0.8, the rho threshold, the L2 windows, and the rest of the fixed-values list), are still open.
+
+## Files touched for this entry
+
+- `context.md` only, apart from the merge of PR #9 which was already on main.
