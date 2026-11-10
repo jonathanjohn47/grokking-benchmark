@@ -1,0 +1,389 @@
+{
+  "date": "2026-11-10",
+  "source": "08_Experiments/results/nanda_unified/analysis/predictor_events.json",
+  "note": "Re-score of saved P_i and G_i only. No retraining. Frozen predictor_events.json was not overwritten. Commutator Defect epochs are the saved eta=1e-3 PRIMARY onset. Lead time scales with G (Xu arXiv:2602.16967; Golwala arXiv:2604.20923). No paper fixes c.",
+  "default_c": 0.8,
+  "rho_thresh_frozen": 0.8999999999999998,
+  "rho_calibration": {
+    "uses_lead_rule": false,
+    "reason": "RHO_THRESH is the 99th percentile of Spearman rho for P ~ Uniform[0, T_MAX]. Rho does not depend on the lead test, so the threshold is the same at every c.",
+    "recomputed_99th_percentile": 0.8999999999999998,
+    "matches_frozen_constant": true,
+    "rho_identical_under_margin_and_fraction": true,
+    "n_trials": 10000,
+    "T_MAX": 40000.0,
+    "generator": "numpy.random.seed(42), same as run_control_experiment.py"
+  },
+  "early_predictors_not_rescored": [
+    {
+      "signal": "L2: MA crossover (implemented)",
+      "saved_P_i_present": true,
+      "n_epochs": 5
+    },
+    {
+      "signal": "L2: MA-of-MA zero crossing (implemented)",
+      "saved_P_i_present": true,
+      "n_epochs": 5
+    },
+    {
+      "signal": "L2: sum(w^2) half-way down from peak",
+      "saved_P_i_present": true,
+      "n_epochs": 5
+    },
+    {
+      "signal": "Dropout: variance peak (implemented)",
+      "saved_P_i_present": true,
+      "n_epochs": 5
+    },
+    {
+      "signal": "Dropout: variance 10% of rise",
+      "saved_P_i_present": true,
+      "n_epochs": 5
+    },
+    {
+      "signal": "Dropout: variance 50% of rise",
+      "saved_P_i_present": true,
+      "n_epochs": 5
+    },
+    {
+      "signal": "Spectral: k90 minimum (implemented)",
+      "saved_P_i_present": true,
+      "n_epochs": 5
+    },
+    {
+      "signal": "Spectral: alignment maximum (implemented)",
+      "saved_P_i_present": true,
+      "n_epochs": 5
+    },
+    {
+      "signal": "Spectral: alignment 10% of rise",
+      "saved_P_i_present": true,
+      "n_epochs": 5
+    },
+    {
+      "signal": "Spectral: alignment 50% of rise",
+      "saved_P_i_present": true,
+      "n_epochs": 5
+    },
+    {
+      "signal": "Spectral: k90 50% of fall",
+      "saved_P_i_present": true,
+      "n_epochs": 5
+    },
+    {
+      "signal": "AGE: NC1 minimum (implemented)",
+      "saved_P_i_present": true,
+      "n_epochs": 5
+    },
+    {
+      "signal": "AGE: log10 NC1 10% of fall",
+      "saved_P_i_present": true,
+      "n_epochs": 5
+    },
+    {
+      "signal": "AGE: log10 NC1 50% of fall",
+      "saved_P_i_present": true,
+      "n_epochs": 5
+    }
+  ],
+  "scored": [
+    {
+      "signal": "HTSR: mean alpha minimum (implemented)",
+      "eta": null,
+      "G_i": [
+        12987,
+        6921,
+        9510,
+        11019,
+        23747
+      ],
+      "P_i": [
+        34300.0,
+        16000.0,
+        24100.0,
+        19500.0,
+        39600.0
+      ],
+      "frozen_file_passed": false,
+      "rules": [
+        {
+          "lead_frac": 0.0,
+          "rho": 0.8999999999999998,
+          "mean_rel_lead": -1.184866295669418,
+          "n_firing": 5,
+          "lead_rule": "margin",
+          "lead_c": null,
+          "lead_margin": 100.0,
+          "passed": false,
+          "rule_name": "margin100"
+        },
+        {
+          "lead_frac": 0.0,
+          "rho": 0.8999999999999998,
+          "mean_rel_lead": -1.184866295669418,
+          "n_firing": 5,
+          "lead_rule": "fraction",
+          "lead_c": 0.7,
+          "lead_margin": null,
+          "passed": false,
+          "rule_name": "c=0.7"
+        },
+        {
+          "lead_frac": 0.0,
+          "rho": 0.8999999999999998,
+          "mean_rel_lead": -1.184866295669418,
+          "n_firing": 5,
+          "lead_rule": "fraction",
+          "lead_c": 0.8,
+          "lead_margin": null,
+          "passed": false,
+          "rule_name": "c=0.8"
+        },
+        {
+          "lead_frac": 0.0,
+          "rho": 0.8999999999999998,
+          "mean_rel_lead": -1.184866295669418,
+          "n_firing": 5,
+          "lead_rule": "fraction",
+          "lead_c": 0.9,
+          "lead_margin": null,
+          "passed": false,
+          "rule_name": "c=0.9"
+        }
+      ],
+      "verdict_changed_vs_frozen_file": false
+    },
+    {
+      "signal": "Weight-PCA: effective-rank minimum (implemented)",
+      "eta": null,
+      "G_i": [
+        12987,
+        6921,
+        9510,
+        11019,
+        23747
+      ],
+      "P_i": [
+        37100.0,
+        27900.0,
+        32400.0,
+        29700.0,
+        36200.0
+      ],
+      "frozen_file_passed": false,
+      "rules": [
+        {
+          "lead_frac": 0.0,
+          "rho": 0.7999999999999999,
+          "mean_rel_lead": -1.902919954043249,
+          "n_firing": 5,
+          "lead_rule": "margin",
+          "lead_c": null,
+          "lead_margin": 100.0,
+          "passed": false,
+          "rule_name": "margin100"
+        },
+        {
+          "lead_frac": 0.0,
+          "rho": 0.7999999999999999,
+          "mean_rel_lead": -1.902919954043249,
+          "n_firing": 5,
+          "lead_rule": "fraction",
+          "lead_c": 0.7,
+          "lead_margin": null,
+          "passed": false,
+          "rule_name": "c=0.7"
+        },
+        {
+          "lead_frac": 0.0,
+          "rho": 0.7999999999999999,
+          "mean_rel_lead": -1.902919954043249,
+          "n_firing": 5,
+          "lead_rule": "fraction",
+          "lead_c": 0.8,
+          "lead_margin": null,
+          "passed": false,
+          "rule_name": "c=0.8"
+        },
+        {
+          "lead_frac": 0.0,
+          "rho": 0.7999999999999999,
+          "mean_rel_lead": -1.902919954043249,
+          "n_firing": 5,
+          "lead_rule": "fraction",
+          "lead_c": 0.9,
+          "lead_margin": null,
+          "passed": false,
+          "rule_name": "c=0.9"
+        }
+      ],
+      "verdict_changed_vs_frozen_file": false
+    },
+    {
+      "signal": "Higher-MI: population omega maximum (implemented)",
+      "eta": null,
+      "G_i": [
+        12987,
+        6921,
+        9510,
+        11019,
+        23747
+      ],
+      "P_i": [
+        15500.0,
+        8500.0,
+        20600.0,
+        12900.0,
+        32500.0
+      ],
+      "frozen_file_passed": false,
+      "rules": [
+        {
+          "lead_frac": 0.0,
+          "rho": 0.7,
+          "mean_rel_lead": -0.4254174785536472,
+          "n_firing": 5,
+          "lead_rule": "margin",
+          "lead_c": null,
+          "lead_margin": 100.0,
+          "passed": false,
+          "rule_name": "margin100"
+        },
+        {
+          "lead_frac": 0.0,
+          "rho": 0.7,
+          "mean_rel_lead": -0.4254174785536472,
+          "n_firing": 5,
+          "lead_rule": "fraction",
+          "lead_c": 0.7,
+          "lead_margin": null,
+          "passed": false,
+          "rule_name": "c=0.7"
+        },
+        {
+          "lead_frac": 0.0,
+          "rho": 0.7,
+          "mean_rel_lead": -0.4254174785536472,
+          "n_firing": 5,
+          "lead_rule": "fraction",
+          "lead_c": 0.8,
+          "lead_margin": null,
+          "passed": false,
+          "rule_name": "c=0.8"
+        },
+        {
+          "lead_frac": 0.0,
+          "rho": 0.7,
+          "mean_rel_lead": -0.4254174785536472,
+          "n_firing": 5,
+          "lead_rule": "fraction",
+          "lead_c": 0.9,
+          "lead_margin": null,
+          "passed": false,
+          "rule_name": "c=0.9"
+        }
+      ],
+      "verdict_changed_vs_frozen_file": false
+    },
+    {
+      "signal": "Commutator Defect: Xu onset on median D (implemented)",
+      "eta": 0.001,
+      "G_i": [
+        12987,
+        6921,
+        9510,
+        11019,
+        23747
+      ],
+      "P_i": [
+        600.0,
+        500.0,
+        500.0,
+        400.0,
+        600.0
+      ],
+      "frozen_file_passed": false,
+      "rules": [
+        {
+          "lead_frac": 1.0,
+          "rho": 0.6324555320336759,
+          "mean_rel_lead": 0.9534825077369792,
+          "n_firing": 5,
+          "lead_rule": "margin",
+          "lead_c": null,
+          "lead_margin": 100.0,
+          "passed": false,
+          "rule_name": "margin100"
+        },
+        {
+          "lead_frac": 1.0,
+          "rho": 0.6324555320336759,
+          "mean_rel_lead": 0.9534825077369792,
+          "n_firing": 5,
+          "lead_rule": "fraction",
+          "lead_c": 0.7,
+          "lead_margin": null,
+          "passed": false,
+          "rule_name": "c=0.7"
+        },
+        {
+          "lead_frac": 1.0,
+          "rho": 0.6324555320336759,
+          "mean_rel_lead": 0.9534825077369792,
+          "n_firing": 5,
+          "lead_rule": "fraction",
+          "lead_c": 0.8,
+          "lead_margin": null,
+          "passed": false,
+          "rule_name": "c=0.8"
+        },
+        {
+          "lead_frac": 1.0,
+          "rho": 0.6324555320336759,
+          "mean_rel_lead": 0.9534825077369792,
+          "n_firing": 5,
+          "lead_rule": "fraction",
+          "lead_c": 0.9,
+          "lead_margin": null,
+          "passed": false,
+          "rule_name": "c=0.9"
+        }
+      ],
+      "verdict_changed_vs_frozen_file": false
+    }
+  ],
+  "noise_stress_test": [
+    {
+      "rule_name": "margin100",
+      "n_trials": 10000,
+      "distribution": "P_i ~ Uniform[0, G_i]",
+      "pass_rate": 0.2164,
+      "lead_frac_mean": 0.9902799999999999,
+      "seed": 42
+    },
+    {
+      "rule_name": "c=0.7",
+      "n_trials": 10000,
+      "distribution": "P_i ~ Uniform[0, G_i]",
+      "pass_rate": 0.0974,
+      "lead_frac_mean": 0.6977399999999999,
+      "seed": 42
+    },
+    {
+      "rule_name": "c=0.8",
+      "n_trials": 10000,
+      "distribution": "P_i ~ Uniform[0, G_i]",
+      "pass_rate": 0.149,
+      "lead_frac_mean": 0.80116,
+      "seed": 42
+    },
+    {
+      "rule_name": "c=0.9",
+      "n_trials": 10000,
+      "distribution": "P_i ~ Uniform[0, G_i]",
+      "pass_rate": 0.1951,
+      "lead_frac_mean": 0.9002199999999999,
+      "seed": 42
+    }
+  ]
+}

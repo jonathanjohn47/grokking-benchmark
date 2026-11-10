@@ -47,17 +47,30 @@ os.makedirs(OUT_DIR, exist_ok=True)
 # Evaluation function (as specified — lead_frac, rho, mean_rel_lead)
 # ---------------------------------------------------------------------------
 
-def evaluate(g_in, p_in, margin=MARGIN):
+# Default for this file's original top-level controls stays the margin rule,
+# so re-running the script does not rewrite the frozen 2026-09-29 calibration
+# under a different lead test. The fractional rule is the PASS-test default
+# in analyze_nanda_unified.py (c=0.8). Pass rule="fraction" here for the sweep.
+# Lead time scales with G (Xu arXiv:2602.16967; Golwala arXiv:2604.20923).
+# No paper fixes c.
+DEFAULT_LEAD_C = 0.8
+
+
+def evaluate(g_in, p_in, margin=MARGIN, rule="margin", c=DEFAULT_LEAD_C):
     """
     g_in, p_in: arrays, length 5. p_in entries may be None (no detection).
 
-    lead_frac: fraction of seeds where P_s < G_s - margin (predictor fired
-        with a real safety margin before the actual grok epoch).
+    lead_frac: fraction of seeds that lead.
+        rule="margin" (this file's historical default): P_s < G_s - margin.
+        rule="fraction": P_s < c * G_s. Lead time scales with G
+        (Xu arXiv:2602.16967; Golwala arXiv:2604.20923). No paper fixes c.
     rho: Spearman rank correlation between G and P across seeds. If P is
         constant (std == 0), correlation is undefined, so rho is forced to
         0.0 rather than NaN — a constant signal carries no seed-to-seed
         timing information, so it must not be rewarded with rho = NaN
         silently passing a downstream `rho >= threshold` check.
+        Rho does not use the lead rule, so the 99th-percentile calibration
+        of RHO_THRESH is the same for every c.
     mean_rel_lead: mean of (G - P) / G, i.e. how much of the pre-grok
         window, as a fraction of G, the predictor's lead covers.
     """
@@ -68,7 +81,12 @@ def evaluate(g_in, p_in, margin=MARGIN):
     g_arr = np.array([x[0] for x in valid], dtype=float)
     p_arr = np.array([x[1] for x in valid], dtype=float)
 
-    lead = p_arr < (g_arr - margin)
+    if rule == "fraction":
+        lead = p_arr < (float(c) * g_arr)
+    elif rule == "margin":
+        lead = p_arr < (g_arr - margin)
+    else:
+        raise ValueError(f"unknown lead rule {rule!r}")
     lead_frac = float(np.mean(lead))
     rel_lead = (g_arr - p_arr) / g_arr
     mean_rel_lead = float(np.mean(rel_lead))
