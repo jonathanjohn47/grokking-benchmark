@@ -12573,3 +12573,53 @@ The margin100 rate matches the previously recorded figure of about 21.7 percent.
 - Predictor modules, the shared model, and the saved checkpoints.
 - `predictor_events.json` and the earlier aggregate verdict files.
 - L2, Dropout, Spectral and AGE scores. Their saved P_i were not passed through the new rule.
+
+
+# 2026-11-10 — All eight predictors scored under the fractional lead rule
+
+## Session Summary
+- Pull request #8 was merged into main (merge commit a79daee). There was no conflict in context.md.
+- Jonathan then asked for verdicts for all eight predictors, including L2 Norm, Dropout, Spectral and AGE. These four did not have a frozen-protocol verdict before. The numbers in the new file are their first frozen-protocol verdicts. Every stored row was scored, including the two Higher-MI exploratory rows.
+- No retraining. predictor_events.json and lead_fraction_sweep_2026-11-10.json were not overwritten.
+
+## Technical Decisions
+- Default lead test remains P_i < 0.8 * G_i. c = 0.7, c = 0.9, and P_i < G_i - 100 are stored beside it.
+- Other PASS conditions are unchanged: at least 4 firing seeds, lead_frac >= 0.8, rho >= 0.8999999999999998, 0.05 <= mean relative lead <= 0.9.
+- G_i (seeds 0 to 4): 12987, 6921, 9510, 11019, 23747.
+
+## Result at c = 0.8
+Every stored row FAILs. No verdict changes at c = 0.7 or at c = 0.9.
+
+| Signal | firing seeds | lead_frac | rho | mean r | verdict |
+|---|---|---|---|---|---|
+| L2: MA crossover | 5 | 1.0000 | 0.7000 | 0.9889 | FAIL |
+| L2: MA-of-MA zero crossing | 5 | 1.0000 | 0.0000 | 0.8350 | FAIL |
+| L2: sum(w^2) half-way down from peak | 5 | 0.4000 | 0.9000 | 0.1621 | FAIL |
+| Dropout: variance peak | 5 | 0.0000 | 0.4000 | -1.1276 | FAIL |
+| Dropout: variance 10% of rise | 5 | 0.0000 | 1.0000 | 0.1139 | FAIL |
+| Dropout: variance 50% of rise | 5 | 0.0000 | 1.0000 | -0.0294 | FAIL |
+| Spectral: k90 minimum | 5 | 0.0000 | 0.3000 | -1.6163 | FAIL |
+| Spectral: alignment maximum | 5 | 0.0000 | -0.3000 | -2.1435 | FAIL |
+| Spectral: alignment 10% of rise | 5 | 0.8000 | 0.7000 | 0.3983 | FAIL |
+| Spectral: alignment 50% of rise | 5 | 0.0000 | 1.0000 | 0.0451 | FAIL |
+| Spectral: k90 50% of fall | 5 | 0.2000 | 0.9747 | -0.0126 | FAIL |
+| AGE: NC1 minimum | 5 | 0.0000 | -0.4000 | -2.1260 | FAIL |
+| AGE: log10 NC1 10% of fall | 5 | 0.8000 | 0.7000 | 0.4828 | FAIL |
+| AGE: log10 NC1 50% of fall | 5 | 0.0000 | 1.0000 | -0.0178 | FAIL |
+| HTSR: mean alpha minimum | 5 | 0.0000 | 0.9000 | -1.1849 | FAIL |
+| Weight-PCA: effective-rank minimum | 5 | 0.0000 | 0.8000 | -1.9029 | FAIL |
+| Higher-MI: population omega maximum | 5 | 0.0000 | 0.7000 | -0.4254 | FAIL |
+| Commutator Defect: Xu onset on median D (eta 1e-3) | 5 | 1.0000 | 0.6325 | 0.9535 | FAIL |
+| Higher-MI: population omega zero-crossing (exploratory) | 5 | 1.0000 | -0.7000 | 0.9181 | FAIL |
+| Higher-MI: temporal-control omega maximum (exploratory) | 5 | 0.8000 | 0.1118 | 0.1703 | FAIL |
+
+Saved P_i are in lead_fraction_all_eight_2026-11-10.json (same order as grok seeds).
+
+## Files Modified
+- 06_Code/scripts/rescore_all_eight.py — new scorer for every stored row.
+- 08_Experiments/results/nanda_unified/analysis/lead_fraction_all_eight_2026-11-10.json — new results. Older files were not overwritten.
+- context.md — this entry.
+
+## What did not change
+- Predictor code, the shared model, checkpoints, and predictor_events.json.
+- The earlier four-predictor sweep file from the same day.
