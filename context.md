@@ -12757,3 +12757,13 @@ Open point: the noise stress test (P_i drawn uniformly from 0 to G_i) passes 0.0
 
 - `context.md`: this entry appended. Nothing earlier in the file was edited.
 - `12_Study/Fixed_Values_Base_Experiment.md`: the Lead margin row now states the rule \(P_i < c \cdot G_i\), marked OWN CHOICE, literature-bounded, and points here. Item 26 in "Rows with no literature basis" points here as well. The default lead test in `analyze_nanda_unified.py` is already \(P_i < c \cdot G_i\) (`lead_fraction_c: 0.8` in `nanda_unified.yaml`). The fixed margin of 100 epochs remains only as the comparison rule.
+
+---
+
+# 2026-11-10 — Decision note: how c must NOT be chosen, and an open option for fixing it
+
+Decision note: how c must NOT be chosen, and an open option for fixing it
+
+1. Tuning c on the first four predictors (L2 Norm, Dropout, Spectral, AGE) and then applying it to the later four was considered and rejected. A pass threshold must be fixed before looking at predictor results. Choosing it from predictor results would let an examiner say the threshold was fitted to the outcome. In practice it is also impossible, because the first four fail at every c in {0.7, 0.8, 0.9}, so their results do not point to any single c.
+
+2. Open option (not implemented): choose c from the noise stress test alone, as the value of c at which a random alarm (P_i drawn uniformly from 0 to G_i) passes the full PASS test at most 5 percent of the time. This uses no predictor results, so it cannot be said to be tuned to them. The 5 percent level is the conventional statistical significance level (p < 0.05); in this project it is already the noise-test target in the script, and it is our own choice, not taken from a grokking paper. Current noise-test pass rates are 0.097, 0.149 and 0.195 at c = 0.7, 0.8 and 0.9, so none of these values meets the 5 percent target yet.
