@@ -114,6 +114,10 @@ def build_events(runs):
 
     for s, r in enumerate(runs):
         sm = r["summary"]
+        # ma_crossover_epoch is a real epoch on the log-uniform grid
+        # (10 ** linspace), not an integer training step and not a grid
+        # index. The decimals (about 113.41, 113.20, ...) are that grid
+        # point. Checked against seed_*/l2_norm/epoch_grid.npy on 10 Nov 2026.
         put("L2: MA crossover (implemented)", s, sm["l2_predictor"]["ma_crossover_epoch"])
         put("L2: MA-of-MA zero crossing (implemented)", s, sm["l2_predictor"]["ma_of_ma_zero_crossing_epoch"])
         _, half = l2_decline_epoch(r["sum_w2"], 0.5)
@@ -290,29 +294,56 @@ def evaluate_frozen_protocol(g_in, p_in, margin=LEAD_MARGIN_EPOCHS, rule="fracti
     }
 
 
-# Signals with an explicitly frozen PRIMARY event rule (declared in the
-# predictor's own module docstring -- see e.g. weight_pca.py's "PRIMARY"
-# label / htsr_alpha.py's single-rule-only convention, both frozen
-# 2026-09-17, context.md). Only these are scored against the frozen
-# protocol and get a verdict persisted into predictor_events.json.
-#
-# L2 Norm, Dropout-Variance, Spectral and AGE predate this convention
-# (their own modules never declared one rule as PRIMARY) and were each
-# closed by separate reasoning recorded in context.md instead -- NOT
-# backfilled here, since guessing which of their several candidate
-# rules was "the" scored one risks contradicting an already-closed
-# verdict. When a predictor's own module declares a PRIMARY rule
-# (Higher-MI, Commutator Defect should follow the same convention),
-# add its "(implemented)" signal name here -- nothing else changes.
-PRIMARY_SIGNALS = [
-    "HTSR: mean alpha minimum (implemented)",
-    "Weight-PCA: effective-rank minimum (implemented)",
-    "Higher-MI: population omega maximum (implemented)",
-    "Commutator Defect: Xu onset on median D (implemented)",
-]
+# Every stored event row is scored. Rows whose name contains "exploratory"
+# are reported and do not count towards the predictor-level verdict.
+# A predictor PASSES only if at least one of its other (pre-declared) rows
+# passes. L2, Dropout, Spectral and AGE are included here; they are no
+# longer skipped. 10 Nov 2026.
+PREDICTORS = (
+    ("L2:", "L2 Norm"),
+    ("Dropout:", "Dropout"),
+    ("Spectral:", "Spectral"),
+    ("AGE:", "AGE"),
+    ("HTSR:", "HTSR Alpha"),
+    ("Weight-PCA:", "Weight-PCA"),
+    ("Higher-MI:", "Higher-MI"),
+    ("Commutator Defect:", "Commutator Defect"),
+)
 
 
-def summarise(ev, grok):
+def predictor_name(signal):
+    for prefix, name in PREDICTORS:
+        if signal.startswith(prefix):
+            return name
+    return None
+
+
+def is_exploratory(signal):
+    return "exploratory" in signal.lower()
+
+
+def _rho_ok(rho):
+    return not (isinstance(rho, float) and np.isnan(rho)) and rho >= RHO_THRESH
+
+
+def attach_pass_checks(verdict):
+    """Four separate PASS checks. The row passes only when every one is true."""
+    rho = verdict["rho"]
+    checks = {
+        "n_firing_at_least_4": verdict["n_firing"] >= 4,
+        "lead_frac_at_least_0.8": verdict["lead_frac"] >= 0.8,
+        "rho_at_least_threshold": bool(_rho_ok(rho)),
+        "mean_rel_lead_in_window": 0.05 <= verdict["mean_rel_lead"] <= 0.9,
+    }
+    verdict["checks"] = checks
+    verdict["passed"] = all(checks.values())
+    verdict["verdict"] = "PASS" if verdict["passed"] else "FAIL"
+    if isinstance(rho, float) and np.isnan(rho):
+        verdict["rho"] = None
+    return verdict
+
+
+def summarise(ev, grok, lead_c=DEFAULT_LEAD_C):
     rows = []
     g = np.array(grok, dtype=float)
     for name, per_seed in ev.items():
@@ -354,24 +385,54 @@ def summarise(ev, grok):
             "pearson": pear,
             "epoch_cv": epoch_cv,
         }
-        if name in PRIMARY_SIGNALS:
-            # Official frozen-protocol verdict (evaluate_frozen_protocol
-            # above): PASS iff lead_frac >= 0.8 AND rho >= RHO_THRESH AND
-            # 0.05 <= mean_rel_lead <= 0.9. None misses are dropped inside
-            # evaluate_frozen_protocol (same as run_control_experiment).
-            verdict = evaluate_frozen_protocol(grok, epochs_raw)  # default: P < c*G, c=0.8
-            rho_ok = (
-                not (isinstance(verdict["rho"], float) and np.isnan(verdict["rho"]))
-                and verdict["rho"] >= RHO_THRESH
-            )
-            verdict["passed"] = (
-                verdict["lead_frac"] >= 0.8
-                and rho_ok
-                and 0.05 <= verdict["mean_rel_lead"] <= 0.9
-            )
-            row["frozen_protocol_verdict"] = verdict
+        # Every predictor row is scored. Exploratory rows are reported
+        # and do not count towards the predictor-level verdict.
+        verdict = evaluate_frozen_protocol(
+            grok, epochs_raw, rule="fraction", c=lead_c
+        )
+        attach_pass_checks(verdict)
+        row["row_role"] = "exploratory" if is_exploratory(name) else "predeclared"
+        row["counts_towards_predictor"] = row["row_role"] == "predeclared"
+        row["frozen_protocol_verdict"] = verdict
         rows.append(row)
     return rows
+
+
+def predictor_level_verdicts(rows):
+    """A predictor PASSES only if at least one pre-declared row PASSES."""
+    grouped = {name: [] for _, name in PREDICTORS}
+    for row in rows:
+        name = predictor_name(row["signal"])
+        if name is None or "frozen_protocol_verdict" not in row:
+            continue
+        grouped[name].append(row)
+    out = []
+    for _, name in PREDICTORS:
+        members = grouped[name]
+        counting = [r for r in members if r["counts_towards_predictor"]]
+        n_pass = sum(1 for r in counting if r["frozen_protocol_verdict"]["passed"])
+        out.append({
+            "predictor": name,
+            "verdict": "PASS" if n_pass >= 1 else "FAIL",
+            "n_predeclared_rows": len(counting),
+            "n_predeclared_passing": n_pass,
+            "rows": [
+                {
+                    "signal": r["signal"],
+                    "role": r["row_role"],
+                    "counts_towards_predictor": r["counts_towards_predictor"],
+                    "P_i": r["epochs"],
+                    "n_firing": r["frozen_protocol_verdict"]["n_firing"],
+                    "lead_frac": r["frozen_protocol_verdict"]["lead_frac"],
+                    "rho": r["frozen_protocol_verdict"]["rho"],
+                    "mean_rel_lead": r["frozen_protocol_verdict"]["mean_rel_lead"],
+                    "checks": r["frozen_protocol_verdict"]["checks"],
+                    "verdict": r["frozen_protocol_verdict"]["verdict"],
+                }
+                for r in members
+            ],
+        })
+    return out
 
 
 def print_table(rows, grok):
@@ -389,28 +450,24 @@ def print_table(rows, grok):
         )
 
 
-def print_verdicts(rows):
-    """Prints (and, via `rows` already being json.dump'd in main(), persists)
-    the official frozen-protocol verdict for every PRIMARY_SIGNALS entry
-    present in this run. Generalises the old hardcoded Weight-PCA-only
-    block so a future predictor needs only a PRIMARY_SIGNALS entry, no
-    changes here."""
-    scored = [r for r in rows if "frozen_protocol_verdict" in r]
-    if not scored:
-        return
-    print("\nOfficial frozen-protocol verdicts (PRIMARY rule only, see PRIMARY_SIGNALS):")
-    for r in scored:
+def print_verdicts(rows, predictors):
+    """Print every row verdict and the predictor-level verdict."""
+    print("\nOfficial frozen-protocol verdicts (every stored row; exploratory does not count):")
+    for r in rows:
+        if "frozen_protocol_verdict" not in r:
+            continue
         v = r["frozen_protocol_verdict"]
-        print(f"\n{r['signal']}")
-        rule_bit = (
-            f"P < {v['lead_c']}*G" if v.get("lead_rule") == "fraction"
-            else f"P < G - {v.get('lead_margin')}"
-        )
-        print(f"  lead rule     = {rule_bit}")
-        print(f"  lead_frac     = {v['lead_frac']:.4f}  (need >= 0.8)")
-        print(f"  rho           = {v['rho']:.4f}  (need >= {RHO_THRESH:.4f})")
-        print(f"  mean_rel_lead = {v['mean_rel_lead']:.4f}  (need in [0.05, 0.9])")
-        print(f"  VERDICT = {'PASS' if v['passed'] else 'FAIL'}")
+        rho = v["rho"]
+        rho_s = "nan" if rho is None else f"{rho:.4f}"
+        print(f"\n{r['signal']}  [{r['row_role']}]")
+        print(f"  n_firing      = {v['n_firing']}  check={v['checks']['n_firing_at_least_4']}")
+        print(f"  lead_frac     = {v['lead_frac']:.4f}  check={v['checks']['lead_frac_at_least_0.8']}")
+        print(f"  rho           = {rho_s}  check={v['checks']['rho_at_least_threshold']}")
+        print(f"  mean_rel_lead = {v['mean_rel_lead']:.4f}  check={v['checks']['mean_rel_lead_in_window']}")
+        print(f"  VERDICT = {v['verdict']}")
+    print("\nPredictor-level verdicts (PASS only if a pre-declared row PASSES):")
+    for p in predictors:
+        print(f"  {p['predictor']:<22} {p['verdict']}  ({p['n_predeclared_passing']}/{p['n_predeclared_rows']} pre-declared rows pass)")
 
 
 # ─────────────────────────── plots ───────────────────────────
@@ -575,35 +632,93 @@ def plot_leads(ev, grok, path):
     plt.close(fig)
 
 
-def main():
-    os.makedirs(OUT, exist_ok=True)
-    seeds = sorted(int(n.split("_")[1]) for n in os.listdir(RESULTS) if n.startswith("seed_"))
+def load_lead_c_from_config():
+    """Read evaluation.lead_fraction_c. Falls back to DEFAULT_LEAD_C."""
+    path = os.path.join(REPO_ROOT, "06_Code", "configs", "nanda_unified.yaml")
+    try:
+        with open(path) as handle:
+            for line in handle:
+                stripped = line.split("#", 1)[0].strip()
+                if stripped.startswith("lead_fraction_c:"):
+                    return float(stripped.split(":", 1)[1].strip())
+    except OSError:
+        pass
+    return DEFAULT_LEAD_C
+
+
+def score_saved_run(lead_c=None, out_dir=None, write=True):
+    """Official scorer. Reads saved seed results. Trains nothing.
+
+    lead_c: fraction in P_i < c * G_i. None loads the config (default 0.8).
+    write: when True, write predictor_events.json, frozen_protocol_verdicts.json,
+    and the four plots under out_dir. The Higher-MI aggregate at the results
+    root is rewritten only for the default analysis folder, so a c sweep
+    does not replace the c = 0.8 summary.
+    """
+    if lead_c is None:
+        lead_c = load_lead_c_from_config()
+    lead_c = float(lead_c)
+    if out_dir is None:
+        out_dir = OUT if abs(lead_c - DEFAULT_LEAD_C) < 1e-12 else os.path.join(
+            OUT, f"c_{lead_c:.1f}"
+        )
+    seeds = sorted(
+        int(n.split("_")[1]) for n in os.listdir(RESULTS) if n.startswith("seed_")
+    )
     runs = [load_seed(s) for s in seeds]
     grok = [r["grok"] for r in runs]
     ev = build_events(runs)
-    rows = summarise(ev, grok)
+    rows = summarise(ev, grok, lead_c=lead_c)
+    predictors = predictor_level_verdicts(rows)
     print_table(rows, grok)
-    print_verdicts(rows)
+    print_verdicts(rows, predictors)
 
-    with open(os.path.join(OUT, "predictor_events.json"), "w") as handle:
-        json.dump({"grok_epochs": grok, "signals": rows}, handle, indent=2)
+    if write:
+        os.makedirs(out_dir, exist_ok=True)
+        events_path = os.path.join(out_dir, "predictor_events.json")
+        with open(events_path, "w") as handle:
+            json.dump({"grok_epochs": grok, "lead_c": lead_c, "signals": rows}, handle, indent=2)
+        verdict_path = os.path.join(out_dir, "frozen_protocol_verdicts.json")
+        with open(verdict_path, "w") as handle:
+            json.dump({
+                "lead_c": lead_c,
+                "lead_rule": "P_i < c * G_i",
+                "rho_thresh": RHO_THRESH,
+                "grok_epochs": grok,
+                "predictors": predictors,
+            }, handle, indent=2)
+        print(f"Wrote {verdict_path}")
 
-    # Higher-MI-only aggregate, requested alongside the full
-    # predictor_events.json above (which already carries Higher-MI's row
-    # too, via the generic PRIMARY_SIGNALS / build_events wiring).
-    higher_mi_rows = [r for r in rows if r["signal"].startswith("Higher-MI")]
-    if higher_mi_rows:
-        agg_path = os.path.join(RESULTS, "aggregate_higher_mi.json")
-        with open(agg_path, "w") as handle:
-            json.dump({"grok_epochs": grok, "signals": higher_mi_rows}, handle, indent=2)
-        print(f"Wrote {agg_path}")
+        if os.path.abspath(out_dir) == os.path.abspath(OUT):
+            higher_mi_rows = [r for r in rows if r["signal"].startswith("Higher-MI")]
+            if higher_mi_rows:
+                agg_path = os.path.join(RESULTS, "aggregate_higher_mi.json")
+                with open(agg_path, "w") as handle:
+                    json.dump({"grok_epochs": grok, "lead_c": lead_c, "signals": higher_mi_rows}, handle, indent=2)
+                print(f"Wrote {agg_path}")
 
-    plot_curves(runs, os.path.join(OUT, "01_grokking_curves.png"))
-    plot_signals(runs, ev, os.path.join(OUT, "02_signals_vs_grok.png"))
-    plot_scatter(ev, grok, os.path.join(OUT, "03_event_vs_grok_scatter.png"))
-    plot_leads(ev, grok, os.path.join(OUT, "04_lead_times.png"))
-    print(f"\nWrote plots and predictor_events.json (now including each"
-          f" PRIMARY_SIGNALS verdict) to {OUT}")
+        plot_curves(runs, os.path.join(out_dir, "01_grokking_curves.png"))
+        plot_signals(runs, ev, os.path.join(out_dir, "02_signals_vs_grok.png"))
+        plot_scatter(ev, grok, os.path.join(out_dir, "03_event_vs_grok_scatter.png"))
+        plot_leads(ev, grok, os.path.join(out_dir, "04_lead_times.png"))
+        print(f"Wrote plots and verdicts to {out_dir}")
+
+    return {"grok": grok, "rows": rows, "predictors": predictors, "lead_c": lead_c, "out_dir": out_dir}
+
+
+def main(argv=None):
+    import argparse
+    parser = argparse.ArgumentParser(description="Score saved Nanda-unified predictor events.")
+    parser.add_argument(
+        "--lead-c", type=float, default=None,
+        help="Lead fraction c in P_i < c * G_i. Default: evaluation.lead_fraction_c (0.8).",
+    )
+    parser.add_argument(
+        "--out-dir", default=None,
+        help="Output folder. Default: analysis/ at c=0.8, analysis/c_<value>/ otherwise.",
+    )
+    args = parser.parse_args(argv)
+    score_saved_run(lead_c=args.lead_c, out_dir=args.out_dir, write=True)
 
 
 if __name__ == "__main__":

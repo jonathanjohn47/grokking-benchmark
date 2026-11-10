@@ -6,6 +6,7 @@
     11019,
     23747
   ],
+  "lead_c": 0.8,
   "signals": [
     {
       "signal": "Higher-MI: population omega maximum (implemented)",
@@ -27,12 +28,24 @@
       "spearman": 0.7,
       "pearson": 0.8976016645998015,
       "epoch_cv": 0.45779935224242096,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
       "frozen_protocol_verdict": {
         "lead_frac": 0.0,
         "rho": 0.7,
         "mean_rel_lead": -0.4254174785536472,
         "n_firing": 5,
-        "passed": false
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
       }
     },
     {
@@ -54,7 +67,26 @@
       "seeds_before_grok": 5,
       "spearman": -0.7,
       "pearson": -0.6617994311810299,
-      "epoch_cv": 0.7181259597614282
+      "epoch_cv": 0.7181259597614282,
+      "row_role": "exploratory",
+      "counts_towards_predictor": false,
+      "frozen_protocol_verdict": {
+        "lead_frac": 1.0,
+        "rho": -0.7,
+        "mean_rel_lead": 0.9181048135773082,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": true,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
     },
     {
       "signal": "Higher-MI: temporal-control omega maximum (exploratory)",
@@ -75,7 +107,26 @@
       "seeds_before_grok": 4,
       "spearman": 0.0,
       "pearson": 0.3039736235663512,
-      "epoch_cv": 0.6095307849303246
+      "epoch_cv": 0.6095307849303246,
+      "row_role": "exploratory",
+      "counts_towards_predictor": false,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.8,
+        "rho": 0.11180339887498947,
+        "mean_rel_lead": 0.1702707745397094,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": true,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": true
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
     }
   ]
 }
