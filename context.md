@@ -12512,7 +12512,6 @@ This makes 5 the minimum sufficient for significance; it is not claimed to give 
 - What did not change: Textbook v2 files, predictor code, shared model, experiment results. Predictor-specific books are still postponed; this book names none of the eight predictors.
 - Next: pull request for v4 only. Do not merge from this session unless Jonathan asks.
 
-
 # 2026-11-10 — Fractional lead rule (c sweep), re-score of saved results
 
 SUPERSEDED as the status of record by the consolidated 10 November 2026 entry and by the official-scorer entry below. In particular, the sentence that L2, Dropout, Spectral and AGE were not backfilled is no longer the current state. This section is kept.
@@ -12735,3 +12734,26 @@ P_i drawn uniformly from 0 to G_i still passes the full rule too often. At c = 0
 ## Files touched for this entry
 
 - `context.md` only, apart from the merge of PR #9 which was already on main.
+
+# 2026-11-10 — Justification for the lead-fraction values c = 0.7, 0.8, 0.9
+
+Lead-fraction values c = 0.7, 0.8, 0.9: why these three
+
+No paper fixes a single value of c, so c remains our own choice. The three values were chosen as a bounded range rather than a single number, for the following reasons.
+
+1. Upper bound from Nanda et al. (2023). In Nanda's main run, the cleanup phase starts at about 9.4k epochs and grokking occurs at around 10k epochs, so cleanup begins at roughly 0.94 G. A warning should come before cleanup starts, because the sudden test-accuracy jump happens during cleanup. Any c above about 0.94 would therefore accept alarms that ring during the jump itself. c = 0.9 is the largest round value safely below this bound.
+
+2. Range reported in the literature. Golwala (arXiv:2604.20923) reports that ILDR gives warnings 9 to 73 percent of the training budget in advance, corresponding roughly to c between 0.27 and 0.91. Xu (arXiv:2602.16967) shows that the commutator-defect lead time grows faster than G itself, so a lead rule should scale with G rather than be a fixed number of epochs. The values 0.7 to 0.9 sit at the demanding end of the reported range: they ask for a warning of 10 to 30 percent of G, which is a useful warning without asking for more than published predictors deliver.
+
+3. Measurement resolution. Test accuracy is evaluated every 100 epochs. At the strictest setting for the shortest grok time (c = 0.9, G = 6921), the required lead is about 692 epochs, about seven evaluation steps. So every value in the range demands a lead well above measurement noise, which the old fixed margin of 100 (one evaluation step) did not.
+
+4. Central value. c = 0.8 is the middle of the range and asks for a lead of at least 20 percent of G. It is used as the main value; 0.7 and 0.9 are reported as sensitivity checks.
+
+5. The verdicts do not depend on the choice. The official scorer gives the same verdict (all 8 predictors FAIL) at c = 0.7, 0.8 and 0.9. The exact value of c therefore does not change the thesis conclusion.
+
+Open point: the noise stress test (P_i drawn uniformly from 0 to G_i) passes 0.097, 0.149 and 0.195 of the time at c = 0.7, 0.8 and 0.9, above the target of 0.05 or less. This is recorded as an open issue with the PASS test as a whole, not with the choice of c.
+
+## Files touched with this entry
+
+- `context.md`: this entry appended. Nothing earlier in the file was edited.
+- `12_Study/Fixed_Values_Base_Experiment.md`: the Lead margin row now states the rule \(P_i < c \cdot G_i\), marked OWN CHOICE, literature-bounded, and points here. Item 26 in "Rows with no literature basis" points here as well. The default lead test in `analyze_nanda_unified.py` is already \(P_i < c \cdot G_i\) (`lead_fraction_c: 0.8` in `nanda_unified.yaml`). The fixed margin of 100 epochs remains only as the comparison rule.
