@@ -12809,3 +12809,25 @@ rho is Spearman's rank correlation between the grok epochs G_i and the predictor
 ## Files touched with this entry
 
 - `context.md`: this entry appended. Nothing earlier in the file was edited. No code and no results were changed.
+
+---
+
+# 2026-11-10 — Justification for the r-bar band 0.05 <= r-bar <= 0.9 (critical own-choice value 4)
+
+Justification for the r-bar band 0.05 <= r-bar <= 0.9 (critical own-choice value 4)
+
+r_i = (G_i - P_i) / G_i is the relative lead of seed i, where G_i is the first epoch with test accuracy > 0.9 and P_i is the predictor's firing epoch. r-bar is the mean of r_i over firing seeds. The PASS rule needs 0.05 <= r-bar <= 0.9, together with lead_frac >= 0.8 and the rho threshold. This entry records why that band was chosen. It is critical own-choice value 4. The choices of c, of lead_frac, and of rho are separate own-choice values and are already recorded above.
+
+1. Literature status. No paper fixes this exact band. Xu 2026 defines the relative-lead ratio and reports observed fractions often > 0.9 at slow learning rates, but sets no acceptance band. Nanda et al. 2023 (arXiv:2301.05217) gives the three phases: memorisation, circuit formation, cleanup.
+
+2. Logical link to Nanda's phases. A useful early warning should fire during circuit formation, i.e. after memorisation ends and before cleanup / the test-accuracy jump. The lower bound 0.05 requires a usable advance warning (the alarm must not fire at the grok jump itself, during cleanup). The upper bound 0.9 excludes alarms that fire during pure memorisation, which is just training noise and not a sign of the coming generalisation.
+
+3. Honest caveat. Memorisation ends at roughly a fixed epoch across seeds, while G_i varies by seed, so a single 0.9 matches Nanda's phase boundary only on average, not seed by seed. The band therefore roughly follows Nanda's phases; it is not derived from them. It remains an own-choice practical heuristic.
+
+4. Alternatives noted for future work. Anchor the bounds to the restricted-loss onset per seed, or use empirical quantiles over seeds.
+
+5. Status. Value 4 is defended by a logical link to Nanda's phases, still own choice. Verdicts are unchanged: all 8 predictors FAIL.
+
+## Files touched with this entry
+
+- `context.md`: this entry appended. Nothing earlier in the file was edited. No code and no results were changed.
