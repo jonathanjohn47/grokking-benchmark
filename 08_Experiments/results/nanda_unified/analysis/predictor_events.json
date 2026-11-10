@@ -6,6 +6,7 @@
     11019,
     23747
   ],
+  "lead_c": 0.8,
   "signals": [
     {
       "signal": "L2: MA crossover (implemented)",
@@ -26,7 +27,26 @@
       "seeds_before_grok": 5,
       "spearman": 0.7,
       "pearson": 0.7414678900860586,
-      "epoch_cv": 0.07678031944840444
+      "epoch_cv": 0.07678031944840444,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 1.0,
+        "rho": 0.7,
+        "mean_rel_lead": 0.9889335120972822,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": true,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
     },
     {
       "signal": "L2: MA-of-MA zero crossing (implemented)",
@@ -46,8 +66,27 @@
       ],
       "seeds_before_grok": 5,
       "spearman": 0.0,
-      "pearson": 0.2909631372615096,
-      "epoch_cv": 0.009285688183577633
+      "pearson": 0.29096313726150946,
+      "epoch_cv": 0.009285688183577633,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 1.0,
+        "rho": 0.0,
+        "mean_rel_lead": 0.8349853199180917,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": true,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": true
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
     },
     {
       "signal": "L2: sum(w^2) half-way down from peak",
@@ -67,8 +106,27 @@
       ],
       "seeds_before_grok": 5,
       "spearman": 0.8999999999999998,
-      "pearson": 0.9770973255766837,
-      "epoch_cv": 0.4695279499891297
+      "pearson": 0.9770973255766838,
+      "epoch_cv": 0.4695279499891297,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.4,
+        "rho": 0.8999999999999998,
+        "mean_rel_lead": 0.1620918808799998,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": true,
+          "mean_rel_lead_in_window": true
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
     },
     {
       "signal": "Dropout: variance peak (implemented)",
@@ -89,7 +147,26 @@
       "seeds_before_grok": 0,
       "spearman": 0.39999999999999997,
       "pearson": 0.835922120390818,
-      "epoch_cv": 0.3141428313338436
+      "epoch_cv": 0.3141428313338436,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": 0.39999999999999997,
+        "mean_rel_lead": -1.1275789325469778,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
     },
     {
       "signal": "Dropout: variance 10% of rise",
@@ -110,7 +187,26 @@
       "seeds_before_grok": 5,
       "spearman": 0.9999999999999999,
       "pearson": 0.9969509614723395,
-      "epoch_cv": 0.48949097828670357
+      "epoch_cv": 0.48949097828670357,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": 0.9999999999999999,
+        "mean_rel_lead": 0.11387929872654726,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": true,
+          "mean_rel_lead_in_window": true
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
     },
     {
       "signal": "Dropout: variance 50% of rise",
@@ -131,7 +227,26 @@
       "seeds_before_grok": 0,
       "spearman": 0.9999999999999999,
       "pearson": 0.9994108209098578,
-      "epoch_cv": 0.43861772662729354
+      "epoch_cv": 0.43861772662729354,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": 0.9999999999999999,
+        "mean_rel_lead": -0.029427288760343902,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": true,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
     },
     {
       "signal": "Spectral: k90 minimum (implemented)",
@@ -152,7 +267,26 @@
       "seeds_before_grok": 0,
       "spearman": 0.3,
       "pearson": 0.32540926605600495,
-      "epoch_cv": 0.27746369116229314
+      "epoch_cv": 0.27746369116229314,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": 0.3,
+        "mean_rel_lead": -1.616292970066374,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
     },
     {
       "signal": "Spectral: alignment maximum (implemented)",
@@ -173,7 +307,26 @@
       "seeds_before_grok": 0,
       "spearman": -0.3,
       "pearson": -0.3589088329110801,
-      "epoch_cv": 0.10054067549469599
+      "epoch_cv": 0.10054067549469599,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": -0.3,
+        "mean_rel_lead": -2.1434968725962458,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
     },
     {
       "signal": "Spectral: alignment 10% of rise",
@@ -194,7 +347,26 @@
       "seeds_before_grok": 5,
       "spearman": 0.7,
       "pearson": 0.9485315694633525,
-      "epoch_cv": 0.7191469277362739
+      "epoch_cv": 0.7191469277362739,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.8,
+        "rho": 0.7,
+        "mean_rel_lead": 0.39831487932014153,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": true,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": true
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
     },
     {
       "signal": "Spectral: alignment 50% of rise",
@@ -215,7 +387,26 @@
       "seeds_before_grok": 5,
       "spearman": 0.9999999999999999,
       "pearson": 0.9989383843537619,
-      "epoch_cv": 0.46846555811828905
+      "epoch_cv": 0.46846555811828905,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": 0.9999999999999999,
+        "mean_rel_lead": 0.04512762655019762,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": true,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
     },
     {
       "signal": "Spectral: k90 50% of fall",
@@ -236,7 +427,26 @@
       "seeds_before_grok": 1,
       "spearman": 0.9999999999999999,
       "pearson": 0.9870960554419076,
-      "epoch_cv": 0.49190420669969914
+      "epoch_cv": 0.49190420669969914,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.2,
+        "rho": 0.9746794344808964,
+        "mean_rel_lead": -0.01255124393140769,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": true,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
     },
     {
       "signal": "AGE: NC1 minimum (implemented)",
@@ -257,7 +467,26 @@
       "seeds_before_grok": 0,
       "spearman": -0.39999999999999997,
       "pearson": -0.5286407069166579,
-      "epoch_cv": 0.10978735287669893
+      "epoch_cv": 0.10978735287669893,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": -0.39999999999999997,
+        "mean_rel_lead": -2.125954849748289,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
     },
     {
       "signal": "AGE: log10 NC1 10% of fall",
@@ -278,7 +507,26 @@
       "seeds_before_grok": 5,
       "spearman": 0.7,
       "pearson": 0.96430779311285,
-      "epoch_cv": 0.8150213328139015
+      "epoch_cv": 0.8150213328139015,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.8,
+        "rho": 0.7,
+        "mean_rel_lead": 0.482787494916896,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": true,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": true
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
     },
     {
       "signal": "AGE: log10 NC1 50% of fall",
@@ -299,7 +547,26 @@
       "seeds_before_grok": 2,
       "spearman": 0.9999999999999999,
       "pearson": 0.9986701260321919,
-      "epoch_cv": 0.4348150509443182
+      "epoch_cv": 0.4348150509443182,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": 0.9999999999999999,
+        "mean_rel_lead": -0.017789332920764622,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": true,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
     },
     {
       "signal": "HTSR: mean alpha minimum (implemented)",
@@ -321,12 +588,24 @@
       "spearman": 0.8999999999999998,
       "pearson": 0.8772709381425577,
       "epoch_cv": 0.3338421399740024,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
       "frozen_protocol_verdict": {
         "lead_frac": 0.0,
         "rho": 0.8999999999999998,
         "mean_rel_lead": -1.184866295669418,
         "n_firing": 5,
-        "passed": false
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": true,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
       }
     },
     {
@@ -349,12 +628,24 @@
       "spearman": 0.7999999999999999,
       "pearson": 0.7112969032808586,
       "epoch_cv": 0.10931445431269328,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
       "frozen_protocol_verdict": {
         "lead_frac": 0.0,
         "rho": 0.7999999999999999,
         "mean_rel_lead": -1.902919954043249,
         "n_firing": 5,
-        "passed": false
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
       }
     },
     {
@@ -377,12 +668,24 @@
       "spearman": 0.7,
       "pearson": 0.8976016645998015,
       "epoch_cv": 0.45779935224242096,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
       "frozen_protocol_verdict": {
         "lead_frac": 0.0,
         "rho": 0.7,
         "mean_rel_lead": -0.4254174785536472,
         "n_firing": 5,
-        "passed": false
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
       }
     },
     {
@@ -405,12 +708,24 @@
       "spearman": 0.7,
       "pearson": 0.5930270950870185,
       "epoch_cv": 0.14390989949130545,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
       "frozen_protocol_verdict": {
         "lead_frac": 1.0,
         "rho": 0.6324555320336759,
         "mean_rel_lead": 0.9534825077369792,
         "n_firing": 5,
-        "passed": false
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": true,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
       }
     },
     {
@@ -432,7 +747,26 @@
       "seeds_before_grok": 5,
       "spearman": -0.7,
       "pearson": -0.6617994311810299,
-      "epoch_cv": 0.7181259597614282
+      "epoch_cv": 0.7181259597614282,
+      "row_role": "exploratory",
+      "counts_towards_predictor": false,
+      "frozen_protocol_verdict": {
+        "lead_frac": 1.0,
+        "rho": -0.7,
+        "mean_rel_lead": 0.9181048135773082,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": true,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
     },
     {
       "signal": "Higher-MI: temporal-control omega maximum (exploratory)",
@@ -453,7 +787,26 @@
       "seeds_before_grok": 4,
       "spearman": 0.0,
       "pearson": 0.3039736235663512,
-      "epoch_cv": 0.6095307849303246
+      "epoch_cv": 0.6095307849303246,
+      "row_role": "exploratory",
+      "counts_towards_predictor": false,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.8,
+        "rho": 0.11180339887498947,
+        "mean_rel_lead": 0.1702707745397094,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": true,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": true
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
     }
   ]
 }

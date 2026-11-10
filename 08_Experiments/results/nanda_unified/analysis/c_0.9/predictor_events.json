@@ -1,0 +1,812 @@
+{
+  "grok_epochs": [
+    12987,
+    6921,
+    9510,
+    11019,
+    23747
+  ],
+  "lead_c": 0.9,
+  "signals": [
+    {
+      "signal": "L2: MA crossover (implemented)",
+      "epochs": [
+        113.4073099931767,
+        113.19719584752606,
+        120.11793260285641,
+        130.6065722584489,
+        136.80423675510377
+      ],
+      "lead": [
+        12873.592690006823,
+        6807.802804152474,
+        9389.882067397144,
+        10888.393427741552,
+        23610.195763244898
+      ],
+      "seeds_before_grok": 5,
+      "spearman": 0.7,
+      "pearson": 0.7414678900860586,
+      "epoch_cv": 0.07678031944840444,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 1.0,
+        "rho": 0.7,
+        "mean_rel_lead": 0.9889335120972822,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.9,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": true,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "signal": "L2: MA-of-MA zero crossing (implemented)",
+      "epochs": [
+        1802.223864069342,
+        1767.2366607262006,
+        1814.1997196140496,
+        1810.8384810470714,
+        1801.269217726741
+      ],
+      "lead": [
+        11184.776135930659,
+        5153.763339273799,
+        7695.800280385951,
+        9208.16151895293,
+        21945.73078227326
+      ],
+      "seeds_before_grok": 5,
+      "spearman": 0.0,
+      "pearson": 0.29096313726150946,
+      "epoch_cv": 0.009285688183577633,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 1.0,
+        "rho": 0.0,
+        "mean_rel_lead": 0.8349853199180917,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.9,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": true,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": true
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "signal": "L2: sum(w^2) half-way down from peak",
+      "epochs": [
+        11921.0,
+        4969.0,
+        9497.0,
+        7868.0,
+        19971.0
+      ],
+      "lead": [
+        1066.0,
+        1952.0,
+        13.0,
+        3151.0,
+        3776.0
+      ],
+      "seeds_before_grok": 5,
+      "spearman": 0.8999999999999998,
+      "pearson": 0.9770973255766838,
+      "epoch_cv": 0.4695279499891297,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.6,
+        "rho": 0.8999999999999998,
+        "mean_rel_lead": 0.1620918808799998,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.9,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": true,
+          "mean_rel_lead_in_window": true
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "signal": "Dropout: variance peak (implemented)",
+      "epochs": [
+        24200.0,
+        25400.0,
+        16700.0,
+        18800.0,
+        39000.0
+      ],
+      "lead": [
+        -11213.0,
+        -18479.0,
+        -7190.0,
+        -7781.0,
+        -15253.0
+      ],
+      "seeds_before_grok": 0,
+      "spearman": 0.39999999999999997,
+      "pearson": 0.835922120390818,
+      "epoch_cv": 0.3141428313338436,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": 0.39999999999999997,
+        "mean_rel_lead": -1.1275789325469778,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.9,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "signal": "Dropout: variance 10% of rise",
+      "epochs": [
+        11500.0,
+        5800.0,
+        9000.0,
+        9100.0,
+        22200.0
+      ],
+      "lead": [
+        1487.0,
+        1121.0,
+        510.0,
+        1919.0,
+        1547.0
+      ],
+      "seeds_before_grok": 5,
+      "spearman": 0.9999999999999999,
+      "pearson": 0.9969509614723395,
+      "epoch_cv": 0.48949097828670357,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.6,
+        "rho": 0.9999999999999999,
+        "mean_rel_lead": 0.11387929872654726,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.9,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": true,
+          "mean_rel_lead_in_window": true
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "signal": "Dropout: variance 50% of rise",
+      "epochs": [
+        13700.0,
+        7200.0,
+        9700.0,
+        11300.0,
+        23900.0
+      ],
+      "lead": [
+        -713.0,
+        -279.0,
+        -190.0,
+        -281.0,
+        -153.0
+      ],
+      "seeds_before_grok": 0,
+      "spearman": 0.9999999999999999,
+      "pearson": 0.9994108209098578,
+      "epoch_cv": 0.43861772662729354,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": 0.9999999999999999,
+        "mean_rel_lead": -0.029427288760343902,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.9,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": true,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "signal": "Spectral: k90 minimum (implemented)",
+      "epochs": [
+        29700.0,
+        30700.0,
+        14100.0,
+        38000.0,
+        33900.0
+      ],
+      "lead": [
+        -16713.0,
+        -23779.0,
+        -4590.0,
+        -26981.0,
+        -10153.0
+      ],
+      "seeds_before_grok": 0,
+      "spearman": 0.3,
+      "pearson": 0.32540926605600495,
+      "epoch_cv": 0.27746369116229314,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": 0.3,
+        "mean_rel_lead": -1.616292970066374,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.9,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "signal": "Spectral: alignment maximum (implemented)",
+      "epochs": [
+        31600.0,
+        37800.0,
+        29300.0,
+        37400.0,
+        32000.0
+      ],
+      "lead": [
+        -18613.0,
+        -30879.0,
+        -19790.0,
+        -26381.0,
+        -8253.0
+      ],
+      "seeds_before_grok": 0,
+      "spearman": -0.3,
+      "pearson": -0.3589088329110801,
+      "epoch_cv": 0.10054067549469599,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": -0.3,
+        "mean_rel_lead": -2.1434968725962458,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.9,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "signal": "Spectral: alignment 10% of rise",
+      "epochs": [
+        8500.0,
+        4100.0,
+        6400.0,
+        2900.0,
+        19600.0
+      ],
+      "lead": [
+        4487.0,
+        2821.0,
+        3110.0,
+        8119.0,
+        4147.0
+      ],
+      "seeds_before_grok": 5,
+      "spearman": 0.7,
+      "pearson": 0.9485315694633525,
+      "epoch_cv": 0.7191469277362739,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 1.0,
+        "rho": 0.7,
+        "mean_rel_lead": 0.39831487932014153,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.9,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": true,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": true
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "signal": "Spectral: alignment 50% of rise",
+      "epochs": [
+        12500.0,
+        6300.0,
+        9500.0,
+        10200.0,
+        23200.0
+      ],
+      "lead": [
+        487.0,
+        621.0,
+        10.0,
+        819.0,
+        547.0
+      ],
+      "seeds_before_grok": 5,
+      "spearman": 0.9999999999999999,
+      "pearson": 0.9989383843537619,
+      "epoch_cv": 0.46846555811828905,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": 0.9999999999999999,
+        "mean_rel_lead": 0.04512762655019762,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.9,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": true,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "signal": "Spectral: k90 50% of fall",
+      "epochs": [
+        13800.0,
+        7500.0,
+        7500.0,
+        11800.0,
+        25100.0
+      ],
+      "lead": [
+        -813.0,
+        -579.0,
+        2010.0,
+        -781.0,
+        -1353.0
+      ],
+      "seeds_before_grok": 1,
+      "spearman": 0.9999999999999999,
+      "pearson": 0.9870960554419076,
+      "epoch_cv": 0.49190420669969914,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.2,
+        "rho": 0.9746794344808964,
+        "mean_rel_lead": -0.01255124393140769,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.9,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": true,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "signal": "AGE: NC1 minimum (implemented)",
+      "epochs": [
+        31500.0,
+        37800.0,
+        29300.0,
+        37400.0,
+        30100.0
+      ],
+      "lead": [
+        -18513.0,
+        -30879.0,
+        -19790.0,
+        -26381.0,
+        -6353.0
+      ],
+      "seeds_before_grok": 0,
+      "spearman": -0.39999999999999997,
+      "pearson": -0.5286407069166579,
+      "epoch_cv": 0.10978735287669893,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": -0.39999999999999997,
+        "mean_rel_lead": -2.125954849748289,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.9,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "signal": "AGE: log10 NC1 10% of fall",
+      "epochs": [
+        8200.0,
+        3000.0,
+        4700.0,
+        2500.0,
+        19000.0
+      ],
+      "lead": [
+        4787.0,
+        3921.0,
+        4810.0,
+        8519.0,
+        4747.0
+      ],
+      "seeds_before_grok": 5,
+      "spearman": 0.7,
+      "pearson": 0.96430779311285,
+      "epoch_cv": 0.8150213328139015,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 1.0,
+        "rho": 0.7,
+        "mean_rel_lead": 0.482787494916896,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.9,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": true,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": true
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "signal": "AGE: log10 NC1 50% of fall",
+      "epochs": [
+        12900.0,
+        7000.0,
+        10300.0,
+        11100.0,
+        23600.0
+      ],
+      "lead": [
+        87.0,
+        -79.0,
+        -790.0,
+        -81.0,
+        147.0
+      ],
+      "seeds_before_grok": 2,
+      "spearman": 0.9999999999999999,
+      "pearson": 0.9986701260321919,
+      "epoch_cv": 0.4348150509443182,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": 0.9999999999999999,
+        "mean_rel_lead": -0.017789332920764622,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.9,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": true,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "signal": "HTSR: mean alpha minimum (implemented)",
+      "epochs": [
+        34300.0,
+        16000.0,
+        24100.0,
+        19500.0,
+        39600.0
+      ],
+      "lead": [
+        -21313.0,
+        -9079.0,
+        -14590.0,
+        -8481.0,
+        -15853.0
+      ],
+      "seeds_before_grok": 0,
+      "spearman": 0.8999999999999998,
+      "pearson": 0.8772709381425577,
+      "epoch_cv": 0.3338421399740024,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": 0.8999999999999998,
+        "mean_rel_lead": -1.184866295669418,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.9,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": true,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "signal": "Weight-PCA: effective-rank minimum (implemented)",
+      "epochs": [
+        37100.0,
+        27900.0,
+        32400.0,
+        29700.0,
+        36200.0
+      ],
+      "lead": [
+        -24113.0,
+        -20979.0,
+        -22890.0,
+        -18681.0,
+        -12453.0
+      ],
+      "seeds_before_grok": 0,
+      "spearman": 0.7999999999999999,
+      "pearson": 0.7112969032808586,
+      "epoch_cv": 0.10931445431269328,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": 0.7999999999999999,
+        "mean_rel_lead": -1.902919954043249,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.9,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "signal": "Higher-MI: population omega maximum (implemented)",
+      "epochs": [
+        15500.0,
+        8500.0,
+        20600.0,
+        12900.0,
+        32500.0
+      ],
+      "lead": [
+        -2513.0,
+        -1579.0,
+        -11090.0,
+        -1881.0,
+        -8753.0
+      ],
+      "seeds_before_grok": 0,
+      "spearman": 0.7,
+      "pearson": 0.8976016645998015,
+      "epoch_cv": 0.45779935224242096,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": 0.7,
+        "mean_rel_lead": -0.4254174785536472,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.9,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "signal": "Commutator Defect: Xu onset on median D (implemented)",
+      "epochs": [
+        600.0,
+        500.0,
+        500.0,
+        400.0,
+        600.0
+      ],
+      "lead": [
+        12387.0,
+        6421.0,
+        9010.0,
+        10619.0,
+        23147.0
+      ],
+      "seeds_before_grok": 5,
+      "spearman": 0.7,
+      "pearson": 0.5930270950870185,
+      "epoch_cv": 0.14390989949130545,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 1.0,
+        "rho": 0.6324555320336759,
+        "mean_rel_lead": 0.9534825077369792,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.9,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": true,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "signal": "Higher-MI: population omega zero-crossing (exploratory)",
+      "epochs": [
+        500.0,
+        1600.0,
+        300.0,
+        1100.0,
+        200.0
+      ],
+      "lead": [
+        12487.0,
+        5321.0,
+        9210.0,
+        9919.0,
+        23547.0
+      ],
+      "seeds_before_grok": 5,
+      "spearman": -0.7,
+      "pearson": -0.6617994311810299,
+      "epoch_cv": 0.7181259597614282,
+      "row_role": "exploratory",
+      "counts_towards_predictor": false,
+      "frozen_protocol_verdict": {
+        "lead_frac": 1.0,
+        "rho": -0.7,
+        "mean_rel_lead": 0.9181048135773082,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.9,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": true,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "signal": "Higher-MI: temporal-control omega maximum (exploratory)",
+      "epochs": [
+        5000.0,
+        5000.0,
+        19000.0,
+        5000.0,
+        14000.0
+      ],
+      "lead": [
+        7987.0,
+        1921.0,
+        -9490.0,
+        6019.0,
+        9747.0
+      ],
+      "seeds_before_grok": 4,
+      "spearman": 0.0,
+      "pearson": 0.3039736235663512,
+      "epoch_cv": 0.6095307849303246,
+      "row_role": "exploratory",
+      "counts_towards_predictor": false,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.8,
+        "rho": 0.11180339887498947,
+        "mean_rel_lead": 0.1702707745397094,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.9,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": true,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": true
+        },
+        "passed": false,
+        "verdict": "FAIL"
+      }
+    }
+  ]
+}
