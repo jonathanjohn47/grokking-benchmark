@@ -12789,3 +12789,23 @@ lead_frac is the fraction of firing seeds whose predictor epoch P_i satisfies th
 ## Files touched with this entry
 
 - `context.md`: this entry appended. Nothing earlier in the file was edited. No code and no results were changed.
+
+---
+
+# 2026-11-10 — Justification for rho >= 0.9 (critical own-choice value 3)
+
+Justification for rho >= 0.9 (critical own-choice value 3)
+
+rho is Spearman's rank correlation between the grok epochs G_i and the predictor epochs P_i over the firing seeds (n = 5). G_i is the first epoch at which the test accuracy of seed i goes above 0.9. The cut is coded as 0.8999999999999998 so that a computed rho of 0.9 is not lost to floating-point error. This entry records why rho >= 0.9 was chosen. It is critical own-choice value 3. The choices of c and of lead_frac are separate own-choice values and are already recorded above.
+
+1. Exact permutation test. With n = 5 there are 5! = 120 equally likely orderings under the null of no relation. For n = 5, Spearman's rho equals 1 minus S/20, where S is the sum of squared rank differences. rho >= 0.9 means S <= 2. That happens only for the perfect order (S = 0, rho = 1) or exactly one adjacent swap (S = 2, rho = 0.9). There are 4 adjacent swaps in a sequence of 5, so 5 orderings in all. Therefore P(rho >= 0.9) = 5/120 = 0.0417. rho >= 0.9 is the exact one-sided Spearman permutation critical value at the attainable alpha = 0.042, which is below the conventional alpha = 0.05.
+
+2. Literature. Exact critical values and tables are in Kendall, M. G. and Gibbons, J. D., Rank Correlation Methods (5th ed., 1990). The same tables appear in the standard nonparametric texts: Hollander, Wolfe and Chicken, Nonparametric Statistical Methods; and Conover, Practical Nonparametric Statistics. A robust (studentized) Spearman permutation test is given by Han Yu and Alan D. Hutson, "A Robust Spearman Correlation Coefficient Permutation Test" (arXiv:2008.01200; Communications in Statistics — Theory and Methods, 2024, 53(6), 2141–2153). The alpha = 0.05 convention is from Fisher, R. A. (1925), Statistical Methods for Research Workers. Kendall's tau would be an equally valid alternative, and it also has exact tables.
+
+3. Relation to the earlier calibration. The 99th percentile of 10,000 random predictors gives the same cut (0.8999999999999998). With n = 5, rho takes only 21 discrete values, and 0.9 is that discrete level. The Monte-Carlo calibration is now a cross-check only. Monte-Carlo is a valid approximation for larger n, but it is unnecessary at n = 5.
+
+4. Status. Value 3 (rho >= 0.9) is now literature-backed as an exact permutation test at alpha = 0.042 < 0.05. Values 8 (the 99th percentile) and 9 (N_rand = 10,000) are no longer critical. They only describe the cross-check. Verdicts are unchanged: all 8 predictors FAIL.
+
+## Files touched with this entry
+
+- `context.md`: this entry appended. Nothing earlier in the file was edited. No code and no results were changed.
