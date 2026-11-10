@@ -12768,6 +12768,8 @@ Decision note: how c must NOT be chosen, and an open option for fixing it
 
 2. Open option (not implemented): choose c from the noise stress test alone, as the value of c at which a random alarm (P_i drawn uniformly from 0 to G_i) passes the full PASS test at most 5 percent of the time. This uses no predictor results, so it cannot be said to be tuned to them. The 5 percent level is the conventional statistical significance level (p < 0.05); in this project it is already the noise-test target in the script, and it is our own choice, not taken from a grokking paper. Current noise-test pass rates are 0.097, 0.149 and 0.195 at c = 0.7, 0.8 and 0.9, so none of these values meets the 5 percent target yet.
 
+---
+
 # 2026-11-10 — Justification for lead_frac >= 0.8 (critical own-choice value 2)
 
 Justification for lead_frac >= 0.8 (critical own-choice value 2)
