@@ -12767,3 +12767,25 @@ Decision note: how c must NOT be chosen, and an open option for fixing it
 1. Tuning c on the first four predictors (L2 Norm, Dropout, Spectral, AGE) and then applying it to the later four was considered and rejected. A pass threshold must be fixed before looking at predictor results. Choosing it from predictor results would let an examiner say the threshold was fitted to the outcome. In practice it is also impossible, because the first four fail at every c in {0.7, 0.8, 0.9}, so their results do not point to any single c.
 
 2. Open option (not implemented): choose c from the noise stress test alone, as the value of c at which a random alarm (P_i drawn uniformly from 0 to G_i) passes the full PASS test at most 5 percent of the time. This uses no predictor results, so it cannot be said to be tuned to them. The 5 percent level is the conventional statistical significance level (p < 0.05); in this project it is already the noise-test target in the script, and it is our own choice, not taken from a grokking paper. Current noise-test pass rates are 0.097, 0.149 and 0.195 at c = 0.7, 0.8 and 0.9, so none of these values meets the 5 percent target yet.
+
+---
+
+# 2026-11-10 — Justification for lead_frac >= 0.8 (critical own-choice value 2)
+
+Justification for lead_frac >= 0.8 (critical own-choice value 2)
+
+lead_frac is the fraction of firing seeds whose predictor epoch P_i satisfies the lead test P_i < c * G_i, with c = 0.8. G_i is the first epoch at which the test accuracy of seed i goes above 0.9. A seed that never fires is not in this fraction. The PASS rule still asks for lead_frac >= 0.8, together with the rho threshold and the mean-relative-lead band. This entry records why the number 0.8 was chosen for lead_frac. It is critical own-choice value 2. The choice of c is a separate own-choice value and is already recorded above.
+
+1. No paper fixes a lead_frac pass line. Power 2022 (arXiv:2201.02177), Nanda 2023 (arXiv:2301.05217), Xu 2026 (arXiv:2602.16967, commutator defect: a sustained-rise rule) and Golwala (arXiv:2604.20923, ILDR: a 2.5 times baseline threshold) choose their thresholds by a false-alarm versus lead trade-off. They do not publish a fixed fraction of seeds that must lead. Classic early-warning-signal work does the same (Scheffer et al., Nature 2009). So the cut cannot be copied from a paper.
+
+2. Statistical anchor. The value 0.8 matches Cohen's 80 percent power convention (Cohen, J. 1988, Statistical Power Analysis for the Behavioral Sciences, 2nd ed.). That convention is the usual partner of alpha = 0.05 in experimental design: a test should detect a real effect at least 80 percent of the time. By the same convention, a predictor must give an early warning on at least 80 percent of seeds. This is a convention the value is chosen to match. It is not a derivation from Cohen's formula, and it is not a power calculation on these five seeds.
+
+3. Design reason, with 5 seeds. lead_frac >= 0.8 means at least 4 of 5 seeds must lead, so exactly one miss is allowed. That matches the minimum of 4 firing seeds, and it matches the reason 5 seeds were chosen: 4 ranked seeds keep Spearman's rho testable, because P(rho = 1) at n = 4 is 1/24 = 0.042. A cut of 1.0 would let one bad seed fail a good predictor. A cut of 0.6 would allow 2 misses out of 5, which is too loose.
+
+4. Honest limit. Under the lead rule P_i < 0.8 * G_i, an alarm fired at a uniformly random epoch in [0, G_i] leads with probability 0.8. Even 5 of 5 seeds leading then has chance 0.8^5 = 0.328. lead_frac alone is therefore not a significance test. Significance is carried by the rho threshold (the 99th percentile of 10,000 random predictors) and by the noise stress test.
+
+5. Status. lead_frac >= 0.8 remains OWN CHOICE, anchored to Cohen's 0.8 power convention. Verdicts are unchanged: all 8 predictors FAIL.
+
+## Files touched with this entry
+
+- `context.md`: this entry appended. Nothing earlier in the file was edited. No code and no results were changed.
