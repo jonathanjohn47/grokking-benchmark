@@ -96,6 +96,14 @@ evaluation:
   # 0.95 and 0.99 are added so the conclusions do not rest on one arbitrary cut.
   grok_thresholds: [0.9, 0.95, 0.99]
 
+  # Lead test for the frozen PASS rule. Seed i leads when P_i < c * G_i.
+  # Lead time scales with G (Xu arXiv:2602.16967; Golwala arXiv:2604.20923).
+  # No paper fixes c. Default c = 0.8. The 10 Nov 2026 sweep also scores
+  # c = 0.7 and c = 0.9, and keeps the old P_i < G_i - 100 rule as a comparison.
+  # The 100-epoch margin is not the default lead test anymore.
+  lead_fraction_c: 0.8
+  lead_margin_epochs: 100
+
   # Console cadence: number of progress lines printed per run.
   # Source: own engineering choice; log_every = epochs // log_lines_per_run.
   log_lines_per_run: 40

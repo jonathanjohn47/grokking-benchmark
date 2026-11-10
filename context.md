@@ -12507,3 +12507,69 @@ This makes 5 the minimum sufficient for significance; it is not claimed to give 
 - QA: xelatex finished with no Overfull hbox and no Missing character. Remaining log notes match v3: hyperref PDF-string warnings on maths in headings, and one Underfull hbox in the reference list (badness 4366). `pdffonts`: every font emb=yes. PDF is 55 pages. `pdftotext` has no L2, Dropout, Spectral, AGE, HTSR, Weight-PCA, Higher-MI, Commutator, Omnigrok, crossover, halfway, or MA-of-MA as words. A low-resolution raster check of all 55 pages found no ink inside the page edge.
 - What did not change: Textbook v2 files, predictor code, shared model, experiment results. Predictor-specific books are still postponed; this book names none of the eight predictors.
 - Next: pull request for v4 only. Do not merge from this session unless Jonathan asks.
+
+
+# 2026-11-10 — Fractional lead rule (c sweep), re-score of saved results
+
+## Session Summary
+- Replaced the default lead test in the frozen PASS rule. Old comparison, still available: seed i leads if P_i < G_i - 100. New default: seed i leads if P_i < c * G_i, with c = 0.8 as the config parameter (`evaluation.lead_fraction_c` in `06_Code/configs/nanda_unified.yaml`).
+- Sensitivity was scored at c = 0.7 and c = 0.9 as well as the margin-100 comparison. No model was retrained. Frozen verdict files, including `predictor_events.json`, were not overwritten.
+- Re-scored only the four predictors that already have a persisted PRIMARY frozen verdict: HTSR Alpha, Weight-PCA, Higher-MI, and Commutator Defect. The Commutator numbers are the saved eta = 1e-3 onset epochs.
+- L2, Dropout, Spectral and AGE were not backfilled. Saved P_i do exist for them: every stored signal row for those four predictors in `predictor_events.json` has an `epochs` list (the event epoch per seed) together with `grok_epochs`.
+- The random-predictor rho calibration does not use the lead test. RHO_THRESH stays 0.8999999999999998. Recomputed with the original `numpy.random.seed(42)` and Uniform[0, 40000] draws: the 99th percentile matches that constant, and the rho values are identical under the margin rule and the fractional rule.
+- The noise stress test P_i ~ Uniform[0, G_i] does use the lead test. It was re-run for 10000 trials (numpy Generator seed 42, same draws for every rule).
+
+## Technical Decisions
+- Lead time scales with G (Xu arXiv:2602.16967; Golwala arXiv:2604.20923). No paper fixes c, so the sweep is there to show that the verdicts do not depend on the particular c.
+- Other PASS conditions are unchanged: at least 4 firing seeds, lead_frac >= 0.8, rho >= 0.8999999999999998, and 0.05 <= mean relative lead <= 0.9.
+- `analyze_nanda_unified.py` now defaults to the fractional rule (c = 0.8). `run_control_experiment.py` still defaults to the margin rule when the old script is run as a whole, so the frozen 2026-09-29 control files are not rewritten by accident. Both `evaluate` functions accept `rule="fraction"` and `rule="margin"`.
+
+## Results (saved P_i, G_i)
+G_i (seeds 0 to 4): 12987, 6921, 9510, 11019, 23747.
+
+HTSR Alpha P_i: 34300, 16000, 24100, 19500, 39600.
+Weight-PCA P_i: 37100, 27900, 32400, 29700, 36200.
+Higher-MI P_i: 15500, 8500, 20600, 12900, 32500.
+Commutator Defect (eta 1e-3) P_i: 600, 500, 500, 400, 600.
+
+| Predictor | Rule | lead_frac | rho | mean relative lead | Verdict |
+|---|---|---|---|---|---|
+| HTSR Alpha | margin100 | 0 | 0.9000 | -1.1849 | FAIL |
+| HTSR Alpha | c=0.7 | 0 | 0.9000 | -1.1849 | FAIL |
+| HTSR Alpha | c=0.8 | 0 | 0.9000 | -1.1849 | FAIL |
+| HTSR Alpha | c=0.9 | 0 | 0.9000 | -1.1849 | FAIL |
+| Weight-PCA | margin100 | 0 | 0.8000 | -1.9029 | FAIL |
+| Weight-PCA | c=0.7 | 0 | 0.8000 | -1.9029 | FAIL |
+| Weight-PCA | c=0.8 | 0 | 0.8000 | -1.9029 | FAIL |
+| Weight-PCA | c=0.9 | 0 | 0.8000 | -1.9029 | FAIL |
+| Higher-MI | margin100 | 0 | 0.7000 | -0.4254 | FAIL |
+| Higher-MI | c=0.7 | 0 | 0.7000 | -0.4254 | FAIL |
+| Higher-MI | c=0.8 | 0 | 0.7000 | -0.4254 | FAIL |
+| Higher-MI | c=0.9 | 0 | 0.7000 | -0.4254 | FAIL |
+| Commutator Defect | margin100 | 1 | 0.6325 | 0.9535 | FAIL |
+| Commutator Defect | c=0.7 | 1 | 0.6325 | 0.9535 | FAIL |
+| Commutator Defect | c=0.8 | 1 | 0.6325 | 0.9535 | FAIL |
+| Commutator Defect | c=0.9 | 1 | 0.6325 | 0.9535 | FAIL |
+
+No verdict changed. All four stay FAIL under every rule. HTSR, Weight-PCA and Higher-MI still have lead_frac = 0 because every saved P_i is after 0.9 * G_i. Commutator still leads on all five seeds (lead_frac = 1) but rho is below the threshold and the mean relative lead is above 0.9.
+
+Noise-test pass rates (P_i ~ Uniform[0, G_i], 10000 trials):
+- margin100: 0.2164
+- c=0.7: 0.0974
+- c=0.8: 0.1490
+- c=0.9: 0.1951
+
+The margin100 rate matches the previously recorded figure of about 21.7 percent.
+
+## Files Modified
+- `06_Code/configs/nanda_unified.yaml` — `evaluation.lead_fraction_c` = 0.8 and `evaluation.lead_margin_epochs` = 100.
+- `06_Code/scripts/analyze_nanda_unified.py` — fractional lead test is the default; margin rule kept as a comparison.
+- `06_Code/scripts/run_control_experiment.py` — `evaluate` accepts both lead rules. Default of that script remains margin.
+- `06_Code/scripts/rescore_lead_fraction.py` — new re-score and noise-test script. Reads saved events only.
+- `08_Experiments/results/nanda_unified/analysis/lead_fraction_sweep_2026-11-10.json` — new result file. Frozen verdict files were not overwritten.
+- `context.md` — this entry.
+
+## What did not change
+- Predictor modules, the shared model, and the saved checkpoints.
+- `predictor_events.json` and the earlier aggregate verdict files.
+- L2, Dropout, Spectral and AGE scores. Their saved P_i were not passed through the new rule.

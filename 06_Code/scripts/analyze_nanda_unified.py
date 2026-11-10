@@ -210,30 +210,69 @@ def rank_corr(a, b):
 # Copied here deliberately rather than imported — see comment above.
 RHO_THRESH = 0.8999999999999998  # 99th percentile, Run 2 calibration, frozen
 
-def evaluate_frozen_protocol(g_in, p_in, margin=100.0):
-    """Same logic as run_control_experiment.py::evaluate().
+# Lead time scales with G (Xu arXiv:2602.16967; Golwala arXiv:2604.20923).
+# No paper fixes the fraction c, so c is a config parameter (default 0.8,
+# configs/nanda_unified.yaml evaluation.lead_fraction_c). The 10 Nov 2026
+# sweep scores c in {0.7, 0.8, 0.9} and keeps the old fixed margin as a
+# comparison. Seed i leads under the default rule when P_i < c * G_i.
+DEFAULT_LEAD_C = 0.8
+LEAD_MARGIN_EPOCHS = 100.0
+
+
+def lead_flags(g_arr, p_arr, rule="fraction", c=DEFAULT_LEAD_C, margin=LEAD_MARGIN_EPOCHS):
+    """Boolean lead mask, one entry per firing seed.
+
+    rule="fraction": P_i < c * G_i (default). Lead time scales with G.
+    rule="margin":   P_i < G_i - margin (the old fixed 100-epoch comparison).
+    """
+    g_arr = np.asarray(g_arr, dtype=float)
+    p_arr = np.asarray(p_arr, dtype=float)
+    if rule == "fraction":
+        return p_arr < (float(c) * g_arr)
+    if rule == "margin":
+        return p_arr < (g_arr - float(margin))
+    raise ValueError(f"unknown lead rule {rule!r}")
+
+
+def evaluate_frozen_protocol(g_in, p_in, margin=LEAD_MARGIN_EPOCHS, rule="fraction", c=DEFAULT_LEAD_C):
+    """Same logic as run_control_experiment.py::evaluate(), with the fractional lead test.
 
     g_in, p_in: length-5 sequences (grok epoch, predictor event epoch).
     p_in entries may be None (no detection / miss).
+
+    Lead rule (10 Nov 2026):
+      - default rule="fraction", c=0.8: seed i leads if P_i < c * G_i
+      - comparison rule="margin": seed i leads if P_i < G_i - margin
+    Lead time scales with G (Xu arXiv:2602.16967; Golwala arXiv:2604.20923).
+    No paper fixes c.
 
     Miss handling (matches run_control_experiment.py::evaluate):
       - drop None pairs before Spearman rho and mean relative lead
       - if fewer than 4 of 5 seeds fire -> FAIL immediately
         (lead_frac=0.0, rho=nan, mean_rel_lead=0.0)
       - negative relative leads stay signed (not dropped, not abs-valued)
+
+    Other PASS conditions are unchanged: at least 4 firing seeds,
+    lead_frac >= 0.8, rho >= RHO_THRESH, 0.05 <= mean relative lead <= 0.9.
     """
     from scipy.stats import spearmanr
     valid = [(g, p) for g, p in zip(g_in, p_in) if p is not None]
+    rule_meta = {
+        "lead_rule": rule,
+        "lead_c": float(c) if rule == "fraction" else None,
+        "lead_margin": float(margin) if rule == "margin" else None,
+    }
     if len(valid) < 4:
         return {
             "lead_frac": 0.0,
             "rho": float("nan"),
             "mean_rel_lead": 0.0,
             "n_firing": len(valid),
+            **rule_meta,
         }
     g_arr = np.asarray([g for g, _ in valid], dtype=float)
     p_arr = np.asarray([p for _, p in valid], dtype=float)
-    lead = p_arr < (g_arr - margin)
+    lead = lead_flags(g_arr, p_arr, rule=rule, c=c, margin=margin)
     lead_frac = float(np.mean(lead))
     rel_lead = (g_arr - p_arr) / g_arr
     mean_rel_lead = float(np.mean(rel_lead))
@@ -247,6 +286,7 @@ def evaluate_frozen_protocol(g_in, p_in, margin=100.0):
         "rho": rho,
         "mean_rel_lead": mean_rel_lead,
         "n_firing": len(valid),
+        **rule_meta,
     }
 
 
@@ -319,7 +359,7 @@ def summarise(ev, grok):
             # above): PASS iff lead_frac >= 0.8 AND rho >= RHO_THRESH AND
             # 0.05 <= mean_rel_lead <= 0.9. None misses are dropped inside
             # evaluate_frozen_protocol (same as run_control_experiment).
-            verdict = evaluate_frozen_protocol(grok, epochs_raw)
+            verdict = evaluate_frozen_protocol(grok, epochs_raw)  # default: P < c*G, c=0.8
             rho_ok = (
                 not (isinstance(verdict["rho"], float) and np.isnan(verdict["rho"]))
                 and verdict["rho"] >= RHO_THRESH
@@ -362,6 +402,11 @@ def print_verdicts(rows):
     for r in scored:
         v = r["frozen_protocol_verdict"]
         print(f"\n{r['signal']}")
+        rule_bit = (
+            f"P < {v['lead_c']}*G" if v.get("lead_rule") == "fraction"
+            else f"P < G - {v.get('lead_margin')}"
+        )
+        print(f"  lead rule     = {rule_bit}")
         print(f"  lead_frac     = {v['lead_frac']:.4f}  (need >= 0.8)")
         print(f"  rho           = {v['rho']:.4f}  (need >= {RHO_THRESH:.4f})")
         print(f"  mean_rel_lead = {v['mean_rel_lead']:.4f}  (need in [0.05, 0.9])")
