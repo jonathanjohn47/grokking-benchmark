@@ -89,7 +89,7 @@ Total: 36 PDFs.
 
   | Predictor | Primary paper | Status |
   |---|---|---|
-  | L2 Norm | Liu et al. 2022 (*Towards Understanding Grokking*) and Liu, Michaud and Tegmark 2023 (*Omnigrok*) for the weight-norm / controlling-quantity claim. Nanda et al. 2023 Fig. 7 is only a descriptive plot of the sum of squared weights, not a detection rule. | CLOSED, negative |
+  | L2 Norm | Liu et al. 2022 (*Towards Understanding Grokking*) and Liu, Michaud and Tegmark 2023 (*Omnigrok*) for the weight-norm / controlling-quantity claim. Nanda et al. 2023 Fig. 7 is only a descriptive plot of the sum of squared weights, not a detection rule. Neither paper gives a detection rule on the weight-norm time series. | CLOSED, negative |
   | Dropout | Salah & Yevick, arXiv:2507.11645 (variance under stochastic dropout) | CLOSED, negative |
   | Spectral | Canatar et al. 2021, *Nat. Commun.* 12, 2914 (spectral bias / task-model alignment) | CLOSED, negative |
   | AGE | Papyan et al. 2020 PNAS (NC1 variability collapse) — **mechanism:** Beaglehole et al. 2024 (AGOP → deep neural collapse, arXiv:2402.13728) + Mallinar et al. 2024 (grokking mod-p via AGOP/RFM, arXiv:2407.20199) | CLOSED, negative (2026-09-06) — NC1 collapses ~45 → ~0.05 in 5/5 seeds but `nc1_min_epoch` lags grok in 5/5 (ratio 1.67–3.92) |

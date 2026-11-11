@@ -12970,3 +12970,38 @@ No scoring code, yaml values, tests, plots, or official result files were change
 - `04_Literature/Papers/Liu Omnigrok.pdf`: added.
 - `04_Literature/README.md`: two index rows, L2 predictor map row, PDF total set to 36.
 - `context.md`: this entry appended. Nothing earlier in the file was edited.
+
+# 2026-11-11 — What Liu et al. claim about weight norm and timing (L2 open attack point 16 closed)
+
+This entry records a reading of the two Liu papers already in `04_Literature/Papers/` (`Liu et al.pdf` and `Liu Omnigrok.pdf`). It closes L2 open attack point 16: what those papers claim about weight norm and timing, and whether they give a detection rule. The "papers are not in the library" part was already closed by point 10. This reading does not close point 2. The thesis still uses detection rules (a moving-average crossover, and a moving-average-of-moving-average zero crossing) that these papers do not give. In fact this reading supports point 2: the published papers give no detection rule.
+
+## Omnigrok (Liu, Michaud and Tegmark, ICLR 2023, arXiv:2210.01117v2)
+
+They treat the model L2 weight norm \(w \equiv \|w\|_2\) as a controlling quantity for grokking, via the "LU mechanism": the reduced training loss plotted against weight norm is L-shaped, and the reduced test loss is U-shaped. Generalizing solutions concentrate around a sphere of radius \(w_c\) (their Figure 1).
+
+Timing claim (Section 2, "Grokking dynamics"): if the run starts with a large weight norm \(w_0 > w_c\), the model first overfits; if training loss is then negligible and weight decay \(\gamma\) is the only regulariser, they write \(w(t) \approx \exp(-\gamma t) w_0\), so the time to reach the Goldilocks zone is \(t \approx \ln(w_0/w_c)/\gamma\). A small \(\gamma\) gives a long delay. This is a theoretical account of why generalization can be delayed. It is not a training-time detection rule that reads the weight-norm curve of a run and fires before grokking.
+
+Their Figure 7a uses the Nanda et al. 2023 setup: a 1-layer transformer on modular addition with \(p = 113\), 4 heads, \(d_{\mathrm{model}} = 128\), \(d_{\mathrm{mlp}} = 512\), AdamW, learning rate 0.001, weight decay \(\gamma = 1\). They plot weight norm, train accuracy and test accuracy over time. They report that the weight norm first increases, is highest during overfitting, and then drops to below the initial norm when the model generalizes. That is a descriptive plot of the same rise-then-fall already known from Nanda's Figure 7. They do not propose a moving-average crossover, a halfway-down threshold, a zero crossing, or any other detection rule on that curve.
+
+Their Figure 7b: reducing the initialization scale and holding the weight norm constant during training almost eliminates grokking (train and test accuracy rise together). That is a control method, not a predictor.
+
+## Towards Understanding Grokking (Liu, Kitouni, Nolte, Michaud, Tegmark, Williams, NeurIPS 2022, arXiv:2205.10343v2)
+
+The main claims are about representation learning and phase diagrams (comprehension, grokking, memorization, confusion). An effective theory, in a toy setting, predicts a critical training-set size and a grokking-time scale \(t \sim 1/\lambda_3\).
+
+Weight decay, especially on the decoder, is treated as a hyperparameter that can change the phase and can speed up generalization. They do not treat the total L2 weight-norm time series as a predictor, and they give no detection rule on that curve.
+
+Words such as "predicted accuracy" in this paper refer to their representation-quality theory, not to an early-warning rule on weight norm.
+
+## Common conclusion
+
+Neither paper gives a detection rule for using weight norm as an early-warning predictor. Omnigrok does claim that weight norm controls grokking (LU mechanism, delay law, descriptive \(p = 113\) plot, constrained-norm control). Towards Understanding Grokking is mainly about representations and phases, not an L2 detection rule.
+
+Official predictor verdicts are unchanged: all 8 predictors still FAIL. Official L2 result remains FAIL, 0 of 3 pre-declared rows. Official n_limit_cycle remains 0.
+
+No scoring code, yaml values, tests, plots, or official result files were changed. Textbook v4 was not changed. No other L2 point was closed.
+
+## Files touched with this entry
+
+- `context.md`: this entry appended. Nothing earlier in the file was edited.
+- `04_Literature/README.md`: one sentence added to the L2 predictor-map row, stating that neither paper gives a detection rule on the weight-norm time series. The PDF total was not changed. No PDFs were added or replaced.
