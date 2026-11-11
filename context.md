@@ -13030,3 +13030,20 @@ No scoring code, yaml values, tests, plots, official result files, or Textbook v
 ## Files touched with this entry
 
 - `context.md`: this entry appended. Nothing earlier in the file was edited.
+
+# 2026-11-11 — L2 open attack point 12 closed: attainable Spearman rho values for n = 5
+
+The 29 September 2026 criterion-validation record in this file (session summary of that date, section 4, Interpretation for Thesis) said that with five seeds the only attainable Spearman rho values are -1.0, -0.8, -0.6, -0.4, -0.2, 0.0, 0.2, 0.4, 0.6, 0.8, and 1.0, that is 11 values in steps of 0.2. That list is wrong, and it leaves out 0.9.
+
+The current statement is the later Value 3 justification (10 November 2026). For n = 5, Spearman's rho equals 1 minus S/20, where S is the sum of squared rank differences. All 120 orderings were checked: S takes every even value from 0 to 40, so rho takes all 21 values from -1.0 to 1.0 in steps of 0.1, including 0.9. rho of 0.9 or above occurs in 5 of those 120 orderings (the perfect order, plus 4 adjacent swaps), which is 0.0417.
+
+Current viva-ready answers must use this 21-value list, not the 29 September 11-value list. The older paragraph stays as dated history and was not rewritten. Official L2 verdict is unchanged: FAIL, 0 of 3 pre-declared rows. No scoring, yaml, tests, plots, result files, or Textbook v4 were changed.
+
+The one matching wrong sentence in `12_Study/Fixed_Values_Base_Experiment.md` (RHO_THRESH row) was corrected in this same change, so it no longer says the attainable values step by 0.2. It now says that for n = 5 the attainable Spearman values are the 21 values from -1.0 to 1.0 in steps of 0.1, and that the 29 September 2026 note listing only 11 values in steps of 0.2 is dated.
+
+No other L2 point was closed.
+
+## Files touched with this entry
+
+- `context.md`: this entry appended. Nothing earlier in the file was edited.
+- `12_Study/Fixed_Values_Base_Experiment.md`: one sentence in the RHO_THRESH viva-defence cell corrected.
