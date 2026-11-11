@@ -11891,7 +11891,7 @@ PASS criteria: unchanged, the same as all other predictors.
 - lead_frac ≥ 0.8, where a lead means event < grok − 100 (a miss counts as no lead)
 - Spearman rho(event, grok) ≥ 0.9
 - 0.05 ≤ mean relative lead ≤ 0.9
-- Miss and negative-lead handling: taken from analyze_nanda_unified.py::evaluate_frozen_protocol and the frozen evaluate() rule it documents as identical (run_control_experiment.py::evaluate, recorded 2026-09-29). (a) Miss: a seed whose predictor never fires is stored as None and is dropped before Spearman rho and mean relative lead are computed; those two statistics use only the seeds that fired. If fewer than 4 of the 5 seeds fire, the set fails immediately (lead_frac = 0.0, rho = nan, mean_rel_lead = 0.0). (b) Negative relative lead: when the event is after grok, rel_lead = (G − P) / G is negative; negative values are kept in the mean as signed numbers (not dropped, not absolute-valued). mean_rel_lead = mean(rel_lead) over the seeds used above. A negative mean fails the 0.05 ≤ mean_rel_lead ≤ 0.9 band.
+- Miss and negative-lead handling: taken from analyze_nanda_unified.py::evaluate_frozen_protocol and the frozen evaluate() rule it documents as identical (run_control_experiment.py::evaluate, recorded 2026-09-29; miss rule aligned 2026-11-11, Value 6). (a) Miss: a seed whose predictor never fires is stored as None. In lead_frac a miss counts as no lead and stays in the denominator, so lead_frac is the number of leading seeds divided by 5. Spearman rho and mean relative lead still drop the miss, because they need a firing epoch P_i; those two statistics use only the seeds that fired. If fewer than 4 of the 5 seeds fire, the set fails immediately (lead_frac = 0.0, rho = nan, mean_rel_lead = 0.0). (b) Negative relative lead: when the event is after grok, rel_lead = (G − P) / G is negative; negative values are kept in the mean as signed numbers (not dropped, not absolute-valued). mean_rel_lead = mean(rel_lead) over the firing seeds. A negative mean fails the 0.05 ≤ mean_rel_lead ≤ 0.9 band.
 
 Sources
 - Main: Y. Xu (2026), "Low-Dimensional and Transversely Curved Optimization Dynamics in Grokking", arXiv:2602.16746 (formula, η, K = 5, onset rule).
@@ -12774,7 +12774,7 @@ Decision note: how c must NOT be chosen, and an open option for fixing it
 
 Justification for lead_frac >= 0.8 (critical own-choice value 2)
 
-lead_frac is the fraction of firing seeds whose predictor epoch P_i satisfies the lead test P_i < c * G_i, with c = 0.8. G_i is the first epoch at which the test accuracy of seed i goes above 0.9. A seed that never fires is not in this fraction. The PASS rule still asks for lead_frac >= 0.8, together with the rho threshold and the mean-relative-lead band. This entry records why the number 0.8 was chosen for lead_frac. It is critical own-choice value 2. The choice of c is a separate own-choice value and is already recorded above.
+lead_frac is the fraction of firing seeds whose predictor epoch P_i satisfies the lead test P_i < c * G_i, with c = 0.8. G_i is the first epoch at which the test accuracy of seed i goes above 0.9. A seed that never fires is not in this fraction. (2026-11-11 note: that sentence described the code before Value 6. A miss now counts as no lead in lead_frac and stays in the denominator. See the 2026-11-11 entry "Justification for miss handling (critical own-choice value 6)".) The PASS rule still asks for lead_frac >= 0.8, together with the rho threshold and the mean-relative-lead band. This entry records why the number 0.8 was chosen for lead_frac. It is critical own-choice value 2. The choice of c is a separate own-choice value and is already recorded above.
 
 1. No paper fixes a lead_frac pass line. Power 2022 (arXiv:2201.02177), Nanda 2023 (arXiv:2301.05217), Xu 2026 (arXiv:2602.16967, commutator defect: a sustained-rise rule) and Golwala (arXiv:2604.20923, ILDR: a 2.5 times baseline threshold) choose their thresholds by a false-alarm versus lead trade-off. They do not publish a fixed fraction of seeds that must lead. Classic early-warning-signal work does the same (Scheffer et al., Nature 2009). So the cut cannot be copied from a paper.
 
@@ -12853,3 +12853,29 @@ The PASS rule requires that a predictor fire on at least 4 of the 5 seeds. A see
 ## Files touched with this entry
 
 - `context.md`: this entry appended. Nothing earlier in the file was edited. No code and no results were changed.
+
+---
+
+# 2026-11-11 — Justification for miss handling (critical own-choice value 6)
+
+Justification for miss handling (critical own-choice value 6)
+
+A miss is a seed whose predictor never fires, so P_i is None. This entry records how a miss is treated in the PASS test. It is critical own-choice value 6. The choices of c, of lead_frac, of rho, of the r-bar band, and of the minimum of 4 firing seeds are separate own-choice values and are already recorded above.
+
+1. The documented rule. The frozen-protocol text already said that a miss counts as no lead. The code did not do that once at least 4 seeds fired: it dropped the miss, and lead_frac was the fraction of firing seeds that led, not the fraction of all 5 seeds.
+
+2. The rule now. lead_frac is the number of leading seeds divided by 5. A miss is counted as no lead, so it stays in the denominator. If 4 seeds fire and all 4 lead, lead_frac is 4/5 = 0.8, not 4/4 = 1.0. If fewer than 4 seeds fire, the set still fails immediately, as required by Value 5 (lead_frac = 0.0, rho = nan, mean_rel_lead = 0.0).
+
+3. rho and r-bar. Those two statistics still drop a miss, because they need a firing epoch P_i. A miss has no P_i, so it cannot enter Spearman rho or the relative-lead mean without inventing a value.
+
+4. Official results. On the official run, all 20 rows fire on all 5 seeds, so lead_frac, rho, r-bar and the FAIL verdicts are unchanged. The change matters for a later predictor that misses a seed.
+
+5. Status. Value 6 is now implemented as the documented rule: a miss counts as no lead in lead_frac. It remains an own choice. Verdicts are unchanged: all 8 predictors FAIL.
+
+## Files touched with this entry
+
+- `06_Code/scripts/analyze_nanda_unified.py`: `evaluate_frozen_protocol` now puts a miss in the lead_frac denominator as no lead. Rho and mean relative lead still use firing seeds only.
+- `06_Code/scripts/run_control_experiment.py`: `evaluate` uses the same miss rule. The top-level 10,000-trial calibration was not re-run.
+- `06_Code/tests/test_miss_counts_as_no_lead.py`: 4 leading fires and 1 miss give lead_frac 0.8; 3 firing seeds still fail immediately.
+- `12_Study/Fixed_Values_Base_Experiment.md`: the Miss / None row now states Value 6.
+- `context.md`: the frozen-protocol miss paragraph and a short note on the Value 2 sentence were updated, and this entry was appended.
