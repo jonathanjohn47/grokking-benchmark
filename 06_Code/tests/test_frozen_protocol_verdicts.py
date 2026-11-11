@@ -21,6 +21,35 @@ def scored():
     return score_saved_run(lead_c=0.8, write=False)
 
 
+def test_l2_official_rows_are_the_two_moving_average_rules(scored):
+    """The hindsight half-way-down-from-peak reading is not an official row."""
+    l2 = next(p for p in scored["predictors"] if p["predictor"] == "L2 Norm")
+    names = [r["signal"] for r in l2["rows"]]
+    assert "L2: sum(w^2) half-way down from peak" not in names
+    assert names == [
+        "L2: MA crossover (implemented)",
+        "L2: MA-of-MA zero crossing (implemented)",
+    ]
+    assert l2["n_predeclared_rows"] == 2
+    assert l2["n_predeclared_passing"] == 0
+    assert l2["verdict"] == "FAIL"
+    assert all(r["verdict"] == "FAIL" and r["counts_towards_predictor"] for r in l2["rows"])
+
+
+def test_l2_still_fails_at_neighbouring_lead_fractions():
+    for lead_c in (0.7, 0.9):
+        scored = score_saved_run(lead_c=lead_c, write=False)
+        l2 = next(p for p in scored["predictors"] if p["predictor"] == "L2 Norm")
+        names = [r["signal"] for r in l2["rows"]]
+        assert names == [
+            "L2: MA crossover (implemented)",
+            "L2: MA-of-MA zero crossing (implemented)",
+        ]
+        assert l2["n_predeclared_rows"] == 2
+        assert l2["n_predeclared_passing"] == 0
+        assert l2["verdict"] == "FAIL"
+
+
 def test_every_predictor_fails(scored):
     expected = {
         "L2 Norm": "FAIL",

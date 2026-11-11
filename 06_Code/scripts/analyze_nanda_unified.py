@@ -72,12 +72,6 @@ def load_seed(seed):
     }
 
 
-def smooth(y, window):
-    kernel = np.ones(window) / window
-    padded = np.pad(y, (window // 2, window - 1 - window // 2), mode="edge")
-    return np.convolve(padded, kernel, mode="valid")
-
-
 def fraction_epochs(epochs, y, fractions=FRACTIONS):
     """First epoch at which y has covered `f` of the way from its start to
     its farthest value. Returns {f: epoch}."""
@@ -90,16 +84,6 @@ def fraction_epochs(epochs, y, fractions=FRACTIONS):
         idx = np.nonzero(sign * (y - target) >= 0)[0]
         out[f] = int(epochs[idx[0]])
     return out
-
-
-def l2_decline_epoch(sum_w2, fraction=0.5):
-    """First epoch after the (smoothed) sum-of-squares peak at which it has
-    fallen `fraction` of the way from that peak to its final value."""
-    y = smooth(sum_w2, 200)
-    peak = int(np.argmax(y))
-    target = y[peak] - fraction * (y[peak] - y[-1])
-    idx = np.nonzero(y[peak:] <= target)[0]
-    return peak, int(peak + idx[0])
 
 
 def build_events(runs):
@@ -120,8 +104,6 @@ def build_events(runs):
         # point. Checked against seed_*/l2_norm/epoch_grid.npy on 10 Nov 2026.
         put("L2: MA crossover (implemented)", s, sm["l2_predictor"]["ma_crossover_epoch"])
         put("L2: MA-of-MA zero crossing (implemented)", s, sm["l2_predictor"]["ma_of_ma_zero_crossing_epoch"])
-        _, half = l2_decline_epoch(r["sum_w2"], 0.5)
-        put("L2: sum(w^2) half-way down from peak", s, half)
 
         put("Dropout: variance peak (implemented)", s, sm["dropout_variance_predictor"]["variance_peak_epoch"])
         fr = fraction_epochs(r["var_ep"], r["var"])
