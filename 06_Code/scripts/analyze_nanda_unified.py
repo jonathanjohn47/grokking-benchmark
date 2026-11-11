@@ -250,8 +250,13 @@ def evaluate_frozen_protocol(g_in, p_in, margin=LEAD_MARGIN_EPOCHS, rule="fracti
     Lead time scales with G (Xu arXiv:2602.16967; Golwala arXiv:2604.20923).
     No paper fixes c.
 
-    Miss handling (matches run_control_experiment.py::evaluate):
-      - drop None pairs before Spearman rho and mean relative lead
+    Miss handling (matches run_control_experiment.py::evaluate), 11 Nov 2026:
+      - a miss (P_i is None) counts as no lead in lead_frac
+      - lead_frac = (number of leading seeds) / (number of seeds), so a
+        miss stays in the denominator. 4 leads and 1 miss is 4/5 = 0.8,
+        not 4/4 = 1.0
+      - Spearman rho and mean relative lead still use only firing seeds,
+        because a miss has no P_i
       - if fewer than 4 of 5 seeds fire -> FAIL immediately
         (lead_frac=0.0, rho=nan, mean_rel_lead=0.0)
       - negative relative leads stay signed (not dropped, not abs-valued)
@@ -260,7 +265,9 @@ def evaluate_frozen_protocol(g_in, p_in, margin=LEAD_MARGIN_EPOCHS, rule="fracti
     lead_frac >= 0.8, rho >= RHO_THRESH, 0.05 <= mean relative lead <= 0.9.
     """
     from scipy.stats import spearmanr
-    valid = [(g, p) for g, p in zip(g_in, p_in) if p is not None]
+    pairs = list(zip(g_in, p_in))
+    n_seeds = len(pairs)
+    valid = [(g, p) for g, p in pairs if p is not None]
     rule_meta = {
         "lead_rule": rule,
         "lead_c": float(c) if rule == "fraction" else None,
@@ -277,7 +284,8 @@ def evaluate_frozen_protocol(g_in, p_in, margin=LEAD_MARGIN_EPOCHS, rule="fracti
     g_arr = np.asarray([g for g, _ in valid], dtype=float)
     p_arr = np.asarray([p for _, p in valid], dtype=float)
     lead = lead_flags(g_arr, p_arr, rule=rule, c=c, margin=margin)
-    lead_frac = float(np.mean(lead))
+    # A miss is not a lead and stays in the denominator.
+    lead_frac = float(np.sum(lead) / n_seeds) if n_seeds else 0.0
     rel_lead = (g_arr - p_arr) / g_arr
     mean_rel_lead = float(np.mean(rel_lead))
     if len(g_arr) >= 3 and np.std(p_arr) > 1e-9:
