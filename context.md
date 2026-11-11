@@ -13005,3 +13005,28 @@ No scoring code, yaml values, tests, plots, or official result files were change
 
 - `context.md`: this entry appended. Nothing earlier in the file was edited.
 - `04_Literature/README.md`: one sentence added to the L2 predictor-map row, stating that neither paper gives a detection rule on the weight-norm time series. The PDF total was not changed. No PDFs were added or replaced.
+
+# 2026-11-11 — Official numbers for the L2 viva-ready answers (L2 open attack point 11 closed)
+
+Jonathan approved this on 11 November 2026: amend the viva-ready answers with the official frozen-run numbers, then wind up. This entry closes L2 open attack point 11. The viva notes and ready answers had still been quoting older runs. The current figures are the official ones already stored in `08_Experiments/results/nanda_unified/analysis/frozen_protocol_verdicts.json`, under the lead rule \(P_i < c G_i\) with \(c = 0.8\).
+
+Official grok epochs \(G_i\), seeds 0 to 4: 12987, 6921, 9510, 11019, 23747. Range 6921 to 23747. Mean 12836.8.
+
+Official L2 moving-average crossover times \(P_i\): 113.4073099931767, 113.19719584752606, 120.11793260285641, 130.6065722584489, 136.80423675510377. In prose those are 113.41, 113.20, 120.12, 130.61 and 136.80. Range 113 to 137. Mean 122.8.
+
+The current viva-ready wording is now:
+
+- The official MA-crossover times are 113.41, 113.20, 120.12, 130.61 and 136.80 (range 113 to 137, mean 122.8).
+- The official grok epochs are 12987, 6921, 9510, 11019 and 23747 (range 6921 to 23747, mean 12836.8).
+
+A short replacement for the old Q3 L2 clause is: "L2 Norm's MA-crossover trigger fires at 113–137 (mean 122.8), while the official grok epochs run from 6921 to 23747 (mean 12836.8)."
+
+The older ready-answer figures in the earlier `context.md` viva Q&A and the Predictor-by-Predictor Justification Table (MA-crossover about 113–120, mean about 115, grok up to about 13000) are dated history. The 17 September 2026 progress-report note (mean grok 13218.8, range 6988–24021, with grok epochs 14474, 6988, 10418, 10193, 24021) is also dated history. Those older passages must not be used as present answers. They were not edited, because `context.md` is append-only and the dated progress reports stay as history.
+
+Official predictor verdicts are unchanged: all 8 predictors still FAIL. Official L2 result remains FAIL, 0 of 3 pre-declared rows. Official n_limit_cycle remains 0.
+
+No scoring code, yaml values, tests, plots, official result files, or Textbook v4 were changed. The 17 September 2026 progress-report PDFs were not changed. No other L2 point was closed.
+
+## Files touched with this entry
+
+- `context.md`: this entry appended. Nothing earlier in the file was edited.
