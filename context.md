@@ -12946,3 +12946,27 @@ Value 11 is the limit-cycle standard-deviation cut of 0.05. After G_i, the first
 
 - `context.md`: this entry appended.
 - `12_Study/Fixed_Values_Base_Experiment.md`: the Limit-cycle standard-deviation cut row now states that Value 11 is defended and points to this entry. The numbered list item for this cut was updated in the same way. No scoring code and no result files were changed.
+
+# 2026-11-11 — Liu papers added to the thesis library (L2 open attack point 10 closed)
+
+Jonathan added `Liu et al.pdf` and `Liu Omnigrok.pdf` to `04_Literature/Papers/` on his Mac on 11 November 2026. They are now also in the repo.
+
+- `Liu et al.pdf` — Ziming Liu, Ouail Kitouni, Niklas Nolte, Eric J. Michaud, Max Tegmark, Mike Williams, *Towards Understanding Grokking: An Effective Theory of Representation Learning*, NeurIPS 2022, arXiv:2205.10343v2.
+- `Liu Omnigrok.pdf` — Ziming Liu, Eric J. Michaud, Max Tegmark, *Omnigrok: Grokking Beyond Algorithmic Data*, ICLR 2023, arXiv:2210.01117v2.
+
+`04_Literature/README.md` now indexes both papers and maps L2's predictor claim to Liu et al. 2022 and Liu, Michaud and Tegmark 2023. Nanda et al. 2023 Figure 7 remains only a descriptive plot of the sum of squared weights, not a detection rule, and remains the architecture/setup reference.
+
+This closes L2 open attack point 10 (source papers missing from the library / README mapped L2 only to Nanda).
+
+It does not close point 16. What Liu et al. actually claim about weight norm and timing, and whether they give a detection rule, still needs to be read.
+
+Official predictor verdicts are unchanged: all 8 predictors still FAIL. Official L2 result remains FAIL, 0 of 3 pre-declared rows. Official n_limit_cycle remains 0.
+
+No scoring code, yaml values, tests, plots, or official result files were changed. Textbook v4 was not changed.
+
+## Files touched with this entry
+
+- `04_Literature/Papers/Liu et al.pdf`: added.
+- `04_Literature/Papers/Liu Omnigrok.pdf`: added.
+- `04_Literature/README.md`: two index rows, L2 predictor map row, PDF total set to 36.
+- `context.md`: this entry appended. Nothing earlier in the file was edited.

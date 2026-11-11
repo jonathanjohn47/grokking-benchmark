@@ -7,7 +7,7 @@ as supplied, with one exception: `Paper et al.pdf` (a download placeholder name)
 was renamed to `Alethea Power - Grokking Generalization beyond overfitting on
 small algorithmic datasets [2022].pdf`.
 
-Total: 25 PDFs.
+Total: 36 PDFs.
 
 ---
 
@@ -16,6 +16,8 @@ Total: 25 PDFs.
 | File | Note |
 |---|---|
 | `Alethea Power - Grokking Generalization beyond overfitting on small algorithmic datasets [2022].pdf` | Power, Burda, Edwards, Babuschkin, Misra (2022). **The paper that first reported grokking.** This project follows it for the modulus `p = 97` and the 3-seeds-per-predictor protocol. (Was supplied as `Paper et al.pdf`.) |
+| `Liu et al.pdf` | Liu, Kitouni, Nolte, Michaud, Tegmark, Williams (2022), *Towards Understanding Grokking: An Effective Theory of Representation Learning*, NeurIPS 2022, arXiv:2205.10343v2. One of the two source papers for treating weight norm as a controlling quantity for grokking, not merely a descriptive plot. Nanda et al. do not propose L2 as a predictor. |
+| `Liu Omnigrok.pdf` | Liu, Michaud and Tegmark (2023), *Omnigrok: Grokking Beyond Algorithmic Data*, ICLR 2023, arXiv:2210.01117v2. The other source paper for the weight-norm / LU-mechanism claim (training and test loss against weight norm). Together with Liu et al. 2022, this is the source behind L2 as a predictor in this thesis. Nanda et al. 2023 Figure 7 remains a descriptive plot of the sum of squared weights only. |
 | `Nanda et al.pdf` | Nanda, Chan, Lieberum, Smith, Steinhardt (2023), *Progress measures for grokking via mechanistic interpretability*, ICLR. **The architecture/setup reference for this project's four-head model.** Defines restricted loss and excluded loss, the three phases (memorisation / circuit formation / cleanup), and states plainly (Sec. 3) that no LayerNorm is used. |
 | `Domenico Pomarico - Transfer Entropy and O-Information to Detect Grokking in Tensor Network Multi-Class Classification Problem.pdf` | Grokking detection via information-theoretic measures. Relevant to the **Higher-MI** predictor. |
 
@@ -87,7 +89,7 @@ Total: 25 PDFs.
 
   | Predictor | Primary paper | Status |
   |---|---|---|
-  | L2 Norm | Nanda et al. 2023 (Fig. 7 sum of squared weights) | CLOSED, negative |
+  | L2 Norm | Liu et al. 2022 (*Towards Understanding Grokking*) and Liu, Michaud and Tegmark 2023 (*Omnigrok*) for the weight-norm / controlling-quantity claim. Nanda et al. 2023 Fig. 7 is only a descriptive plot of the sum of squared weights, not a detection rule. | CLOSED, negative |
   | Dropout | Salah & Yevick, arXiv:2507.11645 (variance under stochastic dropout) | CLOSED, negative |
   | Spectral | Canatar et al. 2021, *Nat. Commun.* 12, 2914 (spectral bias / task-model alignment) | CLOSED, negative |
   | AGE | Papyan et al. 2020 PNAS (NC1 variability collapse) — **mechanism:** Beaglehole et al. 2024 (AGOP → deep neural collapse, arXiv:2402.13728) + Mallinar et al. 2024 (grokking mod-p via AGOP/RFM, arXiv:2407.20199) | CLOSED, negative (2026-09-06) — NC1 collapses ~45 → ~0.05 in 5/5 seeds but `nc1_min_epoch` lags grok in 5/5 (ratio 1.67–3.92) |
