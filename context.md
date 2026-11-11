@@ -12831,3 +12831,25 @@ r_i = (G_i - P_i) / G_i is the relative lead of seed i, where G_i is the first e
 ## Files touched with this entry
 
 - `context.md`: this entry appended. Nothing earlier in the file was edited. No code and no results were changed.
+
+---
+
+# 2026-11-11 — Justification for the minimum of 4 firing seeds (critical own-choice value 5)
+
+Justification for the minimum of 4 firing seeds (critical own-choice value 5)
+
+The PASS rule requires that a predictor fire on at least 4 of the 5 seeds. A seed "fires" when the predictor's rule produces a finite alarm epoch P_i. This entry records why that minimum was chosen. It is critical own-choice value 5. The choices of c, of lead_frac, of rho, and of the r-bar band are separate own-choice values and are already recorded above.
+
+1. No paper fixes this minimum. The cut is our own choice. This entry gives the statistical reason for setting the floor at 4 rather than 3.
+
+2. Fisher consistency. Fisher's conventional significance level is alpha = 0.05 (Fisher, R. A. 1925, Statistical Methods for Research Workers). The same cut is already used in Value 3. Under the null of no relation, the chance of a perfect rank match between G_i and P_i is 1/n!, where n is the number of firing seeds.
+
+3. Why 4, not 3. With 3 firing seeds there are 3! = 6 possible orderings, so a perfect match has p = 1/6 = 0.167, which is above 0.05. Even a perfect order match would not be significant. With 4 firing seeds there are 4! = 24 possible orderings, so a perfect match has p = 1/24 = 0.0417, which is below 0.05. Four is therefore the smallest number of firing seeds for which a perfect order match still meets the same Fisher cut used in Value 3.
+
+4. Honest limit. This is a consistency check with Value 3, not a derivation that a paper fixed 4 of 5 as the rule. It justifies why the floor is 4 rather than 3. Requiring all 5 seeds to fire would also meet the cut, and remains an alternative.
+
+5. Status. Value 5 (minimum 4 of 5 firing seeds) is defended by consistency with Fisher's 0.05 cut, still own choice. Verdicts are unchanged: all 8 predictors FAIL.
+
+## Files touched with this entry
+
+- `context.md`: this entry appended. Nothing earlier in the file was edited. No code and no results were changed.
