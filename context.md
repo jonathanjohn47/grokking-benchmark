@@ -12879,3 +12879,26 @@ A miss is a seed whose predictor never fires, so P_i is None. This entry records
 - `06_Code/tests/test_miss_counts_as_no_lead.py`: 4 leading fires and 1 miss give lead_frac 0.8; 3 firing seeds still fail immediately.
 - `12_Study/Fixed_Values_Base_Experiment.md`: the Miss / None row now states Value 6.
 - `context.md`: the frozen-protocol miss paragraph and a short note on the Value 2 sentence were updated, and this entry was appended.
+
+---
+
+# 2026-11-11 — Justification for the constant-signal rho rule (critical own-choice value 7)
+
+Justification for the constant-signal rho rule (critical own-choice value 7)
+
+If the standard deviation of the alarm epochs P_i is at most 1e-9, or fewer than 3 points remain, or spearmanr returns NaN, the official scorer stores Spearman rho as 0. This entry records why that rule was chosen. It is critical own-choice value 7. The choices of c, of lead_frac, of the rho cut, of the r-bar band, of the minimum of 4 firing seeds, and of miss handling are separate own-choice values and are already recorded above.
+
+1. The rule in the scorer. This is a scoring rule after training, not a training-time floor on gradients or loss. The code is in analyze_nanda_unified.py (evaluate_frozen_protocol) and run_control_experiment.py (evaluate): if at least 3 firing points remain and np.std(p_arr) is greater than 1e-9, compute spearmanr, and replace a NaN with 0.0; otherwise store rho = 0.0. No scoring code is changed in this entry.
+
+2. Statistical reason. When a predictor fires at the exact same epoch across different random seeds, the variance of P_i is mathematically zero, so Spearman rho is undefined: a constant variable cannot co-vary. Rather than leaving a non-value, the scorer stores 0 and treats that flat signal as having no association, so it cannot pass the rho test. This follows the ordinary definition of correlation. No paper in this project is needed for that definition, and no paper is cited as setting the numerical cut.
+
+3. The cut 1e-9. The cutoff 1e-9 is an own-choice practical tolerance, used in the ordinary way floating-point code uses a small number in place of an exact zero. It is a common programming practice, not a literature standard. It must not be defended by Prieto et al. (2025), by Higham (2002), or by NumPy's default absolute tolerance of 1e-8 in isclose and allclose, because those sources do not set a standard-deviation cut for this scorer.
+
+4. Official results are unchanged. A real one-epoch change, with one of the five alarm epochs differing by one, has a standard deviation of 0.4 under the same np.std that the scorer uses. That is far larger than 1e-9, so the exact cut sits far below any genuine seed-to-seed variation and does not change the official scores. On constant identical alarm epochs in this project, the standard deviation is already exactly 0. Verdicts are unchanged: all 8 predictors FAIL.
+
+5. Status. Value 7 is now defended: the rule of storing rho = 0 for a flat signal follows the definition of correlation, and 1e-9 remains an own-choice programming tolerance that does not affect official scores.
+
+## Files touched with this entry
+
+- `context.md`: this entry appended. The earlier frozen-protocol paragraph does not say the constant-signal cut needs defence in viva, and it does not leave Value 7 open, so that history was left as written.
+- `12_Study/Fixed_Values_Base_Experiment.md`: the Constant-signal rho rule row now points to this entry. The Control B row keeps the example value 5000 as an own choice and now points to Value 7 for the rho = 0 treatment. No scoring code and no result files were changed.
