@@ -26,11 +26,6 @@
       "n_epochs": 5
     },
     {
-      "signal": "L2: sum(w^2) half-way down from peak",
-      "saved_P_i_present": true,
-      "n_epochs": 5
-    },
-    {
       "signal": "Dropout: variance peak (implemented)",
       "saved_P_i_present": true,
       "n_epochs": 5

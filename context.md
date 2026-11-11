@@ -13047,3 +13047,23 @@ No other L2 point was closed.
 
 - `context.md`: this entry appended. Nothing earlier in the file was edited.
 - `12_Study/Fixed_Values_Base_Experiment.md`: one sentence in the RHO_THRESH viva-defence cell corrected.
+
+# 2026-11-11 — L2 half-way-down-from-peak row removed from the official test (official-count issue closed)
+
+Jonathan John approved this on 11 November 2026 (Asia/Calcutta): take the L2 "sum of squared weights half-way down from peak" row out of the official table and throw it away. This entry closes that official-count issue.
+
+The reading is not a published detection rule. It uses the final value of the sum of squared weights at the end of the run, so it cannot be used as an early warning during training. It is no longer an official L2 row. It is not kept as an exploratory official row. The official analysis path no longer computes it.
+
+What was removed from the official scorer `06_Code/scripts/analyze_nanda_unified.py`: the function `l2_decline_epoch`, and the helper `smooth` that only that function used. `build_events` no longer records "L2: sum(w^2) half-way down from peak". Because that function is gone, the crash case is also gone: the old code took the first index of the epochs that had reached the half-way level, and it would crash if that level was never reached. There is now no official-path call that can hit that case. The attack-point notes file was not edited. Training code, yaml, moving-average crossover, and MA-of-MA zero crossing were not changed. Textbook v4 was not changed. `12_Study/Fixed_Values_Base_Experiment.md` does not describe this row as an official counted row, so it was not edited. Plots already marked only the two moving-average L2 events, so the plot files did not need a content change and were left as they were.
+
+The official scorer was re-run from saved results, with no retraining, at c = 0.8, c = 0.7, and c = 0.9.
+
+Official L2 verdict after the change, at all three values of c: FAIL, 0 of 2 pre-declared rows. The two remaining official rows are the moving-average crossover and the MA-of-MA zero crossing. Both still FAIL. Their event epochs were not changed. Every other predictor remains FAIL.
+
+## Files touched with this entry
+
+- `context.md`: this entry appended. Nothing earlier in the file was edited.
+- `06_Code/scripts/analyze_nanda_unified.py`: half-way event and its helper functions removed from the official analysis path.
+- `06_Code/tests/test_frozen_protocol_verdicts.py`: checks that official L2 is those two moving-average rows and still FAIL at c = 0.8, 0.7, and 0.9.
+- `08_Experiments/results/nanda_unified/analysis/frozen_protocol_verdicts.json`, `predictor_events.json`, and the same two files under `c_0.7/` and `c_0.9/`: the half-way row is no longer stored. L2 is 0 of 2, FAIL.
+- `08_Experiments/results/nanda_unified/analysis/lead_fraction_all_eight_2026-11-10.json` and `lead_fraction_sweep_2026-11-10.json`: regenerated from the updated event list so they no longer list the discarded row. Moving-average rows in those files were not given new epochs.

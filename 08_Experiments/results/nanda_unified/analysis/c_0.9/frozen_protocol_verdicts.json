@@ -13,7 +13,7 @@
     {
       "predictor": "L2 Norm",
       "verdict": "FAIL",
-      "n_predeclared_rows": 3,
+      "n_predeclared_rows": 2,
       "n_predeclared_passing": 0,
       "rows": [
         {
@@ -58,29 +58,6 @@
             "n_firing_at_least_4": true,
             "lead_frac_at_least_0.8": true,
             "rho_at_least_threshold": false,
-            "mean_rel_lead_in_window": true
-          },
-          "verdict": "FAIL"
-        },
-        {
-          "signal": "L2: sum(w^2) half-way down from peak",
-          "role": "predeclared",
-          "counts_towards_predictor": true,
-          "P_i": [
-            11921.0,
-            4969.0,
-            9497.0,
-            7868.0,
-            19971.0
-          ],
-          "n_firing": 5,
-          "lead_frac": 0.6,
-          "rho": 0.8999999999999998,
-          "mean_rel_lead": 0.1620918808799998,
-          "checks": {
-            "n_firing_at_least_4": true,
-            "lead_frac_at_least_0.8": false,
-            "rho_at_least_threshold": true,
             "mean_rel_lead_in_window": true
           },
           "verdict": "FAIL"
