@@ -12902,3 +12902,26 @@ If the standard deviation of the alarm epochs P_i is at most 1e-9, or fewer than
 
 - `context.md`: this entry appended. The earlier frozen-protocol paragraph does not say the constant-signal cut needs defence in viva, and it does not leave Value 7 open, so that history was left as written.
 - `12_Study/Fixed_Values_Base_Experiment.md`: the Constant-signal rho rule row now points to this entry. The Control B row keeps the example value 5000 as an own choice and now points to Value 7 for the rho = 0 treatment. No scoring code and no result files were changed.
+
+# 2026-11-11 — Justification for the limit-cycle settle fraction 0.05 (critical own-choice value 10)
+
+Justification for the limit-cycle settle fraction 0.05 (critical own-choice value 10)
+
+Value 10 is the limit-cycle settle fraction. In the official scorer and runner, the settle window is int(0.05 times the run length). On the official 40,000-epoch run that window is 2,000 epochs after the grok epoch G_i. G_i is the first epoch at which the test accuracy of seed i goes above 0.9. This entry records why that settle fraction was chosen. It is critical own-choice value 10. The companion cut, Value 11 (the tail is flagged only if its standard deviation is above 0.05 and its minimum falls back below 0.9), is a separate own-choice value and is not closed by this entry.
+
+1. What the check does. Training has already finished. After G_i the check skips the settle window, then inspects the remaining test-accuracy series until the last epoch (40,000). That later stretch is the tail. A seed is flagged as a limit cycle only if the lowest test accuracy in the tail falls back below 0.9 and the standard deviation of the tail is above 0.05. The 0.05 standard-deviation cut is Value 11, not Value 10. This is a quality check on the saved run, not a training-time step and not a PASS rule for predictors. The official predictor verdicts use G_i, so the run must show that the crossing of 0.9 was a lasting jump, not a one-time rise that later keeps falling back.
+
+2. Why the skip starts after G_i, not at epoch 0, and why it is not skipped altogether. At G_i, test accuracy has only just crossed 0.9, and immediately afterwards it is still in the jump: it may still be climbing toward 0.99, and it may also dip. If the tail were taken from G_i itself, that jump and the early rise and fall would look like a cycle, even if accuracy later stayed high. The settle window does not change G_i. It only starts the cycle check after the immediate post-grok jump has been left out, so that the check can be used to trust G_i.
+
+3. Why the window is 2,000 epochs, written as 5% of the run. After the first crossing of 0.9, test accuracy still takes some time to reach 0.99. On the official seeds those remaining rises are 470, 316, 342, 119, and 166 epochs (from the official grok epochs at the 0.9 cut: 12987, 6921, 9510, 11019, 23747; and at the 0.99 cut: 13457, 7237, 9852, 11138, 23913). The old fixed skip of 500 epochs, used before 25 September 2026, was only just above the slowest of those rises (470), so it left almost no margin. A 5% skip of a 40,000-epoch run is 2,000 epochs, which clears that late rise with a wide margin. On 25 September 2026 the hard-coded 500-epoch skip was replaced by int(0.05 times the run length) so that the window would scale if the run length changed. The 2,000-epoch figure is what that 5% gives on the official 40,000-epoch run.
+
+4. Why not 10% or 6%. A 10% skip would be 4,000 epochs, which is far more than this late rise needs, and it would throw away a larger part of the later tail. That matters most for seed 4, which groks at 23747 and has only 16253 epochs left to inspect. A 6% skip would be 2,400 epochs, which is the same idea as 5%, not a different rule. So 5% is the simple percentage that is safely above the late rise, without cutting away more of the tail than the data need. No paper in this project sets the number 0.05 for this window.
+
+5. Official results are unchanged. The official aggregate records n_limit_cycle = 0: none of the five saved seeds was flagged. This entry does not change scoring code, yaml values, or official result files. Official predictor verdicts remain FAIL for all 8 predictors.
+
+6. Status. Value 10 (limit-cycle settle fraction 0.05, equal to 2,000 epochs after grok on the official run) is now defended by the purpose of the check and by the official 0.9-to-0.99 rise times. The exact percentage remains a simple proportion in that range, not a literature standard. Value 11 remains open. Value 1 remains half-closed. Values 8 and 9 remain only a cross-check.
+
+## Files touched with this entry
+
+- `context.md`: this entry appended.
+- `12_Study/Fixed_Values_Base_Experiment.md`: the Limit-cycle settle fraction row now states Value 10 and points to this entry. The Limit-cycle standard-deviation cut row was not changed. Value 11 stays open. No scoring code and no result files were changed.
