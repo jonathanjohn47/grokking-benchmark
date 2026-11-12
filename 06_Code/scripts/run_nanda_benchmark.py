@@ -33,7 +33,7 @@ skipped and its summary reloaded.
 
 Usage:
     python 06_Code/scripts/run_nanda_benchmark.py --seeds 5 --epochs 40000 \
-        --output_dir 08_Experiments/results/nanda_unified --config 06_Code/configs/nanda_unified.yaml
+        --output_dir 08_Experiments/results/results_per_nanda_power --config 06_Code/configs/nanda_unified.yaml
 
     # quick smoke:
     python 06_Code/scripts/run_nanda_benchmark.py --seeds 1 --epochs 100 \
@@ -154,9 +154,12 @@ L2_QUIET_EPOCH_CUTOFF = None
 # SAVE EVERY 100: Nanda's Config.save_every = 100. An init checkpoint is
 # written separately, before any optimizer step (model_init.pt). Epoch
 # files are written after that epoch's optimizer step, when
-# epoch % 100 == 0 (0, 100, ..., 39900). The old every-50 grid (801 files,
-# including epoch 39999) is replaced by this schedule. A 250-epoch eval
-# grid is no longer a subset of the saved epochs.
+# epoch % 100 == 0 (0, 100, ..., 39900), plus model_epoch_<total>.pt
+# after the final step (model_epoch_40000.pt when total is 40000).
+# The loop index of the last step is total-1, so that final file is
+# written after the loop. The old every-50 grid (801 files, including
+# epoch 39999) is replaced by this schedule. A 250-epoch eval grid is
+# no longer a subset of the saved epochs.
 #
 # EVAL: predictors use saved epochs with epoch % EVAL_EVERY == 0.
 # --eval_every accepts 100 or 200 (multiples of SAVE_EVERY).
@@ -197,14 +200,22 @@ ALL_PREDICTORS = list(PREDICTOR_SUMMARY_KEY.keys())
 
 
 def save_checkpoint_schedule(total_epochs, save_every=SAVE_EVERY):
-    """Epoch indices (0-based, matching the training loop's `epoch`) at which
-    a model checkpoint is SAVED, after that epoch's optimizer step:
-    0, save_every, 2*save_every, ... strictly below total_epochs.
-    For 40000 epochs and save_every=100 that is 400 points (0..39900).
-    The init checkpoint is separate and is not in this list."""
+    """Epoch labels at which a model checkpoint is SAVED.
+
+    0, save_every, 2*save_every, ... strictly below total_epochs are the
+    training-loop indices (the file is written after that epoch's optimizer
+    step). total_epochs itself is included once: it is the weights after
+    total_epochs completed steps, saved as model_epoch_<total_epochs>.pt.
+    For 40000 epochs and save_every=100 that is 401 points
+    (0, 100, ..., 39900, 40000). The init checkpoint is separate and is
+    not in this list. total_epochs is not inserted twice when it is already
+    the last grid point."""
     if total_epochs <= 0:
         return []
-    return list(range(0, total_epochs, save_every))
+    schedule = list(range(0, total_epochs, save_every))
+    if not schedule or schedule[-1] != total_epochs:
+        schedule.append(total_epochs)
+    return schedule
 
 
 SAVE_CHECKPOINTS = save_checkpoint_schedule(TOTAL_STEPS)
@@ -596,6 +607,13 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
                   f"sum_w2={sum_w2_history[-1]:.1f}  "
                   f"elapsed={elapsed:10.3f}s  "
                   f"d{log_every}={since_last:8.3f}s", flush=True)
+
+    # The loop index stops at epochs-1. model_epoch_<epochs>.pt is the
+    # weights after that many completed steps. It is not also written
+    # inside the loop, so the file is saved once.
+    if save_checkpoints and args.epochs in save_checkpoint_set:
+        torch.save(model.state_dict(),
+                   os.path.join(ckpt_dir, f"model_epoch_{args.epochs}.pt"))
 
     # (f) save the per-epoch histories
     measurements.save_training_data(
@@ -1645,7 +1663,15 @@ def main():
                         help="number of seeds; seed i uses torch.manual_seed(i)")
     parser.add_argument("--epochs", type=int, default=TOTAL_STEPS,
                         help="full-batch epochs per seed")
-    parser.add_argument("--output_dir", type=str, default="08_Experiments/results/nanda_unified")
+    parser.add_argument(
+        "--output_dir", type=str,
+        default="08_Experiments/results/results_per_nanda_power",
+        help="Results folder for this run. Default is the canonical "
+             "results_per_nanda_power folder. The old run is "
+             "08_Experiments/results/nanda_unified and is used only when "
+             "that path is passed explicitly. This runner never falls "
+             "back to it.",
+    )
     parser.add_argument("--config", type=str, default="06_Code/configs/nanda_unified.yaml")
     parser.add_argument("--predictors", type=str, default="l2,dropout_gap,dropout_variance",
                         help="comma-separated subset of " + ",".join(ALL_PREDICTORS))
@@ -1705,6 +1731,7 @@ def main():
     print(f"grok thr.  : {GROK_THRESHOLDS} (primary {GROK_ACC_THRESHOLD})   "
           f"dropout-variance: n_samples={DROPOUT_VARIANCE_N_SAMPLES} rate={DROPOUT_VARIANCE_RATE}")
     print(f"checkpoints: init, then every {SAVE_EVERY} (Nanda save_every), "
+          f"plus model_epoch_{args.epochs}.pt after the final step; "
           f"evaluate every {args.eval_every}")
     print("=" * 72)
 

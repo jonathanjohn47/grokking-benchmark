@@ -13128,3 +13128,30 @@ Official scorer was rerun on the saved results at c = 0.8, c = 0.7, and c = 0.9,
 - `context_current.md`: PASS/FAIL rank-correlation item states the exact rule.
 - `12_Study/Fixed_Values_Base_Experiment.md`: Constant-signal rho rule row no longer cites 1e-9 as an own-choice number.
 - `context.md`: this entry appended. Earlier entries that mention 1e-9 were left as history.
+
+# 2026-11-12 — Canonical results folder before the 40,000-epoch retrain
+
+The retrain is a new version of the experiment. Its results are the basis for every predictor calculation from now on. The folder is `08_Experiments/results/results_per_nanda_power`. `08_Experiments/results/nanda_unified` is a legacy record only. The new run does not read it and does not write into it. There is no fallback. A script uses the old folder only when that path is passed explicitly.
+
+Training was not started in this change.
+
+## What changed
+
+- `run_nanda_benchmark.py`: default `--output_dir` is `08_Experiments/results/results_per_nanda_power`. After the last optimizer step the runner also saves `model_epoch_<epochs>.pt` (for 40,000 epochs, `model_epoch_40000.pt`). The save list is init, every 100 epochs, and that final file, once. `select_eval_epochs` keeps the final saved epoch and does not list it twice. `TOTAL_STEPS = 40000` is still the argparse default for `--epochs`. The yaml value `training.epochs` is already parsed as `epochs_default`, but it is applied only if the flag is left and the config is read after parsing, so wiring the default to the yaml is not a one-line change. The retrain command passes `--epochs 40000`, which matches the yaml.
+- Analysis scripts that read or write a results folder take `--results-dir` (or the existing results-root argument) and default to the new folder. Outputs stay inside that folder (`analysis/`, `figures/`, `reports/`). `run_control_experiment.py` does not read either results folder. It writes synthetic controls under `controls_results/`. It was left as it is.
+- `context_current.md`: checkpoint text matches this grid. The new folder is recorded as the canonical basis. The old folder is recorded as legacy.
+- Tests that score the saved run pass `08_Experiments/results/nanda_unified` explicitly. A small test checks that `--results-dir` changes the path that is opened, and that epoch 40000 is on the save grid once.
+
+## Commands
+
+Retrain (Jonathan runs this on his Mac; defaults already use the new folder):
+
+`python 06_Code/scripts/run_nanda_benchmark.py --seeds 5 --epochs 40000 --config 06_Code/configs/nanda_unified.yaml`
+
+Analysis after that training:
+
+`python 06_Code/scripts/analyze_nanda_unified.py`
+
+## Files touched with this entry
+
+- The runner, the analysis scripts listed above, `context_current.md`, the tests, and this appended entry. Nothing earlier in `context.md` was edited.

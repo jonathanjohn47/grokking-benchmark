@@ -15,10 +15,15 @@ sys.path.insert(0, os.path.abspath(SCRIPTS))
 
 from analyze_nanda_unified import score_saved_run  # noqa: E402
 
+REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+# Saved run from the previous setup. The canonical folder is
+# results_per_nanda_power; these tests name the legacy folder explicitly.
+LEGACY_RESULTS = os.path.join(REPO, "08_Experiments", "results", "nanda_unified")
+
 
 @pytest.fixture(scope="module")
 def scored():
-    return score_saved_run(lead_c=0.8, write=False)
+    return score_saved_run(lead_c=0.8, write=False, results_dir=LEGACY_RESULTS)
 
 
 def test_l2_official_rows_are_the_two_moving_average_rules(scored):
@@ -38,7 +43,7 @@ def test_l2_official_rows_are_the_two_moving_average_rules(scored):
 
 def test_l2_still_fails_at_neighbouring_lead_fractions():
     for lead_c in (0.7, 0.9):
-        scored = score_saved_run(lead_c=lead_c, write=False)
+        scored = score_saved_run(lead_c=lead_c, write=False, results_dir=LEGACY_RESULTS)
         l2 = next(p for p in scored["predictors"] if p["predictor"] == "L2 Norm")
         names = [r["signal"] for r in l2["rows"]]
         assert names == [

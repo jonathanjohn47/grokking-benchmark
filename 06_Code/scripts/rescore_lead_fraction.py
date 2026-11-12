@@ -1,8 +1,10 @@
 """Re-score saved P_i and G_i under the fractional lead rule. No training.
 
-Reads 08_Experiments/results/nanda_unified/analysis/predictor_events.json
-and writes a NEW file next to it. Does not overwrite predictor_events.json
-or any frozen verdict file.
+Reads <results-dir>/analysis/predictor_events.json and writes a NEW file
+next to it. Default results-dir is
+08_Experiments/results/results_per_nanda_power. Pass
+--results-dir 08_Experiments/results/nanda_unified for the legacy run.
+Does not overwrite predictor_events.json or any frozen verdict file.
 
 Scored predictors (PRIMARY rows only): HTSR Alpha, Weight-PCA, Higher-MI,
 Commutator Defect at the saved eta=1e-3 onset epochs.
@@ -31,17 +33,29 @@ from analyze_nanda_unified import (
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
-EVENTS = os.path.join(
-    REPO, "08_Experiments", "results", "nanda_unified", "analysis", "predictor_events.json"
+DEFAULT_RESULTS = os.path.join(
+    REPO, "08_Experiments", "results", "results_per_nanda_power"
 )
-OUT = os.path.join(
-    REPO,
-    "08_Experiments",
-    "results",
-    "nanda_unified",
-    "analysis",
-    "lead_fraction_sweep_2026-11-10.json",
-)
+
+
+def resolve_results_dir(results_dir=None):
+    if results_dir is None or results_dir == "":
+        path = DEFAULT_RESULTS
+    elif os.path.isabs(results_dir):
+        path = results_dir
+    else:
+        path = os.path.join(REPO, results_dir)
+    return os.path.abspath(path)
+
+
+def analysis_paths(results_dir=None):
+    analysis = os.path.join(resolve_results_dir(results_dir), "analysis")
+    events = os.path.join(analysis, "predictor_events.json")
+    out = os.path.join(analysis, "lead_fraction_sweep_2026-11-10.json")
+    return events, out
+
+
+EVENTS, OUT = analysis_paths()
 
 SCORED = [
     "HTSR: mean alpha minimum (implemented)",
@@ -82,8 +96,17 @@ def score_one(grok, epochs, spec):
     return verdict
 
 
-def main():
-    with open(EVENTS) as handle:
+def main(argv=None):
+    import argparse
+    parser = argparse.ArgumentParser(description="Re-score saved events under the lead-fraction rule.")
+    parser.add_argument(
+        "--results-dir", default=None,
+        help="Results folder. Default: 08_Experiments/results/results_per_nanda_power. "
+             "Pass 08_Experiments/results/nanda_unified for the legacy run.",
+    )
+    args = parser.parse_args(argv)
+    events_path, out_path = analysis_paths(args.results_dir)
+    with open(events_path) as handle:
         events = json.load(handle)
     grok = events["grok_epochs"]
     by_name = {row["signal"]: row for row in events["signals"]}
@@ -157,7 +180,7 @@ def main():
 
     payload = {
         "date": "2026-11-10",
-        "source": os.path.relpath(EVENTS, REPO),
+            "source": os.path.relpath(events_path, REPO),
         "note": (
             "Re-score of saved P_i and G_i only. No retraining. "
             "Frozen predictor_events.json was not overwritten. "
@@ -185,9 +208,9 @@ def main():
         "scored": rows,
         "noise_stress_test": noise,
     }
-    with open(OUT, "w") as handle:
+    with open(out_path, "w") as handle:
         json.dump(payload, handle, indent=2)
-    print(f"Wrote {OUT}")
+    print(f"Wrote {out_path}")
     print(f"recomputed rho 99th percentile = {rho_hat:.6f} (frozen {RHO_THRESH})")
     for row in rows:
         print(row["signal"])

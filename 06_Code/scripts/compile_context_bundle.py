@@ -37,6 +37,10 @@ EXCLUDED_NOTES = [
      "not readable context, and not needed to explain the benchmark"),
     ("08_Experiments/results/nanda_unified/seed_*/{l2_norm,dropout}/*.npy", "large raw numeric arrays; "
      "the per-seed summary.json already carries the derived predictor signals"),
+    ("08_Experiments/results/results_per_nanda_power/seed_*/checkpoints/*.pt",
+     "canonical-run weights; large binaries, not readable context"),
+    ("08_Experiments/results/results_per_nanda_power/seed_*/*/*.npy",
+     "canonical-run numeric arrays; summary.json carries the derived signals"),
     ("graphify-out/", "generated knowledge-graph cache, rebuildable from source anytime"),
     ("Literature/*.pdf", "source papers themselves - cited by name in context.md, "
      "not needed verbatim for a new chat to continue engineering work"),
@@ -159,7 +163,7 @@ def extract_runner_constants_and_registry(runner_text, max_lines=400):
 
 def build_seed_table():
     rows = [("seed", "grok_epoch", "l2_ma_crossover_epoch", "dropout_variance_peak_epoch", "dropout_gap@0.5")]
-    seed_dir = os.path.join(REPO_ROOT, "results", "nanda_unified")
+    seed_dir = os.path.join(REPO_ROOT, "08_Experiments", "results", "results_per_nanda_power")
     if not os.path.isdir(seed_dir):
         return rows
     for name in sorted(os.listdir(seed_dir)):
@@ -294,10 +298,10 @@ def build_with_reportlab():
     story.append(PageBreak())
 
     # ---- Section 4: Latest Results ----
-    set_section("08_Experiments/results/nanda_unified")
+    set_section("08_Experiments/results/results_per_nanda_power")
     story.append(Paragraph("Section 4 - Latest Results", h1))
-    story.append(Paragraph("=== results/nanda_unified/aggregate.json ===", filehdr))
-    story.append(Preformatted(esc(pretty_json("08_Experiments/results/nanda_unified/aggregate.json")), mono))
+    story.append(Paragraph("=== results/results_per_nanda_power/aggregate.json ===", filehdr))
+    story.append(Preformatted(esc(pretty_json("08_Experiments/results/results_per_nanda_power/aggregate.json")), mono))
     story.append(Spacer(1, 0.15 * inch))
     story.append(Paragraph("Per-seed summary extract:", h2))
     rows = build_seed_table()
@@ -418,9 +422,9 @@ def build_with_matplotlib_fallback():
     rows = build_seed_table()
     row_text = "\n".join(
         f"{r[0]:<10} {r[1]:<12} {r[2]:<24} {r[3]:<28} {r[4]:<12}" for r in rows)
-    sections.append(("08_Experiments/results/nanda_unified",
+    sections.append(("08_Experiments/results/results_per_nanda_power",
                       "SECTION 4 - LATEST RESULTS\n\n=== aggregate.json ===\n"
-                      + pretty_json("08_Experiments/results/nanda_unified/aggregate.json")
+                      + pretty_json("08_Experiments/results/results_per_nanda_power/aggregate.json")
                       + "\n\nPer-seed summary extract:\n" + row_text))
 
     runner_text = read_text("run_nanda_benchmark.py") or ""

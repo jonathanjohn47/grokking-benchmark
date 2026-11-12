@@ -23,7 +23,8 @@ docstring, "MAJOR ADAPTATION" / "EXPLORATORY CONTROL").
 
 Usage (from the repo root):
     python 06_Code/scripts/plot_higher_mi_curves.py
-Outputs go to 08_Experiments/results/nanda_unified/reports/measured/.
+Outputs go to <results-dir>/reports/measured/.
+Default results folder: 08_Experiments/results/results_per_nanda_power.
 """
 import json
 import os
@@ -34,12 +35,23 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-RESULTS = os.path.join(REPO_ROOT, "08_Experiments", "results", "nanda_unified")
-REPORTS = os.path.join(RESULTS, "reports", "measured")
+DEFAULT_RESULTS = os.path.join(
+    REPO_ROOT, "08_Experiments", "results", "results_per_nanda_power"
+)
 
 
-def load_seed_higher_mi(seed):
-    d = os.path.join(RESULTS, f"seed_{seed}")
+def resolve_results_dir(results_dir=None):
+    if results_dir is None or results_dir == "":
+        path = DEFAULT_RESULTS
+    elif os.path.isabs(results_dir):
+        path = results_dir
+    else:
+        path = os.path.join(REPO_ROOT, results_dir)
+    return os.path.abspath(path)
+
+
+def load_seed_higher_mi(seed, results_dir):
+    d = os.path.join(results_dir, f"seed_{seed}")
     with open(os.path.join(d, "summary.json")) as handle:
         summary = json.load(handle)
     hd = os.path.join(d, "higher_mi")
@@ -98,16 +110,26 @@ def plot_population_vs_temporal_seed0(run0, path):
     plt.close(fig)
 
 
-def main():
-    os.makedirs(REPORTS, exist_ok=True)
-    seeds = sorted(int(n.split("_")[1]) for n in os.listdir(RESULTS) if n.startswith("seed_"))
-    runs = [load_seed_higher_mi(s) for s in seeds]
+def main(argv=None):
+    import argparse
+    parser = argparse.ArgumentParser(description="Plot saved Higher-MI curves.")
+    parser.add_argument(
+        "--results-dir", default=None,
+        help="Results folder. Default: 08_Experiments/results/results_per_nanda_power. "
+             "Pass 08_Experiments/results/nanda_unified for the legacy run.",
+    )
+    args = parser.parse_args(argv)
+    results_dir = resolve_results_dir(args.results_dir)
+    reports = os.path.join(results_dir, "reports", "measured")
+    os.makedirs(reports, exist_ok=True)
+    seeds = sorted(int(n.split("_")[1]) for n in os.listdir(results_dir) if n.startswith("seed_"))
+    runs = [load_seed_higher_mi(s, results_dir) for s in seeds]
 
-    p1 = os.path.join(REPORTS, "measured_higher_mi_population_omega_all_seeds.png")
+    p1 = os.path.join(reports, "measured_higher_mi_population_omega_all_seeds.png")
     plot_population_all_seeds(runs, p1)
     print(f"Wrote {p1}")
 
-    p2 = os.path.join(REPORTS, "measured_higher_mi_population_vs_temporal_seed0.png")
+    p2 = os.path.join(reports, "measured_higher_mi_population_vs_temporal_seed0.png")
     plot_population_vs_temporal_seed0(runs[0], p2)
     print(f"Wrote {p2}")
 

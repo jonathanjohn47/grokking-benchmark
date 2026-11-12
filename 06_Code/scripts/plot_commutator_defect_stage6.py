@@ -5,17 +5,18 @@ plot_commutator_defect_stage6.py
 
 STAGE 6 — raw Commutator Defect curve plots from saved Stage 5 outputs.
 
-Reads only:
-  08_Experiments/results/nanda_unified/seed_*/commutator_defect/
-  08_Experiments/results/nanda_unified/seed_*/commutator_defect_eta1e-4/
-  08_Experiments/results/nanda_unified/seed_*/training/
-  08_Experiments/results/nanda_unified/seed_*/summary.json
+Reads only (default results folder results_per_nanda_power; pass
+--results-dir for the legacy nanda_unified run):
+  <results-dir>/seed_*/commutator_defect/
+  <results-dir>/seed_*/commutator_defect_eta1e-4/
+  <results-dir>/seed_*/training/
+  <results-dir>/seed_*/summary.json
 
 Does NOT recompute D, does NOT change thresholds / eta / rules, and does NOT
 run Stage 7 official scoring.
 
 Outputs under:
-  08_Experiments/results/nanda_unified/figures/commutator_defect/
+  <results-dir>/figures/commutator_defect/
 
 Usage (from repo root):
   .venv/bin/python 06_Code/scripts/plot_commutator_defect_stage6.py
@@ -32,8 +33,19 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-RESULTS = os.path.join(REPO_ROOT, "08_Experiments", "results", "nanda_unified")
-FIG_DIR = os.path.join(RESULTS, "figures", "commutator_defect")
+DEFAULT_RESULTS = os.path.join(
+    REPO_ROOT, "08_Experiments", "results", "results_per_nanda_power"
+)
+
+
+def resolve_results_dir(results_dir=None):
+    if results_dir is None or results_dir == "":
+        path = DEFAULT_RESULTS
+    elif os.path.isabs(results_dir):
+        path = results_dir
+    else:
+        path = os.path.join(REPO_ROOT, results_dir)
+    return os.path.abspath(path)
 
 # Directory name under each seed_*/ for the two eta runs.
 PRIMARY_SUBDIR = "commutator_defect"
@@ -60,8 +72,8 @@ def xu_baseline_and_threshold(median_series: np.ndarray) -> tuple[float, float]:
     return b, threshold
 
 
-def load_run(seed: int, subdir: str) -> dict:
-    seed_dir = os.path.join(RESULTS, f"seed_{seed}")
+def load_run(seed: int, subdir: str, results_dir: str) -> dict:
+    seed_dir = os.path.join(results_dir, f"seed_{seed}")
     d = os.path.join(seed_dir, subdir)
     with open(os.path.join(d, "commutator_defect_signal.json")) as handle:
         signal = json.load(handle)
@@ -278,28 +290,38 @@ def print_per_seed_table(primary_runs: list[dict]) -> None:
     print()
 
 
-def main() -> None:
-    os.makedirs(FIG_DIR, exist_ok=True)
+def main(argv=None) -> None:
+    import argparse
+    parser = argparse.ArgumentParser(description="Plot saved Commutator Defect curves.")
+    parser.add_argument(
+        "--results-dir", default=None,
+        help="Results folder. Default: 08_Experiments/results/results_per_nanda_power. "
+             "Pass 08_Experiments/results/nanda_unified for the legacy run.",
+    )
+    args = parser.parse_args(argv)
+    results_dir = resolve_results_dir(args.results_dir)
+    fig_dir = os.path.join(results_dir, "figures", "commutator_defect")
+    os.makedirs(fig_dir, exist_ok=True)
     saved: list[str] = []
 
-    primary_runs = [load_run(seed, PRIMARY_SUBDIR) for seed in SEEDS]
-    secondary_runs = [load_run(seed, SECONDARY_SUBDIR) for seed in SEEDS]
+    primary_runs = [load_run(seed, PRIMARY_SUBDIR, results_dir) for seed in SEEDS]
+    secondary_runs = [load_run(seed, SECONDARY_SUBDIR, results_dir) for seed in SEEDS]
 
     for run in primary_runs:
-        path = os.path.join(FIG_DIR, f"commutator_defect_seed{run['seed']}.png")
+        path = os.path.join(fig_dir, f"commutator_defect_seed{run['seed']}.png")
         plot_seed_figure(run, PRIMARY_ETA_LABEL, path)
         saved.append(path)
         print(f"Wrote {path}")
 
     for run in secondary_runs:
         path = os.path.join(
-            FIG_DIR, f"commutator_defect_seed{run['seed']}_eta1e-4.png"
+            fig_dir, f"commutator_defect_seed{run['seed']}_eta1e-4.png"
         )
         plot_seed_figure(run, SECONDARY_ETA_LABEL, path)
         saved.append(path)
         print(f"Wrote {path}")
 
-    overview = os.path.join(FIG_DIR, "commutator_defect_overview_primary.png")
+    overview = os.path.join(fig_dir, "commutator_defect_overview_primary.png")
     plot_overview(primary_runs, overview)
     saved.append(overview)
     print(f"Wrote {overview}")
