@@ -13095,3 +13095,22 @@ Jonathan approved this change. The code and the current-state notes were updated
 ## Files touched with this entry
 
 - The code and docs listed above, plus this appended entry. Nothing earlier in `context.md` was edited.
+
+
+# 2026-11-12 — Training loss cast matches Nanda's executed helpers.py (float32)
+
+The shared loss `cross_entropy_high_precision` was casting the final-position logits to CPU float64. Nanda's released `helpers.py` comment says float64, but the line that actually runs is `logits.to(torch.float32)`, then `log_softmax`, then gather the label log-probability, then minus the mean. The loss now does that cast and stays on the model's device (MPS when training, CPU in the smoke). Nothing else in the training loop was changed. The 40,000-epoch retrain was not started. Nothing under `08_Experiments/results/` was overwritten.
+
+## What changed
+
+- `06_Code/src/models/transformer_four_head.py`: `cross_entropy_high_precision` uses `logits.to(torch.float32)` on the model device. The CPU float64 cast is gone. The function name and the call sites are the same.
+- `context_current.md`: item 6 "Loss" and the "Exception — hardware" paragraph now say float32 on the model device, and they no longer say the loss is float64 on CPU.
+
+## What did not change
+
+- The rest of training: architecture, warmup, init, logging, checkpoints, seeds, optimizer.
+- Predictor code. Saved results. Textbook.
+
+## Files touched with this entry
+
+- The two files above, plus this appended entry. Nothing earlier in `context.md` was edited.

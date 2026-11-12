@@ -24,17 +24,16 @@ import torch.nn.functional as F
 
 
 def cross_entropy_high_precision(logits, labels):
-    """Final-position cross entropy in float64, same reduction as
+    """Final-position cross entropy, same reduction as
     helpers.cross_entropy_high_precision: log_softmax, gather the label,
     minus the mean.
 
-    MPS has no float64, so the logits are cast to CPU float64 for the
-    loss. The cast is differentiable, so gradients flow back to the model.
+    Nanda's comment says float64, but the executed line is
+    logits.to(torch.float32). Stay on the model's device (MPS or CPU).
+    The cast is differentiable, so gradients flow back to the model.
     """
-    logits64 = logits.to(dtype=torch.float64, device="cpu")
-    labels_cpu = labels.to(device="cpu")
-    logprobs = F.log_softmax(logits64, dim=-1)
-    chosen = torch.gather(logprobs, index=labels_cpu[:, None], dim=-1)
+    logprobs = F.log_softmax(logits.to(torch.float32), dim=-1)
+    chosen = torch.gather(logprobs, index=labels[:, None], dim=-1)
     return -torch.mean(chosen)
 
 
