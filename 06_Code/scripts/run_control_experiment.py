@@ -69,11 +69,12 @@ def evaluate(g_in, p_in, margin=MARGIN, rule="margin", c=DEFAULT_LEAD_C):
         rule="fraction": P_s < c * G_s. Lead time scales with G
         (Xu arXiv:2602.16967; Golwala arXiv:2604.20923). No paper fixes c.
     rho: Spearman rank correlation between G and P across firing seeds only.
-        A miss is dropped here, because it has no P_s. If P is
-        constant (std == 0), correlation is undefined, so rho is forced to
-        0.0 rather than NaN — a constant signal carries no seed-to-seed
-        timing information, so it must not be rewarded with rho = NaN
-        silently passing a downstream `rho >= threshold` check.
+        A miss is dropped here, because it has no P_s. If every firing
+        P_s is exactly equal, correlation is undefined, so rho is forced to
+        0.0 rather than NaN. That check is exact (all values identical).
+        No numerical tolerance is used. A constant signal carries no
+        seed-to-seed timing information, so it must not be rewarded with
+        rho = NaN silently passing a downstream `rho >= threshold` check.
         Rho does not use the lead rule, so the 99th-percentile calibration
         of RHO_THRESH is the same for every c.
     mean_rel_lead: mean of (G - P) / G over firing seeds only. A miss is
@@ -100,7 +101,9 @@ def evaluate(g_in, p_in, margin=MARGIN, rule="margin", c=DEFAULT_LEAD_C):
     rel_lead = (g_arr - p_arr) / g_arr
     mean_rel_lead = float(np.mean(rel_lead))
 
-    if len(g_arr) >= 3 and np.std(p_arr) > 1e-9:
+    # Spearman rho is undefined when every firing P value is the same.
+    # Exact equality. No numerical tolerance.
+    if len(g_arr) >= 3 and not np.all(p_arr == p_arr[0]):
         rho, _ = spearmanr(g_arr, p_arr)
         rho = 0.0 if np.isnan(rho) else float(rho)
     else:
