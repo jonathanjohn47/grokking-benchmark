@@ -270,7 +270,9 @@ def evaluate_frozen_protocol(g_in, p_in, margin=LEAD_MARGIN_EPOCHS, rule="fracti
     lead_frac = float(np.sum(lead) / n_seeds) if n_seeds else 0.0
     rel_lead = (g_arr - p_arr) / g_arr
     mean_rel_lead = float(np.mean(rel_lead))
-    if len(g_arr) >= 3 and np.std(p_arr) > 1e-9:
+    # Spearman rho is undefined when every firing P_i is the same value.
+    # That is an exact equality check. No numerical tolerance is used.
+    if len(g_arr) >= 3 and not np.all(p_arr == p_arr[0]):
         rho, _ = spearmanr(g_arr, p_arr)
         rho = 0.0 if np.isnan(rho) else float(rho)
     else:

@@ -13114,3 +13114,17 @@ The shared loss `cross_entropy_high_precision` was casting the final-position lo
 ## Files touched with this entry
 
 - The two files above, plus this appended entry. Nothing earlier in `context.md` was edited.
+
+# 2026-11-12 — Constant-signal rho is an exact equality check
+
+The constant-signal rule no longer uses a standard-deviation tolerance of 1e-9. Spearman rho is set to 0 only when all firing P_i are exactly equal (`np.all(p_arr == p_arr[0])`), because Spearman rho is undefined when the spread is exactly zero. No numerical tolerance is used for this rule. Fewer than 3 firing points, or a NaN from spearmanr, still store rho as 0. The 1e-9 cut was an own-choice number. Exact equality is the definition of a constant signal, so that number is gone.
+
+Official scorer was rerun on the saved results at c = 0.8, c = 0.7, and c = 0.9, without rewriting result files. Every verdict and every rho matched the saved frozen-protocol JSON. All 8 predictors still FAIL. `python3 -m pytest 06_Code/tests -q` passed (7 tests).
+
+## Files touched with this entry
+
+- `06_Code/scripts/analyze_nanda_unified.py`: `evaluate_frozen_protocol` uses exact equality.
+- `06_Code/scripts/run_control_experiment.py`: `evaluate` uses the same check.
+- `context_current.md`: PASS/FAIL rank-correlation item states the exact rule.
+- `12_Study/Fixed_Values_Base_Experiment.md`: Constant-signal rho rule row no longer cites 1e-9 as an own-choice number.
+- `context.md`: this entry appended. Earlier entries that mention 1e-9 were left as history.

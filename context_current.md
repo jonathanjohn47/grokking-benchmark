@@ -91,6 +91,7 @@ The evaluation protocol scores whether an early-warning predictor can forecast t
   3. *Rank Correlation*:
      $$\rho(P_i, G_i) \ge \rho_{\text{thresh}} = 0.8999999999999998 \approx 0.90$$
      Spearman's rank correlation $\rho$ between event times and grokking times must be $\ge 0.90$. The threshold was calibrated as the 99th percentile of $10,000$ trials of an uninformative random predictor $P_i \sim \text{Uniform}[0, T_{\max}]$, capping the false-positive rate at $1\%$ (*2026-09-29: Controlled Experiment: Synthetic-Control Validation*; *2026-11-11: L2 open attack point 12 closed: attainable Spearman rho values for n = 5*).
+     $\rho$ is set to $0$ only when all firing $P_i$ are exactly equal, because Spearman $\rho$ is undefined when the spread is exactly zero. No numerical tolerance is used. Fewer than 3 firing points, or a NaN from `spearmanr`, also store $\rho = 0$ (*2026-11-12: Constant-signal rho is an exact equality check*).
   4. *Mean Relative Lead*:
      $$\bar{r} = \frac{1}{n_{\text{firing}}} \sum_{i \in \text{firing}} \frac{G_i - P_i}{G_i} \in [0.05, 0.90]$$
      The average relative lead must be between $5\%$ and $90\%$ of grokking time. Negative relative leads remain signed in the average. Alarms firing earlier than $0.10 G_i$ ($\bar{r} > 0.90$) fail for being decoupled initialisation transients.
