@@ -50,9 +50,26 @@ from predictors.commutator_defect import (  # noqa: E402
 )
 
 SEED_INDEX = 0  # first of the 5 seeds; grok epoch 12987
-OUTPUT_DIR = os.path.join(REPO_ROOT, "08_Experiments", "results", "nanda_unified")
+DEFAULT_RESULTS = os.path.join(
+    REPO_ROOT, "08_Experiments", "results", "results_per_nanda_power"
+)
+OUTPUT_DIR = DEFAULT_RESULTS
 SEED_DIR = os.path.join(OUTPUT_DIR, f"seed_{SEED_INDEX}")
 CKPT_DIR = os.path.join(SEED_DIR, "checkpoints")
+
+
+def configure_results(results_dir=None):
+    """Point this sanity script at one results folder. No fallback."""
+    global OUTPUT_DIR, SEED_DIR, CKPT_DIR
+    if results_dir is None or results_dir == "":
+        path = DEFAULT_RESULTS
+    elif os.path.isabs(results_dir):
+        path = results_dir
+    else:
+        path = os.path.join(REPO_ROOT, results_dir)
+    OUTPUT_DIR = os.path.abspath(path)
+    SEED_DIR = os.path.join(OUTPUT_DIR, f"seed_{SEED_INDEX}")
+    CKPT_DIR = os.path.join(SEED_DIR, "checkpoints")
 P = 113
 D_MODEL = 128
 NUM_HEADS = 4
@@ -420,7 +437,16 @@ def old_vs_new_table(models_by_epoch, train_inputs, train_labels) -> None:
         print(f"           note: {note}")
 
 
-def main() -> int:
+def main(argv=None) -> int:
+    import argparse
+    parser = argparse.ArgumentParser(description="Commutator Defect sanity checks on saved checkpoints.")
+    parser.add_argument(
+        "--results-dir", default=None,
+        help="Results folder. Default: 08_Experiments/results/results_per_nanda_power. "
+             "Pass 08_Experiments/results/nanda_unified for the legacy run.",
+    )
+    args = parser.parse_args(argv)
+    configure_results(args.results_dir)
     print("Commutator Defect — Stage 3d sanity checks (frozen eta=1e-3 restored)")
     print(f"SEED_DIR = {SEED_DIR}")
 

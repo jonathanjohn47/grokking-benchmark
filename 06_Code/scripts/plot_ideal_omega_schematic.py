@@ -2,8 +2,9 @@
 
 Purpose: thesis figure showing what a working Higher-MI predictor was expected to look like:
 Omega starts in the synergy zone (<0), rises smoothly into the redundancy zone (>0),
-and peaks BEFORE the grok epoch G. The real measured curves are in
-08_Experiments/results/nanda_unified/reports/measured/measured_higher_mi_population_omega_all_seeds.png.
+and peaks BEFORE the grok epoch G. The real measured curves for the canonical run will be in
+08_Experiments/results/results_per_nanda_power/reports/measured/measured_higher_mi_population_omega_all_seeds.png.
+The same filename under nanda_unified is the legacy record.
 """
 import os
 import numpy as np

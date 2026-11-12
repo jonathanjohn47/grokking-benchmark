@@ -392,8 +392,12 @@ def write_markdown_report(seeds_data, results, out_md):
 
 def main():
     parser = argparse.ArgumentParser(description="Check whether Higher-MI spikes are locked to the checkpoint grid.")
-    parser.add_argument("results_root", nargs="?", default="08_Experiments/results/nanda_unified",
-                        help="Path to results root (default: 08_Experiments/results/nanda_unified)")
+    parser.add_argument(
+        "results_root", nargs="?",
+        default="08_Experiments/results/results_per_nanda_power",
+        help="Path to results root (default: 08_Experiments/results/results_per_nanda_power; "
+             "pass 08_Experiments/results/nanda_unified for the legacy run)",
+    )
     parser.add_argument("--output-dir", default=None,
                         help="Output directory for reports and figures (default: <results_root>/reports)")
     args = parser.parse_args()

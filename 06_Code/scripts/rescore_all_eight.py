@@ -12,16 +12,12 @@ first ones. Every stored row is scored, including exploratory rows.
 import json
 import os
 
-from rescore_lead_fraction import EVENTS, REPO, RULES, score_one
+from rescore_lead_fraction import REPO, RULES, analysis_paths, resolve_results_dir, score_one
 
-OUT = os.path.join(
-    REPO,
-    "08_Experiments",
-    "results",
-    "nanda_unified",
-    "analysis",
-    "lead_fraction_all_eight_2026-11-10.json",
-)
+
+def all_eight_out(results_dir=None):
+    analysis = os.path.join(resolve_results_dir(results_dir), "analysis")
+    return os.path.join(analysis, "lead_fraction_all_eight_2026-11-10.json")
 
 PREFIXES = (
     "L2:",
@@ -43,8 +39,18 @@ def family(signal):
     return None
 
 
-def main():
-    with open(EVENTS) as handle:
+def main(argv=None):
+    import argparse
+    parser = argparse.ArgumentParser(description="Score every stored row for all eight predictors.")
+    parser.add_argument(
+        "--results-dir", default=None,
+        help="Results folder. Default: 08_Experiments/results/results_per_nanda_power. "
+             "Pass 08_Experiments/results/nanda_unified for the legacy run.",
+    )
+    args = parser.parse_args(argv)
+    events_path, _sweep = analysis_paths(args.results_dir)
+    out_path = all_eight_out(args.results_dir)
+    with open(events_path) as handle:
         events = json.load(handle)
     grok = events["grok_epochs"]
     rows = []
@@ -67,7 +73,7 @@ def main():
         })
     payload = {
         "date": "2026-11-10",
-        "source": os.path.relpath(EVENTS, REPO),
+        "source": os.path.relpath(events_path, REPO),
         "default_c": 0.8,
         "note": (
             "All stored rows for the eight predictors, scored from saved "
@@ -78,9 +84,9 @@ def main():
         ),
         "rows": rows,
     }
-    with open(OUT, "w") as handle:
+    with open(out_path, "w") as handle:
         json.dump(payload, handle, indent=2)
-    print(f"Wrote {OUT}")
+    print(f"Wrote {out_path}")
     print(f"{'signal':<62} {'n':>3} {'lead':>8} {'rho':>8} {'mean_r':>8} verdict")
     for row in rows:
         main_rule = next(item for item in row["rules"] if item["rule_name"] == "c=0.8")

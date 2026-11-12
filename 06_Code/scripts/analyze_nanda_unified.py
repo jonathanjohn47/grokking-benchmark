@@ -22,7 +22,11 @@ lead = grok_epoch - event_epoch   (positive = signal fired before grok)
 
 Usage (from the repo root):
     python 06_Code/scripts/analyze_nanda_unified.py
-Outputs go to 08_Experiments/results/nanda_unified/analysis/.
+Outputs go to <results-dir>/analysis/.
+The default results folder is 08_Experiments/results/results_per_nanda_power.
+The saved run at 08_Experiments/results/nanda_unified is legacy. Pass
+--results-dir 08_Experiments/results/nanda_unified to read it. There is
+no fallback from the new folder to the old one.
 """
 
 import json
@@ -34,13 +38,33 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-RESULTS = os.path.join(REPO_ROOT, "08_Experiments", "results", "nanda_unified")
-OUT = os.path.join(RESULTS, "analysis")
+DEFAULT_RESULTS_DIR = os.path.join(
+    REPO_ROOT, "08_Experiments", "results", "results_per_nanda_power"
+)
 FRACTIONS = (0.1, 0.5, 0.9)
 
 
-def load_seed(seed):
-    d = os.path.join(RESULTS, f"seed_{seed}")
+def resolve_results_dir(results_dir=None):
+    """Absolute results folder. Default is the new canonical run.
+
+    None and "" both mean the default. The old nanda_unified folder is
+    never substituted in.
+    """
+    if results_dir is None or results_dir == "":
+        path = DEFAULT_RESULTS_DIR
+    elif os.path.isabs(results_dir):
+        path = results_dir
+    else:
+        path = os.path.join(REPO_ROOT, results_dir)
+    return os.path.abspath(path)
+
+
+def default_analysis_dir(results_dir):
+    return os.path.join(resolve_results_dir(results_dir), "analysis")
+
+
+def load_seed(seed, results_dir=None):
+    d = os.path.join(resolve_results_dir(results_dir), f"seed_{seed}")
     with open(os.path.join(d, "summary.json")) as handle:
         summary = json.load(handle)
     ld = lambda sub, name: np.load(os.path.join(d, sub, name))
@@ -638,26 +662,32 @@ def load_lead_c_from_config():
     return DEFAULT_LEAD_C
 
 
-def score_saved_run(lead_c=None, out_dir=None, write=True):
+def score_saved_run(lead_c=None, out_dir=None, write=True, results_dir=None):
     """Official scorer. Reads saved seed results. Trains nothing.
 
     lead_c: fraction in P_i < c * G_i. None loads the config (default 0.8).
+    results_dir: folder of seed_*/ summaries. Default is the canonical
+    results_per_nanda_power run. Pass the old nanda_unified path explicitly
+    to score that legacy record. This function does not look there on its own.
     write: when True, write predictor_events.json, frozen_protocol_verdicts.json,
-    and the four plots under out_dir. The Higher-MI aggregate at the results
-    root is rewritten only for the default analysis folder, so a c sweep
-    does not replace the c = 0.8 summary.
+    and the four plots under out_dir (default <results-dir>/analysis). The
+    Higher-MI aggregate is written inside that same results folder, and only
+    for the default analysis folder, so a c sweep does not replace the c = 0.8
+    summary and a new run never writes into another run's folder.
     """
     if lead_c is None:
         lead_c = load_lead_c_from_config()
     lead_c = float(lead_c)
+    results_dir = resolve_results_dir(results_dir)
+    analysis_dir = default_analysis_dir(results_dir)
     if out_dir is None:
-        out_dir = OUT if abs(lead_c - DEFAULT_LEAD_C) < 1e-12 else os.path.join(
-            OUT, f"c_{lead_c:.1f}"
+        out_dir = analysis_dir if abs(lead_c - DEFAULT_LEAD_C) < 1e-12 else os.path.join(
+            analysis_dir, f"c_{lead_c:.1f}"
         )
     seeds = sorted(
-        int(n.split("_")[1]) for n in os.listdir(RESULTS) if n.startswith("seed_")
+        int(n.split("_")[1]) for n in os.listdir(results_dir) if n.startswith("seed_")
     )
-    runs = [load_seed(s) for s in seeds]
+    runs = [load_seed(s, results_dir) for s in seeds]
     grok = [r["grok"] for r in runs]
     ev = build_events(runs)
     rows = summarise(ev, grok, lead_c=lead_c)
@@ -681,10 +711,10 @@ def score_saved_run(lead_c=None, out_dir=None, write=True):
             }, handle, indent=2)
         print(f"Wrote {verdict_path}")
 
-        if os.path.abspath(out_dir) == os.path.abspath(OUT):
+        if os.path.abspath(out_dir) == os.path.abspath(analysis_dir):
             higher_mi_rows = [r for r in rows if r["signal"].startswith("Higher-MI")]
             if higher_mi_rows:
-                agg_path = os.path.join(RESULTS, "aggregate_higher_mi.json")
+                agg_path = os.path.join(results_dir, "aggregate_higher_mi.json")
                 with open(agg_path, "w") as handle:
                     json.dump({"grok_epochs": grok, "lead_c": lead_c, "signals": higher_mi_rows}, handle, indent=2)
                 print(f"Wrote {agg_path}")
@@ -706,11 +736,22 @@ def main(argv=None):
         help="Lead fraction c in P_i < c * G_i. Default: evaluation.lead_fraction_c (0.8).",
     )
     parser.add_argument(
+        "--results-dir", default=None,
+        help="Seed-results folder to read. Default: "
+             "08_Experiments/results/results_per_nanda_power. "
+             "The old run is 08_Experiments/results/nanda_unified "
+             "(only if you pass that path).",
+    )
+    parser.add_argument(
         "--out-dir", default=None,
-        help="Output folder. Default: analysis/ at c=0.8, analysis/c_<value>/ otherwise.",
+        help="Output folder. Default: <results-dir>/analysis at c=0.8, "
+             "<results-dir>/analysis/c_<value>/ otherwise.",
     )
     args = parser.parse_args(argv)
-    score_saved_run(lead_c=args.lead_c, out_dir=args.out_dir, write=True)
+    score_saved_run(
+        lead_c=args.lead_c, out_dir=args.out_dir, write=True,
+        results_dir=args.results_dir,
+    )
 
 
 if __name__ == "__main__":
