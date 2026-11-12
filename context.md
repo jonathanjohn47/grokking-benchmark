@@ -13155,3 +13155,9 @@ Analysis after that training:
 ## Files touched with this entry
 
 - The runner, the analysis scripts listed above, `context_current.md`, the tests, and this appended entry. Nothing earlier in `context.md` was edited.
+
+---
+
+## 12 Nov 2026 — Nanda PDF renamed
+
+`04_Literature/Papers/Nanda et al.pdf` was renamed with `git mv` to `04_Literature/Papers/Neel Nanda - Progress measures for grokking via mechanistic interpretability [2023].pdf`, matching the Author - Title [Year].pdf style. The older history line that still says `Literature/Nanda et al.pdf` is left as it was. `04_Literature/Papers/2301.05217v3.pdf` was not renamed or deleted. Its sha256 is `93dcdafc2ecf75d31ab2e32e74cdc11e2e488fec42edfef58ad3d4b6515bcd5f`, the same as the renamed Nanda PDF, so the two files are byte-identical. `Alethea Power - Grokking Generalization beyond overfitting on small algorithmic datasets [2022].pdf` was not renamed. References updated: `04_Literature/README.md` and `graphify-out/manifest.json`. `context_current.md` had no filename reference. Code, yaml, results, and Textbook v4 were not changed.
