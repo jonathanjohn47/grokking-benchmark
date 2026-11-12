@@ -50,10 +50,11 @@ own checkpoints.
 
 WHICH MATRICES
 ---------------
-Same six Linear weight matrices as HTSR Alpha (src/predictors/htsr_alpha.py),
+Same Linear weight matrices as HTSR Alpha (src/predictors/htsr_alpha.py),
 for consistency and comparability across predictors on this architecture:
 
     query, key, value          128 x 128
+    attn_out (W_O)             128 x 128
     mlp_in                     512 x 128
     mlp_out                    128 x 512
     output_head                114 x 128
@@ -105,7 +106,7 @@ import torch
 # Identical set to src/predictors/htsr_alpha.py::LAYER_NAMES, kept as a
 # separate list here (not imported) so the two predictors stay independent
 # modules, matching the project's existing per-predictor file convention.
-LAYER_NAMES = ["query", "key", "value", "mlp_in", "mlp_out", "output_head"]
+LAYER_NAMES = ["query", "key", "value", "attn_out", "mlp_in", "mlp_out", "output_head"]
 
 
 def _layer_singular_values(weight):

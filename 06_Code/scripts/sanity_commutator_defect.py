@@ -8,7 +8,7 @@ analyze_nanda_unified.py. Does NOT commit.
 Loading pattern (same as Spectral / AGE recompute paths):
   seed = int(np.load(seed_0/seed.npy)[0])
   torch.manual_seed(seed); np.random.seed(seed)
-  train_loader, _ = get_dataloaders(number=p, batch_size=int(0.3*p*p))
+  train_loader, _ = get_dataloaders(number=p, batch_size=int(0.3*p*p), seed=seed)
 
 recompute_from_checkpoints builds an unseeded loader; Spectral/AGE ignore
 that and rebuild with the seeded split. We copy Spectral/AGE here.
@@ -56,7 +56,7 @@ CKPT_DIR = os.path.join(SEED_DIR, "checkpoints")
 P = 113
 D_MODEL = 128
 NUM_HEADS = 4
-INIT_STD = 0.8 / math.sqrt(D_MODEL)
+INIT_STD = None  # the model draws Nanda's randn/sqrt init itself
 BATCH_DRAW_SEED = 20261103
 WANTED_EPOCHS = (1000, 6000, 12000)
 
@@ -71,7 +71,7 @@ def _load_train_split():
     batch_size = int(0.3 * P * P)  # full-batch training split
     torch.manual_seed(seed)
     np.random.seed(seed)
-    train_loader, _ = get_dataloaders(number=P, batch_size=batch_size)
+    train_loader, _ = get_dataloaders(number=P, batch_size=batch_size, seed=seed)
     train_inputs, train_labels = next(iter(train_loader))
     return seed, train_inputs, train_labels
 
@@ -81,7 +81,6 @@ def _build_model():
         vocab_size=P + 1,
         d_model=D_MODEL,
         num_heads=NUM_HEADS,
-        init_std=INIT_STD,
     )
 
 

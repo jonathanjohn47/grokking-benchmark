@@ -82,7 +82,7 @@ def load_run(seed: int, subdir: str) -> dict:
 
     grok_epoch = signal.get("grok_epoch", summary.get("grok_epoch"))
     if grok_epoch is None and test_acc is not None:
-        hits = np.where(test_acc > 0.9)[0]
+        hits = np.where(test_acc > 0.99)[0]
         grok_epoch = int(hits[0]) if hits.size else None
     else:
         grok_epoch = int(grok_epoch) if grok_epoch is not None else None

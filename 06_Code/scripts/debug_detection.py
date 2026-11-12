@@ -8,7 +8,7 @@ test_acc_history = np.load("test_acc_history.npy")
 rate_of_decline = np.diff(l2_norm_history) * -1
 
 # Find grok
-grok_epoch = np.where(np.array(test_acc_history) > 0.9)[0][0]
+grok_epoch = np.where(np.array(test_acc_history) > 0.99)[0][0]
 print(f"Grok epoch: {grok_epoch}\n")
 
 # Test different thresholds with skip_epochs=200

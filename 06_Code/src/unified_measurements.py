@@ -44,11 +44,14 @@ class PredictorMeasurements:
                           self.reports_dir, self.training_dir]:
             os.makedirs(dir_path, exist_ok=True)
 
-    def save_training_data(self, train_acc, test_acc, loss):
-        """Save core training metrics."""
+    def save_training_data(self, train_acc, test_acc, loss, test_loss=None):
+        """Save core training metrics. `loss` is the train loss. `test_loss`
+        is the test loss from the same pre-step measurement."""
         np.save(os.path.join(self.training_dir, "train_acc_history.npy"), train_acc)
         np.save(os.path.join(self.training_dir, "test_acc_history.npy"), test_acc)
         np.save(os.path.join(self.training_dir, "loss_history.npy"), loss)
+        if test_loss is not None:
+            np.save(os.path.join(self.training_dir, "test_loss_history.npy"), test_loss)
 
     # ========== L2 NORM MEASUREMENTS ==========
 

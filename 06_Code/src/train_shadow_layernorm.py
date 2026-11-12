@@ -21,7 +21,7 @@ torch.manual_seed(1337)
 device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 print("Device:", device)
 
-data_loader = get_dataloaders(97, batch_size=int(0.3 * 97 * 97))
+data_loader = get_dataloaders(97, batch_size=int(0.3 * 97 * 97), seed=1337)
 model = Transformer(vocab_size=98, d_model=128).to(device)
 optimizer = AdamW(model.parameters(), lr=1e-3, weight_decay=1.0)
 
