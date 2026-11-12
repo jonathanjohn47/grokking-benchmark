@@ -39,6 +39,7 @@ Like WeightWatcher (which analyses nn.Linear / Conv layers), only the
 Linear weight matrices are analysed. For the shared TransformerFourHead:
 
     query, key, value          128 x 128
+    attn_out (W_O)             128 x 128
     mlp_in                     512 x 128
     mlp_out                    128 x 512
     output_head                114 x 128
@@ -62,7 +63,7 @@ import numpy as np
 import torch
 
 # Linear layers of TransformerFourHead that carry a 2-D weight matrix.
-LAYER_NAMES = ["query", "key", "value", "mlp_in", "mlp_out", "output_head"]
+LAYER_NAMES = ["query", "key", "value", "attn_out", "mlp_in", "mlp_out", "output_head"]
 
 
 def _layer_eigenvalues(weight):

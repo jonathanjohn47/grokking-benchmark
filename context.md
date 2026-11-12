@@ -13067,3 +13067,31 @@ Official L2 verdict after the change, at all three values of c: FAIL, 0 of 2 pre
 - `06_Code/tests/test_frozen_protocol_verdicts.py`: checks that official L2 is those two moving-average rows and still FAIL at c = 0.8, 0.7, and 0.9.
 - `08_Experiments/results/nanda_unified/analysis/frozen_protocol_verdicts.json`, `predictor_events.json`, and the same two files under `c_0.7/` and `c_0.9/`: the half-way row is no longer stored. L2 is 0 of 2, FAIL.
 - `08_Experiments/results/nanda_unified/analysis/lead_fraction_all_eight_2026-11-10.json` and `lead_fraction_sweep_2026-11-10.json`: regenerated from the updated event list so they no longer list the discarded row. Moving-average rows in those files were not given new epochs.
+
+
+# 2026-11-12 — Training setup aligned with Nanda's released code (no retrain)
+
+Jonathan approved this change. The code and the current-state notes were updated so the next training run follows Nanda's released `transformers.py` and `helpers.cross_entropy_high_precision`, and Power et al. 2022 where noted. The 40,000-epoch retrain was not started. Nothing in `08_Experiments/results/` was overwritten or deleted. `context.md` was only appended. The textbook was not edited. The L2 open-problems list was not added.
+
+## What changed in the code
+
+- Shared model `06_Code/src/models/transformer_four_head.py`: added W_O (128 x 128, no bias) after the concatenated heads and before the residual add; lower-triangular causal mask with -1e10 before the 1/sqrt(d_head) scale; Nanda randn/sqrt init (unembed uses 1/sqrt(114)); removed dropout1 and dropout2. The Dropout predictor file still measures dropout; it now attaches hooks for that measurement only.
+- `06_Code/src/data/modular_arithmetic.py`: `get_dataloaders` reads `train_fraction` from the yaml and uses Nanda's `gen_train_test` shuffle (`random.seed`, then shuffle, then the 30/70 cut). Full batch.
+- `06_Code/scripts/run_nanda_benchmark.py`: float64 CPU cross entropy on the final position over 114 logits; train and test loss and accuracy logged before the optimizer step; LambdaLR warmup `min(step/10, 1)`; init checkpoint `model_init.pt`; checkpoints every 100 epochs instead of every 50. Primary grok threshold is 0.99. 0.9 and 0.95 stay secondary.
+- Predictor and analysis scripts that assumed the old spacing, the old primary cut, or the missing W_O were updated: `analyze_nanda_unified.py`, `analyze_threshold.py`, `debug_detection.py`, `plot_commutator_defect_stage6.py`, `plot_results_four_head.py`, `train_four_head.py`, `htsr_alpha.py`, `weight_pca.py`, `l2_norm.py`, `dropout.py`, `sanity_commutator_defect.py`, `unified_measurements.py` (also saves test loss).
+- Docs: `context_current.md` now has "Training setup (retrain, Nov 2026)" and no longer says the setup strictly replicates Nanda Section 3 or matches it exactly. `nanda_unified.yaml` and `12_Study/Fixed_Values_Base_Experiment.md` state the new values. All G_i and predictor results already in `context_current.md` are from the old setup and must be recomputed after the retrain.
+
+## Two exceptions, not changed
+
+- One seed sets both the data split and the initial weights. Nanda's code seeds only the split. We keep the seed's influence on the weights as well because we want the experiment to be repeatable.
+- Hardware is Apple MPS, not CUDA. The loss is float64 on CPU because MPS has no float64.
+
+## What did not change
+
+- No training run. No files under `08_Experiments/results/`.
+- Predictor verdicts on the saved run remain the old-setup FAIL results.
+- Textbook v4 was not edited.
+
+## Files touched with this entry
+
+- The code and docs listed above, plus this appended entry. Nothing earlier in `context.md` was edited.

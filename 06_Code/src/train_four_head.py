@@ -1,6 +1,7 @@
 import torch
 from torch import nn
 from torch.optim import AdamW
+from models.transformer_four_head import cross_entropy_high_precision
 import numpy as np
 import os
 import re
@@ -33,10 +34,9 @@ from unified_measurements import PredictorMeasurements
 #   - architecture    : 1-layer, 4-head, d_model=128, d_mlp=512, ReLU,
 #                       NO LayerNorm, learned positions, untied embed/unembed,
 #                       no bias in attention/embedding/unembedding, MLP has bias
-#   - init            : N(0, 0.8/sqrt(d_model)) for EVERY weight matrix
-#                       (TransformerLens / Nanda scale)
+#   - init            : Nanda randn/sqrt(d_model), unembed randn/sqrt(d_vocab)
 #   - optimiser       : AdamW, lr=1e-3, weight_decay=1.0, betas=(0.9, 0.98)
-#   - training        : full-batch, no warmup, 40000 epochs, 30/70 split
+#   - training        : full-batch, 10-step warmup, 40000 epochs, yaml split
 #
 # This replaced the old default substrate (p=97, PyTorch-default init,
 # betas 0.9/0.999). Those 3 runs are archived at archive/p97_default/.
@@ -120,7 +120,7 @@ D_MODEL = CFG["architecture"]["d_model"]
 NUM_HEADS = CFG["architecture"]["num_heads"]
 INIT_STD = CFG["init"]["init_std"]
 if INIT_STD is None:
-    INIT_STD = 0.8 / (D_MODEL ** 0.5)
+    INIT_STD = None  # Nanda randn/sqrt init lives in the model, not a single std
 LR = CFG["optimizer"]["lr"]
 WEIGHT_DECAY = CFG["optimizer"]["weight_decay"]
 BETAS = tuple(CFG["optimizer"]["betas"])
@@ -132,7 +132,7 @@ assert VOCAB_SIZE == MODULUS + 1, "vocab_size must be modulus + 1"
 assert D_MODEL % NUM_HEADS == 0, "d_model must be divisible by num_heads"
 print(f"Protocol: {CONFIG_PATH}")
 print(f"  p={MODULUS}  vocab={VOCAB_SIZE}  d_model={D_MODEL}  heads={NUM_HEADS}")
-print(f"  init_std={INIT_STD:.5f}  betas={BETAS}  wd={WEIGHT_DECAY}  lr={LR}")
+print(f"  init=Nanda randn/sqrt  betas={BETAS}  wd={WEIGHT_DECAY}  lr={LR}")
 print(f"  epochs={NUM_EPOCHS}  full-batch size={BATCH_SIZE}")
 
 four_head_dir = os.path.join(project_root, "runs", "four_head")
@@ -161,15 +161,18 @@ np.save("seed.npy", seed)
 device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 print("Device:", device)
 
-data_loader = get_dataloaders(MODULUS, batch_size=BATCH_SIZE)
+data_loader = get_dataloaders(MODULUS, batch_size=BATCH_SIZE, seed=seed)
 model = TransformerFourHead(
-    vocab_size=VOCAB_SIZE, d_model=D_MODEL, num_heads=NUM_HEADS, init_std=INIT_STD
+    vocab_size=VOCAB_SIZE, d_model=D_MODEL, num_heads=NUM_HEADS
 ).to(device)
 optimizer = AdamW(model.parameters(), lr=LR, weight_decay=WEIGHT_DECAY, betas=BETAS)
+WARMUP_STEPS = int(CFG["training"]["warmup_steps"])
+scheduler = torch.optim.lr_scheduler.LambdaLR(
+    optimizer, lr_lambda=lambda step: min(step / float(WARMUP_STEPS), 1.0)
+)
 
 print("Model: TransformerFourHead (num_heads=4, Nanda-Unified substrate)")
 print("Optimizer:", optimizer)
-cross_entropy_loss = nn.CrossEntropyLoss()
 
 num_epochs = NUM_EPOCHS
 train_acc_history = []
@@ -185,37 +188,30 @@ dropout_train_acc_by_rate = {rate: [] for rate in dropout_rates}
 dropout_eval_acc_by_rate = {rate: [] for rate in dropout_rates}
 
 for epoch in range(num_epochs):
-    total_correct = 0
-    total_samples = 0
-    for x, y in data_loader[0]:
-        x, y = x.to(device), y.to(device)
-        logit = model.forward(x)
-        equal_sign_logit = logit[:, 2, :]
+    model.eval()
+    x, y = next(iter(data_loader[0]))
+    x, y = x.to(device), y.to(device)
+    equal_sign_logit = model.forward(x)[:, 2, :]
+    loss = cross_entropy_high_precision(equal_sign_logit, y)
+    total_correct = (equal_sign_logit.argmax(dim=1) == y).sum().item()
+    total_samples = len(y)
 
-        loss = cross_entropy_loss(equal_sign_logit, y)
-
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-
-        predicted = equal_sign_logit.argmax(dim=1)
-        total_correct += (predicted == y).sum().item()
-        total_samples += len(y)
-
-    test_total_correct = 0
-    test_total_samples = 0
-
-    for x_test, y_test in data_loader[1]:
+    with torch.no_grad():
+        x_test, y_test = next(iter(data_loader[1]))
         x_test, y_test = x_test.to(device), y_test.to(device)
-        logit_test = model.forward(x_test)
-        equal_sign_logit_test = logit_test[:, 2, :]
-        predicted_test = equal_sign_logit_test.argmax(dim=1)
-        test_total_correct += (predicted_test == y_test).sum().item()
-        test_total_samples += len(y_test)
+        equal_sign_logit_test = model.forward(x_test)[:, 2, :]
+        test_loss = cross_entropy_high_precision(equal_sign_logit_test, y_test)
+        test_total_correct = (equal_sign_logit_test.argmax(dim=1) == y_test).sum().item()
+        test_total_samples = len(y_test)
 
     train_acc_history.append(total_correct / total_samples)
     test_acc_history.append(test_total_correct / test_total_samples)
     loss_history.append(loss.item())
+
+    loss.backward()
+    optimizer.step()
+    scheduler.step()
+    optimizer.zero_grad()
     l2_norm_history.append(compute_l2_norm(model))
     sum_w2_history.append(compute_sum_of_squared_weights(model))
     per_module_sum_w2_history.append(compute_per_module_sum_of_squared_weights(model))
@@ -242,7 +238,7 @@ for epoch in range(num_epochs):
 # Save all measurements using unified system
 measurements.save_training_data(train_acc_history, test_acc_history, loss_history)
 
-grok_epoch = np.argmax(np.array(test_acc_history) > 0.9)
+grok_epoch = np.argmax(np.array(test_acc_history) > 0.99)
 
 
 
@@ -259,11 +255,11 @@ print(f"\nDetection Results:")
 if detection_epoch is not None:
     lead_time = grok_epoch - detection_epoch
     print(f"  MA Crossover epoch: {detection_epoch:.1f}")
-    print(f"  Grok epoch (test acc > 90%): {grok_epoch}")
+    print(f"  Grok epoch (test acc > 99%): {grok_epoch}")
     print(f"  Lead time: {lead_time:.1f} epochs")
 else:
     print("  No MA crossover detected")
-    print(f"  Grok epoch (test acc > 90%): {grok_epoch}")
+    print(f"  Grok epoch (test acc > 99%): {grok_epoch}")
 
 print(f"\nL2 Norm Stats:")
 print(f"  Min: {np.min(l2_norm_history):.4f}")
@@ -286,11 +282,11 @@ print(f"\nNoise floor: {noise_floor:.6f}")
 if trigger_epoch is not None:
     trigger_lead_time = grok_epoch - trigger_epoch
     print(f"  Trigger epoch (first zero-crossing): {trigger_epoch:.1f}")
-    print(f"  Grok epoch (test acc > 90%): {grok_epoch}")
+    print(f"  Grok epoch (test acc > 99%): {grok_epoch}")
     print(f"  Lead time: {trigger_lead_time:.1f} epochs")
 else:
     print("  No trigger detected")
-    print(f"  Grok epoch (test acc > 90%): {grok_epoch}")
+    print(f"  Grok epoch (test acc > 99%): {grok_epoch}")
 
 # Save all L2 Norm measurements
 measurements.save_l2_norm_data(

@@ -130,8 +130,8 @@ def plot_single_run(run_number, run_dir, data):
     noise_floor = compute_noise_floor(diff, epoch_grid, quiet_epoch_cutoff=QUIET_EPOCH_CUTOFF)
     trigger_epoch = detect_ma_of_ma_zero_crossing(epoch_grid, diff, skip_epochs=SKIP_EPOCHS)
     detection_epoch = detect_ma_crossover(epoch_grid, fast_ma, slow_ma, skip_epochs=SKIP_EPOCHS)
-    grokked = bool((test_acc > 0.9).any())
-    grok_epoch = int(np.argmax(test_acc > 0.9)) if grokked else None
+    grokked = bool((test_acc > 0.99).any())
+    grok_epoch = int(np.argmax(test_acc > 0.99)) if grokked else None
 
     def save(fig, filename):
         path = os.path.join(run_dir, filename)
@@ -305,8 +305,8 @@ def plot_comparison(all_runs_data, out_dir):
         color = color_for(i)
         ax.plot(epochs_axis, data["test_acc"], color=color, linewidth=2.2,
                 label=f"Run {run_number} ({data['num_epochs']} epochs)")
-        if (data["test_acc"] > 0.9).any():
-            grok_epoch = int(np.argmax(data["test_acc"] > 0.9))
+        if (data["test_acc"] > 0.99).any():
+            grok_epoch = int(np.argmax(data["test_acc"] > 0.99))
             ax.axvline(x=grok_epoch, color=color, linestyle=":", linewidth=1.5, alpha=0.6)
     ax.set_xscale("log")
     ax.set_xlabel("Epoch (log scale)", fontsize=12)

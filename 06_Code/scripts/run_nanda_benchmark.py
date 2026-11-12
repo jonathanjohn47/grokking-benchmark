@@ -13,14 +13,14 @@ value. Predictors 3-9 (Spectral, HTSR Alpha, AGE, Weight-PCA, Higher-MI,
 Commutator Defect, ...) are NOT built yet and are NOT called.
 
 Per seed it:
-  - sets torch.manual_seed(seed)
+  - sets torch.manual_seed(seed) and passes the same seed to the data split
   - builds the dataloaders for p from the config (full-batch)
-  - builds TransformerFourHead with the small init (N(0, 0.8/sqrt(d)))
-  - trains full-batch with AdamW(lr, betas, weight_decay) from the config
-  - logs every epoch via unified_measurements.PredictorMeasurements:
-      train_acc, test_acc, loss, l2_norm, sum_w2, per-module sum_w2
-      (5 groups: token_embedding, position_embedding, attention_qkv,
-       mlp, output_head)
+  - builds TransformerFourHead with Nanda's randn/sqrt init
+  - trains full-batch with AdamW and a 10-step linear warmup
+  - logs every epoch, before the optimizer step:
+      train loss, test loss, train acc, test acc, l2_norm, sum_w2,
+      per-module sum_w2 (token_embedding, position_embedding,
+      attention_qkv, attention_out, mlp, output_head)
   - after training: computes the L2-Norm predictor signals (MA crossover,
     MA-of-MA zero crossing, noise floor) and the Dropout gap sweep, and
     saves them under output_dir/seed_{seed}/
@@ -42,7 +42,6 @@ Usage:
 
 import argparse
 import json
-import math
 import os
 import sys
 import time
@@ -50,8 +49,8 @@ import time
 import numpy as np
 import torch
 import yaml
-from torch import nn
 from torch.optim import AdamW
+from torch.optim.lr_scheduler import LambdaLR
 
 # This file lives at <repo>/06_Code/scripts/, so the repo root is two folders
 # up. (Before the 2026-09-17 reorganisation the script sat at the repo root,
@@ -63,7 +62,10 @@ if SRC not in sys.path:
     sys.path.insert(0, SRC)
 
 from data.modular_arithmetic import get_dataloaders                       # noqa: E402
-from models.transformer_four_head import TransformerFourHead              # noqa: E402
+from models.transformer_four_head import (                                 # noqa: E402
+    TransformerFourHead,
+    cross_entropy_high_precision,
+)
 from predictors.l2_norm import (                                          # noqa: E402
     compute_l2_norm,
     compute_sum_of_squared_weights,
@@ -149,37 +151,22 @@ L2_QUIET_EPOCH_CUTOFF = None
 #  thesis analysis criteria, so they are deliberately NOT repeated as code
 #  constants or checks here.)
 #
-# WHY SAVE EVERY 50: the evaluation grids we want to test are 100, 200 and
-# 250, and gcd(100, 200, 250) = 50. A grid can only be evaluated if every one
-# of its epochs was saved, so SAVE_EVERY must divide all of them. 50 does; 100
-# does not divide 250 (saved multiples of 100 that are also multiples of 250
-# are only multiples of 500, i.e. a "250 grid" would silently alias to a 500
-# grid). Save densely once, evaluate on any coarser grid later without
-# retraining.
+# SAVE EVERY 100: Nanda's Config.save_every = 100. An init checkpoint is
+# written separately, before any optimizer step (model_init.pt). Epoch
+# files are written after that epoch's optimizer step, when
+# epoch % 100 == 0 (0, 100, ..., 39900). The old every-50 grid (801 files,
+# including epoch 39999) is replaced by this schedule. A 250-epoch eval
+# grid is no longer a subset of the saved epochs.
 #
-# SAVE   : a checkpoint every SAVE_EVERY = 50 epochs, PLUS the final epoch:
-#          range(0, 40000, 50) = 800 points (0..39950) + epoch 39999 = 801.
-#          Storage: ~0.85 MB per checkpoint -> ~680 MB per seed, ~3.4 GB for 5 seeds.
-# EVAL   : every predictor evaluates only the saved epochs with
-#          epoch % EVAL_EVERY == 0, PLUS the final saved epoch (the fully
-#          trained model; kept so results stay comparable with the earlier
-#          runs, whose grids always ended on epoch 39999). Saving is nearly
-#          free, evaluating is not: Spectral ~9.3 s and Dropout-Variance
-#          ~1.8 s per checkpoint on this machine (~11 s together), so the
-#          default 100 grid (401 points) costs about 1.2 h per seed for those
-#          two, the 200 grid (201 points) ~0.6 h, the 250 grid (161 points)
-#          ~0.5 h, and the full 50 grid (801 points) ~2.5 h.
-# --eval_every accepts 50, 100, 200 or 250 (any multiple of SAVE_EVERY);
-#          select_eval_epochs() raises if the requested grid is not on disk.
-# EVAL_EVERY = 0 means "use every saved checkpoint as-is" (needed to
-#          re-run predictors on the legacy 24-point directories).
+# EVAL: predictors use saved epochs with epoch % EVAL_EVERY == 0.
+# --eval_every accepts 100 or 200 (multiples of SAVE_EVERY).
+# EVAL_EVERY = 0 means "use every saved checkpoint as-is".
 TOTAL_STEPS = 40000          # default --epochs
-DESIRED_EVAL_GRIDS = [100, 200, 250]   # first = default, the rest = fallbacks
-# SAVE_EVERY derived as GCD of desired eval grids, so every eval grid is subset of saved checkpoints
-SAVE_EVERY = math.gcd(*DESIRED_EVAL_GRIDS)   # gives 50
+DESIRED_EVAL_GRIDS = [100, 200]   # first = default, the rest = fallbacks
+SAVE_EVERY = 100             # Nanda save_every, not gcd(100, 200, 250)
 EVAL_EVERY = DESIRED_EVAL_GRIDS[0]
 EVAL_EVERY_FALLBACK = DESIRED_EVAL_GRIDS[1]
-EVAL_EVERY_FALLBACK_COARSE = DESIRED_EVAL_GRIDS[2]
+EVAL_EVERY_FALLBACK_COARSE = DESIRED_EVAL_GRIDS[1]
 
 # LEGACY — for Archive comparison only, not used in unified benchmark.
 # Schedule used up to benchmark v4 (tag benchmark-v4-4predictors): 24
@@ -211,15 +198,13 @@ ALL_PREDICTORS = list(PREDICTOR_SUMMARY_KEY.keys())
 
 def save_checkpoint_schedule(total_epochs, save_every=SAVE_EVERY):
     """Epoch indices (0-based, matching the training loop's `epoch`) at which
-    a model checkpoint is SAVED: 0, save_every, 2*save_every, ... below
-    total_epochs, plus the final epoch total_epochs - 1. For 40000 epochs and
-    save_every=50 that is 800 + 1 = 801 points."""
-    if total_epochs <= 1:
-        return [0]
-    schedule = list(range(0, total_epochs, save_every))
-    if schedule[-1] != total_epochs - 1:
-        schedule.append(total_epochs - 1)
-    return schedule
+    a model checkpoint is SAVED, after that epoch's optimizer step:
+    0, save_every, 2*save_every, ... strictly below total_epochs.
+    For 40000 epochs and save_every=100 that is 400 points (0..39900).
+    The init checkpoint is separate and is not in this list."""
+    if total_epochs <= 0:
+        return []
+    return list(range(0, total_epochs, save_every))
 
 
 SAVE_CHECKPOINTS = save_checkpoint_schedule(TOTAL_STEPS)
@@ -243,7 +228,7 @@ def select_eval_epochs(saved_epochs, eval_every=EVAL_EVERY):
             f"eval_every={eval_every} needs saved checkpoints at epochs such as "
             f"{missing[:5]}, which are not on disk (saved grid spacing is not a "
             f"divisor of {eval_every}). Use a multiple of the save spacing "
-            f"({SAVE_EVERY}; e.g. 100, {EVAL_EVERY_FALLBACK} or {EVAL_EVERY_FALLBACK_COARSE}), "
+            f"({SAVE_EVERY}; e.g. 100 or {EVAL_EVERY_FALLBACK}), "
             f"or --eval_every 0 to use "
             f"all saved checkpoints as they are.")
     chosen = [e for e in saved if e % eval_every == 0]
@@ -288,9 +273,6 @@ def load_config(path):
         cfg = yaml.safe_load(handle)
 
     d_model = cfg["architecture"]["d_model"]
-    init_std = cfg["init"]["init_std"]
-    if init_std is None:
-        init_std = 0.8 / (d_model ** 0.5)
 
     parsed = {
         "modulus": cfg["task"]["modulus"],
@@ -298,10 +280,10 @@ def load_config(path):
         "train_fraction": cfg["task"]["train_fraction"],
         "d_model": d_model,
         "num_heads": cfg["architecture"]["num_heads"],
-        "init_std": float(init_std),
         "lr": float(cfg["optimizer"]["lr"]),
         "weight_decay": float(cfg["optimizer"]["weight_decay"]),
         "betas": tuple(cfg["optimizer"]["betas"]),
+        "warmup_steps": int(cfg["training"]["warmup_steps"]),
         "epochs_default": int(cfg["training"]["epochs"]),
         # evaluation / predictor constants (each has its source in the yaml)
         "grok_thresholds": [float(t) for t in cfg["evaluation"]["grok_thresholds"]],
@@ -412,7 +394,7 @@ def grok_epoch_from(test_acc_history, threshold=None):
 
 
 def grok_epochs_by_threshold(test_acc_history):
-    """{"0.9": epoch, "0.95": epoch, "0.99": epoch} for every threshold in
+    """{"0.99": epoch, "0.9": epoch, "0.95": epoch} for every threshold in
     GROK_THRESHOLDS (None where a threshold is never reached)."""
     return {str(t): grok_epoch_from(test_acc_history, t) for t in GROK_THRESHOLDS}
 
@@ -451,8 +433,7 @@ def limit_cycle_check(test_acc_history, grok_epoch):
 
 def dips_key():
     """Key under which limit_cycle_check stores its dip count. With the
-    primary grok threshold 0.9 this is 'epochs_below_0.9_post_grok', the same
-    key earlier summaries used."""
+    primary grok threshold 0.99 this is 'epochs_below_0.99_post_grok'."""
     return f"epochs_below_{GROK_ACC_THRESHOLD}_post_grok"
 
 
@@ -477,42 +458,54 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
     compute_dv = "dropout_variance" in predictors_to_compute
     compute_l2 = "l2" in predictors_to_compute
 
-    # (a) deterministic per-seed RNG
-    torch.manual_seed(seed)
+    # (a) One seed sets both RNGs. random.seed is applied inside
+    # get_dataloaders. torch.manual_seed is applied immediately before the
+    # model is built, so the initial weights depend on the seed as well.
+    # Nanda's released code seeds only the split. We keep the seed's
+    # influence on the weights because we want the experiment to be repeatable.
     np.random.seed(seed)
 
     p = cfg["modulus"]
     batch_size = int(cfg["train_fraction"] * p * p)  # full-batch
 
-    # (b) data — "=" token id must equal the config modulus p, not any
-    # value carried over from the old p=<old prime> code path
-    train_loader, test_loader = get_dataloaders(number=p, batch_size=batch_size)
+    # (b) data — Nanda gen_train_test, train_fraction read from the yaml
+    train_loader, test_loader = get_dataloaders(number=p, batch_size=batch_size, seed=seed)
     probe_x, _ = next(iter(train_loader))
     eq_token_ids = {int(v) for v in probe_x[:, 2].tolist()}
     assert eq_token_ids == {p}, \
         f"'=' token ids {sorted(eq_token_ids)} != {{{p}}} (config modulus)"
 
-    # (c) model — small-init _init_weights (init_std = 0.8/sqrt(d_model))
+    # (c) model — Nanda randn/sqrt init. Seed the torch RNG here so nothing
+    # earlier in this function consumes it.
+    torch.manual_seed(seed)
     model = TransformerFourHead(
         vocab_size=p + 1,
         d_model=cfg["d_model"],
         num_heads=cfg["num_heads"],
-        init_std=cfg["init_std"],
     ).to(device)
+    if save_checkpoints:
+        torch.save(model.state_dict(), os.path.join(ckpt_dir, "model_init.pt"))
 
-    # (d) optimiser — AdamW(lr, betas, weight_decay) from the config
+    # (d) optimiser — AdamW on all parameters, no grad clipping.
+    # LambdaLR warmup matches Nanda: min(step/10, 1). PyTorch calls
+    # scheduler.step() once inside LambdaLR.__init__, so the first
+    # optimizer step sees lambda(0) = 0, and the factor reaches 1 at step 10.
     optimizer = AdamW(
         model.parameters(),
         lr=cfg["lr"],
         betas=cfg["betas"],
         weight_decay=cfg["weight_decay"],
     )
-    loss_fn = nn.CrossEntropyLoss()
+    warmup_steps = cfg["warmup_steps"]
+    scheduler = LambdaLR(
+        optimizer, lr_lambda=lambda step: min(step / float(warmup_steps), 1.0)
+    )
 
     measurements = PredictorMeasurements(out_dir, model_type="four_head")
     np.save(os.path.join(out_dir, "seed.npy"), np.array([seed]))
 
     train_acc_history, test_acc_history, loss_history = [], [], []
+    test_loss_history = []
     l2_norm_history, sum_w2_history, per_module_sum_w2_history = [], [], []
 
     # Checkpoint SAVE grid (every SAVE_EVERY epochs + final epoch) and the
@@ -536,37 +529,37 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
     started = time.time()
     last_log = started
     for epoch in range(args.epochs):
-        # ---- train pass (full-batch: one iteration) ----
-        model.train()
-        train_correct = train_total = 0
-        for x, y in train_loader:
-            x, y = x.to(device), y.to(device)
-            logits = model.forward(x)[:, 2, :]
-            loss = loss_fn(logits, y)
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
-            train_correct += (logits.argmax(dim=1) == y).sum().item()
-            train_total += len(y)
-
-        # ---- test pass ----
+        # Losses and accuracies are computed BEFORE the optimizer step,
+        # as in Nanda's do_a_training_step. One full batch each.
         model.eval()
-        test_correct = test_total = 0
-        with torch.no_grad():
-            for x_t, y_t in test_loader:
-                x_t, y_t = x_t.to(device), y_t.to(device)
-                pred_t = model.forward(x_t)[:, 2, :].argmax(dim=1)
-                test_correct += (pred_t == y_t).sum().item()
-                test_total += len(y_t)
+        x, y = next(iter(train_loader))
+        x, y = x.to(device), y.to(device)
+        train_logits = model.forward(x)[:, 2, :]
+        train_loss = cross_entropy_high_precision(train_logits, y)
+        train_correct = (train_logits.argmax(dim=1) == y).sum().item()
+        train_total = len(y)
 
-        # (e) per-epoch logging quantities
+        with torch.no_grad():
+            x_t, y_t = next(iter(test_loader))
+            x_t, y_t = x_t.to(device), y_t.to(device)
+            test_logits = model.forward(x_t)[:, 2, :]
+            test_loss = cross_entropy_high_precision(test_logits, y_t)
+            test_correct = (test_logits.argmax(dim=1) == y_t).sum().item()
+            test_total = len(y_t)
+
         train_acc_history.append(train_correct / train_total)
         test_acc_history.append(test_correct / test_total)
-        loss_history.append(loss.item())
+        loss_history.append(train_loss.item())
+        test_loss_history.append(test_loss.item())
         l2_norm_history.append(compute_l2_norm(model))
         sum_w2_history.append(compute_sum_of_squared_weights(model))
         per_module_sum_w2_history.append(
             compute_per_module_sum_of_squared_weights(model))
+
+        train_loss.backward()
+        optimizer.step()
+        scheduler.step()
+        optimizer.zero_grad()
 
         # ---- checkpoint save + Dropout-Variance predictor (post-epoch, model frozen) ----
         # Model-weight checkpointing (SAVE grid) is independent of whether the
@@ -605,7 +598,8 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
                   f"d{log_every}={since_last:8.3f}s", flush=True)
 
     # (f) save the per-epoch histories
-    measurements.save_training_data(train_acc_history, test_acc_history, loss_history)
+    measurements.save_training_data(
+        train_acc_history, test_acc_history, loss_history, test_loss=test_loss_history)
 
     # grok epochs only need test_acc_history — compute them once here so both
     # the Dropout-Variance signal below and the final summary can use them.
@@ -861,7 +855,7 @@ def _checkpoint_predictor_spectral(model, test_loader, ckpt_dir, ckpt_epochs,
     batch_size = int(0.3 * p * p)  # full-batch training split (matches get_dataloaders)
     torch.manual_seed(seed)
     np.random.seed(seed)
-    train_loader, _ = get_dataloaders(number=p, batch_size=batch_size)
+    train_loader, _ = get_dataloaders(number=p, batch_size=batch_size, seed=seed)
 
     spectral_checkpoints = []
     hist = {
@@ -950,7 +944,7 @@ def _checkpoint_predictor_age(model, test_loader, ckpt_dir, ckpt_epochs,
     batch_size = int(0.3 * p * p)  # full-batch training split (matches get_dataloaders)
     torch.manual_seed(seed)
     np.random.seed(seed)
-    train_loader, _ = get_dataloaders(number=p, batch_size=batch_size)
+    train_loader, _ = get_dataloaders(number=p, batch_size=batch_size, seed=seed)
 
     age_checkpoints = []
     nc1_history, fn_history = [], []
@@ -1147,8 +1141,9 @@ def _checkpoint_predictor_higher_mi(model, test_loader, ckpt_dir, ckpt_epochs,
     once in recompute_from_checkpoints / main(), WITHOUT a
     torch.manual_seed(seed) call first) is NOT the same train/test split
     train_one_seed actually trained and evaluated this seed on —
-    get_dataloaders()'s random_split reads torch's GLOBAL RNG, whose
-    state at that call site has nothing to do with this seed. This is
+    The split is Nanda's random.shuffle under random.seed(seed), read from
+    seed.npy. Passing that seed into get_dataloaders rebuilds the same split.
+    This is
     harmless for every OTHER registered checkpoint predictor (spectral
     and age ignore test_loader entirely and rebuild their own TRAIN
     split with an explicit torch.manual_seed(seed) first — see their
@@ -1168,7 +1163,7 @@ def _checkpoint_predictor_higher_mi(model, test_loader, ckpt_dir, ckpt_epochs,
     batch_size = int(0.3 * p * p)  # full-batch training split (matches get_dataloaders)
     torch.manual_seed(seed)
     np.random.seed(seed)
-    _, seeded_test_loader = get_dataloaders(number=p, batch_size=batch_size)
+    _, seeded_test_loader = get_dataloaders(number=p, batch_size=batch_size, seed=seed)
 
     higher_mi_checkpoints = []
     correct_mean_hist, runner_up_mean_hist, rest_mean_mean_hist = [], [], []
@@ -1339,7 +1334,7 @@ def _checkpoint_predictor_commutator_defect(
     batch_size = int(0.3 * p * p)  # full-batch training split
     torch.manual_seed(seed)
     np.random.seed(seed)
-    train_loader, _ = get_dataloaders(number=p, batch_size=batch_size)
+    train_loader, _ = get_dataloaders(number=p, batch_size=batch_size, seed=seed)
     train_inputs, train_labels = next(iter(train_loader))
     n_train = int(train_inputs.shape[0])
     if n_train != 3830:
@@ -1462,11 +1457,10 @@ def recompute_from_checkpoints(seed, args, cfg, device, predictors_to_compute, o
     ckpt_dir = checkpoints_dir_for(args.output_dir, seed)
     p = cfg["modulus"]
     batch_size = int(cfg["train_fraction"] * p * p)
-    _, test_loader = get_dataloaders(number=p, batch_size=batch_size)
+    _, test_loader = get_dataloaders(number=p, batch_size=batch_size, seed=seed)
 
     model = TransformerFourHead(
         vocab_size=p + 1, d_model=cfg["d_model"], num_heads=cfg["num_heads"],
-        init_std=cfg["init_std"],
     ).to(device)
 
     saved_epochs = sorted(
@@ -1703,14 +1697,14 @@ def main():
     print(f"task       : (a + b) mod {cfg['modulus']}   "
           f"'=' token id {cfg['modulus']}   vocab {cfg['vocab_size']}")
     print(f"model      : 4-head, d_model={cfg['d_model']}, "
-          f"init_std={cfg['init_std']:.5f}  (small init)")
+          f"Nanda randn/sqrt init, W_O, causal mask, warmup {cfg['warmup_steps']}")
     print(f"optimiser  : AdamW lr={cfg['lr']} betas={cfg['betas']} "
           f"weight_decay={cfg['weight_decay']}")
     print(f"run        : seeds={args.seeds}  epochs={args.epochs}  "
           f"full-batch={int(cfg['train_fraction'] * cfg['modulus'] * cfg['modulus'])}")
     print(f"grok thr.  : {GROK_THRESHOLDS} (primary {GROK_ACC_THRESHOLD})   "
           f"dropout-variance: n_samples={DROPOUT_VARIANCE_N_SAMPLES} rate={DROPOUT_VARIANCE_RATE}")
-    print(f"checkpoints: save every {SAVE_EVERY} (gcd of {DESIRED_EVAL_GRIDS}), "
+    print(f"checkpoints: init, then every {SAVE_EVERY} (Nanda save_every), "
           f"evaluate every {args.eval_every}")
     print("=" * 72)
 

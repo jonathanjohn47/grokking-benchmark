@@ -29,6 +29,7 @@ PER_MODULE_GROUPS = {
     "token_embedding": ["token_embedding"],
     "position_embedding": ["position_embedding"],
     "attention_qkv": ["query", "key", "value"],
+    "attention_out": ["attn_out"],
     "mlp": ["mlp_in", "mlp_out"],
     "output_head": ["output_head"],
 }

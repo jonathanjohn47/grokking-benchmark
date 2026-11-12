@@ -1,44 +1,61 @@
-from torch import long, tensor
-from torch.utils.data import Dataset, DataLoader, random_split
+from pathlib import Path
 
-def generate_pairs(number):
-    pairs = []
-    for i in range(number):
-        for j in range(number):
-            pairs.append((i, j, (i + j) % number))
-    return pairs
+import yaml
+from torch import tensor
+from torch.utils.data import Dataset, DataLoader
+import random
 
-def get_dataloaders(number, batch_size):
-    modular_arithmetic_dataset = ModularArithmeticDataset(number)
-    train_size = int(0.3 * len(modular_arithmetic_dataset))
-    test_size = len(modular_arithmetic_dataset) - train_size
 
-    train_dataset, test_dataset = random_split(modular_arithmetic_dataset, [train_size, test_size])
-    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-    test_dataloader = DataLoader(test_dataset, batch_size=batch_size)
+def train_fraction_from_yaml():
+    """Read task.train_fraction from the benchmark yaml. Not a hardcoded 0.3."""
+    config_path = Path(__file__).resolve().parents[2] / "configs" / "nanda_unified.yaml"
+    with open(config_path) as handle:
+        cfg = yaml.safe_load(handle)
+    return float(cfg["task"]["train_fraction"])
 
+
+def get_dataloaders(number, batch_size, seed):
+    """Nanda gen_train_test.
+
+    pairs = [(i, j, p) for i in range(p) for j in range(p)]
+    random.seed(seed); random.shuffle(pairs)
+    train = pairs[:int(train_fraction * len(pairs))]; test = the rest.
+
+    train_fraction is read from nanda_unified.yaml. Each loader is one
+    full batch (the whole split), which is Nanda's full-batch step.
+    The batch_size argument is kept so existing call sites still pass it;
+    the loader uses the full split length, which equals
+    int(train_fraction * p * p) for the training split.
+    """
+    del batch_size  # full batch is the split itself; see the docstring
+    train_fraction = train_fraction_from_yaml()
+    pairs = [(i, j, number) for i in range(number) for j in range(number)]
+    random.seed(seed)
+    random.shuffle(pairs)
+    div = int(train_fraction * len(pairs))
+    train_pairs = pairs[:div]
+    test_pairs = pairs[div:]
+
+    train_dataset = ModularArithmeticDataset(number, train_pairs)
+    test_dataset = ModularArithmeticDataset(number, test_pairs)
+    train_dataloader = DataLoader(train_dataset, batch_size=len(train_dataset), shuffle=False)
+    test_dataloader = DataLoader(test_dataset, batch_size=len(test_dataset), shuffle=False)
     return train_dataloader, test_dataloader
 
 
 class ModularArithmeticDataset(Dataset):
-    def __init__(self, number):
+    def __init__(self, number, pairs):
         self.number = number
-        self.pairs = generate_pairs(number)
+        self.pairs = pairs
 
     def __len__(self):
         return len(self.pairs)
 
     def __getitem__(self, idx):
-        return (self.get_tensor(self.pairs[idx]), self.pairs[idx][2])
-
-    def get_tensor(self, item):
-        # item is (a, b, answer). The third sequence position is the "="
-        # token, whose id is the modulus itself (number tokens are 0..p-1,
-        # so the "=" token id is p). Previously hardcoded to 97; now
-        # parametrised so the Nanda-Unified protocol (p = 113) gives the
-        # "=" token id 113. See configs/nanda_unified.yaml.
-        sequence = [item[0], item[1], self.number]
-        return tensor(sequence)
+        a, b, _equals = self.pairs[idx]
+        sequence = [a, b, self.number]
+        label = (a + b) % self.number
+        return (tensor(sequence), label)
 
 
 if __name__ == "__main__":

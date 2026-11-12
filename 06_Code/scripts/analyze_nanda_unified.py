@@ -7,7 +7,7 @@ Post-hoc analysis + plots for the 5-seed Nanda-Unified run (L2 Norm, Dropout,
 Spectral, AGE, HTSR Alpha). Reads only saved results, trains nothing.
 
 For every predictor signal it asks one question: does the signal move BEFORE
-the model groks (test acc first > 0.9), and does the moment it moves follow
+the model groks (test acc first > 0.99, the primary cut), and does the moment it moves follow
 the grok epoch from seed to seed?
 
 Event epochs (all computed from the saved per-checkpoint arrays):
@@ -474,7 +474,7 @@ def plot_curves(runs, path):
         ax[0].plot(r["test_acc"], color=cols[s], lw=1.2, label=f"seed {s}")
         ax[0].axvline(r["grok"], color=cols[s], ls=":", lw=0.9)
         ax[1].plot(r["train_acc"], color=cols[s], lw=1.2)
-    ax[0].set(title="Test accuracy (dotted = grok epoch, test acc > 0.9)", xlabel="epoch", ylabel="accuracy")
+    ax[0].set(title="Test accuracy (dotted = grok epoch, test acc > 0.99)", xlabel="epoch", ylabel="accuracy")
     ax[1].set(title="Train accuracy", xlabel="epoch", ylabel="accuracy")
     ax[0].legend()
     fig.tight_layout()
