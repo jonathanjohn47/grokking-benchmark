@@ -4,6 +4,8 @@ This document summarizes the active, in-force state of the thesis research proje
 
 **Retrain status (13 November 2026).** The 40,000-epoch retrain is finished. Five seeds (0, 1, 2, 3, 4) were trained with `06_Code/configs/nanda_unified.yaml` through `06_Code/scripts/run_nanda_benchmark.py`, using the runner's default predictors `l2`, `dropout_gap`, and `dropout_variance`. Canonical results are in `08_Experiments/results/results_per_nanda_power` (`aggregate.json`, plus `seed_0` through `seed_4` json and npy). The 2010 `.pt` checkpoints were not committed. They stay only on Jonathan's Mac. Official scoring has not been rerun on this folder. The predictor verdicts printed later in this file are still the legacy `nanda_unified` record.
 
+**Figures (13 November 2026).** PNGs for this retrain are in `08_Experiments/results/results_per_nanda_power/figures/`. The script is `06_Code/scripts/plot_results_per_nanda_power.py`. It reads only the saved json and npy files (the per-epoch training and L2 histories, `l2_norm/epoch_grid.npy` as a length check, and the dropout-variance checkpoint grid). It does not load `.pt` checkpoints. Each seed has train-versus-test accuracy (log epoch index), train-versus-test loss, L2 norm with sum of squared weights, and the dropout-variance signal. Grok cuts 0.99, 0.95, and 0.9, the two L2 detection epochs, and the dropout-variance peak epoch are marked from the json. Two overview figures cover all five seeds: test accuracy overlaid, and grok epoch by seed and cut. `figures/README.md` lists each file. A dropout-gap-versus-epoch figure was not made: `dropout_gap_epochs.npy` stores only the final epoch.
+
 ---
 
 ## 1. Frozen Experimental Setup
