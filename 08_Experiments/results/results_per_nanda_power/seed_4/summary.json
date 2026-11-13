@@ -1,0 +1,61 @@
+{
+  "seed": 4,
+  "epochs": 40000,
+  "modulus": 113,
+  "grok_epoch": 6637,
+  "grok_epochs_by_threshold": {
+    "0.99": 6637,
+    "0.9": 5650,
+    "0.95": 5810
+  },
+  "final_train_acc": 1.0,
+  "final_test_acc": 1.0,
+  "l2_norm_init": 42.19599151611328,
+  "l2_norm_final": 30.973222732543945,
+  "sum_w2_init": 1780.501612663269,
+  "sum_w2_final": 959.3404050339013,
+  "token_embedding_share_init": 0.06384265562327412,
+  "l2_predictor": {
+    "ma_crossover_epoch": 104.0239456261458,
+    "ma_of_ma_zero_crossing_epoch": 489.48704885185305,
+    "noise_floor": 0.000459651256357314,
+    "windows": {
+      "fast": 50,
+      "slow": 200,
+      "ma_of_ma_fast": 20,
+      "skip_epochs": 100,
+      "quiet_epoch_cutoff": 90
+    }
+  },
+  "dropout_final_gap_by_rate": {
+    "0.1": -0.37509788566953794,
+    "0.3": -0.8064660476563374,
+    "0.5": -0.9202371629936235,
+    "0.7": -0.960286385501734,
+    "0.9": -0.9848976395569974
+  },
+  "dropout_variance_predictor": {
+    "variance_peak_epoch": 18100,
+    "variance_peak_value": 3.503184834537686e-05,
+    "grok_epoch": 6637,
+    "peak_to_grok_ratio": 2.727135754105771,
+    "rate": 0.5,
+    "n_samples": 100,
+    "num_checkpoints": 400
+  },
+  "spectral_predictor": null,
+  "age_predictor": null,
+  "htsr_predictor": null,
+  "higher_mi_predictor": null,
+  "commutator_defect_predictor": null,
+  "limit_cycle_check": {
+    "applicable": true,
+    "window_start_epoch": 8637,
+    "post_grok_min": 0.4021702651303278,
+    "post_grok_std": 0.015582782666243042,
+    "post_grok_final": 1.0,
+    "epochs_below_0.99_post_grok": 256,
+    "limit_cycle": false
+  },
+  "wall_time_sec": 9814.8
+}
