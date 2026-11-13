@@ -30,12 +30,9 @@ four_head_dir = os.path.join(project_root, "runs", "four_head")
 
 LEGACY_FILENAMES = [
     "train_acc_history.npy", "test_acc_history.npy", "loss_history.npy",
-    "l2_norm_history.npy", "dropout_gap_epochs.npy", "dropout_gap_history.npy",
+    "dropout_gap_epochs.npy", "dropout_gap_history.npy",
     "dropout_train_acc_history.npy", "dropout_eval_acc_history.npy",
-    "epoch_grid.npy", "fast_ma.npy", "slow_ma.npy", "fast_ma_of_slow_ma.npy",
-    "ma_of_ma_diff.npy", "training_report.pdf",
-    "ma_of_slow_ma_crossover.png", "ma_of_slow_ma_diff.png",
-    "ma_of_slow_ma_diff_linear.png", "ma_of_ma_diff_vs_grokking_linear.png",
+    "training_report.pdf",
     "grokking_curve.png", "loss_curve.png", "l2_norm_curve.png", "dropout_gap_curve.png",
 ]
 

@@ -38,7 +38,7 @@ from unified_measurements import PredictorMeasurements
 #
 # Outputs are saved under results/four_head/run_<N>/ (created if it does not
 # exist yet), NOT in the project root, so they never overwrite train.py's
-# own train_acc_history.npy / l2_norm_history.npy / dropout_gap_history.npy
+# own train_acc_history.npy / sum_w2_history.npy / dropout_gap_history.npy
 # / etc., which belong to the original single-head run.
 #
 # RUN NUMBERING: every time this script is run, it saves into a NEW
@@ -52,12 +52,9 @@ from unified_measurements import PredictorMeasurements
 
 LEGACY_FILENAMES = [
     "train_acc_history.npy", "test_acc_history.npy", "loss_history.npy",
-    "l2_norm_history.npy", "dropout_gap_epochs.npy", "dropout_gap_history.npy",
+    "dropout_gap_epochs.npy", "dropout_gap_history.npy",
     "dropout_train_acc_history.npy", "dropout_eval_acc_history.npy",
-    "epoch_grid.npy", "fast_ma.npy", "slow_ma.npy", "fast_ma_of_slow_ma.npy",
-    "ma_of_ma_diff.npy", "training_report.pdf",
-    "ma_of_slow_ma_crossover.png", "ma_of_slow_ma_diff.png",
-    "ma_of_slow_ma_diff_linear.png", "ma_of_ma_diff_vs_grokking_linear.png",
+    "training_report.pdf",
     "grokking_curve.png", "loss_curve.png", "l2_norm_curve.png", "dropout_gap_curve.png",
 ]
 

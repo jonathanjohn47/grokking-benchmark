@@ -480,12 +480,3 @@ class PredictorMeasurements:
             plt.close(fig)
 
         return os.path.join(self.reports_dir, "training_report.pdf")
-
-    # ========== UTILITIES ==========
-
-    @staticmethod
-    def _smooth_signal(signal, window=50):
-        """Apply simple moving average smoothing."""
-        if window > len(signal):
-            window = len(signal)
-        return np.convolve(signal, np.ones(window)/window, mode='same')
