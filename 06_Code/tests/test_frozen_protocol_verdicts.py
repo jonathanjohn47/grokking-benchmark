@@ -1,8 +1,9 @@
 """The official scorer's predictor-level verdicts, checked in code.
 
 Loads the saved Nanda-unified results and calls score_saved_run.
-Does not write files. Every predictor is FAIL at c = 0.8: no pre-declared
-row clears all four PASS checks.
+Does not write files. On that legacy folder the confirmed-peak L2 row
+passes the frozen checks. The other seven predictors stay FAIL.
+The retrain folder is scored in test_l2_confirmed_peak.py.
 """
 
 import os
@@ -26,38 +27,41 @@ def scored():
     return score_saved_run(lead_c=0.8, write=False, results_dir=LEGACY_RESULTS)
 
 
-def test_l2_official_rows_are_the_two_moving_average_rules(scored):
-    """The hindsight half-way-down-from-peak reading is not an official row."""
+def test_l2_official_row_is_the_confirmed_peak(scored):
+    """One official row. The old moving-average rules are exploratory."""
     l2 = next(p for p in scored["predictors"] if p["predictor"] == "L2 Norm")
     names = [r["signal"] for r in l2["rows"]]
     assert "L2: sum(w^2) half-way down from peak" not in names
-    assert names == [
-        "L2: MA crossover (implemented)",
-        "L2: MA-of-MA zero crossing (implemented)",
-    ]
-    assert l2["n_predeclared_rows"] == 2
-    assert l2["n_predeclared_passing"] == 0
-    assert l2["verdict"] == "FAIL"
-    assert all(r["verdict"] == "FAIL" and r["counts_towards_predictor"] for r in l2["rows"])
+    assert names[0] == "L2: confirmed peak of sum w^2 (k=100)"
+    assert "L2: MA crossover 50/200 (exploratory)" in names
+    assert "L2: MA-of-MA zero crossing 20 (exploratory)" in names
+    official = [r for r in l2["rows"] if r["counts_towards_predictor"]]
+    exploratory = [r for r in l2["rows"] if r["role"] == "exploratory"]
+    assert len(official) == 1
+    assert len(exploratory) == 2
+    assert l2["n_predeclared_rows"] == 1
+    assert l2["n_predeclared_passing"] == 1
+    assert l2["verdict"] == "PASS"
+    assert official[0]["verdict"] == "PASS"
+    assert all(r["counts_towards_predictor"] is False for r in exploratory)
 
 
-def test_l2_still_fails_at_neighbouring_lead_fractions():
+def test_l2_confirmed_peak_passes_legacy_at_neighbouring_lead_fractions():
     for lead_c in (0.7, 0.9):
         scored = score_saved_run(lead_c=lead_c, write=False, results_dir=LEGACY_RESULTS)
         l2 = next(p for p in scored["predictors"] if p["predictor"] == "L2 Norm")
-        names = [r["signal"] for r in l2["rows"]]
-        assert names == [
-            "L2: MA crossover (implemented)",
-            "L2: MA-of-MA zero crossing (implemented)",
+        official = [r for r in l2["rows"] if r["counts_towards_predictor"]]
+        assert [r["signal"] for r in official] == [
+            "L2: confirmed peak of sum w^2 (k=100)",
         ]
-        assert l2["n_predeclared_rows"] == 2
-        assert l2["n_predeclared_passing"] == 0
-        assert l2["verdict"] == "FAIL"
+        assert l2["n_predeclared_rows"] == 1
+        assert l2["n_predeclared_passing"] == 1
+        assert l2["verdict"] == "PASS"
 
 
 def test_every_predictor_fails(scored):
     expected = {
-        "L2 Norm": "FAIL",
+        "L2 Norm": "PASS",
         "Dropout": "FAIL",
         "Spectral": "FAIL",
         "AGE": "FAIL",
