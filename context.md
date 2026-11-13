@@ -13189,3 +13189,25 @@ Grok epochs, seeds 0, 1, 2, 3, 4, taken only from this file:
 - `context_current.md`: retrain status, new-setup grok epochs from `aggregate.json`, and the note that checkpoints are local-only.
 - `context.md`: this entry appended. Nothing earlier in the file was edited.
 
+
+
+# 2026-11-13 — Figures for the results_per_nanda_power retrain
+
+Figures for the finished 40,000-epoch retrain were added so they can be viewed on GitHub. Training code was not changed. No existing result file (json or npy) was edited. The `.pt` checkpoints are still not in git.
+
+## What was added
+
+- `06_Code/scripts/plot_results_per_nanda_power.py` reads `08_Experiments/results/results_per_nanda_power` (`aggregate.json`, each seed's `summary.json`, the training histories, the L2 histories, `l2_norm/epoch_grid.npy`, and the dropout-variance checkpoint arrays). It writes PNGs under `08_Experiments/results/results_per_nanda_power/figures/`.
+- Per seed (0 through 4): train versus test accuracy on a log epoch index, train versus test loss, L2 norm together with the sum of squared weights, and the dropout-variance signal. Vertical lines use the grok epochs at cuts 0.99 (primary), 0.95, and 0.9 from `aggregate.json` / the seed summary, the L2 MA-crossover and MA-of-MA zero-crossing epochs, and the dropout-variance peak epoch.
+- Overview: `overview_test_accuracy.png` (five test-accuracy curves) and `overview_grok_epochs.png` (grouped bars, one group per seed, three cuts).
+- `08_Experiments/results/results_per_nanda_power/figures/README.md` names each figure in one line and embeds the PNG so GitHub renders it.
+- A dropout-gap-versus-epoch figure was not made. `dropout_gap_epochs.npy` contains only the final epoch, so there is no gap history in the saved files.
+
+The epoch axis is the stored 0-based loop index (the same index as `grok_epoch`). Index 0 is outside the log axis. `epoch_grid.npy` is the log-uniform grid on which the L2 moving averages were computed; the plotted L2 curve is the per-epoch `l2_norm_history.npy`, and the detection epochs from the json are marked at those stored epoch values.
+
+## Files touched with this entry
+
+- `06_Code/scripts/plot_results_per_nanda_power.py` (new).
+- `08_Experiments/results/results_per_nanda_power/figures/` (new PNGs and `README.md`).
+- `context_current.md`: a short note that these figures exist and where they are.
+- `context.md`: this entry appended. Nothing earlier in the file was edited.
