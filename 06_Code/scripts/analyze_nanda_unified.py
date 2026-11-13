@@ -12,7 +12,7 @@ the grok epoch from seed to seed?
 
 Event epochs (all computed from the saved per-checkpoint arrays):
   * Implemented predictor outputs, taken straight from summary.json
-    (L2 MA-crossover, L2 MA-of-MA zero crossing, dropout-variance peak,
+    (L2 confirmed peak of sum of squared weights, dropout-variance peak,
     spectral k90-min / alignment-max, AGE NC1-min, HTSR mean-alpha minimum).
   * "Fraction-of-change" epochs: first epoch at which a signal has covered
     10% / 50% / 90% of the way from its starting value to its final extreme.
@@ -31,6 +31,7 @@ no fallback from the new folder to the old one.
 
 import json
 import os
+import sys
 
 import numpy as np
 import matplotlib
@@ -38,6 +39,19 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if os.path.join(REPO_ROOT, "06_Code") not in sys.path:
+    sys.path.insert(0, os.path.join(REPO_ROOT, "06_Code"))
+from src.predictors.l2_norm import (  # noqa: E402
+    CONFIRMED_PEAK_K,
+    detect_confirmed_sum_w2_peak,
+    sum_w2_peak,
+)
+
+# Official L2 row. The two moving-average names contain "exploratory",
+# so summarise() reports them and does not count them.
+L2_CONFIRMED_PEAK = f"L2: confirmed peak of sum w^2 (k={CONFIRMED_PEAK_K})"
+L2_MA_EXPLORATORY = "L2: MA crossover 50/200 (exploratory)"
+L2_MAMA_EXPLORATORY = "L2: MA-of-MA zero crossing 20 (exploratory)"
 DEFAULT_RESULTS_DIR = os.path.join(
     REPO_ROOT, "08_Experiments", "results", "results_per_nanda_power"
 )
@@ -122,12 +136,17 @@ def build_events(runs):
 
     for s, r in enumerate(runs):
         sm = r["summary"]
+        # Official L2 event: first time sum(w^2) has stayed strictly below
+        # its running maximum for k consecutive epochs. Computed from the
+        # per-epoch sum_w2 history, not from the saved moving-average epochs.
+        put(L2_CONFIRMED_PEAK, s, detect_confirmed_sum_w2_peak(r["sum_w2"]))
+        # Old rules stay available for comparison. They do not count.
         # ma_crossover_epoch is a real epoch on the log-uniform grid
         # (10 ** linspace), not an integer training step and not a grid
-        # index. The decimals (about 113.41, 113.20, ...) are that grid
-        # point. Checked against seed_*/l2_norm/epoch_grid.npy on 10 Nov 2026.
-        put("L2: MA crossover (implemented)", s, sm["l2_predictor"]["ma_crossover_epoch"])
-        put("L2: MA-of-MA zero crossing (implemented)", s, sm["l2_predictor"]["ma_of_ma_zero_crossing_epoch"])
+        # index. Checked against seed_*/l2_norm/epoch_grid.npy on 10 Nov 2026.
+        if sm.get("l2_predictor"):
+            put(L2_MA_EXPLORATORY, s, sm["l2_predictor"].get("ma_crossover_epoch"))
+            put(L2_MAMA_EXPLORATORY, s, sm["l2_predictor"].get("ma_of_ma_zero_crossing_epoch"))
 
         put("Dropout: variance peak (implemented)", s, sm["dropout_variance_predictor"]["variance_peak_epoch"])
         fr = fraction_epochs(r["var_ep"], r["var"])
@@ -327,6 +346,47 @@ PREDICTORS = (
 )
 
 
+def score_l2_saved_histories(results_dir=None, lead_c=DEFAULT_LEAD_C):
+    """Score only the L2 rows from per-epoch sum_w2 histories.
+
+    Does not load the other predictors and does not write result files.
+    The official row is the confirmed peak. The two old moving-average
+    epochs stored in summary.json are scored as exploratory comparison.
+    """
+    root = resolve_results_dir(results_dir)
+    with open(os.path.join(root, "aggregate.json")) as handle:
+        grok = json.load(handle)["grok_epochs"]
+    events = {
+        L2_CONFIRMED_PEAK: {},
+        L2_MA_EXPLORATORY: {},
+        L2_MAMA_EXPLORATORY: {},
+    }
+    peaks = []
+    for seed, g_i in enumerate(grok):
+        seed_dir = os.path.join(root, f"seed_{seed}")
+        series = np.load(os.path.join(seed_dir, "l2_norm", "sum_w2_history.npy"))
+        with open(os.path.join(seed_dir, "summary.json")) as handle:
+            l2 = json.load(handle)["l2_predictor"]
+        peak_epoch, peak_value = sum_w2_peak(series)
+        p_i = detect_confirmed_sum_w2_peak(series)
+        events[L2_CONFIRMED_PEAK][seed] = None if p_i is None else float(p_i)
+        events[L2_MA_EXPLORATORY][seed] = l2.get("ma_crossover_epoch")
+        events[L2_MAMA_EXPLORATORY][seed] = l2.get("ma_of_ma_zero_crossing_epoch")
+        ratio = None if p_i is None else float(p_i) / float(g_i)
+        rel = None if p_i is None else (float(g_i) - float(p_i)) / float(g_i)
+        peaks.append({
+            "seed": seed,
+            "G_i": int(g_i),
+            "peak_epoch": peak_epoch,
+            "peak_S": peak_value,
+            "P_i": p_i,
+            "P_over_G": ratio,
+            "r_i": rel,
+        })
+    rows = summarise(events, grok, lead_c=lead_c)
+    return {"grok_epochs": list(grok), "per_seed": peaks, "rows": rows, "lead_c": lead_c}
+
+
 def predictor_name(signal):
     for prefix, name in PREDICTORS:
         if signal.startswith(prefix):
@@ -511,8 +571,9 @@ def plot_curves(runs, path):
 def plot_signals(runs, ev, path):
     cols = [
         ("Weight norm  sum(w^2)", lambda r: (np.arange(len(r["sum_w2"])), r["sum_w2"]),
-         [("L2: MA crossover (implemented)", "tab:blue"),
-          ("L2: MA-of-MA zero crossing (implemented)", "tab:cyan")]),
+         [(L2_CONFIRMED_PEAK, "tab:blue"),
+          (L2_MA_EXPLORATORY, "tab:cyan"),
+          (L2_MAMA_EXPLORATORY, "tab:olive")]),
         ("Dropout variance", lambda r: (r["var_ep"], r["var"]),
          [("Dropout: variance peak (implemented)", "tab:orange")]),
         ("Spectral alignment", lambda r: (r["sp_ep"], r["align"]),
@@ -575,8 +636,9 @@ def plot_signals(runs, ev, path):
 
 def plot_scatter(ev, grok, path):
     show = [
-        "L2: MA crossover (implemented)",
-        "L2: MA-of-MA zero crossing (implemented)",
+        L2_CONFIRMED_PEAK,
+        L2_MA_EXPLORATORY,
+        L2_MAMA_EXPLORATORY,
         "Dropout: variance peak (implemented)",
         "Spectral: alignment maximum (implemented)",
         "Spectral: alignment 10% of rise",
@@ -615,8 +677,9 @@ def plot_scatter(ev, grok, path):
 
 def plot_leads(ev, grok, path):
     names = [
-        "L2: MA crossover (implemented)",
-        "L2: MA-of-MA zero crossing (implemented)",
+        L2_CONFIRMED_PEAK,
+        L2_MA_EXPLORATORY,
+        L2_MAMA_EXPLORATORY,
         "Dropout: variance peak (implemented)",
         "Spectral: alignment maximum (implemented)",
         "Spectral: alignment 10% of rise",

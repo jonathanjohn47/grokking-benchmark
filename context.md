@@ -13211,3 +13211,38 @@ The epoch axis is the stored 0-based loop index (the same index as `grok_epoch`)
 - `08_Experiments/results/results_per_nanda_power/figures/` (new PNGs and `README.md`).
 - `context_current.md`: a short note that these figures exist and where they are.
 - `context.md`: this entry appended. Nothing earlier in the file was edited.
+
+# 2026-11-13 — L2 official row is a confirmed peak of sum of squared weights
+
+The official L2 firing rule was replaced and scored on the finished retrain. Nothing was trained. No file under `08_Experiments/results/nanda_unified` was edited.
+
+## Rule
+
+\(S(t)\) is the total sum of squared weights at epoch \(t\) (Nanda et al. 2023, Figure 7), read from `seed_N/l2_norm/sum_w2_history.npy` under `08_Experiments/results/results_per_nanda_power`. \(M(t)\) is the running maximum of \(S\) on epochs \(0..t\). \(P_i\) is the first epoch \(t\) such that \(S(t-j) < M(t-j)\) for all \(j = 0..k-1\). Never completing that window gives `None`. \(k = 100\) is an own choice, fixed before scoring. No paper gives a confirmation window. \(100\) equals Nanda `save_every`. No moving average, no early skip, no logarithm. Each seed also stores the global peak epoch and the peak value of \(S\).
+
+The MA crossover (50/200) and the MA-of-MA zero crossing (window 20) are no longer official. They stay in the scorer as exploratory rows and do not count.
+
+## Retrain score (G_i at 0.99: 8021, 8253, 4094, 7831, 6637)
+
+Official \(P_i = [279, 280, 276, 281, 281]\). Peak epochs \([179, 902, 176, 181, 181]\). At \(c = 0.7\), \(0.8\), and \(0.9\): lead fraction \(1\), Spearman \(\rho = 0.1539\), mean relative lead \(0.9571\). **FAIL** (rho below \(0.8999999999999998\), and mean relative lead above \(0.90\)).
+
+Seed 1 is the odd one. A local maximum at epoch 180 (sum of squares about \(3686.23\)) is already confirmed at epoch 280. The global peak is later, epoch 902, and only slightly higher (about \(3690.31\)). The rule keeps the first completed window. On the other four seeds the global peak is the early peak (epochs 176 to 181) and \(S\) never sets a higher value afterwards, so \(P_i\) is that peak plus \(100\).
+
+The two old rules, scored on this same retrain for comparison only, also FAIL at all three \(c\) values. MA crossover \(\rho = 0.50\), mean relative lead \(0.9842\). MA-of-MA \(\rho = -0.70\), mean relative lead \(0.9304\).
+
+## Legacy folder, not the result of record
+
+The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 1161]\) and PASSes the frozen checks at \(c \in \{0.7, 0.8, 0.9\}\). Those files were only read.
+
+## Tests
+
+`python -m pytest 06_Code/tests -q` from the project virtualenv: 17 passed.
+
+## Files touched with this entry
+
+- `06_Code/src/predictors/l2_norm.py`: confirmed-peak detector. \(k = 100\) labelled as own choice.
+- `06_Code/scripts/analyze_nanda_unified.py`: that detector is the single official L2 row. The two old rules are exploratory. `score_l2_saved_histories` scores the retrain without loading the other predictors.
+- `06_Code/tests/test_l2_confirmed_peak.py`: new.
+- `06_Code/tests/test_frozen_protocol_verdicts.py`: official-row names, and the legacy folder's L2 verdict under the new row.
+- `context_current.md`: Predictor 1.
+- `context.md`: this entry appended. Nothing earlier in the file was edited.

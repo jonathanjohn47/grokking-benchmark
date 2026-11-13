@@ -230,6 +230,49 @@ def detect_ma_of_ma_trigger(epoch_grid, diff, noise_floor, threshold_multiplier=
     return None
 
 
+# No published paper gives a confirmation window for the weight-norm peak.
+# 100 epochs is this project's own choice. It is fixed before scoring.
+# It equals Nanda et al.'s save_every (one checkpoint span).
+CONFIRMED_PEAK_K = 100
+
+
+def sum_w2_peak(sum_w2):
+    """Global peak of S(t): first epoch where the sum of squared weights is largest, and that value."""
+    series = np.asarray(sum_w2, dtype=float)
+    if series.size == 0:
+        return None, None
+    peak_epoch = int(np.argmax(series))
+    return peak_epoch, float(series[peak_epoch])
+
+
+def detect_confirmed_sum_w2_peak(sum_w2, k=CONFIRMED_PEAK_K):
+    """First epoch when S has stayed strictly below its running maximum for k epochs.
+
+    S(t) is the total sum of squared weights at epoch t (Nanda et al. 2023, Figure 7).
+    M(t) is the running maximum of S over epochs 0..t.
+    The returned epoch is the first t such that S(t-j) < M(t-j) for every j = 0..k-1.
+    A later higher peak does not move this epoch: the first completed window is the event.
+    Returns None when the window never completes. No moving average, no early skip, no log.
+    k is CONFIRMED_PEAK_K unless a test passes another window.
+    """
+    if k < 1:
+        raise ValueError("confirmation window k must be at least 1")
+    series = np.asarray(sum_w2, dtype=float)
+    if series.size < k:
+        return None
+    running_max = np.maximum.accumulate(series)
+    below = series < running_max
+    run = 0
+    for t, is_below in enumerate(below):
+        if is_below:
+            run += 1
+            if run >= k:
+                return int(t)
+        else:
+            run = 0
+    return None
+
+
 def detect_ma_of_ma_zero_crossing(epoch_grid, diff, skip_epochs=100):
     """
     Fire on the first epoch (after skip_epochs) where diff crosses from
