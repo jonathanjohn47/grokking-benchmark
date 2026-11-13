@@ -13161,3 +13161,31 @@ Analysis after that training:
 ## 12 Nov 2026 — Nanda PDF renamed
 
 `04_Literature/Papers/Nanda et al.pdf` was renamed with `git mv` to `04_Literature/Papers/Neel Nanda - Progress measures for grokking via mechanistic interpretability [2023].pdf`, matching the Author - Title [Year].pdf style. The older history line that still says `Literature/Nanda et al.pdf` is left as it was. `04_Literature/Papers/2301.05217v3.pdf` was not renamed or deleted. Its sha256 is `93dcdafc2ecf75d31ab2e32e74cdc11e2e488fec42edfef58ad3d4b6515bcd5f`, the same as the renamed Nanda PDF, so the two files are byte-identical. `Alethea Power - Grokking Generalization beyond overfitting on small algorithmic datasets [2022].pdf` was not renamed. References updated: `04_Literature/README.md` and `graphify-out/manifest.json`. `context_current.md` had no filename reference. Code, yaml, results, and Textbook v4 were not changed.
+
+# 2026-11-13 — Retrain finished; results recorded; checkpoints stay on the Mac
+
+Jonathan pushed `results/retrain-nanda-power` at commit `2b0e306` (161 files). The 40,000-epoch retrain is complete. Five seeds, 0 through 4, were trained with `06_Code/configs/nanda_unified.yaml` via `06_Code/scripts/run_nanda_benchmark.py`, using that runner's default predictors `l2`, `dropout_gap`, and `dropout_variance`. Canonical results are `08_Experiments/results/results_per_nanda_power` (`aggregate.json` plus `seed_0` through `seed_4` json and npy). The 2010 `.pt` checkpoints were not pushed. They stay only on Jonathan's Mac and are not in git. No training code and no result file was edited in this recording step. `context.md` was only appended.
+
+## What `aggregate.json` contains
+
+Top-level keys: `n_seeds` = 5, `epochs` = 40000, `grok_epoch_mean`, `grok_epoch_std`, `grok_epochs`, `grok_thresholds` = [0.99, 0.9, 0.95], `grok_epochs_by_threshold` (keys `0.99`, `0.9`, `0.95`; each value has `per_seed`, `mean`, `std`, `n_grokked`), `n_limit_cycle` = 0, and `seeds` (five objects).
+
+Each seed object has keys `seed`, `epochs`, `modulus`, `grok_epoch`, `grok_epochs_by_threshold`, `final_train_acc`, `final_test_acc`, `l2_norm_init`, `l2_norm_final`, `sum_w2_init`, `sum_w2_final`, `token_embedding_share_init`, `l2_predictor`, `dropout_final_gap_by_rate`, `dropout_variance_predictor`, `spectral_predictor`, `age_predictor`, `htsr_predictor`, `higher_mi_predictor`, `commutator_defect_predictor`, `limit_cycle_check`, `wall_time_sec`. On seed 0, `spectral_predictor`, `age_predictor`, `htsr_predictor`, `higher_mi_predictor`, and `commutator_defect_predictor` are null. `l2_predictor`, `dropout_final_gap_by_rate`, and `dropout_variance_predictor` are filled. Every seed has `final_train_acc` = 1.0 and `final_test_acc` = 1.0, and `limit_cycle` is false.
+
+Grok epochs, seeds 0, 1, 2, 3, 4, taken only from this file:
+
+- Cut 0.99 (`grok_epochs` and `grok_epochs_by_threshold["0.99"].per_seed`): 8021, 8253, 4094, 7831, 6637. Mean 6967.2. Standard deviation 1541.0539769910722. `n_grokked` = 5.
+- Cut 0.9: 7688, 7870, 3790, 7114, 5650. Mean 6422.4. Standard deviation 1529.8190219761289. `n_grokked` = 5.
+- Cut 0.95: 7785, 8011, 3888, 7273, 5810. Mean 6553.4. Standard deviation 1537.2872991084002. `n_grokked` = 5.
+
+## Next, not done in this entry
+
+- Run `analyze_nanda_unified.py` on `08_Experiments/results/results_per_nanda_power`.
+- Recompute \(G_i\) at the 0.99 cut and score all 8 predictors.
+- Revisit the L2 open list: items 4, 5, 6, 10, and 11 (MA-of-MA on a fixed clock; the only rule that passes looks into the future; causal smoothing uses the future; every weight lumped together; window sizes never tested).
+
+## Files touched with this entry
+
+- `context_current.md`: retrain status, new-setup grok epochs from `aggregate.json`, and the note that checkpoints are local-only.
+- `context.md`: this entry appended. Nothing earlier in the file was edited.
+
