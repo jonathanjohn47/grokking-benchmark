@@ -1,0 +1,32 @@
+{
+  "0.1": {
+    "train_accuracy": 0.624902114330462,
+    "eval_accuracy": 1.0,
+    "dropout_gap": -0.37509788566953794,
+    "clean_accuracy": 1.0
+  },
+  "0.3": {
+    "train_accuracy": 0.1935339523436626,
+    "eval_accuracy": 1.0,
+    "dropout_gap": -0.8064660476563374,
+    "clean_accuracy": 1.0
+  },
+  "0.5": {
+    "train_accuracy": 0.07976283700637656,
+    "eval_accuracy": 1.0,
+    "dropout_gap": -0.9202371629936235,
+    "clean_accuracy": 1.0
+  },
+  "0.7": {
+    "train_accuracy": 0.03971361449826603,
+    "eval_accuracy": 1.0,
+    "dropout_gap": -0.960286385501734,
+    "clean_accuracy": 1.0
+  },
+  "0.9": {
+    "train_accuracy": 0.015102360443002573,
+    "eval_accuracy": 1.0,
+    "dropout_gap": -0.9848976395569974,
+    "clean_accuracy": 1.0
+  }
+}

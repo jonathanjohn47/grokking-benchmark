@@ -2,11 +2,13 @@
 
 This document summarizes the active, in-force state of the thesis research project *"A Unified Benchmark of Grokking Predictors in Neural Networks"*, conducted by Jonathan John under the supervision of Prof. Dr.-Ing. Sheikh Faisal Rashid (AI, Berlin campus, IU Internationale Hochschule). All superseded architectures, temporary debugging trials, abandoned trigger heuristics, and legacy data configurations have been stripped out. Each decision is accompanied by its underlying scientific or methodological rationale and citation to the original research log.
 
+**Retrain status (13 November 2026).** The 40,000-epoch retrain is finished. Five seeds (0, 1, 2, 3, 4) were trained with `06_Code/configs/nanda_unified.yaml` through `06_Code/scripts/run_nanda_benchmark.py`, using the runner's default predictors `l2`, `dropout_gap`, and `dropout_variance`. Canonical results are in `08_Experiments/results/results_per_nanda_power` (`aggregate.json`, plus `seed_0` through `seed_4` json and npy). The 2010 `.pt` checkpoints were not committed. They stay only on Jonathan's Mac. Official scoring has not been rerun on this folder. The predictor verdicts printed later in this file are still the legacy `nanda_unified` record.
+
 ---
 
 ## 1. Frozen Experimental Setup
 
-The experimental substrate is configured in `06_Code/configs/nanda_unified.yaml` and executed via `06_Code/scripts/run_nanda_benchmark.py`. It is the Nanda et al. (2023) modular-addition task. It does **not** strictly replicate Nanda Section 3, and it does **not** match that section exactly. The code was aligned with Nanda's released training code in November 2026. The paragraph "Training setup (retrain, Nov 2026)" below is the description of that code. Every \(G_i\) and every predictor result printed later in this file was computed on the **old** setup (no \(W_O\), no causal mask, no warmup, init \(0.8/\sqrt{d_{\mathrm{model}}}\), checkpoints every 50 epochs, primary grok cut 0.9). Those numbers must be recomputed after the 40,000-epoch retrain. They are not results of the new setup.
+The experimental substrate is configured in `06_Code/configs/nanda_unified.yaml` and executed via `06_Code/scripts/run_nanda_benchmark.py`. It is the Nanda et al. (2023) modular-addition task. It does **not** strictly replicate Nanda Section 3, and it does **not** match that section exactly. The code was aligned with Nanda's released training code in November 2026. The paragraph "Training setup (retrain, Nov 2026)" below is the description of that code. The retrain that uses this setup finished on 13 November 2026. \(G_i\) at the cuts stored in `aggregate.json` are listed under "New-setup grok epochs". Every predictor verdict printed later in this file was computed on the **old** setup (no \(W_O\), no causal mask, no warmup, init \(0.8/\sqrt{d_{\mathrm{model}}}\), checkpoints every 50 epochs, primary grok cut 0.9). Those verdicts are not results of the new setup. They still have to be recomputed.
 
 ### Training setup (retrain, Nov 2026)
 
@@ -57,12 +59,21 @@ Scripts updated for the new checkpoint spacing or the new \(G_i\): `run_nanda_be
 - **Canonical results folder**:
   - New runs and all predictor calculations read and write `08_Experiments/results/results_per_nanda_power`. That folder is the default `--output_dir` of `run_nanda_benchmark.py` and the default `--results-dir` of the analysis scripts. Analysis files go in `<that folder>/analysis`.
   - `08_Experiments/results/nanda_unified` is a legacy record of the previous setup. Nothing in the new run reads it or writes into it. A script uses it only when that path is passed explicitly (`--results-dir 08_Experiments/results/nanda_unified` or `--output_dir` set to that path).
-  - Retrain command (defaults already point at the new folder): `python 06_Code/scripts/run_nanda_benchmark.py --seeds 5 --epochs 40000 --config 06_Code/configs/nanda_unified.yaml`
-  - Analysis command after that retrain: `python 06_Code/scripts/analyze_nanda_unified.py`
+  - The retrain named above has been run. `aggregate.json` and the per-seed json and npy files are in git. The `.pt` checkpoints are not in git. They remain only on Jonathan's Mac.
+  - Retrain command that was used: `python 06_Code/scripts/run_nanda_benchmark.py --seeds 5 --epochs 40000 --config 06_Code/configs/nanda_unified.yaml`
+  - Analysis still to run: `python 06_Code/scripts/analyze_nanda_unified.py`
 - **Random Seeds & Grokking Definition**:
   - Exactly 5 deterministic seeds: `seed = 0, 1, 2, 3, 4`.
   - *Reason for 5 Seeds*: Matches Nanda et al. (2023). In addition, $n = 5$ is the minimal sample size for Spearman's rank correlation $\rho$ to achieve one-sided statistical significance ($p < 0.05$, where $P(\rho \ge 0.9) = 5/120 \approx 0.0417$) while tolerating up to 1 non-firing seed ($n_{\text{firing}} \ge 4$, where $P(\rho = 1.0) = 1/24 \approx 0.0417$). Seed counts below 5 cannot achieve statistical significance (*2026-09-01: Methodology: Justifying 3-run protocol*; *2026-11-09: Why the benchmark uses 5 seeds*).
-  - *Grokking Definition (code, Nov 2026)*: $G_i$ is the first epoch where test accuracy strictly exceeds $0.99$. Cuts $0.90$ and $0.95$ are secondary. The list below is the **old** primary cut of $0.90$ from the saved run and must be recomputed after the retrain.
+  - *Grokking Definition (code, Nov 2026)*: $G_i$ is the first epoch where test accuracy strictly exceeds $0.99$. Cuts $0.90$ and $0.95$ are secondary.
+  - *New-setup grok epochs, from `08_Experiments/results/results_per_nanda_power/aggregate.json` only (13 November 2026)*:
+    - Top-level keys: `n_seeds` (5), `epochs` (40000), `grok_epoch_mean`, `grok_epoch_std`, `grok_epochs`, `grok_thresholds` (`[0.99, 0.9, 0.95]`), `grok_epochs_by_threshold` (keys `0.99`, `0.9`, `0.95`; each has `per_seed`, `mean`, `std`, `n_grokked`), `n_limit_cycle` (0), `seeds` (five objects).
+    - Each seed object has: `seed`, `epochs`, `modulus`, `grok_epoch`, `grok_epochs_by_threshold`, `final_train_acc`, `final_test_acc`, `l2_norm_init`, `l2_norm_final`, `sum_w2_init`, `sum_w2_final`, `token_embedding_share_init`, `l2_predictor`, `dropout_final_gap_by_rate`, `dropout_variance_predictor`, `spectral_predictor`, `age_predictor`, `htsr_predictor`, `higher_mi_predictor`, `commutator_defect_predictor`, `limit_cycle_check`, `wall_time_sec`. On seed 0, `spectral_predictor`, `age_predictor`, `htsr_predictor`, `higher_mi_predictor`, and `commutator_defect_predictor` are null. `l2_predictor`, `dropout_final_gap_by_rate`, and `dropout_variance_predictor` are filled.
+    - Primary cut $0.99$ (`grok_epochs`, and `grok_epochs_by_threshold["0.99"].per_seed`): seed 0 = 8021, seed 1 = 8253, seed 2 = 4094, seed 3 = 7831, seed 4 = 6637. Mean $6967.2$, standard deviation $1541.0539769910722$, `n_grokked` = 5.
+    - Cut $0.9$: seed 0 = 7688, seed 1 = 7870, seed 2 = 3790, seed 3 = 7114, seed 4 = 5650. Mean $6422.4$, standard deviation $1529.8190219761289$, `n_grokked` = 5.
+    - Cut $0.95$: seed 0 = 7785, seed 1 = 8011, seed 2 = 3888, seed 3 = 7273, seed 4 = 5810. Mean $6553.4$, standard deviation $1537.2872991084002$, `n_grokked` = 5.
+    - Each seed's `final_train_acc` and `final_test_acc` are $1.0$. Each `limit_cycle` flag is false.
+  - *Next, not done yet*: run `python 06_Code/scripts/analyze_nanda_unified.py` on `08_Experiments/results/results_per_nanda_power`; recompute $G_i$ at the $0.99$ cut together with all 8 predictors; revisit the L2 open list, items 4 (MA-of-MA on a fixed clock), 5 (the only rule that passes looks into the future), 6 (causal smoothing uses the future), 10 (every weight lumped together), and 11 (window sizes never tested).
   - *Old-setup epochs at the old $0.90$ cut (not the new $G_i$)*:
     - Seed 0: $G_0 = 12987$ (accuracy $>0.95$: 13133; $>0.99$: 13457)
     - Seed 1: $G_1 = 6921$ (accuracy $>0.95$: 7031; $>0.99$: 7237)
