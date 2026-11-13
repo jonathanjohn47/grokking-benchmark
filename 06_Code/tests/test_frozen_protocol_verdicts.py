@@ -28,22 +28,16 @@ def scored():
 
 
 def test_l2_official_row_is_the_confirmed_peak(scored):
-    """One official row. The old moving-average rules are exploratory."""
+    """One official row: the confirmed peak of the total sum of squared weights."""
     l2 = next(p for p in scored["predictors"] if p["predictor"] == "L2 Norm")
     names = [r["signal"] for r in l2["rows"]]
-    assert "L2: sum(w^2) half-way down from peak" not in names
-    assert names[0] == "L2: confirmed peak of sum w^2 (k=100)"
-    assert "L2: MA crossover 50/200 (exploratory)" in names
-    assert "L2: MA-of-MA zero crossing 20 (exploratory)" in names
+    assert names == ["L2: confirmed peak of sum w^2 (k=100)"]
     official = [r for r in l2["rows"] if r["counts_towards_predictor"]]
-    exploratory = [r for r in l2["rows"] if r["role"] == "exploratory"]
     assert len(official) == 1
-    assert len(exploratory) == 2
     assert l2["n_predeclared_rows"] == 1
     assert l2["n_predeclared_passing"] == 1
     assert l2["verdict"] == "PASS"
     assert official[0]["verdict"] == "PASS"
-    assert all(r["counts_towards_predictor"] is False for r in exploratory)
 
 
 def test_l2_confirmed_peak_passes_legacy_at_neighbouring_lead_fractions():

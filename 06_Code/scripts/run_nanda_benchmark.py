@@ -18,11 +18,10 @@ Per seed it:
   - builds TransformerFourHead with Nanda's randn/sqrt init
   - trains full-batch with AdamW and a 10-step linear warmup
   - logs every epoch, before the optimizer step:
-      train loss, test loss, train acc, test acc, l2_norm, sum_w2,
-      per-module sum_w2 (token_embedding, position_embedding,
-      attention_qkv, attention_out, mlp, output_head)
-  - after training: computes the L2-Norm predictor signals (MA crossover,
-    MA-of-MA zero crossing, noise floor) and the Dropout gap sweep, and
+      train loss, test loss, train acc, test acc, and the total sum of
+      squared weights (Nanda et al. 2023 Figure 7)
+  - after training: records the confirmed-peak epoch of that sum, and the
+    Dropout gap sweep, and
     saves them under output_dir/seed_{seed}/
 
 After all seeds it aggregates: mean grok epoch, per-seed predictor
@@ -67,14 +66,9 @@ from models.transformer_four_head import (                                 # noq
     cross_entropy_high_precision,
 )
 from predictors.l2_norm import (                                          # noqa: E402
-    compute_l2_norm,
     compute_sum_of_squared_weights,
-    compute_per_module_sum_of_squared_weights,
-    compute_fast_slow_moving_averages,
-    detect_ma_crossover,
-    compute_ma_of_slow_ma,
-    compute_noise_floor,
-    detect_ma_of_ma_zero_crossing,
+    detect_confirmed_sum_w2_peak,
+    sum_w2_peak,
 )
 from predictors.dropout import (                                          # noqa: E402
     compute_dropout_gap_multi_rate,
@@ -120,11 +114,6 @@ LIMIT_CYCLE_STD_ABOVE = None
 DROPOUT_RATES = None              # multi-rate sweep
 DROPOUT_VARIANCE_RATE = None
 DROPOUT_VARIANCE_N_SAMPLES = None
-L2_FAST_WINDOW = None
-L2_SLOW_WINDOW = None
-L2_MA_OF_MA_FAST_WINDOW = None
-L2_SKIP_EPOCHS = None
-L2_QUIET_EPOCH_CUTOFF = None
 
 # Dropout-Variance predictor (Salah & Yevick, arXiv:2507.11645): at a
 # checkpoint, run n_samples stochastic forward passes with dropout active
@@ -253,9 +242,8 @@ def dropout_variance_checkpoint_schedule(total_epochs, num_points=len(OLD_24_LOG
     LEGACY — for Archive comparison only, not used in unified benchmark
     (24 log-spaced points; see OLD_24_LOG_SPACED_CHECKPOINTS and the
     checkpoint-schedule block above). Nothing in the main flow calls it.
-    Log-uniform-spaced epoch indices for the dropout-variance checkpoints,
-    same spirit as l2_norm.resample_to_log_uniform_grid's log-epoch grid —
-    equal VISUAL spacing on a log-x plot, so early training (where things
+    Log-uniform-spaced epoch indices for the dropout-variance checkpoints.
+    Equal visual spacing on a log-x plot, so early training (where things
     change fast) gets proportionally more checkpoints than the long flat
     tail. Returns a sorted list of 0-based epoch indices (matching the
     training loop's `epoch` variable, range(total_epochs)), always
@@ -304,11 +292,6 @@ def load_config(path):
         "dropout_rates": [float(r) for r in cfg["dropout"]["rates"]],
         "dropout_variance_rate": float(cfg["dropout"]["variance_rate"]),
         "dropout_variance_n_samples": int(cfg["dropout"]["n_samples"]),
-        "l2_fast_window": int(cfg["l2_norm"]["fast_window"]),
-        "l2_slow_window": int(cfg["l2_norm"]["slow_window"]),
-        "l2_ma_of_ma_fast_window": int(cfg["l2_norm"]["ma_of_ma_fast_window"]),
-        "l2_skip_epochs": int(cfg["l2_norm"]["skip_epochs"]),
-        "l2_quiet_epoch_cutoff": int(cfg["l2_norm"]["quiet_epoch_cutoff"]),
     }
     # Fail loud if the config is internally inconsistent.
     assert parsed["vocab_size"] == parsed["modulus"] + 1, \
@@ -326,8 +309,6 @@ def apply_config_constants(cfg):
     global GROK_THRESHOLDS, GROK_ACC_THRESHOLD, LOG_LINES_PER_RUN
     global LIMIT_CYCLE_SETTLE_FRACTION, LIMIT_CYCLE_STD_ABOVE
     global DROPOUT_RATES, DROPOUT_VARIANCE_RATE, DROPOUT_VARIANCE_N_SAMPLES
-    global L2_FAST_WINDOW, L2_SLOW_WINDOW, L2_MA_OF_MA_FAST_WINDOW
-    global L2_SKIP_EPOCHS, L2_QUIET_EPOCH_CUTOFF
     GROK_THRESHOLDS = list(cfg["grok_thresholds"])
     GROK_ACC_THRESHOLD = GROK_THRESHOLDS[0]      # primary
     LOG_LINES_PER_RUN = cfg["log_lines_per_run"]
@@ -336,11 +317,6 @@ def apply_config_constants(cfg):
     DROPOUT_RATES = list(cfg["dropout_rates"])
     DROPOUT_VARIANCE_RATE = cfg["dropout_variance_rate"]
     DROPOUT_VARIANCE_N_SAMPLES = cfg["dropout_variance_n_samples"]
-    L2_FAST_WINDOW = cfg["l2_fast_window"]
-    L2_SLOW_WINDOW = cfg["l2_slow_window"]
-    L2_MA_OF_MA_FAST_WINDOW = cfg["l2_ma_of_ma_fast_window"]
-    L2_SKIP_EPOCHS = cfg["l2_skip_epochs"]
-    L2_QUIET_EPOCH_CUTOFF = cfg["l2_quiet_epoch_cutoff"]
 
 
 def pick_device():
@@ -455,11 +431,10 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
     runs this call; a predictor NOT in that set falls back to its block
     in old_summary (if any) in the final summary.json, so a predictor
     that was already done is never silently dropped or recomputed just
-    because a different predictor triggered this retrain. l2_norm_history
-    itself is always collected during training regardless (needed for the
-    training-data plots either way, and is cheap), but the L2-predictor
-    *signal* block still only overwrites old_summary's when "l2" is
-    actually requested."""
+    because a different predictor triggered this retrain. sum_w2_history
+    (total sum of squared weights) is always collected during training
+    (it is cheap), but the L2-predictor *signal* block still only
+    overwrites old_summary's when "l2" is actually requested."""
     out_dir = seed_dir_for(args.output_dir, seed)
     os.makedirs(out_dir, exist_ok=True)
     ckpt_dir = checkpoints_dir_for(args.output_dir, seed)
@@ -517,7 +492,7 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
 
     train_acc_history, test_acc_history, loss_history = [], [], []
     test_loss_history = []
-    l2_norm_history, sum_w2_history, per_module_sum_w2_history = [], [], []
+    sum_w2_history = []
 
     # Checkpoint SAVE grid (every SAVE_EVERY epochs + final epoch) and the
     # EVAL grid (subsampled from it, every args.eval_every epochs + final
@@ -562,10 +537,7 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
         test_acc_history.append(test_correct / test_total)
         loss_history.append(train_loss.item())
         test_loss_history.append(test_loss.item())
-        l2_norm_history.append(compute_l2_norm(model))
         sum_w2_history.append(compute_sum_of_squared_weights(model))
-        per_module_sum_w2_history.append(
-            compute_per_module_sum_of_squared_weights(model))
 
         train_loss.backward()
         optimizer.step()
@@ -626,35 +598,17 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
     grok_epochs_all = grok_epochs_by_threshold(test_acc_history)
     grok_epoch = grok_epoch_from(test_acc_history)
 
-    # (g) L2-Norm predictor signals (post-training)
-    epoch_grid, fast_ma, slow_ma = compute_fast_slow_moving_averages(
-        l2_norm_history, fast_window=L2_FAST_WINDOW, slow_window=L2_SLOW_WINDOW)
-    ma_crossover_epoch = detect_ma_crossover(
-        epoch_grid, fast_ma, slow_ma, skip_epochs=L2_SKIP_EPOCHS)
-    fast_ma_of_slow_ma, ma_of_ma_diff = compute_ma_of_slow_ma(
-        slow_ma, fast_window=L2_MA_OF_MA_FAST_WINDOW)
-    noise_floor = compute_noise_floor(
-        ma_of_ma_diff, epoch_grid, quiet_epoch_cutoff=L2_QUIET_EPOCH_CUTOFF)
-    ma_of_ma_zero_crossing_epoch = detect_ma_of_ma_zero_crossing(
-        epoch_grid, ma_of_ma_diff, skip_epochs=L2_SKIP_EPOCHS)
-
-    measurements.save_l2_norm_data(
-        l2_norm_history, epoch_grid, fast_ma, slow_ma,
-        fast_ma_of_slow_ma, ma_of_ma_diff, ma_crossover_epoch,
-        sum_w2_history=sum_w2_history,
-        per_module_sum_w2_history=per_module_sum_w2_history,
-    )
-
+    # (g) L2 predictor: confirmed peak of the total sum of squared weights.
+    measurements.save_l2_norm_data(sum_w2_history)
+    peak_epoch, peak_value = sum_w2_peak(sum_w2_history)
+    confirmed_epoch = detect_confirmed_sum_w2_peak(sum_w2_history)
     l2_signals = {
-        "ma_crossover_epoch": _num_or_none(ma_crossover_epoch),
-        "ma_of_ma_zero_crossing_epoch": _num_or_none(ma_of_ma_zero_crossing_epoch),
-        "noise_floor": float(noise_floor),
-        "windows": {
-            "fast": L2_FAST_WINDOW, "slow": L2_SLOW_WINDOW,
-            "ma_of_ma_fast": L2_MA_OF_MA_FAST_WINDOW,
-            "skip_epochs": L2_SKIP_EPOCHS,
-            "quiet_epoch_cutoff": L2_QUIET_EPOCH_CUTOFF,
-        },
+        "signal": "sum of squared weights",
+        "rule": "confirmed peak (own choice)",
+        "k": 100,
+        "peak_epoch": peak_epoch,
+        "peak_S": peak_value,
+        "confirmed_peak_epoch": confirmed_epoch,
     }
     with open(os.path.join(measurements.l2_norm_dir,
                            "l2_predictor_signals.json"), "w") as handle:
@@ -759,12 +713,8 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
         "grok_epochs_by_threshold": grok_epochs_all,
         "final_train_acc": float(train_acc_history[-1]),
         "final_test_acc": float(test_acc_history[-1]),
-        "l2_norm_init": float(l2_norm_history[0]),
-        "l2_norm_final": float(l2_norm_history[-1]),
         "sum_w2_init": float(sum_w2_history[0]),
         "sum_w2_final": float(sum_w2_history[-1]),
-        "token_embedding_share_init": float(
-            per_module_sum_w2_history[0]["token_embedding"] / sum_w2_history[0]),
         "l2_predictor": l2_block,
         "dropout_final_gap_by_rate": dropout_gap_block,
         "dropout_variance_predictor": dropout_variance_block,
@@ -1543,8 +1493,8 @@ def aggregate(summaries, args):
         if lp is None:
             print(f"  seed {s['seed']}: n/a (not computed for this seed)")
             continue
-        print(f"  seed {s['seed']}: MA-crossover={lp['ma_crossover_epoch']}  "
-              f"MA-of-MA zero-cross={lp['ma_of_ma_zero_crossing_epoch']}  "
+        print(f"  seed {s['seed']}: confirmed peak P_i={lp.get('confirmed_peak_epoch')}  "
+              f"global peak epoch={lp.get('peak_epoch')}  "
               f"(grok={s['grok_epoch']})")
 
     print("\nDropout-Variance predictor (per seed):")

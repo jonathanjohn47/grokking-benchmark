@@ -55,59 +55,10 @@ class PredictorMeasurements:
 
     # ========== L2 NORM MEASUREMENTS ==========
 
-    def save_l2_norm_data(self, l2_norm_history, epoch_grid, fast_ma, slow_ma,
-                         fast_ma_of_slow_ma, ma_of_ma_diff, detection_epoch=None,
-                         sum_w2_history=None, per_module_sum_w2_history=None):
-        """Save all L2 Norm measurements.
-
-        sum_w2_history: optional per-epoch list of sum-of-squared-weights
-            (the Nanda Figure 7 quantity; == l2_norm_history ** 2).
-        per_module_sum_w2_history: optional per-epoch list of dicts
-            {group_name: sum_w2} from
-            predictors.l2_norm.compute_per_module_sum_of_squared_weights.
-            Saved as per_module_sum_w2.npy shaped [n_groups, n_epochs] with
-            the row order recorded in per_module_sum_w2_names.npy.
-        """
-
-        # Raw L2 norm
-        np.save(os.path.join(self.l2_norm_dir, "l2_norm_history.npy"), l2_norm_history)
-
-        # sum w^2 (Nanda Fig 7 quantity) — total and per module
-        if sum_w2_history is not None:
-            np.save(os.path.join(self.l2_norm_dir, "sum_w2_history.npy"),
-                    np.asarray(sum_w2_history, dtype=float))
-        if per_module_sum_w2_history:
-            group_names = list(per_module_sum_w2_history[0].keys())
-            per_module_matrix = np.array(
-                [[row[g] for row in per_module_sum_w2_history] for g in group_names],
-                dtype=float,
-            )
-            np.save(os.path.join(self.l2_norm_dir, "per_module_sum_w2.npy"), per_module_matrix)
-            np.save(os.path.join(self.l2_norm_dir, "per_module_sum_w2_names.npy"),
-                    np.array(group_names))
-
-        # Smoothed L2 norm (simple low-pass filter)
-        l2_norm_smoothed = self._smooth_signal(l2_norm_history, window=50)
-        np.save(os.path.join(self.l2_norm_dir, "l2_norm_smoothed.npy"), l2_norm_smoothed)
-
-        # Moving averages
-        np.save(os.path.join(self.l2_norm_dir, "epoch_grid.npy"), epoch_grid)
-        np.save(os.path.join(self.l2_norm_dir, "fast_ma.npy"), fast_ma)
-        np.save(os.path.join(self.l2_norm_dir, "slow_ma.npy"), slow_ma)
-        np.save(os.path.join(self.l2_norm_dir, "fast_ma_of_slow_ma.npy"), fast_ma_of_slow_ma)
-        np.save(os.path.join(self.l2_norm_dir, "ma_of_ma_diff.npy"), ma_of_ma_diff)
-
-        # Acceleration derivatives
-        accel_raw = np.diff(l2_norm_history)
-        accel_smoothed = self._smooth_signal(accel_raw, window=50)
-        accel_double_smoothed = self._smooth_signal(accel_smoothed, window=50)
-
-        np.save(os.path.join(self.l2_norm_dir, "acceleration_raw.npy"), accel_raw)
-        np.save(os.path.join(self.l2_norm_dir, "acceleration_smoothed.npy"), accel_smoothed)
-        np.save(os.path.join(self.l2_norm_dir, "acceleration_double_smoothed.npy"), accel_double_smoothed)
-
-        if detection_epoch is not None:
-            np.save(os.path.join(self.l2_norm_dir, "detection_epoch.npy"), np.array([detection_epoch]))
+    def save_l2_norm_data(self, sum_w2_history):
+        """Save the per-epoch total sum of squared weights (Nanda et al. 2023, Figure 7)."""
+        np.save(os.path.join(self.l2_norm_dir, "sum_w2_history.npy"),
+                np.asarray(sum_w2_history, dtype=float))
 
     # ========== DROPOUT MEASUREMENTS ==========
 
@@ -396,83 +347,35 @@ class PredictorMeasurements:
                     np.array(history[key]))
 
 
-    def generate_l2_norm_visualizations(self, l2_norm_history, epoch_grid, fast_ma, slow_ma,
-                                       fast_ma_of_slow_ma, ma_of_ma_diff, test_acc_history,
-                                       grok_epoch, detection_epoch=None, trigger_epoch=None):
-        """Generate standalone L2 Norm visualization graphs."""
+    def generate_l2_norm_visualizations(self, sum_w2_history, grok_epoch,
+                                       peak_epoch=None, confirmed_epoch=None):
+        """Plot the total sum of squared weights, with the global peak and confirmed-peak epoch."""
+        from predictors.l2_norm import detect_confirmed_sum_w2_peak, sum_w2_peak
 
-        num_epochs = len(l2_norm_history)
-        epochs_axis = range(1, num_epochs + 1)
+        series = np.asarray(sum_w2_history, dtype=float)
+        epochs_axis = np.arange(len(series))
+        if peak_epoch is None or confirmed_epoch is None:
+            found_peak, _ = sum_w2_peak(series)
+            if peak_epoch is None:
+                peak_epoch = found_peak
+            if confirmed_epoch is None:
+                confirmed_epoch = detect_confirmed_sum_w2_peak(series)
 
-        # 1. L2 Norm curve
         fig, ax = plt.subplots(figsize=(12, 7))
-        ax.plot(epochs_axis, l2_norm_history, color="purple", linewidth=2)
-        if detection_epoch is not None:
-            ax.axvline(x=detection_epoch, color="red", linestyle="--", linewidth=2,
-                       label=f"MA Crossover (epoch {detection_epoch:.0f})")
-        ax.axvline(x=grok_epoch, color="green", linestyle=":", linewidth=2,
-                   label=f"Grok epoch (epoch {grok_epoch})")
+        ax.plot(epochs_axis, series, color="#1b7f4e", linewidth=1.4, label=r"Sum of squared weights $\sum w^2$")
+        ax.axvline(x=grok_epoch, color="#b00020", linestyle="-", linewidth=1.6, label=f"Grok cut 0.99 (epoch {grok_epoch})")
+        if peak_epoch is not None:
+            ax.axvline(x=peak_epoch, color="#1f4e79", linestyle="--", linewidth=1.3, label=f"Global peak (epoch {peak_epoch})")
+        if confirmed_epoch is not None:
+            ax.axvline(x=confirmed_epoch, color="#6a3d9a", linestyle="-.", linewidth=1.3,
+                       label=f"Confirmed peak P_i (epoch {confirmed_epoch})")
         ax.set_xscale("log")
-        ax.set_xlabel("Epoch (log scale)")
-        ax.set_ylabel("L2 Norm")
-        ax.set_title("L2 Norm of Model Weights")
+        ax.set_xlabel("Epoch index (log scale)")
+        ax.set_ylabel(r"$\sum w^2$")
+        ax.set_title("Total sum of squared weights")
         ax.legend()
         ax.grid(True, alpha=0.3)
-        plt.savefig(os.path.join(self.l2_norm_dir, "l2_norm_curve.png"), dpi=150, bbox_inches='tight')
-        plt.close(fig)
-
-        # 2. MA crossover detection
-        fig, ax = plt.subplots(figsize=(12, 7))
-        ax.plot(epoch_grid, fast_ma, label="Fast MA (window=50)", linewidth=2, color="blue")
-        ax.plot(epoch_grid, slow_ma, label="Slow MA (window=200)", linewidth=2, color="orange")
-        if detection_epoch is not None:
-            ax.axvline(x=detection_epoch, color="red", linestyle="--", linewidth=2,
-                       label=f"Crossover (epoch {detection_epoch:.0f})")
-        ax.axvline(x=grok_epoch, color="green", linestyle=":", linewidth=2,
-                   label=f"Grok epoch (epoch {grok_epoch})")
-        ax.set_xscale("log")
-        ax.set_xlabel("Epoch (log scale)")
-        ax.set_ylabel("L2 Norm")
-        ax.set_title("Moving Average Crossover Detection")
-        ax.legend()
-        ax.grid(True, alpha=0.3)
-        plt.savefig(os.path.join(self.l2_norm_dir, "ma_of_slow_ma_crossover.png"), dpi=150, bbox_inches='tight')
-        plt.close(fig)
-
-        # 3. MA-of-MA differential
-        fig, ax = plt.subplots(figsize=(12, 7))
-        ax.plot(epoch_grid, ma_of_ma_diff, color="darkred", linewidth=2, label="MA-of-MA Differential")
-        ax.axhline(y=0, color="black", linestyle="-", linewidth=0.5, alpha=0.5)
-        if trigger_epoch is not None:
-            ax.axvline(x=trigger_epoch, color="red", linestyle="--", linewidth=2,
-                       label=f"Zero-crossing (epoch {trigger_epoch:.0f})")
-        ax.axvline(x=grok_epoch, color="green", linestyle=":", linewidth=2,
-                   label=f"Grok epoch (epoch {grok_epoch})")
-        ax.set_xscale("log")
-        ax.set_xlabel("Epoch (log scale)")
-        ax.set_ylabel("Differential")
-        ax.set_title("MA-of-MA Differential: Zero-Crossing Trigger")
-        ax.legend()
-        ax.grid(True, alpha=0.3)
-        plt.savefig(os.path.join(self.l2_norm_dir, "ma_of_ma_diff.png"), dpi=150, bbox_inches='tight')
-        plt.close(fig)
-
-        # 4. MA-of-MA differential vs grokking (linear scale)
-        fig, ax = plt.subplots(figsize=(12, 7))
-        ax.plot(epoch_grid, ma_of_ma_diff, color="darkred", linewidth=2, label="MA-of-MA Differential")
-        ax.axhline(y=0, color="black", linestyle="-", linewidth=0.5, alpha=0.5)
-        if trigger_epoch is not None:
-            ax.axvline(x=trigger_epoch, color="red", linestyle="--", linewidth=2,
-                       label=f"Zero-crossing (epoch {trigger_epoch:.0f})")
-        ax.axvline(x=grok_epoch, color="green", linestyle=":", linewidth=2,
-                   label=f"Grok epoch (epoch {grok_epoch})")
-        ax.set_xscale("linear")
-        ax.set_xlabel("Epoch (linear scale)")
-        ax.set_ylabel("Differential")
-        ax.set_title("MA-of-MA Differential: Linear Scale")
-        ax.legend()
-        ax.grid(True, alpha=0.3)
-        plt.savefig(os.path.join(self.l2_norm_dir, "ma_of_ma_diff_linear.png"), dpi=150, bbox_inches='tight')
+        plt.savefig(os.path.join(self.l2_norm_dir, "l2_norm_curve.png"), dpi=150, bbox_inches="tight")
         plt.close(fig)
 
     def generate_dropout_visualizations(self, dropout_gap_epochs, dropout_gap_history_by_rate,
@@ -499,9 +402,9 @@ class PredictorMeasurements:
         plt.savefig(os.path.join(self.dropout_dir, "dropout_gap_curve.png"), dpi=150, bbox_inches='tight')
         plt.close(fig)
 
-    def generate_combined_report(self, train_acc, test_acc, loss, l2_norm_history,
+    def generate_combined_report(self, train_acc, test_acc, loss, sum_w2_history,
                                 dropout_gap_epochs, dropout_gap_history_by_rate, dropout_rates,
-                                epoch_grid, fast_ma, slow_ma, grok_epoch, detection_epoch=None):
+                                grok_epoch, peak_epoch=None, confirmed_epoch=None):
         """Generate combined PDF report with all measurements."""
 
         num_epochs = len(train_acc)
@@ -535,20 +438,22 @@ class PredictorMeasurements:
             pdf.savefig(fig)
             plt.close(fig)
 
-            # Page 3: L2 Norm with MA crossover
+            # Page 3: total sum of squared weights
             fig, ax = plt.subplots(figsize=(12, 7))
-            ax.plot(epochs_axis, l2_norm_history, color="purple", linewidth=2, label="L2 Norm")
-            ax.plot(epoch_grid, fast_ma, label="Fast MA", linewidth=2, color="blue", alpha=0.7)
-            ax.plot(epoch_grid, slow_ma, label="Slow MA", linewidth=2, color="orange", alpha=0.7)
-            if detection_epoch is not None:
-                ax.axvline(x=detection_epoch, color="red", linestyle="--", linewidth=2,
-                           label=f"Crossover ({detection_epoch:.0f})")
-            ax.axvline(x=grok_epoch, color="green", linestyle=":", linewidth=2,
+            ax.plot(np.arange(len(sum_w2_history)), sum_w2_history, color="#1b7f4e", linewidth=1.4,
+                    label=r"Sum of squared weights")
+            if peak_epoch is not None:
+                ax.axvline(x=peak_epoch, color="#1f4e79", linestyle="--", linewidth=1.3,
+                           label=f"Global peak ({peak_epoch})")
+            if confirmed_epoch is not None:
+                ax.axvline(x=confirmed_epoch, color="#6a3d9a", linestyle="-.", linewidth=1.3,
+                           label=f"Confirmed peak ({confirmed_epoch})")
+            ax.axvline(x=grok_epoch, color="#b00020", linestyle="-", linewidth=1.6,
                        label=f"Grok ({grok_epoch})")
             ax.set_xscale("log")
             ax.set_xlabel("Epoch (log scale)")
-            ax.set_ylabel("L2 Norm")
-            ax.set_title("L2 Norm & Moving Averages")
+            ax.set_ylabel(r"$\sum w^2$")
+            ax.set_title("Total sum of squared weights")
             ax.legend()
             ax.grid(True, alpha=0.3)
             pdf.savefig(fig)
