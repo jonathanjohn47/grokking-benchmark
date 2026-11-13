@@ -140,15 +140,10 @@ dropout:
 # L2-Norm predictor windows. Source: own choices from the 2026-08-07 sessions
 # (see context.md), identical to 06_Code/src/train_four_head.py. Not from a paper.
 l2_norm:
-  fast_window: 50
-  slow_window: 200
-  ma_of_ma_fast_window: 20
-  skip_epochs: 100
-  quiet_epoch_cutoff: 90
+  # Own-choice confirmation window for the sum-of-squared-weights peak.
+  # The number used by the scorer is CONFIRMED_PEAK_K in predictors/l2_norm.py.
+  confirmed_peak_k: 100
 
 logging:
-  # Weight-norm quantities recorded every epoch for the weight-space predictors.
-  weight_norm_total_l2: true            # sqrt(sum w^2) over all parameters
-  weight_norm_total_sum_w2: true        # sum w^2 over all parameters (Nanda Fig 7 quantity)
-  weight_norm_per_module_sum_w2: true   # groups: token_embedding, position_embedding,
-                                        #         attention_qkv, attention_out, mlp, output_head
+  # Recorded every epoch. This is Nanda et al. (2023) Figure 7.
+  weight_norm_total_sum_w2: true        # sum w^2 over all parameters

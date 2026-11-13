@@ -64,9 +64,10 @@ def test_retrain_official_row_fails_the_frozen_protocol():
     assert verdict["n_firing"] == 5
     assert verdict["verdict"] == "FAIL"
     assert verdict["checks"]["mean_rel_lead_in_window"] is False
-    exploratory = [r for r in scored["rows"] if not r["counts_towards_predictor"]]
-    assert len(exploratory) == 2
-    assert all(r["frozen_protocol_verdict"]["verdict"] == "FAIL" for r in exploratory)
+    assert verdict["lead_frac"] == 1.0
+    assert round(verdict["rho"], 4) == 0.1539
+    assert round(verdict["mean_rel_lead"], 4) == 0.9571
+    assert [r for r in scored["rows"] if not r["counts_towards_predictor"]] == []
 
 
 @pytest.mark.parametrize("lead_c", [0.7, 0.9])

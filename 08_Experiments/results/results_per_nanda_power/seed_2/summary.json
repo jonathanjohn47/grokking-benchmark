@@ -10,22 +10,15 @@
   },
   "final_train_acc": 1.0,
   "final_test_acc": 1.0,
-  "l2_norm_init": 42.17961120605469,
-  "l2_norm_final": 34.96218490600586,
   "sum_w2_init": 1779.1194684505463,
   "sum_w2_final": 1222.3542826920748,
-  "token_embedding_share_init": 0.06357421571943957,
   "l2_predictor": {
-    "ma_crossover_epoch": 101.14340233651747,
-    "ma_of_ma_zero_crossing_epoch": 479.98446526418223,
-    "noise_floor": 0.0004915205722350505,
-    "windows": {
-      "fast": 50,
-      "slow": 200,
-      "ma_of_ma_fast": 20,
-      "skip_epochs": 100,
-      "quiet_epoch_cutoff": 90
-    }
+    "signal": "sum of squared weights",
+    "rule": "confirmed peak (own choice)",
+    "k": 100,
+    "peak_epoch": 176,
+    "peak_S": 3630.8399645034224,
+    "confirmed_peak_epoch": 276
   },
   "dropout_final_gap_by_rate": {
     "0.1": -0.008837677592571924,

@@ -33,15 +33,7 @@ Contains general training metrics for a single 10,000-epoch run:
 - `training_report.pdf` — 4-page PDF with graphs (grokking curve, loss, L2 norm, Dropout Gap)
 
 ### `l2_norm/`
-Contains all L2 Norm predictor data and analysis:
-- **Raw metrics:** `l2_norm_history.npy` — L2 norm of model weights per epoch
-- **Moving averages:** `slow_ma.npy`, `fast_ma.npy`, `fast_ma_of_slow_ma.npy` — Smoothed L2 norm curves
-- **Trigger data:** `ma_of_ma_diff.npy`, `epoch_grid.npy` — Used for zero-crossing detection
-- **Plots:**
-  - `ma_of_slow_ma_crossover.png` — Slow MA vs. fast-MA-of-slow-MA with trigger marked
-  - `ma_of_slow_ma_diff.png` — Difference curve (log-x scale)
-  - `ma_of_slow_ma_diff_linear.png` — Difference curve (linear x-scale)
-  - `ma_of_ma_diff_vs_grokking_linear.png` — Difference overlaid on grokking curve
+The live predictor stores one series: `sum_w2_history.npy`, the total sum of squared weights. The confirmed-peak epoch is written in `l2_predictor_signals.json`.
 
 ### `dropout/`
 Contains all Dropout predictor data:

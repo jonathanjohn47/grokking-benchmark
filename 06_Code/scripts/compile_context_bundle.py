@@ -162,7 +162,7 @@ def extract_runner_constants_and_registry(runner_text, max_lines=400):
 
 
 def build_seed_table():
-    rows = [("seed", "grok_epoch", "l2_ma_crossover_epoch", "dropout_variance_peak_epoch", "dropout_gap@0.5")]
+    rows = [("seed", "grok_epoch", "l2_confirmed_peak_epoch", "dropout_variance_peak_epoch", "dropout_gap@0.5")]
     seed_dir = os.path.join(REPO_ROOT, "08_Experiments", "results", "results_per_nanda_power")
     if not os.path.isdir(seed_dir):
         return rows
@@ -175,7 +175,7 @@ def build_seed_table():
         with open(summary_path, "r", encoding="utf-8") as handle:
             summary = json.load(handle)
         grok_epoch = summary.get("grok_epoch", "-")
-        l2_epoch = summary.get("l2_predictor", {}).get("ma_crossover_epoch", "-")
+        l2_epoch = summary.get("l2_predictor", {}).get("confirmed_peak_epoch", "-")
         dv_epoch = summary.get("dropout_variance_predictor", {}).get("variance_peak_epoch", "-")
         gap05 = summary.get("dropout_final_gap_by_rate", {}).get("0.5", "-")
         rows.append((

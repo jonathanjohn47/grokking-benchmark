@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import os
 import re
 
-from predictors.l2_norm import compute_noise_floor, detect_ma_of_ma_zero_crossing, detect_ma_crossover
+from predictors.l2_norm import detect_confirmed_sum_w2_peak, sum_w2_peak
 
 # ======================================================================
 # 4-HEAD VARIANT of plot_results.py — now MULTI-RUN aware.
@@ -28,17 +28,11 @@ from predictors.l2_norm import compute_noise_floor, detect_ma_of_ma_zero_crossin
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 four_head_dir = os.path.join(project_root, "runs", "four_head")
 
-SKIP_EPOCHS = 100
-QUIET_EPOCH_CUTOFF = 90
-
 LEGACY_FILENAMES = [
     "train_acc_history.npy", "test_acc_history.npy", "loss_history.npy",
-    "l2_norm_history.npy", "dropout_gap_epochs.npy", "dropout_gap_history.npy",
+    "dropout_gap_epochs.npy", "dropout_gap_history.npy",
     "dropout_train_acc_history.npy", "dropout_eval_acc_history.npy",
-    "epoch_grid.npy", "fast_ma.npy", "slow_ma.npy", "fast_ma_of_slow_ma.npy",
-    "ma_of_ma_diff.npy", "training_report.pdf",
-    "ma_of_slow_ma_crossover.png", "ma_of_slow_ma_diff.png",
-    "ma_of_slow_ma_diff_linear.png", "ma_of_ma_diff_vs_grokking_linear.png",
+    "training_report.pdf",
     "grokking_curve.png", "loss_curve.png", "l2_norm_curve.png", "dropout_gap_curve.png",
 ]
 
@@ -90,10 +84,7 @@ def load_run_data(run_dir):
     # (key, relative_path).
     required_files = [
         ("train_acc", "training/train_acc_history.npy"), ("test_acc", "training/test_acc_history.npy"),
-        ("loss", "training/loss_history.npy"), ("l2_norm", "l2_norm/l2_norm_history.npy"),
-        ("epoch_grid", "l2_norm/epoch_grid.npy"), ("fast_ma", "l2_norm/fast_ma.npy"),
-        ("slow_ma", "l2_norm/slow_ma.npy"), ("fast_ma_of_slow_ma", "l2_norm/fast_ma_of_slow_ma.npy"),
-        ("ma_of_ma_diff", "l2_norm/ma_of_ma_diff.npy"),
+        ("loss", "training/loss_history.npy"), ("sum_w2", "l2_norm/sum_w2_history.npy"),
         ("dropout_gap_epochs", "dropout/dropout_gap_epochs.npy"),
         ("dropout_gap_by_rate", "dropout/dropout_gap_by_rate.npy"),
         ("dropout_rates", "dropout/dropout_rates.npy"),
@@ -111,25 +102,19 @@ def load_run_data(run_dir):
 
 
 def plot_single_run(run_number, run_dir, data):
-    """Recreates this run's own 8 plots, saved inside results/four_head/run_<N>/ itself."""
-    epoch_grid = data["epoch_grid"]
-    fast_ma = data["fast_ma"]
-    slow_ma = data["slow_ma"]
-    fast_ma_of_slow_ma = data["fast_ma_of_slow_ma"]
-    diff = data["ma_of_ma_diff"]
+    """Recreates this run's plots, saved inside results/four_head/run_<N>/ itself."""
     train_acc = data["train_acc"]
     test_acc = data["test_acc"]
     loss_history = data["loss"]
-    l2_norm_history = data["l2_norm"]
+    sum_w2 = data["sum_w2"]
     dropout_gap_epochs = data["dropout_gap_epochs"]
     dropout_gap_by_rate = data["dropout_gap_by_rate"]   # shape [rate, epoch]
     dropout_rates = data["dropout_rates"]
     num_epochs = data["num_epochs"]
     epochs_axis = range(1, num_epochs + 1)
 
-    noise_floor = compute_noise_floor(diff, epoch_grid, quiet_epoch_cutoff=QUIET_EPOCH_CUTOFF)
-    trigger_epoch = detect_ma_of_ma_zero_crossing(epoch_grid, diff, skip_epochs=SKIP_EPOCHS)
-    detection_epoch = detect_ma_crossover(epoch_grid, fast_ma, slow_ma, skip_epochs=SKIP_EPOCHS)
+    peak_epoch, _ = sum_w2_peak(sum_w2)
+    confirmed_epoch = detect_confirmed_sum_w2_peak(sum_w2)
     grokked = bool((test_acc > 0.99).any())
     grok_epoch = int(np.argmax(test_acc > 0.99)) if grokked else None
 
@@ -139,90 +124,7 @@ def plot_single_run(run_number, run_dir, data):
         plt.close(fig)
         print(f"[OK] Run {run_number}: plot saved to results/four_head/run_{run_number}/{filename}")
 
-    # Plot 1: Slow MA vs. Fast MA of Slow MA
-    fig, ax = plt.subplots(figsize=(12, 7))
-    ax.plot(epoch_grid, slow_ma, color="purple", linewidth=3.5, label="Slow MA (w=200)")
-    ax.plot(epoch_grid, fast_ma_of_slow_ma, color="orange", linewidth=3.5, label="Fast MA of Slow MA (w=20)")
-    if trigger_epoch is not None:
-        trigger_idx = np.argmin(np.abs(epoch_grid - trigger_epoch))
-        ax.axvline(x=trigger_epoch, color="red", linestyle="--", linewidth=2)
-        ax.scatter(trigger_epoch, slow_ma[trigger_idx], color="red", zorder=5, s=150, marker="*",
-                   label=f"Trigger (epoch {trigger_epoch:.0f})")
-    ax.set_xscale("log")
-    ax.set_xlabel("Epoch (log scale)", fontsize=12)
-    ax.set_ylabel("L2 Norm", fontsize=12)
-    ax.set_title(f"4-head model, Run {run_number}: Slow MA vs. Fast MA of Slow MA", fontsize=13)
-    ax.legend(loc="upper right", fontsize=11)
-    ax.grid(True, alpha=0.3)
-    plt.tight_layout()
-    save(fig, "ma_of_slow_ma_crossover.png")
-
-    # Plot 2: Difference curve, log-x
-    fig2, ax2 = plt.subplots(figsize=(12, 7))
-    ax2.plot(epoch_grid, diff, color="darkred", linewidth=3.5)
-    ax2.axhline(y=0, color="black", linestyle="--", linewidth=1)
-    ax2.fill_between(epoch_grid, 0, diff, where=(diff > 0), alpha=0.2, color="green")
-    ax2.fill_between(epoch_grid, 0, diff, where=(diff <= 0), alpha=0.2, color="red")
-    if trigger_epoch is not None:
-        trigger_idx = np.argmin(np.abs(epoch_grid - trigger_epoch))
-        ax2.axvline(x=trigger_epoch, color="red", linestyle="--", linewidth=2)
-        ax2.scatter(trigger_epoch, diff[trigger_idx], color="red", zorder=5, s=150, marker="*",
-                    label=f"Trigger (epoch {trigger_epoch:.0f})")
-    ax2.set_xscale("log")
-    ax2.set_xlabel("Epoch (log scale)", fontsize=12)
-    ax2.set_ylabel("Fast MA of Slow MA − Slow MA", fontsize=12)
-    ax2.set_title(f"4-head model, Run {run_number}: Difference — Fast MA of Slow MA minus Slow MA", fontsize=13)
-    ax2.legend(loc="upper right", fontsize=11)
-    ax2.grid(True, alpha=0.3)
-    plt.tight_layout()
-    save(fig2, "ma_of_slow_ma_diff.png")
-
-    # Plot 3: Same difference curve, linear x-axis
-    fig3, ax3 = plt.subplots(figsize=(12, 7))
-    ax3.plot(epoch_grid, diff, color="darkred", linewidth=3.5)
-    ax3.axhline(y=0, color="black", linestyle="--", linewidth=1)
-    ax3.fill_between(epoch_grid, 0, diff, where=(diff > 0), alpha=0.2, color="green")
-    ax3.fill_between(epoch_grid, 0, diff, where=(diff <= 0), alpha=0.2, color="red")
-    if trigger_epoch is not None:
-        trigger_idx = np.argmin(np.abs(epoch_grid - trigger_epoch))
-        ax3.axvline(x=trigger_epoch, color="red", linestyle="--", linewidth=2)
-        ax3.scatter(trigger_epoch, diff[trigger_idx], color="red", zorder=5, s=150, marker="*",
-                    label=f"Trigger (epoch {trigger_epoch:.0f})")
-    ax3.set_xlabel("Epoch (linear scale)", fontsize=12)
-    ax3.set_ylabel("Fast MA of Slow MA − Slow MA", fontsize=12)
-    ax3.set_title(f"4-head model, Run {run_number}: Difference — Linear Scale", fontsize=13)
-    ax3.legend(loc="upper right", fontsize=11)
-    ax3.grid(True, alpha=0.3)
-    plt.tight_layout()
-    save(fig3, "ma_of_slow_ma_diff_linear.png")
-
-    # Plot 4: Difference curve overlaid on the grokking curve
-    fig4, ax4 = plt.subplots(figsize=(12, 7))
-    ax4.plot(range(1, num_epochs + 1), train_acc, color="steelblue", linewidth=2.5, label="Train Accuracy")
-    ax4.plot(range(1, num_epochs + 1), test_acc, color="seagreen", linewidth=2.5, label="Test Accuracy")
-    ax4.set_xlabel("Epoch (linear scale)", fontsize=12)
-    ax4.set_ylabel("Accuracy", fontsize=12)
-    ax4.set_ylim(-0.05, 1.05)
-    ax4b = ax4.twinx()
-    ax4b.plot(epoch_grid, diff, color="darkred", linewidth=3, label="Fast MA of Slow MA − Slow MA", alpha=0.85)
-    ax4b.axhline(y=0, color="black", linestyle="--", linewidth=1)
-    ax4b.set_ylabel("MA-of-MA Difference", fontsize=12)
-    if grokked:
-        ax4.axvline(x=grok_epoch, color="seagreen", linestyle=":", linewidth=2, alpha=0.7)
-    if trigger_epoch is not None:
-        ax4.axvline(x=trigger_epoch, color="red", linestyle="--", linewidth=2)
-        ax4b.scatter(trigger_epoch, diff[np.argmin(np.abs(epoch_grid - trigger_epoch))],
-                     color="red", zorder=5, s=150, marker="*", label=f"Trigger (epoch {trigger_epoch:.0f})")
-    title_suffix = f"Grok epoch {grok_epoch}" if grokked else "did not grok in this run"
-    ax4.set_title(f"4-head model, Run {run_number}: MA-of-MA Difference vs. Grokking Curve — {title_suffix}", fontsize=13)
-    lines4, labels4 = ax4.get_legend_handles_labels()
-    lines4b, labels4b = ax4b.get_legend_handles_labels()
-    ax4.legend(lines4 + lines4b, labels4 + labels4b, loc="center right", fontsize=10)
-    ax4.grid(True, alpha=0.3)
-    plt.tight_layout()
-    save(fig4, "ma_of_ma_diff_vs_grokking_linear.png")
-
-    # Plot 5: Grokking curve
+    # Grokking curve
     fig5, ax5 = plt.subplots(figsize=(12, 7))
     ax5.plot(epochs_axis, train_acc, label="Train Accuracy", color="steelblue", linewidth=2)
     ax5.plot(epochs_axis, test_acc, label="Test Accuracy", color="seagreen", linewidth=2)
@@ -246,16 +148,18 @@ def plot_single_run(run_number, run_dir, data):
     plt.tight_layout()
     save(fig6, "loss_curve.png")
 
-    # Plot 7: L2 Norm curve, with MA Crossover marked
     fig7, ax7 = plt.subplots(figsize=(12, 7))
-    ax7.plot(epochs_axis, l2_norm_history, color="purple", linewidth=2, label="L2 Norm")
-    if detection_epoch is not None:
-        ax7.axvline(x=detection_epoch, color="red", linestyle="--", linewidth=2,
-                    label=f"MA Crossover (epoch {detection_epoch:.0f})")
+    ax7.plot(np.arange(len(sum_w2)), sum_w2, color="#1b7f4e", linewidth=1.4, label=r"Sum of squared weights")
+    if peak_epoch is not None:
+        ax7.axvline(x=peak_epoch, color="#1f4e79", linestyle="--", linewidth=1.3,
+                    label=f"Global peak (epoch {peak_epoch})")
+    if confirmed_epoch is not None:
+        ax7.axvline(x=confirmed_epoch, color="#6a3d9a", linestyle="-.", linewidth=1.3,
+                    label=f"Confirmed peak (epoch {confirmed_epoch})")
     ax7.set_xscale("log")
     ax7.set_xlabel("Epoch (log scale)")
-    ax7.set_ylabel("L2 Norm")
-    ax7.set_title(f"4-head model, Run {run_number}: L2 Norm of Model Weights")
+    ax7.set_ylabel(r"$\sum w^2$")
+    ax7.set_title(f"4-head model, Run {run_number}: total sum of squared weights")
     ax7.legend(loc="upper right")
     ax7.grid(True, alpha=0.3)
     plt.tight_layout()
@@ -281,7 +185,7 @@ def plot_single_run(run_number, run_dir, data):
     return {
         "run_number": run_number, "num_epochs": num_epochs, "grokked": grokked,
         "grok_epoch": grok_epoch, "final_test_acc": float(test_acc[-1]),
-        "final_l2_norm": float(l2_norm_history[-1]),
+        "final_sum_w2": float(sum_w2[-1]),
         "final_dropout_gap_by_rate": final_gap_by_rate,
     }
 
@@ -341,12 +245,12 @@ def plot_comparison(all_runs_data, out_dir):
     fig, ax = plt.subplots(figsize=(12, 7))
     for i, (run_number, data) in enumerate(all_runs_data):
         epochs_axis = range(1, data["num_epochs"] + 1)
-        ax.plot(epochs_axis, data["l2_norm"], color=color_for(i), linewidth=2,
+        ax.plot(np.arange(len(data["sum_w2"])), data["sum_w2"], color=color_for(i), linewidth=2,
                 label=f"Run {run_number} ({data['num_epochs']} epochs)")
     ax.set_xscale("log")
     ax.set_xlabel("Epoch (log scale)", fontsize=12)
-    ax.set_ylabel("L2 Norm", fontsize=12)
-    ax.set_title("4-head model: L2 Norm of Model Weights Across All Runs", fontsize=13)
+    ax.set_ylabel(r"$\sum w^2$", fontsize=12)
+    ax.set_title("4-head model: total sum of squared weights across all runs", fontsize=13)
     ax.legend(loc="upper right", fontsize=10)
     ax.grid(True, alpha=0.3)
     plt.tight_layout()
@@ -407,7 +311,7 @@ else:
                              for rate, gap in sorted(s["final_dropout_gap_by_rate"].items()))
         print(f"  Run {s['run_number']} ({s['num_epochs']} epochs): {grok_text}, "
               f"final test acc = {s['final_test_acc']:.4f}, "
-              f"final L2 norm = {s['final_l2_norm']:.4f}")
+              f"final sum w^2 = {s['final_sum_w2']:.1f}")
         print(f"      final dropout gap sweep: {gap_text}")
 
     print(f"\n[OK] Per-run plots saved inside each results/four_head/run_<N>/ folder.")

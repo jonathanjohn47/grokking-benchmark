@@ -5,10 +5,9 @@ Figures for the finished 40,000-epoch retrain in
 
 Reads only the saved json and npy files. Does not load checkpoints and does
 not invent series. Training histories are one sample per loop index
-(0 .. epochs-1), which is the same index stored as grok_epoch. The L2 moving
-averages were computed on l2_norm/epoch_grid.npy (uniform in log10 epoch);
-detection epochs from the json are positions on that grid and are drawn at
-those epoch values.
+(0 .. epochs-1), which is the same index stored as grok_epoch. The L2
+figure uses l2_norm/sum_w2_history.npy, the total sum of squared weights.
+The global peak and the confirmed-peak epoch are computed from that array.
 
 Usage (from the repo root):
     python 06_Code/scripts/plot_results_per_nanda_power.py
@@ -22,7 +21,11 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
+import sys
+
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.join(REPO_ROOT, "06_Code"))
+from src.predictors.l2_norm import detect_confirmed_sum_w2_peak, sum_w2_peak  # noqa: E402
 DEFAULT_RESULTS = os.path.join(
     REPO_ROOT, "08_Experiments", "results", "results_per_nanda_power"
 )
@@ -120,9 +123,7 @@ def load_seed(root, seed):
         "test_acc": np.load(os.path.join(train, "test_acc_history.npy")),
         "train_loss": np.load(os.path.join(train, "loss_history.npy")),
         "test_loss": np.load(os.path.join(train, "test_loss_history.npy")),
-        "l2": np.load(os.path.join(l2, "l2_norm_history.npy")),
         "sum_w2": np.load(os.path.join(l2, "sum_w2_history.npy")),
-        "epoch_grid": np.load(os.path.join(l2, "epoch_grid.npy")),
         "var_epochs": np.load(os.path.join(drop, "dropout_variance_checkpoints.npy")),
         "var": np.load(os.path.join(drop, "dropout_variance_history.npy")),
         "var_mean_acc": np.load(os.path.join(drop, "dropout_variance_mean_acc_history.npy")),
@@ -135,10 +136,7 @@ def plot_accuracy(run, path):
     ax.plot(x, run["train_acc"], color="#1b7f4e", lw=1.3, label="Train accuracy")
     ax.plot(x, run["test_acc"], color="#1f4e79", lw=1.3, label="Test accuracy")
     labelled = mark_grok(ax, run["summary"]["grok_epochs_by_threshold"])
-    l2 = run["summary"]["l2_predictor"] or {}
     dv = run["summary"]["dropout_variance_predictor"] or {}
-    mark_named(ax, l2.get("ma_crossover_epoch"), "#6a3d9a", "L2 MA crossover", labelled)
-    mark_named(ax, l2.get("ma_of_ma_zero_crossing_epoch"), "#8c6bb1", "L2 MA-of-MA zero crossing", labelled)
     mark_named(ax, dv.get("variance_peak_epoch"), "#333333", "Dropout variance peak", labelled)
     log_x(ax, len(x))
     ax.set_ylim(-0.02, 1.05)
@@ -165,21 +163,17 @@ def plot_loss(run, path):
 def plot_l2(run, path):
     fig, ax = plt.subplots(figsize=(9.2, 4.8))
     x = run["epochs"]
-    ax.plot(x, run["l2"], color="#1f4e79", lw=1.3, label=r"Parameter L2 norm $\|w\|_2$")
-    ax2 = ax.twinx()
-    ax2.plot(x, run["sum_w2"], color="#1b7f4e", lw=1.1, alpha=0.9, label=r"Sum of squared weights $\sum w^2$")
-    ax2.grid(False)
+    series = run["sum_w2"]
+    peak_epoch, _ = sum_w2_peak(series)
+    confirmed = detect_confirmed_sum_w2_peak(series)
+    ax.plot(x, series, color="#1b7f4e", lw=1.3, label=r"Sum of squared weights $\sum w^2$")
     labelled = mark_grok(ax, run["summary"]["grok_epochs_by_threshold"])
-    l2 = run["summary"]["l2_predictor"] or {}
-    mark_named(ax, l2.get("ma_crossover_epoch"), "#6a3d9a", "L2 MA crossover", labelled)
-    mark_named(ax, l2.get("ma_of_ma_zero_crossing_epoch"), "#8c6bb1", "L2 MA-of-MA zero crossing", labelled)
+    mark_named(ax, peak_epoch, "#5c4b8a", "Global peak of sum of squared weights", labelled)
+    mark_named(ax, confirmed, "#6a3d9a", "Confirmed peak P_i (k = 100, own choice)", labelled)
     log_x(ax, len(x))
-    ax.set_ylabel(r"$\|w\|_2$")
-    ax2.set_ylabel(r"$\sum w^2$")
-    ax.set_title(f"Seed {run['seed']}: weight norm (per-epoch history, not the log-uniform MA grid)")
-    lines, labels = ax.get_legend_handles_labels()
-    lines2, labels2 = ax2.get_legend_handles_labels()
-    ax.legend(lines + lines2, labels + labels2, loc="upper left", framealpha=0.95)
+    ax.set_ylabel(r"$\sum w^2$")
+    ax.set_title(f"Seed {run['seed']}: total sum of squared weights")
+    ax.legend(loc="upper left", framealpha=0.95)
     save(fig, path)
 
 
@@ -247,10 +241,8 @@ def main():
     runs = [load_seed(root, row["seed"]) for row in aggregate["seeds"]]
     for run in runs:
         seed = run["seed"]
-        if len(run["l2"]) != len(run["epochs"]):
-            raise SystemExit(f"seed {seed}: l2 history length does not match training history")
-        if len(run["epoch_grid"]) != len(run["l2"]):
-            raise SystemExit(f"seed {seed}: epoch_grid length does not match l2 history")
+        if len(run["sum_w2"]) != len(run["epochs"]):
+            raise SystemExit(f"seed {seed}: sum of squared weights length does not match training history")
         if len(run["var"]) != len(run["var_epochs"]):
             raise SystemExit(f"seed {seed}: dropout variance length does not match its checkpoints")
         plot_accuracy(run, os.path.join(out, f"seed_{seed}_train_test_accuracy.png"))

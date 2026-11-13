@@ -2,9 +2,9 @@
 
 These plots are drawn only from `aggregate.json` and the `seed_0` … `seed_4` json and npy files in `08_Experiments/results/results_per_nanda_power`. No checkpoint (`.pt`) file is used. The script is `06_Code/scripts/plot_results_per_nanda_power.py`.
 
-The horizontal axis on the accuracy, loss, and L2 plots is the stored epoch index: array position `0` is the measurement before the first optimizer step, and the grok numbers in `aggregate.json` are that same index. The axis is logarithmic, so index `0` is left outside the frame. Vertical lines are the grok epochs at test-accuracy cuts 0.99 (primary), 0.95, and 0.9, plus the L2 detection epochs and the dropout-variance peak epoch saved in each seed's summary.
+The horizontal axis on the accuracy, loss, and L2 plots is the stored epoch index: array position `0` is the measurement before the first optimizer step, and the grok numbers in `aggregate.json` are that same index. The axis is logarithmic, so index `0` is left outside the frame. Vertical lines on the accuracy plot are the grok epochs at test-accuracy cuts 0.99 (primary), 0.95, and 0.9, plus the dropout-variance peak epoch saved in each seed's summary. The L2 plot marks the same three grok cuts, the global peak of the sum of squared weights, and the confirmed-peak firing epoch.
 
-The L2 norm and the sum of squared weights are the per-epoch histories. `l2_norm/epoch_grid.npy` is the log-uniform grid used to compute the moving-average detection epochs. Those detection epochs are marked on the per-epoch axis at the epoch value stored in the json.
+The L2 curve is the per-epoch total sum of squared weights, `l2_norm/sum_w2_history.npy`. The peak epoch and the confirmed-peak epoch are computed from that array. The parameter L2 norm is not drawn.
 
 The dropout-variance curve uses `dropout_variance_checkpoints.npy`. The saved checkpoint at epoch 0 is omitted from the line because a log axis cannot place it. The variance peak is the epoch stored in `dropout_variance_signal.json`. On this retrain that peak is after the grok epoch.
 
@@ -30,7 +30,7 @@ Train and test cross-entropy loss (log vertical axis), with the three grok cuts.
 
 ![Seed 0 loss](seed_0_train_test_loss.png)
 
-Parameter L2 norm and the sum of squared weights, with grok cuts and the two L2 detection epochs.
+Total sum of squared weights, with grok cuts 0.99, 0.95, and 0.9, the global peak epoch, and the confirmed-peak firing epoch.
 
 ![Seed 0 L2 norm](seed_0_l2_norm.png)
 
@@ -48,7 +48,7 @@ Train and test cross-entropy loss (log vertical axis), with the three grok cuts.
 
 ![Seed 1 loss](seed_1_train_test_loss.png)
 
-Parameter L2 norm and the sum of squared weights, with grok cuts and the two L2 detection epochs.
+Total sum of squared weights, with grok cuts 0.99, 0.95, and 0.9, the global peak epoch, and the confirmed-peak firing epoch.
 
 ![Seed 1 L2 norm](seed_1_l2_norm.png)
 
@@ -66,7 +66,7 @@ Train and test cross-entropy loss (log vertical axis), with the three grok cuts.
 
 ![Seed 2 loss](seed_2_train_test_loss.png)
 
-Parameter L2 norm and the sum of squared weights, with grok cuts and the two L2 detection epochs.
+Total sum of squared weights, with grok cuts 0.99, 0.95, and 0.9, the global peak epoch, and the confirmed-peak firing epoch.
 
 ![Seed 2 L2 norm](seed_2_l2_norm.png)
 
@@ -84,7 +84,7 @@ Train and test cross-entropy loss (log vertical axis), with the three grok cuts.
 
 ![Seed 3 loss](seed_3_train_test_loss.png)
 
-Parameter L2 norm and the sum of squared weights, with grok cuts and the two L2 detection epochs.
+Total sum of squared weights, with grok cuts 0.99, 0.95, and 0.9, the global peak epoch, and the confirmed-peak firing epoch.
 
 ![Seed 3 L2 norm](seed_3_l2_norm.png)
 
@@ -102,7 +102,7 @@ Train and test cross-entropy loss (log vertical axis), with the three grok cuts.
 
 ![Seed 4 loss](seed_4_train_test_loss.png)
 
-Parameter L2 norm and the sum of squared weights, with grok cuts and the two L2 detection epochs.
+Total sum of squared weights, with grok cuts 0.99, 0.95, and 0.9, the global peak epoch, and the confirmed-peak firing epoch.
 
 ![Seed 4 L2 norm](seed_4_l2_norm.png)
 
