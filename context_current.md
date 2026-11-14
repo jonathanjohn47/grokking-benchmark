@@ -297,3 +297,51 @@ The following four items remain active open issues requiring Jonathan's directio
 - *Context*: An audit of Predictor 8 identified 16 theoretical and methodological attack points documented in `11_Predictor_Issues_and_Lacunas/08_Commutator_Defect_Issues/Commutator_Defect_Attack_Points.md`. Key items include: probe step $\eta$ dependence at late epochs, gradient evaluations using batch sampling with replacement on a full-batch model, and the arbitrary floor of 20 in Xu's onset rule.
 - *Issue*: While none of these items can flip the overall verdict from FAIL to PASS, they represent potential colloquium defense questions.
 - *Status*: Open. Requires Jonathan's review during viva preparation.
+
+
+---
+
+## 6. Structural Evaluation Protocol Reframing — Synthetic Control Framework as Primary Benchmark Metric (November 2026)
+
+### 1. Re-Framing the Baseline and Benchmark Hierarchy
+
+In earlier project documents, supervisor emails, and initial exploratory notes, the first four predictors (L2 Norm, Dropout, Spectral, AGE) were colloquially termed the "4-predictor baseline" or "starting baseline." This terminology was a historical scheduling artifact representing the initial sequence of implementations rather than a scientifically grounded baseline. 
+
+**Official protocol shift:**
+- The first four predictors (L2 Norm, Dropout, Spectral, AGE) are **not** the baseline or benchmark of this thesis. They are empirical candidate predictors under evaluation, sharing the exact same status as subsequent predictors (HTSR Alpha, Weight-PCA, Higher-MI, Commutator Defect, and Correlation Traps).
+- The true, foundational benchmark framework of the thesis is the **Synthetic Control Experiment** (`06_Code/scripts/run_control_experiment.py`, first established on 2026-09-29).
+- Moving forward across all thesis chapters, viva defenses, and benchmark summaries, the synthetic control setup serves as the primary benchmark metric and methodological foundation against which all candidate literature predictors (1 through 9) are tested and compared.
+
+### 2. Positioning the Control Validation Setup as the Primary Benchmark Metric
+
+The synthetic control suite establishes the mathematical and statistical bounds of what an early-warning grokking predictor must satisfy to demonstrate genuine predictive power over chance:
+
+1. **Null Distribution Calibration (Control E)**:
+   - Evaluates an uninformative random predictor $P_i \sim \text{Uniform}[0, T_{\max}]$ over $10,000$ Monte Carlo trials across the empirical grokking distribution $G_i$.
+   - Calibrates the Spearman rank correlation threshold at the 99th percentile:
+     $$\rho_{\text{thresh}} = 0.8999999999999998 \approx 0.90$$
+   - This caps the false-positive rate on uninformative signals at $\alpha \le 0.01$ under the minimal sample size ($n = 5$ seeds) required for rank-based significance ($p < 0.05$).
+2. **Oracle Positive Control (Control A)**:
+   - Validates that an ideal predictive signal proportional to grokking time ($P_i = 0.5 G_i$) reliably passes all benchmark criteria ($\text{lead\_frac} = 1.0$, $\rho = 1.0$, $\bar{r} = 0.50$).
+3. **Late / Post-Grokking Control (Control B)**:
+   - Tests a delayed signal firing after grokking ($P_i = 1.05 G_i$), confirming that post-takeoff signals are decisively rejected by the fractional lead rule ($c = 0.8$, with $c \in \{0.7, 0.9\}$ sensitivity bounds).
+4. **Zero-Variance / Invariant Timing Control (Control C)**:
+   - Verifies that signals firing at a static training epoch ($P_i = \text{const}$) fail the rank-correlation test ($\rho = 0.0$ via exact zero-variance enforcement), preventing static memorization transients from qualifying as predictors.
+5. **Noise Stress Testing (Control D)**:
+   - Quantifies the degradation of predictor pass rates under controlled Gaussian temporal jitter ($\sigma \in \{0.0, 0.10, 0.25, 0.50, 1.0\}$), defining empirical sensitivity limits.
+
+### 3. Revised Structural Hierarchy of the Benchmark
+
+The scientific structure of the project is now explicitly formalized into three distinct tiers:
+
+1. **Experimental Substrate (Ground Truth)**:
+   - Nanda-Unified canonical modular addition $(a + b) \pmod{113}$ on a 1-layer 4-head Transformer across 5 deterministic seeds ($40,000$ epochs, full-batch AdamW, $\lambda = 1.0$, $\beta_2 = 0.98$). Generates the ground-truth grokking vector $G_i$ (primary cut $0.99$).
+2. **Primary Benchmark Framework (Yardstick)**:
+   - The Synthetic Control Experiment (`run_control_experiment.py`), which formally defines the pass/fail boundary, false-positive boundaries, and statistical scoring protocol.
+3. **Candidate Predictor Evaluations (Evaluated Literature)**:
+   - All 9 published predictors from the literature (evaluated in the designated sequence: 1. L2 Norm, 2. Dropout, 3. Spectral, 4. AGE, 5. HTSR Alpha, 6. Weight-PCA, 7. Higher-MI, 8. Commutator Defect, with Correlation Traps documented as post-grok anti-grokking metric).
+   - Each candidate is evaluated head-to-head against the criteria fixed by the synthetic control benchmark framework.
+
+### 4. Append-Only Status & Harmonization Note
+
+In strict adherence to the project's append-only rule, earlier sections in this document (and historical entries in `context.md`) mentioning a "4-predictor baseline" are preserved as historical records of initial project terminology. However, in all active interpretations, scientific evaluations, and thesis narratives from this point forward, the synthetic control framework is established as the sole primary benchmark baseline.

@@ -13246,3 +13246,43 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 - `06_Code/tests/test_frozen_protocol_verdicts.py`: official-row names, and the legacy folder's L2 verdict under the new row.
 - `context_current.md`: Predictor 1.
 - `context.md`: this entry appended. Nothing earlier in the file was edited.
+
+
+---
+
+# Session Summary — November 15, 2026 (Structural Protocol Reframing: Synthetic Control as Foundational Benchmark)
+
+## Session Summary
+- **Implemented / Updated:** Re-framed the benchmark evaluation architecture across `context_current.md` to establish the Synthetic Control Experiment (`06_Code/scripts/run_control_experiment.py`) as the primary benchmark framework and evaluation yardstick, superseding the historical "4-predictor baseline" label.
+- **Investigated:** Reviewed the evaluation protocol and verified that the initial group of four predictors (L2 Norm, Dropout, Spectral, AGE) was merely a chronological sequence from early project milestones, rather than a genuine scientific baseline.
+- **Changed:** Formally defined the 3-tier project hierarchy in `context_current.md` (Section 6 appended): Substrate (modular arithmetic $(a+b)\pmod{113}$), Primary Benchmark (Synthetic Controls A-E), and Candidate Predictors (Literature Predictors 1-9).
+- **Fixed:** Corrected the narrative ambiguity where the first four predictors were previously conflated with the benchmark baseline itself.
+- **Postponed:** The four open items in `context_current.md` Section 5 (noise stress test FPR, HTSR Alpha $< 2$ treatment, `REPO_ROOT` path definitions in auxiliary scripts, and commutator defect colloquium attack points) remain open pending supervisor discussion or viva review.
+
+## Technical Decisions
+- **Benchmark Yardstick Definition:** The Synthetic Control suite (`run_control_experiment.py`) is the formal benchmark framework. It establishes the mathematical null distribution via Control E ($10,000$ trials of $P_i \sim \text{Uniform}[0, T_{\max}]$) calibrating $\rho_{\text{thresh}} \approx 0.90$ (99th percentile) to ensure $\le 1\%$ false-positive rate.
+- **Candidate Predictor Classification:** All 9 literature predictors (1. L2 Norm, 2. Dropout, 3. Spectral, 4. AGE, 5. HTSR Alpha, 6. Weight-PCA, 7. Higher-MI, 8. Commutator Defect, and the removed Correlation Traps) are categorized as evaluated candidate predictors, all measured against the synthetic control yardstick.
+- **Append-Only Preservation:** `context_current.md` Section 6 was appended without deleting or overwriting any historical text, preserving complete historical auditability.
+
+## User Instructions
+- The user instructed to re-frame the baseline/benchmark definition across `context_current.md`, establishing the synthetic control experiment as the foundational benchmark framework.
+- The user reinforced the append-only rule for `context_current.md`.
+- The user requested to commit and push the repository changes.
+
+## Current Project State
+- **Completed Work:**
+  - 40,000-epoch, 5-seed Nanda-unified retrain complete (`results_per_nanda_power`).
+  - L2 Norm scored on new retrain (FAIL).
+  - Synthetic Control experiment validated and positioned as primary benchmark metric.
+  - Section 6 appended to `context_current.md`.
+- **Work in Progress / Next Actions:**
+  - Run `06_Code/scripts/analyze_nanda_unified.py` on `08_Experiments/results/results_per_nanda_power` to score remaining predictors (2-8) at the $0.99$ grok cut.
+  - Review open attack points and colloquium defense notes.
+- **Blockers:** None.
+
+## Important Discoveries
+- Establishing synthetic control as the primary benchmark metric clarifies the thesis contribution: the thesis does not propose a new predictor; it develops a unified benchmark protocol (calibrated via synthetic controls) and tests literature claims against it.
+
+## Files Modified
+- `context_current.md`: Appended Section 6 detailing the structural protocol reframing, synthetic control benchmark metric, and 3-tier hierarchy.
+- `context.md`: Appended this session summary to maintain persistent project memory.
