@@ -1,0 +1,46 @@
+# ======================================================================
+# Isolated Salah & Yevick Dropout substrate (arXiv:2507.11645).
+#
+# This config is ONLY for the Dropout variance / DRC signal-extraction
+# pipeline. It does not replace nanda_unified.yaml. The Nanda 4-head
+# Transformer benchmark stays on nanda_unified.yaml and is untouched.
+# ======================================================================
+
+task:
+  operation: "(a + b) mod p"
+  modulus: 53
+  train_fraction: 0.5          # paper: test/training fraction of 0.5
+
+architecture:
+  type: mlp_two_layer
+  embed_dim: 128
+  hidden_dim: 256              # concat of two 128-d embeddings
+  mlp_activation: relu
+  output_dim: 53
+
+init:
+  scheme: xavier_normal        # sigma = sqrt(2 / (n_in + n_out))
+  init_scale: 1.0
+
+optimizer:
+  name: adamw
+  lr: 0.0003                   # 3e-4
+  weight_decay: 1.0
+  betas: [0.9, 0.999]          # paper does not override PyTorch defaults
+
+training:
+  epochs: 3000                 # paper figures cover ~2500 epochs
+  full_batch: true
+  loss: cross_entropy
+  device_preference: [mps, cpu]
+
+# Signal extraction only — no validity gates, no Superiority Index.
+dropout:
+  variance_rate: 0.3           # Fig. 1 primary signal
+  n_samples: 100               # stochastic passes per epoch
+  # DRC: test accuracy vs rate, every epoch
+  drc_rates: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+  measure_every_epoch: true
+
+evaluation:
+  grok_threshold: 0.99

@@ -1,0 +1,35 @@
+{
+  "description": "L2 negative control: synthetic constant P_i = [280]*5 against Nanda-unified grokking epochs (cut 0.99). Mimics the real L2 fixed-early-epoch failure mode.",
+  "grokking_epochs": [
+    8021,
+    8253,
+    4094,
+    7831,
+    6637
+  ],
+  "synthetic_firing_epochs": [
+    280,
+    280,
+    280,
+    280,
+    280
+  ],
+  "lead_c": 0.8,
+  "validity_gate_metrics": {
+    "lead_fraction": 1.0,
+    "correlation": 0.0,
+    "noise_margin": 0.9569657481853217
+  },
+  "validity_gate_verdict": false,
+  "validity_gate_pass": false,
+  "superiority_index": 0.0,
+  "evaluate_metrics_result": {
+    "lead_frac": 1.0,
+    "rho": 0.0,
+    "mean_rel_lead": 0.9569657481853217,
+    "noise_margin": 0.9569657481853217,
+    "n_firing": 5,
+    "passed": false,
+    "superiority_index": 0.0
+  }
+}

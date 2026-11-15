@@ -70,10 +70,6 @@ from predictors.l2_norm import (                                          # noqa
     detect_confirmed_sum_w2_peak,
     sum_w2_peak,
 )
-from predictors.dropout import (                                          # noqa: E402
-    compute_dropout_gap_multi_rate,
-    compute_dropout_variance,
-)
 from predictors.spectral import compute_spectral_metrics_for_checkpoint   # noqa: E402
 from predictors.age import compute_age_metrics_for_checkpoint             # noqa: E402
 from predictors.htsr_alpha import (                                       # noqa: E402
@@ -111,25 +107,12 @@ GROK_ACC_THRESHOLD = None         # primary threshold = GROK_THRESHOLDS[0]
 LOG_LINES_PER_RUN = None          # console lines per run; log_every = epochs // this
 LIMIT_CYCLE_SETTLE_FRACTION = None
 LIMIT_CYCLE_STD_ABOVE = None
-DROPOUT_RATES = None              # multi-rate sweep
-DROPOUT_VARIANCE_RATE = None
-DROPOUT_VARIANCE_N_SAMPLES = None
 
-# Dropout-Variance predictor (Salah & Yevick, arXiv:2507.11645): at a
-# checkpoint, run n_samples stochastic forward passes with dropout active
-# and look at the variance of test accuracy across those passes (see
-# src/predictors/dropout.py's compute_dropout_variance docstring).
-#
-# Now paper-faithful on the number of passes: n_samples = 100 (the paper's
-# own value; the earlier 30 was a compute saving). Remaining deviations:
-#   - rate = 0.5 here, the paper's Figure 1 sweep used 0.3. Their own
-#     Figure 2 (Dropout Robustness Curve) shows 0.5 separates pre- and
-#     post-grok best, so the primary signal uses 0.5.
-#   - the paper measures at (implicitly) every logged epoch; here every
-#     predictor, this one included, is evaluated on the same EVAL_EVERY grid
-#     (see the checkpoint-schedule block below). 40000 epochs x 100 passes at
-#     every epoch is not affordable on MPS.
-# Cost: about 3x the old n_samples=30 setting per checkpoint (was ~1.8 s).
+# Dropout measurement has been removed from this Nanda-Unified runner.
+# The Salah & Yevick signal (MLP p=53, every-epoch variance + DRC) lives in
+# scripts/train_dropout_salah_yevick.py and predictors/dropout.py. This
+# runner no longer computes dropout_gap or dropout_variance on the
+# Transformer. Old summary.json keys are still carried forward if present.
 
 # ---------------------------------------------------------------------------
 # Checkpoint schedule: SAVING is decoupled from EVALUATING.
@@ -160,24 +143,12 @@ EVAL_EVERY = DESIRED_EVAL_GRIDS[0]
 EVAL_EVERY_FALLBACK = DESIRED_EVAL_GRIDS[1]
 EVAL_EVERY_FALLBACK_COARSE = DESIRED_EVAL_GRIDS[1]
 
-# LEGACY — for Archive comparison only, not used in unified benchmark.
-# Schedule used up to benchmark v4 (tag benchmark-v4-4predictors): 24
-# log-spaced epochs, chosen as a compute budget for Dropout-Variance, with no
-# scientific justification for the count (see context.md, 2026-09-25). Kept,
-# NOT deleted, so the old grid can be reproduced for ablation comparison, e.g.
-# via --eval_every 0 on a legacy results directory. select_eval_epochs() and
-# the main flow never read it.
-OLD_24_LOG_SPACED_CHECKPOINTS = [
-    0, 1, 2, 3, 5, 9, 15, 24, 39, 62, 99, 158, 251, 398, 632, 1002, 1589,
-    2520, 3995, 6333, 10040, 15917, 25232, 39999,
-]
-
 # Names understood by --predictors / --overwrite, and the summary.json key
 # each one's presence is checked against (see get_done_predictors below).
+# Dropout is not listed: it is measured on the isolated Salah & Yevick
+# MLP pipeline, not on this Transformer runner.
 PREDICTOR_SUMMARY_KEY = {
     "l2": "l2_predictor",
-    "dropout_gap": "dropout_final_gap_by_rate",
-    "dropout_variance": "dropout_variance_predictor",
     "spectral": "spectral_predictor",
     "age": "age_predictor",
     "htsr": "htsr_predictor",
@@ -237,31 +208,6 @@ def select_eval_epochs(saved_epochs, eval_every=EVAL_EVERY):
     return chosen
 
 
-def dropout_variance_checkpoint_schedule(total_epochs, num_points=len(OLD_24_LOG_SPACED_CHECKPOINTS)):
-    """
-    LEGACY — for Archive comparison only, not used in unified benchmark
-    (24 log-spaced points; see OLD_24_LOG_SPACED_CHECKPOINTS and the
-    checkpoint-schedule block above). Nothing in the main flow calls it.
-    Log-uniform-spaced epoch indices for the dropout-variance checkpoints.
-    Equal visual spacing on a log-x plot, so early training (where things
-    change fast) gets proportionally more checkpoints than the long flat
-    tail. Returns a sorted list of 0-based epoch indices (matching the
-    training loop's `epoch` variable, range(total_epochs)), always
-    including epoch 0 and the final epoch (total_epochs - 1).
-    """
-    if total_epochs <= 1:
-        return [0]
-    log_grid = np.linspace(0, np.log10(total_epochs), num_points)
-    raw = np.round(10 ** log_grid).astype(int) - 1  # 1..total_epochs -> 0..total_epochs-1
-    raw = np.clip(raw, 0, total_epochs - 1)
-    checkpoints = sorted(set(int(v) for v in raw))
-    if checkpoints[0] != 0:
-        checkpoints.insert(0, 0)
-    if checkpoints[-1] != total_epochs - 1:
-        checkpoints.append(total_epochs - 1)
-    return checkpoints
-
-
 def _num_or_none(value):
     return None if value is None else float(value)
 
@@ -289,9 +235,6 @@ def load_config(path):
         "log_lines_per_run": int(cfg["evaluation"]["log_lines_per_run"]),
         "limit_cycle_settle_fraction": float(cfg["evaluation"]["limit_cycle"]["settle_fraction"]),
         "limit_cycle_std_above": float(cfg["evaluation"]["limit_cycle"]["std_above"]),
-        "dropout_rates": [float(r) for r in cfg["dropout"]["rates"]],
-        "dropout_variance_rate": float(cfg["dropout"]["variance_rate"]),
-        "dropout_variance_n_samples": int(cfg["dropout"]["n_samples"]),
     }
     # Fail loud if the config is internally inconsistent.
     assert parsed["vocab_size"] == parsed["modulus"] + 1, \
@@ -308,15 +251,11 @@ def apply_config_constants(cfg):
     at the start of main(), before any training or recompute."""
     global GROK_THRESHOLDS, GROK_ACC_THRESHOLD, LOG_LINES_PER_RUN
     global LIMIT_CYCLE_SETTLE_FRACTION, LIMIT_CYCLE_STD_ABOVE
-    global DROPOUT_RATES, DROPOUT_VARIANCE_RATE, DROPOUT_VARIANCE_N_SAMPLES
     GROK_THRESHOLDS = list(cfg["grok_thresholds"])
     GROK_ACC_THRESHOLD = GROK_THRESHOLDS[0]      # primary
     LOG_LINES_PER_RUN = cfg["log_lines_per_run"]
     LIMIT_CYCLE_SETTLE_FRACTION = cfg["limit_cycle_settle_fraction"]
     LIMIT_CYCLE_STD_ABOVE = cfg["limit_cycle_std_above"]
-    DROPOUT_RATES = list(cfg["dropout_rates"])
-    DROPOUT_VARIANCE_RATE = cfg["dropout_variance_rate"]
-    DROPOUT_VARIANCE_N_SAMPLES = cfg["dropout_variance_n_samples"]
 
 
 def pick_device():
@@ -346,9 +285,9 @@ def load_summary(output_dir, seed):
 def get_done_predictors(output_dir, seed):
     """Which predictors already have a real result in this seed's
     summary.json, keyed by PREDICTOR_SUMMARY_KEY -> returns a set of
-    predictor names (e.g. {"l2", "dropout_gap"}). Empty set if
+    predictor names (e.g. {"l2", "spectral"}). Empty set if
     summary.json does not exist yet, or exists but is missing a key
-    entirely (e.g. an old run from before dropout_variance existed)."""
+    entirely."""
     summary = load_summary(output_dir, seed)
     if summary is None:
         return set()
@@ -440,8 +379,6 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
     ckpt_dir = checkpoints_dir_for(args.output_dir, seed)
     if save_checkpoints:
         os.makedirs(ckpt_dir, exist_ok=True)
-    compute_dropout_gap = "dropout_gap" in predictors_to_compute
-    compute_dv = "dropout_variance" in predictors_to_compute
     compute_l2 = "l2" in predictors_to_compute
 
     # (a) One seed sets both RNGs. random.seed is applied inside
@@ -494,23 +431,12 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
     test_loss_history = []
     sum_w2_history = []
 
-    # Checkpoint SAVE grid (every SAVE_EVERY epochs + final epoch) and the
-    # EVAL grid (subsampled from it, every args.eval_every epochs + final
-    # epoch) are fixed up front. Saving and evaluating are decoupled: the
-    # Dropout-Variance measurement (which needs live weights) runs only on
-    # the eval grid, but every save-grid checkpoint is written to disk so
-    # any other predictor can later be evaluated on any coarser grid
-    # without retraining.
+    # Checkpoint SAVE grid (every SAVE_EVERY epochs + final epoch).
+    # Predictors that need frozen weights re-read these files later.
     save_checkpoint_set = set(save_checkpoint_schedule(args.epochs))
-    dv_checkpoint_schedule = select_eval_epochs(
-        sorted(save_checkpoint_set), args.eval_every)
-    dv_checkpoint_set = set(dv_checkpoint_schedule)
     # Console cadence derived from the run length: LOG_LINES_PER_RUN lines
     # per run (40 lines = every 1000 epochs for the default 40000).
     log_every = max(1, args.epochs // LOG_LINES_PER_RUN)
-    dropout_variance_checkpoints, dropout_variance_history = [], []
-    dropout_variance_mean_acc_history = []
-    dropout_drc_snapshots = {}
 
     started = time.time()
     last_log = started
@@ -544,29 +470,11 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
         scheduler.step()
         optimizer.zero_grad()
 
-        # ---- checkpoint save + Dropout-Variance predictor (post-epoch, model frozen) ----
-        # Model-weight checkpointing (SAVE grid) is independent of whether the
-        # Dropout-Variance predictor is being computed THIS run — other
-        # predictors (Spectral, AGE, HTSR, ...) reuse these .pt files
-        # without retraining, as long as save_checkpoints is on.
+        # Model-weight checkpointing (SAVE grid). Predictors such as
+        # Spectral, AGE, HTSR reuse these .pt files without retraining.
         if save_checkpoints and epoch in save_checkpoint_set:
             torch.save(model.state_dict(),
                        os.path.join(ckpt_dir, f"model_epoch_{epoch}.pt"))
-
-        # Dropout-Variance evaluation (EVAL grid, a subset of the SAVE grid).
-        if compute_dv and epoch in dv_checkpoint_set:
-            mean_acc, variance = compute_dropout_variance(
-                model, test_loader, n_samples=DROPOUT_VARIANCE_N_SAMPLES,
-                dropout_rate=DROPOUT_VARIANCE_RATE, device=device)
-            dropout_variance_checkpoints.append(epoch)
-            dropout_variance_history.append(variance)
-            dropout_variance_mean_acc_history.append(mean_acc)
-
-            # 5-rate Dropout Robustness Curve snapshot on the SAME eval grid
-            # (no separate, smaller subset).
-            drc_results = compute_dropout_gap_multi_rate(model, test_loader, DROPOUT_RATES)
-            dropout_drc_snapshots[epoch] = {
-                str(r): drc_results[r]["train_accuracy"] for r in DROPOUT_RATES}
 
         if epoch % log_every == 0 or epoch == args.epochs - 1:
             now = time.time()
@@ -591,14 +499,13 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
     measurements.save_training_data(
         train_acc_history, test_acc_history, loss_history, test_loss=test_loss_history)
 
-    # grok epochs only need test_acc_history — compute them once here so both
-    # the Dropout-Variance signal below and the final summary can use them.
+    # grok epochs only need test_acc_history.
     # grok_epoch is the primary threshold (GROK_THRESHOLDS[0]); the epochs for
     # every threshold are also stored, so no conclusion rests on one cut.
     grok_epochs_all = grok_epochs_by_threshold(test_acc_history)
     grok_epoch = grok_epoch_from(test_acc_history)
 
-    # (g) L2 predictor: confirmed peak of the total sum of squared weights.
+    # L2 predictor: confirmed peak of the total sum of squared weights.
     measurements.save_l2_norm_data(sum_w2_history)
     peak_epoch, peak_value = sum_w2_peak(sum_w2_history)
     confirmed_epoch = detect_confirmed_sum_w2_peak(sum_w2_history)
@@ -614,66 +521,10 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
                            "l2_predictor_signals.json"), "w") as handle:
         json.dump(l2_signals, handle, indent=2)
 
-    # (g) Dropout predictor — one multi-rate sweep on the final model
-    old_dropout_gap_block = (old_summary or {}).get("dropout_final_gap_by_rate")
-    if compute_dropout_gap:
-        dropout_results = compute_dropout_gap_multi_rate(model, test_loader, DROPOUT_RATES)
-        model.train()  # compute_dropout_gap_multi_rate leaves the model in eval()
-
-        final_epoch = args.epochs
-        measurements.save_dropout_data(
-            dropout_gap_epochs=[final_epoch],
-            dropout_gap_history_by_rate={
-                r: [dropout_results[r]["dropout_gap"]] for r in DROPOUT_RATES},
-            dropout_train_acc_by_rate={
-                r: [dropout_results[r]["train_accuracy"]] for r in DROPOUT_RATES},
-            dropout_eval_acc_by_rate={
-                r: [dropout_results[r]["eval_accuracy"]] for r in DROPOUT_RATES},
-            dropout_rates=DROPOUT_RATES,
-        )
-        dropout_json = {
-            str(r): {k: float(v) for k, v in dropout_results[r].items()}
-            for r in DROPOUT_RATES
-        }
-        with open(os.path.join(measurements.dropout_dir,
-                               "dropout_gap_final.json"), "w") as handle:
-            json.dump(dropout_json, handle, indent=2)
-        dropout_gap_block = {
-            str(r): float(dropout_results[r]["dropout_gap"]) for r in DROPOUT_RATES}
-    else:
-        # not requested this call -> carry the old result forward unchanged
-        dropout_gap_block = old_dropout_gap_block
-
-    # (h) Dropout-Variance predictor — per-checkpoint arrays + signal
-    old_dv_block = (old_summary or {}).get("dropout_variance_predictor")
-    if compute_dv:
-        np.save(os.path.join(measurements.dropout_dir, "dropout_variance_checkpoints.npy"),
-                np.array(dropout_variance_checkpoints, dtype=int))
-        np.save(os.path.join(measurements.dropout_dir, "dropout_variance_history.npy"),
-                np.array(dropout_variance_history, dtype=float))
-        np.save(os.path.join(measurements.dropout_dir, "dropout_variance_mean_acc_history.npy"),
-                np.array(dropout_variance_mean_acc_history, dtype=float))
-        with open(os.path.join(measurements.dropout_dir,
-                               "dropout_drc_snapshots.json"), "w") as handle:
-            json.dump({str(e): v for e, v in dropout_drc_snapshots.items()}, handle, indent=2)
-
-        peak_idx = int(np.argmax(dropout_variance_history))
-        variance_peak_epoch = dropout_variance_checkpoints[peak_idx]
-        dropout_variance_block = {
-            "variance_peak_epoch": variance_peak_epoch,
-            "variance_peak_value": float(dropout_variance_history[peak_idx]),
-            "grok_epoch": grok_epoch,
-            "peak_to_grok_ratio": (
-                float(variance_peak_epoch) / grok_epoch if grok_epoch else None),
-            "rate": DROPOUT_VARIANCE_RATE,
-            "n_samples": DROPOUT_VARIANCE_N_SAMPLES,
-            "num_checkpoints": len(dropout_variance_checkpoints),
-        }
-        with open(os.path.join(measurements.dropout_dir,
-                               "dropout_variance_signal.json"), "w") as handle:
-            json.dump(dropout_variance_block, handle, indent=2)
-    else:
-        dropout_variance_block = old_dv_block
+    # Dropout is no longer measured on this Transformer path. Carry any
+    # previously saved blocks forward so old result folders stay intact.
+    dropout_gap_block = (old_summary or {}).get("dropout_final_gap_by_rate")
+    dropout_variance_block = (old_summary or {}).get("dropout_variance_predictor")
 
     # L2-predictor block: reuse the old one unless "l2" was requested.
     old_l2_block = (old_summary or {}).get("l2_predictor")
@@ -733,70 +584,6 @@ def train_one_seed(seed, args, cfg, device, predictors_to_compute, old_summary,
           f"grok_epoch={grok_epoch}  "
           f"final_test_acc={summary['final_test_acc']:.4f}", flush=True)
     return summary
-
-
-def _checkpoint_predictor_dropout_variance(model, test_loader, ckpt_dir, ckpt_epochs,
-                                            measurements, grok_epoch, device):
-    """CHECKPOINT_PREDICTOR_FUNCS["dropout_variance"] — loads each saved
-    checkpoint into `model` in turn and rebuilds the same variance-peak
-    signal that train_one_seed computes live during training. Returns the
-    dropout_variance_predictor block; also re-writes the same .npy/.json
-    files train_one_seed writes, so downstream (plot_nanda_results.py)
-    cannot tell a live-trained result from a checkpoint-recomputed one.
-
-    This is the reference shape for any FUTURE checkpoint-only predictor
-    (e.g. Spectral): take (model, test_loader, ckpt_dir, ckpt_epochs,
-    measurements, grok_epoch, device), load each checkpoint's
-    state_dict() into `model` yourself, compute your signal, save your own
-    files under measurements.<predictor>_dir, and return one block dict —
-    then register the function in CHECKPOINT_PREDICTOR_FUNCS below and add
-    the predictor's name to PREDICTOR_SUMMARY_KEY / ALL_PREDICTORS /
-    CHECKPOINT_ONLY_PREDICTORS. No other part of this file needs to
-    change."""
-    dropout_variance_checkpoints, dropout_variance_history = [], []
-    dropout_variance_mean_acc_history = []
-    dropout_drc_snapshots = {}
-
-    for epoch in ckpt_epochs:
-        state = torch.load(os.path.join(ckpt_dir, f"model_epoch_{epoch}.pt"), map_location=device)
-        model.load_state_dict(state)
-        mean_acc, variance = compute_dropout_variance(
-            model, test_loader, n_samples=DROPOUT_VARIANCE_N_SAMPLES,
-            dropout_rate=DROPOUT_VARIANCE_RATE, device=device)
-        dropout_variance_checkpoints.append(epoch)
-        dropout_variance_history.append(variance)
-        dropout_variance_mean_acc_history.append(mean_acc)
-        # DRC snapshot on every eval-grid checkpoint, same grid as the variance.
-        drc_results = compute_dropout_gap_multi_rate(model, test_loader, DROPOUT_RATES)
-        dropout_drc_snapshots[epoch] = {
-            str(r): drc_results[r]["train_accuracy"] for r in DROPOUT_RATES}
-
-    np.save(os.path.join(measurements.dropout_dir, "dropout_variance_checkpoints.npy"),
-            np.array(dropout_variance_checkpoints, dtype=int))
-    np.save(os.path.join(measurements.dropout_dir, "dropout_variance_history.npy"),
-            np.array(dropout_variance_history, dtype=float))
-    np.save(os.path.join(measurements.dropout_dir, "dropout_variance_mean_acc_history.npy"),
-            np.array(dropout_variance_mean_acc_history, dtype=float))
-    with open(os.path.join(measurements.dropout_dir,
-                           "dropout_drc_snapshots.json"), "w") as handle:
-        json.dump({str(e): v for e, v in dropout_drc_snapshots.items()}, handle, indent=2)
-
-    peak_idx = int(np.argmax(dropout_variance_history))
-    variance_peak_epoch = dropout_variance_checkpoints[peak_idx]
-    block = {
-        "variance_peak_epoch": variance_peak_epoch,
-        "variance_peak_value": float(dropout_variance_history[peak_idx]),
-        "grok_epoch": grok_epoch,
-        "peak_to_grok_ratio": (
-            float(variance_peak_epoch) / grok_epoch if grok_epoch else None),
-        "rate": DROPOUT_VARIANCE_RATE,
-        "n_samples": DROPOUT_VARIANCE_N_SAMPLES,
-        "num_checkpoints": len(dropout_variance_checkpoints),
-    }
-    with open(os.path.join(measurements.dropout_dir,
-                           "dropout_variance_signal.json"), "w") as handle:
-        json.dump(block, handle, indent=2)
-    return block
 
 
 def _checkpoint_predictor_spectral(model, test_loader, ckpt_dir, ckpt_epochs,
@@ -1391,13 +1178,11 @@ def _checkpoint_predictor_commutator_defect(
 
 
 # Predictors this runner knows how to (re)compute from already-saved
-# checkpoints/model_epoch_*.pt alone, with NO retraining. Adding a future
-# predictor here (once it exists) is the ONLY change needed for it to gain
-# the same "compute later, no retrain" resume behaviour dropout_variance
-# already has — see _checkpoint_predictor_dropout_variance's docstring for
-# the exact function shape expected.
+# checkpoints/model_epoch_*.pt alone, with NO retraining. See
+# _checkpoint_predictor_spectral for the shared function shape.
+# Dropout is not registered here; it runs on the isolated Salah & Yevick
+# MLP pipeline (train_dropout_salah_yevick.py).
 CHECKPOINT_PREDICTOR_FUNCS = {
-    "dropout_variance": _checkpoint_predictor_dropout_variance,
     "spectral": _checkpoint_predictor_spectral,
     "age": _checkpoint_predictor_age,
     "htsr": _checkpoint_predictor_htsr,
@@ -1409,13 +1194,12 @@ CHECKPOINT_ONLY_PREDICTORS = set(CHECKPOINT_PREDICTOR_FUNCS.keys())
 
 
 def recompute_from_checkpoints(seed, args, cfg, device, predictors_to_compute, old_summary):
-    """Compute predictor(s) that only need frozen model weights (currently
-    just "dropout_variance", via CHECKPOINT_PREDICTOR_FUNCS) from this
-    seed's already-saved checkpoints/model_epoch_*.pt, with NO retraining.
-    Every other block in old_summary is carried forward unchanged. Only
-    called when predictors_to_compute is a subset of
-    CHECKPOINT_ONLY_PREDICTORS and has_saved_checkpoints() is true for
-    this seed."""
+    """Compute predictor(s) that only need frozen model weights (via
+    CHECKPOINT_PREDICTOR_FUNCS) from this seed's already-saved
+    checkpoints/model_epoch_*.pt, with NO retraining. Every other block
+    in old_summary is carried forward unchanged. Only called when
+    predictors_to_compute is a subset of CHECKPOINT_ONLY_PREDICTORS and
+    has_saved_checkpoints() is true for this seed."""
     assert predictors_to_compute <= CHECKPOINT_ONLY_PREDICTORS, (
         f"recompute_from_checkpoints can only rebuild "
         f"{sorted(CHECKPOINT_ONLY_PREDICTORS)} from saved weights; the rest "
@@ -1497,17 +1281,6 @@ def aggregate(summaries, args):
               f"global peak epoch={lp.get('peak_epoch')}  "
               f"(grok={s['grok_epoch']})")
 
-    print("\nDropout-Variance predictor (per seed):")
-    for s in summaries:
-        dv = s.get("dropout_variance_predictor")
-        if dv is None:
-            print(f"  seed {s['seed']}: n/a (not computed for this seed)")
-            continue
-        ratio = dv["peak_to_grok_ratio"]
-        ratio_str = f"{ratio:.4f}" if ratio is not None else "None"
-        print(f"  seed {s['seed']}: variance_peak_epoch={dv['variance_peak_epoch']}  "
-              f"peak/grok={ratio_str}  (grok={s['grok_epoch']})")
-
     print("\nSpectral predictor (Canatar task-model alignment, per seed):")
     for s in summaries:
         sp = s.get("spectral_predictor")
@@ -1562,15 +1335,6 @@ def aggregate(summaries, args):
               f"event/grok={ratio_str}  eta={cd.get('eta')}  "
               f"(grok={s['grok_epoch']})")
 
-    print("\nDropout gap at final epoch (per seed, by rate):")
-    for s in summaries:
-        gaps = s.get("dropout_final_gap_by_rate")
-        if gaps is None:
-            print(f"  seed {s['seed']}: n/a (not computed for this seed)")
-            continue
-        print(f"  seed {s['seed']}: " +
-              "  ".join(f"p{r}={gaps[r]:+.3f}" for r in gaps))
-
     print("\nLimit-cycle check (post-grok test-acc oscillation):")
     n_limit_cycle = 0
     for s in summaries:
@@ -1606,7 +1370,7 @@ def aggregate(summaries, args):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Nanda-Unified benchmark runner (L2-Norm + Dropout only).",
+        description="Nanda-Unified benchmark runner (Transformer substrate).",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument("--seeds", type=int, default=5,
@@ -1623,7 +1387,7 @@ def main():
              "back to it.",
     )
     parser.add_argument("--config", type=str, default="06_Code/configs/nanda_unified.yaml")
-    parser.add_argument("--predictors", type=str, default="l2,dropout_gap,dropout_variance",
+    parser.add_argument("--predictors", type=str, default="l2",
                         help="comma-separated subset of " + ",".join(ALL_PREDICTORS))
     parser.add_argument("--overwrite", type=str, default="",
                         help="comma-separated predictors to force-recompute even if "
@@ -1634,7 +1398,7 @@ def main():
                         help=f"evaluate predictors on saved checkpoints with epoch %% eval_every == 0 "
                              f"(plus the final epoch). Must be a multiple of the save spacing "
                              f"({SAVE_EVERY}); fallbacks if too slow: {EVAL_EVERY_FALLBACK}, {EVAL_EVERY_FALLBACK_COARSE}. "
-                             f"0 = use every saved checkpoint (legacy 24-point directories).")
+                             f"0 = use every saved checkpoint as-is.")
     parser.add_argument(
         "--commutator_secondary_eta", action="store_true",
         help="also run unscored Commutator Defect sensitivity at eta=1e-4 "
@@ -1665,7 +1429,7 @@ def main():
     device = pick_device()
 
     print("=" * 72)
-    print("NANDA-UNIFIED BENCHMARK RUNNER   (predictors built so far: L2-Norm, Dropout)")
+    print("NANDA-UNIFIED BENCHMARK RUNNER   (Transformer substrate)")
     print("=" * 72)
     print(f"config     : {args.config}")
     print(f"output_dir : {args.output_dir}")
@@ -1678,11 +1442,13 @@ def main():
           f"weight_decay={cfg['weight_decay']}")
     print(f"run        : seeds={args.seeds}  epochs={args.epochs}  "
           f"full-batch={int(cfg['train_fraction'] * cfg['modulus'] * cfg['modulus'])}")
-    print(f"grok thr.  : {GROK_THRESHOLDS} (primary {GROK_ACC_THRESHOLD})   "
-          f"dropout-variance: n_samples={DROPOUT_VARIANCE_N_SAMPLES} rate={DROPOUT_VARIANCE_RATE}")
+    print(f"grok thr.  : {GROK_THRESHOLDS} (primary {GROK_ACC_THRESHOLD})")
+    print(f"predictors : {sorted(requested_predictors)}")
     print(f"checkpoints: init, then every {SAVE_EVERY} (Nanda save_every), "
           f"plus model_epoch_{args.epochs}.pt after the final step; "
           f"evaluate every {args.eval_every}")
+    print("note       : Dropout signal is isolated "
+          "(train_dropout_salah_yevick.py); not measured here.")
     print("=" * 72)
 
     summaries = []

@@ -125,15 +125,13 @@ evaluation:
     settle_fraction: 0.05
     std_above: 0.05
 
-# Dropout predictor.
+# Dropout predictor — LEGACY on this Nanda-Unified yaml.
+# The live Salah & Yevick signal extraction now uses the isolated MLP
+# substrate in configs/dropout_salah_yevick.yaml and
+# scripts/train_dropout_salah_yevick.py. run_nanda_benchmark.py no longer
+# reads this block. Kept only so older docs / archives still parse.
 dropout:
-  # Multi-rate sweep. Source: own choice, same five rates as the earlier sweeps.
   rates: [0.1, 0.3, 0.5, 0.7, 0.9]
-  # Dropout-Variance signal (Salah & Yevick, arXiv:2507.11645).
-  # n_samples: 100 stochastic passes per checkpoint = the paper's own value
-  #   (earlier 30 was a compute saving, no longer used).
-  # variance_rate: 0.5, where the paper's Dropout Robustness Curve (their
-  #   Fig. 2) separates pre- and post-grok best. (Their Fig. 1 sweep used 0.3.)
   n_samples: 100
   variance_rate: 0.5
 
