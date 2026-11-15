@@ -1,0 +1,107 @@
+{
+  "grok_epochs": [
+    8021,
+    8253,
+    4094,
+    7831,
+    6637
+  ],
+  "lead_c": 0.7,
+  "l2_only": true,
+  "per_seed": [
+    {
+      "seed": 0,
+      "G_i": 8021,
+      "peak_epoch": 179,
+      "peak_S": 3669.516970254481,
+      "P_i": 279,
+      "P_over_G": 0.03478369280638324,
+      "r_i": 0.9652163071936167
+    },
+    {
+      "seed": 1,
+      "G_i": 8253,
+      "peak_epoch": 902,
+      "peak_S": 3690.312300376594,
+      "P_i": 280,
+      "P_over_G": 0.033927056827820185,
+      "r_i": 0.9660729431721798
+    },
+    {
+      "seed": 2,
+      "G_i": 4094,
+      "peak_epoch": 176,
+      "peak_S": 3630.8399645034224,
+      "P_i": 276,
+      "P_over_G": 0.06741573033707865,
+      "r_i": 0.9325842696629213
+    },
+    {
+      "seed": 3,
+      "G_i": 7831,
+      "peak_epoch": 181,
+      "peak_S": 3626.9473360814154,
+      "P_i": 281,
+      "P_over_G": 0.035883028987357936,
+      "r_i": 0.964116971012642
+    },
+    {
+      "seed": 4,
+      "G_i": 6637,
+      "peak_epoch": 181,
+      "peak_S": 3675.4634246863425,
+      "P_i": 281,
+      "P_over_G": 0.04233840590628296,
+      "r_i": 0.9576615940937171
+    }
+  ],
+  "signals": [
+    {
+      "signal": "L2: confirmed peak of sum w^2 (k=100)",
+      "epochs": [
+        279.0,
+        280.0,
+        276.0,
+        281.0,
+        281.0
+      ],
+      "lead": [
+        7742.0,
+        7973.0,
+        3818.0,
+        7550.0,
+        6356.0
+      ],
+      "seeds_before_grok": 5,
+      "spearman": 0.09999999999999999,
+      "pearson": 0.7677900352084183,
+      "epoch_cv": 0.0066382380067972115,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 1.0,
+        "rho": 0.15389675281277312,
+        "mean_rel_lead": 0.9571304170270153,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.7,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": true,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL",
+        "S_rho": 0.15389675281277312,
+        "S_lead": 0.08573916594596942,
+        "sigma_r": 0.012625037265159886,
+        "S_sigma": 0.986809491119951,
+        "S_raw": 0.01302093073728172,
+        "S": 0.0,
+        "pass": false
+      }
+    }
+  ]
+}
