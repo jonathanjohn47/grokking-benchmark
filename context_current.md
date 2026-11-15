@@ -255,7 +255,7 @@ The repository is organized according to the supervisor-mandated structure:
   - `06_Code/src/unified_measurements.py`: Centralized persistence handler for all predictor data.
   - `06_Code/scripts/run_nanda_benchmark.py`: Master benchmark runner supporting full multi-seed training, checkpoint saving (init, then every 100 epochs; the folders on disk still have the old 801 files), and checkpoint-only recomputation.
   - `06_Code/scripts/analyze_nanda_unified.py`: Official scoring script evaluating all 8 predictors under the fractional lead rule ($c = 0.8$, with $0.7$ and $0.9$ sensitivity sweeps).
-  - `06_Code/scripts/run_control_experiment.py`: Synthetic-control validation script for benchmark PASS criteria.
+  - `06_Code/scripts/run_control_experiment.py`: Synthetic-control validation script for benchmark PASS criteria. Since PR #35 it also computes the Predictor Quality Index S (section 6.5). It never trains a model. Outputs go to `controls_results/` at the repository root: `summary_table.csv`, `detailed_results.json`, `plot_sensitivity.png` and `plot_null_distribution.png`.
   - `06_Code/configs/nanda_unified.yaml`: Protocol configuration specifying task, architecture, optimizer, and evaluation thresholds.
   - `06_Code/tests/test_frozen_protocol_verdicts.py`: Automated test suite asserting that all 8 predictors fail under the official protocol.
 - **`08_Experiments/results/nanda_unified/` (Experiment Data)**:
@@ -365,6 +365,21 @@ In strict adherence to the project's append-only rule, earlier sections in this 
   - Control E1 (Uniform$[0, T_{\max}]$, unconditional): $S_{\text{mean}} = 0.0001$ ($S_{\text{raw\_mean}} = 0.0005$).
   - Control E2 (Uniform$[0, G_i]$, conditional): $S_{\text{mean}} = 0.0759$ ($S_{\text{raw\_mean}} = 0.1927$).
   - Every earlier value ($\rho_{\text{thresh}}$, $\text{lead\_frac}$, $\rho$, $\bar{r}$, $\text{pass\_rate}$) was reproduced exactly.
+  - Pass rates in the same run: E1 $\text{pass\_rate} = 0.0022$ with fraction of trials with $S > 0$ equal to $0.0007$; E2 $\text{pass\_rate} = 0.2170$ with fraction of trials with $S > 0$ equal to $0.2113$. Control D pass rates are $1.0000, 1.0000, 0.9104, 0.5079, 0.2192$ at noise fractions $0.0, 0.1, 0.25, 0.5, 1.0$.
+  - Component means (`summary_table.csv`, columns `S_rho_mean`, `S_lead_mean`, `S_sigma_mean`):
+    - Control A: $S_\rho = 1.0000$, $S_{\text{lead}} = 1.0000$, $S_\sigma = 1.0000$.
+    - Control B: $S_\rho = 0.0000$, $S_{\text{lead}} = 0.9190$, $S_\sigma = 0.6892$ ($S_{\text{raw}} = 0$ because $S_\rho = 0$).
+    - Control C: $S_\rho = 1.0000$, $S_{\text{lead}} = 0.0000$, $S_\sigma = 0.0000$ ($\bar{r} = -0.50$).
+    - Control D at noise fractions $0.0, 0.1, 0.25, 0.5, 1.0$: $S_\rho = 1.0000, 0.9949, 0.9306, 0.7798, 0.5161$; $S_{\text{lead}} = 1.0000, 0.9793, 0.9481, 0.8949, 0.7918$; $S_\sigma = 1.0000, 0.9501, 0.8751, 0.7474, 0.4707$.
+    - Control D standard deviation of S across the 10,000 trials: $0.0000, 0.0277, 0.2332, 0.3237, 0.1624$.
+    - E1 and E2: see open item (a).
+- **Code changes in PR #35** (merge commit `c2cd587`, only `06_Code/scripts/run_control_experiment.py` and the files in `controls_results/` changed):
+  - New function `quality_score(result, rho_thresh)` returns `S_rho`, `S_lead`, `sigma_r`, `S_sigma`, `S_raw`, `S` and `pass`.
+  - `evaluate()` now also returns `r_i`, the per-seed relative lead over firing seeds. When fewer than 4 seeds fire it returns `r_i = None`, and `quality_score` then gives every component and S as 0.
+  - `summary_table.csv` has six new columns: `S_mean`, `S_std`, `S_raw_mean`, `S_rho_mean`, `S_lead_mean`, `S_sigma_mean`.
+  - `detailed_results.json` has a `score` block for Controls A, B and C; per-noise-fraction `S_mean`, `S_std`, `S_raw_mean`, `S_raw_std`, `S_rho_mean`, `S_lead_mean`, `S_sigma_mean` for Control D; and `S_mean`, `S_std`, `S_raw_mean`, `frac_S_gt_0` for E1 and E2.
+  - `plot_sensitivity.png` and `plot_null_distribution.png` were regenerated.
+  - Unchanged: the PASS gate, `passes()`, `Gs`, `T_MAX`, `MARGIN`, the default `rule="margin"`, `np.random.seed(42)`, `N_TRIALS_NOISY`, `N_RAND`, `NOISE_FRACS`, the $\rho_{\text{thresh}}$ calibration and the order of every random draw. Earlier values matched `b77c185` to within $10^{-9}$.
 - **Open items**:
   - (a) For E1 and E2, the CSV columns `S_rho_mean`, `S_lead_mean`, `S_sigma_mean` are written as 0 but were never computed.
   - (b) The control script still uses the old-setup grok epochs ($12987, 6921, 9510, 11019, 23747$) and the old 100-epoch margin rule, not the experiment's $G_i$ ($8021, 8253, 4094, 7831, 6637$ at the $0.99$ cut) and the $c = 0.8$ rule.
