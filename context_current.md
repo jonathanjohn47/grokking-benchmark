@@ -146,8 +146,9 @@ Correlation Traps     : REMOVED from line-up on 2026-09-30 (detects post-grok an
 - **Why this rule**: No published paper gives a detection rule for the weight norm as a grokking predictor. Nanda et al. (2023) describe the norm. Liu et al. (2022) give a delay law, not a detection rule. The rule is the project's own reading of "the total rises, then stays below the highest value it has reached." The window length is the only own-choice number in the rule.
 - **Official results on the experiment** (`results_per_nanda_power`, 40,000 epochs, five seeds). \(G_i\) at the \(0.99\) cut: 8021, 8253, 4094, 7831, 6637. \(P_i = 279, 280, 276, 281, 281\). Global peak epochs: 179, 902, 176, 181, 181. Firing count \(5/5\). \(\text{lead\_frac} = 1\), Spearman \(\rho = 0.1539\), mean relative lead \(\bar{r} = 0.9571\).
 - **Verdict**: **FAIL** at \(c = 0.7\), \(c = 0.8\), and \(c = 0.9\) (0 of 1 official row passing). It fires too early, during memorisation, and it does not rank the seeds. The row fails \(\rho \ge 0.8999999999999998\) and \(\bar{r} \le 0.90\). \(\rho\) and \(\bar{r}\) do not depend on \(c\), and every \(P_i\) is far below \(0.7 G_i\).
+- **Predictor Quality Index S (PR #38, 15 November 2026)**: computed by the official scorer with the shared `quality_score()` (section 6.5), on the same \(G_i\) and \(P_i\) as the gate. At \(c = 0.7\), \(0.8\) and \(0.9\) the values are the same: \(S_\rho = 0.1539\), \(S_{\text{lead}} = 0.0857\), \(\sigma_r = 0.0126\), \(S_\sigma = 0.9868\), \(S_{\text{raw}} = 0.0130\), and \(S = 0\) because the row fails the gate. They are stored next to the L2 verdict in `analysis/frozen_protocol_verdicts.json` and `analysis/l2_quality_summary.json` (and the same files under `analysis/c_0.7/` and `analysis/c_0.9/`).
 - **Colloquium attack list**: A1 is done. A2 (causal lag) has been discussed: the rule fires at the early peak during memorisation; the sharp drop comes in cleanup after the circuit forms, so it cannot warn ahead of grokking; the early point is nearly the same epoch on every seed. A3 is next.
-- **Code on main**: this L2-only state is the merge commit of PR #33 (`8a4e9eb`).
+- **Code on main**: the L2-only state is the merge commit of PR #33 (`8a4e9eb`). The S scoring for L2 is the merge commit of PR #38 (`924e39a`); the L2 rule, signal, gate and numbers did not change.
 - **Note on the legacy folder**: Re-scoring `nanda_unified` with this same official row gives \(P_i = [1153, 1137, 1151, 1141, 1161]\) and a **PASS** at \(c \in \{0.7, 0.8, 0.9\}\) (\(\rho = 0.9000\), \(\bar{r} = 0.8947\) at the printed precision). That folder is not this experiment. The L2 line in the status block above is this experiment's row. The other lines in that block are the older printout.
 
 ### Predictor 2: Dropout
@@ -252,9 +253,10 @@ The repository is organized according to the supervisor-mandated structure:
 - **`06_Code/` (Codebase)**:
   - `06_Code/src/models/transformer_four_head.py`: The single canonical 4-head Transformer model.
   - `06_Code/src/predictors/`: The 8 implemented predictor modules (`l2_norm.py`, `dropout.py`, `spectral.py`, `age.py`, `htsr_alpha.py`, `weight_pca.py`, `higher_mi.py`, `commutator_defect.py`).
+  - `06_Code/src/quality_score.py`: Shared module (PR #38) holding `passes()` and `quality_score()` for the Predictor Quality Index S. Used by both `run_control_experiment.py` and `analyze_nanda_unified.py`.
   - `06_Code/src/unified_measurements.py`: Centralized persistence handler for all predictor data.
   - `06_Code/scripts/run_nanda_benchmark.py`: Master benchmark runner supporting full multi-seed training, checkpoint saving (init, then every 100 epochs; the folders on disk still have the old 801 files), and checkpoint-only recomputation.
-  - `06_Code/scripts/analyze_nanda_unified.py`: Official scoring script evaluating all 8 predictors under the fractional lead rule ($c = 0.8$, with $0.7$ and $0.9$ sensitivity sweeps).
+  - `06_Code/scripts/analyze_nanda_unified.py`: Official scoring script evaluating all 8 predictors under the fractional lead rule ($c = 0.8$, with $0.7$ and $0.9$ sensitivity sweeps). Since PR #38 it attaches S to the L2 row only, and the flag `--l2-only` scores only L2 from the saved `aggregate.json` and `sum_w2_history.npy` (no training, no `.pt` files).
   - `06_Code/scripts/run_control_experiment.py`: Synthetic-control validation script for benchmark PASS criteria. Since PR #35 it also computes the Predictor Quality Index S (section 6.5). It never trains a model. Outputs go to `controls_results/` at the repository root: `summary_table.csv`, `detailed_results.json`, `plot_sensitivity.png` and `plot_null_distribution.png`.
   - `06_Code/configs/nanda_unified.yaml`: Protocol configuration specifying task, architecture, optimizer, and evaluation thresholds.
   - `06_Code/tests/test_frozen_protocol_verdicts.py`: Automated test suite asserting that all 8 predictors fail under the official protocol.
@@ -380,6 +382,10 @@ In strict adherence to the project's append-only rule, earlier sections in this 
   - `detailed_results.json` has a `score` block for Controls A, B and C; per-noise-fraction `S_mean`, `S_std`, `S_raw_mean`, `S_raw_std`, `S_rho_mean`, `S_lead_mean`, `S_sigma_mean` for Control D; and `S_mean`, `S_std`, `S_raw_mean`, `frac_S_gt_0` for E1 and E2.
   - `plot_sensitivity.png` and `plot_null_distribution.png` were regenerated.
   - Unchanged: the PASS gate, `passes()`, `Gs`, `T_MAX`, `MARGIN`, the default `rule="margin"`, `np.random.seed(42)`, `N_TRIALS_NOISY`, `N_RAND`, `NOISE_FRACS`, the $\rho_{\text{thresh}}$ calibration and the order of every random draw. Earlier values matched `b77c185` to within $10^{-9}$.
+- **Applied to predictors (PR #38, merge `924e39a`, 15 November 2026)**:
+  - `passes()` and `quality_score()` moved, with the same formulas, from `run_control_experiment.py` into the shared module `06_Code/src/quality_score.py`; the control script imports them. `controls_results/` was not changed by this PR.
+  - The official scorer now gives S for L2 only (section 3, Predictor 1): \(S = 0\) at \(c = 0.7\), \(0.8\) and \(0.9\), with \(S_{\text{raw}} = 0.0130\).
+  - The other 7 predictors are not scored with S yet.
 - **Open items**:
   - (a) For E1 and E2, the CSV columns `S_rho_mean`, `S_lead_mean`, `S_sigma_mean` are written as 0 but were never computed.
   - (b) The control script still uses the old-setup grok epochs ($12987, 6921, 9510, 11019, 23747$) and the old 100-epoch margin rule, not the experiment's $G_i$ ($8021, 8253, 4094, 7831, 6637$ at the $0.99$ cut) and the $c = 0.8$ rule.
