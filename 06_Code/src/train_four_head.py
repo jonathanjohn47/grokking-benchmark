@@ -1,5 +1,4 @@
 import torch
-from torch import nn
 from torch.optim import AdamW
 from models.transformer_four_head import cross_entropy_high_precision
 import numpy as np
@@ -13,7 +12,6 @@ from predictors.l2_norm import (
 )
 from data.modular_arithmetic import get_dataloaders
 from models.transformer_four_head import TransformerFourHead
-from predictors.dropout import compute_dropout_gap_multi_rate
 from unified_measurements import PredictorMeasurements
 
 # ======================================================================
@@ -21,33 +19,11 @@ from unified_measurements import PredictorMeasurements
 #
 # The substrate is defined ONCE in configs/nanda_unified.yaml and loaded
 # below. This script asserts its own constants against that file so the
-# two cannot drift silently. Every predictor in the thesis is measured on
-# a model trained by this exact loop.
+# two cannot drift silently.
 #
-# Nanda-Unified protocol (see configs/nanda_unified.yaml, context.md):
-#   - task            : (a + b) mod 113   ("=" token id 113, vocab 114)
-#   - architecture    : 1-layer, 4-head, d_model=128, d_mlp=512, ReLU,
-#                       NO LayerNorm, learned positions, untied embed/unembed,
-#                       no bias in attention/embedding/unembedding, MLP has bias
-#   - init            : Nanda randn/sqrt(d_model), unembed randn/sqrt(d_vocab)
-#   - optimiser       : AdamW, lr=1e-3, weight_decay=1.0, betas=(0.9, 0.98)
-#   - training        : full-batch, 10-step warmup, 40000 epochs, yaml split
-#
-# This replaced the old default substrate (p=97, PyTorch-default init,
-# betas 0.9/0.999). Those 3 runs are archived at archive/p97_default/.
-#
-# Outputs are saved under results/four_head/run_<N>/ (created if it does not
-# exist yet), NOT in the project root, so they never overwrite train.py's
-# own train_acc_history.npy / sum_w2_history.npy / dropout_gap_history.npy
-# / etc., which belong to the original single-head run.
-#
-# RUN NUMBERING: every time this script is run, it saves into a NEW
-# numbered subfolder (run_1, run_2, run_3, ...) instead of overwriting the
-# previous run's results. This is needed because grokking is stochastic —
-# the grok epoch moves with the random seed — so a real comparison needs
-# several independent runs kept side by side, not one run's numbers
-# overwritten by the next. plot_results_four_head.py reads every run_<N>
-# folder it finds and plots them together for comparison.
+# Dropout measurement has been removed from this script. The Salah &
+# Yevick Dropout signal is measured on the isolated MLP pipeline
+# (scripts/train_dropout_salah_yevick.py), not on this Transformer.
 # ======================================================================
 
 LEGACY_FILENAMES = [
@@ -110,9 +86,6 @@ VOCAB_SIZE = CFG["task"]["vocab_size"]
 TRAIN_FRACTION = CFG["task"]["train_fraction"]
 D_MODEL = CFG["architecture"]["d_model"]
 NUM_HEADS = CFG["architecture"]["num_heads"]
-INIT_STD = CFG["init"]["init_std"]
-if INIT_STD is None:
-    INIT_STD = None  # Nanda randn/sqrt init lives in the model, not a single std
 LR = CFG["optimizer"]["lr"]
 WEIGHT_DECAY = CFG["optimizer"]["weight_decay"]
 BETAS = tuple(CFG["optimizer"]["betas"])
@@ -171,11 +144,6 @@ train_acc_history = []
 test_acc_history = []
 loss_history = []
 sum_w2_history = []
-dropout_gap_epochs = []
-dropout_rates = [0.1, 0.3, 0.5, 0.7, 0.9]
-dropout_gap_history_by_rate = {rate: [] for rate in dropout_rates}
-dropout_train_acc_by_rate = {rate: [] for rate in dropout_rates}
-dropout_eval_acc_by_rate = {rate: [] for rate in dropout_rates}
 
 for epoch in range(num_epochs):
     model.eval()
@@ -190,7 +158,6 @@ for epoch in range(num_epochs):
         x_test, y_test = next(iter(data_loader[1]))
         x_test, y_test = x_test.to(device), y_test.to(device)
         equal_sign_logit_test = model.forward(x_test)[:, 2, :]
-        test_loss = cross_entropy_high_precision(equal_sign_logit_test, y_test)
         test_total_correct = (equal_sign_logit_test.argmax(dim=1) == y_test).sum().item()
         test_total_samples = len(y_test)
 
@@ -204,35 +171,21 @@ for epoch in range(num_epochs):
     optimizer.zero_grad()
     sum_w2_history.append(compute_sum_of_squared_weights(model))
 
-    # Dropout Gap Predictor: full multi-rate sweep across all 5 rates
-    # (0.1, 0.3, 0.5, 0.7, 0.9). There is no single "primary" rate — every
-    # rate is stored, and the analysis works on the whole sweep.
-    results = compute_dropout_gap_multi_rate(model, data_loader[1], dropout_rates)
-
-    dropout_gap_epochs.append(epoch + 1)
-    for rate in dropout_rates:
-        dropout_gap_history_by_rate[rate].append(results[rate]["dropout_gap"])
-        dropout_train_acc_by_rate[rate].append(results[rate]["train_accuracy"])
-        dropout_eval_acc_by_rate[rate].append(results[rate]["eval_accuracy"])
-
-    # compute_dropout_gap_multi_rate() leaves the model in eval() mode with p
-    # reset to 0.0. Training must resume in train() mode, so we restore it here
-    # before the next epoch's training pass begins.
-    model.train()
-
-    gap_summary = ", ".join(f"p{rate}={results[rate]['dropout_gap']:+.3f}" for rate in dropout_rates)
-    print(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}, Train Accuracy: {train_acc_history[-1]:.4f}, Test Accuracy: {test_acc_history[-1]:.4f}, Sum w^2: {sum_w2_history[-1]:.1f}, Dropout Gap sweep: {gap_summary}")
+    print(
+        f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}, "
+        f"Train Accuracy: {train_acc_history[-1]:.4f}, "
+        f"Test Accuracy: {test_acc_history[-1]:.4f}, "
+        f"Sum w^2: {sum_w2_history[-1]:.1f}"
+    )
 
 # Save all measurements using unified system
 measurements.save_training_data(train_acc_history, test_acc_history, loss_history)
 
 grok_epoch = np.argmax(np.array(test_acc_history) > 0.99)
 
-
-
-print("\n" + "="*60)
+print("\n" + "=" * 60)
 print("L2 NORM PREDICTOR: confirmed peak of the total sum of squared weights")
-print("="*60)
+print("=" * 60)
 
 peak_epoch, peak_value = sum_w2_peak(sum_w2_history)
 confirmed_epoch = detect_confirmed_sum_w2_peak(sum_w2_history)
@@ -242,59 +195,32 @@ print(f"  Grok epoch (test acc > 99%): {grok_epoch}")
 
 measurements.save_l2_norm_data(sum_w2_history)
 
-# Dropout Predictor: gap tracked at every epoch during training
-print("\n" + "="*60)
-print("DROPOUT PREDICTOR (4-head model): Gap tracked every epoch")
-print("="*60)
-print(f"\nFinal Dropout Gap sweep (epoch {dropout_gap_epochs[-1]}):")
-for rate in dropout_rates:
-    print(f"  rate={rate}: gap={dropout_gap_history_by_rate[rate][-1]:+.4f}  "
-          f"(train p={rate}: {dropout_train_acc_by_rate[rate][-1]:.4f}, "
-          f"clean p=0.0: {dropout_eval_acc_by_rate[rate][-1]:.4f})")
-
-# Save all Dropout measurements — full sweep, no single-rate record
-measurements.save_dropout_data(
-    dropout_gap_epochs, dropout_gap_history_by_rate,
-    dropout_train_acc_by_rate, dropout_eval_acc_by_rate, dropout_rates
-)
-
-
-# ======================================================================
-# VISUALIZATION & REPORT GENERATION
-# ======================================================================
-print("\n" + "="*60)
+print("\n" + "=" * 60)
 print("VISUALIZATION & REPORT GENERATION (4-head model)")
-print("="*60)
+print("=" * 60)
 
-# Generate standalone L2 Norm visualizations
 measurements.generate_l2_norm_visualizations(
     sum_w2_history, grok_epoch, peak_epoch, confirmed_epoch
 )
 print("[OK] L2 Norm visualizations saved to runs/four_head/run_{}/l2_norm/".format(run_number))
 
-# Generate standalone Dropout visualizations
-measurements.generate_dropout_visualizations(
-    dropout_gap_epochs, dropout_gap_history_by_rate,
-    dropout_rates, test_acc_history, grok_epoch
-)
-print("[OK] Dropout visualizations saved to runs/four_head/run_{}/dropout/".format(run_number))
-
-# Generate combined PDF report
+# Combined PDF: Dropout page is left empty (rates=[]) because Dropout is
+# no longer measured on this Transformer path.
 report_path = measurements.generate_combined_report(
     train_acc_history, test_acc_history, loss_history, sum_w2_history,
-    dropout_gap_epochs, dropout_gap_history_by_rate, dropout_rates,
+    [], {}, [],
     grok_epoch, peak_epoch, confirmed_epoch
 )
-print(f"[OK] PDF report saved to {report_path} (4 pages: all measurements)")
+print(f"[OK] PDF report saved to {report_path}")
 
-print("\n" + "="*60)
+print("\n" + "=" * 60)
 print("RUN {} COMPLETE".format(run_number))
-print("="*60)
+print("=" * 60)
 print(f"Grok epoch: {grok_epoch}")
 print(f"L2 confirmed-peak epoch: {confirmed_epoch}")
 print(f"L2 global peak epoch: {peak_epoch}")
 print(f"\nAll measurements saved to runs/four_head/run_{run_number}/")
 print(f"  - training/ : raw training data")
 print(f"  - l2_norm/ : L2 norm measurements + visualizations")
-print(f"  - dropout/ : dropout measurements + visualizations")
 print(f"  - reports/ : combined PDF report")
+print("Note: Dropout is measured by train_dropout_salah_yevick.py, not here.")
