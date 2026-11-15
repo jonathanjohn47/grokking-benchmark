@@ -45,12 +45,18 @@ either formula.
 
 import json
 import os
+import sys
 
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from scipy.stats import spearmanr
+
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if os.path.join(REPO_ROOT, "06_Code") not in sys.path:
+    sys.path.insert(0, os.path.join(REPO_ROOT, "06_Code"))
+from src.quality_score import passes, quality_score
 
 np.random.seed(42)
 
@@ -148,82 +154,7 @@ def evaluate(g_in, p_in, margin=MARGIN, rule="margin", c=DEFAULT_LEAD_C):
     }
 
 
-def passes(result, rho_thresh):
-    return (
-        result["lead_frac"] >= 0.8
-        and result["rho"] >= rho_thresh
-        and 0.05 <= result["mean_rel_lead"] <= 0.9
-    )
-
-
-# ---------------------------------------------------------------------------
-# Predictor Quality Index S
-# ---------------------------------------------------------------------------
-
-def quality_score(result, rho_thresh):
-    """
-    Compute the Predictor Quality Index S and its components.
-
-    Uses the per-seed relative lead array r_i that evaluate() returns for
-    firing seeds (misses already dropped, same population as rho and
-    mean_rel_lead).
-
-    Components
-    ----------
-    S_rho   = max(0, rho)                      rho NaN -> 0
-    r_bar   = mean(r_i)
-    S_lead  = max(0, 1 - |r_bar - 0.5| / 0.5) own choice; target lead = 0.5
-    sigma_r = np.std(r_i, ddof=0)              population std
-    S_sigma = max(0, 1 - sigma_r / r_bar)      own choice; 0 when r_bar <= 0
-    S_raw   = lead_frac * S_rho * S_lead * S_sigma
-    S       = S_raw  if passes(result, rho_thresh)  else 0.0
-
-    Gate fires first: PASS is required for S > 0.
-
-    Returns
-    -------
-    dict with keys: S_rho, S_lead, sigma_r, S_sigma, S_raw, S, pass
-    """
-    passed = passes(result, rho_thresh)
-
-    # Fail-fast branch: fewer than 4 firing seeds (r_i is None in evaluate())
-    r_i = result.get("r_i")
-    if r_i is None:
-        return {
-            "S_rho": 0.0, "S_lead": 0.0, "sigma_r": 0.0,
-            "S_sigma": 0.0, "S_raw": 0.0, "S": 0.0, "pass": passed,
-        }
-
-    rho = result["rho"]
-    lead_frac = result["lead_frac"]
-
-    # S_rho: NaN -> 0
-    S_rho = float(max(0.0, 0.0 if np.isnan(rho) else rho))
-
-    # r_bar and S_lead
-    r_bar = float(np.mean(r_i))
-    S_lead = float(max(0.0, 1.0 - abs(r_bar - 0.5) / 0.5))
-
-    # sigma_r and S_sigma
-    sigma_r = float(np.std(r_i, ddof=0))
-    if r_bar <= 0.0:
-        S_sigma = 0.0
-    else:
-        S_sigma = float(max(0.0, 1.0 - sigma_r / r_bar))
-
-    # S_raw and gated S
-    S_raw = float(lead_frac * S_rho * S_lead * S_sigma)
-    S = S_raw if passed else 0.0
-
-    return {
-        "S_rho": S_rho,
-        "S_lead": S_lead,
-        "sigma_r": sigma_r,
-        "S_sigma": S_sigma,
-        "S_raw": S_raw,
-        "S": S,
-        "pass": passed,
-    }
+# passes() and quality_score() are imported from src.quality_score above.
 
 
 # ---------------------------------------------------------------------------

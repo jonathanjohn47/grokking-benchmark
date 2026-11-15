@@ -46,6 +46,7 @@ from src.predictors.l2_norm import (  # noqa: E402
     detect_confirmed_sum_w2_peak,
     sum_w2_peak,
 )
+from src.quality_score import quality_score  # noqa: E402
 
 # Official L2 row. One rule: the confirmed peak of the total sum of squared weights.
 L2_CONFIRMED_PEAK = f"L2: confirmed peak of sum w^2 (k={CONFIRMED_PEAK_K})"
@@ -339,8 +340,9 @@ PREDICTORS = (
 def score_l2_saved_histories(results_dir=None, lead_c=DEFAULT_LEAD_C):
     """Score the L2 row from per-epoch sum_w2 histories.
 
-    Does not load the other predictors and does not write result files.
-    The only row is the confirmed peak of the total sum of squared weights.
+    Does not load the other predictors. The only row is the confirmed peak
+    of the total sum of squared weights. Reads aggregate.json G_i (0.99 cut)
+    and sum_w2_history.npy; does not load .pt checkpoints.
     """
     root = resolve_results_dir(results_dir)
     with open(os.path.join(root, "aggregate.json")) as handle:
@@ -366,6 +368,98 @@ def score_l2_saved_histories(results_dir=None, lead_c=DEFAULT_LEAD_C):
         })
     rows = summarise(events, grok, lead_c=lead_c)
     return {"grok_epochs": list(grok), "per_seed": peaks, "rows": rows, "lead_c": lead_c}
+
+
+def score_l2_only(lead_c=None, out_dir=None, write=True, results_dir=None):
+    """Official L2-only scorer from saved json/npy. No other predictors, no .pt.
+
+    Writes frozen_protocol_verdicts.json (L2 row + Predictor Quality Index S)
+    and an L2 summary table under out_dir. Default folder layout matches
+    score_saved_run: <results-dir>/analysis at c=0.8, else analysis/c_<value>/.
+    """
+    if lead_c is None:
+        lead_c = load_lead_c_from_config()
+    lead_c = float(lead_c)
+    results_dir = resolve_results_dir(results_dir)
+    analysis_dir = default_analysis_dir(results_dir)
+    if out_dir is None:
+        out_dir = analysis_dir if abs(lead_c - DEFAULT_LEAD_C) < 1e-12 else os.path.join(
+            analysis_dir, f"c_{lead_c:.1f}"
+        )
+    payload = score_l2_saved_histories(results_dir=results_dir, lead_c=lead_c)
+    grok = payload["grok_epochs"]
+    rows = payload["rows"]
+    predictors = [p for p in predictor_level_verdicts(rows) if p["predictor"] == "L2 Norm"]
+    print_table(rows, grok)
+    print_verdicts(rows, predictors)
+
+    if write:
+        os.makedirs(out_dir, exist_ok=True)
+        events_path = os.path.join(out_dir, "predictor_events.json")
+        with open(events_path, "w") as handle:
+            json.dump(
+                {
+                    "grok_epochs": grok,
+                    "lead_c": lead_c,
+                    "l2_only": True,
+                    "per_seed": payload["per_seed"],
+                    "signals": rows,
+                },
+                handle,
+                indent=2,
+            )
+        verdict_path = os.path.join(out_dir, "frozen_protocol_verdicts.json")
+        with open(verdict_path, "w") as handle:
+            json.dump(
+                {
+                    "lead_c": lead_c,
+                    "lead_rule": "P_i < c * G_i",
+                    "rho_thresh": RHO_THRESH,
+                    "grok_epochs": grok,
+                    "l2_only": True,
+                    "predictors": predictors,
+                },
+                handle,
+                indent=2,
+            )
+        print(f"Wrote {verdict_path}")
+
+        # Compact L2 summary table next to the verdict file.
+        summary_path = os.path.join(out_dir, "l2_quality_summary.json")
+        l2_rows = []
+        for pred in predictors:
+            for row in pred["rows"]:
+                l2_rows.append({
+                    "lead_c": lead_c,
+                    "signal": row["signal"],
+                    "P_i": row["P_i"],
+                    "G_i": grok,
+                    "n_firing": row["n_firing"],
+                    "lead_frac": row["lead_frac"],
+                    "rho": row["rho"],
+                    "mean_rel_lead": row["mean_rel_lead"],
+                    "verdict": row["verdict"],
+                    "S_rho": row.get("S_rho"),
+                    "S_lead": row.get("S_lead"),
+                    "sigma_r": row.get("sigma_r"),
+                    "S_sigma": row.get("S_sigma"),
+                    "S_raw": row.get("S_raw"),
+                    "S": row.get("S"),
+                    "pass": row.get("pass"),
+                })
+        with open(summary_path, "w") as handle:
+            json.dump({"lead_c": lead_c, "rows": l2_rows}, handle, indent=2)
+        print(f"Wrote {summary_path}")
+        print(f"Wrote L2-only verdicts to {out_dir}")
+
+    return {
+        "grok": grok,
+        "rows": rows,
+        "predictors": predictors,
+        "lead_c": lead_c,
+        "out_dir": out_dir,
+        "per_seed": payload["per_seed"],
+    }
 
 
 def predictor_name(signal):
@@ -397,6 +491,44 @@ def attach_pass_checks(verdict):
     verdict["verdict"] = "PASS" if verdict["passed"] else "FAIL"
     if isinstance(rho, float) and np.isnan(rho):
         verdict["rho"] = None
+    return verdict
+
+
+def attach_l2_quality_score(verdict, grok, epochs_raw):
+    """Attach Predictor Quality Index S to an L2 row only.
+
+    Uses the shared quality_score() formulas. Other predictors are not scored.
+    G_i and P_i come from the same arrays already used for the PASS gate.
+    """
+    firing = [
+        (float(g), float(p))
+        for g, p in zip(grok, epochs_raw)
+        if p is not None
+    ]
+    if len(firing) < 4:
+        r_i = None
+    else:
+        r_i = np.asarray(
+            [(g - p) / g for g, p in firing],
+            dtype=float,
+        )
+    rho = verdict["rho"]
+    if rho is None:
+        rho = float("nan")
+    score = quality_score(
+        {
+            "lead_frac": verdict["lead_frac"],
+            "rho": rho,
+            "mean_rel_lead": verdict["mean_rel_lead"],
+            "n_firing": verdict["n_firing"],
+            "r_i": r_i,
+            "passed": verdict["passed"],
+        },
+        RHO_THRESH,
+        passed=verdict["passed"],
+    )
+    for key in ("S_rho", "S_lead", "sigma_r", "S_sigma", "S_raw", "S", "pass"):
+        verdict[key] = score[key]
     return verdict
 
 
@@ -448,6 +580,9 @@ def summarise(ev, grok, lead_c=DEFAULT_LEAD_C):
             grok, epochs_raw, rule="fraction", c=lead_c
         )
         attach_pass_checks(verdict)
+        # Predictor Quality Index S: L2 row only (shared quality_score module).
+        if name.startswith("L2:"):
+            attach_l2_quality_score(verdict, grok, epochs_raw)
         row["row_role"] = "exploratory" if is_exploratory(name) else "predeclared"
         row["counts_towards_predictor"] = row["row_role"] == "predeclared"
         row["frozen_protocol_verdict"] = verdict
@@ -474,21 +609,32 @@ def predictor_level_verdicts(rows):
             "n_predeclared_rows": len(counting),
             "n_predeclared_passing": n_pass,
             "rows": [
-                {
-                    "signal": r["signal"],
-                    "role": r["row_role"],
-                    "counts_towards_predictor": r["counts_towards_predictor"],
-                    "P_i": r["epochs"],
-                    "n_firing": r["frozen_protocol_verdict"]["n_firing"],
-                    "lead_frac": r["frozen_protocol_verdict"]["lead_frac"],
-                    "rho": r["frozen_protocol_verdict"]["rho"],
-                    "mean_rel_lead": r["frozen_protocol_verdict"]["mean_rel_lead"],
-                    "checks": r["frozen_protocol_verdict"]["checks"],
-                    "verdict": r["frozen_protocol_verdict"]["verdict"],
-                }
+                _row_verdict_summary(r)
                 for r in members
             ],
         })
+    return out
+
+
+def _row_verdict_summary(r):
+    """One row entry for frozen_protocol_verdicts.json."""
+    v = r["frozen_protocol_verdict"]
+    out = {
+        "signal": r["signal"],
+        "role": r["row_role"],
+        "counts_towards_predictor": r["counts_towards_predictor"],
+        "P_i": r["epochs"],
+        "n_firing": v["n_firing"],
+        "lead_frac": v["lead_frac"],
+        "rho": v["rho"],
+        "mean_rel_lead": v["mean_rel_lead"],
+        "checks": v["checks"],
+        "verdict": v["verdict"],
+    }
+    # Predictor Quality Index S sits next to the L2 verdict only.
+    for key in ("S_rho", "S_lead", "sigma_r", "S_sigma", "S_raw", "S", "pass"):
+        if key in v:
+            out[key] = v[key]
     return out
 
 
@@ -522,6 +668,14 @@ def print_verdicts(rows, predictors):
         print(f"  rho           = {rho_s}  check={v['checks']['rho_at_least_threshold']}")
         print(f"  mean_rel_lead = {v['mean_rel_lead']:.4f}  check={v['checks']['mean_rel_lead_in_window']}")
         print(f"  VERDICT = {v['verdict']}")
+        if "S" in v:
+            print(f"  S_rho         = {v['S_rho']:.4f}")
+            print(f"  S_lead        = {v['S_lead']:.4f}")
+            print(f"  sigma_r       = {v['sigma_r']:.4f}")
+            print(f"  S_sigma       = {v['S_sigma']:.4f}")
+            print(f"  S_raw         = {v['S_raw']:.4f}")
+            print(f"  S             = {v['S']:.4f}")
+            print(f"  pass (S gate) = {v['pass']}")
     print("\nPredictor-level verdicts (PASS only if a pre-declared row PASSES):")
     for p in predictors:
         print(f"  {p['predictor']:<22} {p['verdict']}  ({p['n_predeclared_passing']}/{p['n_predeclared_rows']} pre-declared rows pass)")
@@ -785,11 +939,23 @@ def main(argv=None):
         help="Output folder. Default: <results-dir>/analysis at c=0.8, "
              "<results-dir>/analysis/c_<value>/ otherwise.",
     )
-    args = parser.parse_args(argv)
-    score_saved_run(
-        lead_c=args.lead_c, out_dir=args.out_dir, write=True,
-        results_dir=args.results_dir,
+    parser.add_argument(
+        "--l2-only", action="store_true",
+        help="Score only the official L2 row from saved sum_w2 histories "
+             "(and G_i from aggregate.json). Skips other predictors. "
+             "Writes Predictor Quality Index S next to the L2 verdict.",
     )
+    args = parser.parse_args(argv)
+    if args.l2_only:
+        score_l2_only(
+            lead_c=args.lead_c, out_dir=args.out_dir, write=True,
+            results_dir=args.results_dir,
+        )
+    else:
+        score_saved_run(
+            lead_c=args.lead_c, out_dir=args.out_dir, write=True,
+            results_dir=args.results_dir,
+        )
 
 
 if __name__ == "__main__":

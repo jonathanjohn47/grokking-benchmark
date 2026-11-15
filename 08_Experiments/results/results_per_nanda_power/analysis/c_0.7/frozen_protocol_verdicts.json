@@ -1,0 +1,53 @@
+{
+  "lead_c": 0.7,
+  "lead_rule": "P_i < c * G_i",
+  "rho_thresh": 0.8999999999999998,
+  "grok_epochs": [
+    8021,
+    8253,
+    4094,
+    7831,
+    6637
+  ],
+  "l2_only": true,
+  "predictors": [
+    {
+      "predictor": "L2 Norm",
+      "verdict": "FAIL",
+      "n_predeclared_rows": 1,
+      "n_predeclared_passing": 0,
+      "rows": [
+        {
+          "signal": "L2: confirmed peak of sum w^2 (k=100)",
+          "role": "predeclared",
+          "counts_towards_predictor": true,
+          "P_i": [
+            279.0,
+            280.0,
+            276.0,
+            281.0,
+            281.0
+          ],
+          "n_firing": 5,
+          "lead_frac": 1.0,
+          "rho": 0.15389675281277312,
+          "mean_rel_lead": 0.9571304170270153,
+          "checks": {
+            "n_firing_at_least_4": true,
+            "lead_frac_at_least_0.8": true,
+            "rho_at_least_threshold": false,
+            "mean_rel_lead_in_window": false
+          },
+          "verdict": "FAIL",
+          "S_rho": 0.15389675281277312,
+          "S_lead": 0.08573916594596942,
+          "sigma_r": 0.012625037265159886,
+          "S_sigma": 0.986809491119951,
+          "S_raw": 0.01302093073728172,
+          "S": 0.0,
+          "pass": false
+        }
+      ]
+    }
+  ]
+}
