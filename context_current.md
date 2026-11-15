@@ -323,12 +323,12 @@ The synthetic control suite establishes the mathematical and statistical bounds 
    - This caps the false-positive rate on uninformative signals at $\alpha \le 0.01$ under the minimal sample size ($n = 5$ seeds) required for rank-based significance ($p < 0.05$).
 2. **Oracle Positive Control (Control A)**:
    - Validates that an ideal predictive signal proportional to grokking time ($P_i = 0.5 G_i$) reliably passes all benchmark criteria ($\text{lead\_frac} = 1.0$, $\rho = 1.0$, $\bar{r} = 0.50$).
-3. **Late / Post-Grokking Control (Control B)**:
-   - Tests a delayed signal firing after grokking ($P_i = 1.05 G_i$), confirming that post-takeoff signals are decisively rejected by the fractional lead rule ($c = 0.8$, with $c \in \{0.7, 0.9\}$ sensitivity bounds).
-4. **Zero-Variance / Invariant Timing Control (Control C)**:
-   - Verifies that signals firing at a static training epoch ($P_i = \text{const}$) fail the rank-correlation test ($\rho = 0.0$ via exact zero-variance enforcement), preventing static memorization transients from qualifying as predictors.
+3. **Zero-Variance / Constant Timing Control (Control B)**:
+   - Verifies that signals firing at a static training epoch ($P_i = 5000$ for all seeds) fail the rank-correlation test ($\rho = 0.0$ via exact zero-variance enforcement), preventing static memorization transients from qualifying as predictors.
+4. **Late / Post-Grokking Control (Control C)**:
+   - Tests a delayed signal firing after grokking ($P_i = 1.5 G_i$), confirming that post-takeoff signals are decisively rejected by the lead rule ($\text{lead\_frac} = 0.0$, $\bar{r} = -0.50$).
 5. **Noise Stress Testing (Control D)**:
-   - Quantifies the degradation of predictor pass rates under controlled Gaussian temporal jitter ($\sigma \in \{0.0, 0.10, 0.25, 0.50, 1.0\}$), defining empirical sensitivity limits.
+   - Quantifies the degradation of predictor pass rates under controlled uniform temporal jitter ($P_i = 0.5 G_i + \text{noise\_frac} \times 0.5 G_i \times U[-1, 1]$ across $\text{noise\_frac} \in \{0.0, 0.10, 0.25, 0.50, 1.0\}$), defining empirical sensitivity limits.
 
 ### 3. Revised Structural Hierarchy of the Benchmark
 
@@ -345,3 +345,26 @@ The scientific structure of the project is now explicitly formalized into three 
 ### 4. Append-Only Status & Harmonization Note
 
 In strict adherence to the project's append-only rule, earlier sections in this document (and historical entries in `context.md`) mentioning a "4-predictor baseline" are preserved as historical records of initial project terminology. However, in all active interpretations, scientific evaluations, and thesis narratives from this point forward, the synthetic control framework is established as the sole primary benchmark baseline.
+
+### 5. Predictor Quality Index S (PR #35, 15 Nov 2026)
+
+- **Role of the score**: The PASS/FAIL gate decides validity and is unchanged. $S \in [0, 1]$ only ranks rows that pass; a failing row gets $S = 0$.
+- **Formulation**:
+  - $S = \text{lead\_frac} \times S_\rho \times S_{\text{lead}} \times S_\sigma$ if `passes(result, rho_thresh)` else $0.0$.
+  - $S_\rho = \max(0, \rho)$ (with $\rho = \text{NaN} \to 0$).
+  - $r_i = (G_i - P_i) / G_i$ over firing seeds; $\bar{r} = \text{mean}(r_i)$.
+  - $S_{\text{lead}} = \max(0, 1 - |\bar{r} - 0.5| / 0.5)$ (rewards lead fraction centred on $0.5$; target lead $0.5$ and $S_{\text{lead}}$ formula are **own choice**, no paper fixes them).
+  - $\sigma_r = \text{std}(r_i, \text{ddof}=0)$ (population standard deviation, matching project convention).
+  - $S_\sigma = \max(0, 1 - \sigma_r / \bar{r})$, set to $0$ if $\bar{r} \le 0$ to avoid division by zero or sign flip (**own choice**, no paper fixes this formula).
+  - $S_{\text{raw}} = \text{lead\_frac} \times S_\rho \times S_{\text{lead}} \times S_\sigma$.
+- **Results (`controls_results/summary_table.csv`)**:
+  - Control A (Ideal): $S = 1.0000$ ($S_{\text{raw}} = 1.0000$).
+  - Control B (Constant 5000): $S = 0$ ($S_{\text{raw}} = 0$, gated).
+  - Control C (Post-grok 1.5·$G_i$): $S = 0$ ($S_{\text{raw}} = 0$, gated).
+  - Control D (Noisy-good): $S_{\text{mean}} = 1.0000, 0.9257, 0.7213, 0.3230, 0.0751$ at noise fractions $0.0, 0.1, 0.25, 0.5, 1.0$ ($S_{\text{raw\_mean}} = 1.0000, 0.9257, 0.7724, 0.5234, 0.1928$).
+  - Control E1 (Uniform$[0, T_{\max}]$, unconditional): $S_{\text{mean}} = 0.0001$ ($S_{\text{raw\_mean}} = 0.0005$).
+  - Control E2 (Uniform$[0, G_i]$, conditional): $S_{\text{mean}} = 0.0759$ ($S_{\text{raw\_mean}} = 0.1927$).
+  - Every earlier value ($\rho_{\text{thresh}}$, $\text{lead\_frac}$, $\rho$, $\bar{r}$, $\text{pass\_rate}$) was reproduced exactly.
+- **Open items**:
+  - (a) For E1 and E2, the CSV columns `S_rho_mean`, `S_lead_mean`, `S_sigma_mean` are written as 0 but were never computed.
+  - (b) The control script still uses the old-setup grok epochs ($12987, 6921, 9510, 11019, 23747$) and the old 100-epoch margin rule, not the experiment's $G_i$ ($8021, 8253, 4094, 7831, 6637$ at the $0.99$ cut) and the $c = 0.8$ rule.
