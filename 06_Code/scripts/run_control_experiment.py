@@ -14,6 +14,33 @@ Output folder: ./controls_results/
     plot_sensitivity.png     pass_rate vs noise_frac for Control D
     plot_null_distribution.png   histogram of random rho with RHO_THRESH line
     detailed_results.json    all raw numbers
+
+Predictor Quality Index S
+--------------------------
+The gate (passes()) decides validity: a control row that fails PASS receives
+S = 0 and is not ranked.  For rows that pass, S in [0, 1] ranks predictive
+quality along four independent axes:
+
+  S_rho  = max(0, rho)              -- rank-correlation quality; NaN -> 0
+  r_i    = (G_i - P_i) / G_i        -- per-seed relative lead (firing seeds only)
+  r_bar  = mean(r_i)
+  S_lead = max(0, 1 - |r_bar - 0.5| / 0.5)
+                                     -- rewards lead fraction centred on 0.5;
+                                        own choice, no paper fixes this target
+  sigma_r = np.std(r_i, ddof=0)     -- population std, same convention as the
+                                        rest of the project
+  S_sigma = max(0, 1 - sigma_r / r_bar)   if r_bar > 0, else 0
+                                     -- rewards low cross-seed variability;
+                                        own choice, no paper fixes this formula;
+                                        guard: r_bar <= 0 sets S_sigma = 0 to
+                                        avoid division by zero / sign flip
+  S_raw  = lead_frac * S_rho * S_lead * S_sigma
+  S      = S_raw  if passes(result, rho_thresh)  else 0.0
+
+The gate fires first: a row that fails PASS gets S = 0 regardless of S_raw.
+S_lead and S_sigma target the same lead fraction r_bar = 0.5 used by Control A
+(the oracle positive control).  Labels 'own choice' because no paper fixes
+either formula.
 """
 
 import json
@@ -80,12 +107,14 @@ def evaluate(g_in, p_in, margin=MARGIN, rule="margin", c=DEFAULT_LEAD_C):
     mean_rel_lead: mean of (G - P) / G over firing seeds only. A miss is
         dropped, same as rho. This is how much of the pre-grok window, as
         a fraction of G, the predictor's lead covers.
+    Returns also: r_i (per-seed relative lead array over firing seeds).
+        The fail-fast branch (fewer than 4 firing seeds) returns r_i = None.
     """
     pairs = list(zip(g_in, p_in))
     n_seeds = len(pairs)
     valid = [(g, p) for g, p in pairs if p is not None]
     if len(valid) < 4:
-        return {"pass": False, "lead_frac": 0.0, "rho": np.nan, "mean_rel_lead": 0.0}
+        return {"pass": False, "lead_frac": 0.0, "rho": np.nan, "mean_rel_lead": 0.0, "r_i": None}
 
     g_arr = np.array([x[0] for x in valid], dtype=float)
     p_arr = np.array([x[1] for x in valid], dtype=float)
@@ -115,6 +144,7 @@ def evaluate(g_in, p_in, margin=MARGIN, rule="margin", c=DEFAULT_LEAD_C):
         "mean_rel_lead": mean_rel_lead,
         "g": g_arr,
         "p": p_arr,
+        "r_i": rel_lead,
     }
 
 
@@ -124,6 +154,76 @@ def passes(result, rho_thresh):
         and result["rho"] >= rho_thresh
         and 0.05 <= result["mean_rel_lead"] <= 0.9
     )
+
+
+# ---------------------------------------------------------------------------
+# Predictor Quality Index S
+# ---------------------------------------------------------------------------
+
+def quality_score(result, rho_thresh):
+    """
+    Compute the Predictor Quality Index S and its components.
+
+    Uses the per-seed relative lead array r_i that evaluate() returns for
+    firing seeds (misses already dropped, same population as rho and
+    mean_rel_lead).
+
+    Components
+    ----------
+    S_rho   = max(0, rho)                      rho NaN -> 0
+    r_bar   = mean(r_i)
+    S_lead  = max(0, 1 - |r_bar - 0.5| / 0.5) own choice; target lead = 0.5
+    sigma_r = np.std(r_i, ddof=0)              population std
+    S_sigma = max(0, 1 - sigma_r / r_bar)      own choice; 0 when r_bar <= 0
+    S_raw   = lead_frac * S_rho * S_lead * S_sigma
+    S       = S_raw  if passes(result, rho_thresh)  else 0.0
+
+    Gate fires first: PASS is required for S > 0.
+
+    Returns
+    -------
+    dict with keys: S_rho, S_lead, sigma_r, S_sigma, S_raw, S, pass
+    """
+    passed = passes(result, rho_thresh)
+
+    # Fail-fast branch: fewer than 4 firing seeds (r_i is None in evaluate())
+    r_i = result.get("r_i")
+    if r_i is None:
+        return {
+            "S_rho": 0.0, "S_lead": 0.0, "sigma_r": 0.0,
+            "S_sigma": 0.0, "S_raw": 0.0, "S": 0.0, "pass": passed,
+        }
+
+    rho = result["rho"]
+    lead_frac = result["lead_frac"]
+
+    # S_rho: NaN -> 0
+    S_rho = float(max(0.0, 0.0 if np.isnan(rho) else rho))
+
+    # r_bar and S_lead
+    r_bar = float(np.mean(r_i))
+    S_lead = float(max(0.0, 1.0 - abs(r_bar - 0.5) / 0.5))
+
+    # sigma_r and S_sigma
+    sigma_r = float(np.std(r_i, ddof=0))
+    if r_bar <= 0.0:
+        S_sigma = 0.0
+    else:
+        S_sigma = float(max(0.0, 1.0 - sigma_r / r_bar))
+
+    # S_raw and gated S
+    S_raw = float(lead_frac * S_rho * S_lead * S_sigma)
+    S = S_raw if passed else 0.0
+
+    return {
+        "S_rho": S_rho,
+        "S_lead": S_lead,
+        "sigma_r": sigma_r,
+        "S_sigma": S_sigma,
+        "S_raw": S_raw,
+        "S": S,
+        "pass": passed,
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -155,6 +255,7 @@ print(f"Calibrated RHO_THRESH (99th percentile of {N_RAND} random rho values) = 
 Ps_A = 0.5 * Gs
 res_A = evaluate(Gs, Ps_A)
 pass_A = passes(res_A, RHO_THRESH)
+score_A = quality_score(res_A, RHO_THRESH)
 
 
 # ---------------------------------------------------------------------------
@@ -164,6 +265,7 @@ pass_A = passes(res_A, RHO_THRESH)
 Ps_B = np.full(5, 5000.0)
 res_B = evaluate(Gs, Ps_B)
 pass_B = passes(res_B, RHO_THRESH)
+score_B = quality_score(res_B, RHO_THRESH)
 
 
 # ---------------------------------------------------------------------------
@@ -173,6 +275,7 @@ pass_B = passes(res_B, RHO_THRESH)
 Ps_C = 1.5 * Gs
 res_C = evaluate(Gs, Ps_C)
 pass_C = passes(res_C, RHO_THRESH)
+score_C = quality_score(res_C, RHO_THRESH)
 
 
 # ---------------------------------------------------------------------------
@@ -193,6 +296,13 @@ for frac in NOISE_FRACS:
     rel_leads = np.empty(N_TRIALS_NOISY)
     pass_flags = np.empty(N_TRIALS_NOISY, dtype=bool)
 
+    # Score arrays for Control D
+    S_arr = np.empty(N_TRIALS_NOISY)
+    S_raw_arr = np.empty(N_TRIALS_NOISY)
+    S_rho_arr = np.empty(N_TRIALS_NOISY)
+    S_lead_arr = np.empty(N_TRIALS_NOISY)
+    S_sigma_arr = np.empty(N_TRIALS_NOISY)
+
     for i in range(N_TRIALS_NOISY):
         U = np.random.uniform(-1.0, 1.0, size=5)
         base = 0.5 * Gs
@@ -204,12 +314,27 @@ for frac in NOISE_FRACS:
         rel_leads[i] = r["mean_rel_lead"]
         pass_flags[i] = passes(r, RHO_THRESH)
 
+        sc = quality_score(r, RHO_THRESH)
+        S_arr[i] = sc["S"]
+        S_raw_arr[i] = sc["S_raw"]
+        S_rho_arr[i] = sc["S_rho"]
+        S_lead_arr[i] = sc["S_lead"]
+        S_sigma_arr[i] = sc["S_sigma"]
+
     control_D_summary[frac] = {
         "lead_frac_mean": float(np.mean(lead_fracs)),
         "rho_mean": float(np.mean(rhos)),
         "rho_std": float(np.std(rhos)),
         "mean_rel_lead": float(np.mean(rel_leads)),
         "pass_rate": float(np.mean(pass_flags)),
+        # Score fields
+        "S_mean": float(np.mean(S_arr)),
+        "S_std": float(np.std(S_arr)),
+        "S_raw_mean": float(np.mean(S_raw_arr)),
+        "S_raw_std": float(np.std(S_raw_arr)),
+        "S_rho_mean": float(np.mean(S_rho_arr)),
+        "S_lead_mean": float(np.mean(S_lead_arr)),
+        "S_sigma_mean": float(np.mean(S_sigma_arr)),
     }
     control_D_raw[frac] = {
         "lead_fracs": lead_fracs.tolist(),
@@ -230,18 +355,31 @@ for frac in NOISE_FRACS:
 lead_fracs_v1 = np.empty(N_RAND)
 rel_leads_v1 = np.empty(N_RAND)
 pass_flags_v1 = np.empty(N_RAND, dtype=bool)
+S_v1 = np.empty(N_RAND)
+S_raw_v1 = np.empty(N_RAND)
+pass_with_S_v1 = np.empty(N_RAND, dtype=bool)
+
 for i in range(N_RAND):
     p_rand = np.random.uniform(0, T_MAX, size=5)
     r = evaluate(Gs, p_rand)
     lead_fracs_v1[i] = r["lead_frac"]
     rel_leads_v1[i] = r["mean_rel_lead"]
     pass_flags_v1[i] = passes(r, RHO_THRESH)
+    sc = quality_score(r, RHO_THRESH)
+    S_v1[i] = sc["S"]
+    S_raw_v1[i] = sc["S_raw"]
+    pass_with_S_v1[i] = sc["S"] > 0.0
+
 rhos_v1 = random_rhos_unconditional
 
 lead_fracs_v2 = np.empty(N_RAND)
 rhos_v2 = np.empty(N_RAND)
 rel_leads_v2 = np.empty(N_RAND)
 pass_flags_v2 = np.empty(N_RAND, dtype=bool)
+S_v2 = np.empty(N_RAND)
+S_raw_v2 = np.empty(N_RAND)
+pass_with_S_v2 = np.empty(N_RAND, dtype=bool)
+
 for i in range(N_RAND):
     p_rand = np.random.uniform(0, Gs)  # per-seed upper bound, elementwise
     r = evaluate(Gs, p_rand)
@@ -249,6 +387,10 @@ for i in range(N_RAND):
     rhos_v2[i] = r["rho"]
     rel_leads_v2[i] = r["mean_rel_lead"]
     pass_flags_v2[i] = passes(r, RHO_THRESH)
+    sc = quality_score(r, RHO_THRESH)
+    S_v2[i] = sc["S"]
+    S_raw_v2[i] = sc["S_raw"]
+    pass_with_S_v2[i] = sc["S"] > 0.0
 
 
 # ---------------------------------------------------------------------------
@@ -266,6 +408,13 @@ rows.append({
     "pass_rate": float(pass_A),
     "expected_pass_rate": "100%",
     "verdict": "PASS" if pass_A else "FAIL (BROKEN CRITERION)",
+    # Score columns
+    "S_mean": score_A["S"],
+    "S_std": 0.0,
+    "S_raw_mean": score_A["S_raw"],
+    "S_rho_mean": score_A["S_rho"],
+    "S_lead_mean": score_A["S_lead"],
+    "S_sigma_mean": score_A["S_sigma"],
 })
 
 rows.append({
@@ -277,6 +426,13 @@ rows.append({
     "pass_rate": float(pass_B),
     "expected_pass_rate": "0%",
     "verdict": "FAIL (as required)" if not pass_B else "PASS (BROKEN CRITERION)",
+    # Score columns
+    "S_mean": score_B["S"],
+    "S_std": 0.0,
+    "S_raw_mean": score_B["S_raw"],
+    "S_rho_mean": score_B["S_rho"],
+    "S_lead_mean": score_B["S_lead"],
+    "S_sigma_mean": score_B["S_sigma"],
 })
 
 rows.append({
@@ -288,6 +444,13 @@ rows.append({
     "pass_rate": float(pass_C),
     "expected_pass_rate": "0%",
     "verdict": "FAIL (as required)" if not pass_C else "PASS (BROKEN CRITERION)",
+    # Score columns
+    "S_mean": score_C["S"],
+    "S_std": 0.0,
+    "S_raw_mean": score_C["S_raw"],
+    "S_rho_mean": score_C["S_rho"],
+    "S_lead_mean": score_C["S_lead"],
+    "S_sigma_mean": score_C["S_sigma"],
 })
 
 for frac in NOISE_FRACS:
@@ -301,6 +464,13 @@ for frac in NOISE_FRACS:
         "pass_rate": s["pass_rate"],
         "expected_pass_rate": "decreasing with noise_frac",
         "verdict": "see plot_sensitivity.png",
+        # Score columns
+        "S_mean": s["S_mean"],
+        "S_std": s["S_std"],
+        "S_raw_mean": s["S_raw_mean"],
+        "S_rho_mean": s["S_rho_mean"],
+        "S_lead_mean": s["S_lead_mean"],
+        "S_sigma_mean": s["S_sigma_mean"],
     })
 
 rows.append({
@@ -312,6 +482,13 @@ rows.append({
     "pass_rate": float(np.mean(pass_flags_v1)),
     "expected_pass_rate": "<=1% (FPR, by calibration construction)",
     "verdict": "OK" if np.mean(pass_flags_v1) <= 0.01 else "FPR ABOVE TARGET",
+    # Score columns
+    "S_mean": float(np.mean(S_v1)),
+    "S_std": float(np.std(S_v1)),
+    "S_raw_mean": float(np.mean(S_raw_v1)),
+    "S_rho_mean": 0.0,       # not applicable: not stored per-trial for v1 (rho reused from calibration)
+    "S_lead_mean": 0.0,      # not stored per-trial for v1
+    "S_sigma_mean": 0.0,     # not stored per-trial for v1
 })
 
 rows.append({
@@ -323,11 +500,23 @@ rows.append({
     "pass_rate": float(np.mean(pass_flags_v2)),
     "expected_pass_rate": "<=5% (FPR of rho check alone)",
     "verdict": "OK" if np.mean(pass_flags_v2) <= 0.05 else "FPR ABOVE TARGET",
+    # Score columns
+    "S_mean": float(np.mean(S_v2)),
+    "S_std": float(np.std(S_v2)),
+    "S_raw_mean": float(np.mean(S_raw_v2)),
+    "S_rho_mean": 0.0,       # not stored per-trial for v2 (component arrays not kept)
+    "S_lead_mean": 0.0,
+    "S_sigma_mean": 0.0,
 })
 
 # CSV (no pandas dependency — numpy/scipy/matplotlib only)
 csv_path = os.path.join(OUT_DIR, "summary_table.csv")
-fieldnames = ["Control", "lead_frac", "rho_mean", "rho_std", "mean_rel_lead", "pass_rate", "expected_pass_rate", "verdict"]
+fieldnames = [
+    "Control", "lead_frac", "rho_mean", "rho_std", "mean_rel_lead",
+    "pass_rate", "expected_pass_rate", "verdict",
+    # New score columns
+    "S_mean", "S_std", "S_raw_mean", "S_rho_mean", "S_lead_mean", "S_sigma_mean",
+]
 with open(csv_path, "w") as f:
     f.write(",".join(fieldnames) + "\n")
     for row in rows:
@@ -392,9 +581,24 @@ detailed = {
     "margin": MARGIN,
     "RHO_THRESH": RHO_THRESH,
     "n_rand_for_calibration": N_RAND,
-    "control_A": {"Ps": Ps_A.tolist(), **{k: v for k, v in res_A.items() if k not in ("g", "p")}, "pass": pass_A},
-    "control_B": {"Ps": Ps_B.tolist(), **{k: v for k, v in res_B.items() if k not in ("g", "p")}, "pass": pass_B},
-    "control_C": {"Ps": Ps_C.tolist(), **{k: v for k, v in res_C.items() if k not in ("g", "p")}, "pass": pass_C},
+    "control_A": {
+        "Ps": Ps_A.tolist(),
+        **{k: v for k, v in res_A.items() if k not in ("g", "p", "r_i")},
+        "pass": pass_A,
+        "score": score_A,
+    },
+    "control_B": {
+        "Ps": Ps_B.tolist(),
+        **{k: v for k, v in res_B.items() if k not in ("g", "p", "r_i")},
+        "pass": pass_B,
+        "score": score_B,
+    },
+    "control_C": {
+        "Ps": Ps_C.tolist(),
+        **{k: v for k, v in res_C.items() if k not in ("g", "p", "r_i")},
+        "pass": pass_C,
+        "score": score_C,
+    },
     "control_D": {
         "noise_fracs": NOISE_FRACS,
         "n_trials_per_frac": N_TRIALS_NOISY,
@@ -407,6 +611,10 @@ detailed = {
         "rho_std": float(np.std(rhos_v1)),
         "mean_rel_lead": float(np.mean(rel_leads_v1)),
         "pass_rate": float(np.mean(pass_flags_v1)),
+        "S_mean": float(np.mean(S_v1)),
+        "S_std": float(np.std(S_v1)),
+        "S_raw_mean": float(np.mean(S_raw_v1)),
+        "frac_S_gt_0": float(np.mean(pass_with_S_v1)),
     },
     "control_E_variant2_conditional": {
         "n_trials": N_RAND,
@@ -415,6 +623,10 @@ detailed = {
         "rho_std": float(np.std(rhos_v2)),
         "mean_rel_lead": float(np.mean(rel_leads_v2)),
         "pass_rate": float(np.mean(pass_flags_v2)),
+        "S_mean": float(np.mean(S_v2)),
+        "S_std": float(np.std(S_v2)),
+        "S_raw_mean": float(np.mean(S_raw_v2)),
+        "frac_S_gt_0": float(np.mean(pass_with_S_v2)),
     },
 }
 
