@@ -1,46 +1,25 @@
 """
-Synthetic control experiment for the pre-grok predictor evaluation criterion.
+Synthetic control experiment — 17 engineered Superiority Index signals.
 
-This does NOT touch any real predictor code or checkpoints. It only tests
-whether the evaluation rule itself (lead + correlation + relative-lead
-window, with a calibrated Spearman threshold) is a sensible pass/fail rule
-by throwing known-good and known-bad synthetic signals at it.
+This does NOT touch any real predictor code or checkpoints. It reverse-engineers
+the three raw gate metrics (Lead fraction, Correlation coefficient, Noise margin)
+so that the evaluation pipeline returns exact expected Superiority Index values.
+
+Part 1 — 7 validity-gate failures (all permutations of Lead / Correlation / Noise)
+         Expected Superiority Index = 0.0 for every signal.
+
+Part 2 — 10 passing signals on the superiority spectrum
+         Raw values sit exactly fraction t in {0.10, ..., 1.00} above the gate
+         floors toward the theoretical perfect values, so SI = t exactly.
 
 Run:
-    python run_control_experiment.py
+    python 06_Code/scripts/run_control_experiment.py
 
 Output folder: ./controls_results/
-    summary_table.csv        one row per control
-    plot_sensitivity.png     pass_rate vs noise_frac for Control D
-    plot_null_distribution.png   histogram of random rho with RHO_THRESH line
-    detailed_results.json    all raw numbers
+    summary_table.csv
+    detailed_results.json
 
-Predictor Quality Index S
---------------------------
-The gate (passes()) decides validity: a control row that fails PASS receives
-S = 0 and is not ranked.  For rows that pass, S in [0, 1] ranks predictive
-quality along four independent axes:
-
-  S_rho  = max(0, rho)              -- rank-correlation quality; NaN -> 0
-  r_i    = (G_i - P_i) / G_i        -- per-seed relative lead (firing seeds only)
-  r_bar  = mean(r_i)
-  S_lead = max(0, 1 - |r_bar - 0.5| / 0.5)
-                                     -- rewards lead fraction centred on 0.5;
-                                        own choice, no paper fixes this target
-  sigma_r = np.std(r_i, ddof=0)     -- population std, same convention as the
-                                        rest of the project
-  S_sigma = max(0, 1 - sigma_r / r_bar)   if r_bar > 0, else 0
-                                     -- rewards low cross-seed variability;
-                                        own choice, no paper fixes this formula;
-                                        guard: r_bar <= 0 sets S_sigma = 0 to
-                                        avoid division by zero / sign flip
-  S_raw  = lead_frac * S_rho * S_lead * S_sigma
-  S      = S_raw  if passes(result, rho_thresh)  else 0.0
-
-The gate fires first: a row that fails PASS gets S = 0 regardless of S_raw.
-S_lead and S_sigma target the same lead fraction r_bar = 0.5 used by Control A
-(the oracle positive control).  Labels 'own choice' because no paper fixes
-either formula.
+The script exits with status 1 if any assertion fails.
 """
 
 import json
@@ -48,522 +27,325 @@ import os
 import sys
 
 import numpy as np
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-from scipy.stats import spearmanr
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 if os.path.join(REPO_ROOT, "06_Code") not in sys.path:
     sys.path.insert(0, os.path.join(REPO_ROOT, "06_Code"))
-from src.quality_score import passes, quality_score
 
-np.random.seed(42)
+from src.quality_score import (
+    CORR_PERFECT,
+    CORR_THRESH,
+    LEAD_PERFECT,
+    LEAD_THRESH,
+    NOISE_HI,
+    NOISE_LO,
+    NOISE_PERFECT,
+    passes,
+    raw_values_for_superiority_target,
+    superiority_index,
+    superiority_index_from_result,
+)
 
-# ---------------------------------------------------------------------------
-# Fixed problem setup
-# ---------------------------------------------------------------------------
+TOL = 1e-4
 
-Gs = np.array([12987, 6921, 9510, 11019, 23747], dtype=float)  # actual grok epochs, 5 seeds
-T_MAX = 40000.0
-MARGIN = 100.0
-N_TRIALS_NOISY = 10000    # per noise level, Control D
-N_RAND = 10000            # Control E, each variant
-NOISE_FRACS = [0.0, 0.10, 0.25, 0.50, 1.0]
-
-OUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "controls_results")
-OUT_DIR = os.path.abspath(OUT_DIR)
+OUT_DIR = os.path.join(REPO_ROOT, "controls_results")
 os.makedirs(OUT_DIR, exist_ok=True)
 
 
 # ---------------------------------------------------------------------------
-# Evaluation function (as specified — lead_frac, rho, mean_rel_lead)
+# Evaluation pipeline for a synthetic metric signal
 # ---------------------------------------------------------------------------
 
-# Default for this file's original top-level controls stays the margin rule,
-# so re-running the script does not rewrite the frozen 2026-09-29 calibration
-# under a different lead test. The fractional rule is the PASS-test default
-# in analyze_nanda_unified.py (c=0.8). Pass rule="fraction" here for the sweep.
-# Lead time scales with G (Xu arXiv:2602.16967; Golwala arXiv:2604.20923).
-# No paper fixes c.
-DEFAULT_LEAD_C = 0.8
+def evaluate_metrics(lead_frac, rho, noise_margin, corr_thresh=CORR_THRESH):
+    """Run the three raw metrics through the validity gate and Superiority Index.
 
-
-def evaluate(g_in, p_in, margin=MARGIN, rule="margin", c=DEFAULT_LEAD_C):
+    Returns a result dict compatible with passes() / superiority_index_from_result().
     """
-    g_in, p_in: arrays, length 5. p_in entries may be None (no detection).
-
-    lead_frac: number of leading seeds divided by the number of seeds.
-        A miss (None) counts as no lead and stays in the denominator.
-        4 leads and 1 miss is 4/5 = 0.8, not 4/4 = 1.0.
-        If fewer than 4 seeds fire, fail immediately
-        (lead_frac=0.0, rho=nan, mean_rel_lead=0.0).
-        rule="margin" (this file's historical default): P_s < G_s - margin.
-        rule="fraction": P_s < c * G_s. Lead time scales with G
-        (Xu arXiv:2602.16967; Golwala arXiv:2604.20923). No paper fixes c.
-    rho: Spearman rank correlation between G and P across firing seeds only.
-        A miss is dropped here, because it has no P_s. If every firing
-        P_s is exactly equal, correlation is undefined, so rho is forced to
-        0.0 rather than NaN. That check is exact (all values identical).
-        No numerical tolerance is used. A constant signal carries no
-        seed-to-seed timing information, so it must not be rewarded with
-        rho = NaN silently passing a downstream `rho >= threshold` check.
-        Rho does not use the lead rule, so the 99th-percentile calibration
-        of RHO_THRESH is the same for every c.
-    mean_rel_lead: mean of (G - P) / G over firing seeds only. A miss is
-        dropped, same as rho. This is how much of the pre-grok window, as
-        a fraction of G, the predictor's lead covers.
-    Returns also: r_i (per-seed relative lead array over firing seeds).
-        The fail-fast branch (fewer than 4 firing seeds) returns r_i = None.
-    """
-    pairs = list(zip(g_in, p_in))
-    n_seeds = len(pairs)
-    valid = [(g, p) for g, p in pairs if p is not None]
-    if len(valid) < 4:
-        return {"pass": False, "lead_frac": 0.0, "rho": np.nan, "mean_rel_lead": 0.0, "r_i": None}
-
-    g_arr = np.array([x[0] for x in valid], dtype=float)
-    p_arr = np.array([x[1] for x in valid], dtype=float)
-
-    if rule == "fraction":
-        lead = p_arr < (float(c) * g_arr)
-    elif rule == "margin":
-        lead = p_arr < (g_arr - margin)
-    else:
-        raise ValueError(f"unknown lead rule {rule!r}")
-    # A miss is not a lead and stays in the denominator.
-    lead_frac = float(np.sum(lead) / n_seeds) if n_seeds else 0.0
-    rel_lead = (g_arr - p_arr) / g_arr
-    mean_rel_lead = float(np.mean(rel_lead))
-
-    # Spearman rho is undefined when every firing P value is the same.
-    # Exact equality. No numerical tolerance.
-    if len(g_arr) >= 3 and not np.all(p_arr == p_arr[0]):
-        rho, _ = spearmanr(g_arr, p_arr)
-        rho = 0.0 if np.isnan(rho) else float(rho)
-    else:
-        rho = 0.0
-
-    return {
-        "lead_frac": lead_frac,
-        "rho": rho,
-        "mean_rel_lead": mean_rel_lead,
-        "g": g_arr,
-        "p": p_arr,
-        "r_i": rel_lead,
+    result = {
+        "lead_frac": float(lead_frac),
+        "rho": float(rho),
+        "mean_rel_lead": float(noise_margin),
+        "noise_margin": float(noise_margin),
+        "n_firing": 5,  # metric-level signals assume a full firing set
     }
-
-
-# passes() and quality_score() are imported from src.quality_score above.
-
-
-# ---------------------------------------------------------------------------
-# Step 1 — calibrate RHO_THRESH from Control E Variant 1 (unconditional random)
-# ---------------------------------------------------------------------------
-# Rationale: instead of hand-picking a Spearman cutoff, generate 10,000
-# fully random predictors (Ps ~ Uniform[0, T_MAX], independent of Gs) and
-# take the 99th percentile of their rho distribution. Any real predictor
-# must clear that bar to be called correlated with grokking, which caps
-# the false-positive rate of the rho check at <= 1% by construction
-# (for the unconditional variant; the conditional variant, Control E
-# Variant 2, still runs higher because it always leads by construction —
-# see its "verdict" in summary_table.csv).
-
-random_rhos_unconditional = np.empty(N_RAND)
-for i in range(N_RAND):
-    p_rand = np.random.uniform(0, T_MAX, size=5)
-    res = evaluate(Gs, p_rand)
-    random_rhos_unconditional[i] = res["rho"]
-
-RHO_THRESH = float(np.percentile(random_rhos_unconditional, 99))
-print(f"Calibrated RHO_THRESH (99th percentile of {N_RAND} random rho values) = {RHO_THRESH:.4f}")
+    gate_pass = passes(result, corr_thresh)
+    si = superiority_index_from_result(result, corr_thresh=corr_thresh)
+    result["passed"] = gate_pass
+    result["superiority_index"] = si
+    return result
 
 
 # ---------------------------------------------------------------------------
-# Control A — Ideal perfect predictor: Ps = 0.5 * Gs
+# Part 1 — 7 failing signals (every non-empty subset of the three gate checks)
 # ---------------------------------------------------------------------------
+# Passing reference values used when a dimension is NOT the failure mode:
+#   Lead = 1.0, Correlation = 0.95, Noise = 0.5
+# Failing values:
+#   Lead = 0.6 (< 0.8), Correlation = 0.7 (< 0.9), Noise = 0.01 (out of window)
 
-Ps_A = 0.5 * Gs
-res_A = evaluate(Gs, Ps_A)
-pass_A = passes(res_A, RHO_THRESH)
-score_A = quality_score(res_A, RHO_THRESH)
+_PASS_LEAD = LEAD_PERFECT
+_PASS_CORR = 0.95
+_PASS_NOISE = NOISE_PERFECT
+_FAIL_LEAD = 0.6
+_FAIL_CORR = 0.7
+_FAIL_NOISE = 0.01  # below NOISE_LO; also could use 0.95 (> NOISE_HI)
 
-
-# ---------------------------------------------------------------------------
-# Control B — Constant early signal: Ps = 5000 for all seeds
-# ---------------------------------------------------------------------------
-
-Ps_B = np.full(5, 5000.0)
-res_B = evaluate(Gs, Ps_B)
-pass_B = passes(res_B, RHO_THRESH)
-score_B = quality_score(res_B, RHO_THRESH)
-
-
-# ---------------------------------------------------------------------------
-# Control C — Post-grok signal: Ps = 1.5 * Gs
-# ---------------------------------------------------------------------------
-
-Ps_C = 1.5 * Gs
-res_C = evaluate(Gs, Ps_C)
-pass_C = passes(res_C, RHO_THRESH)
-score_C = quality_score(res_C, RHO_THRESH)
-
-
-# ---------------------------------------------------------------------------
-# Control D — Noisy-good predictor: Ps = 0.5*Gs + noise_frac*(0.5*Gs)*U[-1,1]
-# ---------------------------------------------------------------------------
-# Normalization: Gs ranges 6921..23747, a >3x spread. A fixed absolute noise
-# (e.g. +-1000) would be a large fraction of the signal for the smallest
-# seed and a small fraction for the largest — biased across seeds. Scaling
-# noise by 0.5*Gs (the target value itself) keeps the noise fraction equal,
-# in relative terms, for every seed.
-
-control_D_summary = {}
-control_D_raw = {}
-
-for frac in NOISE_FRACS:
-    lead_fracs = np.empty(N_TRIALS_NOISY)
-    rhos = np.empty(N_TRIALS_NOISY)
-    rel_leads = np.empty(N_TRIALS_NOISY)
-    pass_flags = np.empty(N_TRIALS_NOISY, dtype=bool)
-
-    # Score arrays for Control D
-    S_arr = np.empty(N_TRIALS_NOISY)
-    S_raw_arr = np.empty(N_TRIALS_NOISY)
-    S_rho_arr = np.empty(N_TRIALS_NOISY)
-    S_lead_arr = np.empty(N_TRIALS_NOISY)
-    S_sigma_arr = np.empty(N_TRIALS_NOISY)
-
-    for i in range(N_TRIALS_NOISY):
-        U = np.random.uniform(-1.0, 1.0, size=5)
-        base = 0.5 * Gs
-        eps = frac * base * U
-        p_trial = base + eps
-        r = evaluate(Gs, p_trial)
-        lead_fracs[i] = r["lead_frac"]
-        rhos[i] = r["rho"]
-        rel_leads[i] = r["mean_rel_lead"]
-        pass_flags[i] = passes(r, RHO_THRESH)
-
-        sc = quality_score(r, RHO_THRESH)
-        S_arr[i] = sc["S"]
-        S_raw_arr[i] = sc["S_raw"]
-        S_rho_arr[i] = sc["S_rho"]
-        S_lead_arr[i] = sc["S_lead"]
-        S_sigma_arr[i] = sc["S_sigma"]
-
-    control_D_summary[frac] = {
-        "lead_frac_mean": float(np.mean(lead_fracs)),
-        "rho_mean": float(np.mean(rhos)),
-        "rho_std": float(np.std(rhos)),
-        "mean_rel_lead": float(np.mean(rel_leads)),
-        "pass_rate": float(np.mean(pass_flags)),
-        # Score fields
-        "S_mean": float(np.mean(S_arr)),
-        "S_std": float(np.std(S_arr)),
-        "S_raw_mean": float(np.mean(S_raw_arr)),
-        "S_raw_std": float(np.std(S_raw_arr)),
-        "S_rho_mean": float(np.mean(S_rho_arr)),
-        "S_lead_mean": float(np.mean(S_lead_arr)),
-        "S_sigma_mean": float(np.mean(S_sigma_arr)),
-    }
-    control_D_raw[frac] = {
-        "lead_fracs": lead_fracs.tolist(),
-        "rhos": rhos.tolist(),
-        "rel_leads": rel_leads.tolist(),
-    }
+FAILING_SIGNALS = [
+    {
+        "id": 1,
+        "name": "fail_lead_only",
+        "lead_frac": _FAIL_LEAD,
+        "rho": _PASS_CORR,
+        "noise_margin": _PASS_NOISE,
+        "expected_si": 0.0,
+        "failure_modes": ("lead",),
+    },
+    {
+        "id": 2,
+        "name": "fail_corr_only",
+        "lead_frac": _PASS_LEAD,
+        "rho": _FAIL_CORR,
+        "noise_margin": _PASS_NOISE,
+        "expected_si": 0.0,
+        "failure_modes": ("corr",),
+    },
+    {
+        "id": 3,
+        "name": "fail_noise_only",
+        "lead_frac": _PASS_LEAD,
+        "rho": _PASS_CORR,
+        "noise_margin": _FAIL_NOISE,
+        "expected_si": 0.0,
+        "failure_modes": ("noise",),
+    },
+    {
+        "id": 4,
+        "name": "fail_lead_corr",
+        "lead_frac": _FAIL_LEAD,
+        "rho": _FAIL_CORR,
+        "noise_margin": _PASS_NOISE,
+        "expected_si": 0.0,
+        "failure_modes": ("lead", "corr"),
+    },
+    {
+        "id": 5,
+        "name": "fail_lead_noise",
+        "lead_frac": _FAIL_LEAD,
+        "rho": _PASS_CORR,
+        "noise_margin": _FAIL_NOISE,
+        "expected_si": 0.0,
+        "failure_modes": ("lead", "noise"),
+    },
+    {
+        "id": 6,
+        "name": "fail_corr_noise",
+        "lead_frac": _PASS_LEAD,
+        "rho": _FAIL_CORR,
+        "noise_margin": _FAIL_NOISE,
+        "expected_si": 0.0,
+        "failure_modes": ("corr", "noise"),
+    },
+    {
+        "id": 7,
+        "name": "fail_all_three",
+        "lead_frac": _FAIL_LEAD,
+        "rho": _FAIL_CORR,
+        "noise_margin": _FAIL_NOISE,
+        "expected_si": 0.0,
+        "failure_modes": ("lead", "corr", "noise"),
+    },
+]
 
 
 # ---------------------------------------------------------------------------
-# Control E — Random predictor (false-positive rate estimate)
-# ---------------------------------------------------------------------------
-# Variant 1 (unconditional): Ps ~ Uniform[0, T_MAX] — tests lead AND rho.
-#   (random_rhos_unconditional was already generated above for calibration;
-#    reuse it here instead of drawing a fresh batch.)
-# Variant 2 (conditional): Ps ~ Uniform[0, Gs] per seed — always leads by
-#   construction, isolates the correlation check's false-positive rate.
-
-lead_fracs_v1 = np.empty(N_RAND)
-rel_leads_v1 = np.empty(N_RAND)
-pass_flags_v1 = np.empty(N_RAND, dtype=bool)
-S_v1 = np.empty(N_RAND)
-S_raw_v1 = np.empty(N_RAND)
-pass_with_S_v1 = np.empty(N_RAND, dtype=bool)
-
-for i in range(N_RAND):
-    p_rand = np.random.uniform(0, T_MAX, size=5)
-    r = evaluate(Gs, p_rand)
-    lead_fracs_v1[i] = r["lead_frac"]
-    rel_leads_v1[i] = r["mean_rel_lead"]
-    pass_flags_v1[i] = passes(r, RHO_THRESH)
-    sc = quality_score(r, RHO_THRESH)
-    S_v1[i] = sc["S"]
-    S_raw_v1[i] = sc["S_raw"]
-    pass_with_S_v1[i] = sc["S"] > 0.0
-
-rhos_v1 = random_rhos_unconditional
-
-lead_fracs_v2 = np.empty(N_RAND)
-rhos_v2 = np.empty(N_RAND)
-rel_leads_v2 = np.empty(N_RAND)
-pass_flags_v2 = np.empty(N_RAND, dtype=bool)
-S_v2 = np.empty(N_RAND)
-S_raw_v2 = np.empty(N_RAND)
-pass_with_S_v2 = np.empty(N_RAND, dtype=bool)
-
-for i in range(N_RAND):
-    p_rand = np.random.uniform(0, Gs)  # per-seed upper bound, elementwise
-    r = evaluate(Gs, p_rand)
-    lead_fracs_v2[i] = r["lead_frac"]
-    rhos_v2[i] = r["rho"]
-    rel_leads_v2[i] = r["mean_rel_lead"]
-    pass_flags_v2[i] = passes(r, RHO_THRESH)
-    sc = quality_score(r, RHO_THRESH)
-    S_v2[i] = sc["S"]
-    S_raw_v2[i] = sc["S_raw"]
-    pass_with_S_v2[i] = sc["S"] > 0.0
-
-
-# ---------------------------------------------------------------------------
-# Assemble summary table
+# Part 2 — 10 passing signals (Superiority spectrum 0.10 … 1.00)
 # ---------------------------------------------------------------------------
 
-rows = []
+PASSING_TARGETS = [0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00]
 
-rows.append({
-    "Control": "A: Ideal (0.5*Gs)",
-    "lead_frac": res_A["lead_frac"],
-    "rho_mean": res_A["rho"],
-    "rho_std": 0.0,
-    "mean_rel_lead": res_A["mean_rel_lead"],
-    "pass_rate": float(pass_A),
-    "expected_pass_rate": "100%",
-    "verdict": "PASS" if pass_A else "FAIL (BROKEN CRITERION)",
-    # Score columns
-    "S_mean": score_A["S"],
-    "S_std": 0.0,
-    "S_raw_mean": score_A["S_raw"],
-    "S_rho_mean": score_A["S_rho"],
-    "S_lead_mean": score_A["S_lead"],
-    "S_sigma_mean": score_A["S_sigma"],
-})
-
-rows.append({
-    "Control": "B: Constant (5000)",
-    "lead_frac": res_B["lead_frac"],
-    "rho_mean": res_B["rho"],
-    "rho_std": 0.0,
-    "mean_rel_lead": res_B["mean_rel_lead"],
-    "pass_rate": float(pass_B),
-    "expected_pass_rate": "0%",
-    "verdict": "FAIL (as required)" if not pass_B else "PASS (BROKEN CRITERION)",
-    # Score columns
-    "S_mean": score_B["S"],
-    "S_std": 0.0,
-    "S_raw_mean": score_B["S_raw"],
-    "S_rho_mean": score_B["S_rho"],
-    "S_lead_mean": score_B["S_lead"],
-    "S_sigma_mean": score_B["S_sigma"],
-})
-
-rows.append({
-    "Control": "C: Post-grok (1.5*Gs)",
-    "lead_frac": res_C["lead_frac"],
-    "rho_mean": res_C["rho"],
-    "rho_std": 0.0,
-    "mean_rel_lead": res_C["mean_rel_lead"],
-    "pass_rate": float(pass_C),
-    "expected_pass_rate": "0%",
-    "verdict": "FAIL (as required)" if not pass_C else "PASS (BROKEN CRITERION)",
-    # Score columns
-    "S_mean": score_C["S"],
-    "S_std": 0.0,
-    "S_raw_mean": score_C["S_raw"],
-    "S_rho_mean": score_C["S_rho"],
-    "S_lead_mean": score_C["S_lead"],
-    "S_sigma_mean": score_C["S_sigma"],
-})
-
-for frac in NOISE_FRACS:
-    s = control_D_summary[frac]
-    rows.append({
-        "Control": f"D: Noisy-good (frac={frac})",
-        "lead_frac": s["lead_frac_mean"],
-        "rho_mean": s["rho_mean"],
-        "rho_std": s["rho_std"],
-        "mean_rel_lead": s["mean_rel_lead"],
-        "pass_rate": s["pass_rate"],
-        "expected_pass_rate": "decreasing with noise_frac",
-        "verdict": "see plot_sensitivity.png",
-        # Score columns
-        "S_mean": s["S_mean"],
-        "S_std": s["S_std"],
-        "S_raw_mean": s["S_raw_mean"],
-        "S_rho_mean": s["S_rho_mean"],
-        "S_lead_mean": s["S_lead_mean"],
-        "S_sigma_mean": s["S_sigma_mean"],
+PASSING_SIGNALS = []
+for i, t in enumerate(PASSING_TARGETS, start=8):
+    raw = raw_values_for_superiority_target(t)
+    PASSING_SIGNALS.append({
+        "id": i,
+        "name": f"pass_si_{t:.2f}",
+        "lead_frac": raw["lead_frac"],
+        "rho": raw["rho"],
+        "noise_margin": raw["noise_margin"],
+        "expected_si": float(t),
+        "target_fraction": float(t),
     })
 
-rows.append({
-    "Control": "E: Random Uniform[0,T_MAX] (Variant 1, unconditional)",
-    "lead_frac": float(np.mean(lead_fracs_v1)),
-    "rho_mean": float(np.mean(rhos_v1)),
-    "rho_std": float(np.std(rhos_v1)),
-    "mean_rel_lead": float(np.mean(rel_leads_v1)),
-    "pass_rate": float(np.mean(pass_flags_v1)),
-    "expected_pass_rate": "<=1% (FPR, by calibration construction)",
-    "verdict": "OK" if np.mean(pass_flags_v1) <= 0.01 else "FPR ABOVE TARGET",
-    # Score columns
-    "S_mean": float(np.mean(S_v1)),
-    "S_std": float(np.std(S_v1)),
-    "S_raw_mean": float(np.mean(S_raw_v1)),
-    "S_rho_mean": 0.0,       # not applicable: not stored per-trial for v1 (rho reused from calibration)
-    "S_lead_mean": 0.0,      # not stored per-trial for v1
-    "S_sigma_mean": 0.0,     # not stored per-trial for v1
-})
 
-rows.append({
-    "Control": "E: Random Uniform[0,Gs] (Variant 2, conditional, always leads)",
-    "lead_frac": float(np.mean(lead_fracs_v2)),
-    "rho_mean": float(np.mean(rhos_v2)),
-    "rho_std": float(np.std(rhos_v2)),
-    "mean_rel_lead": float(np.mean(rel_leads_v2)),
-    "pass_rate": float(np.mean(pass_flags_v2)),
-    "expected_pass_rate": "<=5% (FPR of rho check alone)",
-    "verdict": "OK" if np.mean(pass_flags_v2) <= 0.05 else "FPR ABOVE TARGET",
-    # Score columns
-    "S_mean": float(np.mean(S_v2)),
-    "S_std": float(np.std(S_v2)),
-    "S_raw_mean": float(np.mean(S_raw_v2)),
-    "S_rho_mean": 0.0,       # not stored per-trial for v2 (component arrays not kept)
-    "S_lead_mean": 0.0,
-    "S_sigma_mean": 0.0,
-})
-
-# CSV (no pandas dependency — numpy/scipy/matplotlib only)
-csv_path = os.path.join(OUT_DIR, "summary_table.csv")
-fieldnames = [
-    "Control", "lead_frac", "rho_mean", "rho_std", "mean_rel_lead",
-    "pass_rate", "expected_pass_rate", "verdict",
-    # New score columns
-    "S_mean", "S_std", "S_raw_mean", "S_rho_mean", "S_lead_mean", "S_sigma_mean",
-]
-with open(csv_path, "w") as f:
-    f.write(",".join(fieldnames) + "\n")
-    for row in rows:
-        vals = []
-        for k in fieldnames:
-            v = row[k]
-            if isinstance(v, float):
-                vals.append(f"{v:.4f}")
-            else:
-                vals.append(str(v).replace(",", ";"))
-        f.write(",".join(vals) + "\n")
-print(f"Wrote {csv_path}")
+ALL_SIGNALS = FAILING_SIGNALS + PASSING_SIGNALS
+assert len(ALL_SIGNALS) == 17, f"expected 17 signals, got {len(ALL_SIGNALS)}"
 
 
 # ---------------------------------------------------------------------------
-# Plot 1 — sensitivity curve (Control D: pass_rate vs noise_frac)
+# Run pipeline + strict assertions
 # ---------------------------------------------------------------------------
 
-fig, ax = plt.subplots(figsize=(7, 5))
-xs = NOISE_FRACS
-ys = [control_D_summary[f]["pass_rate"] * 100 for f in NOISE_FRACS]
-ax.plot(xs, ys, marker="o", linewidth=2)
-ax.set_xlabel("noise_frac")
-ax.set_ylabel("pass_rate (%)")
-ax.set_title("Control D — Noisy-good predictor: pass rate vs noise level")
-ax.set_ylim(-5, 105)
-ax.grid(True, alpha=0.3)
-fig.tight_layout()
-sens_path = os.path.join(OUT_DIR, "plot_sensitivity.png")
-fig.savefig(sens_path, dpi=150)
-plt.close(fig)
-print(f"Wrote {sens_path}")
+def _fmt_discrepancy(sig, got, expected):
+    return (
+        f"  [{sig['id']:02d}] {sig['name']}: "
+        f"got SI={got:.8f}, expected={expected:.8f}, "
+        f"|diff|={abs(got - expected):.8e} "
+        f"(lead={sig['lead_frac']:.6f}, "
+        f"rho={sig['rho']:.6f}, "
+        f"noise={sig['noise_margin']:.6f})"
+    )
 
 
-# ---------------------------------------------------------------------------
-# Plot 2 — null distribution (Control E Variant 1 rho histogram + threshold)
-# ---------------------------------------------------------------------------
+def main():
+    print("=" * 72)
+    print("Control experiment — 17 Superiority Index signals")
+    print("=" * 72)
+    print(
+        f"Gate: Lead>={LEAD_THRESH}, Corr>={CORR_THRESH}, "
+        f"Noise in [{NOISE_LO}, {NOISE_HI}]"
+    )
+    print(
+        f"Perfect: Lead={LEAD_PERFECT}, Corr={CORR_PERFECT}, "
+        f"Noise={NOISE_PERFECT}"
+    )
+    print(f"Assertion tolerance: {TOL}")
+    print()
 
-fig, ax = plt.subplots(figsize=(7, 5))
-ax.hist(rhos_v1, bins=40, color="steelblue", alpha=0.8, edgecolor="white")
-ax.axvline(RHO_THRESH, color="red", linewidth=2, linestyle="--",
-           label=f"RHO_THRESH (99th pct) = {RHO_THRESH:.3f}")
-ax.set_xlabel("Spearman rho (Gs vs random Ps)")
-ax.set_ylabel("count")
-ax.set_title(f"Null distribution of rho, {N_RAND} random predictors (Control E, Variant 1)")
-ax.legend()
-ax.grid(True, alpha=0.3)
-fig.tight_layout()
-null_path = os.path.join(OUT_DIR, "plot_null_distribution.png")
-fig.savefig(null_path, dpi=150)
-plt.close(fig)
-print(f"Wrote {null_path}")
+    rows = []
+    failures = []
+
+    for sig in ALL_SIGNALS:
+        result = evaluate_metrics(
+            sig["lead_frac"], sig["rho"], sig["noise_margin"]
+        )
+        got = result["superiority_index"]
+        expected = float(sig["expected_si"])
+        ok = abs(got - expected) <= TOL
+
+        # Direct formula check (same pipeline path, explicit call).
+        got_direct = superiority_index(
+            sig["lead_frac"], sig["rho"], sig["noise_margin"]
+        )
+        if abs(got_direct - got) > TOL:
+            failures.append(
+                f"  [{sig['id']:02d}] {sig['name']}: "
+                f"pipeline SI ({got:.8f}) != direct SI ({got_direct:.8f})"
+            )
+
+        if not ok:
+            failures.append(_fmt_discrepancy(sig, got, expected))
+
+        # Failing signals must also fail the validity gate.
+        if sig["id"] <= 7 and result["passed"]:
+            failures.append(
+                f"  [{sig['id']:02d}] {sig['name']}: "
+                f"expected gate FAIL, but passes() returned True"
+            )
+
+        # Passing signals must clear the validity gate.
+        if sig["id"] >= 8 and not result["passed"]:
+            failures.append(
+                f"  [{sig['id']:02d}] {sig['name']}: "
+                f"expected gate PASS, but passes() returned False"
+            )
+
+        status = "OK" if ok else "MISMATCH"
+        print(
+            f"[{sig['id']:02d}] {sig['name']:<22} "
+            f"lead={sig['lead_frac']:.4f}  rho={sig['rho']:.4f}  "
+            f"noise={sig['noise_margin']:.4f}  "
+            f"SI={got:.6f}  expected={expected:.2f}  [{status}]"
+        )
+
+        rows.append({
+            "id": sig["id"],
+            "name": sig["name"],
+            "lead_frac": sig["lead_frac"],
+            "rho": sig["rho"],
+            "noise_margin": sig["noise_margin"],
+            "gate_pass": bool(result["passed"]),
+            "superiority_index": got,
+            "expected_si": expected,
+            "abs_error": abs(got - expected),
+            "assertion_ok": ok,
+            "failure_modes": list(sig.get("failure_modes", [])),
+            "target_fraction": sig.get("target_fraction"),
+        })
+
+    print()
+
+    # -----------------------------------------------------------------------
+    # Write outputs
+    # -----------------------------------------------------------------------
+    csv_path = os.path.join(OUT_DIR, "summary_table.csv")
+    fieldnames = [
+        "id", "name", "lead_frac", "rho", "noise_margin",
+        "gate_pass", "superiority_index", "expected_si",
+        "abs_error", "assertion_ok",
+    ]
+    with open(csv_path, "w") as f:
+        f.write(",".join(fieldnames) + "\n")
+        for row in rows:
+            vals = []
+            for k in fieldnames:
+                v = row[k]
+                if isinstance(v, float):
+                    vals.append(f"{v:.6f}")
+                else:
+                    vals.append(str(v))
+            f.write(",".join(vals) + "\n")
+    print(f"Wrote {csv_path}")
+
+    detailed = {
+        "description": (
+            "17 synthetic Superiority Index signals: "
+            "7 validity-gate failures + 10 passing spectrum points."
+        ),
+        "tolerance": TOL,
+        "gate": {
+            "lead_thresh": LEAD_THRESH,
+            "corr_thresh": CORR_THRESH,
+            "noise_lo": NOISE_LO,
+            "noise_hi": NOISE_HI,
+        },
+        "perfect": {
+            "lead": LEAD_PERFECT,
+            "corr": CORR_PERFECT,
+            "noise": NOISE_PERFECT,
+        },
+        "formula": (
+            "SI = 0 if gate fails; else "
+            "mean( (L-0.8)/0.2, (rho-0.9)/0.1, (noise-0.05)/0.45 )"
+        ),
+        "n_signals": len(rows),
+        "signals": rows,
+        "all_assertions_passed": len(failures) == 0,
+    }
+    json_path = os.path.join(OUT_DIR, "detailed_results.json")
+    with open(json_path, "w") as f:
+        json.dump(detailed, f, indent=2)
+    print(f"Wrote {json_path}")
+
+    # -----------------------------------------------------------------------
+    # Hard fail on any discrepancy
+    # -----------------------------------------------------------------------
+    if failures:
+        print()
+        print("ASSERTION FAILURES — criteria do not fit:")
+        for line in failures:
+            print(line)
+        print()
+        print(f"{len(failures)} discrepancy(ies). Exiting with status 1.")
+        sys.exit(1)
+
+    print()
+    print(
+        "All 17 assertions passed: "
+        "7 failing signals -> SI = 0.0; "
+        "10 passing signals -> SI in {0.10, ..., 1.00}."
+    )
+    print("Done. All outputs in:", OUT_DIR)
 
 
-# ---------------------------------------------------------------------------
-# detailed_results.json
-# ---------------------------------------------------------------------------
-
-detailed = {
-    "Gs": Gs.tolist(),
-    "T_MAX": T_MAX,
-    "margin": MARGIN,
-    "RHO_THRESH": RHO_THRESH,
-    "n_rand_for_calibration": N_RAND,
-    "control_A": {
-        "Ps": Ps_A.tolist(),
-        **{k: v for k, v in res_A.items() if k not in ("g", "p", "r_i")},
-        "pass": pass_A,
-        "score": score_A,
-    },
-    "control_B": {
-        "Ps": Ps_B.tolist(),
-        **{k: v for k, v in res_B.items() if k not in ("g", "p", "r_i")},
-        "pass": pass_B,
-        "score": score_B,
-    },
-    "control_C": {
-        "Ps": Ps_C.tolist(),
-        **{k: v for k, v in res_C.items() if k not in ("g", "p", "r_i")},
-        "pass": pass_C,
-        "score": score_C,
-    },
-    "control_D": {
-        "noise_fracs": NOISE_FRACS,
-        "n_trials_per_frac": N_TRIALS_NOISY,
-        "summary": control_D_summary,
-    },
-    "control_E_variant1_unconditional": {
-        "n_trials": N_RAND,
-        "lead_frac_mean": float(np.mean(lead_fracs_v1)),
-        "rho_mean": float(np.mean(rhos_v1)),
-        "rho_std": float(np.std(rhos_v1)),
-        "mean_rel_lead": float(np.mean(rel_leads_v1)),
-        "pass_rate": float(np.mean(pass_flags_v1)),
-        "S_mean": float(np.mean(S_v1)),
-        "S_std": float(np.std(S_v1)),
-        "S_raw_mean": float(np.mean(S_raw_v1)),
-        "frac_S_gt_0": float(np.mean(pass_with_S_v1)),
-    },
-    "control_E_variant2_conditional": {
-        "n_trials": N_RAND,
-        "lead_frac_mean": float(np.mean(lead_fracs_v2)),
-        "rho_mean": float(np.mean(rhos_v2)),
-        "rho_std": float(np.std(rhos_v2)),
-        "mean_rel_lead": float(np.mean(rel_leads_v2)),
-        "pass_rate": float(np.mean(pass_flags_v2)),
-        "S_mean": float(np.mean(S_v2)),
-        "S_std": float(np.std(S_v2)),
-        "S_raw_mean": float(np.mean(S_raw_v2)),
-        "frac_S_gt_0": float(np.mean(pass_with_S_v2)),
-    },
-}
-
-json_path = os.path.join(OUT_DIR, "detailed_results.json")
-with open(json_path, "w") as f:
-    json.dump(detailed, f, indent=2)
-print(f"Wrote {json_path}")
-
-print("\nDone. All outputs in:", OUT_DIR)
+if __name__ == "__main__":
+    main()

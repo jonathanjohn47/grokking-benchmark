@@ -1,185 +1,277 @@
 {
-  "Gs": [
-    12987.0,
-    6921.0,
-    9510.0,
-    11019.0,
-    23747.0
+  "description": "17 synthetic Superiority Index signals: 7 validity-gate failures + 10 passing spectrum points.",
+  "tolerance": 0.0001,
+  "gate": {
+    "lead_thresh": 0.8,
+    "corr_thresh": 0.9,
+    "noise_lo": 0.05,
+    "noise_hi": 0.9
+  },
+  "perfect": {
+    "lead": 1.0,
+    "corr": 1.0,
+    "noise": 0.5
+  },
+  "formula": "SI = 0 if gate fails; else mean( (L-0.8)/0.2, (rho-0.9)/0.1, (noise-0.05)/0.45 )",
+  "n_signals": 17,
+  "signals": [
+    {
+      "id": 1,
+      "name": "fail_lead_only",
+      "lead_frac": 0.6,
+      "rho": 0.95,
+      "noise_margin": 0.5,
+      "gate_pass": false,
+      "superiority_index": 0.0,
+      "expected_si": 0.0,
+      "abs_error": 0.0,
+      "assertion_ok": true,
+      "failure_modes": [
+        "lead"
+      ],
+      "target_fraction": null
+    },
+    {
+      "id": 2,
+      "name": "fail_corr_only",
+      "lead_frac": 1.0,
+      "rho": 0.7,
+      "noise_margin": 0.5,
+      "gate_pass": false,
+      "superiority_index": 0.0,
+      "expected_si": 0.0,
+      "abs_error": 0.0,
+      "assertion_ok": true,
+      "failure_modes": [
+        "corr"
+      ],
+      "target_fraction": null
+    },
+    {
+      "id": 3,
+      "name": "fail_noise_only",
+      "lead_frac": 1.0,
+      "rho": 0.95,
+      "noise_margin": 0.01,
+      "gate_pass": false,
+      "superiority_index": 0.0,
+      "expected_si": 0.0,
+      "abs_error": 0.0,
+      "assertion_ok": true,
+      "failure_modes": [
+        "noise"
+      ],
+      "target_fraction": null
+    },
+    {
+      "id": 4,
+      "name": "fail_lead_corr",
+      "lead_frac": 0.6,
+      "rho": 0.7,
+      "noise_margin": 0.5,
+      "gate_pass": false,
+      "superiority_index": 0.0,
+      "expected_si": 0.0,
+      "abs_error": 0.0,
+      "assertion_ok": true,
+      "failure_modes": [
+        "lead",
+        "corr"
+      ],
+      "target_fraction": null
+    },
+    {
+      "id": 5,
+      "name": "fail_lead_noise",
+      "lead_frac": 0.6,
+      "rho": 0.95,
+      "noise_margin": 0.01,
+      "gate_pass": false,
+      "superiority_index": 0.0,
+      "expected_si": 0.0,
+      "abs_error": 0.0,
+      "assertion_ok": true,
+      "failure_modes": [
+        "lead",
+        "noise"
+      ],
+      "target_fraction": null
+    },
+    {
+      "id": 6,
+      "name": "fail_corr_noise",
+      "lead_frac": 1.0,
+      "rho": 0.7,
+      "noise_margin": 0.01,
+      "gate_pass": false,
+      "superiority_index": 0.0,
+      "expected_si": 0.0,
+      "abs_error": 0.0,
+      "assertion_ok": true,
+      "failure_modes": [
+        "corr",
+        "noise"
+      ],
+      "target_fraction": null
+    },
+    {
+      "id": 7,
+      "name": "fail_all_three",
+      "lead_frac": 0.6,
+      "rho": 0.7,
+      "noise_margin": 0.01,
+      "gate_pass": false,
+      "superiority_index": 0.0,
+      "expected_si": 0.0,
+      "abs_error": 0.0,
+      "assertion_ok": true,
+      "failure_modes": [
+        "lead",
+        "corr",
+        "noise"
+      ],
+      "target_fraction": null
+    },
+    {
+      "id": 8,
+      "name": "pass_si_0.10",
+      "lead_frac": 0.8200000000000001,
+      "rho": 0.91,
+      "noise_margin": 0.095,
+      "gate_pass": true,
+      "superiority_index": 0.10000000000000007,
+      "expected_si": 0.1,
+      "abs_error": 6.938893903907228e-17,
+      "assertion_ok": true,
+      "failure_modes": [],
+      "target_fraction": 0.1
+    },
+    {
+      "id": 9,
+      "name": "pass_si_0.20",
+      "lead_frac": 0.8400000000000001,
+      "rho": 0.92,
+      "noise_margin": 0.14,
+      "gate_pass": true,
+      "superiority_index": 0.20000000000000018,
+      "expected_si": 0.2,
+      "abs_error": 1.6653345369377348e-16,
+      "assertion_ok": true,
+      "failure_modes": [],
+      "target_fraction": 0.2
+    },
+    {
+      "id": 10,
+      "name": "pass_si_0.30",
+      "lead_frac": 0.86,
+      "rho": 0.93,
+      "noise_margin": 0.185,
+      "gate_pass": true,
+      "superiority_index": 0.30000000000000004,
+      "expected_si": 0.3,
+      "abs_error": 5.551115123125783e-17,
+      "assertion_ok": true,
+      "failure_modes": [],
+      "target_fraction": 0.3
+    },
+    {
+      "id": 11,
+      "name": "pass_si_0.40",
+      "lead_frac": 0.88,
+      "rho": 0.9400000000000001,
+      "noise_margin": 0.23000000000000004,
+      "gate_pass": true,
+      "superiority_index": 0.40000000000000013,
+      "expected_si": 0.4,
+      "abs_error": 1.1102230246251565e-16,
+      "assertion_ok": true,
+      "failure_modes": [],
+      "target_fraction": 0.4
+    },
+    {
+      "id": 12,
+      "name": "pass_si_0.50",
+      "lead_frac": 0.9,
+      "rho": 0.95,
+      "noise_margin": 0.275,
+      "gate_pass": true,
+      "superiority_index": 0.49999999999999983,
+      "expected_si": 0.5,
+      "abs_error": 1.6653345369377348e-16,
+      "assertion_ok": true,
+      "failure_modes": [],
+      "target_fraction": 0.5
+    },
+    {
+      "id": 13,
+      "name": "pass_si_0.60",
+      "lead_frac": 0.92,
+      "rho": 0.96,
+      "noise_margin": 0.32,
+      "gate_pass": true,
+      "superiority_index": 0.6,
+      "expected_si": 0.6,
+      "abs_error": 0.0,
+      "assertion_ok": true,
+      "failure_modes": [],
+      "target_fraction": 0.6
+    },
+    {
+      "id": 14,
+      "name": "pass_si_0.70",
+      "lead_frac": 0.94,
+      "rho": 0.97,
+      "noise_margin": 0.365,
+      "gate_pass": true,
+      "superiority_index": 0.6999999999999997,
+      "expected_si": 0.7,
+      "abs_error": 2.220446049250313e-16,
+      "assertion_ok": true,
+      "failure_modes": [],
+      "target_fraction": 0.7
+    },
+    {
+      "id": 15,
+      "name": "pass_si_0.80",
+      "lead_frac": 0.96,
+      "rho": 0.98,
+      "noise_margin": 0.41000000000000003,
+      "gate_pass": true,
+      "superiority_index": 0.7999999999999998,
+      "expected_si": 0.8,
+      "abs_error": 2.220446049250313e-16,
+      "assertion_ok": true,
+      "failure_modes": [],
+      "target_fraction": 0.8
+    },
+    {
+      "id": 16,
+      "name": "pass_si_0.90",
+      "lead_frac": 0.98,
+      "rho": 0.99,
+      "noise_margin": 0.455,
+      "gate_pass": true,
+      "superiority_index": 0.8999999999999999,
+      "expected_si": 0.9,
+      "abs_error": 1.1102230246251565e-16,
+      "assertion_ok": true,
+      "failure_modes": [],
+      "target_fraction": 0.9
+    },
+    {
+      "id": 17,
+      "name": "pass_si_1.00",
+      "lead_frac": 1.0,
+      "rho": 1.0,
+      "noise_margin": 0.5,
+      "gate_pass": true,
+      "superiority_index": 1.0,
+      "expected_si": 1.0,
+      "abs_error": 0.0,
+      "assertion_ok": true,
+      "failure_modes": [],
+      "target_fraction": 1.0
+    }
   ],
-  "T_MAX": 40000.0,
-  "margin": 100.0,
-  "RHO_THRESH": 0.8999999999999998,
-  "n_rand_for_calibration": 10000,
-  "control_A": {
-    "Ps": [
-      6493.5,
-      3460.5,
-      4755.0,
-      5509.5,
-      11873.5
-    ],
-    "lead_frac": 1.0,
-    "rho": 0.9999999999999999,
-    "mean_rel_lead": 0.5,
-    "pass": true,
-    "score": {
-      "S_rho": 0.9999999999999999,
-      "S_lead": 1.0,
-      "sigma_r": 0.0,
-      "S_sigma": 1.0,
-      "S_raw": 0.9999999999999999,
-      "S": 0.9999999999999999,
-      "pass": true
-    }
-  },
-  "control_B": {
-    "Ps": [
-      5000.0,
-      5000.0,
-      5000.0,
-      5000.0,
-      5000.0
-    ],
-    "lead_frac": 1.0,
-    "rho": 0.0,
-    "mean_rel_lead": 0.5404967418731447,
-    "pass": false,
-    "score": {
-      "S_rho": 0.0,
-      "S_lead": 0.9190065162537107,
-      "sigma_r": 0.16797938369107826,
-      "S_sigma": 0.6892129578636697,
-      "S_raw": 0.0,
-      "S": 0.0,
-      "pass": false
-    }
-  },
-  "control_C": {
-    "Ps": [
-      19480.5,
-      10381.5,
-      14265.0,
-      16528.5,
-      35620.5
-    ],
-    "lead_frac": 0.0,
-    "rho": 0.9999999999999999,
-    "mean_rel_lead": -0.5,
-    "pass": false,
-    "score": {
-      "S_rho": 0.9999999999999999,
-      "S_lead": 0.0,
-      "sigma_r": 0.0,
-      "S_sigma": 0.0,
-      "S_raw": 0.0,
-      "S": 0.0,
-      "pass": false
-    }
-  },
-  "control_D": {
-    "noise_fracs": [
-      0.0,
-      0.1,
-      0.25,
-      0.5,
-      1.0
-    ],
-    "n_trials_per_frac": 10000,
-    "summary": {
-      "0.0": {
-        "lead_frac_mean": 1.0,
-        "rho_mean": 0.9999999999999998,
-        "rho_std": 1.1102230246251565e-16,
-        "mean_rel_lead": 0.5,
-        "pass_rate": 1.0,
-        "S_mean": 0.9999999999999998,
-        "S_std": 1.1102230246251565e-16,
-        "S_raw_mean": 0.9999999999999998,
-        "S_raw_std": 1.1102230246251565e-16,
-        "S_rho_mean": 0.9999999999999998,
-        "S_lead_mean": 1.0,
-        "S_sigma_mean": 1.0
-      },
-      "0.1": {
-        "lead_frac_mean": 1.0,
-        "rho_mean": 0.9949099999999999,
-        "rho_std": 0.021979351673786944,
-        "mean_rel_lead": 0.4998201767799403,
-        "pass_rate": 1.0,
-        "S_mean": 0.925662221610971,
-        "S_std": 0.027688191226061837,
-        "S_raw_mean": 0.925662221610971,
-        "S_raw_std": 0.027688191226061837,
-        "S_rho_mean": 0.9949099999999999,
-        "S_lead_mean": 0.9792527262257692,
-        "S_sigma_mean": 0.950131064911027
-      },
-      "0.25": {
-        "lead_frac_mean": 1.0,
-        "rho_mean": 0.9306399999999999,
-        "rho_std": 0.08647074881137551,
-        "mean_rel_lead": 0.49978450039272965,
-        "pass_rate": 0.9104,
-        "S_mean": 0.721291912609369,
-        "S_std": 0.23322400269082147,
-        "S_raw_mean": 0.7724242138999041,
-        "S_raw_std": 0.08601691600158012,
-        "S_rho_mean": 0.9306399999999999,
-        "S_lead_mean": 0.9481344270568636,
-        "S_sigma_mean": 0.8750871003890652
-      },
-      "0.5": {
-        "lead_frac_mean": 1.0,
-        "rho_mean": 0.7797,
-        "rho_std": 0.19934369816976902,
-        "mean_rel_lead": 0.4998650936441388,
-        "pass_rate": 0.5079,
-        "S_mean": 0.3229639733730257,
-        "S_std": 0.323672110829978,
-        "S_raw_mean": 0.5233709675518289,
-        "S_raw_std": 0.1551209748944939,
-        "S_rho_mean": 0.7797799999999999,
-        "S_lead_mean": 0.8948933630192152,
-        "S_sigma_mean": 0.7473887228912378
-      },
-      "1.0": {
-        "lead_frac_mean": 0.9907799999999999,
-        "rho_mean": 0.47147,
-        "rho_std": 0.4189260544535276,
-        "mean_rel_lead": 0.49902130852468307,
-        "pass_rate": 0.2192,
-        "S_mean": 0.0750622960734906,
-        "S_std": 0.16243319384322524,
-        "S_raw_mean": 0.19282030098220407,
-        "S_raw_std": 0.16098068606645455,
-        "S_rho_mean": 0.51605,
-        "S_lead_mean": 0.7917657059728129,
-        "S_sigma_mean": 0.4706704811804799
-      }
-    }
-  },
-  "control_E_variant1_unconditional": {
-    "n_trials": 10000,
-    "lead_frac_mean": 0.31868,
-    "rho_mean": 0.005339999999999999,
-    "rho_std": 0.4990866501921284,
-    "mean_rel_lead": -0.8308510825335954,
-    "pass_rate": 0.0022,
-    "S_mean": 8.873314306415696e-05,
-    "S_std": 0.0039064619825780866,
-    "S_raw_mean": 0.0005025815049473947,
-    "frac_S_gt_0": 0.0007
-  },
-  "control_E_variant2_conditional": {
-    "n_trials": 10000,
-    "lead_frac_mean": 0.99124,
-    "rho_mean": 0.4737,
-    "rho_std": 0.41394481516260107,
-    "mean_rel_lead": 0.5008446841862464,
-    "pass_rate": 0.217,
-    "S_mean": 0.07594009045428511,
-    "S_std": 0.16424911688444885,
-    "S_raw_mean": 0.19272129258621576,
-    "frac_S_gt_0": 0.2113
-  }
+  "all_assertions_passed": true
 }
