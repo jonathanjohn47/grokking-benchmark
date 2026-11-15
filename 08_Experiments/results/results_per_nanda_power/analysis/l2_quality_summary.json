@@ -23,13 +23,11 @@
       "rho": 0.15389675281277312,
       "mean_rel_lead": 0.9571304170270153,
       "verdict": "FAIL",
-      "S_rho": 0.15389675281277312,
-      "S_lead": 0.08573916594596942,
-      "sigma_r": 0.012625037265159886,
-      "S_sigma": 0.986809491119951,
-      "S_raw": 0.01302093073728172,
-      "S": 0.0,
-      "pass": false
+      "gate_lead_frac": 1.0,
+      "gate_correlation": 0.15389675281277312,
+      "gate_noise_margin": 0.9571304170270153,
+      "gate_pass": false,
+      "superiority_index": 0.0
     }
   ]
 }

@@ -1,0 +1,23 @@
+{
+  "raw_firing_epochs": [
+    279,
+    280,
+    276,
+    281,
+    281
+  ],
+  "grokking_epochs": [
+    8021,
+    8253,
+    4094,
+    7831,
+    6637
+  ],
+  "validity_gate_metrics": {
+    "lead_fraction": 1.0,
+    "correlation": 0.15389675281277312,
+    "noise_margin": 0.9571304170270153
+  },
+  "validity_gate_verdict": false,
+  "superiority_index": null
+}

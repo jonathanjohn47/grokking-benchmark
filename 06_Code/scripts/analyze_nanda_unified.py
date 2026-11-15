@@ -39,14 +39,25 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+_SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
 if os.path.join(REPO_ROOT, "06_Code") not in sys.path:
     sys.path.insert(0, os.path.join(REPO_ROOT, "06_Code"))
+if _SCRIPTS_DIR not in sys.path:
+    sys.path.insert(0, _SCRIPTS_DIR)
 from src.predictors.l2_norm import (  # noqa: E402
     CONFIRMED_PEAK_K,
     detect_confirmed_sum_w2_peak,
     sum_w2_peak,
 )
-from src.quality_score import quality_score  # noqa: E402
+# Validity Gate + Superiority Index: reuse the control experiment exactly.
+# Do not rewrite those formulas here.
+from run_control_experiment import evaluate_metrics  # noqa: E402
+from src.quality_score import (  # noqa: E402
+    CORR_THRESH,
+    LEAD_THRESH,
+    NOISE_HI,
+    NOISE_LO,
+)
 
 # Official L2 row. One rule: the confirmed peak of the total sum of squared weights.
 L2_CONFIRMED_PEAK = f"L2: confirmed peak of sum w^2 (k={CONFIRMED_PEAK_K})"
@@ -370,12 +381,106 @@ def score_l2_saved_histories(results_dir=None, lead_c=DEFAULT_LEAD_C):
     return {"grok_epochs": list(grok), "per_seed": peaks, "rows": rows, "lead_c": lead_c}
 
 
+def build_l2_predictor_results(grok, rows):
+    """Structured L2 evaluation payload for disk and console display.
+
+    superiority_index is null when the Validity Gate fails (not 0.0).
+    """
+    l2_rows = [r for r in rows if r["signal"].startswith("L2:")]
+    if not l2_rows:
+        raise RuntimeError("No L2 row found after scoring; cannot build results.")
+    row = l2_rows[0]
+    v = row["frozen_protocol_verdict"]
+    lead_fraction = float(v["gate_lead_frac"])
+    correlation = v["gate_correlation"]
+    if correlation is not None:
+        correlation = float(correlation)
+    noise_margin = float(v["gate_noise_margin"])
+    gate_pass = bool(v["gate_pass"])
+    raw_firing = [
+        None if p is None else int(p) for p in row["epochs"]
+    ]
+    grokking = [int(g) for g in grok]
+    return {
+        "raw_firing_epochs": raw_firing,
+        "grokking_epochs": grokking,
+        "validity_gate_metrics": {
+            "lead_fraction": lead_fraction,
+            "correlation": correlation,
+            "noise_margin": noise_margin,
+        },
+        "validity_gate_verdict": gate_pass,
+        "superiority_index": (
+            None if not gate_pass else float(v["superiority_index"])
+        ),
+    }
+
+
+def _metric_pass_fail(name, value):
+    """Pass/Fail for one Validity Gate metric using control thresholds."""
+    if value is None or (isinstance(value, float) and np.isnan(value)):
+        return "FAIL"
+    if name == "lead_fraction":
+        return "PASS" if value >= LEAD_THRESH else "FAIL"
+    if name == "correlation":
+        return "PASS" if value >= CORR_THRESH else "FAIL"
+    if name == "noise_margin":
+        return "PASS" if NOISE_LO <= value <= NOISE_HI else "FAIL"
+    raise ValueError(f"unknown gate metric {name!r}")
+
+
+def print_l2_predictor_results(results):
+    """Human-readable multi-section console summary for L2 evaluation."""
+    metrics = results["validity_gate_metrics"]
+    gate_pass = results["validity_gate_verdict"]
+    si = results["superiority_index"]
+
+    print()
+    print("=" * 64)
+    print("L2 PREDICTOR EVALUATION RESULTS")
+    print("=" * 64)
+    print()
+    print("Section 1: Raw Epochs")
+    print("-" * 64)
+    print(f"  Firing epochs (P_i) : {results['raw_firing_epochs']}")
+    print(f"  Grokking epochs (G_i): {results['grokking_epochs']}")
+    print()
+    print("Section 2: Validity Gate Checks")
+    print("-" * 64)
+    for key, label in (
+        ("lead_fraction", "Lead fraction"),
+        ("correlation", "Correlation"),
+        ("noise_margin", "Noise margin"),
+    ):
+        value = metrics[key]
+        status = _metric_pass_fail(key, value)
+        if value is None:
+            value_s = "nan"
+        else:
+            value_s = f"{float(value):.4f}"
+        print(f"  {label:<16}: {value_s:>10}   [{status}]")
+    print()
+    print("Section 3: Final Verdict")
+    print("-" * 64)
+    print(f"  Validity Gate       : {'PASS' if gate_pass else 'FAIL'}")
+    print()
+    print("Section 4: Superiority Index")
+    print("-" * 64)
+    if gate_pass and si is not None:
+        print(f"  Superiority Index   : {float(si):.4f}")
+    else:
+        print("  Superiority Index   : N/A - Gate Failed")
+    print()
+    print("=" * 64)
+
+
 def score_l2_only(lead_c=None, out_dir=None, write=True, results_dir=None):
     """Official L2-only scorer from saved json/npy. No other predictors, no .pt.
 
-    Writes frozen_protocol_verdicts.json (L2 row + Predictor Quality Index S)
-    and an L2 summary table under out_dir. Default folder layout matches
-    score_saved_run: <results-dir>/analysis at c=0.8, else analysis/c_<value>/.
+    Writes l2_predictor_results.json (structured Validity Gate + Superiority
+    Index), plus the existing frozen_protocol_verdicts.json / summary files,
+    under out_dir. Default folder layout matches score_saved_run:
+    <results-dir>/analysis at c=0.8, else analysis/c_<value>/.
     """
     if lead_c is None:
         lead_c = load_lead_c_from_config()
@@ -390,11 +495,16 @@ def score_l2_only(lead_c=None, out_dir=None, write=True, results_dir=None):
     grok = payload["grok_epochs"]
     rows = payload["rows"]
     predictors = [p for p in predictor_level_verdicts(rows) if p["predictor"] == "L2 Norm"]
-    print_table(rows, grok)
-    print_verdicts(rows, predictors)
+    l2_results = build_l2_predictor_results(grok, rows)
+    print_l2_predictor_results(l2_results)
 
     if write:
         os.makedirs(out_dir, exist_ok=True)
+        results_path = os.path.join(out_dir, "l2_predictor_results.json")
+        with open(results_path, "w") as handle:
+            json.dump(l2_results, handle, indent=2)
+        print(f"Wrote {results_path}")
+
         events_path = os.path.join(out_dir, "predictor_events.json")
         with open(events_path, "w") as handle:
             json.dump(
@@ -439,13 +549,11 @@ def score_l2_only(lead_c=None, out_dir=None, write=True, results_dir=None):
                     "rho": row["rho"],
                     "mean_rel_lead": row["mean_rel_lead"],
                     "verdict": row["verdict"],
-                    "S_rho": row.get("S_rho"),
-                    "S_lead": row.get("S_lead"),
-                    "sigma_r": row.get("sigma_r"),
-                    "S_sigma": row.get("S_sigma"),
-                    "S_raw": row.get("S_raw"),
-                    "S": row.get("S"),
-                    "pass": row.get("pass"),
+                    "gate_lead_frac": row.get("gate_lead_frac"),
+                    "gate_correlation": row.get("gate_correlation"),
+                    "gate_noise_margin": row.get("gate_noise_margin"),
+                    "gate_pass": row.get("gate_pass"),
+                    "superiority_index": row.get("superiority_index"),
                 })
         with open(summary_path, "w") as handle:
             json.dump({"lead_c": lead_c, "rows": l2_rows}, handle, indent=2)
@@ -459,6 +567,7 @@ def score_l2_only(lead_c=None, out_dir=None, write=True, results_dir=None):
         "lead_c": lead_c,
         "out_dir": out_dir,
         "per_seed": payload["per_seed"],
+        "l2_predictor_results": l2_results,
     }
 
 
@@ -494,41 +603,33 @@ def attach_pass_checks(verdict):
     return verdict
 
 
-def attach_l2_quality_score(verdict, grok, epochs_raw):
-    """Attach Predictor Quality Index S to an L2 row only.
+def attach_l2_superiority_index(verdict):
+    """Attach Validity Gate + Superiority Index to an L2 row only.
 
-    Uses the shared quality_score() formulas. Other predictors are not scored.
-    G_i and P_i come from the same arrays already used for the PASS gate.
+    Passes the L2 gate metrics (from G_i and the L2 firing epochs P_i) into
+    the control experiment's evaluate_metrics() pipeline. That function
+    applies the Validity Gate (Lead fraction, Correlation, Noise margin) and,
+    only on Pass, the Superiority Index spectrum mapping. On Fail, SI is 0.
+    Other predictors are not scored here.
     """
-    firing = [
-        (float(g), float(p))
-        for g, p in zip(grok, epochs_raw)
-        if p is not None
-    ]
-    if len(firing) < 4:
-        r_i = None
-    else:
-        r_i = np.asarray(
-            [(g - p) / g for g, p in firing],
-            dtype=float,
-        )
     rho = verdict["rho"]
     if rho is None:
         rho = float("nan")
-    score = quality_score(
-        {
-            "lead_frac": verdict["lead_frac"],
-            "rho": rho,
-            "mean_rel_lead": verdict["mean_rel_lead"],
-            "n_firing": verdict["n_firing"],
-            "r_i": r_i,
-            "passed": verdict["passed"],
-        },
-        RHO_THRESH,
-        passed=verdict["passed"],
+    result = evaluate_metrics(
+        lead_frac=verdict["lead_frac"],
+        rho=rho,
+        noise_margin=verdict["mean_rel_lead"],
     )
-    for key in ("S_rho", "S_lead", "sigma_r", "S_sigma", "S_raw", "S", "pass"):
-        verdict[key] = score[key]
+    # Explicit Validity Gate metrics (control thresholds, not legacy S).
+    gate_corr = float(result["rho"])
+    if np.isnan(gate_corr):
+        gate_corr = None
+    verdict["gate_lead_frac"] = float(result["lead_frac"])
+    verdict["gate_correlation"] = gate_corr
+    verdict["gate_noise_margin"] = float(result["noise_margin"])
+    verdict["gate_pass"] = bool(result["passed"])
+    # Superiority Index: 0.0 when the gate fails; else continuous in [0, 1].
+    verdict["superiority_index"] = float(result["superiority_index"])
     return verdict
 
 
@@ -580,9 +681,9 @@ def summarise(ev, grok, lead_c=DEFAULT_LEAD_C):
             grok, epochs_raw, rule="fraction", c=lead_c
         )
         attach_pass_checks(verdict)
-        # Predictor Quality Index S: L2 row only (shared quality_score module).
+        # Validity Gate + Superiority Index: L2 row only (control experiment).
         if name.startswith("L2:"):
-            attach_l2_quality_score(verdict, grok, epochs_raw)
+            attach_l2_superiority_index(verdict)
         row["row_role"] = "exploratory" if is_exploratory(name) else "predeclared"
         row["counts_towards_predictor"] = row["row_role"] == "predeclared"
         row["frozen_protocol_verdict"] = verdict
@@ -631,8 +732,14 @@ def _row_verdict_summary(r):
         "checks": v["checks"],
         "verdict": v["verdict"],
     }
-    # Predictor Quality Index S sits next to the L2 verdict only.
-    for key in ("S_rho", "S_lead", "sigma_r", "S_sigma", "S_raw", "S", "pass"):
+    # Validity Gate + Superiority Index sit next to the L2 verdict only.
+    for key in (
+        "gate_lead_frac",
+        "gate_correlation",
+        "gate_noise_margin",
+        "gate_pass",
+        "superiority_index",
+    ):
         if key in v:
             out[key] = v[key]
     return out
@@ -668,14 +775,14 @@ def print_verdicts(rows, predictors):
         print(f"  rho           = {rho_s}  check={v['checks']['rho_at_least_threshold']}")
         print(f"  mean_rel_lead = {v['mean_rel_lead']:.4f}  check={v['checks']['mean_rel_lead_in_window']}")
         print(f"  VERDICT = {v['verdict']}")
-        if "S" in v:
-            print(f"  S_rho         = {v['S_rho']:.4f}")
-            print(f"  S_lead        = {v['S_lead']:.4f}")
-            print(f"  sigma_r       = {v['sigma_r']:.4f}")
-            print(f"  S_sigma       = {v['S_sigma']:.4f}")
-            print(f"  S_raw         = {v['S_raw']:.4f}")
-            print(f"  S             = {v['S']:.4f}")
-            print(f"  pass (S gate) = {v['pass']}")
+        if "superiority_index" in v:
+            gate_corr = v["gate_correlation"]
+            gate_corr_s = "nan" if gate_corr is None else f"{gate_corr:.4f}"
+            print(f"  gate_lead_frac     = {v['gate_lead_frac']:.4f}")
+            print(f"  gate_correlation   = {gate_corr_s}")
+            print(f"  gate_noise_margin  = {v['gate_noise_margin']:.4f}")
+            print(f"  gate_pass          = {v['gate_pass']}")
+            print(f"  superiority_index  = {v['superiority_index']:.4f}")
     print("\nPredictor-level verdicts (PASS only if a pre-declared row PASSES):")
     for p in predictors:
         print(f"  {p['predictor']:<22} {p['verdict']}  ({p['n_predeclared_passing']}/{p['n_predeclared_rows']} pre-declared rows pass)")
@@ -943,7 +1050,8 @@ def main(argv=None):
         "--l2-only", action="store_true",
         help="Score only the official L2 row from saved sum_w2 histories "
              "(and G_i from aggregate.json). Skips other predictors. "
-             "Writes Predictor Quality Index S next to the L2 verdict.",
+             "Writes Validity Gate + Superiority Index (control experiment) "
+             "next to the L2 verdict.",
     )
     args = parser.parse_args(argv)
     if args.l2_only:
