@@ -1,6 +1,6 @@
-# 1. MANDATORY PRECURSOR — READ `context.md` FIRST
+# 1. MANDATORY PRECURSOR — READ `context_current.md` FIRST
 
-Before doing **anything** for this project, Codex **MUST** locate and read `context.md` from the project root.
+Before doing **anything** for this project, Codex **MUST** locate and read `context_current.md` from the project root.
 
 This applies before:
 
@@ -17,13 +17,14 @@ This rule has the highest priority in this file.
 
 ## Required procedure
 
-1. Find `context.md` in the project root.
+1. Find `context_current.md` in the project root.
 2. Read it completely.
-3. Treat it as the main source of project history and current status.
+3. Treat it as the main source of the project's current state.
 4. Confirm internally that it has been read.
-5. Only then continue with the user's request.
+5. If `context_current.md` does not answer a question about history or an earlier decision, then read the relevant part of `context.md` (the append-only history).
+6. Only then continue with the user's request.
 
-If `context.md` cannot be found or cannot be read:
+If `context_current.md` cannot be found or cannot be read:
 
 - STOP.
 - Do not inspect source files.
@@ -31,7 +32,7 @@ If `context.md` cannot be found or cannot be read:
 - Do not make a plan.
 - Do not write an implementation.
 - Do not suggest a solution.
-- Ask the user where `context.md` is or ask them to provide it.
+- Ask the user where `context_current.md` is or ask them to provide it.
 
 **No exceptions.**
 
@@ -224,7 +225,7 @@ Then Codex may give a longer answer for that request.
 
 # 6. MANDATORY PROJECT WORKFLOW
 
-## Step 1 — Read `context.md`
+## Step 1 — Read `context_current.md`
 
 This must happen first.
 
@@ -238,7 +239,7 @@ It must happen before:
 
 ## Step 2 — Inspect Graphify
 
-After reading `context.md`, inspect Graphify before reading source files.
+After reading `context_current.md`, inspect Graphify before reading source files.
 
 Start with:
 
@@ -359,6 +360,8 @@ coding agent.
 ---
 
 # 9. PROJECT MEMORY — `context.md`
+
+`context_current.md` holds the current state of the project; `context.md` holds the full append-only history.
 
 `context.md` is the persistent memory of the project.
 
@@ -613,8 +616,8 @@ Use this format whenever it helps prevent confusion.
 
 # 15. NON-NEGOTIABLE PROJECT RULES
 
-1. Read `context.md` completely before doing anything else.
-2. If `context.md` is unavailable or cannot be read, stop.
+1. Read `context_current.md` completely before doing anything else.
+2. If `context_current.md` is unavailable or cannot be read, stop.
 3. Inspect Graphify before reading source files.
 4. Never scan the whole repository unnecessarily.
 5. Never assume the project structure.
@@ -624,7 +627,7 @@ Use this format whenever it helps prevent confusion.
 9. Codex implements every requested change directly, itself, inside the project's own files — no separate prompt file is created for another tool.
 10. Update `context.md` before every requested Git commit.
 11. Leave the repository clean after a commit.
-12. Treat `context.md` as the main project memory.
+12. Treat `context_current.md` as the main record of the current state, and `context.md` as the append-only history.
 13. Clearly separate shared model changes from predictor-specific changes.
 14. Clearly distinguish changed, unchanged, deleted, and postponed work.
 15. Never say code was removed when it was only left untouched.
