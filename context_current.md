@@ -253,11 +253,11 @@ The repository is organized according to the supervisor-mandated structure:
 - **`06_Code/` (Codebase)**:
   - `06_Code/src/models/transformer_four_head.py`: The single canonical 4-head Transformer model.
   - `06_Code/src/predictors/`: The 8 implemented predictor modules (`l2_norm.py`, `dropout.py`, `spectral.py`, `age.py`, `htsr_alpha.py`, `weight_pca.py`, `higher_mi.py`, `commutator_defect.py`).
-  - `06_Code/src/quality_score.py`: Shared module (PR #38) holding `passes()` and `quality_score()` for the Predictor Quality Index S. Used by both `run_control_experiment.py` and `analyze_nanda_unified.py`.
+  - `06_Code/src/quality_score.py`: Shared module (PR #38) holding `passes()` and `quality_score()` for the Predictor Quality Index S, used by `analyze_nanda_unified.py` for the L2 row. Since PR #40 it also holds the gate constants (`LEAD_THRESH` 0.8, `CORR_THRESH` 0.9, `NOISE_LO` 0.05, `NOISE_HI` 0.9, perfect values 1.0, 1.0, 0.5) and `superiority_index()`, `superiority_index_from_result()` and `raw_values_for_superiority_target()`, used by `run_control_experiment.py` (section 6.6).
   - `06_Code/src/unified_measurements.py`: Centralized persistence handler for all predictor data.
   - `06_Code/scripts/run_nanda_benchmark.py`: Master benchmark runner supporting full multi-seed training, checkpoint saving (init, then every 100 epochs; the folders on disk still have the old 801 files), and checkpoint-only recomputation.
   - `06_Code/scripts/analyze_nanda_unified.py`: Official scoring script evaluating all 8 predictors under the fractional lead rule ($c = 0.8$, with $0.7$ and $0.9$ sensitivity sweeps). Since PR #38 it attaches S to the L2 row only, and the flag `--l2-only` scores only L2 from the saved `aggregate.json` and `sum_w2_history.npy` (no training, no `.pt` files).
-  - `06_Code/scripts/run_control_experiment.py`: Synthetic-control validation script for benchmark PASS criteria. Since PR #35 it also computes the Predictor Quality Index S (section 6.5). It never trains a model. Outputs go to `controls_results/` at the repository root: `summary_table.csv`, `detailed_results.json`, `plot_sensitivity.png` and `plot_null_distribution.png`.
+  - `06_Code/scripts/run_control_experiment.py`: Synthetic-control script. Since PR #40 (15 November 2026) it runs 17 engineered signals scored by the Superiority Index (section 6.6) and no longer runs Controls A–E (sections 6.2 and 6.5 describe the earlier version). It never trains a model. It writes `summary_table.csv` and `detailed_results.json` to `controls_results/` at the repository root and exits with status 1 if any check fails. `plot_sensitivity.png` and `plot_null_distribution.png` in that folder are left over from the earlier version and are no longer written.
   - `06_Code/configs/nanda_unified.yaml`: Protocol configuration specifying task, architecture, optimizer, and evaluation thresholds.
   - `06_Code/tests/test_frozen_protocol_verdicts.py`: Automated test suite asserting that all 8 predictors fail under the official protocol.
 - **`08_Experiments/results/nanda_unified/` (Experiment Data)**:
@@ -389,3 +389,22 @@ In strict adherence to the project's append-only rule, earlier sections in this 
 - **Open items**:
   - (a) For E1 and E2, the CSV columns `S_rho_mean`, `S_lead_mean`, `S_sigma_mean` are written as 0 but were never computed.
   - (b) The control script still uses the old-setup grok epochs ($12987, 6921, 9510, 11019, 23747$) and the old 100-epoch margin rule, not the experiment's $G_i$ ($8021, 8253, 4094, 7831, 6637$ at the $0.99$ cut) and the $c = 0.8$ rule.
+
+### 6. Control experiment redesign: Superiority Index (PR #40, merge `5b321dc`, 15 November 2026)
+
+- **What changed**: `run_control_experiment.py` was rewritten (commit `91749f2`). Controls A–E, the random-predictor calibration of $\rho_{\text{thresh}}$, the old `Gs`, `MARGIN`, the plots and `np.random.seed(42)` were removed. The script no longer builds $G_i$ and $P_i$; it sets the three gate metrics directly for each signal. The legacy S used for the L2 row (section 3, section 6.5) is unchanged.
+- **Gate** (in `quality_score.py`): lead fraction $\ge 0.8$, correlation $\ge 0.9$ (a fixed value, not the calibrated $0.8999999999999998$), noise margin (mean relative lead $\bar{r}$) in $[0.05, 0.9]$. A failing signal gets Superiority Index $SI = 0$.
+- **Superiority Index for a passing signal**: the mean of three margins, each clamped to $[0, 1]$:
+  - $m_{\text{lead}} = (\text{lead\_frac} - 0.8) / 0.2$
+  - $m_{\text{corr}} = (\rho - 0.9) / 0.1$
+  - $m_{\text{noise}} = (\bar{r} - 0.05) / 0.45$, where $0.5$ is taken as the ideal relative lead (own choice)
+  - $SI = (m_{\text{lead}} + m_{\text{corr}} + m_{\text{noise}}) / 3$
+- **The 17 signals and results** (`controls_results/summary_table.csv`):
+  - Part 1, 7 gate failures (every combination of lead $0.6$, correlation $0.7$, noise margin $0.01$, with the others at $1.0$, $0.95$, $0.5$): all fail the gate, $SI = 0$.
+  - Part 2, 10 passing signals placed a fraction $t \in \{0.10, \dots, 1.00\}$ of the way from each gate floor to its perfect value (for example $t = 0.10$: lead $0.82$, $\rho = 0.91$, $\bar{r} = 0.095$): $SI = t$ for each.
+  - All 17 checks pass with absolute error $0$.
+- **Open items after PR #40**:
+  - (c) The script compares each SI to its expected value within `TOL = 1e-4`, which is a numerical tolerance.
+  - (d) The correlation floor is a fixed $0.9$, not the calibrated 99th-percentile $\rho_{\text{thresh}}$; the calibration and the false-positive checks (old Controls E1/E2, section 5 item 1) are no longer in the script.
+  - (e) The Superiority Index (mean of three margins) and the legacy S used for L2 (product of $\text{lead\_frac}$, $S_\rho$, $S_{\text{lead}}$, $S_\sigma$) are different formulas; which one is the thesis score is not yet decided.
+  - Open items (a) and (b) of section 6.5 refer to the removed Controls D/E and `Gs`, so they no longer apply to the current script.
