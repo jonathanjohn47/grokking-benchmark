@@ -2655,12 +2655,12 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/seed_2/dropout/drc_snapshot_epochs.json": {
-    "mtime": 1794796013.2389915,
+    "mtime": 1794845212.5683672,
     "ast_hash": "c3a553aed824921972381b324e3ef1a6",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/seed_2/dropout/dropout_signal.json": {
-    "mtime": 1794796013.2394686,
+    "mtime": 1794845212.2460296,
     "ast_hash": "1f5e891c60269271d6a7c3a492186b1c",
     "semantic_hash": ""
   },
@@ -2680,72 +2680,72 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/seed_2/dropout/drc_auc_vs_epoch.png": {
-    "mtime": 1794796013.2387333,
+    "mtime": 1794845212.502659,
     "ast_hash": "861a459685e4fc90c2896fb616ea8cac",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/seed_2/dropout/drc_snapshots.png": {
-    "mtime": 1794796013.2393386,
+    "mtime": 1794845212.5675154,
     "ast_hash": "953d357d3934c553aacb277a1775f064",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/seed_2/dropout/dropout_variance_vs_epoch.png": {
-    "mtime": 1794796013.2401707,
+    "mtime": 1794845212.3881466,
     "ast_hash": "8e7764584d7be7062a78693a5e3917a8",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/dropout_verdict.json": {
-    "mtime": 1794796013.2287838,
+    "mtime": 1794850906.5097063,
     "ast_hash": "e12639bf1f17469e3e8db41b5f2253fc",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/seed_3/dropout/drc_snapshot_epochs.json": {
-    "mtime": 1794796013.2422612,
+    "mtime": 1794848051.761885,
     "ast_hash": "62005fe6b690accd06a31b10f13886a9",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/seed_3/dropout/dropout_signal.json": {
-    "mtime": 1794796013.243716,
+    "mtime": 1794848051.426461,
     "ast_hash": "392df8bc00a3f84938adc0071be8c582",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/seed_4/dropout/drc_snapshot_epochs.json": {
-    "mtime": 1794796013.2458358,
+    "mtime": 1794850905.7727988,
     "ast_hash": "d927909a1b85b1f2d66d1d056aef0649",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/seed_4/dropout/dropout_signal.json": {
-    "mtime": 1794796013.2463229,
+    "mtime": 1794850905.4364555,
     "ast_hash": "392b572c0500c5f4038ee61a208c8502",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/seed_3/dropout/drc_auc_vs_epoch.png": {
-    "mtime": 1794796013.241485,
+    "mtime": 1794848051.6639032,
     "ast_hash": "cc50488069c4d8d0bbd2593b444f8fe2",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/seed_3/dropout/drc_snapshots.png": {
-    "mtime": 1794796013.2431846,
+    "mtime": 1794848051.7606275,
     "ast_hash": "45bf2d4d5b167f94d663be4eba584844",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/seed_3/dropout/dropout_variance_vs_epoch.png": {
-    "mtime": 1794796013.244531,
+    "mtime": 1794848051.5476944,
     "ast_hash": "998ccbf215800f99f7a0ae068735f5e8",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/seed_4/dropout/drc_auc_vs_epoch.png": {
-    "mtime": 1794796013.2455664,
+    "mtime": 1794850905.7048655,
     "ast_hash": "4594120990874484ae5b0e096812221c",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/seed_4/dropout/drc_snapshots.png": {
-    "mtime": 1794796013.2461894,
+    "mtime": 1794850905.7712646,
     "ast_hash": "eeefef5cdf8809bb40bac28149e851fd",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/seed_4/dropout/dropout_variance_vs_epoch.png": {
-    "mtime": 1794796013.2469218,
+    "mtime": 1794850905.5841432,
     "ast_hash": "b7546d11b3d8cd9cbeff90520d1d9bc9",
     "semantic_hash": ""
   },
