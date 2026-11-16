@@ -1,0 +1,51 @@
+(eval):1: command not found: setsid
+
+=== detached launch ===
+Device: mps
+Config: /Users/jonathanjohn/Documents/grokking-benchmark/06_Code/configs/dropout_salah_yevick.yaml
+Output: 08_Experiments/results/dropout_salah_yevick
+Substrate: MLPTwoLayer  p=53  train_fraction=0.5  epochs=3000
+Signal: variance rate=0.3  n_samples=100  DRC rates=[0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]  (every epoch)
+[seed 0] epoch     0/3000  train=0.0164  test=0.0178  var@0.3=0.000009  elapsed=1.1s
+[seed 0] epoch    75/3000  train=0.1496  test=0.0000  var@0.3=0.000000  elapsed=65.5s
+[seed 0] epoch   150/3000  train=0.2714  test=0.0000  var@0.3=0.000000  elapsed=129.4s
+[seed 0] epoch   225/3000  train=0.4672  test=0.0000  var@0.3=0.000000  elapsed=195.3s
+[seed 0] epoch   300/3000  train=0.8020  test=0.0000  var@0.3=0.000000  elapsed=261.3s
+[seed 0] epoch   375/3000  train=0.9765  test=0.0000  var@0.3=0.000000  elapsed=325.4s
+[seed 0] epoch   450/3000  train=1.0000  test=0.0000  var@0.3=0.000000  elapsed=390.1s
+[seed 0] epoch   525/3000  train=1.0000  test=0.0000  var@0.3=0.000000  elapsed=454.2s
+[seed 0] epoch   600/3000  train=1.0000  test=0.0000  var@0.3=0.000000  elapsed=518.4s
+[seed 0] epoch   675/3000  train=1.0000  test=0.0000  var@0.3=0.000000  elapsed=582.1s
+[seed 0] epoch   750/3000  train=1.0000  test=0.0000  var@0.3=0.000000  elapsed=646.4s
+[seed 0] epoch   825/3000  train=1.0000  test=0.0000  var@0.3=0.000000  elapsed=711.3s
+[seed 0] epoch   900/3000  train=1.0000  test=0.0000  var@0.3=0.000000  elapsed=776.7s
+[seed 0] epoch   975/3000  train=1.0000  test=0.0000  var@0.3=0.000000  elapsed=841.7s
+[seed 0] epoch  1050/3000  train=1.0000  test=0.0000  var@0.3=0.000000  elapsed=906.7s
+[seed 0] epoch  1125/3000  train=1.0000  test=0.0000  var@0.3=0.000000  elapsed=973.0s
+[seed 0] epoch  1200/3000  train=1.0000  test=0.0000  var@0.3=0.000000  elapsed=1039.6s
+[seed 0] epoch  1275/3000  train=1.0000  test=0.0000  var@0.3=0.000000  elapsed=1104.7s
+[seed 0] epoch  1350/3000  train=1.0000  test=0.0000  var@0.3=0.000000  elapsed=1171.1s
+[seed 0] epoch  1425/3000  train=1.0000  test=0.0000  var@0.3=0.000001  elapsed=1237.4s
+[seed 0] epoch  1500/3000  train=1.0000  test=0.0000  var@0.3=0.000001  elapsed=1297.5s
+[seed 0] epoch  1575/3000  train=1.0000  test=0.0000  var@0.3=0.000001  elapsed=1358.4s
+[seed 0] epoch  1650/3000  train=1.0000  test=0.0000  var@0.3=0.000001  elapsed=1421.5s
+[seed 0] epoch  1725/3000  train=1.0000  test=0.0000  var@0.3=0.000001  elapsed=1486.4s
+[seed 0] epoch  1800/3000  train=1.0000  test=0.0000  var@0.3=0.000001  elapsed=1552.2s
+[seed 0] epoch  1875/3000  train=1.0000  test=0.0000  var@0.3=0.000001  elapsed=1615.9s
+[seed 0] epoch  1950/3000  train=1.0000  test=0.0000  var@0.3=0.000001  elapsed=1678.4s
+[seed 0] epoch  2025/3000  train=1.0000  test=0.0000  var@0.3=0.000001  elapsed=1741.0s
+[seed 0] epoch  2100/3000  train=1.0000  test=0.0000  var@0.3=0.000001  elapsed=1805.6s
+[seed 0] epoch  2175/3000  train=1.0000  test=0.0000  var@0.3=0.000002  elapsed=1868.7s
+[seed 0] epoch  2250/3000  train=1.0000  test=0.0000  var@0.3=0.000001  elapsed=1934.0s
+[seed 0] epoch  2325/3000  train=1.0000  test=0.0000  var@0.3=0.000002  elapsed=1998.5s
+[seed 0] epoch  2400/3000  train=1.0000  test=0.0000  var@0.3=0.000002  elapsed=2063.4s
+[seed 0] epoch  2475/3000  train=1.0000  test=0.0000  var@0.3=0.000002  elapsed=2127.4s
+[seed 0] epoch  2550/3000  train=1.0000  test=0.0000  var@0.3=0.000002  elapsed=2192.8s
+[seed 0] epoch  2625/3000  train=1.0000  test=0.0000  var@0.3=0.000002  elapsed=2256.2s
+[seed 0] epoch  2700/3000  train=1.0000  test=0.0000  var@0.3=0.000002  elapsed=2320.7s
+[seed 0] epoch  2775/3000  train=1.0000  test=0.0000  var@0.3=0.000002  elapsed=2384.8s
+[seed 0] epoch  2850/3000  train=1.0000  test=0.0000  var@0.3=0.000003  elapsed=2447.6s
+[seed 0] epoch  2925/3000  train=1.0000  test=0.0000  var@0.3=0.000004  elapsed=2511.5s
+[seed 0] epoch  2999/3000  train=1.0000  test=0.0007  var@0.3=0.000003  elapsed=2576.0s
+[seed 0] done in 2576.0s  grok_epoch=None  variance_peak_epoch=1  final_test_acc=0.0007
+Wrote 08_Experiments/results/dropout_salah_yevick/aggregate.json

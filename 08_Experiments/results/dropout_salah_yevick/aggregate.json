@@ -1,0 +1,20 @@
+{
+  "n_seeds": 1,
+  "epochs": 3000,
+  "config": "06_Code/configs/dropout_salah_yevick.yaml",
+  "paper": "Salah & Yevick, arXiv:2507.11645",
+  "seeds": [
+    {
+      "seed": 0,
+      "epochs": 3000,
+      "modulus": 53,
+      "architecture": "mlp_two_layer",
+      "grok_epoch": null,
+      "final_train_acc": 1.0,
+      "final_test_acc": 0.0007117437722419929,
+      "dropout_variance_peak_epoch": 1,
+      "dropout_variance_peak_value": 1.2410987702789983e-05,
+      "wall_time_sec": 2576.0
+    }
+  ]
+}

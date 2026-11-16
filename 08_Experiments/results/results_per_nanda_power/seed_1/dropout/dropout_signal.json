@@ -1,0 +1,25 @@
+{
+  "seed": 1,
+  "grok_epoch": 8253,
+  "grok_cut": 0.99,
+  "variance_rate": 0.3,
+  "variance_n_samples": 100,
+  "drc_rates": [
+    0.0,
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.8,
+    0.9
+  ],
+  "drc_passes_at_positive_rate": 5,
+  "variance_peak_epoch": 9100,
+  "variance_peak_value": 3.0428392952545378e-05,
+  "drc_inflection_epoch": 18200,
+  "drc_inflection_derivative": 0.000835938026569784,
+  "n_checkpoints": 401
+}

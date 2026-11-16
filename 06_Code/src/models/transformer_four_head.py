@@ -18,8 +18,6 @@ import torch.nn.functional as F
 #   - Init: W_E, W_pos, W_Q, W_K, W_V, W_O, W_in, W_out drawn as
 #     randn / sqrt(d_model). W_U drawn as randn / sqrt(d_vocab).
 #     b_in and b_out are zeros. No attention, embedding, or unembed bias.
-#   - No dropout modules. Nanda's model has none. The Dropout predictor
-#     applies its own measurement-time dropout; it does not live here.
 # ======================================================================
 
 
