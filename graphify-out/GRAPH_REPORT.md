@@ -1,16 +1,16 @@
 # Graph Report - grokking-benchmark  (2026-11-16)
 
 ## Corpus Check
-- 265 files · ~7,605,597 words
+- 265 files · ~7,605,900 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2201 nodes · 2572 edges · 170 communities (153 shown, 17 thin omitted)
+- 2207 nodes · 2578 edges · 169 communities (151 shown, 18 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 44 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d509b3b5`
+- Built from commit: `f4603a20`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -169,7 +169,6 @@
 - [[_COMMUNITY_Community 166|Community 166]]
 - [[_COMMUNITY_Community 167|Community 167]]
 - [[_COMMUNITY_Community 168|Community 168]]
-- [[_COMMUNITY_Community 169|Community 169]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `Project Compilation — Full NPY Data Dump` - 466 edges
@@ -201,7 +200,7 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (170 total, 17 thin omitted)
+## Communities (169 total, 18 thin omitted)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.06
@@ -220,8 +219,8 @@ Cohesion: 0.07
 Nodes (27): 1.1 What is grokking, 1.2 What a grokking predictor is supposed to do, 1. Prerequisites Recap, 2.1 What a kernel is, 2.2 Why a trained network's hidden layer defines a kernel, 2.3 The representation matrix and the Gram matrix, 2. Kernel Regression Basics, 3.1 Eigenvalues and eigenvectors of $K$ (+19 more)
 
 ### Community 5 - "Community 5"
-Cohesion: 0.21
-Nodes (20): build_l2_predictor_results(), default_analysis_dir(), load_lead_c_from_config(), load_seed(), main(), plot_curves(), plot_leads(), plot_scatter() (+12 more)
+Cohesion: 0.17
+Nodes (24): build_events(), build_l2_predictor_results(), default_analysis_dir(), fraction_epochs(), load_lead_c_from_config(), load_seed(), main(), plot_curves() (+16 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.25
@@ -265,7 +264,7 @@ Nodes (11): 10. Likely Viva Questions and Model Answers, 1. What This Report Is 
 
 ### Community 17 - "Community 17"
 Cohesion: 0.03
-Nodes (60): Current verified state of `src/models/transformer.py`, Identity & Context, Jonathan's Learning Style Notes (carried forward), Pending (Not Yet Done), Project Plan (unchanged reference material), Session Summary — August 10–11, 2026 (L2 Norm set aside; Dropout predictor started; transformer.py dropout wiring), Session Summary — August 11, 2026 (Dropout predictor attempt #2 — `compute_accuracy` done, `compute_dropout_gap` has a known open bug), Session Summary — August 1, 2026 (L2 Norm predictor: rate-of-decline function built) (+52 more)
+Nodes (58): Current Project State (Updated — July 6, 2026, later session), Current verified state of `src/models/transformer.py`, Identity & Context, Jonathan's Learning Style Notes (carried forward), Pending (Not Yet Done), Project Plan (unchanged reference material), Session Summary — August 10–11, 2026 (L2 Norm set aside; Dropout predictor started; transformer.py dropout wiring), Session Summary — August 11, 2026 (Dropout predictor attempt #2 — `compute_accuracy` done, `compute_dropout_gap` has a known open bug) (+50 more)
 
 ### Community 18 - "Community 18"
 Cohesion: 0.11
@@ -301,7 +300,7 @@ Nodes (10): _analysis_outputs_present(), BenchmarkAnalyzer, main(), prepare_runs
 
 ### Community 26 - "Community 26"
 Cohesion: 0.05
-Nodes (36): 1. Conditional Noise Stress Test False-Positive Rate ($P_i \sim \text{Uniform}[0, G_i]$), 1. Frozen Experimental Setup, 1. L2 Norm Predictor, 1. Re-Framing the Baseline and Benchmark Hierarchy, 2. Benchmark Rules & Evaluation Protocol, 2. Dropout Predictor, 2. Positioning the Control Validation Setup as the Primary Benchmark Metric, 2. Treatment of HTSR Alpha Values Below 2 ($\alpha < 2$) (+28 more)
+Nodes (42): 1. Conditional Noise Stress Test False-Positive Rate ($P_i \sim \text{Uniform}[0, G_i]$), 1. Frozen Experimental Setup, 1. L2 Norm Predictor, 1. L2 Norm Predictor, 1. Re-Framing the Baseline and Benchmark Hierarchy, 2. Benchmark Rules & Evaluation Protocol, 2. Dropout Predictor, 2. Dropout Predictor (+34 more)
 
 ### Community 27 - "Community 27"
 Cohesion: 0.13
@@ -488,8 +487,8 @@ Cohesion: 0.24
 Nodes (9): _collect_representations_and_labels(), compute_spectral_for_model(), compute_spectral_metrics_for_checkpoint(), Spectral predictor (Predictor 3 of 9) — FAITHFUL Canatar et al. 2021.  Paper: Ab, Canatar et al. 2021 task-model-alignment metrics for ONE frozen     model checkp, Thin wrapper kept for run_nanda_benchmark.py's import. One frozen     checkpoint, Run the model over the full training split and capture, per example,     the hid, _checkpoint_predictor_spectral() (+1 more)
 
 ### Community 100 - "Community 100"
-Cohesion: 0.12
-Nodes (16): 1. New finding — final L2-norm/Σw² vs grok-epoch correlation sign-flips on seed 4 alone, 1. What happened, in order, 2. Files Modified, Addendum — same day: two legacy plot scripts brought up to date (sweep + current layout), Core Philosophy, End-of-session state — September 2, 2026, Files Modified, Files Modified (addendum) (+8 more)
+Cohesion: 0.11
+Nodes (17): 1. Decision — Dropout will NOT be evaluated as a live/causal predictor, 1. Question answered — "what is the point of many different seeds?", 1. What happened, in order, 2. Files Modified, 2. What this decision means going forward, 3. Files Modified, Addendum — same day: two legacy plot scripts brought up to date (sweep + current layout), End-of-session state — September 2, 2026 (+9 more)
 
 ### Community 101 - "Community 101"
 Cohesion: 0.22
@@ -636,8 +635,8 @@ Cohesion: 0.33
 Nodes (6): Addendum — same day: old `src/` snapshotted, `src/` is now the Nanda-Unified mainstream, Clean check on the live `src/` pipeline, Files Modified / Added (addendum), Still pending (unchanged from the main entry), Verify (done), What was done
 
 ### Community 137 - "Community 137"
-Cohesion: 0.40
-Nodes (5): 1. Decision — Dropout will NOT be evaluated as a live/causal predictor, 2. What this decision means going forward, 3. Files Modified, Next, Session Summary — September 4, 2026 (Dropout predictor formally closed as a post-hoc characterization metric, not a live predictor — decision recorded, no code changed; project moving to Spectral)
+Cohesion: 0.50
+Nodes (4): 1. New finding — final L2-norm/Σw² vs grok-epoch correlation sign-flips on seed 4 alone, Files Modified, Next, Session Summary — September 4, 2026 (Supplementary: computed correlation stats for the L2-Norm "why it fails" discussion — new number, not previously on record)
 
 ### Community 138 - "Community 138"
 Cohesion: 0.25
@@ -668,8 +667,8 @@ Cohesion: 0.15
 Nodes (16): detect_confirmed_sum_w2_peak(), L2 Norm predictor: Nanda et al. (2023) Figure 7, plus one own-choice rule.  S(t), Global peak of S(t): first epoch of the maximum, and that value., First epoch when S has stayed strictly below its running maximum for k epochs., sum_w2_peak(), Score the L2 row from per-epoch sum_w2 histories.      Does not load the other p, score_l2_saved_histories(), plot_single_run() (+8 more)
 
 ### Community 145 - "Community 145"
-Cohesion: 0.27
-Nodes (10): all_eight_out(), family(), main(), First full frozen-protocol score of every stored row for all 8 predictors.  Read, analysis_paths(), main(), passes(), Re-score saved P_i and G_i under the fractional lead rule. No training.  Reads < (+2 more)
+Cohesion: 0.15
+Nodes (17): evaluate_frozen_protocol(), lead_flags(), Boolean lead mask, one entry per firing seed.      rule="fraction": P_i < c * G_, Same logic as run_control_experiment.py::evaluate(), with the fractional lead te, all_eight_out(), family(), main(), First full frozen-protocol score of every stored row for all 8 predictors.  Read (+9 more)
 
 ### Community 146 - "Community 146"
 Cohesion: 0.33
@@ -705,7 +704,7 @@ Nodes (4): Test 1: The featureless null test.     This test proves the detector 
 
 ### Community 154 - "Community 154"
 Cohesion: 0.50
-Nodes (4): 1. Question answered — "what is the point of many different seeds?", Files Modified, Next, Session Summary — September 4, 2026 (Discussion: why the benchmark uses multiple seeds — no code changed)
+Nodes (4): Core Philosophy, The Thesis Contribution, Thesis Motivation, Why This Research Matters
 
 ### Community 155 - "Community 155"
 Cohesion: 0.67
@@ -727,10 +726,6 @@ Nodes (6): discover_run_dirs(), migrate_legacy_flat_run(), plot_comparison(), Bu
 Cohesion: 0.28
 Nodes (8): detect_dropout_grokking_transition(), Test Category 2: The Injected Grokking Transition.      Generate synthetic accur, Test Category 3: Dropout Variance Scaling.      Generate synthetic evaluation ac, Predictor logic for detecting a grokking transition from Dropout Robustness Curv, Test Category 1: The Flat/No-Grokking Signal.      Generate synthetic training a, test_dropout_variance_scaling(), test_flat_no_grokking_signal(), test_injected_grokking_transition()
 
-### Community 160 - "Community 160"
-Cohesion: 0.29
-Nodes (7): evaluate_frozen_protocol(), lead_flags(), Boolean lead mask, one entry per firing seed.      rule="fraction": P_i < c * G_, Same logic as run_control_experiment.py::evaluate(), with the fractional lead te, Value 6: a miss counts as no lead in lead_frac and stays in the denominator.  Rh, test_four_leads_and_one_miss_is_four_fifths(), test_three_firing_seeds_fail_immediately()
-
 ### Community 161 - "Community 161"
 Cohesion: 0.40
 Nodes (5): 1. Question answered — "why can't L2 Norm be used as a predictor?", 2. Follow-up correction — "isn't the one postdictive run (Run 3) the, Files Modified, Next, Session Summary — September 4, 2026 (Discussion: why L2 Norm cannot be used as a grokking predictor — full review of plots, results and numbers; no code changed)
@@ -743,10 +738,6 @@ Nodes (3): main(), render_page(), wrap_markdown()
 Cohesion: 0.70
 Nodes (4): get_images(), horizontal_collage(), main(), vertical_collage()
 
-### Community 164 - "Community 164"
-Cohesion: 0.50
-Nodes (4): build_events(), fraction_epochs(), First epoch at which y has covered `f` of the way from its start to     its fart, events[predictor_signal][seed] = epoch (or None for a miss).
-
 ### Community 166 - "Community 166"
 Cohesion: 0.50
 Nodes (4): dips_key(), limit_cycle_check(), Detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test, Key under which limit_cycle_check stores its dip count. With the     primary gro
@@ -756,15 +747,15 @@ Cohesion: 0.67
 Nodes (3): Current verified state (after revert), Session Summary — August 11, 2026 (Dropout predictor attempt #1 — reverted, restarting fresh), Still Open / Next Steps (updated — August 11, 2026, session close)
 
 ## Knowledge Gaps
-- **1199 isolated node(s):** `Training setup (Nov 2026)`, `2. Benchmark Rules & Evaluation Protocol`, `Predictor 1: L2 Norm`, `Predictor 2: Dropout`, `Predictor 3: Spectral` (+1194 more)
+- **1204 isolated node(s):** `Training setup (Nov 2026)`, `2. Benchmark Rules & Evaluation Protocol`, `Predictor 1: L2 Norm`, `Predictor 2: Dropout`, `Predictor 3: Spectral` (+1199 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **17 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **18 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `train_one_seed()` connect `Community 138` to `Community 166`, `Community 14`, `Community 144`, `Community 19`, `Community 24`, `Community 156`, `Community 93`?**
-  _High betweenness centrality (0.027) - this node is a cross-community bridge._
+  _High betweenness centrality (0.025) - this node is a cross-community bridge._
 - **Why does `Tensor` connect `Community 78` to `Community 21`, `Community 22`?**
   _High betweenness centrality (0.015) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `PredictorMeasurements` (e.g. with `recompute_from_checkpoints()` and `train_one_seed()`) actually correct?**
@@ -772,7 +763,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **Are the 2 inferred relationships involving `score_saved_run()` (e.g. with `scored()` and `test_l2_confirmed_peak_passes_legacy_at_neighbouring_lead_fractions()`) actually correct?**
   _`score_saved_run()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `Training setup (Nov 2026)`, `2. Benchmark Rules & Evaluation Protocol`, `Predictor 1: L2 Norm` to the rest of the system?**
-  _1461 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _1466 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 1` be split into smaller, more focused modules?**
   _Cohesion score 0.058823529411764705 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
