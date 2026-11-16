@@ -3,7 +3,7 @@ import sys
 import numpy as np
 import pytest
 
-REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 CODE_DIR = os.path.join(REPO_ROOT, "06_Code")
 SCRIPTS_DIR = os.path.join(CODE_DIR, "scripts")
 SRC_DIR = os.path.join(CODE_DIR, "src")

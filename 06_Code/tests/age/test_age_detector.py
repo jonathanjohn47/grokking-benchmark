@@ -5,7 +5,7 @@ import pytest
 import torch
 import numpy as np
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "src")))
 from predictors.age import compute_age_metrics_for_checkpoint
 
 class MockModel:

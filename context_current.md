@@ -782,3 +782,52 @@ Neural Collapse (NC1) is a terminal-phase phenomenon occurring during late-stage
 - **Regenerated Canonical Plots:**
   - `08_Experiments/results/results_per_nanda_power/figures/`: all per-seed and overview figures refreshed.
   - `08_Experiments/results/results_per_nanda_power/analysis/`: all 4 summary comparison figures and verdict JSONs refreshed.
+
+
+## 2026-11-16 — Predictor separation completed (L2 / Dropout / Spectral / AGE)
+
+**Canonical results tree:** `08_Experiments/results/results_per_nanda_power/`.
+This is the current, authoritative benchmark output. All future runs, plots,
+and PASS/FAIL verdicts read from this tree.
+
+**Legacy results tree:** `08_Experiments/results/nanda_unified/`.
+Now considered archive. Retained on disk for provenance. Moving it under
+`archive/` is a SEPARATE task (requires auditing `analyze_nanda_unified.py`
+for hardcoded paths first — see the read-only grep in this commit's task log).
+
+**Per-predictor status:**
+
+| Predictor | Code | Tests | Results | Plots | Status |
+|---|---|---|---|---|---|
+| L2 Norm | `06_Code/src/predictors/l2_norm.py` | `06_Code/tests/l2/` | `results_per_nanda_power/seed_*/l2_norm/` | `plot_results_per_nanda_power.py::plot_l2()` | Complete |
+| Dropout | `06_Code/src/predictors/dropout.py` | `06_Code/tests/dropout/` | `dropout_salah_yevick/` (isolated MLP substrate, by design) | `plot_dropout_salah_yevick.py` + `plot_results_per_nanda_power.py::plot_dropout_gap_bars()` | Complete |
+| Spectral | `06_Code/src/predictors/spectral.py` | `06_Code/tests/spectral/` (relocated 2026-11-16 from `tests/` at repo root) | `results_per_nanda_power/spectral/seed_*/` | `plot_bespoke_spectral_age.py::plot_spectral_per_seed()` | Complete |
+| AGE | `06_Code/src/predictors/age.py` | `06_Code/tests/age/` (relocated 2026-11-16 from flat `06_Code/tests/test_age_*.py`) | `results_per_nanda_power/seed_*/age/` | `plot_bespoke_spectral_age.py::plot_age_per_seed()` | Complete |
+
+**Relic locations (untouched, for reference only):**
+- `archive/relics_pre_nov14/nanda_l2_p113/predictors/l2_norm.py`
+- `archive/Deprecated_Code/src_p97_mainstream_old/predictors/l2_norm.py`
+- `archive/Deprecated_Code/src_p97_mainstream_old/predictors/dropout.py`
+- `archive/Unused/_tmp_spectral_report_data.json`
+
+**Structural note (deliberately not changed):** Spectral results use
+predictor-nested layout (`spectral/seed_N/`), while L2/Dropout/AGE use
+seed-nested layout (`seed_N/<predictor>/`). This asymmetry is baked into
+`run_nanda_benchmark.py::_checkpoint_predictor_spectral` and
+`plot_bespoke_spectral_age.py`. Normalizing it would require touching the
+runner — deferred.
+
+**Known defects flagged for a separate fix (NOT fixed here):**
+1. `06_Code/src/predictors/age.py::compute_age_metrics_for_checkpoint`
+   hardcodes `C = 113` instead of reading the modulus from the config.
+   This silently breaks if the config is ever changed to a different prime.
+2. `plot_results_per_nanda_power.py::plot_l2()` reads
+   `analysis/l2_predictor_results.json`, which is produced by
+   `analyze_nanda_unified.score_saved_run()`. The plot script calls that
+   analyser at the end of `main()` but wraps it in a bare `try/except`, so
+   a failure there produces a silent warning and the L2 figure reads stale
+   data.
+
+**Untouched (as required):** Nanda/Power base model, dataset, training loops,
+`run_nanda_benchmark.py`, existing plot scripts, canonical results tree,
+`archive/` contents.

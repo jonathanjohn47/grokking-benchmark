@@ -3,7 +3,7 @@ import sys
 import numpy as np
 import pytest
 
-REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 CODE_SRC = os.path.join(REPO_ROOT, "06_Code", "src")
 if CODE_SRC not in sys.path:
     sys.path.insert(0, CODE_SRC)
