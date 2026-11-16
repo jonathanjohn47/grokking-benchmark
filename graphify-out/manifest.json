@@ -75,8 +75,8 @@
     "semantic_hash": ""
   },
   "06_Code/scripts/run_nanda_benchmark.py": {
-    "mtime": 1794739352.6352358,
-    "ast_hash": "b967a3d71feae9d78ed548a2f2a3cd4f",
+    "mtime": 1794798167.7249525,
+    "ast_hash": "0e73a2cb59be49d98a5580e44e2fa906",
     "semantic_hash": ""
   },
   "06_Code/scripts/scaffold.py": {
@@ -130,8 +130,8 @@
     "semantic_hash": ""
   },
   "06_Code/src/train_four_head.py": {
-    "mtime": 1794739352.6363175,
-    "ast_hash": "5fc3fc9b56e0e110bf0ad3b7c263115f",
+    "mtime": 1794798167.7617836,
+    "ast_hash": "8b2ffa8a07b45b22431d40bf146b9957",
     "semantic_hash": ""
   },
   "06_Code/src/train_shadow_layernorm.py": {
@@ -310,8 +310,8 @@
     "semantic_hash": ""
   },
   "06_Code/configs/nanda_unified.yaml": {
-    "mtime": 1794736712.8197064,
-    "ast_hash": "093582eb664b74af0a948561c9fb0c9e",
+    "mtime": 1794798167.4220133,
+    "ast_hash": "65270d3eae999f7ce9d6b6c455505618",
     "semantic_hash": ""
   },
   "06_Code/requirements.txt": {
@@ -2480,8 +2480,8 @@
     "semantic_hash": ""
   },
   "context_current.md": {
-    "mtime": 1794797541.7674205,
-    "ast_hash": "c7d993833713c007aefa424e7b2cde37",
+    "mtime": 1794799669.14265,
+    "ast_hash": "118b5f1799f55a48063dd11ec544aea1",
     "semantic_hash": ""
   },
   "context_split/context_part1_of_3.md": {
@@ -2734,11 +2734,6 @@
     "ast_hash": "817df7ec6eb0d0ccf089678c6f6a5aec",
     "semantic_hash": ""
   },
-  "06_Code/tests/test_l2_confirmed_peak.py": {
-    "mtime": 1794546716.0627437,
-    "ast_hash": "382a8ddec02c01e5f0422104e8c59403",
-    "semantic_hash": ""
-  },
   "04_Literature/Papers/south indian meme - Google Search_files/RotateCookiesPage.html": {
     "mtime": 1794562125.0780838,
     "ast_hash": "b49f7fe235eca5a72f0cb87d15bb12af",
@@ -2814,29 +2809,14 @@
     "ast_hash": "b965f319654e612cfb8391a5a022196a",
     "semantic_hash": ""
   },
-  "06_Code/scripts/run_l2_positive_control.py": {
-    "mtime": 1794720382.3038807,
-    "ast_hash": "b6aaede2ec3656ccceb5327336c4e80f",
-    "semantic_hash": ""
-  },
   "08_Experiments/results/l2_positive_control_results.json": {
-    "mtime": 1794720382.3045819,
+    "mtime": 1794797984.079646,
     "ast_hash": "19ba03f2f6df312ad480f05416bb372b",
     "semantic_hash": ""
   },
   "08_Experiments/results/l2_positive_control_plot.png": {
-    "mtime": 1794720382.3043983,
+    "mtime": 1794797984.4165037,
     "ast_hash": "03874bee5ba331cf83d83ac2a26c08ac",
-    "semantic_hash": ""
-  },
-  "06_Code/scripts/run_l2_negative_control.py": {
-    "mtime": 1794736712.8200371,
-    "ast_hash": "e9f0c46391a521dd89048ef0d2e1d960",
-    "semantic_hash": ""
-  },
-  "06_Code/scripts/train_dropout_salah_yevick.py": {
-    "mtime": 1794796013.2254286,
-    "ast_hash": "9131ef9d8b9a5c87d5165d4f94296510",
     "semantic_hash": ""
   },
   "06_Code/src/data/modular_arithmetic_p53.py": {
@@ -2850,7 +2830,7 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/l2_negative_control_results.json": {
-    "mtime": 1794736712.822701,
+    "mtime": 1794797986.0251343,
     "ast_hash": "e857c64ca0e526667751e3f5c2c13b45",
     "semantic_hash": ""
   },
@@ -2860,18 +2840,8 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/l2_negative_control_plot.png": {
-    "mtime": 1794736712.822514,
+    "mtime": 1794797986.3979433,
     "ast_hash": "5fae76a22b7f29c277934a0a4a532f09",
-    "semantic_hash": ""
-  },
-  "06_Code/scripts/evaluate_dropout_predictor.py": {
-    "mtime": 1794796013.2241843,
-    "ast_hash": "cd1af3c554f381433b23c40ef90124eb",
-    "semantic_hash": ""
-  },
-  "06_Code/scripts/plot_dropout_salah_yevick.py": {
-    "mtime": 1794796013.2247741,
-    "ast_hash": "0002104357e94d395c69f42c318bef48",
     "semantic_hash": ""
   },
   "08_Experiments/results/dropout_salah_yevick/aggregate.json": {
@@ -2897,11 +2867,6 @@
   "08_Experiments/results/results_per_nanda_power/seed_0/dropout/dropout_signal.json": {
     "mtime": 1794796013.2304447,
     "ast_hash": "685586bfe018b12dd386a9cf7bb37066",
-    "semantic_hash": ""
-  },
-  "tests/test_l2_signal_dependence.py": {
-    "mtime": 1794748920.6224291,
-    "ast_hash": "fa645566e6330350b24d31a025919e5f",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/seed_0/dropout/drc_auc_vs_epoch.png": {
@@ -3024,14 +2989,59 @@
     "ast_hash": "b7546d11b3d8cd9cbeff90520d1d9bc9",
     "semantic_hash": ""
   },
-  "tests/test_dropout_predictor_synthetics.py": {
-    "mtime": 1794797451.487503,
-    "ast_hash": "06c54c81cb9d616805c5bfcd9b3ef754",
+  "06_Code/scripts/dropout/evaluate_dropout_predictor.py": {
+    "mtime": 1794798167.4680817,
+    "ast_hash": "c58974598d3875765f73e05b33ea7173",
     "semantic_hash": ""
   },
-  "tests/test_dropout_scorer_synthetics.py": {
-    "mtime": 1794797498.557748,
-    "ast_hash": "4050cb2d8a037e454ff52781de3df415",
+  "06_Code/scripts/dropout/plot_dropout_salah_yevick.py": {
+    "mtime": 1794798167.5065444,
+    "ast_hash": "142cb3e8ff61514006363bc1e9639e32",
+    "semantic_hash": ""
+  },
+  "06_Code/scripts/dropout/train_dropout_salah_yevick.py": {
+    "mtime": 1794798167.56927,
+    "ast_hash": "867976f83b6e1b00f34351613f13b3d0",
+    "semantic_hash": ""
+  },
+  "06_Code/scripts/l2/run_l2_negative_control.py": {
+    "mtime": 1794798167.600261,
+    "ast_hash": "e323d83c6a65e86f1546bc45cdf4f527",
+    "semantic_hash": ""
+  },
+  "06_Code/scripts/l2/run_l2_positive_control.py": {
+    "mtime": 1794798167.6326408,
+    "ast_hash": "8d7d24812322666ad51e541a6068a218",
+    "semantic_hash": ""
+  },
+  "06_Code/tests/dropout/__init__.py": {
+    "mtime": 1794797867.6950617,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "06_Code/tests/dropout/test_dropout_predictor_synthetics.py": {
+    "mtime": 1794798167.8142297,
+    "ast_hash": "62f37aa280d53acfd2f8454df3eb2e71",
+    "semantic_hash": ""
+  },
+  "06_Code/tests/dropout/test_dropout_scorer_synthetics.py": {
+    "mtime": 1794798167.8407612,
+    "ast_hash": "539dc82ed4251901fef2ce96fbb014c4",
+    "semantic_hash": ""
+  },
+  "06_Code/tests/l2/__init__.py": {
+    "mtime": 1794797867.6947699,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "06_Code/tests/l2/test_l2_confirmed_peak.py": {
+    "mtime": 1794798167.8619266,
+    "ast_hash": "f5c911520a38dc0546e6dd52be1796c3",
+    "semantic_hash": ""
+  },
+  "06_Code/tests/l2/test_l2_signal_dependence.py": {
+    "mtime": 1794798167.885845,
+    "ast_hash": "6eb12caf3335ca223222557da4a98730",
     "semantic_hash": ""
   }
 }
