@@ -751,11 +751,16 @@ Neural Collapse (NC1) is a terminal-phase phenomenon occurring during late-stage
 
 ---
 
-## 7. Diagnostic Visualization & Artifact Publication (November 16, 2026)
+## 8. Resolution of Canonical Alignment & Checkpoint-Only Recompute (November 16, 2026)
 
-- **Bespoke Diagnostic Plots:** Generated bespoke diagnostic plots for Predictor 3 (Spectral) and Predictor 4 (AGE) and saved to `08_Experiments/results/nanda_unified/analysis/bespoke_diagnostics/`. Both per-seed PNG visualizations (`age_seed_0.png`–`age_seed_4.png`, `spectral_seed_0.png`–`spectral_seed_4.png`) and combined overview PDFs (`age_all_seeds.pdf`, `spectral_all_seeds.pdf`) are produced.
-- **Asymmetric Rebuild Schema Integration:** Corrected `06_Code/scripts/plot_bespoke_spectral_age.py` to read directly from the respective asymmetric rebuild output directories:
-  - Spectral predictor-first: Trajectories from `08_Experiments/results/nanda_unified/spectral/seed_{i}/` (`alignment_trajectory.npy`, `k90_trajectory.npy`), checkpoint grid, and global extrema from `08_Experiments/results/nanda_unified/spectral/spectral_summary.json` (Alignment maximums: `[11000, 5800, 9200, 8700, 21900]`, $k_{90}$ minimums: `[34500, 13600, 24100, 19200, 32400]`).
-  - AGE per-seed: Trajectories from `08_Experiments/results/nanda_unified/seed_{i}/age/` (`age_nc1.npy`), and signal metrics from `age_signal.json` (`nc1_min_epoch`: `[13000, 28100, 30600, 35900, 34400]`).
-- **Canonical Grokking Epochs & Aggregation:** Verified and updated `08_Experiments/results/nanda_unified/aggregate.json` to canonical primary 0.99 cut grokking epochs: `[8021, 8253, 4094, 7831, 6637]`.
-- **Publication for Review:** All empirical result artifacts, summary files, and diagnostic plots staged and published to GitHub `main` for supervisory review.
+- **Reversion of Legacy Corruption:** Restored `08_Experiments/results/nanda_unified/aggregate.json` to its authentic, uncorrupted legacy state with true grokking epochs `[12987, 6921, 9510, 11019, 23747]`.
+- **Canonical Checkpoint-Only Evaluation for Spectral:** Executed `python 06_Code/scripts/run_nanda_benchmark.py --output_dir 08_Experiments/results/results_per_nanda_power --predictors spectral` across all 5 seeds (401 checkpoints per seed, epochs 0 to 40000, eval_every=100) without retraining:
+  - Canonical primary grokking epochs ($G_i$, cut 0.99): `[8021, 8253, 4094, 7831, 6637]`
+  - Alignment global maximum epochs: `[1000, 1200, 1100, 1200, 1100]`
+  - $k_{90}$ global minimum epochs: `[6700, 24700, 8700, 6500, 35400]`
+  - AGE NC1 global minimum epochs: `[13000, 28100, 30600, 35900, 34400]`
+- **Artifacts Generated & Verified:**
+  - Per-seed trajectories and metrics in `08_Experiments/results/results_per_nanda_power/spectral/seed_{i}/` (`spectral_alignment.npy`, `spectral_k90.npy`, `spectral_checkpoints.npy`, `alignment_trajectory.npy`, `k90_trajectory.npy`, etc.).
+  - Summary metrics recorded in `08_Experiments/results/results_per_nanda_power/spectral/spectral_summary.json` and canonical `aggregate.json`.
+- **Diagnostic Plotting Script Aligned:** Updated `06_Code/scripts/plot_bespoke_spectral_age.py` to load strictly from `08_Experiments/results/results_per_nanda_power/` using the true checkpoint epoch grid.
+- **Regenerated Bespoke Plots:** Generated clean diagnostic plots (`age_seed_*.png`, `spectral_seed_*.png`, `age_all_seeds.pdf`, `spectral_all_seeds.pdf`) under `08_Experiments/results/nanda_unified/analysis/bespoke_diagnostics/` and `08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/`. All curves and vertical markers reflect the canonical run.

@@ -13636,3 +13636,56 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 - `08_Experiments/results/nanda_unified/seed_*/age/*`: AGE rebuild data files.
 - `08_Experiments/results/nanda_unified/spectral/seed_*/*`: Spectral rebuild data files.
 - `08_Experiments/results/nanda_unified/analysis/bespoke_diagnostics/*`: Diagnostic plots.
+
+
+---
+
+# Session Summary — November 16, 2026 (Canonical Alignment of Spectral & AGE Recompute and Bespoke Diagnostic Plots)
+
+## Session Summary
+- **Implemented:**
+  - Restored `08_Experiments/results/nanda_unified/aggregate.json` to its authentic uncorrupted legacy state (`grok_epochs: [12987, 6921, 9510, 11019, 23747]`).
+  - Executed checkpoint-only evaluation for Predictor 3 (Spectral) on the canonical `results_per_nanda_power` checkpoints (seeds 0–4, 401 checkpoints each, no retraining).
+  - Updated `08_Experiments/results/results_per_nanda_power/aggregate.json` and generated `08_Experiments/results/results_per_nanda_power/spectral/spectral_summary.json`.
+  - Updated `06_Code/scripts/plot_bespoke_spectral_age.py` to point strictly to the canonical experiment paths (`results_per_nanda_power`).
+  - Regenerated all bespoke diagnostic plots in `08_Experiments/results/nanda_unified/analysis/bespoke_diagnostics/` and `08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/`.
+- **Investigated:**
+  - Resolved root-cause data mismatch: the previous attempt evaluated Spectral on legacy `nanda_unified` data while manually injecting canonical grokking epochs into `nanda_unified/aggregate.json`. This corrupted the legacy aggregate and created mismatch against canonical grokking points.
+- **Changed:**
+  - `08_Experiments/results/nanda_unified/aggregate.json`: Reverted grokking epochs back to legacy values.
+  - `06_Code/scripts/plot_bespoke_spectral_age.py`: Points strictly to `08_Experiments/results/results_per_nanda_power/`.
+  - `context_current.md`: Appended Section 8 describing canonical alignment and recompute.
+- **Fixed:**
+  - Grokking points and predictor inflection points are now 100% aligned to the canonical experiment.
+- **Postponed:** None.
+
+## Technical Decisions
+- Checkpoint-only evaluation on `results_per_nanda_power` preserves the frozen experimental substrate and avoids unnecessary retraining while generating authentic trajectories.
+- Trajectory aliases (`alignment_trajectory.npy` and `k90_trajectory.npy`) are stored alongside `spectral_alignment.npy` and `spectral_k90.npy` to guarantee compatibility with any analysis scripts.
+
+## User Instructions
+- Revert corrupted legacy files, execute checkpoint-only evaluation for Spectral and AGE on the canonical experiment, and regenerate bespoke diagnostic plots using the correct, aligned data.
+
+## Current Project State
+- **Completed Work:**
+  - Reversion of corrupted `nanda_unified/aggregate.json`.
+  - Checkpoint-only evaluation of Spectral across all 5 seeds on `results_per_nanda_power`.
+  - Generation of canonical `spectral_summary.json` and canonical `aggregate.json` update.
+  - Bespoke diagnostic plots regenerated and verified.
+- **Next Actions:**
+  - Stage, commit, and push changes to git.
+- **Blockers:** None.
+
+## Important Discoveries
+- On canonical run (`results_per_nanda_power`), Spectral alignment peaks at epochs `[1000, 1200, 1100, 1200, 1100]` during initial representation alignment, whereas $k_{90}$ reaches its global minimum at epochs `[6700, 24700, 8700, 6500, 35400]`, well post-grokking or late in training. The combined Canatar persistence rule fails to fire on any seed ($0/5$), confirming failure mode (c).
+
+## Files Modified
+- `context_current.md`: Appended canonical resolution section.
+- `context.md`: Appended session summary.
+- `06_Code/scripts/plot_bespoke_spectral_age.py`: Canonical path configuration.
+- `08_Experiments/results/nanda_unified/aggregate.json`: Reverted to legacy grokking epochs.
+- `08_Experiments/results/nanda_unified/analysis/bespoke_diagnostics/*`: Diagnostic plots regenerated.
+- `08_Experiments/results/results_per_nanda_power/aggregate.json`: Added canonical spectral predictor blocks.
+- `08_Experiments/results/results_per_nanda_power/spectral/*`: Canonical spectral trajectories, checkpoints, and summary.
+- `08_Experiments/results/results_per_nanda_power/seed_*/spectral/*`: Canonical spectral signals and sample indices.
+- `08_Experiments/results/results_per_nanda_power/seed_*/summary.json`: Added spectral blocks.

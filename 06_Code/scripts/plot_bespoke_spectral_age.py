@@ -1,19 +1,20 @@
 """plot_bespoke_spectral_age.py
 ================================
 Bespoke diagnostic plots for Predictor 3 (Spectral) and Predictor 4 (AGE)
-using artifacts under 08_Experiments/results/nanda_unified/.
+using canonical artifacts under 08_Experiments/results/results_per_nanda_power/.
 
-Reads from the new rebuild output directory structure:
-- Global grokking epochs: 08_Experiments/results/nanda_unified/aggregate.json ("grok_epochs")
+Reads from the canonical rebuild output directory structure:
+- Global grokking epochs: 08_Experiments/results/results_per_nanda_power/aggregate.json ("grok_epochs")
+  strictly [8021, 8253, 4094, 7831, 6637]
 - AGE per-seed:
-    Trajectory: 08_Experiments/results/nanda_unified/seed_{i}/age/age_nc1.npy
-    Metrics: 08_Experiments/results/nanda_unified/seed_{i}/age/age_signal.json ("nc1_min_epoch")
+    Trajectory: 08_Experiments/results/results_per_nanda_power/seed_{i}/age/age_nc1.npy
+    Metrics: 08_Experiments/results/results_per_nanda_power/seed_{i}/age/age_signal.json ("nc1_min_epoch")
 - Spectral predictor-first:
-    Trajectories: 08_Experiments/results/nanda_unified/spectral/seed_{i}/alignment_trajectory.npy
-                  08_Experiments/results/nanda_unified/spectral/seed_{i}/k90_trajectory.npy
-    Metrics: 08_Experiments/results/nanda_unified/spectral/spectral_summary.json
+    Trajectories: 08_Experiments/results/results_per_nanda_power/spectral/seed_{i}/alignment_trajectory.npy
+                  08_Experiments/results/results_per_nanda_power/spectral/seed_{i}/k90_trajectory.npy
+    Metrics: 08_Experiments/results/results_per_nanda_power/spectral/spectral_summary.json
 - Epoch grid:
-    08_Experiments/results/nanda_unified/seed_{i}/training/epochs.npy
+    08_Experiments/results/results_per_nanda_power/seed_{i}/age/age_checkpoints.npy or spectral_checkpoints.npy
 """
 
 import os
@@ -35,11 +36,12 @@ def set_plotting_style():
 
 
 def load_epoch_grid(seed, base_dir, trajectory_len):
-    """Load actual epoch array from training/epochs.npy or derive if length matches 401."""
+    """Load actual epoch array from saved checkpoint arrays or derive if length matches 401."""
     epoch_paths = [
-        os.path.join(base_dir, f"seed_{seed}", "training", "epochs.npy"),
-        os.path.join(base_dir, "spectral", f"seed_{seed}", "spectral_checkpoints.npy"),
+        os.path.join(base_dir, f"seed_{seed}", "age", "age_checkpoints.npy"),
         os.path.join(base_dir, f"seed_{seed}", "spectral", "spectral_checkpoints.npy"),
+        os.path.join(base_dir, "spectral", f"seed_{seed}", "spectral_checkpoints.npy"),
+        os.path.join(base_dir, f"seed_{seed}", "training", "epochs.npy"),
     ]
     for p in epoch_paths:
         if os.path.exists(p):
@@ -57,7 +59,7 @@ def load_epoch_grid(seed, base_dir, trajectory_len):
     )
 
 
-def load_all_data(base_dir="08_Experiments/results/nanda_unified"):
+def load_all_data(base_dir="08_Experiments/results/results_per_nanda_power"):
     """Load trajectories, exact checkpoint epochs, and metrics for all seeds."""
     agg_path = os.path.join(base_dir, "aggregate.json")
     if not os.path.exists(agg_path):
@@ -70,12 +72,11 @@ def load_all_data(base_dir="08_Experiments/results/nanda_unified"):
     if grok_epochs is None:
         raise KeyError(f"'grok_epochs' key not found in {agg_path}. Keys: {list(agg_data.keys())}")
 
+    spec_summary = {}
     spec_summary_path = os.path.join(base_dir, "spectral", "spectral_summary.json")
-    if not os.path.exists(spec_summary_path):
-        raise FileNotFoundError(f"Missing required spectral summary: {spec_summary_path}")
-
-    with open(spec_summary_path, "r") as f:
-        spec_summary = json.load(f)
+    if os.path.exists(spec_summary_path):
+        with open(spec_summary_path, "r") as f:
+            spec_summary = json.load(f)
 
     seeds_data = []
 
@@ -113,43 +114,35 @@ def load_all_data(base_dir="08_Experiments/results/nanda_unified"):
         # 2. Spectral: Trajectories & Metrics
         align_path = os.path.join(base_dir, "spectral", f"seed_{seed}", "alignment_trajectory.npy")
         if not os.path.exists(align_path):
-            fallback_align = os.path.join(base_dir, "spectral", f"seed_{seed}", "spectral_alignment.npy")
-            if os.path.exists(fallback_align):
-                align_path = fallback_align
+            candidate_paths = [
+                os.path.join(base_dir, "spectral", f"seed_{seed}", "spectral_alignment.npy"),
+                os.path.join(base_dir, f"seed_{seed}", "spectral", "spectral_alignment.npy"),
+                os.path.join(base_dir, f"seed_{seed}", "spectral", "alignment_trajectory.npy"),
+            ]
+            for cp in candidate_paths:
+                if os.path.exists(cp):
+                    align_path = cp
+                    break
             else:
-                raise FileNotFoundError(f"Missing required Spectral alignment trajectory: {align_path}")
+                raise FileNotFoundError(f"Missing required Spectral alignment trajectory for seed {seed}")
 
         align = np.load(align_path)
 
         k90_path = os.path.join(base_dir, "spectral", f"seed_{seed}", "k90_trajectory.npy")
         if not os.path.exists(k90_path):
-            fallback_k90 = os.path.join(base_dir, "spectral", f"seed_{seed}", "spectral_k90.npy")
-            if os.path.exists(fallback_k90):
-                k90_path = fallback_k90
+            candidate_paths = [
+                os.path.join(base_dir, "spectral", f"seed_{seed}", "spectral_k90.npy"),
+                os.path.join(base_dir, f"seed_{seed}", "spectral", "spectral_k90.npy"),
+                os.path.join(base_dir, f"seed_{seed}", "spectral", "k90_trajectory.npy"),
+            ]
+            for cp in candidate_paths:
+                if os.path.exists(cp):
+                    k90_path = cp
+                    break
             else:
-                raise FileNotFoundError(f"Missing required Spectral k90 trajectory: {k90_path}")
+                raise FileNotFoundError(f"Missing required Spectral k90 trajectory for seed {seed}")
 
         k90 = np.load(k90_path)
-
-        # Extract spectral metrics for this seed
-        if f"seed_{seed}" in spec_summary:
-            seed_block = spec_summary[f"seed_{seed}"]
-            alignment_max_epoch = seed_block.get("alignment_max_epoch")
-            k_90_min_epoch = seed_block.get("k_90_min_epoch") or seed_block.get("k90_min_epoch")
-        elif "diagnostics" in spec_summary and "alignment_global_max_epochs" in spec_summary["diagnostics"]:
-            diag = spec_summary["diagnostics"]
-            alignment_max_epoch = diag["alignment_global_max_epochs"][seed]
-            k_90_min_epoch = diag["k90_global_min_epochs"][seed]
-        else:
-            print("ERROR: spectral_summary.json structure is nested differently than expected!")
-            print("Top-level keys in spectral_summary.json:", list(spec_summary.keys()))
-            raise KeyError(f"Unable to extract Spectral metrics for seed {seed} from spectral_summary.json")
-
-        if alignment_max_epoch is None or k_90_min_epoch is None:
-            raise ValueError(
-                f"Seed {seed}: Extracted alignment_max_epoch={alignment_max_epoch}, "
-                f"k_90_min_epoch={k_90_min_epoch} cannot be None."
-            )
 
         # 3. Epoch Grid
         epochs = load_epoch_grid(seed, base_dir, len(nc1))
@@ -159,6 +152,42 @@ def load_all_data(base_dir="08_Experiments/results/nanda_unified"):
                 f"Seed {seed}: Mismatched array lengths: epochs={len(epochs)}, nc1={len(nc1)}, "
                 f"align={len(align)}, k90={len(k90)}"
             )
+
+        # Extract spectral metrics for this seed
+        alignment_max_epoch = None
+        k_90_min_epoch = None
+        if f"seed_{seed}" in spec_summary:
+            seed_block = spec_summary[f"seed_{seed}"]
+            alignment_max_epoch = seed_block.get("alignment_max_epoch")
+            k_90_min_epoch = seed_block.get("k_90_min_epoch") or seed_block.get("k90_min_epoch")
+        elif "diagnostics" in spec_summary and "alignment_global_max_epochs" in spec_summary["diagnostics"]:
+            diag = spec_summary["diagnostics"]
+            alignment_max_epoch = diag["alignment_global_max_epochs"][seed]
+            k_90_min_epoch = diag["k90_global_min_epochs"][seed]
+        else:
+            # Check spectral_signal.json in seed or summary.json
+            sig_path = os.path.join(base_dir, f"seed_{seed}", "spectral", "spectral_signal.json")
+            if not os.path.exists(sig_path):
+                sig_path = os.path.join(base_dir, "spectral", f"seed_{seed}", "spectral_signal.json")
+            if os.path.exists(sig_path):
+                with open(sig_path, "r") as sf:
+                    sig_data = json.load(sf)
+                    alignment_max_epoch = sig_data.get("alignment_max_epoch")
+                    k_90_min_epoch = sig_data.get("k_90_min_epoch") or sig_data.get("k90_min_epoch")
+            if alignment_max_epoch is None or k_90_min_epoch is None:
+                seed_summary_path = os.path.join(base_dir, f"seed_{seed}", "summary.json")
+                if os.path.exists(seed_summary_path):
+                    with open(seed_summary_path, "r") as ssf:
+                        ss_data = json.load(ssf)
+                        sp_block = ss_data.get("spectral_predictor") or {}
+                        alignment_max_epoch = sp_block.get("alignment_max_epoch")
+                        k_90_min_epoch = sp_block.get("k_90_min_epoch") or sp_block.get("k90_min_epoch")
+
+        # Fallback to direct computation from trajectory if not in summary files
+        if alignment_max_epoch is None:
+            alignment_max_epoch = int(epochs[np.argmax(align)])
+        if k_90_min_epoch is None:
+            k_90_min_epoch = int(epochs[np.argmin(k90)])
 
         seeds_data.append({
             "seed": seed,
@@ -324,32 +353,37 @@ def main():
     set_plotting_style()
     grok_epochs, seeds_data = load_all_data()
 
-    out_dir = "08_Experiments/results/nanda_unified/analysis/bespoke_diagnostics"
-    os.makedirs(out_dir, exist_ok=True)
+    out_dirs = [
+        "08_Experiments/results/nanda_unified/analysis/bespoke_diagnostics",
+        "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics",
+    ]
+    for out_dir in out_dirs:
+        os.makedirs(out_dir, exist_ok=True)
 
     generated_files = []
 
-    # Per-seed plots
-    for s_data in seeds_data:
-        seed = s_data["seed"]
-        # AGE plot
-        age_png = os.path.join(out_dir, f"age_seed_{seed}.png")
-        plot_age_per_seed(s_data, age_png)
-        generated_files.append(age_png)
+    for out_dir in out_dirs:
+        # Per-seed plots
+        for s_data in seeds_data:
+            seed = s_data["seed"]
+            # AGE plot
+            age_png = os.path.join(out_dir, f"age_seed_{seed}.png")
+            plot_age_per_seed(s_data, age_png)
+            generated_files.append(age_png)
 
-        # Spectral plot
-        spec_png = os.path.join(out_dir, f"spectral_seed_{seed}.png")
-        plot_spectral_per_seed(s_data, spec_png)
-        generated_files.append(spec_png)
+            # Spectral plot
+            spec_png = os.path.join(out_dir, f"spectral_seed_{seed}.png")
+            plot_spectral_per_seed(s_data, spec_png)
+            generated_files.append(spec_png)
 
-    # Combined PDFs
-    age_pdf = os.path.join(out_dir, "age_all_seeds.pdf")
-    plot_age_all_seeds_pdf(seeds_data, age_pdf)
-    generated_files.append(age_pdf)
+        # Combined PDFs
+        age_pdf = os.path.join(out_dir, "age_all_seeds.pdf")
+        plot_age_all_seeds_pdf(seeds_data, age_pdf)
+        generated_files.append(age_pdf)
 
-    spec_pdf = os.path.join(out_dir, "spectral_all_seeds.pdf")
-    plot_spectral_all_seeds_pdf(seeds_data, spec_pdf)
-    generated_files.append(spec_pdf)
+        spec_pdf = os.path.join(out_dir, "spectral_all_seeds.pdf")
+        plot_spectral_all_seeds_pdf(seeds_data, spec_pdf)
+        generated_files.append(spec_pdf)
 
     print("Successfully generated bespoke diagnostic plots:")
     for f in generated_files:
