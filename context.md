@@ -13821,3 +13821,52 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 - `08_Experiments/results/results_per_nanda_power/analysis/`: Regenerated `01_grokking_curves.png`, `02_signals_vs_grok.png`, `03_event_vs_grok_scatter.png`, `04_lead_times.png`.
 - `08_Experiments/results/results_per_nanda_power/figures/`: Regenerated seed and overview figures, added `overview_dropout_gap.png`.
 - `archive/relics_pre_nov14/`: Relocated legacy `nanda_l2_p113`, `benchmark_analysis`, and stray outputs.
+
+
+# Session Summary — November 17, 2026 (Dynamic Class Inference in AGE, Bespoke Diagnostics & 5x3 Grid Collation, Codebase Audit)
+
+## Session Summary
+- **Implemented:**
+  - Dynamic class count inference in `06_Code/src/predictors/age.py`: replaced hardcoded `C = 113` with `C = model.output_head.out_features - 1`, ensuring compatibility across varying vocabulary configurations.
+  - Added 5x3 multi-predictor collation grid `08_Experiments/results/results_per_nanda_power/analysis/predictor_grid_5x3.png` comparing seeds across predictors.
+  - Updated bespoke diagnostic plots (PNG and PDF) for Spectral and AGE with log-scale alignment matching L2.
+  - Performed comprehensive file audits documenting root directory files, predictor matching files, and command execution outputs (`audit_root_files.txt`, `audit_matching_predictor_files.txt`, `audit_command_outputs.txt`).
+  - Updated graphify dependency graph, cache, and manifest.
+- **Investigated:**
+  - Inspected predictor files and diagnostic output structures across `06_Code/` and `08_Experiments/`.
+  - Verified modularity and separation between shared model files and predictor implementations.
+- **Fixed:**
+  - Eliminated hardcoded modulus/class assumption `C = 113` in `age.py`.
+- **Postponed:** None.
+
+## Technical Decisions
+- Dynamic inference of class count from model output head dimensions (`out_features - 1`), allowing predictors to automatically handle models without manual parameter overrides.
+- Log-scale formatting for x-axes in bespoke diagnostic plots for consistency across the benchmark suite.
+
+## User Instructions
+- Commit all changes and push to remote.
+- Keep `context.md` updated with the required schema prior to committing.
+
+## Current Project State
+- **Completed Work:**
+  - AGE dynamic class inference implemented and verified.
+  - Diagnostic and collation figures generated.
+  - Repository audits recorded.
+- **Work in Progress:**
+  - Further benchmarking and thesis writeup.
+- **Blockers:** None.
+- **Next Actions:**
+  - Continue predictor evaluations and thesis documentation.
+
+## Important Discoveries
+- Hardcoded constants in predictor implementations (e.g., class counts) can cause silent bugs when testing on different moduli; dynamic deduction from the model architecture guarantees robustness.
+
+## Files Modified
+- `06_Code/src/predictors/age.py`: Dynamically infer class count `C` from `model.output_head.out_features - 1`.
+- `08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/`: Updated AGE and Spectral plots (PNG and PDF).
+- `08_Experiments/results/results_per_nanda_power/analysis/predictor_grid_5x3.png`: Generated 5x3 predictor grid.
+- `audit_command_outputs.txt`: Codebase command output audit.
+- `audit_matching_predictor_files.txt`: Predictor file audit.
+- `audit_root_files.txt`: Root repository audit.
+- `graphify-out/*`: Updated graph artifacts, manifest, and cache.
+- `context.md`: Appended session summary.

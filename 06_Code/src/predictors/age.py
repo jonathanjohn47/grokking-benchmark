@@ -38,7 +38,7 @@ def compute_age_metrics_for_checkpoint(model, train_loader, device):
     Y = torch.cat(labels, dim=0).cpu().long()  # [N]
     
     N = Phi.shape[0]
-    C = 113  # number of classes
+    C = model.output_head.out_features - 1  # Dynamically infer number of classes
     
     # 3. Compute class means and global mean
     mu_G = Phi.mean(dim=0)  # [128]
