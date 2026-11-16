@@ -1,0 +1,28 @@
+{
+  "paper": "Salah & Yevick, arXiv:2507.11645",
+  "substrate": "mlp_two_layer_p53",
+  "modulus": 53,
+  "train_fraction": 0.5,
+  "epochs": 3000,
+  "variance_rate": 0.3,
+  "n_samples": 100,
+  "drc_rates": [
+    0.0,
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.8,
+    0.9
+  ],
+  "variance_peak_epoch": 1,
+  "variance_peak_value": 1.2410987702789983e-05,
+  "grok_epoch": null,
+  "grok_threshold": 0.99,
+  "final_train_acc": 1.0,
+  "final_test_acc": 0.0007117437722419929,
+  "note": "Signal extraction only. Validity gates and Superiority Index are not computed in this pipeline."
+}

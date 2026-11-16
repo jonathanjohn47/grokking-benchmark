@@ -30,14 +30,96 @@ sys.path.insert(0, str(SRC_ROOT))
 
 from data.modular_arithmetic_p53 import get_dataloaders_p53  # noqa: E402
 from models.mlp_two_layer import MLPTwoLayer, cross_entropy_loss  # noqa: E402
-from predictors.dropout import (  # noqa: E402
-    DRC_RATES,
-    VARIANCE_DROPOUT_RATE,
-    VARIANCE_N_SAMPLES,
-    compute_accuracy,
-    compute_dropout_robustness_curve,
-    compute_dropout_variance,
-)
+
+# This script trains the paper's MLP, which owns an nn.Dropout module.
+# The Nanda transformer predictor in predictors/dropout.py is a different
+# measurement (forward hooks, no module in the transformer). These helpers
+# stay here so the two substrates do not share a dropout implementation.
+VARIANCE_DROPOUT_RATE = 0.3
+VARIANCE_N_SAMPLES = 100
+DRC_RATES = [round(0.1 * i, 1) for i in range(10)]
+
+
+def compute_accuracy(model, data_loader, device=None):
+    """One forward pass over the loader; returns fraction correct."""
+    if device is None:
+        device = next(model.parameters()).device
+    total_correct = 0
+    total_samples = 0
+    for x, y in data_loader:
+        x, y = x.to(device), y.to(device)
+        with torch.no_grad():
+            logits = model(x)
+        predicted = logits.argmax(dim=1)
+        total_correct += (predicted == y).sum().item()
+        total_samples += len(y)
+    return total_correct / total_samples if total_samples > 0 else 0.0
+
+
+def compute_dropout_variance(
+    model,
+    data_loader,
+    n_samples=VARIANCE_N_SAMPLES,
+    dropout_rate=VARIANCE_DROPOUT_RATE,
+    device=None,
+):
+    """Variance of test accuracy across ``n_samples`` stochastic passes.
+
+    Weights stay frozen. Dropout is active at ``dropout_rate`` (paper: 0.3).
+    Returns (mean_accuracy, variance_of_accuracy). Restores the dropout rate
+    and model.eval() before returning.
+    """
+    if device is None:
+        device = next(model.parameters()).device
+
+    previous_rate = float(model.dropout.p)
+    model.set_dropout_rate(dropout_rate)
+    model.train()  # so nn.Dropout samples a fresh mask each pass
+
+    accuracies = []
+    with torch.no_grad():
+        for _ in range(n_samples):
+            accuracies.append(compute_accuracy(model, data_loader, device=device))
+
+    model.set_dropout_rate(previous_rate)
+    model.eval()
+
+    accuracies = np.asarray(accuracies, dtype=float)
+    return float(accuracies.mean()), float(accuracies.var())
+
+
+def compute_dropout_robustness_curve(
+    model,
+    data_loader,
+    dropout_rates=None,
+    device=None,
+):
+    """Dropout Robustness Curve: test accuracy at each dropout rate.
+
+    For rate 0.0 the forward pass is deterministic (eval mode). For a rate
+    above 0.0 a single stochastic pass is used. Returns ``{rate: accuracy}``.
+    Restores dropout to the previous rate and model.eval() before returning.
+    """
+    if dropout_rates is None:
+        dropout_rates = list(DRC_RATES)
+    if device is None:
+        device = next(model.parameters()).device
+
+    previous_rate = float(model.dropout.p)
+    results = {}
+
+    for rate in dropout_rates:
+        rate = float(rate)
+        model.set_dropout_rate(rate)
+        if rate <= 0.0:
+            model.eval()
+        else:
+            model.train()
+        results[rate] = float(compute_accuracy(model, data_loader, device=device))
+
+    model.set_dropout_rate(previous_rate)
+    model.eval()
+    return results
 
 
 DEFAULT_CONFIG = CODE_ROOT / "configs" / "dropout_salah_yevick.yaml"
