@@ -499,47 +499,6 @@ The Dropout predictor and its associated scorer are mathematically intact, funct
 - Files added: `tests/test_dropout_predictor_synthetics.py`, `tests/test_dropout_scorer_synthetics.py`
 - Branch: `main`
 
-# Predictor Experimental Validation Master Tracker
-
-## 1. L2 Norm Predictor
-- [x] 1. Signal and Trigger Definition (Metric Definition, Trigger Rule)
-- [x] 2. Implementation and Integration (Computation Logic, Trigger Logic, Registry Integration)
-- [x] 3. Synthetic Detector Validation (Featureless Null Test, Injected Feature Test)
-- [x] 4. Synthetic Scorer Validation (Positive Control, Negative Control)
-- [x] 5. Empirical Execution (5-Seed Computation, Checkpoint Utilization)
-- [x] 6. Formal Scoring and Verdict (Validity Gate Evaluation, Superiority Index, Verdict Assignment)
-
-## 2. Dropout Predictor
-- [x] 1. Signal and Trigger Definition (Metric Definition, Trigger Rule)
-- [x] 2. Implementation and Integration (Computation Logic, Trigger Logic, Registry Integration)
-- [x] 3. Synthetic Detector Validation (Featureless Null Test, Injected Feature Test)
-- [x] 4. Synthetic Scorer Validation (Positive Control, Negative Control)
-- [x] 5. Empirical Execution (5-Seed Computation, Checkpoint Utilization)
-- [x] 6. Formal Scoring and Verdict (Validity Gate Evaluation, Superiority Index, Verdict Assignment)
-
-## 3. Spectral Predictor
-- [ ] 1. Signal and Trigger Definition (Metric Definition, Trigger Rule)
-- [ ] 2. Implementation and Integration (Computation Logic, Trigger Logic, Registry Integration)
-- [ ] 3. Synthetic Detector Validation (Featureless Null Test, Injected Feature Test)
-- [ ] 4. Synthetic Scorer Validation (Positive Control, Negative Control)
-- [ ] 5. Empirical Execution (5-Seed Computation, Checkpoint Utilization)
-- [ ] 6. Formal Scoring and Verdict (Validity Gate Evaluation, Superiority Index, Verdict Assignment)
-
-## 4. AGE Predictor
-- [ ] 1. Signal and Trigger Definition (Metric Definition, Trigger Rule)
-- [ ] 2. Implementation and Integration (Computation Logic, Trigger Logic, Registry Integration)
-- [ ] 3. Synthetic Detector Validation (Featureless Null Test, Injected Feature Test)
-- [ ] 4. Synthetic Scorer Validation (Positive Control, Negative Control)
-- [ ] 5. Empirical Execution (5-Seed Computation, Checkpoint Utilization)
-- [ ] 6. Formal Scoring and Verdict (Validity Gate Evaluation, Superiority Index, Verdict Assignment)
-
-## 5. HTSR Alpha Predictor
-- [ ] 1. Signal and Trigger Definition (Metric Definition, Trigger Rule)
-- [ ] 2. Implementation and Integration (Computation Logic, Trigger Logic, Registry Integration)
-- [ ] 3. Synthetic Detector Validation (Featureless Null Test, Injected Feature Test)
-- [ ] 4. Synthetic Scorer Validation (Positive Control, Negative Control)
-- [ ] 5. Empirical Execution (5-Seed Computation, Checkpoint Utilization)
-- [ ] 6. Formal Scoring and Verdict (Validity Gate Evaluation, Superiority Index, Verdict Assignment)
 
 # Predictor Experimental Validation Master Tracker
 
