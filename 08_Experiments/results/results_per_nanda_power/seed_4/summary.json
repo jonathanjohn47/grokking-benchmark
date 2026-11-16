@@ -28,13 +28,16 @@
     "0.9": -0.9848976395569974
   },
   "dropout_variance_predictor": {
-    "variance_peak_epoch": 18100,
+    "variance_peak_epoch": 25400,
     "variance_peak_value": 3.503184834537686e-05,
     "grok_epoch": 6637,
-    "peak_to_grok_ratio": 2.727135754105771,
+    "peak_to_grok_ratio": 3.827030284767214,
     "rate": 0.5,
     "n_samples": 100,
-    "num_checkpoints": 400
+    "num_checkpoints": 400,
+    "peak_epoch": 25400,
+    "drc_inflection_epoch": 28200,
+    "drc_inflection_to_grok_ratio": 4.248907638993521
   },
   "spectral_predictor": {
     "spectral_checkpoints": [

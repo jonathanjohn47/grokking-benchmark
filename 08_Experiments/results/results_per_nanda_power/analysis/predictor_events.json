@@ -56,29 +56,29 @@
     {
       "signal": "Dropout: variance peak (implemented)",
       "epochs": [
-        27200.0,
-        25300.0,
-        33500.0,
-        33900.0,
-        18100.0
+        22500.0,
+        9100.0,
+        20800.0,
+        39000.0,
+        25400.0
       ],
       "lead": [
-        -19179.0,
-        -17047.0,
-        -29406.0,
-        -26069.0,
-        -11463.0
+        -14479.0,
+        -847.0,
+        -16706.0,
+        -31169.0,
+        -18763.0
       ],
       "seeds_before_grok": 0,
-      "spearman": -0.19999999999999998,
-      "pearson": -0.2614119619839574,
-      "epoch_cv": 0.21139061080891047,
+      "spearman": -0.3,
+      "pearson": 0.01286016185552021,
+      "epoch_cv": 0.41033950182195333,
       "row_role": "predeclared",
       "counts_towards_predictor": true,
       "frozen_protocol_verdict": {
         "lead_frac": 0.0,
-        "rho": -0.19999999999999998,
-        "mean_rel_lead": -3.339088297933736,
+        "rho": -0.3,
+        "mean_rel_lead": -2.559121756596034,
         "n_firing": 5,
         "lead_rule": "fraction",
         "lead_c": 0.8,
@@ -90,7 +90,327 @@
           "mean_rel_lead_in_window": false
         },
         "passed": false,
-        "verdict": "FAIL"
+        "verdict": "FAIL",
+        "gate_lead_frac": 0.0,
+        "gate_correlation": -0.3,
+        "gate_noise_margin": -2.559121756596034,
+        "gate_pass": false,
+        "superiority_index": 0.0
+      }
+    },
+    {
+      "signal": "Dropout: DRC inflection (implemented)",
+      "epochs": [
+        20200.0,
+        18200.0,
+        12100.0,
+        36800.0,
+        28200.0
+      ],
+      "lead": [
+        -12179.0,
+        -9947.0,
+        -8006.0,
+        -28969.0,
+        -21563.0
+      ],
+      "seeds_before_grok": 0,
+      "spearman": 0.09999999999999999,
+      "pearson": 0.49070677010089864,
+      "epoch_cv": 0.37094288066426595,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": 0.09999999999999999,
+        "mean_rel_lead": -2.325474476849846,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL",
+        "gate_lead_frac": 0.0,
+        "gate_correlation": 0.09999999999999999,
+        "gate_noise_margin": -2.325474476849846,
+        "gate_pass": false,
+        "superiority_index": 0.0
+      }
+    },
+    {
+      "signal": "Spectral: k90 minimum (implemented)",
+      "epochs": [
+        6700.0,
+        24700.0,
+        8700.0,
+        6500.0,
+        35400.0
+      ],
+      "lead": [
+        1321.0,
+        -16447.0,
+        -4606.0,
+        1331.0,
+        -28763.0
+      ],
+      "seeds_before_grok": 2,
+      "spearman": -0.09999999999999999,
+      "pearson": 0.08614934200691027,
+      "epoch_cv": 0.7117606426135032,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": -0.09999999999999999,
+        "mean_rel_lead": -1.4233978134723508,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL",
+        "gate_lead_frac": 0.0,
+        "gate_correlation": -0.09999999999999999,
+        "gate_noise_margin": -1.4233978134723508,
+        "gate_pass": false,
+        "superiority_index": 0.0
+      }
+    },
+    {
+      "signal": "Spectral: alignment maximum (implemented)",
+      "epochs": [
+        1000.0,
+        1200.0,
+        1100.0,
+        1200.0,
+        1100.0
+      ],
+      "lead": [
+        7021.0,
+        7053.0,
+        2994.0,
+        6631.0,
+        5537.0
+      ],
+      "seeds_before_grok": 5,
+      "spearman": 0.19999999999999998,
+      "pearson": 0.190041927966376,
+      "epoch_cv": 0.0668153104781061,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 1.0,
+        "rho": 0.26352313834736496,
+        "mean_rel_lead": 0.8284530091092874,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": true,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": true
+        },
+        "passed": false,
+        "verdict": "FAIL",
+        "gate_lead_frac": 1.0,
+        "gate_correlation": 0.26352313834736496,
+        "gate_noise_margin": 0.8284530091092874,
+        "gate_pass": false,
+        "superiority_index": 0.0
+      }
+    },
+    {
+      "signal": "Spectral: Canatar onset (implemented)",
+      "epochs": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "lead": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "seeds_before_grok": 0,
+      "spearman": NaN,
+      "pearson": NaN,
+      "epoch_cv": NaN,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": null,
+        "mean_rel_lead": 0.0,
+        "n_firing": 0,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": false,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL",
+        "gate_lead_frac": 0.0,
+        "gate_correlation": null,
+        "gate_noise_margin": 0.0,
+        "gate_pass": false,
+        "superiority_index": 0.0
+      }
+    },
+    {
+      "signal": "Spectral: alignment 10% of rise",
+      "epochs": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "lead": [
+        8021.0,
+        8253.0,
+        4094.0,
+        7831.0,
+        6637.0
+      ],
+      "seeds_before_grok": 5,
+      "spearman": -0.6,
+      "pearson": NaN,
+      "epoch_cv": NaN,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 1.0,
+        "rho": 0.0,
+        "mean_rel_lead": 1.0,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": true,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL",
+        "gate_lead_frac": 1.0,
+        "gate_correlation": 0.0,
+        "gate_noise_margin": 1.0,
+        "gate_pass": false,
+        "superiority_index": 0.0
+      }
+    },
+    {
+      "signal": "Spectral: alignment 50% of rise",
+      "epochs": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "lead": [
+        8021.0,
+        8253.0,
+        4094.0,
+        7831.0,
+        6637.0
+      ],
+      "seeds_before_grok": 5,
+      "spearman": -0.6,
+      "pearson": NaN,
+      "epoch_cv": NaN,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 1.0,
+        "rho": 0.0,
+        "mean_rel_lead": 1.0,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": true,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL",
+        "gate_lead_frac": 1.0,
+        "gate_correlation": 0.0,
+        "gate_noise_margin": 1.0,
+        "gate_pass": false,
+        "superiority_index": 0.0
+      }
+    },
+    {
+      "signal": "Spectral: k90 50% of fall",
+      "epochs": [
+        0.0,
+        17600.0,
+        0.0,
+        0.0,
+        22800.0
+      ],
+      "lead": [
+        8021.0,
+        -9347.0,
+        4094.0,
+        7831.0,
+        -16163.0
+      ],
+      "seeds_before_grok": 3,
+      "spearman": 0.0,
+      "pearson": 0.19537154128284787,
+      "epoch_cv": 1.241538363518197,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.6,
+        "rho": 0.11180339887498947,
+        "mean_rel_lead": -0.11356897700401096,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL",
+        "gate_lead_frac": 0.6,
+        "gate_correlation": 0.11180339887498947,
+        "gate_noise_margin": -0.11356897700401096,
+        "gate_pass": false,
+        "superiority_index": 0.0
       }
     },
     {
@@ -130,7 +450,12 @@
           "mean_rel_lead_in_window": false
         },
         "passed": false,
-        "verdict": "FAIL"
+        "verdict": "FAIL",
+        "gate_lead_frac": 0.0,
+        "gate_correlation": -0.49999999999999994,
+        "gate_noise_margin": -3.4534659306852205,
+        "gate_pass": false,
+        "superiority_index": 0.0
       }
     },
     {
@@ -170,7 +495,12 @@
           "mean_rel_lead_in_window": true
         },
         "passed": false,
-        "verdict": "FAIL"
+        "verdict": "FAIL",
+        "gate_lead_frac": 1.0,
+        "gate_correlation": 0.46169025843831935,
+        "gate_noise_margin": 0.4897930871956455,
+        "gate_pass": false,
+        "superiority_index": 0.0
       }
     },
     {
@@ -210,7 +540,12 @@
           "mean_rel_lead_in_window": false
         },
         "passed": false,
-        "verdict": "FAIL"
+        "verdict": "FAIL",
+        "gate_lead_frac": 0.0,
+        "gate_correlation": 0.8207826816681233,
+        "gate_noise_margin": -0.012930174018379939,
+        "gate_pass": false,
+        "superiority_index": 0.0
       }
     }
   ]

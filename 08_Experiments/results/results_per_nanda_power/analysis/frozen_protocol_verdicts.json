@@ -49,7 +49,7 @@
     {
       "predictor": "Dropout",
       "verdict": "FAIL",
-      "n_predeclared_rows": 1,
+      "n_predeclared_rows": 2,
       "n_predeclared_passing": 0,
       "rows": [
         {
@@ -57,32 +57,234 @@
           "role": "predeclared",
           "counts_towards_predictor": true,
           "P_i": [
-            27200.0,
-            25300.0,
-            33500.0,
-            33900.0,
-            18100.0
+            22500.0,
+            9100.0,
+            20800.0,
+            39000.0,
+            25400.0
           ],
           "n_firing": 5,
           "lead_frac": 0.0,
-          "rho": -0.19999999999999998,
-          "mean_rel_lead": -3.339088297933736,
+          "rho": -0.3,
+          "mean_rel_lead": -2.559121756596034,
           "checks": {
             "n_firing_at_least_4": true,
             "lead_frac_at_least_0.8": false,
             "rho_at_least_threshold": false,
             "mean_rel_lead_in_window": false
           },
-          "verdict": "FAIL"
+          "verdict": "FAIL",
+          "gate_lead_frac": 0.0,
+          "gate_correlation": -0.3,
+          "gate_noise_margin": -2.559121756596034,
+          "gate_pass": false,
+          "superiority_index": 0.0
+        },
+        {
+          "signal": "Dropout: DRC inflection (implemented)",
+          "role": "predeclared",
+          "counts_towards_predictor": true,
+          "P_i": [
+            20200.0,
+            18200.0,
+            12100.0,
+            36800.0,
+            28200.0
+          ],
+          "n_firing": 5,
+          "lead_frac": 0.0,
+          "rho": 0.09999999999999999,
+          "mean_rel_lead": -2.325474476849846,
+          "checks": {
+            "n_firing_at_least_4": true,
+            "lead_frac_at_least_0.8": false,
+            "rho_at_least_threshold": false,
+            "mean_rel_lead_in_window": false
+          },
+          "verdict": "FAIL",
+          "gate_lead_frac": 0.0,
+          "gate_correlation": 0.09999999999999999,
+          "gate_noise_margin": -2.325474476849846,
+          "gate_pass": false,
+          "superiority_index": 0.0
         }
       ]
     },
     {
       "predictor": "Spectral",
       "verdict": "FAIL",
-      "n_predeclared_rows": 0,
+      "n_predeclared_rows": 6,
       "n_predeclared_passing": 0,
-      "rows": []
+      "rows": [
+        {
+          "signal": "Spectral: k90 minimum (implemented)",
+          "role": "predeclared",
+          "counts_towards_predictor": true,
+          "P_i": [
+            6700.0,
+            24700.0,
+            8700.0,
+            6500.0,
+            35400.0
+          ],
+          "n_firing": 5,
+          "lead_frac": 0.0,
+          "rho": -0.09999999999999999,
+          "mean_rel_lead": -1.4233978134723508,
+          "checks": {
+            "n_firing_at_least_4": true,
+            "lead_frac_at_least_0.8": false,
+            "rho_at_least_threshold": false,
+            "mean_rel_lead_in_window": false
+          },
+          "verdict": "FAIL",
+          "gate_lead_frac": 0.0,
+          "gate_correlation": -0.09999999999999999,
+          "gate_noise_margin": -1.4233978134723508,
+          "gate_pass": false,
+          "superiority_index": 0.0
+        },
+        {
+          "signal": "Spectral: alignment maximum (implemented)",
+          "role": "predeclared",
+          "counts_towards_predictor": true,
+          "P_i": [
+            1000.0,
+            1200.0,
+            1100.0,
+            1200.0,
+            1100.0
+          ],
+          "n_firing": 5,
+          "lead_frac": 1.0,
+          "rho": 0.26352313834736496,
+          "mean_rel_lead": 0.8284530091092874,
+          "checks": {
+            "n_firing_at_least_4": true,
+            "lead_frac_at_least_0.8": true,
+            "rho_at_least_threshold": false,
+            "mean_rel_lead_in_window": true
+          },
+          "verdict": "FAIL",
+          "gate_lead_frac": 1.0,
+          "gate_correlation": 0.26352313834736496,
+          "gate_noise_margin": 0.8284530091092874,
+          "gate_pass": false,
+          "superiority_index": 0.0
+        },
+        {
+          "signal": "Spectral: Canatar onset (implemented)",
+          "role": "predeclared",
+          "counts_towards_predictor": true,
+          "P_i": [
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "n_firing": 0,
+          "lead_frac": 0.0,
+          "rho": null,
+          "mean_rel_lead": 0.0,
+          "checks": {
+            "n_firing_at_least_4": false,
+            "lead_frac_at_least_0.8": false,
+            "rho_at_least_threshold": false,
+            "mean_rel_lead_in_window": false
+          },
+          "verdict": "FAIL",
+          "gate_lead_frac": 0.0,
+          "gate_correlation": null,
+          "gate_noise_margin": 0.0,
+          "gate_pass": false,
+          "superiority_index": 0.0
+        },
+        {
+          "signal": "Spectral: alignment 10% of rise",
+          "role": "predeclared",
+          "counts_towards_predictor": true,
+          "P_i": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "n_firing": 5,
+          "lead_frac": 1.0,
+          "rho": 0.0,
+          "mean_rel_lead": 1.0,
+          "checks": {
+            "n_firing_at_least_4": true,
+            "lead_frac_at_least_0.8": true,
+            "rho_at_least_threshold": false,
+            "mean_rel_lead_in_window": false
+          },
+          "verdict": "FAIL",
+          "gate_lead_frac": 1.0,
+          "gate_correlation": 0.0,
+          "gate_noise_margin": 1.0,
+          "gate_pass": false,
+          "superiority_index": 0.0
+        },
+        {
+          "signal": "Spectral: alignment 50% of rise",
+          "role": "predeclared",
+          "counts_towards_predictor": true,
+          "P_i": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "n_firing": 5,
+          "lead_frac": 1.0,
+          "rho": 0.0,
+          "mean_rel_lead": 1.0,
+          "checks": {
+            "n_firing_at_least_4": true,
+            "lead_frac_at_least_0.8": true,
+            "rho_at_least_threshold": false,
+            "mean_rel_lead_in_window": false
+          },
+          "verdict": "FAIL",
+          "gate_lead_frac": 1.0,
+          "gate_correlation": 0.0,
+          "gate_noise_margin": 1.0,
+          "gate_pass": false,
+          "superiority_index": 0.0
+        },
+        {
+          "signal": "Spectral: k90 50% of fall",
+          "role": "predeclared",
+          "counts_towards_predictor": true,
+          "P_i": [
+            0.0,
+            17600.0,
+            0.0,
+            0.0,
+            22800.0
+          ],
+          "n_firing": 5,
+          "lead_frac": 0.6,
+          "rho": 0.11180339887498947,
+          "mean_rel_lead": -0.11356897700401096,
+          "checks": {
+            "n_firing_at_least_4": true,
+            "lead_frac_at_least_0.8": false,
+            "rho_at_least_threshold": false,
+            "mean_rel_lead_in_window": false
+          },
+          "verdict": "FAIL",
+          "gate_lead_frac": 0.6,
+          "gate_correlation": 0.11180339887498947,
+          "gate_noise_margin": -0.11356897700401096,
+          "gate_pass": false,
+          "superiority_index": 0.0
+        }
+      ]
     },
     {
       "predictor": "AGE",
@@ -111,7 +313,12 @@
             "rho_at_least_threshold": false,
             "mean_rel_lead_in_window": false
           },
-          "verdict": "FAIL"
+          "verdict": "FAIL",
+          "gate_lead_frac": 0.0,
+          "gate_correlation": -0.49999999999999994,
+          "gate_noise_margin": -3.4534659306852205,
+          "gate_pass": false,
+          "superiority_index": 0.0
         },
         {
           "signal": "AGE: log10 NC1 10% of fall",
@@ -134,7 +341,12 @@
             "rho_at_least_threshold": false,
             "mean_rel_lead_in_window": true
           },
-          "verdict": "FAIL"
+          "verdict": "FAIL",
+          "gate_lead_frac": 1.0,
+          "gate_correlation": 0.46169025843831935,
+          "gate_noise_margin": 0.4897930871956455,
+          "gate_pass": false,
+          "superiority_index": 0.0
         },
         {
           "signal": "AGE: log10 NC1 50% of fall",
@@ -157,7 +369,12 @@
             "rho_at_least_threshold": false,
             "mean_rel_lead_in_window": false
           },
-          "verdict": "FAIL"
+          "verdict": "FAIL",
+          "gate_lead_frac": 0.0,
+          "gate_correlation": 0.8207826816681233,
+          "gate_noise_margin": -0.012930174018379939,
+          "gate_pass": false,
+          "superiority_index": 0.0
         }
       ]
     },

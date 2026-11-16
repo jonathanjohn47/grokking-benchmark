@@ -87,23 +87,35 @@ def default_analysis_dir(results_dir):
 
 
 def load_seed(seed, results_dir=None):
-    d = os.path.join(resolve_results_dir(results_dir), f"seed_{seed}")
+    res_base = resolve_results_dir(results_dir)
+    d = os.path.join(res_base, f"seed_{seed}")
     with open(os.path.join(d, "summary.json")) as handle:
         summary = json.load(handle)
     def ld(sub, name):
         p = os.path.join(d, sub, name)
         return np.load(p) if os.path.exists(p) else None
+
+    # Load spectral from canonical <res_base>/spectral/seed_{seed}/ first, then legacy d/spectral/
+    def ld_sp(name):
+        p1 = os.path.join(res_base, "spectral", f"seed_{seed}", name)
+        if os.path.exists(p1):
+            return np.load(p1)
+        p2 = os.path.join(d, "spectral", name)
+        return np.load(p2) if os.path.exists(p2) else None
+
+    var_ep = ld("dropout", "dropout_variance_checkpoints.npy")
+
     return {
         "summary": summary,
         "grok": summary["grok_epoch"],
         "test_acc": ld("training", "test_acc_history.npy"),
         "train_acc": ld("training", "train_acc_history.npy"),
         "sum_w2": ld("l2_norm", "sum_w2_history.npy"),
-        "var_ep": ld("dropout", "dropout_variance_checkpoints.npy"),
+        "var_ep": var_ep,
         "var": ld("dropout", "dropout_variance_history.npy"),
-        "sp_ep": ld("spectral", "spectral_checkpoints.npy"),
-        "align": ld("spectral", "spectral_alignment.npy"),
-        "k90": ld("spectral", "spectral_k90.npy"),
+        "sp_ep": ld_sp("spectral_checkpoints.npy"),
+        "align": ld_sp("spectral_alignment.npy"),
+        "k90": ld_sp("spectral_k90.npy"),
         "age_ep": ld("age", "age_checkpoints.npy"),
         "nc1": ld("age", "age_nc1.npy"),
         "htsr_ep": ld("htsr", "htsr_checkpoints.npy"),
@@ -149,6 +161,8 @@ def build_events(runs):
 
         if sm.get("dropout_variance_predictor") is not None:
             put("Dropout: variance peak (implemented)", s, sm["dropout_variance_predictor"]["variance_peak_epoch"])
+            if sm["dropout_variance_predictor"].get("drc_inflection_epoch") is not None:
+                put("Dropout: DRC inflection (implemented)", s, sm["dropout_variance_predictor"]["drc_inflection_epoch"])
             if r.get("var_ep") is not None and r.get("var") is not None:
                 fr = fraction_epochs(r["var_ep"], r["var"])
                 put("Dropout: variance 10% of rise", s, fr[0.1])
@@ -157,6 +171,8 @@ def build_events(runs):
         if sm.get("spectral_predictor") is not None:
             put("Spectral: k90 minimum (implemented)", s, sm["spectral_predictor"]["k_90_min_epoch"])
             put("Spectral: alignment maximum (implemented)", s, sm["spectral_predictor"]["alignment_max_epoch"])
+            if "firing_epoch" in sm["spectral_predictor"]:
+                put("Spectral: Canatar onset (implemented)", s, sm["spectral_predictor"]["firing_epoch"])
             if r.get("sp_ep") is not None and r.get("align") is not None:
                 fr = fraction_epochs(r["sp_ep"], r["align"])
                 put("Spectral: alignment 10% of rise", s, fr[0.1])
@@ -600,15 +616,8 @@ def attach_pass_checks(verdict):
     return verdict
 
 
-def attach_l2_superiority_index(verdict):
-    """Attach Validity Gate + Superiority Index to an L2 row only.
-
-    Passes the L2 gate metrics (from G_i and the L2 firing epochs P_i) into
-    the control experiment's evaluate_metrics() pipeline. That function
-    applies the Validity Gate (Lead fraction, Correlation, Noise margin) and,
-    only on Pass, the Superiority Index spectrum mapping. On Fail, SI is 0.
-    Other predictors are not scored here.
-    """
+def attach_superiority_index(verdict):
+    """Attach Validity Gate + Superiority Index using evaluate_metrics from control experiment."""
     rho = verdict["rho"]
     if rho is None:
         rho = float("nan")
@@ -628,6 +637,9 @@ def attach_l2_superiority_index(verdict):
     # Superiority Index: 0.0 when the gate fails; else continuous in [0, 1].
     verdict["superiority_index"] = float(result["superiority_index"])
     return verdict
+
+
+attach_l2_superiority_index = attach_superiority_index
 
 
 def summarise(ev, grok, lead_c=DEFAULT_LEAD_C):
@@ -678,9 +690,9 @@ def summarise(ev, grok, lead_c=DEFAULT_LEAD_C):
             grok, epochs_raw, rule="fraction", c=lead_c
         )
         attach_pass_checks(verdict)
-        # Validity Gate + Superiority Index: L2 row only (control experiment).
-        if name.startswith("L2:"):
-            attach_l2_superiority_index(verdict)
+        # Validity Gate + Superiority Index: scored via control experiment evaluate_metrics.
+        if name.startswith("L2:") or name.startswith("Spectral:") or name.startswith("Dropout:") or name.startswith("AGE:"):
+            attach_superiority_index(verdict)
         row["row_role"] = "exploratory" if is_exploratory(name) else "predeclared"
         row["counts_towards_predictor"] = row["row_role"] == "predeclared"
         row["frozen_protocol_verdict"] = verdict
@@ -1006,6 +1018,32 @@ def score_saved_run(lead_c=None, out_dir=None, write=True, results_dir=None):
                 "predictors": predictors,
             }, handle, indent=2)
         print(f"Wrote {verdict_path}")
+
+        spectral_rows = [r for r in rows if r["signal"].startswith("Spectral:")]
+        if spectral_rows:
+            spec_summary_path = os.path.join(out_dir, "spectral_quality_summary.json")
+            spec_rows_out = []
+            for r in spectral_rows:
+                v = r["frozen_protocol_verdict"]
+                spec_rows_out.append({
+                    "lead_c": lead_c,
+                    "signal": r["signal"],
+                    "P_i": r["epochs"],
+                    "G_i": grok,
+                    "n_firing": v["n_firing"],
+                    "lead_frac": v["lead_frac"],
+                    "rho": v["rho"],
+                    "mean_rel_lead": v["mean_rel_lead"],
+                    "verdict": v["verdict"],
+                    "gate_lead_frac": v.get("gate_lead_frac"),
+                    "gate_correlation": v.get("gate_correlation"),
+                    "gate_noise_margin": v.get("gate_noise_margin"),
+                    "gate_pass": v.get("gate_pass"),
+                    "superiority_index": v.get("superiority_index"),
+                })
+            with open(spec_summary_path, "w") as handle:
+                json.dump({"lead_c": lead_c, "rows": spec_rows_out}, handle, indent=2)
+            print(f"Wrote {spec_summary_path}")
 
         if os.path.abspath(out_dir) == os.path.abspath(analysis_dir):
             higher_mi_rows = [r for r in rows if r["signal"].startswith("Higher-MI")]

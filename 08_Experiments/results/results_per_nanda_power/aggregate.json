@@ -85,13 +85,16 @@
         "0.9": -0.9779617406868777
       },
       "dropout_variance_predictor": {
-        "variance_peak_epoch": 27200,
+        "variance_peak_epoch": 22500,
         "variance_peak_value": 3.5510692657413045e-05,
         "grok_epoch": 8021,
-        "peak_to_grok_ratio": 3.3910983667871837,
+        "peak_to_grok_ratio": 2.80513651664381,
         "rate": 0.5,
         "n_samples": 100,
-        "num_checkpoints": 400
+        "num_checkpoints": 400,
+        "peak_epoch": 22500,
+        "drc_inflection_epoch": 20200,
+        "drc_inflection_to_grok_ratio": 2.518389228275776
       },
       "spectral_predictor": {
         "spectral_checkpoints": [
@@ -3392,13 +3395,16 @@
         "0.9": -0.9610694708580378
       },
       "dropout_variance_predictor": {
-        "variance_peak_epoch": 25300,
+        "variance_peak_epoch": 9100,
         "variance_peak_value": 3.6203810738407654e-05,
         "grok_epoch": 8253,
-        "peak_to_grok_ratio": 3.0655519205137525,
+        "peak_to_grok_ratio": 1.1026293469041561,
         "rate": 0.5,
         "n_samples": 100,
-        "num_checkpoints": 400
+        "num_checkpoints": 400,
+        "peak_epoch": 9100,
+        "drc_inflection_epoch": 18200,
+        "drc_inflection_to_grok_ratio": 2.2052586938083123
       },
       "spectral_predictor": {
         "spectral_checkpoints": [
@@ -6699,13 +6705,16 @@
         "0.9": -0.9760599619644256
       },
       "dropout_variance_predictor": {
-        "variance_peak_epoch": 33500,
+        "variance_peak_epoch": 20800,
         "variance_peak_value": 3.732465038391926e-05,
         "grok_epoch": 4094,
-        "peak_to_grok_ratio": 8.182706399609184,
+        "peak_to_grok_ratio": 5.0806057645334635,
         "rate": 0.5,
         "n_samples": 100,
-        "num_checkpoints": 400
+        "num_checkpoints": 400,
+        "peak_epoch": 20800,
+        "drc_inflection_epoch": 12100,
+        "drc_inflection_to_grok_ratio": 2.955544699560332
       },
       "spectral_predictor": {
         "spectral_checkpoints": [
@@ -10006,13 +10015,16 @@
         "0.9": -0.9689003244210762
       },
       "dropout_variance_predictor": {
-        "variance_peak_epoch": 33900,
+        "variance_peak_epoch": 39000,
         "variance_peak_value": 3.394187006960363e-05,
         "grok_epoch": 7831,
-        "peak_to_grok_ratio": 4.32894904865279,
+        "peak_to_grok_ratio": 4.9802068701315285,
         "rate": 0.5,
         "n_samples": 100,
-        "num_checkpoints": 400
+        "num_checkpoints": 400,
+        "peak_epoch": 39000,
+        "drc_inflection_epoch": 36800,
+        "drc_inflection_to_grok_ratio": 4.699272123611289
       },
       "spectral_predictor": {
         "spectral_checkpoints": [
@@ -13313,13 +13325,16 @@
         "0.9": -0.9848976395569974
       },
       "dropout_variance_predictor": {
-        "variance_peak_epoch": 18100,
+        "variance_peak_epoch": 25400,
         "variance_peak_value": 3.503184834537686e-05,
         "grok_epoch": 6637,
-        "peak_to_grok_ratio": 2.727135754105771,
+        "peak_to_grok_ratio": 3.827030284767214,
         "rate": 0.5,
         "n_samples": 100,
-        "num_checkpoints": 400
+        "num_checkpoints": 400,
+        "peak_epoch": 25400,
+        "drc_inflection_epoch": 28200,
+        "drc_inflection_to_grok_ratio": 4.248907638993521
       },
       "spectral_predictor": {
         "spectral_checkpoints": [

@@ -1,0 +1,173 @@
+{
+  "lead_c": 0.8,
+  "rows": [
+    {
+      "lead_c": 0.8,
+      "signal": "Spectral: k90 minimum (implemented)",
+      "P_i": [
+        6700.0,
+        24700.0,
+        8700.0,
+        6500.0,
+        35400.0
+      ],
+      "G_i": [
+        8021,
+        8253,
+        4094,
+        7831,
+        6637
+      ],
+      "n_firing": 5,
+      "lead_frac": 0.0,
+      "rho": -0.09999999999999999,
+      "mean_rel_lead": -1.4233978134723508,
+      "verdict": "FAIL",
+      "gate_lead_frac": 0.0,
+      "gate_correlation": -0.09999999999999999,
+      "gate_noise_margin": -1.4233978134723508,
+      "gate_pass": false,
+      "superiority_index": 0.0
+    },
+    {
+      "lead_c": 0.8,
+      "signal": "Spectral: alignment maximum (implemented)",
+      "P_i": [
+        1000.0,
+        1200.0,
+        1100.0,
+        1200.0,
+        1100.0
+      ],
+      "G_i": [
+        8021,
+        8253,
+        4094,
+        7831,
+        6637
+      ],
+      "n_firing": 5,
+      "lead_frac": 1.0,
+      "rho": 0.26352313834736496,
+      "mean_rel_lead": 0.8284530091092874,
+      "verdict": "FAIL",
+      "gate_lead_frac": 1.0,
+      "gate_correlation": 0.26352313834736496,
+      "gate_noise_margin": 0.8284530091092874,
+      "gate_pass": false,
+      "superiority_index": 0.0
+    },
+    {
+      "lead_c": 0.8,
+      "signal": "Spectral: Canatar onset (implemented)",
+      "P_i": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "G_i": [
+        8021,
+        8253,
+        4094,
+        7831,
+        6637
+      ],
+      "n_firing": 0,
+      "lead_frac": 0.0,
+      "rho": null,
+      "mean_rel_lead": 0.0,
+      "verdict": "FAIL",
+      "gate_lead_frac": 0.0,
+      "gate_correlation": null,
+      "gate_noise_margin": 0.0,
+      "gate_pass": false,
+      "superiority_index": 0.0
+    },
+    {
+      "lead_c": 0.8,
+      "signal": "Spectral: alignment 10% of rise",
+      "P_i": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "G_i": [
+        8021,
+        8253,
+        4094,
+        7831,
+        6637
+      ],
+      "n_firing": 5,
+      "lead_frac": 1.0,
+      "rho": 0.0,
+      "mean_rel_lead": 1.0,
+      "verdict": "FAIL",
+      "gate_lead_frac": 1.0,
+      "gate_correlation": 0.0,
+      "gate_noise_margin": 1.0,
+      "gate_pass": false,
+      "superiority_index": 0.0
+    },
+    {
+      "lead_c": 0.8,
+      "signal": "Spectral: alignment 50% of rise",
+      "P_i": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "G_i": [
+        8021,
+        8253,
+        4094,
+        7831,
+        6637
+      ],
+      "n_firing": 5,
+      "lead_frac": 1.0,
+      "rho": 0.0,
+      "mean_rel_lead": 1.0,
+      "verdict": "FAIL",
+      "gate_lead_frac": 1.0,
+      "gate_correlation": 0.0,
+      "gate_noise_margin": 1.0,
+      "gate_pass": false,
+      "superiority_index": 0.0
+    },
+    {
+      "lead_c": 0.8,
+      "signal": "Spectral: k90 50% of fall",
+      "P_i": [
+        0.0,
+        17600.0,
+        0.0,
+        0.0,
+        22800.0
+      ],
+      "G_i": [
+        8021,
+        8253,
+        4094,
+        7831,
+        6637
+      ],
+      "n_firing": 5,
+      "lead_frac": 0.6,
+      "rho": 0.11180339887498947,
+      "mean_rel_lead": -0.11356897700401096,
+      "verdict": "FAIL",
+      "gate_lead_frac": 0.6,
+      "gate_correlation": 0.11180339887498947,
+      "gate_noise_margin": -0.11356897700401096,
+      "gate_pass": false,
+      "superiority_index": 0.0
+    }
+  ]
+}

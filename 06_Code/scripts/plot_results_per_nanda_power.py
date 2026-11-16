@@ -181,7 +181,6 @@ def load_seed(root, seed):
     summary = load_json(os.path.join(seed_dir, "summary.json"))
     train = os.path.join(seed_dir, "training")
     l2 = os.path.join(seed_dir, "l2_norm")
-    drop = os.path.join(seed_dir, "dropout")
     return {
         "seed": seed,
         "summary": summary,
@@ -191,9 +190,6 @@ def load_seed(root, seed):
         "train_loss": np.load(os.path.join(train, "loss_history.npy")),
         "test_loss": np.load(os.path.join(train, "test_loss_history.npy")),
         "sum_w2": np.load(os.path.join(l2, "sum_w2_history.npy")),
-        "var_epochs": np.load(os.path.join(drop, "dropout_variance_checkpoints.npy")),
-        "var": np.load(os.path.join(drop, "dropout_variance_history.npy")),
-        "var_mean_acc": np.load(os.path.join(drop, "dropout_variance_mean_acc_history.npy")),
     }
 
 
@@ -295,26 +291,6 @@ def plot_l2(run, path, l2_results):
     save(fig, path)
 
 
-def plot_dropout(run, path):
-    fig, ax = plt.subplots(figsize=(9.2, 4.6))
-    epochs = run["var_epochs"].astype(float)
-    # Checkpoint 0 is in the file. A log axis cannot show it, so the line starts at the next saved checkpoint.
-    keep = epochs >= 1
-    ax.plot(epochs[keep], run["var"][keep], color="#6a3d9a", lw=1.4, marker="o", ms=2.2, label="Accuracy variance across 100 dropout samples (rate 0.5)")
-    labelled = mark_grok(ax, run["summary"]["grok_epochs_by_threshold"])
-    dv = run["summary"]["dropout_variance_predictor"] or {}
-    mark_named(ax, dv.get("variance_peak_epoch"), "#333333", "Dropout variance peak", labelled)
-    ax.set_xscale("log")
-    positive = epochs[epochs >= 1]
-    if len(positive):
-        ax.set_xlim(float(positive.min()), float(max(run["epochs"][-1], positive.max())))
-    ax.set_xlabel("Checkpoint epoch (saved dropout-variance grid)")
-    ax.set_ylabel("Variance of test accuracy")
-    ax.set_title(f"Seed {run['seed']}: dropout variance signal")
-    ax.legend(loc="best", framealpha=0.95)
-    save(fig, path)
-
-
 def plot_overlay(runs, path):
     fig, ax = plt.subplots(figsize=(9.2, 5.0))
     colours = ["#1f4e79", "#b00020", "#1b7f4e", "#e07a00", "#6a3d9a"]
@@ -362,12 +338,9 @@ def main():
         seed = run["seed"]
         if len(run["sum_w2"]) != len(run["epochs"]):
             raise SystemExit(f"seed {seed}: sum of squared weights length does not match training history")
-        if len(run["var"]) != len(run["var_epochs"]):
-            raise SystemExit(f"seed {seed}: dropout variance length does not match its checkpoints")
         plot_accuracy(run, os.path.join(out, f"seed_{seed}_train_test_accuracy.png"))
         plot_loss(run, os.path.join(out, f"seed_{seed}_train_test_loss.png"))
         plot_l2(run, os.path.join(out, f"seed_{seed}_l2_norm.png"), l2_results)
-        plot_dropout(run, os.path.join(out, f"seed_{seed}_dropout_variance.png"))
     plot_overlay(runs, os.path.join(out, "overview_test_accuracy.png"))
     plot_grok_bars(aggregate, os.path.join(out, "overview_grok_epochs.png"))
 

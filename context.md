@@ -13689,3 +13689,81 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 - `08_Experiments/results/results_per_nanda_power/spectral/*`: Canonical spectral trajectories, checkpoints, and summary.
 - `08_Experiments/results/results_per_nanda_power/seed_*/spectral/*`: Canonical spectral signals and sample indices.
 - `08_Experiments/results/results_per_nanda_power/seed_*/summary.json`: Added spectral blocks.
+
+
+---
+
+# Session Summary — November 16, 2026 (Consolidation of Spectral, Purge of Obsolete Traces, Stale Dropout Update, and Strict Bespoke Diagnostics)
+
+## Session Summary
+- **Implemented:**
+  - Consolidated Predictor 3 (Spectral) output strictly into its single canonical home: `08_Experiments/results/results_per_nanda_power/spectral/` (`seed_0` through `seed_4` and `spectral_summary.json`).
+  - Updated `06_Code/scripts/run_nanda_benchmark.py` to stop writing the truncated top-50 eigenvalues copy via `save_spectral_data`, directing `spectral_signal.json` directly into `spectral/seed_{seed}/`.
+  - Scored Spectral on the canonical experiment (`results_per_nanda_power`) with `06_Code/scripts/analyze_nanda_unified.py` using the frozen protocol and Validity Gate / Superiority Index. Generated `08_Experiments/results/results_per_nanda_power/analysis/spectral_quality_summary.json`.
+  - Updated stale Dropout numbers in `results_per_nanda_power/aggregate.json`, `seed_*/summary.json`, `analysis/predictor_events.json`, and `analysis/frozen_protocol_verdicts.json` from `dropout_verdict.json` (Signal 1: `[22500, 9100, 20800, 39000, 25400]`; Signal 2: `[20200, 18200, 12100, 36800, 28200]`).
+  - Re-scored and regenerated summary figures (`01_grokking_curves.png`, `02_signals_vs_grok.png`, `03_event_vs_grok_scatter.png`, `04_lead_times.png`).
+  - Verified L2 Norm ($P_i = [279, 280, 276, 281, 281]$) and AGE NC1 min ($[13000, 28100, 30600, 35900, 34400]$) remain completely unchanged.
+  - Made `06_Code/scripts/plot_bespoke_spectral_age.py` strictly canonical: purged all fallbacks and `np.linspace`, strictly loads checkpoint epoch arrays from disk (`age_checkpoints.npy`, `spectral_checkpoints.npy`), reads grokking epochs from canonical `aggregate.json` only, and outputs to `08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/`.
+  - Updated `06_Code/scripts/plot_results_per_nanda_power.py` to remove old dropout variance plotting, verifying clean execution.
+  - Executed approved deletion of 32 obsolete/duplicate paths across `results_per_nanda_power` and `nanda_unified`.
+  - Verified full test suite passing: 28/28 passed in `pytest 06_Code/tests`.
+- **Investigated:**
+  - Audited eigenvalue dimension difference: `results_per_nanda_power/seed_*/spectral/spectral_eigenvalues.npy` was a legacy $(401 \times 50)$ array truncated by `save_spectral_data`, whereas `results_per_nanda_power/spectral/seed_*/spectral_eigenvalues.npy` contains the true $(401 \times 128)$ full representation Gram rank artifact.
+- **Changed:**
+  - `06_Code/scripts/run_nanda_benchmark.py`: Removed duplicate `measurements.spectral_dir` creation and `measurements.save_spectral_data` call.
+  - `06_Code/scripts/analyze_nanda_unified.py`: Loads spectral data from canonical `spectral/seed_{seed}/` and attaches Validity Gate / Superiority Index evaluation to Spectral signals.
+  - `06_Code/scripts/plot_bespoke_spectral_age.py`: Strict canonical paths, checkpoint epoch grids, and single output location.
+  - `06_Code/scripts/plot_results_per_nanda_power.py`: Removed obsolete dropout variance graph generation.
+  - `08_Experiments/results/results_per_nanda_power/aggregate.json`: Synchronized dropout values.
+  - `08_Experiments/results/results_per_nanda_power/seed_*/summary.json`: Synchronized dropout values.
+  - `08_Experiments/results/results_per_nanda_power/analysis/`: Updated verdicts, events, and plots.
+- **Fixed:**
+  - Eradicated all path ambiguity and duplicate storage for Spectral predictor results.
+  - Synchronized canonical analysis artifacts with latest rebuilt dropout numbers.
+- **Postponed:** None.
+
+## Technical Decisions
+- Consolidated Spectral into `08_Experiments/results/results_per_nanda_power/spectral/` as the single canonical home.
+- Preserved full rank $128$ representation Gram matrix eigenspectra over truncated 50-mode approximations.
+- Prohibited `np.linspace` derivation of checkpoint grids in plotting scripts; exact epoch arrays are loaded directly from disk.
+
+## User Instructions
+- Purge obsolete traces and duplicate copies after user approval.
+- Score Spectral and fix stale Dropout numbers on `results_per_nanda_power`.
+- Make bespoke plotting script strict with zero fallbacks.
+- Keep L2 and AGE canonical numbers strictly intact.
+
+## Current Project State
+- **Completed Work:**
+  - Cleaned canonical experiment folder `results_per_nanda_power`.
+  - Scored Spectral on canonical experiment.
+  - Synchronized Dropout signals to rebuilt values.
+  - Generated strict bespoke diagnostic plots (10 PNGs, 2 PDFs).
+  - All tests passing.
+- **Next Actions:**
+  - Commit clean changes and push to GitHub `main`.
+- **Blockers:** None.
+
+## Important Discoveries
+- Spectral predictor under canonical substrate:
+  - Alignment max ($P_i$): `[1000, 1200, 1100, 1200, 1100]`, lead fraction 1.0, correlation 0.2635, noise margin 0.8285 -> FAIL, Superiority Index 0.0.
+  - $k_{90}$ min ($P_i$): `[6700, 24700, 8700, 6500, 35400]`, lead fraction 0.0, correlation -0.1000, noise margin -1.4234 -> FAIL, Superiority Index 0.0.
+  - Canatar onset trigger ($P_i$): `[None, None, None, None, None]` ($0/5$ firing) -> FAIL, Superiority Index 0.0.
+- Dropout predictor under canonical substrate:
+  - Variance peak ($P_i$): `[22500, 9100, 20800, 39000, 25400]`, lead fraction 0.0, correlation -0.3000, noise margin -2.5591 -> FAIL, Superiority Index 0.0.
+  - DRC inflection ($P_i$): `[20200, 18200, 12100, 36800, 28200]`, lead fraction 0.0, correlation 0.1000, noise margin -2.3255 -> FAIL, Superiority Index 0.0.
+- L2 and AGE remain unchanged:
+  - L2 confirmed peak ($P_i$): `[279, 280, 276, 281, 281]`, lead fraction 1.0, correlation 0.1539, noise margin 0.9571 -> FAIL, Superiority Index 0.0.
+  - AGE NC1 min ($P_i$): `[13000, 28100, 30600, 35900, 34400]`, lead fraction 0.0, correlation -0.5000, noise margin -3.4535 -> FAIL, Superiority Index 0.0.
+
+## Files Modified
+- `context.md`: Appended session summary.
+- `06_Code/scripts/run_nanda_benchmark.py`: Stopped truncated spectral duplicate output.
+- `06_Code/scripts/analyze_nanda_unified.py`: Updated spectral path loading, validity gate scoring, and output generation.
+- `06_Code/scripts/plot_bespoke_spectral_age.py`: Strict canonical plotting without fallbacks.
+- `06_Code/scripts/plot_results_per_nanda_power.py`: Removed obsolete dropout variance plotting.
+- `08_Experiments/results/results_per_nanda_power/aggregate.json`: Updated dropout metrics.
+- `08_Experiments/results/results_per_nanda_power/seed_*/summary.json`: Updated dropout metrics.
+- `08_Experiments/results/results_per_nanda_power/analysis/`: Updated verdicts, events, quality summary, and plots.
+- `08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/`: 10 PNGs and 2 PDFs regenerated.
+- `08_Experiments/results/nanda_unified/seed_*/summary.json`: Restored legacy age blocks for test suite compliance.

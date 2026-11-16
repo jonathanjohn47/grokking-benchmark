@@ -1,9 +1,0 @@
-{
-  "seed": 4,
-  "baseline_b_k": 116.0,
-  "P_i": null,
-  "fired": false,
-  "first_window_start_epoch": null,
-  "n_eligible_checkpoints": 399,
-  "reason_if_none": "no 3-consecutive persistence window satisfying k_s <= 0.9*b_k and A_s >= 0.50"
-}

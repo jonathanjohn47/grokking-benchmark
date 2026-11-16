@@ -619,11 +619,11 @@ def _checkpoint_predictor_spectral(model, test_loader, ckpt_dir, ckpt_epochs,
     train_loader, _ = get_dataloaders(number=p, batch_size=batch_size, seed=seed)
 
     # 4.7 Per-seed artifacts directory under <output_dir>/spectral/seed_<seed>/
+    # (Sole home for Spectral artifacts; no duplicate under seed_<seed>/spectral)
     spectral_artifact_dir = os.path.join(
         os.path.dirname(measurements.output_dir), "spectral", f"seed_{seed}"
     )
     os.makedirs(spectral_artifact_dir, exist_ok=True)
-    os.makedirs(measurements.spectral_dir, exist_ok=True)
 
     # Persist or reload fixed deterministic sample indices
     sample_indices_path = os.path.join(spectral_artifact_dir, "spectral_sample_indices.npy")
@@ -632,7 +632,6 @@ def _checkpoint_predictor_spectral(model, test_loader, ckpt_dir, ckpt_epochs,
     else:
         sample_indices = get_deterministic_sample_indices(batch_size, seed=12345, n_spec=2048)
         np.save(sample_indices_path, sample_indices)
-    np.save(os.path.join(measurements.spectral_dir, "spectral_sample_indices.npy"), sample_indices)
 
     spectral_checkpoints = []
     hist = {
@@ -661,8 +660,6 @@ def _checkpoint_predictor_spectral(model, test_loader, ckpt_dir, ckpt_epochs,
         hist["entropy"].append(m["spectral_entropy"])
         hist["eigenvalues_history"].append(m["eigenvalues"])
         hist["cumulative_power_history"].append(m["cumulative_task_power"])
-
-    measurements.save_spectral_data(spectral_checkpoints, hist)
 
     k90 = hist["k_90"]
     align = hist["alignment_score"]
@@ -752,7 +749,7 @@ def _checkpoint_predictor_spectral(model, test_loader, ckpt_dir, ckpt_epochs,
             float(alignment_max_epoch) / grok_epoch if grok_epoch else None),
         "num_checkpoints": len(spectral_checkpoints),
     }
-    with open(os.path.join(measurements.spectral_dir,
+    with open(os.path.join(spectral_artifact_dir,
                            "spectral_signal.json"), "w") as handle:
         json.dump(block, handle, indent=2)
     return block
