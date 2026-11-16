@@ -760,70 +760,63 @@ def _checkpoint_predictor_spectral(model, test_loader, ckpt_dir, ckpt_epochs,
 
 def _checkpoint_predictor_age(model, test_loader, ckpt_dir, ckpt_epochs,
                               measurements, grok_epoch, device):
-    """CHECKPOINT_PREDICTOR_FUNCS["age"] — AGE, Adaptive Grokking Epoch via
-    Neural Collapse (Papyan et al. 2020 NC1; see src/predictors/age.py).
-    Loads each saved checkpoint into `model` in turn, computes
-    compute_age_metrics_for_checkpoint(model, train_loader, device) — the
-    NC1 variability-collapse ratio Tr(Sigma_W)/Tr(Sigma_B) and the mean
-    feature norm — collects the per-checkpoint history, saves it via
-    measurements.save_age_data, and returns the age_predictor block for
-    summary.json.
-
-    test_loader is IGNORED — NC1 is a property of the TRAINING
-    representations (within-/between-class scatter of the penultimate
-    features on the train split). This function rebuilds the exact
-    training split this seed used (same per-seed RNG seeding as
-    train_one_seed step (a) and _checkpoint_predictor_spectral) so the
-    class means match the data the model was trained on. The signature
-    keeps `test_loader` only to match the shared
-    CHECKPOINT_PREDICTOR_FUNCS shape.
-
-    AGE prediction under test: NC1 falls sharply at or BEFORE grok, so the
-    checkpoint epoch of minimum NC1 is a leading/coincident grokking
-    marker. nc1_min_to_grok_ratio = nc1_min_epoch / grok_epoch is the
-    head-to-head number the benchmark records."""
-    # Recover this seed and rebuild its training split deterministically.
+    """Checkpoint-only AGE computation."""
+    import os
     seed = int(np.load(os.path.join(measurements.output_dir, "seed.npy"))[0])
     p = model.output_head.out_features - 1
-    batch_size = int(0.3 * p * p)  # full-batch training split (matches get_dataloaders)
+
+    # Rebuild train_loader with correct seed
     torch.manual_seed(seed)
     np.random.seed(seed)
-    train_loader, _ = get_dataloaders(number=p, batch_size=batch_size, seed=seed)
+    from data.modular_arithmetic import get_dataloaders
+    train_loader, _ = get_dataloaders(number=p, batch_size=int(0.3 * p * p), seed=seed)
 
     age_checkpoints = []
-    nc1_history, fn_history = [], []
+    age_history = {"nc1": [], "fn": []}
 
     for epoch in ckpt_epochs:
-        state = torch.load(os.path.join(ckpt_dir, f"model_epoch_{epoch}.pt"), map_location=device)
-        model.load_state_dict(state)
-        m = compute_age_metrics_for_checkpoint(model, train_loader, device)
+        ckpt_path = os.path.join(ckpt_dir, f"model_epoch_{epoch}.pt")
+        model.load_state_dict(torch.load(ckpt_path, map_location=device))
+
+        metrics = compute_age_metrics_for_checkpoint(model, train_loader, device)
         age_checkpoints.append(epoch)
-        nc1_history.append(m["nc1"])
-        fn_history.append(m["fn"])
+        age_history["nc1"].append(metrics["nc1"])
+        age_history["fn"].append(metrics["fn"])
 
-    measurements.save_age_data(age_checkpoints, {"nc1": nc1_history, "fn": fn_history})
+    # Save data
+    measurements.save_age_data(age_checkpoints, age_history)
 
-    nc1_min_idx = int(np.argmin(nc1_history))
-    nc1_min_epoch = age_checkpoints[nc1_min_idx]
-    fn_arr = np.asarray(fn_history, dtype=float)
+    # Find trigger epochs
+    nc1_arr = np.array(age_history["nc1"])
+    nc1_min_epoch = int(age_checkpoints[np.argmin(nc1_arr)])
+
+    # 10% drop rule
+    nc1_start = nc1_arr[0]
+    nc1_min = nc1_arr.min()
+    total_drop = nc1_start - nc1_min
+    threshold_10 = nc1_start - 0.1 * total_drop
+    hits = np.where(nc1_arr <= threshold_10)[0]
+    threshold_10_epoch = int(age_checkpoints[hits[0]]) if len(hits) > 0 else None
 
     block = {
         "age_checkpoints": age_checkpoints,
-        "nc1_history": [float(v) for v in nc1_history],
-        "fn_history": [float(v) for v in fn_history],
-        "grok_epoch": grok_epoch,
+        "nc1_history": age_history["nc1"],
+        "fn_history": age_history["fn"],
         "nc1_min_epoch": nc1_min_epoch,
-        "nc1_min_value": float(nc1_history[nc1_min_idx]),
-        "nc1_first_last": {"first": float(nc1_history[0]), "last": float(nc1_history[-1])},
-        "fn_first_last": {"first": float(fn_history[0]), "last": float(fn_history[-1])},
-        "fn_min": float(fn_arr.min()),
-        "fn_max": float(fn_arr.max()),
+        "nc1_min_value": float(nc1_min),
+        "nc1_first_last": {"first": float(age_history["nc1"][0]), "last": float(age_history["nc1"][-1])},
+        "fn_first_last": {"first": float(age_history["fn"][0]), "last": float(age_history["fn"][-1])},
         "nc1_min_to_grok_ratio": (
             float(nc1_min_epoch) / grok_epoch if grok_epoch else None),
-        "num_checkpoints": len(age_checkpoints),
+        "threshold_10_epoch": threshold_10_epoch,
+        "grok_epoch": grok_epoch,
+        "num_checkpoints": len(age_checkpoints)
     }
-    with open(os.path.join(measurements.age_dir, "age_signal.json"), "w") as handle:
-        json.dump(block, handle, indent=2)
+
+    with open(os.path.join(measurements.age_dir, "age_signal.json"), "w") as f:
+        import json
+        json.dump(block, f, indent=2)
+
     return block
 
 
@@ -1390,8 +1383,12 @@ def aggregate(summaries, args):
         if ap is None:
             print(f"  seed {s['seed']}: n/a (not computed for this seed)")
             continue
-        nc1 = ap["nc1_first_last"]
-        ratio = ap["nc1_min_to_grok_ratio"]
+        nc1 = ap.get("nc1_first_last")
+        if nc1 is None and "nc1_history" in ap:
+            nc1 = {"first": float(ap["nc1_history"][0]), "last": float(ap["nc1_history"][-1])}
+        ratio = ap.get("nc1_min_to_grok_ratio")
+        if ratio is None and ap.get("nc1_min_epoch") is not None and s.get("grok_epoch"):
+            ratio = float(ap["nc1_min_epoch"]) / s["grok_epoch"]
         ratio_str = f"{ratio:.4f}" if ratio is not None else "None"
         print(f"  seed {s['seed']}: NC1 {nc1['first']:.4f}->{nc1['last']:.4f}  "
               f"nc1_min_epoch={ap['nc1_min_epoch']}  "

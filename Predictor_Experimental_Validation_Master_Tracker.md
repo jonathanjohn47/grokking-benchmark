@@ -42,12 +42,24 @@ Failure mode: (c) never fires / insufficient firing count (1 of 5 seeds fired: s
 
 ## 4. AGE Predictor
 **Status Snapshot Date: November 16, 2026**
-- Phase 1 (Signal and Trigger Definition): PENDING
-- Phase 2 (Implementation and Integration): PENDING
-- Phase 3 (Synthetic Detector Validation): PENDING
-- Phase 4 (Synthetic Scorer Validation): PENDING
-- Phase 5 (Empirical Execution): PENDING
-- Phase 6 (Formal Scoring and Verdict): PENDING
+- Phase 1 (Signal and Trigger Definition): COMPLETED
+- Phase 2 (Implementation and Integration): COMPLETED
+- Phase 3 (Synthetic Detector Validation): COMPLETED
+- Phase 4 (Synthetic Scorer Validation): COMPLETED
+- Phase 5 (Empirical Execution): COMPLETED
+- Phase 6 (Formal Scoring and Verdict): COMPLETED
+
+Evidence — Implementation: `06_Code/src/predictors/age.py`
+Evidence — Detector tests: `06_Code/tests/test_age_detector.py` (2 passed)
+Evidence — Scorer tests: `06_Code/tests/test_age_scorer.py` (2 passed)
+Evidence — Artifacts: `08_Experiments/results/results_per_nanda_power/seed_*/age/` (401 checkpoints per seed)
+Empirical P_i (NC1 min): [13000, 28100, 30600, 35900, 34400]
+Empirical P_i (log10 NC1 10% fall): [5100, 3700, 900, 5400, 3700]
+Ground-truth G_i (cut 0.99): [8021, 8253, 4094, 7831, 6637]
+Official Metrics (NC1 min): lead_frac = 0.0000, rho = -0.5000, mean_rel_lead = -3.4535
+Official Metrics (log10 NC1 10% fall): lead_frac = 1.0000, rho = 0.4617, mean_rel_lead = 0.4898
+Verdict: FAIL (0 of 3 pre-declared rows passing; Note: All 6 phases COMPLETED)
+Physical interpretation: NC1 within-class variability collapse is postdictive. The global NC1 minimum occurs significantly after grokking (1.62x - 7.47x G_i) during terminal representation crystallization, functioning as a consequence of generalization rather than an ex-ante early warning indicator. Log10 NC1 10% fall leads but fails the Spearman rank correlation threshold (rho = 0.4617 < 0.90).
 
 ## 5. HTSR Alpha Predictor
 **Status Snapshot Date: November 16, 2026**

@@ -13460,3 +13460,57 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 ## Files Modified
 - `context_current.md`: Removed redundant checkbox block, retaining the immutable status snapshot.
 - `context.md`: Appended this session summary.
+
+
+---
+
+# Session Summary — November 16, 2026 (AGE Predictor Ground-Up Rebuild and Empirical Validation)
+
+## Session Summary
+- **Implemented:** Executed a ground-up rebuild of Predictor 4 (AGE: Adaptive Grokking Epoch via Neural Collapse) on the canonical unified substrate (`results_per_nanda_power`). Rebuilt `06_Code/src/predictors/age.py`, integrated into `run_nanda_benchmark.py`, created unit tests `test_age_detector.py` and `test_age_scorer.py`, computed 401 checkpoints per seed across 5 seeds, and ran formal frozen-protocol scoring with `analyze_nanda_unified.py`.
+- **Investigated:** Evaluated within-class variability collapse ($\text{NC1} = \operatorname{Tr}(\Sigma_W) / (\operatorname{Tr}(\Sigma_B) + \epsilon)$) and its temporal relationship with grokking ($G_i$ at cut 0.99: [8021, 8253, 4094, 7831, 6637]).
+- **Changed:**
+  - Deleted legacy `age.py` and test files.
+  - Implemented `06_Code/src/predictors/age.py` with forward hook at penultimate layer (position 2 '=' token), evaluating Tr($\Sigma_W$) and Tr($\Sigma_B$) in float64 on CPU across $C=113$ classes.
+  - Wired into `06_Code/scripts/run_nanda_benchmark.py` and `unified_measurements.py`.
+  - Added unit tests in `06_Code/tests/test_age_detector.py` and `06_Code/tests/test_age_scorer.py` (all 4 passed).
+  - Updated `06_Code/scripts/analyze_nanda_unified.py` to robustly score available predictors without failing on missing data.
+  - Recomputed AGE metrics on all 401 checkpoints across seeds 0–4 without retraining.
+  - Updated `Predictor_Experimental_Validation_Master_Tracker.md` and `context_current.md`.
+- **Fixed:** Resolved `analyze_nanda_unified.py` brittle assumptions about all predictors being simultaneously present, enabling modular evaluation.
+- **Postponed:** Predictor 5 (HTSR Alpha) rebuild.
+
+## Technical Decisions
+- Standardized NC1 computation using double precision (float64) on CPU to prevent numerical underflow in trace ratios.
+- Pre-registered Rule A (global NC1 minimum) and Rule B (10% drop of NC1).
+
+## User Instructions
+- Execute the ground-up rebuild of the AGE predictor following strict steps (Step 0 through Step 8), verify each step before proceeding, generate PASS/FAIL verdict under the frozen protocol, and commit/push to main.
+
+## Current Project State
+- **Completed Work:**
+  - Predictor 1 (L2 Norm): COMPLETED, FAIL.
+  - Predictor 2 (Dropout): COMPLETED, FAIL.
+  - Predictor 3 (Spectral): COMPLETED, FAIL.
+  - Predictor 4 (AGE): COMPLETED, FAIL (all 6 phases completed).
+- **Work in Progress / Next Actions:**
+  - Proceed to Predictor 5: HTSR Alpha rebuild and validation.
+- **Blockers:** None.
+
+## Important Discoveries
+- NC1 exhibits massive collapse ($\sim 45.8 \to 0.05$), but the global minimum occurs consistently after grokking ($1.62\times - 7.47\times G_i$). This confirms that Neural Collapse in transformer modular arithmetic is a terminal-phase phenomenon (feature cleanup / parameter decay) rather than a causal early warning indicator of grokking.
+- While the retrospective 10% fall leads grokking, it has low rank correlation ($\rho = 0.4617 < 0.90$), reflecting early training memorization fluctuations.
+
+## Files Modified
+- `06_Code/src/predictors/age.py`: Rebuilt from scratch.
+- `06_Code/tests/test_age_detector.py`: Synthetic causality and null hypothesis unit tests.
+- `06_Code/tests/test_age_scorer.py`: Synthetic positive and negative control unit tests.
+- `06_Code/scripts/run_nanda_benchmark.py`: Re-integrated checkpoint runner and summary aggregation.
+- `06_Code/scripts/analyze_nanda_unified.py`: Guarded predictor loading and event extraction.
+- `08_Experiments/results/results_per_nanda_power/aggregate.json`: Added empirical AGE predictor results.
+- `08_Experiments/results/results_per_nanda_power/seed_*/summary.json`: Added per-seed AGE records.
+- `08_Experiments/results/results_per_nanda_power/seed_*/age/*`: 401-checkpoint evaluation artifacts per seed.
+- `08_Experiments/results/results_per_nanda_power/analysis/*`: Updated analysis verdicts, events, and plots.
+- `Predictor_Experimental_Validation_Master_Tracker.md`: Marked all 6 phases of AGE as COMPLETED with empirical verdict.
+- `context_current.md`: Updated Section 3 status and appended Session Summary.
+- `context.md`: Appended this session summary.

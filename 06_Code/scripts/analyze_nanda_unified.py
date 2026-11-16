@@ -90,7 +90,9 @@ def load_seed(seed, results_dir=None):
     d = os.path.join(resolve_results_dir(results_dir), f"seed_{seed}")
     with open(os.path.join(d, "summary.json")) as handle:
         summary = json.load(handle)
-    ld = lambda sub, name: np.load(os.path.join(d, sub, name))
+    def ld(sub, name):
+        p = os.path.join(d, sub, name)
+        return np.load(p) if os.path.exists(p) else None
     return {
         "summary": summary,
         "grok": summary["grok_epoch"],
@@ -108,14 +110,8 @@ def load_seed(seed, results_dir=None):
         "alpha": ld("htsr", "htsr_alpha.npy"),
         "wpca_ep": ld("weight_pca", "weight_pca_checkpoints.npy"),
         "norm_eff_rank": ld("weight_pca", "weight_pca_norm_eff_rank.npy"),
-        "cd_ep": ld("commutator_defect", "commutator_defect_checkpoints.npy")
-            if os.path.exists(os.path.join(d, "commutator_defect",
-                                           "commutator_defect_checkpoints.npy"))
-            else None,
-        "cd_median": ld("commutator_defect", "commutator_defect_median.npy")
-            if os.path.exists(os.path.join(d, "commutator_defect",
-                                           "commutator_defect_median.npy"))
-            else None,
+        "cd_ep": ld("commutator_defect", "commutator_defect_checkpoints.npy"),
+        "cd_median": ld("commutator_defect", "commutator_defect_median.npy"),
     }
 
 
@@ -148,50 +144,51 @@ def build_events(runs):
         # Official L2 event: first time sum(w^2) has stayed strictly below
         # its running maximum for k consecutive epochs. Computed from the
         # per-epoch sum_w2 history, not from the saved moving-average epochs.
-        put(L2_CONFIRMED_PEAK, s, detect_confirmed_sum_w2_peak(r["sum_w2"]))
+        if r.get("sum_w2") is not None:
+            put(L2_CONFIRMED_PEAK, s, detect_confirmed_sum_w2_peak(r["sum_w2"]))
 
-        put("Dropout: variance peak (implemented)", s, sm["dropout_variance_predictor"]["variance_peak_epoch"])
-        fr = fraction_epochs(r["var_ep"], r["var"])
-        put("Dropout: variance 10% of rise", s, fr[0.1])
-        put("Dropout: variance 50% of rise", s, fr[0.5])
+        if sm.get("dropout_variance_predictor") is not None:
+            put("Dropout: variance peak (implemented)", s, sm["dropout_variance_predictor"]["variance_peak_epoch"])
+            if r.get("var_ep") is not None and r.get("var") is not None:
+                fr = fraction_epochs(r["var_ep"], r["var"])
+                put("Dropout: variance 10% of rise", s, fr[0.1])
+                put("Dropout: variance 50% of rise", s, fr[0.5])
 
-        put("Spectral: k90 minimum (implemented)", s, sm["spectral_predictor"]["k_90_min_epoch"])
-        put("Spectral: alignment maximum (implemented)", s, sm["spectral_predictor"]["alignment_max_epoch"])
-        fr = fraction_epochs(r["sp_ep"], r["align"])
-        put("Spectral: alignment 10% of rise", s, fr[0.1])
-        put("Spectral: alignment 50% of rise", s, fr[0.5])
-        fr = fraction_epochs(r["sp_ep"], r["k90"])
-        put("Spectral: k90 50% of fall", s, fr[0.5])
+        if sm.get("spectral_predictor") is not None:
+            put("Spectral: k90 minimum (implemented)", s, sm["spectral_predictor"]["k_90_min_epoch"])
+            put("Spectral: alignment maximum (implemented)", s, sm["spectral_predictor"]["alignment_max_epoch"])
+            if r.get("sp_ep") is not None and r.get("align") is not None:
+                fr = fraction_epochs(r["sp_ep"], r["align"])
+                put("Spectral: alignment 10% of rise", s, fr[0.1])
+                put("Spectral: alignment 50% of rise", s, fr[0.5])
+            if r.get("sp_ep") is not None and r.get("k90") is not None:
+                fr = fraction_epochs(r["sp_ep"], r["k90"])
+                put("Spectral: k90 50% of fall", s, fr[0.5])
 
-        put("AGE: NC1 minimum (implemented)", s, sm["age_predictor"]["nc1_min_epoch"])
-        fr = fraction_epochs(r["age_ep"], np.log10(r["nc1"]))
-        put("AGE: log10 NC1 10% of fall", s, fr[0.1])
-        put("AGE: log10 NC1 50% of fall", s, fr[0.5])
+        if sm.get("age_predictor") is not None:
+            put("AGE: NC1 minimum (implemented)", s, sm["age_predictor"]["nc1_min_epoch"])
+            if r.get("age_ep") is not None and r.get("nc1") is not None:
+                fr = fraction_epochs(r["age_ep"], np.log10(r["nc1"]))
+                put("AGE: log10 NC1 10% of fall", s, fr[0.1])
+                put("AGE: log10 NC1 50% of fall", s, fr[0.5])
 
         # HTSR Alpha: published-style rule only (epoch of lowest mean alpha).
         # No fraction-of-change level is added (scope decision: no new rules).
-        put("HTSR: mean alpha minimum (implemented)", s, sm["htsr_predictor"]["alpha_min_epoch"])
+        if sm.get("htsr_predictor") is not None:
+            put("HTSR: mean alpha minimum (implemented)", s, sm["htsr_predictor"]["alpha_min_epoch"])
 
-        # Weight-PCA: PRIMARY rule only (global minimum of mean NormEffRank),
-        # frozen 2026-09-17, same precedent as HTSR above. The exploratory
-        # steepest-drop / threshold-90 epochs in weight_pca_predictor[
-        # "exploratory"] are deliberately NOT added here — they are thesis-
-        # appendix / sensitivity-analysis material, not part of the scored table.
-        put("Weight-PCA: effective-rank minimum (implemented)", s,
-            sm["weight_pca_predictor"]["norm_eff_rank_min_epoch"])
+        # Weight-PCA: PRIMARY rule only (global minimum of mean NormEffRank)
+        if sm.get("weight_pca_predictor") is not None:
+            put("Weight-PCA: effective-rank minimum (implemented)", s,
+                sm["weight_pca_predictor"]["norm_eff_rank_min_epoch"])
 
-        # Higher-MI (Pomarico et al. 2025; see src/predictors/higher_mi.py).
-        # PRIMARY rule, frozen 2026-10-03: global MAXIMUM of the population
-        # O-information signal Omega_pop(t) (peak redundancy) -- same
-        # "one PRIMARY rule declared in the module" convention as HTSR /
-        # Weight-PCA above. Always defined (find_global_maximum_epoch has
-        # no None case), so it's safe inside this unconditional per-seed loop.
-        put("Higher-MI: population omega maximum (implemented)", s,
-            sm["higher_mi_predictor"]["population_omega_max_epoch"])
+        # Higher-MI (Pomarico et al. 2025; see src/predictors/higher_mi.py)
+        if sm.get("higher_mi_predictor") is not None:
+            put("Higher-MI: population omega maximum (implemented)", s,
+                sm["higher_mi_predictor"]["population_omega_max_epoch"])
 
         # Commutator Defect (Xu 2026): PRIMARY Xu onset on median D̃.
-        # event_epoch may be None (miss) — kept as None, not coerced.
-        if "commutator_defect_predictor" in sm and sm["commutator_defect_predictor"] is not None:
+        if sm.get("commutator_defect_predictor") is not None:
             put("Commutator Defect: Xu onset on median D (implemented)", s,
                 sm["commutator_defect_predictor"].get("event_epoch"))
 
@@ -207,7 +204,7 @@ def build_events(runs):
     # each of these is added only if ALL seeds produced a value --
     # otherwise it is left out of the table with a console note, rather
     # than crashing on a per_seed[s] KeyError for whichever seed is None.
-    if runs and all("higher_mi_predictor" in r["summary"] for r in runs):
+    if runs and all(r["summary"].get("higher_mi_predictor") is not None for r in runs):
         hmi = [r["summary"]["higher_mi_predictor"] for r in runs]
 
         zc_vals = [b["exploratory"]["population_omega_zero_crossing_epoch"] for b in hmi]

@@ -189,12 +189,12 @@ Correlation Traps     : REMOVED from line-up on 2026-09-30 (detects post-grok an
   - Measures Neural Collapse variability collapse:
     $$\text{NC1} = \frac{\text{Tr}(\Sigma_W)}{\text{Tr}(\Sigma_B)}$$
     where $\Sigma_W$ is within-class covariance and $\Sigma_B$ is between-class covariance of penultimate representations at the '=' position across the $C = 113$ classes. Firing rule: Global minimum of NC1 across checkpoints. From Papyan et al. (Also tracked: retrospective 10% and 50% fall of $\log_{10}\text{NC1}$).
-- **Official Results ($c = 0.8$)**:
-  - *NC1 Minimum*: $P_i = [31500, 37800, 29300, 37400, 30100]$. Firing count: $5/5$. $\text{lead\_frac} = 0.0000$, $\rho = -0.4000$, $\bar{r} = -2.1260$. **FAIL**.
-  - *$\log_{10}\text{NC1}$ 10% Fall*: $P_i = [8200, 3000, 4700, 2500, 19000]$. $\text{lead\_frac} = 0.8000$, $\rho = 0.7000$, $\bar{r} = 0.4828$. **FAIL** (fails $\rho \ge 0.90$).
-  - *$\log_{10}\text{NC1}$ 50% Fall*: $P_i = [12900, 7000, 10300, 11100, 23600]$. $\text{lead\_frac} = 0.0000$, $\rho = 1.0000$, $\bar{r} = -0.0178$. **FAIL**.
+- **Official Results on Canonical Experiment ($results\_per\_nanda\_power$, $c = 0.8$, $G_i$ at cut 0.99: [8021, 8253, 4094, 7831, 6637])**:
+  - *NC1 Minimum*: $P_i = [13000, 28100, 30600, 35900, 34400]$. Firing count: $5/5$. $\text{lead\_frac} = 0.0000$, $\rho = -0.5000$, $\bar{r} = -3.4535$. **FAIL**.
+  - *$\log_{10}\text{NC1}$ 10% Fall*: $P_i = [5100, 3700, 900, 5400, 3700]$. Firing count: $5/5$. $\text{lead\_frac} = 1.0000$, $\rho = 0.4617$, $\bar{r} = 0.4898$. **FAIL** (fails $\rho \ge 0.90$).
+  - *$\log_{10}\text{NC1}$ 50% Fall*: $P_i = [7900, 8100, 3700, 8100, 7700]$. Firing count: $5/5$. $\text{lead\_frac} = 0.0000$, $\rho = 0.8208$, $\bar{r} = -0.0129$. **FAIL**.
 - **Verdict**: **CLOSED, NEGATIVE** (0 of 3 rows passing).
-- **Scientific Reason & Notes**: Neural collapse is defined by Papyan et al. as a terminal-phase phenomenon occurring after training loss has reached near-zero. NC1 exhibits a massive $\sim 660\times$ collapse (from $\sim 45$ to $\sim 0.05$), but the minimum occurs long after grokking ($1.27 - 5.46 \times G_i$) (*2026-09-06: AGE predictor implemented*; *2026-09-22: AGE Calculation Explanation*).
+- **Scientific Reason & Notes**: Neural collapse is defined by Papyan et al. as a terminal-phase phenomenon occurring after training loss has reached near-zero. NC1 exhibits a massive collapse (from $\sim 45$ to $\sim 0.05$), but the minimum occurs long after grokking ($1.62 - 7.47 \times G_i$). Representation collapse is a downstream consequence of Fourier circuit crystallization and weight decay cleanup, not an ex-ante predictor (*Rebuilt and validated 2026-11-16*).
 
 ### Predictor 5: HTSR Alpha
 - **Paper**: Charles H. Martin & Michael W. Mahoney (2021, *JMLR* / WeightWatcher).
@@ -672,4 +672,78 @@ Recomputing the trigger post-hoc over the parameter grid:
   - `threshold = 0.95`: $P_i = [9800, 5400, 7800, 8100, \text{None}]$
 
 ### 11. Next Task in Benchmark Sequence
-Predictor 3 (Spectral) is fully executed, validated, evidenced, and closed. In accordance with the non-negotiable benchmark order, the next predictor to be evaluated is **Predictor 4: AGE (Adaptive Grokking Epoch via Neural Collapse)**, followed by Predictor 5: HTSR Alpha. Neither has been started.
+Predictor 3 (Spectral) is fully executed, validated, evidenced, and closed. Predictor 4 (AGE) has now been completely rebuilt, validated, and formally scored on the canonical substrate (results below). The next predictor to be evaluated in the non-negotiable benchmark sequence is **Predictor 5: HTSR Alpha**.
+
+---
+
+## Session Summary — November 16, 2026 (AGE Predictor Ground-Up Rebuild)
+
+### 1. Step 0: Deletion of Old AGE Implementation
+- Cleaned up legacy implementation files: deleted `06_Code/src/predictors/age.py`, `06_Code/tests/test_age_detector.py`, and `06_Code/tests/test_age_scorer.py`.
+- Purged previous measurement files across `08_Experiments/results/nanda_unified/seed_*/age/`.
+- Removed stale `age_predictor` blocks from legacy `08_Experiments/results/nanda_unified/aggregate.json` and per-seed summaries.
+
+### 2. Step 1: Signal Definition and Mathematical Foundation
+- **Signal**: AGE = Adaptive Grokking Epoch via Neural Collapse (Papyan et al. 2020, PNAS).
+- **NC1 Formula**:
+  $$\text{NC1} = \frac{\operatorname{Tr}(\Sigma_W)}{\operatorname{Tr}(\Sigma_B) + \epsilon}$$
+  where:
+  - $\Sigma_W = \frac{1}{C} \sum_{c=1}^C \frac{1}{n_c} \sum_{i \in c} (h_i - \mu_c)(h_i - \mu_c)^T$
+  - $\Sigma_B = \frac{1}{C} \sum_{c=1}^C (\mu_c - \mu_G)(\mu_c - \mu_G)^T$
+  - $\operatorname{Tr}(\Sigma_W) = \frac{1}{C} \sum_{c=1}^C \frac{1}{n_c} \sum_{i \in c} \|h_i - \mu_c\|^2$
+  - $\operatorname{Tr}(\Sigma_B) = \frac{1}{C} \sum_{c=1}^C \|\mu_c - \mu_G\|^2$
+  - Numerical floor $\epsilon = 10^{-12}$.
+- **Feature Extraction**: Forward hook on `model.output_head` capturing penultimate representation at sequence position 2 ('=' token, ID 113) yielding $\Phi \in \mathbb{R}^{N \times 128}$ ($N = 3830$ train pairs) evaluated in float64 on CPU across $C = 113$ modular classes.
+- **Pre-registered Trigger Rules**:
+  - Rule A: Global minimum of $\log_{10}(\text{NC1})$ / NC1.
+  - Rule B: 10% fractional drop from initial value.
+
+### 3. Step 2: Implementation Details
+- Authored clean `06_Code/src/predictors/age.py` computing penultimate feature activations, class means, and NC1 variability collapse in float64 on CPU.
+- Integrated checkpoint runner `_checkpoint_predictor_age` in `06_Code/scripts/run_nanda_benchmark.py` and registered under `CHECKPOINT_PREDICTOR_FUNCS["age"]` and `PREDICTOR_SUMMARY_KEY["age"]`.
+- Validated per-checkpoint storage under `unified_measurements.py` saving `age_checkpoints.npy`, `age_nc1.npy`, `age_fn.npy`, and `age_signal.json`.
+
+### 4. Step 3: Unit Tests for Detector Validation
+- Created `06_Code/tests/test_age_detector.py` validating:
+  - Null hypothesis / random noise: NC1 remains high and stable ($> 0.5$).
+  - Injected feature / perfect class separation: NC1 collapses to zero ($< 0.01$).
+- Both synthetic tests passed (2/2).
+
+### 5. Step 4: Unit Tests for Scorer Validation
+- Created `06_Code/tests/test_age_scorer.py` validating:
+  - Positive control: synthetic curve firing 500 epochs before grokking satisfies all frozen protocol gates.
+  - Negative control: synthetic curve firing post-grokking correctly triggers FAIL.
+- Both scoring tests passed (2/2).
+
+### 6. Step 5: Empirical Execution Results
+- Executed checkpoint-only recomputation across all 5 seeds on the canonical unified substrate (`results_per_nanda_power`):
+  `python 06_Code/scripts/run_nanda_benchmark.py --predictors age`
+- No retraining occurred. All 401 checkpoints per seed (0 to 40000, eval_every=100) evaluated.
+- Output artifacts verified across all 5 seeds in `08_Experiments/results/results_per_nanda_power/seed_*/age/`.
+
+### 7. Step 6: Formal Scoring and Verdict
+- Official evaluation run with `python 06_Code/scripts/analyze_nanda_unified.py` at $c = 0.8$:
+  - Primary Grok Epochs ($G_i$, test acc > 0.99): `[8021, 8253, 4094, 7831, 6637]`
+  - NC1 Minimum ($P_i$): `[13000, 28100, 30600, 35900, 34400]`
+    - Firing count: $5/5$ (check: PASS)
+    - Lead fraction: $0.0000 < 0.80$ (check: FAIL)
+    - Spearman $\rho$: $-0.5000 < 0.90$ (check: FAIL)
+    - Mean relative lead: $-3.4535 \notin [0.05, 0.90]$ (check: FAIL)
+    - Verdict: **FAIL**
+  - $\log_{10}\text{NC1}$ 10% Fall ($P_i$): `[5100, 3700, 900, 5400, 3700]`
+    - Firing count: $5/5$ (check: PASS)
+    - Lead fraction: $1.0000 \ge 0.80$ (check: PASS)
+    - Spearman $\rho$: $0.4617 < 0.90$ (check: FAIL)
+    - Mean relative lead: $0.4898 \in [0.05, 0.90]$ (check: PASS)
+    - Verdict: **FAIL**
+  - $\log_{10}\text{NC1}$ 50% Fall ($P_i$): `[7900, 8100, 3700, 8100, 7700]`
+    - Firing count: $5/5$ (check: PASS)
+    - Lead fraction: $0.0000 < 0.80$ (check: FAIL)
+    - Spearman $\rho$: $0.8208 < 0.90$ (check: FAIL)
+    - Mean relative lead: $-0.0129 \notin [0.05, 0.90]$ (check: FAIL)
+    - Verdict: **FAIL**
+- Predictor-Level Verdict for AGE: **FAIL** (0 of 3 pre-declared rows passing).
+
+### 8. Physical Interpretation
+Neural Collapse (NC1) is a terminal-phase phenomenon occurring during late-stage optimization after training loss approaches machine precision (Papyan et al. 2020). The global minimum of within-class variability collapse occurs significantly post-grokking (between $1.62\times$ and $7.47\times G_i$). Although penultimate representations undergo extreme metric collapse (from $\text{NC1} \approx 45.8$ to $\sim 0.05$), this collapse is a downstream consequence of feature cleanup following circuit formation, not an early warning signal of grokking. The retrospective 10% fall does lead grokking, but fails rank correlation ($\rho = 0.4617 \ll 0.90$), indicating that early variability drops reflect initial memorization dynamics rather than generalisation timing.
+

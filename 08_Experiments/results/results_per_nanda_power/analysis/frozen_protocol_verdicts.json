@@ -9,7 +9,6 @@
     7831,
     6637
   ],
-  "l2_only": true,
   "predictors": [
     {
       "predictor": "L2 Norm",
@@ -46,6 +45,149 @@
           "superiority_index": 0.0
         }
       ]
+    },
+    {
+      "predictor": "Dropout",
+      "verdict": "FAIL",
+      "n_predeclared_rows": 1,
+      "n_predeclared_passing": 0,
+      "rows": [
+        {
+          "signal": "Dropout: variance peak (implemented)",
+          "role": "predeclared",
+          "counts_towards_predictor": true,
+          "P_i": [
+            27200.0,
+            25300.0,
+            33500.0,
+            33900.0,
+            18100.0
+          ],
+          "n_firing": 5,
+          "lead_frac": 0.0,
+          "rho": -0.19999999999999998,
+          "mean_rel_lead": -3.339088297933736,
+          "checks": {
+            "n_firing_at_least_4": true,
+            "lead_frac_at_least_0.8": false,
+            "rho_at_least_threshold": false,
+            "mean_rel_lead_in_window": false
+          },
+          "verdict": "FAIL"
+        }
+      ]
+    },
+    {
+      "predictor": "Spectral",
+      "verdict": "FAIL",
+      "n_predeclared_rows": 0,
+      "n_predeclared_passing": 0,
+      "rows": []
+    },
+    {
+      "predictor": "AGE",
+      "verdict": "FAIL",
+      "n_predeclared_rows": 3,
+      "n_predeclared_passing": 0,
+      "rows": [
+        {
+          "signal": "AGE: NC1 minimum (implemented)",
+          "role": "predeclared",
+          "counts_towards_predictor": true,
+          "P_i": [
+            13000.0,
+            28100.0,
+            30600.0,
+            35900.0,
+            34400.0
+          ],
+          "n_firing": 5,
+          "lead_frac": 0.0,
+          "rho": -0.49999999999999994,
+          "mean_rel_lead": -3.4534659306852205,
+          "checks": {
+            "n_firing_at_least_4": true,
+            "lead_frac_at_least_0.8": false,
+            "rho_at_least_threshold": false,
+            "mean_rel_lead_in_window": false
+          },
+          "verdict": "FAIL"
+        },
+        {
+          "signal": "AGE: log10 NC1 10% of fall",
+          "role": "predeclared",
+          "counts_towards_predictor": true,
+          "P_i": [
+            5100.0,
+            3700.0,
+            900.0,
+            5400.0,
+            3700.0
+          ],
+          "n_firing": 5,
+          "lead_frac": 1.0,
+          "rho": 0.46169025843831935,
+          "mean_rel_lead": 0.4897930871956455,
+          "checks": {
+            "n_firing_at_least_4": true,
+            "lead_frac_at_least_0.8": true,
+            "rho_at_least_threshold": false,
+            "mean_rel_lead_in_window": true
+          },
+          "verdict": "FAIL"
+        },
+        {
+          "signal": "AGE: log10 NC1 50% of fall",
+          "role": "predeclared",
+          "counts_towards_predictor": true,
+          "P_i": [
+            7900.0,
+            8100.0,
+            3700.0,
+            8100.0,
+            7700.0
+          ],
+          "n_firing": 5,
+          "lead_frac": 0.0,
+          "rho": 0.8207826816681233,
+          "mean_rel_lead": -0.012930174018379939,
+          "checks": {
+            "n_firing_at_least_4": true,
+            "lead_frac_at_least_0.8": false,
+            "rho_at_least_threshold": false,
+            "mean_rel_lead_in_window": false
+          },
+          "verdict": "FAIL"
+        }
+      ]
+    },
+    {
+      "predictor": "HTSR Alpha",
+      "verdict": "FAIL",
+      "n_predeclared_rows": 0,
+      "n_predeclared_passing": 0,
+      "rows": []
+    },
+    {
+      "predictor": "Weight-PCA",
+      "verdict": "FAIL",
+      "n_predeclared_rows": 0,
+      "n_predeclared_passing": 0,
+      "rows": []
+    },
+    {
+      "predictor": "Higher-MI",
+      "verdict": "FAIL",
+      "n_predeclared_rows": 0,
+      "n_predeclared_passing": 0,
+      "rows": []
+    },
+    {
+      "predictor": "Commutator Defect",
+      "verdict": "FAIL",
+      "n_predeclared_rows": 0,
+      "n_predeclared_passing": 0,
+      "rows": []
     }
   ]
 }
