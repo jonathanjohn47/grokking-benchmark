@@ -13924,3 +13924,59 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 - `08_Experiments/results/results_per_nanda_power/seed_*/htsr/htsr_signal.json`: Generated HTSR signals.
 - `08_Experiments/results/results_per_nanda_power/analysis/`: Diagnostic plots, grid, and analysis summaries.
 - `context.md`: Appended session summary.
+
+
+---
+
+# 2026-11-17: Full Weight-PCA Predictor Pipeline (Predictor 6)
+
+## Session Summary
+- **Implemented:**
+  - Full Weight-PCA pipeline for Predictor 6 following Yunis et al. (2024) / Roy & Vetterli (2007).
+  - Synthetic test suite in `06_Code/tests/weight_pca/test_weight_pca_signal_dependence.py` verifying maximum entropy effective rank ($\text{ER} = N, \text{NormEffRank} = 1.0$) and low-rank collapse ($\text{ER} = 1.0, \text{NormEffRank} = 1/N$).
+  - Updated `effective_rank` in `06_Code/src/predictors/weight_pca.py` to correctly compute $\text{ER} = \exp(H)$ and $\text{NormEffRank} = \text{ER} / R$ matching Roy & Vetterli (2007) and the synthetic tests.
+  - Dedicated Weight-PCA evaluation runner `06_Code/scripts/run_weight_pca_evaluation.py` evaluating all 401 checkpoints (every 100 epochs, 0 to 40000) across all 5 seeds on Nanda-Power checkpoints (`results_per_nanda_power`).
+  - Added `score_weight_pca_saved_histories()` and `--weight-pca-only` CLI flag to `06_Code/scripts/analyze_nanda_unified.py`.
+  - Added Weight-PCA per-seed diagnostic plotting `plot_weight_pca_per_seed()` to `06_Code/scripts/plot_bespoke_spectral_age.py`.
+  - Expanded collation grid in `06_Code/scripts/collate_predictor_grid.py` to a 5x5 grid (`predictor_grid_5x5.png`) featuring L2 Norm, Spectral, AGE, HTSR, and Weight-PCA.
+- **Investigated:**
+  - Evaluated normalized effective rank trajectories across all 5 seeds on Nanda modular-addition checkpoints: minimum rank epochs are $P_i = [33200, 40000, 38400, 30500, 23000]$ against grokking epochs $G_i = [8021, 8253, 4094, 7831, 6637]$.
+- **Fixed:**
+  - Aligned `effective_rank` implementation with Roy & Vetterli (2007) mathematical definition $\text{EffRank} = \exp(H)$.
+- **Postponed:** None.
+
+## Technical Decisions
+- Preserved frozen protocol without online detection engineering: primary event rule is the global minimum of layer-averaged NormEffRank.
+- Scored strictly under frozen benchmark protocol ($c = 0.8$): Weight-PCA achieves 5/5 firing count, 0.0 lead fraction, $\rho = 0.40$, and mean relative lead $\bar{r} = -4.1451$, resulting in a frozen verdict of **FAIL**.
+
+## User Instructions
+- Work only on branch `main`. Never create a branch. Never open a PR.
+- DO NOT modify base model, data, or training loops.
+- DO NOT change existing L2, Dropout, Spectral, AGE, or HTSR logic.
+- Execute steps in order, run evaluation, regenerate plots, commit and push.
+
+## Current Project State
+- **Completed Work:**
+  - Weight-PCA synthetics and unit tests pass (`pytest tests/weight_pca -q`).
+  - Per-checkpoint Weight-PCA signal JSON files generated for seeds 0 through 4 under `08_Experiments/results/results_per_nanda_power/seed_{i}/weight_pca/weight_pca_signal.json`.
+  - Diagnostic plots `weight_pca_seed_{0..4}.png` generated in `08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/`.
+  - 5x5 collation grid `predictor_grid_5x5.png` generated.
+- **Work in Progress:** Remaining predictors benchmarking (Higher-MI, Commutator Defect).
+- **Blockers:** None.
+- **Next Actions:** Evaluate Predictor 7 (Higher-MI).
+
+## Important Discoveries
+- NormEffRank falls monotonically from $\sim 0.855$ down to $\sim 0.104 - 0.148$, bottoming out well after grokking ($2.88 - 9.38 \times G_i$). The low-rank collapse reflects post-grok cleanup and consolidation of the Fourier multiplication circuit under weight decay, rather than an early warning signal of grokking.
+
+## Files Modified
+- `06_Code/src/predictors/weight_pca.py`: Aligned `effective_rank` with $\exp(H)$ Roy & Vetterli formulation.
+- `06_Code/tests/weight_pca/__init__.py`: Package init.
+- `06_Code/tests/weight_pca/test_weight_pca_signal_dependence.py`: Synthetics test suite.
+- `06_Code/scripts/analyze_nanda_unified.py`: Added `score_weight_pca_saved_histories()` and `--weight-pca-only`.
+- `06_Code/scripts/run_weight_pca_evaluation.py`: Checkpoint evaluation runner for Weight-PCA.
+- `06_Code/scripts/plot_bespoke_spectral_age.py`: Added Weight-PCA data loader and `plot_weight_pca_per_seed()`.
+- `06_Code/scripts/collate_predictor_grid.py`: Expanded to 5x5 grid including Weight-PCA.
+- `08_Experiments/results/results_per_nanda_power/seed_*/weight_pca/weight_pca_signal.json`: Generated Weight-PCA signals.
+- `08_Experiments/results/results_per_nanda_power/analysis/`: Diagnostic plots, 5x5 grid.
+- `context_current.md`: Updated Predictor 6 results to canonical Nanda-Power run.
+- `context.md`: Appended session summary.

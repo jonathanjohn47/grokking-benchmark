@@ -134,7 +134,8 @@ def effective_rank(singular_values):
     p = sv / total
     # 0 * log(0) := 0 by convention (entropy), avoid log(0) warnings.
     nonzero = p > 0
-    eff_rank = float(-np.sum(p[nonzero] * np.log(p[nonzero])))
+    entropy = float(-np.sum(p[nonzero] * np.log(p[nonzero])))
+    eff_rank = float(np.exp(entropy))
     norm_eff_rank = eff_rank / R
     return eff_rank, norm_eff_rank
 

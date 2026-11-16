@@ -211,10 +211,10 @@ Correlation Traps     : REMOVED from line-up on 2026-09-30 (detects post-grok an
   - Normalized Effective Rank:
     $$\text{NormEffRank}(W) = \frac{-\sum_i p_i \log p_i}{R}, \quad p_i = \frac{\sigma_i}{\sum_j \sigma_j}$$
     averaged across weight matrices. Firing rule: Global minimum of NormEffRank. From Yunis et al.
-- **Official Results ($c = 0.8$)**:
-  - *NormEffRank Minimum*: $P_i = [37100, 27900, 32400, 29700, 36200]$. Firing count: $5/5$. $\text{lead\_frac} = 0.0000$, $\rho = 0.8000$, $\bar{r} = -1.9029$. **FAIL**.
+- **Official Results on Canonical Experiment ($results\_per\_nanda\_power$, $c = 0.8$, $G_i$ at cut 0.99: [8021, 8253, 4094, 7831, 6637])**:
+  - *NormEffRank Minimum*: $P_i = [33200, 40000, 38400, 30500, 23000]$. Firing count: $5/5$. $\text{lead\_frac} = 0.0000$, $\rho = 0.4000$, $\bar{r} = -4.1451$. **FAIL**.
 - **Verdict**: **CLOSED, NEGATIVE** (0 of 1 rows passing).
-- **Scientific Reason & Notes**: NormEffRank falls monotonically from $\sim 0.037$ to $\sim 0.016 - 0.019$, bottoming out well after grokking ($1.52 - 4.03 \times G_i$), confirming that rank collapse accompanies post-grok cleanup rather than serving as an early indicator (*2026-10-02: Weight-PCA implemented and run*).
+- **Scientific Reason & Notes**: NormEffRank falls from $\sim 0.855$ down to $\sim 0.104 - 0.148$, bottoming out well after grokking ($2.88 - 9.38 \times G_i$). The low-rank collapse reflects post-grok cleanup and consolidation of the Fourier multiplication circuit under weight decay, rather than an early warning signal of grokking (*Evaluated and verified 2026-11-17*).
 
 ### Predictor 7: Higher-MI
 - **Paper**: Pomarico et al. (2025, arXiv:2507.23346).

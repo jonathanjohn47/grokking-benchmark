@@ -1092,6 +1092,10 @@ def main(argv=None):
         "--htsr-only", action="store_true",
         help="Score only the HTSR Alpha row from saved per-checkpoint htsr_signal.json files.",
     )
+    parser.add_argument(
+        "--weight-pca-only", action="store_true",
+        help="Score only the Weight-PCA row from saved per-checkpoint weight_pca_signal.json files.",
+    )
     args = parser.parse_args(argv)
     if args.l2_only:
         score_l2_only(
@@ -1100,6 +1104,10 @@ def main(argv=None):
         )
     elif args.htsr_only:
         res = score_htsr_saved_histories(results_dir=args.results_dir)
+        import json
+        print(json.dumps(res, indent=2))
+    elif args.weight_pca_only:
+        res = score_weight_pca_saved_histories(results_dir=args.results_dir)
         import json
         print(json.dumps(res, indent=2))
     else:
@@ -1144,6 +1152,42 @@ def score_htsr_saved_histories(results_dir=None):
         "mean_relative_lead": frozen_scored["mean_rel_lead"],
         "verdict": frozen_scored["verdict"]
     }
+
+
+def score_weight_pca_saved_histories(results_dir=None):
+    """Score the Weight-PCA row from the saved per-checkpoint weight_pca_signal.json files."""
+    import json
+    import os
+    import numpy as np
+    
+    root = resolve_results_dir(results_dir)
+    with open(os.path.join(root, "aggregate.json")) as handle:
+        grok_epochs = json.load(handle)["grok_epochs"]
+        
+    firing_epochs = []
+    for seed in range(len(grok_epochs)):
+        seed_file = os.path.join(root, f"seed_{seed}", "weight_pca", "weight_pca_signal.json")
+        if not os.path.exists(seed_file):
+            firing_epochs.append(None)
+            continue
+        with open(seed_file) as f:
+            data = json.load(f)
+        # The primary event rule is the global minimum of NormEffRank
+        firing_epochs.append(data.get("norm_eff_rank_min_epoch"))
+        
+    frozen_result = evaluate_frozen_protocol(grok_epochs, firing_epochs)
+    frozen_scored = attach_pass_checks(frozen_result)
+    
+    return {
+        "signal": "Weight-PCA: norm_eff_rank minimum",
+        "per_seed": [{"seed": i, "grok_epoch": g, "signal_epoch": p} for i, (g, p) in enumerate(zip(grok_epochs, firing_epochs))],
+        "n_firing": frozen_scored["n_firing"],
+        "lead_frac": frozen_scored["lead_frac"],
+        "spearman_rho": frozen_scored["rho"],
+        "mean_relative_lead": frozen_scored["mean_rel_lead"],
+        "verdict": frozen_scored["verdict"]
+    }
+
 
 
 

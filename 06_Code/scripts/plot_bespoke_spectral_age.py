@@ -141,6 +141,13 @@ def load_all_data(base_dir=CANONICAL_BASE_DIR):
         alpha = np.array(htsr_metrics["alpha_history"])
         alpha_min_epoch = htsr_metrics["alpha_min_epoch"]
 
+        # 4. Weight-PCA: Trajectory & Metrics
+        w_pca_path = os.path.join(base_dir, f"seed_{seed}", "weight_pca", "weight_pca_signal.json")
+        if not os.path.exists(w_pca_path):
+            raise FileNotFoundError(f"Missing required Weight-PCA signal file: {w_pca_path}")
+        with open(w_pca_path, "r") as f:
+            w_pca_metrics = json.load(f)
+
         seeds_data.append({
             "seed": seed,
             "grok_epoch": int(grok_epochs[seed]),
@@ -155,6 +162,9 @@ def load_all_data(base_dir=CANONICAL_BASE_DIR):
             "htsr_epochs": htsr_epochs,
             "alpha": alpha,
             "alpha_min_epoch": int(alpha_min_epoch),
+            "w_pca_epochs": w_pca_metrics["weight_pca_checkpoints"],
+            "w_pca_rank_history": w_pca_metrics["norm_eff_rank_history"],
+            "w_pca_min_epoch": w_pca_metrics["norm_eff_rank_min_epoch"]
         })
 
     return grok_epochs, seeds_data
@@ -336,6 +346,31 @@ def plot_htsr_per_seed(s_data, out_path):
     plt.close(fig)
 
 
+def plot_weight_pca_per_seed(s_data, out_path):
+    """Generate Weight-PCA Diagnostic Plot for a single seed."""
+    seed = s_data["seed"]
+    epochs = s_data["w_pca_epochs"]
+    rank = s_data["w_pca_rank_history"]
+    grok_epoch = s_data["grok_epoch"]
+    min_epoch = s_data["w_pca_min_epoch"]
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.plot(epochs, rank, color="#1f77b4", lw=1.8, label="Normalized Effective Rank")
+    
+    ax.axvline(x=grok_epoch, color="red", linestyle="--", lw=1.8, label=f"Grokking ({grok_epoch})")
+    ax.axvline(x=min_epoch, color="purple", linestyle=":", lw=2.0, label=f"Min Rank ({min_epoch})")
+
+    ax.set_xscale("log")
+    ax.set_xlim(max(1, epochs[0]), epochs[-1])
+    ax.set_xlabel("Epochs", fontsize=11)
+    ax.set_ylabel("Norm. Effective Rank", fontsize=11)
+    ax.set_title(f"Seed {seed}: Weight-PCA Trajectory", fontsize=13, fontweight="bold")
+    ax.legend(loc="upper right", frameon=True)
+    fig.tight_layout()
+    fig.savefig(out_path, dpi=200)
+    plt.close(fig)
+
+
 def main():
     set_plotting_style()
     grok_epochs, seeds_data = load_all_data(CANONICAL_BASE_DIR)
@@ -362,6 +397,10 @@ def main():
         htsr_png = os.path.join(out_dir, f"htsr_seed_{seed}.png")
         plot_htsr_per_seed(s_data, htsr_png)
         generated_files.append(htsr_png)
+
+        w_pca_png = os.path.join(out_dir, f"weight_pca_seed_{seed}.png")
+        plot_weight_pca_per_seed(s_data, w_pca_png)
+        generated_files.append(w_pca_png)
 
     # Combined PDFs
     age_pdf = os.path.join(out_dir, "age_all_seeds.pdf")
