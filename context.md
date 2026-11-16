@@ -13514,3 +13514,45 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 - `Predictor_Experimental_Validation_Master_Tracker.md`: Marked all 6 phases of AGE as COMPLETED with empirical verdict.
 - `context_current.md`: Updated Section 3 status and appended Session Summary.
 - `context.md`: Appended this session summary.
+
+
+---
+
+# Session Summary — November 16, 2026 (Bespoke Diagnostic Plots for Spectral and AGE Rebuilds)
+
+## Session Summary
+- **Implemented:** Created `06_Code/scripts/plot_bespoke_spectral_age.py` to generate bespoke diagnostic plots for Predictor 3 (Spectral) and Predictor 4 (AGE) on `08_Experiments/results/nanda_unified/`.
+- **Investigated:** Audited directory structure and checkpoint grids for AGE and Spectral rebuilds. Confirmed that the true evaluation checkpoint grid is saved in `spectral_checkpoints.npy` across all 5 seeds ([0, 100, 200, ..., 39900, 39999], length 401), eliminating any reliance on guessed `np.linspace(0, 40000, 401)` grids.
+- **Changed:**
+  - Removed stale plotting scripts and stale diagnostic plots under `08_Experiments/results/nanda_unified/analysis/bespoke_diagnostics/`.
+  - Authored `06_Code/scripts/plot_bespoke_spectral_age.py` loading the exact checkpoint epoch arrays directly from `spectral_checkpoints.npy`.
+  - Hardcoded canonical grokking epochs for seeds 0–4: `[8021, 8253, 4094, 7831, 6637]`.
+  - Generated per-seed diagnostic plots (`age_seed_0.png` through `age_seed_4.png`, `spectral_seed_0.png` through `spectral_seed_4.png`) and multi-seed overlay PDFs (`age_all_seeds.pdf`, `spectral_all_seeds.pdf`).
+- **Fixed:** Corrected X-axis grids to reflect true checkpoint epochs (ending at epoch 39999) and aligned vertical grokking markers strictly with the primary 0.99 cut grokking epochs.
+- **Postponed:** None.
+
+## Technical Decisions
+- Enforced zero-guessing policy: script dynamically discovers and loads exact checkpoint epoch arrays (`spectral_checkpoints.npy`) and halts with diagnostic output if missing.
+- Configured AGE plots with $\log_{10}(\mathrm{NC1})$ trajectory, grokking epoch marker, global minimum NC1 marker, and post-grok terminal phase shading.
+- Configured Spectral plots with dual subplots (Alignment score and $k_{90}$ effective rank) sharing the exact checkpoint X-axis.
+
+## User Instructions
+- Purge stale diagnostic artifacts, verify exact file structure of Spectral and AGE rebuilds, and generate correct git-tracked diagnostic plots using the actual saved checkpoint epochs and correct grokking epochs.
+- Commit script and plots with message: `feat: add bespoke diagnostic plots for Spectral and AGE rebuilds`.
+
+## Current Project State
+- **Completed Work:**
+  - Audit and cleanup of stale diagnostic artifacts.
+  - Bespoke diagnostic plotting script authored and executed.
+  - 10 per-seed PNG plots and 2 combined PDFs generated and verified.
+- **Work in Progress / Next Actions:**
+  - Next benchmark step as determined by roadmap.
+- **Blockers:** None.
+
+## Important Discoveries
+- Checkpoint saving schedule writes `model_epoch_39999.pt` at the boundary rather than 40000; loading the exact `spectral_checkpoints.npy` prevents off-by-one and interval distortion issues associated with naive linspace grids.
+
+## Files Modified
+- `06_Code/scripts/plot_bespoke_spectral_age.py`: New bespoke diagnostic plotting script.
+- `08_Experiments/results/nanda_unified/analysis/bespoke_diagnostics/*`: Bespoke diagnostic PNGs and combined PDFs.
+- `context.md`: Appended session summary.
