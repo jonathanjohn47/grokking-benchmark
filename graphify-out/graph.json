@@ -21,14 +21,84 @@
   },
   "nodes": [
     {
+      "label": "Predictor_Experimental_Validation_Master_Tracker.md",
+      "file_type": "document",
+      "source_file": "Predictor_Experimental_Validation_Master_Tracker.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "predictor_experimental_validation_master_tracker",
+      "community": 137,
+      "norm_label": "predictor_experimental_validation_master_tracker.md"
+    },
+    {
+      "label": "Predictor Experimental Validation Master Tracker",
+      "file_type": "document",
+      "source_file": "Predictor_Experimental_Validation_Master_Tracker.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "predictor_experimental_validation_master_tracker_predictor_experimental_validation_master_tracker",
+      "community": 137,
+      "norm_label": "predictor experimental validation master tracker"
+    },
+    {
+      "label": "1. L2 Norm Predictor",
+      "file_type": "document",
+      "source_file": "Predictor_Experimental_Validation_Master_Tracker.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "predictor_experimental_validation_master_tracker_1_l2_norm_predictor",
+      "community": 137,
+      "norm_label": "1. l2 norm predictor"
+    },
+    {
+      "label": "2. Dropout Predictor",
+      "file_type": "document",
+      "source_file": "Predictor_Experimental_Validation_Master_Tracker.md",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "predictor_experimental_validation_master_tracker_2_dropout_predictor",
+      "community": 137,
+      "norm_label": "2. dropout predictor"
+    },
+    {
+      "label": "3. Spectral Predictor",
+      "file_type": "document",
+      "source_file": "Predictor_Experimental_Validation_Master_Tracker.md",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "predictor_experimental_validation_master_tracker_3_spectral_predictor",
+      "community": 137,
+      "norm_label": "3. spectral predictor"
+    },
+    {
+      "label": "4. AGE Predictor",
+      "file_type": "document",
+      "source_file": "Predictor_Experimental_Validation_Master_Tracker.md",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "predictor_experimental_validation_master_tracker_4_age_predictor",
+      "community": 137,
+      "norm_label": "4. age predictor"
+    },
+    {
+      "label": "5. HTSR Alpha Predictor",
+      "file_type": "document",
+      "source_file": "Predictor_Experimental_Validation_Master_Tracker.md",
+      "source_location": "L41",
+      "_origin": "ast",
+      "id": "predictor_experimental_validation_master_tracker_5_htsr_alpha_predictor",
+      "community": 137,
+      "norm_label": "5. htsr alpha predictor"
+    },
+    {
       "label": "context_current.md",
       "file_type": "document",
       "source_file": "context_current.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "context_current",
       "community": 26,
-      "norm_label": "context_current.md"
+      "norm_label": "context_current.md",
+      "id": "context_current"
     },
     {
       "label": "Current State of the Grokking Predictor Benchmark (`context_current.md`)",
@@ -36,9 +106,9 @@
       "source_file": "context_current.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md",
       "community": 26,
-      "norm_label": "current state of the grokking predictor benchmark (`context_current.md`)"
+      "norm_label": "current state of the grokking predictor benchmark (`context_current.md`)",
+      "id": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md"
     },
     {
       "label": "1. Frozen Experimental Setup",
@@ -46,9 +116,9 @@
       "source_file": "context_current.md",
       "source_location": "L11",
       "_origin": "ast",
-      "id": "context_current_1_frozen_experimental_setup",
       "community": 26,
-      "norm_label": "1. frozen experimental setup"
+      "norm_label": "1. frozen experimental setup",
+      "id": "context_current_1_frozen_experimental_setup"
     },
     {
       "label": "Training setup (Nov 2026)",
@@ -56,9 +126,9 @@
       "source_file": "context_current.md",
       "source_location": "L15",
       "_origin": "ast",
-      "id": "context_current_training_setup_nov_2026",
       "community": 26,
-      "norm_label": "training setup (nov 2026)"
+      "norm_label": "training setup (nov 2026)",
+      "id": "context_current_training_setup_nov_2026"
     },
     {
       "label": "2. Benchmark Rules & Evaluation Protocol",
@@ -66,9 +136,9 @@
       "source_file": "context_current.md",
       "source_location": "L89",
       "_origin": "ast",
-      "id": "context_current_2_benchmark_rules_evaluation_protocol",
       "community": 26,
-      "norm_label": "2. benchmark rules & evaluation protocol"
+      "norm_label": "2. benchmark rules & evaluation protocol",
+      "id": "context_current_2_benchmark_rules_evaluation_protocol"
     },
     {
       "label": "3. Predictor Benchmark Evaluations",
@@ -76,9 +146,9 @@
       "source_file": "context_current.md",
       "source_location": "L120",
       "_origin": "ast",
-      "id": "context_current_3_predictor_benchmark_evaluations",
       "community": 26,
-      "norm_label": "3. predictor benchmark evaluations"
+      "norm_label": "3. predictor benchmark evaluations",
+      "id": "context_current_3_predictor_benchmark_evaluations"
     },
     {
       "label": "Predictor 1: L2 Norm",
@@ -86,9 +156,9 @@
       "source_file": "context_current.md",
       "source_location": "L141",
       "_origin": "ast",
-      "id": "context_current_predictor_1_l2_norm",
       "community": 26,
-      "norm_label": "predictor 1: l2 norm"
+      "norm_label": "predictor 1: l2 norm",
+      "id": "context_current_predictor_1_l2_norm"
     },
     {
       "label": "Predictor 2: Dropout",
@@ -96,9 +166,9 @@
       "source_file": "context_current.md",
       "source_location": "L158",
       "_origin": "ast",
-      "id": "context_current_predictor_2_dropout",
       "community": 26,
-      "norm_label": "predictor 2: dropout"
+      "norm_label": "predictor 2: dropout",
+      "id": "context_current_predictor_2_dropout"
     },
     {
       "label": "Predictor 3: Spectral",
@@ -106,9 +176,9 @@
       "source_file": "context_current.md",
       "source_location": "L171",
       "_origin": "ast",
-      "id": "context_current_predictor_3_spectral",
       "community": 26,
-      "norm_label": "predictor 3: spectral"
+      "norm_label": "predictor 3: spectral",
+      "id": "context_current_predictor_3_spectral"
     },
     {
       "label": "Predictor 4: AGE (Adaptive Grokking Epoch via Neural Collapse)",
@@ -116,9 +186,9 @@
       "source_file": "context_current.md",
       "source_location": "L186",
       "_origin": "ast",
-      "id": "context_current_predictor_4_age_adaptive_grokking_epoch_via_neural_collapse",
       "community": 26,
-      "norm_label": "predictor 4: age (adaptive grokking epoch via neural collapse)"
+      "norm_label": "predictor 4: age (adaptive grokking epoch via neural collapse)",
+      "id": "context_current_predictor_4_age_adaptive_grokking_epoch_via_neural_collapse"
     },
     {
       "label": "Predictor 5: HTSR Alpha",
@@ -126,9 +196,9 @@
       "source_file": "context_current.md",
       "source_location": "L199",
       "_origin": "ast",
-      "id": "context_current_predictor_5_htsr_alpha",
       "community": 26,
-      "norm_label": "predictor 5: htsr alpha"
+      "norm_label": "predictor 5: htsr alpha",
+      "id": "context_current_predictor_5_htsr_alpha"
     },
     {
       "label": "Predictor 6: Weight-PCA",
@@ -136,9 +206,9 @@
       "source_file": "context_current.md",
       "source_location": "L208",
       "_origin": "ast",
-      "id": "context_current_predictor_6_weight_pca",
       "community": 26,
-      "norm_label": "predictor 6: weight-pca"
+      "norm_label": "predictor 6: weight-pca",
+      "id": "context_current_predictor_6_weight_pca"
     },
     {
       "label": "Predictor 7: Higher-MI",
@@ -146,9 +216,9 @@
       "source_file": "context_current.md",
       "source_location": "L219",
       "_origin": "ast",
-      "id": "context_current_predictor_7_higher_mi",
       "community": 26,
-      "norm_label": "predictor 7: higher-mi"
+      "norm_label": "predictor 7: higher-mi",
+      "id": "context_current_predictor_7_higher_mi"
     },
     {
       "label": "Predictor 8: Commutator Defect",
@@ -156,9 +226,9 @@
       "source_file": "context_current.md",
       "source_location": "L230",
       "_origin": "ast",
-      "id": "context_current_predictor_8_commutator_defect",
       "community": 26,
-      "norm_label": "predictor 8: commutator defect"
+      "norm_label": "predictor 8: commutator defect",
+      "id": "context_current_predictor_8_commutator_defect"
     },
     {
       "label": "Note on Removed Predictor: Correlation Traps",
@@ -166,9 +236,9 @@
       "source_file": "context_current.md",
       "source_location": "L242",
       "_origin": "ast",
-      "id": "context_current_note_on_removed_predictor_correlation_traps",
       "community": 26,
-      "norm_label": "note on removed predictor: correlation traps"
+      "norm_label": "note on removed predictor: correlation traps",
+      "id": "context_current_note_on_removed_predictor_correlation_traps"
     },
     {
       "label": "4. Current Repository State",
@@ -176,9 +246,9 @@
       "source_file": "context_current.md",
       "source_location": "L248",
       "_origin": "ast",
-      "id": "context_current_4_current_repository_state",
       "community": 26,
-      "norm_label": "4. current repository state"
+      "norm_label": "4. current repository state",
+      "id": "context_current_4_current_repository_state"
     },
     {
       "label": "5. Unresolved \u2014 Needs Jonathan's Check",
@@ -186,9 +256,9 @@
       "source_file": "context_current.md",
       "source_location": "L281",
       "_origin": "ast",
-      "id": "context_current_5_unresolved_needs_jonathan_s_check",
       "community": 26,
-      "norm_label": "5. unresolved \u2014 needs jonathan's check"
+      "norm_label": "5. unresolved \u2014 needs jonathan's check",
+      "id": "context_current_5_unresolved_needs_jonathan_s_check"
     },
     {
       "label": "1. Conditional Noise Stress Test False-Positive Rate ($P_i \\sim \\text{Uniform}[0, G_i]$)",
@@ -196,9 +266,9 @@
       "source_file": "context_current.md",
       "source_location": "L285",
       "_origin": "ast",
-      "id": "context_current_1_conditional_noise_stress_test_false_positive_rate_p_i_sim_text_uniform_0_g_i",
       "community": 26,
-      "norm_label": "1. conditional noise stress test false-positive rate ($p_i \\sim \\text{uniform}[0, g_i]$)"
+      "norm_label": "1. conditional noise stress test false-positive rate ($p_i \\sim \\text{uniform}[0, g_i]$)",
+      "id": "context_current_1_conditional_noise_stress_test_false_positive_rate_p_i_sim_text_uniform_0_g_i"
     },
     {
       "label": "2. Treatment of HTSR Alpha Values Below 2 ($\\alpha < 2$)",
@@ -206,9 +276,9 @@
       "source_file": "context_current.md",
       "source_location": "L291",
       "_origin": "ast",
-      "id": "context_current_2_treatment_of_htsr_alpha_values_below_2_alpha_2",
       "community": 26,
-      "norm_label": "2. treatment of htsr alpha values below 2 ($\\alpha < 2$)"
+      "norm_label": "2. treatment of htsr alpha values below 2 ($\\alpha < 2$)",
+      "id": "context_current_2_treatment_of_htsr_alpha_values_below_2_alpha_2"
     },
     {
       "label": "3. Auxiliary Script `REPO_ROOT` Definitions",
@@ -216,9 +286,9 @@
       "source_file": "context_current.md",
       "source_location": "L297",
       "_origin": "ast",
-      "id": "context_current_3_auxiliary_script_repo_root_definitions",
       "community": 26,
-      "norm_label": "3. auxiliary script `repo_root` definitions"
+      "norm_label": "3. auxiliary script `repo_root` definitions",
+      "id": "context_current_3_auxiliary_script_repo_root_definitions"
     },
     {
       "label": "4. Commutator Defect Open Attack Points",
@@ -226,9 +296,9 @@
       "source_file": "context_current.md",
       "source_location": "L303",
       "_origin": "ast",
-      "id": "context_current_4_commutator_defect_open_attack_points",
       "community": 26,
-      "norm_label": "4. commutator defect open attack points"
+      "norm_label": "4. commutator defect open attack points",
+      "id": "context_current_4_commutator_defect_open_attack_points"
     },
     {
       "label": "6. Structural Evaluation Protocol Reframing \u2014 Synthetic Control Framework as Primary Benchmark Metric (November 2026)",
@@ -236,9 +306,9 @@
       "source_file": "context_current.md",
       "source_location": "L312",
       "_origin": "ast",
-      "id": "context_current_6_structural_evaluation_protocol_reframing_synthetic_control_framework_as_primary_benchmark_metric_november_2026",
       "community": 26,
-      "norm_label": "6. structural evaluation protocol reframing \u2014 synthetic control framework as primary benchmark metric (november 2026)"
+      "norm_label": "6. structural evaluation protocol reframing \u2014 synthetic control framework as primary benchmark metric (november 2026)",
+      "id": "context_current_6_structural_evaluation_protocol_reframing_synthetic_control_framework_as_primary_benchmark_metric_november_2026"
     },
     {
       "label": "1. Re-Framing the Baseline and Benchmark Hierarchy",
@@ -246,9 +316,9 @@
       "source_file": "context_current.md",
       "source_location": "L314",
       "_origin": "ast",
-      "id": "context_current_1_re_framing_the_baseline_and_benchmark_hierarchy",
       "community": 26,
-      "norm_label": "1. re-framing the baseline and benchmark hierarchy"
+      "norm_label": "1. re-framing the baseline and benchmark hierarchy",
+      "id": "context_current_1_re_framing_the_baseline_and_benchmark_hierarchy"
     },
     {
       "label": "2. Positioning the Control Validation Setup as the Primary Benchmark Metric",
@@ -256,9 +326,9 @@
       "source_file": "context_current.md",
       "source_location": "L323",
       "_origin": "ast",
-      "id": "context_current_2_positioning_the_control_validation_setup_as_the_primary_benchmark_metric",
       "community": 26,
-      "norm_label": "2. positioning the control validation setup as the primary benchmark metric"
+      "norm_label": "2. positioning the control validation setup as the primary benchmark metric",
+      "id": "context_current_2_positioning_the_control_validation_setup_as_the_primary_benchmark_metric"
     },
     {
       "label": "3. Revised Structural Hierarchy of the Benchmark",
@@ -266,9 +336,9 @@
       "source_file": "context_current.md",
       "source_location": "L341",
       "_origin": "ast",
-      "id": "context_current_3_revised_structural_hierarchy_of_the_benchmark",
       "community": 26,
-      "norm_label": "3. revised structural hierarchy of the benchmark"
+      "norm_label": "3. revised structural hierarchy of the benchmark",
+      "id": "context_current_3_revised_structural_hierarchy_of_the_benchmark"
     },
     {
       "label": "4. Append-Only Status & Harmonization Note",
@@ -276,9 +346,9 @@
       "source_file": "context_current.md",
       "source_location": "L353",
       "_origin": "ast",
-      "id": "context_current_4_append_only_status_harmonization_note",
       "community": 26,
-      "norm_label": "4. append-only status & harmonization note"
+      "norm_label": "4. append-only status & harmonization note",
+      "id": "context_current_4_append_only_status_harmonization_note"
     },
     {
       "label": "5. Predictor Quality Index S (PR #35, 15 Nov 2026)",
@@ -286,9 +356,9 @@
       "source_file": "context_current.md",
       "source_location": "L357",
       "_origin": "ast",
-      "id": "context_current_5_predictor_quality_index_s_pr_35_15_nov_2026",
       "community": 26,
-      "norm_label": "5. predictor quality index s (pr #35, 15 nov 2026)"
+      "norm_label": "5. predictor quality index s (pr #35, 15 nov 2026)",
+      "id": "context_current_5_predictor_quality_index_s_pr_35_15_nov_2026"
     },
     {
       "label": "6. Control experiment redesign: Superiority Index (PR #40, merge `5b321dc`, 15 November 2026)",
@@ -296,9 +366,9 @@
       "source_file": "context_current.md",
       "source_location": "L399",
       "_origin": "ast",
-      "id": "context_current_6_control_experiment_redesign_superiority_index_pr_40_merge_5b321dc_15_november_2026",
       "community": 26,
-      "norm_label": "6. control experiment redesign: superiority index (pr #40, merge `5b321dc`, 15 november 2026)"
+      "norm_label": "6. control experiment redesign: superiority index (pr #40, merge `5b321dc`, 15 november 2026)",
+      "id": "context_current_6_control_experiment_redesign_superiority_index_pr_40_merge_5b321dc_15_november_2026"
     },
     {
       "label": "L2 Predictor Signal Dependence Unit Tests",
@@ -306,9 +376,9 @@
       "source_file": "context_current.md",
       "source_location": "L422",
       "_origin": "ast",
-      "id": "context_current_l2_predictor_signal_dependence_unit_tests",
       "community": 26,
-      "norm_label": "l2 predictor signal dependence unit tests"
+      "norm_label": "l2 predictor signal dependence unit tests",
+      "id": "context_current_l2_predictor_signal_dependence_unit_tests"
     },
     {
       "label": "Dropout Predictor Evaluation on the Experiment (Salah & Yevick signals)",
@@ -316,9 +386,9 @@
       "source_file": "context_current.md",
       "source_location": "L448",
       "_origin": "ast",
-      "id": "context_current_dropout_predictor_evaluation_on_the_experiment_salah_yevick_signals",
       "community": 26,
-      "norm_label": "dropout predictor evaluation on the experiment (salah & yevick signals)"
+      "norm_label": "dropout predictor evaluation on the experiment (salah & yevick signals)",
+      "id": "context_current_dropout_predictor_evaluation_on_the_experiment_salah_yevick_signals"
     },
     {
       "label": "Dropout Predictor & Scorer Synthetic Signal Unit Tests",
@@ -326,9 +396,9 @@
       "source_file": "context_current.md",
       "source_location": "L468",
       "_origin": "ast",
-      "id": "context_current_dropout_predictor_scorer_synthetic_signal_unit_tests",
       "community": 26,
-      "norm_label": "dropout predictor & scorer synthetic signal unit tests"
+      "norm_label": "dropout predictor & scorer synthetic signal unit tests",
+      "id": "context_current_dropout_predictor_scorer_synthetic_signal_unit_tests"
     },
     {
       "label": "Predictor Experimental Validation Master Tracker",
@@ -336,9 +406,9 @@
       "source_file": "context_current.md",
       "source_location": "L503",
       "_origin": "ast",
-      "id": "context_current_predictor_experimental_validation_master_tracker",
       "community": 26,
-      "norm_label": "predictor experimental validation master tracker"
+      "norm_label": "predictor experimental validation master tracker",
+      "id": "context_current_predictor_experimental_validation_master_tracker"
     },
     {
       "label": "1. L2 Norm Predictor",
@@ -346,9 +416,9 @@
       "source_file": "context_current.md",
       "source_location": "L507",
       "_origin": "ast",
-      "id": "context_current_1_l2_norm_predictor",
       "community": 26,
-      "norm_label": "1. l2 norm predictor"
+      "norm_label": "1. l2 norm predictor",
+      "id": "context_current_1_l2_norm_predictor"
     },
     {
       "label": "2. Dropout Predictor",
@@ -356,9 +426,9 @@
       "source_file": "context_current.md",
       "source_location": "L516",
       "_origin": "ast",
-      "id": "context_current_2_dropout_predictor",
       "community": 26,
-      "norm_label": "2. dropout predictor"
+      "norm_label": "2. dropout predictor",
+      "id": "context_current_2_dropout_predictor"
     },
     {
       "label": "3. Spectral Predictor",
@@ -366,9 +436,9 @@
       "source_file": "context_current.md",
       "source_location": "L525",
       "_origin": "ast",
-      "id": "context_current_3_spectral_predictor",
       "community": 26,
-      "norm_label": "3. spectral predictor"
+      "norm_label": "3. spectral predictor",
+      "id": "context_current_3_spectral_predictor"
     },
     {
       "label": "4. AGE Predictor",
@@ -376,9 +446,9 @@
       "source_file": "context_current.md",
       "source_location": "L534",
       "_origin": "ast",
-      "id": "context_current_4_age_predictor",
       "community": 26,
-      "norm_label": "4. age predictor"
+      "norm_label": "4. age predictor",
+      "id": "context_current_4_age_predictor"
     },
     {
       "label": "5. HTSR Alpha Predictor",
@@ -386,9 +456,9 @@
       "source_file": "context_current.md",
       "source_location": "L543",
       "_origin": "ast",
-      "id": "context_current_5_htsr_alpha_predictor",
       "community": 26,
-      "norm_label": "5. htsr alpha predictor"
+      "norm_label": "5. htsr alpha predictor",
+      "id": "context_current_5_htsr_alpha_predictor"
     },
     {
       "label": "analyze_nanda_unified.py",
@@ -436,7 +506,7 @@
       "source_file": "06_Code/scripts/analyze_nanda_unified.py",
       "source_location": "L122",
       "_origin": "ast",
-      "community": 164,
+      "community": 5,
       "norm_label": "fraction_epochs()",
       "id": "scripts_analyze_nanda_unified_fraction_epochs"
     },
@@ -446,7 +516,7 @@
       "source_file": "06_Code/scripts/analyze_nanda_unified.py",
       "source_location": "L136",
       "_origin": "ast",
-      "community": 164,
+      "community": 5,
       "norm_label": "build_events()",
       "id": "scripts_analyze_nanda_unified_build_events"
     },
@@ -466,7 +536,7 @@
       "source_file": "06_Code/scripts/analyze_nanda_unified.py",
       "source_location": "L253",
       "_origin": "ast",
-      "community": 137,
+      "community": 145,
       "norm_label": "lead_flags()",
       "id": "scripts_analyze_nanda_unified_lead_flags"
     },
@@ -476,7 +546,7 @@
       "source_file": "06_Code/scripts/analyze_nanda_unified.py",
       "source_location": "L268",
       "_origin": "ast",
-      "community": 137,
+      "community": 145,
       "norm_label": "evaluate_frozen_protocol()",
       "id": "scripts_analyze_nanda_unified_evaluate_frozen_protocol"
     },
@@ -726,7 +796,7 @@
       "source_file": "06_Code/scripts/analyze_nanda_unified.py",
       "source_location": "L123",
       "_origin": "ast",
-      "community": 164,
+      "community": 5,
       "norm_label": "first epoch at which y has covered `f` of the way from its start to     its fart",
       "id": "scripts_analyze_nanda_unified_rationale_123"
     },
@@ -736,7 +806,7 @@
       "source_file": "06_Code/scripts/analyze_nanda_unified.py",
       "source_location": "L137",
       "_origin": "ast",
-      "community": 164,
+      "community": 5,
       "norm_label": "events[predictor_signal][seed] = epoch (or none for a miss).",
       "id": "scripts_analyze_nanda_unified_rationale_137"
     },
@@ -746,7 +816,7 @@
       "source_file": "06_Code/scripts/analyze_nanda_unified.py",
       "source_location": "L254",
       "_origin": "ast",
-      "community": 137,
+      "community": 145,
       "norm_label": "boolean lead mask, one entry per firing seed.      rule=\"fraction\": p_i < c * g_",
       "id": "scripts_analyze_nanda_unified_rationale_254"
     },
@@ -756,7 +826,7 @@
       "source_file": "06_Code/scripts/analyze_nanda_unified.py",
       "source_location": "L269",
       "_origin": "ast",
-      "community": 137,
+      "community": 145,
       "norm_label": "same logic as run_control_experiment.py::evaluate(), with the fractional lead te",
       "id": "scripts_analyze_nanda_unified_rationale_269"
     },
@@ -2906,7 +2976,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L328",
       "_origin": "ast",
-      "community": 166,
+      "community": 14,
       "norm_label": "limit_cycle_check()",
       "id": "scripts_run_nanda_benchmark_limit_cycle_check"
     },
@@ -2916,7 +2986,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L360",
       "_origin": "ast",
-      "community": 166,
+      "community": 14,
       "norm_label": "dips_key()",
       "id": "scripts_run_nanda_benchmark_dips_key"
     },
@@ -3106,7 +3176,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L329",
       "_origin": "ast",
-      "community": 166,
+      "community": 14,
       "norm_label": "detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test",
       "id": "scripts_run_nanda_benchmark_rationale_329"
     },
@@ -3116,7 +3186,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L361",
       "_origin": "ast",
-      "community": 166,
+      "community": 14,
       "norm_label": "key under which limit_cycle_check stores its dip count. with the     primary gro",
       "id": "scripts_run_nanda_benchmark_rationale_361"
     },
@@ -6206,7 +6276,7 @@
       "source_file": "06_Code/tests/test_miss_counts_as_no_lead.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 137,
+      "community": 145,
       "norm_label": "test_miss_counts_as_no_lead.py",
       "id": "tests_test_miss_counts_as_no_lead"
     },
@@ -6216,7 +6286,7 @@
       "source_file": "06_Code/tests/test_miss_counts_as_no_lead.py",
       "source_location": "L25",
       "_origin": "ast",
-      "community": 137,
+      "community": 145,
       "norm_label": "test_four_leads_and_one_miss_is_four_fifths()",
       "id": "tests_test_miss_counts_as_no_lead_test_four_leads_and_one_miss_is_four_fifths"
     },
@@ -6226,7 +6296,7 @@
       "source_file": "06_Code/tests/test_miss_counts_as_no_lead.py",
       "source_location": "L35",
       "_origin": "ast",
-      "community": 137,
+      "community": 145,
       "norm_label": "test_three_firing_seeds_fail_immediately()",
       "id": "tests_test_miss_counts_as_no_lead_test_three_firing_seeds_fail_immediately"
     },
@@ -6236,7 +6306,7 @@
       "source_file": "06_Code/tests/test_miss_counts_as_no_lead.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 137,
+      "community": 145,
       "norm_label": "value 6: a miss counts as no lead in lead_frac and stays in the denominator.  rh",
       "id": "tests_test_miss_counts_as_no_lead_rationale_1"
     },
@@ -12416,7 +12486,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L232",
       "_origin": "ast",
-      "community": 165,
+      "community": 17,
       "norm_label": "current project state (updated \u2014 july 6, 2026, later session)",
       "id": "context_split_context_part1_of_3_current_project_state_updated_july_6_2026_later_session"
     },
@@ -12426,7 +12496,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L252",
       "_origin": "ast",
-      "community": 165,
+      "community": 17,
       "norm_label": "what still needs to be done (full rebuild)",
       "id": "context_split_context_part1_of_3_what_still_needs_to_be_done_full_rebuild"
     },
@@ -12496,7 +12566,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L414",
       "_origin": "ast",
-      "community": 168,
+      "community": 17,
       "norm_label": "session summary \u2014 july 7, 2026 (input format decided + get_tensor debugging)",
       "id": "context_split_context_part1_of_3_session_summary_july_7_2026_input_format_decided_get_tensor_debugging"
     },
@@ -12506,7 +12576,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L456",
       "_origin": "ast",
-      "community": 168,
+      "community": 17,
       "norm_label": "still open / next steps (updated \u2014 july 7, 2026, end of session)",
       "id": "context_split_context_part1_of_3_still_open_next_steps_updated_july_7_2026_end_of_session"
     },
@@ -12576,7 +12646,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L744",
       "_origin": "ast",
-      "community": 169,
+      "community": 17,
       "norm_label": "session summary \u2014 july 8, 2026 (q/k/v projections built, mentoring session)",
       "id": "context_split_context_part1_of_3_session_summary_july_8_2026_q_k_v_projections_built_mentoring_session"
     },
@@ -12586,7 +12656,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L821",
       "_origin": "ast",
-      "community": 169,
+      "community": 17,
       "norm_label": "still open / next steps (updated \u2014 july 8, 2026, end of session)",
       "id": "context_split_context_part1_of_3_still_open_next_steps_updated_july_8_2026_end_of_session"
     },
@@ -12616,7 +12686,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L960",
       "_origin": "ast",
-      "community": 17,
+      "community": 166,
       "norm_label": "session summary \u2014 july 8, 2026 (attention computation completed, mlp + output head built, `transformer.py` architecture complete)",
       "id": "context_split_context_part1_of_3_session_summary_july_8_2026_attention_computation_completed_mlp_output_head_built_transformer_py_architecture_complete"
     },
@@ -12626,7 +12696,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L1081",
       "_origin": "ast",
-      "community": 17,
+      "community": 166,
       "norm_label": "still open / next steps (updated \u2014 july 8, 2026, end of session)",
       "id": "context_split_context_part1_of_3_still_open_next_steps_updated_july_8_2026_end_of_session_1081"
     },
@@ -12886,7 +12956,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L1919",
       "_origin": "ast",
-      "community": 17,
+      "community": 165,
       "norm_label": "session summary \u2014 august 4, 2026 (matplotlib windows dll fix, numpy-based data saving, separate plotting script)",
       "id": "context_split_context_part1_of_3_session_summary_august_4_2026_matplotlib_windows_dll_fix_numpy_based_data_saving_separate_plotting_script"
     },
@@ -12896,7 +12966,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L1973",
       "_origin": "ast",
-      "community": 17,
+      "community": 165,
       "norm_label": "still open / next steps (updated \u2014 august 4, 2026, end of session)",
       "id": "context_split_context_part1_of_3_still_open_next_steps_updated_august_4_2026_end_of_session"
     },
@@ -13136,7 +13206,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L2377",
       "_origin": "ast",
-      "community": 17,
+      "community": 164,
       "norm_label": "session summary \u2014 august 10\u201311, 2026 (l2 norm set aside; dropout predictor started; transformer.py dropout wiring)",
       "id": "context_split_context_part1_of_3_session_summary_august_10_11_2026_l2_norm_set_aside_dropout_predictor_started_transformer_py_dropout_wiring"
     },
@@ -13146,7 +13216,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L2391",
       "_origin": "ast",
-      "community": 17,
+      "community": 164,
       "norm_label": "current verified state of `src/models/transformer.py`",
       "id": "context_split_context_part1_of_3_current_verified_state_of_src_models_transformer_py"
     },
@@ -13156,7 +13226,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L2442",
       "_origin": "ast",
-      "community": 17,
+      "community": 164,
       "norm_label": "still open / next steps (superseded \u2014 see next session below, dropout work reverted)",
       "id": "context_split_context_part1_of_3_still_open_next_steps_superseded_see_next_session_below_dropout_work_reverted"
     },
@@ -14996,7 +15066,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L388",
       "_origin": "ast",
-      "community": 100,
+      "community": 161,
       "norm_label": "thesis motivation",
       "id": "context_split_context_part2_of_3_thesis_motivation"
     },
@@ -15006,7 +15076,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L390",
       "_origin": "ast",
-      "community": 100,
+      "community": 161,
       "norm_label": "why this research matters",
       "id": "context_split_context_part2_of_3_why_this_research_matters"
     },
@@ -15016,7 +15086,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L400",
       "_origin": "ast",
-      "community": 100,
+      "community": 161,
       "norm_label": "the thesis contribution",
       "id": "context_split_context_part2_of_3_the_thesis_contribution"
     },
@@ -15026,7 +15096,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L409",
       "_origin": "ast",
-      "community": 100,
+      "community": 161,
       "norm_label": "core philosophy",
       "id": "context_split_context_part2_of_3_core_philosophy"
     },
@@ -16306,7 +16376,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2301",
       "_origin": "ast",
-      "community": 161,
+      "community": 100,
       "norm_label": "session summary \u2014 september 4, 2026 (discussion: why l2 norm cannot be used as a grokking predictor \u2014 full review of plots, results and numbers; no code changed)",
       "id": "context_split_context_part2_of_3_session_summary_september_4_2026_discussion_why_l2_norm_cannot_be_used_as_a_grokking_predictor_full_review_of_plots_results_and_numbers_no_code_changed"
     },
@@ -16316,7 +16386,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2303",
       "_origin": "ast",
-      "community": 161,
+      "community": 100,
       "norm_label": "1. question answered \u2014 \"why can't l2 norm be used as a predictor?\"",
       "id": "context_split_context_part2_of_3_1_question_answered_why_can_t_l2_norm_be_used_as_a_predictor"
     },
@@ -16326,7 +16396,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2385",
       "_origin": "ast",
-      "community": 161,
+      "community": 100,
       "norm_label": "2. follow-up correction \u2014 \"isn't the one postdictive run (run 3) the",
       "id": "context_split_context_part2_of_3_2_follow_up_correction_isn_t_the_one_postdictive_run_run_3_the"
     },
@@ -16336,7 +16406,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2412",
       "_origin": "ast",
-      "community": 161,
+      "community": 100,
       "norm_label": "files modified",
       "id": "context_split_context_part2_of_3_files_modified_2412"
     },
@@ -16346,7 +16416,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2417",
       "_origin": "ast",
-      "community": 161,
+      "community": 100,
       "norm_label": "next",
       "id": "context_split_context_part2_of_3_next_2417"
     },
@@ -16356,7 +16426,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2428",
       "_origin": "ast",
-      "community": 154,
+      "community": 100,
       "norm_label": "session summary \u2014 september 4, 2026 (dropout predictor formally closed as a post-hoc characterization metric, not a live predictor \u2014 decision recorded, no code changed; project moving to spectral)",
       "id": "context_split_context_part2_of_3_session_summary_september_4_2026_dropout_predictor_formally_closed_as_a_post_hoc_characterization_metric_not_a_live_predictor_decision_recorded_no_code_changed_project_moving_to_spectral"
     },
@@ -16366,7 +16436,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2430",
       "_origin": "ast",
-      "community": 154,
+      "community": 100,
       "norm_label": "1. decision \u2014 dropout will not be evaluated as a live/causal predictor",
       "id": "context_split_context_part2_of_3_1_decision_dropout_will_not_be_evaluated_as_a_live_causal_predictor"
     },
@@ -16376,7 +16446,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2443",
       "_origin": "ast",
-      "community": 154,
+      "community": 100,
       "norm_label": "2. what this decision means going forward",
       "id": "context_split_context_part2_of_3_2_what_this_decision_means_going_forward"
     },
@@ -16386,7 +16456,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2468",
       "_origin": "ast",
-      "community": 154,
+      "community": 100,
       "norm_label": "3. files modified",
       "id": "context_split_context_part2_of_3_3_files_modified"
     },
@@ -16396,7 +16466,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2478",
       "_origin": "ast",
-      "community": 154,
+      "community": 100,
       "norm_label": "next",
       "id": "context_split_context_part2_of_3_next_2478"
     },
@@ -16446,7 +16516,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2580",
       "_origin": "ast",
-      "community": 100,
+      "community": 154,
       "norm_label": "session summary \u2014 september 4, 2026 (dropout predictor reopened \u2014 literature search found a directly-relevant paper (salah & yevick) after the earlier \"formally closed\" decision; decision reversed; opencode prompt drafted, not yet implemented)",
       "id": "context_split_context_part2_of_3_session_summary_september_4_2026_dropout_predictor_reopened_literature_search_found_a_directly_relevant_paper_salah_yevick_after_the_earlier_formally_closed_decision_decision_reversed_opencode_prompt_drafted_not_yet_implemented"
     },
@@ -16456,7 +16526,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2582",
       "_origin": "ast",
-      "community": 100,
+      "community": 154,
       "norm_label": "1. what happened, in order",
       "id": "context_split_context_part2_of_3_1_what_happened_in_order"
     },
@@ -16466,7 +16536,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2652",
       "_origin": "ast",
-      "community": 100,
+      "community": 154,
       "norm_label": "2. files modified",
       "id": "context_split_context_part2_of_3_2_files_modified"
     },
@@ -16476,7 +16546,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2669",
       "_origin": "ast",
-      "community": 100,
+      "community": 154,
       "norm_label": "next",
       "id": "context_split_context_part2_of_3_next_2669"
     },
@@ -22032,6 +22102,66 @@
     }
   ],
   "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Predictor_Experimental_Validation_Master_Tracker.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "predictor_experimental_validation_master_tracker",
+      "target": "predictor_experimental_validation_master_tracker_predictor_experimental_validation_master_tracker",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Predictor_Experimental_Validation_Master_Tracker.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "predictor_experimental_validation_master_tracker_predictor_experimental_validation_master_tracker",
+      "target": "predictor_experimental_validation_master_tracker_1_l2_norm_predictor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Predictor_Experimental_Validation_Master_Tracker.md",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "predictor_experimental_validation_master_tracker_predictor_experimental_validation_master_tracker",
+      "target": "predictor_experimental_validation_master_tracker_2_dropout_predictor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Predictor_Experimental_Validation_Master_Tracker.md",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "predictor_experimental_validation_master_tracker_predictor_experimental_validation_master_tracker",
+      "target": "predictor_experimental_validation_master_tracker_3_spectral_predictor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Predictor_Experimental_Validation_Master_Tracker.md",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "predictor_experimental_validation_master_tracker_predictor_experimental_validation_master_tracker",
+      "target": "predictor_experimental_validation_master_tracker_4_age_predictor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Predictor_Experimental_Validation_Master_Tracker.md",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "predictor_experimental_validation_master_tracker_predictor_experimental_validation_master_tracker",
+      "target": "predictor_experimental_validation_master_tracker_5_htsr_alpha_predictor",
+      "confidence_score": 1.0
+    },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
@@ -48251,5 +48381,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "fc0387c18c8a7e1732784ee49fdf20b15b0251fe"
+  "built_at_commit": "749ac8dfc7fd0426486cb5aeb486a47b249d22b3"
 }
