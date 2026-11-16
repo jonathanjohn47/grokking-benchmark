@@ -13596,3 +13596,43 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 - `06_Code/scripts/plot_bespoke_spectral_age.py`: Corrected input paths and metrics extraction.
 - `08_Experiments/results/nanda_unified/analysis/bespoke_diagnostics/*`: Refreshed plots.
 - `context.md`: Appended session summary.
+
+
+---
+
+# Session Summary — November 16, 2026 (Publishing Spectral and AGE Rebuild Results and Artifacts)
+
+## Session Summary
+- **Implemented:** Staged and published all recent Spectral and AGE rebuild artifacts, corrected `aggregate.json`, and generated bespoke diagnostic plots for supervisor review.
+- **Investigated:** Verified that all `.npy` and `.json` data files across seeds 0–4 for Spectral (`08_Experiments/results/nanda_unified/spectral/seed_*`) and AGE (`08_Experiments/results/nanda_unified/seed_*/age/`) are present, properly structured, and match the official benchmark numbers.
+- **Changed:**
+  - Appended Section 7 to `context_current.md` summarizing the diagnostic plots and artifact publication.
+  - Staged all Spectral and AGE `.npy` and `.json` data files, `spectral_summary.json`, `aggregate.json`, and diagnostic plots.
+  - Pushed to `origin/main`.
+- **Fixed:** Ensured all empirical data files for the rebuilds are tracked in git rather than sitting untracked on the local environment.
+- **Postponed:** None.
+
+## Technical Decisions
+- Preserved `.pt` checkpoints as local-only files per project hardware protocol while ensuring all `.npy` and `.json` numerical results and figures are fully tracked and pushed for external review.
+
+## User Instructions
+- Stage, commit, and push all recent experimental results (Spectral and AGE data files, updated `aggregate.json`, and bespoke diagnostic plots) to GitHub for professor review. Update `context_current.md`.
+
+## Current Project State
+- **Completed Work:**
+  - `context_current.md` updated.
+  - All Spectral and AGE data files staged and committed.
+  - Changes pushed to GitHub `origin/main`.
+- **Work in Progress / Next Actions:**
+  - Await supervisory review or continue with next predictor implementation.
+- **Blockers:** None.
+
+## Important Discoveries
+- Tracking all per-seed `.npy` trajectories and summary `.json` files ensures complete reproducibility and inspection capability without committing heavy binary model checkpoint weights (`.pt`).
+
+## Files Modified
+- `context_current.md`: Appended diagnostic visualization and artifact publication summary.
+- `context.md`: Appended this session summary.
+- `08_Experiments/results/nanda_unified/seed_*/age/*`: AGE rebuild data files.
+- `08_Experiments/results/nanda_unified/spectral/seed_*/*`: Spectral rebuild data files.
+- `08_Experiments/results/nanda_unified/analysis/bespoke_diagnostics/*`: Diagnostic plots.

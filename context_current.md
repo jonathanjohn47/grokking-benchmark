@@ -747,3 +747,15 @@ Predictor 3 (Spectral) is fully executed, validated, evidenced, and closed. Pred
 ### 8. Physical Interpretation
 Neural Collapse (NC1) is a terminal-phase phenomenon occurring during late-stage optimization after training loss approaches machine precision (Papyan et al. 2020). The global minimum of within-class variability collapse occurs significantly post-grokking (between $1.62\times$ and $7.47\times G_i$). Although penultimate representations undergo extreme metric collapse (from $\text{NC1} \approx 45.8$ to $\sim 0.05$), this collapse is a downstream consequence of feature cleanup following circuit formation, not an early warning signal of grokking. The retrospective 10% fall does lead grokking, but fails rank correlation ($\rho = 0.4617 \ll 0.90$), indicating that early variability drops reflect initial memorization dynamics rather than generalisation timing.
 
+
+
+---
+
+## 7. Diagnostic Visualization & Artifact Publication (November 16, 2026)
+
+- **Bespoke Diagnostic Plots:** Generated bespoke diagnostic plots for Predictor 3 (Spectral) and Predictor 4 (AGE) and saved to `08_Experiments/results/nanda_unified/analysis/bespoke_diagnostics/`. Both per-seed PNG visualizations (`age_seed_0.png`–`age_seed_4.png`, `spectral_seed_0.png`–`spectral_seed_4.png`) and combined overview PDFs (`age_all_seeds.pdf`, `spectral_all_seeds.pdf`) are produced.
+- **Asymmetric Rebuild Schema Integration:** Corrected `06_Code/scripts/plot_bespoke_spectral_age.py` to read directly from the respective asymmetric rebuild output directories:
+  - Spectral predictor-first: Trajectories from `08_Experiments/results/nanda_unified/spectral/seed_{i}/` (`alignment_trajectory.npy`, `k90_trajectory.npy`), checkpoint grid, and global extrema from `08_Experiments/results/nanda_unified/spectral/spectral_summary.json` (Alignment maximums: `[11000, 5800, 9200, 8700, 21900]`, $k_{90}$ minimums: `[34500, 13600, 24100, 19200, 32400]`).
+  - AGE per-seed: Trajectories from `08_Experiments/results/nanda_unified/seed_{i}/age/` (`age_nc1.npy`), and signal metrics from `age_signal.json` (`nc1_min_epoch`: `[13000, 28100, 30600, 35900, 34400]`).
+- **Canonical Grokking Epochs & Aggregation:** Verified and updated `08_Experiments/results/nanda_unified/aggregate.json` to canonical primary 0.99 cut grokking epochs: `[8021, 8253, 4094, 7831, 6637]`.
+- **Publication for Review:** All empirical result artifacts, summary files, and diagnostic plots staged and published to GitHub `main` for supervisory review.
