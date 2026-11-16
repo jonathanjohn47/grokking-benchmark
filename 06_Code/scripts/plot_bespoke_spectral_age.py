@@ -129,6 +129,18 @@ def load_all_data(base_dir=CANONICAL_BASE_DIR):
                 f"Seed {seed}: missing alignment_max_epoch or k_90_min_epoch in {spec_summary_path}"
             )
 
+        # 3. HTSR: Trajectory, Epochs & Metrics
+        htsr_signal_path = os.path.join(base_dir, f"seed_{seed}", "htsr", "htsr_signal.json")
+        if not os.path.exists(htsr_signal_path):
+            raise FileNotFoundError(f"Missing required HTSR metrics file: {htsr_signal_path}")
+
+        with open(htsr_signal_path, "r") as f:
+            htsr_metrics = json.load(f)
+
+        htsr_epochs = np.array(htsr_metrics["htsr_checkpoints"])
+        alpha = np.array(htsr_metrics["alpha_history"])
+        alpha_min_epoch = htsr_metrics["alpha_min_epoch"]
+
         seeds_data.append({
             "seed": seed,
             "grok_epoch": int(grok_epochs[seed]),
@@ -140,6 +152,9 @@ def load_all_data(base_dir=CANONICAL_BASE_DIR):
             "k90": k90,
             "alignment_max_epoch": int(alignment_max_epoch),
             "k_90_min_epoch": int(k_90_min_epoch),
+            "htsr_epochs": htsr_epochs,
+            "alpha": alpha,
+            "alpha_min_epoch": int(alpha_min_epoch),
         })
 
     return grok_epochs, seeds_data
@@ -296,6 +311,31 @@ def plot_spectral_all_seeds_pdf(seeds_data, out_path):
     plt.close(fig)
 
 
+def plot_htsr_per_seed(s_data, out_path):
+    """Generate HTSR Alpha Diagnostic Plot for a single seed."""
+    seed = s_data["seed"]
+    epochs = s_data["htsr_epochs"]
+    alpha = s_data["alpha"]
+    grok_epoch = s_data["grok_epoch"]
+    alpha_min_epoch = s_data["alpha_min_epoch"]
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.plot(epochs, alpha, color="#1b7f4e", lw=1.8, label=r"$\alpha$ (HTSR)")
+    
+    ax.axvline(x=grok_epoch, color="red", linestyle="--", lw=1.8, label=f"Grokking ({grok_epoch})")
+    ax.axvline(x=alpha_min_epoch, color="purple", linestyle=":", lw=2.0, label=f"Alpha Min ({alpha_min_epoch})")
+
+    ax.set_xscale("log")
+    ax.set_xlim(max(1, epochs[0]), epochs[-1])
+    ax.set_xlabel("Epochs", fontsize=11)
+    ax.set_ylabel(r"Heavy-Tailed Power-Law Exponent ($\alpha$)", fontsize=11)
+    ax.set_title(f"Seed {seed}: HTSR Alpha Trajectory", fontsize=13, fontweight="bold")
+    ax.legend(loc="upper right", frameon=True)
+    fig.tight_layout()
+    fig.savefig(out_path, dpi=200)
+    plt.close(fig)
+
+
 def main():
     set_plotting_style()
     grok_epochs, seeds_data = load_all_data(CANONICAL_BASE_DIR)
@@ -317,6 +357,11 @@ def main():
         spec_png = os.path.join(out_dir, f"spectral_seed_{seed}.png")
         plot_spectral_per_seed(s_data, spec_png)
         generated_files.append(spec_png)
+
+        # HTSR plot
+        htsr_png = os.path.join(out_dir, f"htsr_seed_{seed}.png")
+        plot_htsr_per_seed(s_data, htsr_png)
+        generated_files.append(htsr_png)
 
     # Combined PDFs
     age_pdf = os.path.join(out_dir, "age_all_seeds.pdf")

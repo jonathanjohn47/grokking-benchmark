@@ -13870,3 +13870,57 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 - `audit_root_files.txt`: Root repository audit.
 - `graphify-out/*`: Updated graph artifacts, manifest, and cache.
 - `context.md`: Appended session summary.
+
+
+---
+
+# 2026-11-17: Full HTSR Alpha Predictor Pipeline (Predictor 5)
+
+## Session Summary
+- **Implemented:**
+  - Full HTSR Alpha pipeline for Predictor 5 following Martin & Mahoney (2021).
+  - Synthetic test suite in `06_Code/tests/htsr/test_htsr_signal_dependence.py` verifying power-law recovery ($\alpha \approx 2.0$) and high $\alpha$ null on Gaussian noise.
+  - Dedicated HTSR evaluation runner `06_Code/scripts/run_htsr_evaluation.py` evaluating all 401 checkpoints (every 100 epochs, 0 to 40000) across all 5 seeds on Nanda-Power checkpoints (`results_per_nanda_power`).
+  - Added `score_htsr_saved_histories()` and `--htsr-only` CLI flag to `06_Code/scripts/analyze_nanda_unified.py`.
+  - Added HTSR per-seed diagnostic plotting `plot_htsr_per_seed()` to `06_Code/scripts/plot_bespoke_spectral_age.py`.
+  - Expanded collation grid in `06_Code/scripts/collate_predictor_grid.py` from 5x3 to 5x4 to include HTSR Alpha alongside L2 Norm, Spectral, and AGE.
+- **Investigated:**
+  - Verified `06_Code/src/predictors/htsr_alpha.py` adheres strictly to Martin & Mahoney / WeightWatcher setup using Clauset-Shalizi-Newman maximum likelihood with KS-distance optimal tail start selection (`powerlaw.Fit(evals, xmin=None)`).
+  - Analyzed empirical spectral density exponents across all 5 seeds: alpha min epochs are 31100, 17300, 17600, 16000, 28700 against grokking epochs 8021, 8253, 4094, 7831, 6637.
+- **Fixed:**
+  - Handled floating-point tolerance boundary check in null hypothesis test where Gaussian noise fitted $\alpha = 2.999999999999999$.
+- **Postponed:** None.
+
+## Technical Decisions
+- Preserved frozen protocol without online detection engineering: HTSR firing event is the global minimum of the layer-averaged power-law exponent $\alpha$.
+- Scored strictly under frozen benchmark protocol ($c = 0.8$): HTSR Alpha achieves 5/5 firing count, 0.0 lead fraction, $\rho = -0.10$, and mean relative lead $\bar{r} = -2.328$, resulting in a frozen verdict of **FAIL**.
+
+## User Instructions
+- Work only on branch `main`. Never create a branch. Never open a PR.
+- DO NOT modify base model, data, or training loops.
+- DO NOT change existing L2, Dropout, Spectral, or AGE logic.
+- Execute steps in order, run evaluation, regenerate plots, commit and push.
+
+## Current Project State
+- **Completed Work:**
+  - HTSR Alpha tests pass (`pytest tests/htsr -q`).
+  - Per-checkpoint HTSR signal JSON files generated for seeds 0 through 4 under `08_Experiments/results/results_per_nanda_power/seed_{i}/htsr/htsr_signal.json`.
+  - Diagnostic plots `htsr_seed_{0..4}.png` generated in `08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/`.
+  - Updated 5x4 collation grid `predictor_grid_5x4.png` generated.
+- **Work in Progress:** Benchmarking remaining predictors (Weight-PCA next).
+- **Blockers:** None.
+- **Next Actions:** Evaluate Predictor 6 (Weight-PCA).
+
+## Important Discoveries
+- HTSR mean $\alpha$ drops monotonically from $\sim 2.7$ down to $\sim 1.25$ and plateaus post-grokking, reaching its minimum after grokking ($2.04 - 4.30 \times G_i$). Exponents $\alpha < 2$ dominate post-grok due to compact matrix dimensions ($128 \times 128$) and low-rank Fourier representations, confirming HTSR spectral sharpening is a consequence of late consolidation rather than an early warning signal.
+
+## Files Modified
+- `06_Code/tests/htsr/__init__.py`: Package init.
+- `06_Code/tests/htsr/test_htsr_signal_dependence.py`: Synthetics test file.
+- `06_Code/scripts/analyze_nanda_unified.py`: Added `score_htsr_saved_histories()` and `--htsr-only`.
+- `06_Code/scripts/run_htsr_evaluation.py`: Checkpoint evaluation runner for HTSR.
+- `06_Code/scripts/plot_bespoke_spectral_age.py`: Added HTSR data loader and `plot_htsr_per_seed()`.
+- `06_Code/scripts/collate_predictor_grid.py`: Expanded to 5x4 grid including HTSR.
+- `08_Experiments/results/results_per_nanda_power/seed_*/htsr/htsr_signal.json`: Generated HTSR signals.
+- `08_Experiments/results/results_per_nanda_power/analysis/`: Diagnostic plots, grid, and analysis summaries.
+- `context.md`: Appended session summary.

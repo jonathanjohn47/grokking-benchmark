@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Collate L2, Spectral, and AGE plots into a single 5x3 grid."""
+"""Collate L2, Spectral, AGE, and HTSR plots into a single 5x4 grid."""
 import os
 import matplotlib
 matplotlib.use("Agg")
@@ -10,18 +10,19 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fi
 BASE_DIR = os.path.join(REPO_ROOT, "08_Experiments", "results", "results_per_nanda_power")
 FIG_DIR = os.path.join(BASE_DIR, "figures")
 DIAG_DIR = os.path.join(BASE_DIR, "analysis", "bespoke_diagnostics")
-OUT_PATH = os.path.join(BASE_DIR, "analysis", "predictor_grid_5x3.png")
+OUT_PATH = os.path.join(BASE_DIR, "analysis", "predictor_grid_5x4.png")
 
 def get_paths(seed):
     return [
         os.path.join(FIG_DIR, f"seed_{seed}_l2_norm.png"),
         os.path.join(DIAG_DIR, f"spectral_seed_{seed}.png"),
-        os.path.join(DIAG_DIR, f"age_seed_{seed}.png")
+        os.path.join(DIAG_DIR, f"age_seed_{seed}.png"),
+        os.path.join(DIAG_DIR, f"htsr_seed_{seed}.png")
     ]
 
 def main():
-    fig, axes = plt.subplots(nrows=5, ncols=3, figsize=(18, 25))
-    col_titles = ["L2 Norm", "Spectral", "AGE"]
+    fig, axes = plt.subplots(nrows=5, ncols=4, figsize=(24, 25))
+    col_titles = ["L2 Norm", "Spectral", "AGE", "HTSR"]
 
     for col, title in enumerate(col_titles):
         axes[0, col].set_title(title, fontsize=16, fontweight="bold", pad=15)

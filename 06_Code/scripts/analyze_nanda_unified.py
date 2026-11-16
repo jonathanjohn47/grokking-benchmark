@@ -1088,17 +1088,63 @@ def main(argv=None):
              "Writes Validity Gate + Superiority Index (control experiment) "
              "next to the L2 verdict.",
     )
+    parser.add_argument(
+        "--htsr-only", action="store_true",
+        help="Score only the HTSR Alpha row from saved per-checkpoint htsr_signal.json files.",
+    )
     args = parser.parse_args(argv)
     if args.l2_only:
         score_l2_only(
             lead_c=args.lead_c, out_dir=args.out_dir, write=True,
             results_dir=args.results_dir,
         )
+    elif args.htsr_only:
+        res = score_htsr_saved_histories(results_dir=args.results_dir)
+        import json
+        print(json.dumps(res, indent=2))
     else:
         score_saved_run(
             lead_c=args.lead_c, out_dir=args.out_dir, write=True,
             results_dir=args.results_dir,
         )
+
+
+def score_htsr_saved_histories(results_dir=None):
+    """Score the HTSR Alpha row from the saved per-checkpoint htsr_signal.json files.
+    Reads aggregate.json for G_i (grok epochs) and compares to alpha_min_epoch.
+    """
+    import json
+    import os
+    import numpy as np
+    
+    root = resolve_results_dir(results_dir)
+    with open(os.path.join(root, "aggregate.json")) as handle:
+        grok_epochs = json.load(handle)["grok_epochs"]
+        
+    firing_epochs = []
+    for seed in range(len(grok_epochs)):
+        seed_file = os.path.join(root, f"seed_{seed}", "htsr", "htsr_signal.json")
+        if not os.path.exists(seed_file):
+            firing_epochs.append(None)
+            continue
+        with open(seed_file) as f:
+            data = json.load(f)
+        firing_epochs.append(data.get("alpha_min_epoch"))
+        
+    # Pass to the frozen protocol
+    frozen_result = evaluate_frozen_protocol(grok_epochs, firing_epochs)
+    frozen_scored = attach_pass_checks(frozen_result)
+    
+    return {
+        "signal": "HTSR: alpha minimum",
+        "per_seed": [{"seed": i, "grok_epoch": g, "signal_epoch": p} for i, (g, p) in enumerate(zip(grok_epochs, firing_epochs))],
+        "n_firing": frozen_scored["n_firing"],
+        "lead_frac": frozen_scored["lead_frac"],
+        "spearman_rho": frozen_scored["rho"],
+        "mean_relative_lead": frozen_scored["mean_rel_lead"],
+        "verdict": frozen_scored["verdict"]
+    }
+
 
 
 if __name__ == "__main__":

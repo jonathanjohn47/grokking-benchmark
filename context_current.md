@@ -199,11 +199,11 @@ Correlation Traps     : REMOVED from line-up on 2026-09-30 (detects post-grok an
 ### Predictor 5: HTSR Alpha
 - **Paper**: Charles H. Martin & Michael W. Mahoney (2021, *JMLR* / WeightWatcher).
 - **Signal & Firing Rules**:
-  - Fits power-law exponent $\alpha$ via Maximum Likelihood with automatic Kolmogorov-Smirnov $x_{\min}$ selection (`powerlaw.Fit`) on the empirical spectral density of the six `nn.Linear` weight matrices (`query`, `key`, `value`, `mlp_in`, `mlp_out`, `output_head`). Firing rule: Global minimum of layer-averaged mean $\alpha$. From Martin & Mahoney.
-- **Official Results ($c = 0.8$)**:
-  - *Mean $\alpha$ Minimum*: $P_i = [34300, 16000, 24100, 19500, 39600]$. Firing count: $5/5$. $\text{lead\_frac} = 0.0000$, $\rho = 0.9000$, $\bar{r} = -1.1849$. **FAIL** (fails $\text{lead\_frac} \ge 0.80$ and $\bar{r} \ge 0.05$).
+  - Fits power-law exponent $\alpha$ via Maximum Likelihood with automatic Kolmogorov-Smirnov $x_{\min}$ selection (`powerlaw.Fit`) on the empirical spectral density of the six `nn.Linear` weight matrices (`query`, `key`, `value`, `attn_out`, `mlp_in`, `mlp_out`, `output_head`). Firing rule: Global minimum of layer-averaged mean $\alpha$. From Martin & Mahoney.
+- **Official Results on Canonical Experiment ($results\_per\_nanda\_power$, $c = 0.8$, $G_i$ at cut 0.99: [8021, 8253, 4094, 7831, 6637])**:
+  - *Mean $\alpha$ Minimum*: $P_i = [31100, 17300, 17600, 16000, 28700]$. Firing count: $5/5$. $\text{lead\_frac} = 0.0000$, $\rho = -0.1000$, $\bar{r} = -2.3280$. **FAIL** (fails $\text{lead\_frac} \ge 0.80$, $\rho \ge 0.90$, and $\bar{r} \ge 0.05$).
 - **Verdict**: **CLOSED, NEGATIVE** (0 of 1 rows passing).
-- **Scientific Reason & Notes**: Mean $\alpha$ falls monotonically from $\sim 2.7$ to $\sim 1.25$ and plateaus post-grokking, reaching its minimum after grokking ($1.67 - 2.64 \times G_i$). In $85\% - 94\%$ of layer-checkpoint fits, $\alpha < 2$, outside Martin & Mahoney's heavy-tailed regime $[2, 6]$, caused by small matrix dimensions ($128 \times 128$) and compact Fourier representations (*2026-09-25: HTSR Alpha implemented*; *2026-09-25: Formal scoring of HTSR Alpha*).
+- **Scientific Reason & Notes**: Mean $\alpha$ falls monotonically from $\sim 2.7$ to $\sim 1.25$ and plateaus post-grokking, reaching its minimum after grokking ($2.04 - 4.30 \times G_i$). In the vast majority of layer-checkpoint fits post-grok, $\alpha < 2$, outside Martin & Mahoney's heavy-tailed regime $[2, 6]$, caused by small matrix dimensions ($128 \times 128$) and compact Fourier representations (*Evaluated and verified 2026-11-17*).
 
 ### Predictor 6: Weight-PCA
 - **Paper**: David Yunis et al. (2024, arXiv:2408.11804).
