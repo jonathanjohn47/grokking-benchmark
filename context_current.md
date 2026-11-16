@@ -443,3 +443,20 @@ The L2 predictor code is not broken, random, or hardcoded. It is a perfectly fun
 - Branch: `main`
 
 ---
+
+## Dropout Predictor Evaluation on the Experiment (Salah & Yevick signals)
+**Date:** Monday, November 16, 2026 (committed in PR #50, merge c1549c2)
+
+**What was added:** `06_Code/scripts/evaluate_dropout_predictor.py`, `06_Code/scripts/plot_dropout_salah_yevick.py`, changes to `train_dropout_salah_yevick.py`, `src/models/transformer_four_head.py` and `src/predictors/dropout.py`, the isolated run folder `08_Experiments/results/dropout_salah_yevick/`, new per-seed `drc_*` files and `dropout_signal.json` in each `results_per_nanda_power/seed_*/dropout/`, and `results_per_nanda_power/dropout_verdict.json`. The old per-seed `dropout_*` result files (gap, rates, DRC snapshots, variance signal and so on) were deleted; `dropout_variance_history.npy` was rewritten.
+
+**Method:** the saved checkpoints of the experiment are loaded (no training, transformer class not edited) and two Salah & Yevick signals are measured with forward hooks.
+- Signal 1: variance of test accuracy at dropout rate 0.3 over 100 passes; firing epoch = checkpoint with the highest variance.
+- Signal 2: area under the Dropout Robustness Curve (rates 0.0 to 0.9); firing epoch = checkpoint with the steepest rise of that area.
+- Scored with the frozen protocol (`evaluate_frozen_protocol` + `attach_pass_checks`): lead if \(P_i < 0.8 G_i\), lead fraction ≥ 0.8, Spearman ρ ≥ 0.9, mean relative lead in [0.05, 0.9], at least 4 of 5 seeds firing. This is the legacy frozen protocol, not yet the Superiority Index.
+
+**Results (G_i = 8021, 8253, 4094, 7831, 6637):**
+- Signal 1 (variance peak): P_i = 22500, 9100, 20800, 39000, 25400; lead fraction 0.0; ρ = −0.3; mean relative lead −2.559. FAIL.
+- Signal 2 (DRC area steepest rise): P_i = 20200, 18200, 12100, 36800, 28200; lead fraction 0.0; ρ = 0.1; mean relative lead −2.325. FAIL.
+- Both signals fire after grokking on every seed.
+
+**Still open:** dropout is not yet scored with the Validity Gate and Superiority Index; the firing rule for the isolated Salah & Yevick MLP setup (PR #48) is still to be decided.
