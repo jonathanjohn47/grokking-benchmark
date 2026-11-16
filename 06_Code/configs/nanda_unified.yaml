@@ -128,7 +128,7 @@ evaluation:
 # Dropout predictor — LEGACY on this Nanda-Unified yaml.
 # The live Salah & Yevick signal extraction now uses the isolated MLP
 # substrate in configs/dropout_salah_yevick.yaml and
-# scripts/train_dropout_salah_yevick.py. run_nanda_benchmark.py no longer
+# scripts/dropout/train_dropout_salah_yevick.py. run_nanda_benchmark.py no longer
 # reads this block. Kept only so older docs / archives still parse.
 dropout:
   rates: [0.1, 0.3, 0.5, 0.7, 0.9]

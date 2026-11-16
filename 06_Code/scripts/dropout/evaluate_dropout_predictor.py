@@ -25,7 +25,7 @@ That case is a FAIL.
 
 Run from the repository root:
 
-    python 06_Code/scripts/evaluate_dropout_predictor.py
+    python 06_Code/scripts/dropout/evaluate_dropout_predictor.py
 """
 
 from __future__ import annotations
@@ -52,7 +52,7 @@ warnings.filterwarnings(
 import numpy as np
 import torch
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+REPO_ROOT = Path(__file__).resolve().parents[3]
 CODE_ROOT = REPO_ROOT / "06_Code"
 SRC_ROOT = CODE_ROOT / "src"
 SCRIPTS_ROOT = CODE_ROOT / "scripts"

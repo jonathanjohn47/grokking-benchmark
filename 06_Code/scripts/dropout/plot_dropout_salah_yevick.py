@@ -6,8 +6,8 @@ train_dropout_salah_yevick.py. Does not touch the Nanda-Unified
 Transformer figures.
 
 Usage:
-    python3 06_Code/scripts/plot_dropout_salah_yevick.py
-    python3 06_Code/scripts/plot_dropout_salah_yevick.py \\
+    python3 06_Code/scripts/dropout/plot_dropout_salah_yevick.py
+    python3 06_Code/scripts/dropout/plot_dropout_salah_yevick.py \\
         --results-dir 08_Experiments/results/dropout_salah_yevick
 """
 
@@ -24,7 +24,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+REPO_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_RESULTS = REPO_ROOT / "08_Experiments" / "results" / "dropout_salah_yevick"
 
 

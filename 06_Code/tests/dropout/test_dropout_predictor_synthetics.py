@@ -5,7 +5,7 @@ import pytest
 from scipy.stats import pearsonr, spearmanr
 
 # Ensure 06_Code is on sys.path so src.predictors and scripts are importable
-CODE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "06_Code"))
+CODE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 if CODE_DIR not in sys.path:
     sys.path.insert(0, CODE_DIR)
 

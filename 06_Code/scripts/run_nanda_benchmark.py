@@ -110,7 +110,7 @@ LIMIT_CYCLE_STD_ABOVE = None
 
 # Dropout measurement has been removed from this Nanda-Unified runner.
 # The Salah & Yevick signal (MLP p=53, every-epoch variance + DRC) lives in
-# scripts/train_dropout_salah_yevick.py and predictors/dropout.py. This
+# scripts/dropout/train_dropout_salah_yevick.py and predictors/dropout.py. This
 # runner no longer computes dropout_gap or dropout_variance on the
 # Transformer. Old summary.json keys are still carried forward if present.
 
@@ -1181,7 +1181,7 @@ def _checkpoint_predictor_commutator_defect(
 # checkpoints/model_epoch_*.pt alone, with NO retraining. See
 # _checkpoint_predictor_spectral for the shared function shape.
 # Dropout is not registered here; it runs on the isolated Salah & Yevick
-# MLP pipeline (train_dropout_salah_yevick.py).
+# MLP pipeline (scripts/dropout/train_dropout_salah_yevick.py).
 CHECKPOINT_PREDICTOR_FUNCS = {
     "spectral": _checkpoint_predictor_spectral,
     "age": _checkpoint_predictor_age,
@@ -1448,7 +1448,7 @@ def main():
           f"plus model_epoch_{args.epochs}.pt after the final step; "
           f"evaluate every {args.eval_every}")
     print("note       : Dropout signal is isolated "
-          "(train_dropout_salah_yevick.py); not measured here.")
+          "(scripts/dropout/train_dropout_salah_yevick.py); not measured here.")
     print("=" * 72)
 
     summaries = []

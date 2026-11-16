@@ -5,8 +5,8 @@ import pytest
 from scipy.stats import spearmanr
 
 # Ensure 06_Code and 06_Code/scripts are on sys.path
-REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-CODE_DIR = os.path.join(REPO_ROOT, "06_Code")
+CODE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+REPO_ROOT = os.path.abspath(os.path.join(CODE_DIR, ".."))
 SCRIPTS_DIR = os.path.join(CODE_DIR, "scripts")
 
 for p in (CODE_DIR, SCRIPTS_DIR):

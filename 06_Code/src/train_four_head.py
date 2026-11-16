@@ -23,7 +23,7 @@ from unified_measurements import PredictorMeasurements
 #
 # Dropout measurement has been removed from this script. The Salah &
 # Yevick Dropout signal is measured on the isolated MLP pipeline
-# (scripts/train_dropout_salah_yevick.py), not on this Transformer.
+# (scripts/dropout/train_dropout_salah_yevick.py), not on this Transformer.
 # ======================================================================
 
 LEGACY_FILENAMES = [
@@ -223,4 +223,4 @@ print(f"\nAll measurements saved to runs/four_head/run_{run_number}/")
 print(f"  - training/ : raw training data")
 print(f"  - l2_norm/ : L2 norm measurements + visualizations")
 print(f"  - reports/ : combined PDF report")
-print("Note: Dropout is measured by train_dropout_salah_yevick.py, not here.")
+print("Note: Dropout is measured by scripts/dropout/train_dropout_salah_yevick.py, not here.")

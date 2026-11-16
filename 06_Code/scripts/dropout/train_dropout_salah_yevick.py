@@ -23,7 +23,7 @@ import torch
 import yaml
 from torch.optim import AdamW
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+REPO_ROOT = Path(__file__).resolve().parents[3]
 CODE_ROOT = REPO_ROOT / "06_Code"
 SRC_ROOT = CODE_ROOT / "src"
 sys.path.insert(0, str(SRC_ROOT))

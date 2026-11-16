@@ -13286,3 +13286,61 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 ## Files Modified
 - `context_current.md`: Appended Section 6 detailing the structural protocol reframing, synthetic control benchmark metric, and 3-tier hierarchy.
 - `context.md`: Appended this session summary to maintain persistent project memory.
+
+
+---
+
+# Session Summary — November 16, 2026 (Organization of L2 and Dropout Scripts and Test Suites)
+
+## Session Summary
+- **Implemented / Organized:** Reorganized L2 and Dropout synthetic scripts, control experiments, and unit tests into dedicated subdirectories to remove clutter from `06_Code/scripts/` and unify all testing under `06_Code/tests/`.
+- **Investigated:** Checked file locations and execution paths for L2 controls (`run_l2_positive_control.py`, `run_l2_negative_control.py`), Dropout isolated scripts (`train_dropout_salah_yevick.py`, `evaluate_dropout_predictor.py`, `plot_dropout_salah_yevick.py`), and test suites that had been placed in an ad-hoc root `tests/` directory.
+- **Changed:**
+  - Created predictor-specific script subfolders: `06_Code/scripts/l2/` and `06_Code/scripts/dropout/`.
+  - Moved L2 synthetic control scripts into `06_Code/scripts/l2/`.
+  - Moved Dropout training, evaluation, and plotting scripts into `06_Code/scripts/dropout/`.
+  - Created predictor-specific test subfolders: `06_Code/tests/l2/` and `06_Code/tests/dropout/`.
+  - Consolidated all unit tests (`test_l2_confirmed_peak.py`, `test_l2_signal_dependence.py`, `test_dropout_predictor_synthetics.py`, `test_dropout_scorer_synthetics.py`) under `06_Code/tests/`, removing the redundant root `tests/` directory.
+  - Updated relative path resolutions (`REPO_ROOT`, `CODE_DIR`) across all moved files.
+  - Updated references across `06_Code/configs/nanda_unified.yaml`, `06_Code/scripts/run_nanda_benchmark.py`, `06_Code/src/train_four_head.py`, and `context_current.md`.
+- **Fixed:** Cleaned up script sprawl in `06_Code/scripts/` and resolved the split-test directory issue between root `tests/` and `06_Code/tests/`.
+- **Postponed:** Scorer scoring of Dropout with the Validity Gate and Superiority Index, and remaining predictor evaluations on `results_per_nanda_power`.
+
+## Technical Decisions
+- **Subdirectory Organization:** Rather than dumping all runnable predictor scripts at the root of `06_Code/scripts/`, scripts specific to individual predictors (such as isolated training, controls, and plotting) are organized into predictor-named subfolders (`l2/`, `dropout/`), keeping the master benchmark scripts (`run_nanda_benchmark.py`, `analyze_nanda_unified.py`, `plot_results_per_nanda_power.py`, `run_control_experiment.py`) cleanly visible at the top level.
+- **Test Suite Consolidation:** All unit tests and synthetic validation tests belong under the supervisor-mandated `06_Code/tests/` hierarchy (`06_Code/tests/l2/`, `06_Code/tests/dropout/`), matching the canonical codebase architecture.
+
+## User Instructions
+- The user instructed: "For L2 and Dropout, its synthetics and unit test, arrange these files in proper folders. All of them under "Script" is too messy. Organize these files so that it is easy to find them manually."
+- The user instructed to commit and push the changes.
+
+## Current Project State
+- **Completed Work:**
+  - Reorganized L2 and Dropout scripts and tests into dedicated subdirectories.
+  - Verified full test suite execution: all 24 tests collected and passed.
+  - Verified standalone execution of `run_l2_positive_control.py` and `run_l2_negative_control.py`.
+  - Updated `context_current.md` and `context.md`.
+- **Work in Progress / Next Actions:**
+  - Proceed with next predictor evaluations and viva preparation.
+- **Blockers:** None.
+
+## Important Discoveries
+- Standardizing path calculations using `Path(__file__).resolve().parents[...]` ensures all moved scripts locate the repository root robustly and write artifacts to the canonical `08_Experiments/results/` directory without path drift.
+
+## Files Modified
+- `06_Code/scripts/l2/run_l2_positive_control.py`: Moved from `scripts/`, updated `REPO_ROOT` path resolution and docstring.
+- `06_Code/scripts/l2/run_l2_negative_control.py`: Moved from `scripts/`, updated `REPO_ROOT` path resolution and docstring.
+- `06_Code/scripts/dropout/train_dropout_salah_yevick.py`: Moved from `scripts/`, updated `REPO_ROOT` path resolution.
+- `06_Code/scripts/dropout/evaluate_dropout_predictor.py`: Moved from `scripts/`, updated `REPO_ROOT` path resolution and docstring.
+- `06_Code/scripts/dropout/plot_dropout_salah_yevick.py`: Moved from `scripts/`, updated `REPO_ROOT` path resolution and docstring.
+- `06_Code/tests/l2/test_l2_confirmed_peak.py`: Moved from `06_Code/tests/`, updated `CODE` path resolution.
+- `06_Code/tests/l2/test_l2_signal_dependence.py`: Moved from `tests/`, updated `CODE_DIR` path resolution.
+- `06_Code/tests/dropout/test_dropout_predictor_synthetics.py`: Moved from `tests/`, updated `CODE_DIR` path resolution.
+- `06_Code/tests/dropout/test_dropout_scorer_synthetics.py`: Moved from `tests/`, updated `CODE_DIR` and `REPO_ROOT` path resolution.
+- `06_Code/tests/l2/__init__.py`: Package initialization for test discovery.
+- `06_Code/tests/dropout/__init__.py`: Package initialization for test discovery.
+- `06_Code/configs/nanda_unified.yaml`: Updated script reference comment.
+- `06_Code/scripts/run_nanda_benchmark.py`: Updated script reference comments and print statements.
+- `06_Code/src/train_four_head.py`: Updated script reference comments and print statements.
+- `context_current.md`: Updated Section 4, Section 3, and test references.
+- `context.md`: Appended this session summary.

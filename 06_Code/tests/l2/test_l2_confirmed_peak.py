@@ -10,7 +10,7 @@ import sys
 import numpy as np
 import pytest
 
-CODE = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+CODE = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 sys.path.insert(0, CODE)
 sys.path.insert(0, os.path.join(CODE, "scripts"))
 
