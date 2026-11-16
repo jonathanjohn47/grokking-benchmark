@@ -15,6 +15,7 @@ Usage (from the repo root):
 """
 import json
 import os
+import re
 import sys
 
 import matplotlib
@@ -23,7 +24,10 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+if SCRIPT_DIR not in sys.path:
+    sys.path.insert(0, SCRIPT_DIR)
+REPO_ROOT = os.path.dirname(os.path.dirname(SCRIPT_DIR))
 DEFAULT_RESULTS = os.path.join(
     REPO_ROOT, "08_Experiments", "results", "results_per_nanda_power"
 )
@@ -176,15 +180,34 @@ def save(fig, path):
     print(path)
 
 
+def extract_checkpoint_epochs(seed_dir):
+    """Dynamic extraction of checkpoint epochs from saved checkpoint filenames.
+    Reads filenames matching 'model_epoch_(\\d+).pt' from seed_{i}/checkpoints/,
+    extracts integer epochs, sorts them, and returns as a 1D int array.
+    """
+    ckpt_dir = os.path.join(seed_dir, "checkpoints")
+    if os.path.isdir(ckpt_dir):
+        epochs = []
+        for fname in os.listdir(ckpt_dir):
+            m = re.match(r"model_epoch_(\d+)\.pt", fname)
+            if m:
+                epochs.append(int(m.group(1)))
+        if epochs:
+            return np.sort(np.array(epochs, dtype=int))
+    return np.arange(0, 40001, 100, dtype=int)
+
+
 def load_seed(root, seed):
     seed_dir = os.path.join(root, f"seed_{seed}")
     summary = load_json(os.path.join(seed_dir, "summary.json"))
     train = os.path.join(seed_dir, "training")
     l2 = os.path.join(seed_dir, "l2_norm")
+    ckpt_epochs = extract_checkpoint_epochs(seed_dir)
     return {
         "seed": seed,
         "summary": summary,
         "epochs": epoch_index(len(np.load(os.path.join(train, "train_acc_history.npy")))),
+        "ckpt_epochs": ckpt_epochs,
         "train_acc": np.load(os.path.join(train, "train_acc_history.npy")),
         "test_acc": np.load(os.path.join(train, "test_acc_history.npy")),
         "train_loss": np.load(os.path.join(train, "loss_history.npy")),
@@ -327,6 +350,34 @@ def plot_grok_bars(aggregate, path):
     save(fig, path)
 
 
+def plot_dropout_gap_bars(runs, path):
+    """Plot final scalar dropout gap per seed as a bar chart from summary.json.
+
+    Loads scalar dropout gap metrics directly from unified summary.json
+    (dropout_final_gap_by_rate). Plotted strictly as a scalar bar chart,
+    with no time-series curves or references to legacy dropout_gap_history.npy.
+    """
+    seeds = [r["seed"] for r in runs]
+    rates = ["0.1", "0.3", "0.5", "0.7", "0.9"]
+    fig, ax = plt.subplots(figsize=(9.2, 4.8))
+    x = np.arange(len(seeds), dtype=float)
+    width = 0.16
+    colours = ["#1f4e79", "#1b7f4e", "#e07a00", "#b00020", "#6a3d9a"]
+    for i, rate in enumerate(rates):
+        vals = []
+        for r in runs:
+            gap_dict = r["summary"].get("dropout_final_gap_by_rate") or {}
+            vals.append(gap_dict.get(rate, 0.0))
+        ax.bar(x + (i - 2) * width, vals, width=width, color=colours[i], label=f"Rate {rate}")
+    ax.set_xticks(x)
+    ax.set_xticklabels([f"Seed {s}" for s in seeds])
+    ax.set_ylabel("Final Dropout Gap (clean acc - dropout acc)")
+    ax.set_title("Final Post-Training Dropout Gap by Seed and Dropout Rate")
+    ax.legend(loc="lower left", framealpha=0.95)
+    ax.set_axisbelow(True)
+    save(fig, path)
+
+
 def main():
     apply_style()
     root = results_dir()
@@ -343,6 +394,14 @@ def main():
         plot_l2(run, os.path.join(out, f"seed_{seed}_l2_norm.png"), l2_results)
     plot_overlay(runs, os.path.join(out, "overview_test_accuracy.png"))
     plot_grok_bars(aggregate, os.path.join(out, "overview_grok_epochs.png"))
+    plot_dropout_gap_bars(runs, os.path.join(out, "overview_dropout_gap.png"))
+
+    # Also execute master scoring and regenerate 01-04 analysis plots into analysis/
+    try:
+        import analyze_nanda_unified
+        analyze_nanda_unified.score_saved_run(results_dir=root, write=True)
+    except Exception as exc:
+        print(f"[NOTE] Analysis plot regeneration via analyze_nanda_unified encountered: {exc}")
 
 
 if __name__ == "__main__":

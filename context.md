@@ -13767,3 +13767,57 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 - `08_Experiments/results/results_per_nanda_power/analysis/`: Updated verdicts, events, quality summary, and plots.
 - `08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/`: 10 PNGs and 2 PDFs regenerated.
 - `08_Experiments/results/nanda_unified/seed_*/summary.json`: Restored legacy age blocks for test suite compliance.
+
+
+# Session Summary — November 16, 2026 (Audit Cleanup: Archive Relics, Fix Predictor Paths/Epochs, Protect Active Runs)
+
+## Session Summary
+- **Implemented:**
+  - Archived confirmed pre-Nov 14 legacy directories: moved `08_Experiments/nanda_l2_p113/` and `08_Experiments/benchmark_analysis/` to `archive/relics_pre_nov14/`.
+  - Cleaned stray legacy outputs: moved `runs/`, `Claude outputs/`, `Grokbot outputs/`, and `ChatGPT Outputs/` into `archive/relics_pre_nov14/stray/`.
+  - Added dynamic checkpoint epoch extraction (`extract_checkpoint_epochs`) in `06_Code/scripts/plot_results_per_nanda_power.py` to inspect saved checkpoint filenames (`model_epoch_{epoch}.pt`) on disk.
+  - Implemented scalar post-training Dropout Gap visualization (`plot_dropout_gap_bars`) directly from unified `summary.json`, ensuring zero references to `dropout_gap_history.npy`.
+  - Updated `06_Code/scripts/analyze_nanda_unified.py` to format grok epoch markers as explicit vertical dashed lines aligning with the canonical grok epochs `[8021, 8253, 4094, 7831, 6637]`.
+  - Integrated full analysis plot regeneration directly within `plot_results_per_nanda_power.py`, ensuring all comparison plots (`01_grokking_curves.png`, `02_signals_vs_grok.png`, `03_event_vs_grok_scatter.png`, `04_lead_times.png`) are saved directly into `08_Experiments/results/results_per_nanda_power/analysis/`.
+  - Strictly protected the active canonical run `08_Experiments/results/results_per_nanda_power/` and the newly created `dropout_salah_yevick/` substrate.
+- **Investigated:**
+  - Evaluated repository structure against outdated prompt assumptions; verified that `08_Experiments/results/results_per_nanda_power/` is the true canonical active substrate while `nanda_unified` is the legacy run.
+  - Confirmed MPS safety across SVD and eigenvalue operations (`torch.linalg.svdvals`, `np.linalg.eigh`, and `.cpu().double()`).
+- **Fixed:**
+  - Prevented accidental archival of current active work (`dropout_salah_yevick/` and `results_per_nanda_power`).
+  - Corrected plot generation pipeline and grok marker styles.
+- **Postponed:** None.
+
+## Technical Decisions
+- Preserved `08_Experiments/results/results_per_nanda_power/` as the single canonical results root with grokking epochs `[8021, 8253, 4094, 7831, 6637]`.
+- Maintained legacy `nanda_unified` as a preserved historical artifact.
+- Kept `dropout_salah_yevick/` completely intact as active work for the Salah & Yevick modular arithmetic MLP substrate.
+- Prohibited hardcoding of checkpoint epoch grids; dynamically parsed checkpoint filenames from disk.
+
+## User Instructions
+- Enforce the single-version rule for active benchmark results.
+- Archive true legacy folders while protecting the active canonical run.
+- Keep core setup files (`transformer.py`, `transformer_four_head.py`, `train.py`, `run_nanda_benchmark.py`, `nanda_unified.yaml`) completely untouched.
+- Verify that `aggregate.json` preserves canonical grokking epochs `[8021, 8253, 4094, 7831, 6637]`.
+
+## Current Project State
+- **Completed Work:**
+  - Pre-Nov 14 relics archived into `archive/relics_pre_nov14/` and `archive/relics_pre_nov14/stray/`.
+  - `plot_results_per_nanda_power.py` enhanced with dynamic checkpoint epoch extraction and scalar dropout gap plotting.
+  - Comparison figures (`01_grokking_curves.png`, `02_signals_vs_grok.png`, `03_event_vs_grok_scatter.png`, `04_lead_times.png`) regenerated in `results_per_nanda_power/analysis/`.
+  - Per-seed and overview figures regenerated in `results_per_nanda_power/figures/`.
+- **Next Actions:**
+  - Commit changes to Git with the specified message and push to `origin main`.
+- **Blockers:** None.
+
+## Important Discoveries
+- SVD and eigendecomposition functions across predictors (`spectral.py`, `age.py`, `htsr_alpha.py`, `weight_pca.py`) strictly execute on CPU float64, guaranteeing zero Apple Silicon MPS crashes.
+- Verification confirms canonical grokking epochs for the 5 seeds at cut 0.99 are strictly `[8021, 8253, 4094, 7831, 6637]`.
+
+## Files Modified
+- `context.md`: Appended session summary.
+- `06_Code/scripts/plot_results_per_nanda_power.py`: Added dynamic checkpoint extraction, scalar dropout gap bar plotting, and analysis plot invocation.
+- `06_Code/scripts/analyze_nanda_unified.py`: Configured dashed vertical lines for grok epoch markers.
+- `08_Experiments/results/results_per_nanda_power/analysis/`: Regenerated `01_grokking_curves.png`, `02_signals_vs_grok.png`, `03_event_vs_grok_scatter.png`, `04_lead_times.png`.
+- `08_Experiments/results/results_per_nanda_power/figures/`: Regenerated seed and overview figures, added `overview_dropout_gap.png`.
+- `archive/relics_pre_nov14/`: Relocated legacy `nanda_l2_p113`, `benchmark_analysis`, and stray outputs.

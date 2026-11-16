@@ -764,3 +764,21 @@ Neural Collapse (NC1) is a terminal-phase phenomenon occurring during late-stage
   - Summary metrics recorded in `08_Experiments/results/results_per_nanda_power/spectral/spectral_summary.json` and canonical `aggregate.json`.
 - **Diagnostic Plotting Script Aligned:** Updated `06_Code/scripts/plot_bespoke_spectral_age.py` to load strictly from `08_Experiments/results/results_per_nanda_power/` using the true checkpoint epoch grid.
 - **Regenerated Bespoke Plots:** Generated clean diagnostic plots (`age_seed_*.png`, `spectral_seed_*.png`, `age_all_seeds.pdf`, `spectral_all_seeds.pdf`) under `08_Experiments/results/nanda_unified/analysis/bespoke_diagnostics/` and `08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/`. All curves and vertical markers reflect the canonical run.
+
+
+---
+
+## 9. Provenance Audit Cleanup and Predictor Plotting Alignment (November 16, 2026)
+
+- **Archive of Pre-Nov 14 Relics:**
+  - Relocated confirmed legacy packages `08_Experiments/nanda_l2_p113/` and `08_Experiments/benchmark_analysis/` to `archive/relics_pre_nov14/`.
+  - Moved legacy stray outputs (`runs/`, `Claude outputs/`, `Grokbot outputs/`, `ChatGPT Outputs/`) into `archive/relics_pre_nov14/stray/`.
+  - Strictly protected the active canonical results directory (`08_Experiments/results/results_per_nanda_power/`) and the active Salah & Yevick modular arithmetic MLP substrate (`dropout_salah_yevick/`).
+- **Predictor Plotting Enhancements (`plot_results_per_nanda_power.py` & `analyze_nanda_unified.py`):**
+  - Added dynamic checkpoint epoch extraction (`extract_checkpoint_epochs`) from on-disk checkpoint filenames (`model_epoch_{epoch}.pt`).
+  - Added post-training Dropout Gap scalar bar visualization (`plot_dropout_gap_bars`), avoiding time-series approximations and eliminating references to `dropout_gap_history.npy`.
+  - Aligned vertical dashed lines for canonical grokking epochs `[8021, 8253, 4094, 7831, 6637]` in `01_grokking_curves.png`.
+  - Integrated full analysis plot regeneration (`01_grokking_curves.png`, `02_signals_vs_grok.png`, `03_event_vs_grok_scatter.png`, `04_lead_times.png`) directly into `plot_results_per_nanda_power.py`.
+- **Regenerated Canonical Plots:**
+  - `08_Experiments/results/results_per_nanda_power/figures/`: all per-seed and overview figures refreshed.
+  - `08_Experiments/results/results_per_nanda_power/analysis/`: all 4 summary comparison figures and verdict JSONs refreshed.

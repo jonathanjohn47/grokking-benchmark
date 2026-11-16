@@ -809,9 +809,9 @@ def plot_curves(runs, path):
     cols = plt.cm.tab10(np.arange(len(runs)))
     for s, r in enumerate(runs):
         ax[0].plot(r["test_acc"], color=cols[s], lw=1.2, label=f"seed {s}")
-        ax[0].axvline(r["grok"], color=cols[s], ls=":", lw=0.9)
+        ax[0].axvline(r["grok"], color=cols[s], ls="--", lw=1.2)
         ax[1].plot(r["train_acc"], color=cols[s], lw=1.2)
-    ax[0].set(title="Test accuracy (dotted = grok epoch, test acc > 0.99)", xlabel="epoch", ylabel="accuracy")
+    ax[0].set(title="Test accuracy (dashed = grok epoch, test acc > 0.99)", xlabel="epoch", ylabel="accuracy")
     ax[1].set(title="Train accuracy", xlabel="epoch", ylabel="accuracy")
     ax[0].legend()
     fig.tight_layout()
