@@ -21,6 +21,546 @@
   },
   "nodes": [
     {
+      "label": "analyze_nanda_unified.py",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified",
+      "community": 5,
+      "norm_label": "analyze_nanda_unified.py"
+    },
+    {
+      "label": "resolve_results_dir()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L70",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_resolve_results_dir",
+      "community": 5,
+      "norm_label": "resolve_results_dir()"
+    },
+    {
+      "label": "default_analysis_dir()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L85",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_default_analysis_dir",
+      "community": 5,
+      "norm_label": "default_analysis_dir()"
+    },
+    {
+      "label": "load_seed()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L89",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_load_seed",
+      "community": 5,
+      "norm_label": "load_seed()"
+    },
+    {
+      "label": "fraction_epochs()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L130",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_fraction_epochs",
+      "community": 5,
+      "norm_label": "fraction_epochs()"
+    },
+    {
+      "label": "build_events()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L144",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_build_events",
+      "community": 5,
+      "norm_label": "build_events()"
+    },
+    {
+      "label": "rank_corr()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L246",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_rank_corr",
+      "community": 170,
+      "norm_label": "rank_corr()"
+    },
+    {
+      "label": "lead_flags()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L266",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_lead_flags",
+      "community": 170,
+      "norm_label": "lead_flags()"
+    },
+    {
+      "label": "evaluate_frozen_protocol()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L281",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_evaluate_frozen_protocol",
+      "community": 170,
+      "norm_label": "evaluate_frozen_protocol()"
+    },
+    {
+      "label": "score_l2_saved_histories()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L364",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_score_l2_saved_histories",
+      "community": 144,
+      "norm_label": "score_l2_saved_histories()"
+    },
+    {
+      "label": "build_l2_predictor_results()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L397",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_build_l2_predictor_results",
+      "community": 5,
+      "norm_label": "build_l2_predictor_results()"
+    },
+    {
+      "label": "_metric_pass_fail()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L432",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_metric_pass_fail",
+      "community": 149,
+      "norm_label": "_metric_pass_fail()"
+    },
+    {
+      "label": "print_l2_predictor_results()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L445",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_print_l2_predictor_results",
+      "community": 149,
+      "norm_label": "print_l2_predictor_results()"
+    },
+    {
+      "label": "score_l2_only()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L490",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_score_l2_only",
+      "community": 5,
+      "norm_label": "score_l2_only()"
+    },
+    {
+      "label": "predictor_name()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L587",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_predictor_name",
+      "community": 178,
+      "norm_label": "predictor_name()"
+    },
+    {
+      "label": "is_exploratory()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L594",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_is_exploratory",
+      "community": 170,
+      "norm_label": "is_exploratory()"
+    },
+    {
+      "label": "_rho_ok()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L598",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_rho_ok",
+      "community": 170,
+      "norm_label": "_rho_ok()"
+    },
+    {
+      "label": "attach_pass_checks()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L602",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_attach_pass_checks",
+      "community": 170,
+      "norm_label": "attach_pass_checks()"
+    },
+    {
+      "label": "attach_superiority_index()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L619",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_attach_superiority_index",
+      "community": 170,
+      "norm_label": "attach_superiority_index()"
+    },
+    {
+      "label": "summarise()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L645",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_summarise",
+      "community": 170,
+      "norm_label": "summarise()"
+    },
+    {
+      "label": "predictor_level_verdicts()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L703",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_predictor_level_verdicts",
+      "community": 178,
+      "norm_label": "predictor_level_verdicts()"
+    },
+    {
+      "label": "_row_verdict_summary()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L729",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_row_verdict_summary",
+      "community": 178,
+      "norm_label": "_row_verdict_summary()"
+    },
+    {
+      "label": "print_table()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L757",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_print_table",
+      "community": 5,
+      "norm_label": "print_table()"
+    },
+    {
+      "label": "print_verdicts()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L772",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_print_verdicts",
+      "community": 5,
+      "norm_label": "print_verdicts()"
+    },
+    {
+      "label": "norm01()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L802",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_norm01",
+      "community": 5,
+      "norm_label": "norm01()"
+    },
+    {
+      "label": "plot_curves()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L807",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_plot_curves",
+      "community": 5,
+      "norm_label": "plot_curves()"
+    },
+    {
+      "label": "plot_signals()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L822",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_plot_signals",
+      "community": 5,
+      "norm_label": "plot_signals()"
+    },
+    {
+      "label": "plot_scatter()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L886",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_plot_scatter",
+      "community": 5,
+      "norm_label": "plot_scatter()"
+    },
+    {
+      "label": "plot_leads()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L925",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_plot_leads",
+      "community": 5,
+      "norm_label": "plot_leads()"
+    },
+    {
+      "label": "load_lead_c_from_config()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L959",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_load_lead_c_from_config",
+      "community": 5,
+      "norm_label": "load_lead_c_from_config()"
+    },
+    {
+      "label": "score_saved_run()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L973",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_score_saved_run",
+      "community": 5,
+      "norm_label": "score_saved_run()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L1065",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_main",
+      "community": 5,
+      "norm_label": "main()"
+    },
+    {
+      "label": "score_htsr_saved_histories()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L1112",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_score_htsr_saved_histories",
+      "community": 170,
+      "norm_label": "score_htsr_saved_histories()"
+    },
+    {
+      "label": "Absolute results folder. Default is the new canonical run.      None and \"\" both",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L71",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_rationale_71",
+      "community": 5,
+      "norm_label": "absolute results folder. default is the new canonical run.      none and \"\" both"
+    },
+    {
+      "label": "First epoch at which y has covered `f` of the way from its start to     its fart",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L131",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_rationale_131",
+      "community": 5,
+      "norm_label": "first epoch at which y has covered `f` of the way from its start to     its fart"
+    },
+    {
+      "label": "events[predictor_signal][seed] = epoch (or None for a miss).",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L145",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_rationale_145",
+      "community": 5,
+      "norm_label": "events[predictor_signal][seed] = epoch (or none for a miss)."
+    },
+    {
+      "label": "Boolean lead mask, one entry per firing seed.      rule=\"fraction\": P_i < c * G_",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L267",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_rationale_267",
+      "community": 170,
+      "norm_label": "boolean lead mask, one entry per firing seed.      rule=\"fraction\": p_i < c * g_"
+    },
+    {
+      "label": "Same logic as run_control_experiment.py::evaluate(), with the fractional lead te",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L282",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_rationale_282",
+      "community": 170,
+      "norm_label": "same logic as run_control_experiment.py::evaluate(), with the fractional lead te"
+    },
+    {
+      "label": "Score the L2 row from per-epoch sum_w2 histories.      Does not load the other p",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L365",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_rationale_365",
+      "community": 144,
+      "norm_label": "score the l2 row from per-epoch sum_w2 histories.      does not load the other p"
+    },
+    {
+      "label": "Structured L2 evaluation payload for disk and console display.      superiority_",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L398",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_rationale_398",
+      "community": 5,
+      "norm_label": "structured l2 evaluation payload for disk and console display.      superiority_"
+    },
+    {
+      "label": "Pass/Fail for one Validity Gate metric using control thresholds.",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L433",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_rationale_433",
+      "community": 149,
+      "norm_label": "pass/fail for one validity gate metric using control thresholds."
+    },
+    {
+      "label": "Human-readable multi-section console summary for L2 evaluation.",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L446",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_rationale_446",
+      "community": 149,
+      "norm_label": "human-readable multi-section console summary for l2 evaluation."
+    },
+    {
+      "label": "Official L2-only scorer from saved json/npy. No other predictors, no .pt.      W",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L491",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_rationale_491",
+      "community": 5,
+      "norm_label": "official l2-only scorer from saved json/npy. no other predictors, no .pt.      w"
+    },
+    {
+      "label": "Four separate PASS checks. The row passes only when every one is true.",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L603",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_rationale_603",
+      "community": 170,
+      "norm_label": "four separate pass checks. the row passes only when every one is true."
+    },
+    {
+      "label": "Attach Validity Gate + Superiority Index using evaluate_metrics from control exp",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L620",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_rationale_620",
+      "community": 170,
+      "norm_label": "attach validity gate + superiority index using evaluate_metrics from control exp"
+    },
+    {
+      "label": "A predictor PASSES only if at least one pre-declared row PASSES.",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L704",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_rationale_704",
+      "community": 178,
+      "norm_label": "a predictor passes only if at least one pre-declared row passes."
+    },
+    {
+      "label": "One row entry for frozen_protocol_verdicts.json.",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L730",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_rationale_730",
+      "community": 178,
+      "norm_label": "one row entry for frozen_protocol_verdicts.json."
+    },
+    {
+      "label": "Print every row verdict and the predictor-level verdict.",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L773",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_rationale_773",
+      "community": 5,
+      "norm_label": "print every row verdict and the predictor-level verdict."
+    },
+    {
+      "label": "Read evaluation.lead_fraction_c. Falls back to DEFAULT_LEAD_C.",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L960",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_rationale_960",
+      "community": 5,
+      "norm_label": "read evaluation.lead_fraction_c. falls back to default_lead_c."
+    },
+    {
+      "label": "Official scorer. Reads saved seed results. Trains nothing.      lead_c: fraction",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L974",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_rationale_974",
+      "community": 5,
+      "norm_label": "official scorer. reads saved seed results. trains nothing.      lead_c: fraction"
+    },
+    {
+      "label": "Score the HTSR Alpha row from the saved per-checkpoint htsr_signal.json files.",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L1113",
+      "_origin": "ast",
+      "id": "scripts_analyze_nanda_unified_rationale_1113",
+      "community": 170,
+      "norm_label": "score the htsr alpha row from the saved per-checkpoint htsr_signal.json files."
+    },
+    {
+      "label": "collate_predictor_grid.py",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/collate_predictor_grid.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_collate_predictor_grid",
+      "community": 183,
+      "norm_label": "collate_predictor_grid.py"
+    },
+    {
+      "label": "get_paths()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/collate_predictor_grid.py",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "scripts_collate_predictor_grid_get_paths",
+      "community": 183,
+      "norm_label": "get_paths()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/collate_predictor_grid.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "scripts_collate_predictor_grid_main",
+      "community": 183,
+      "norm_label": "main()"
+    },
+    {
       "label": "plot_bespoke_spectral_age.py",
       "file_type": "code",
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
@@ -54,7 +594,7 @@
       "label": "plot_age_per_seed()",
       "file_type": "code",
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L148",
+      "source_location": "L163",
       "_origin": "ast",
       "id": "scripts_plot_bespoke_spectral_age_plot_age_per_seed",
       "community": 91,
@@ -64,7 +604,7 @@
       "label": "plot_spectral_per_seed()",
       "file_type": "code",
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L181",
+      "source_location": "L196",
       "_origin": "ast",
       "id": "scripts_plot_bespoke_spectral_age_plot_spectral_per_seed",
       "community": 91,
@@ -74,7 +614,7 @@
       "label": "plot_age_all_seeds_pdf()",
       "file_type": "code",
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L218",
+      "source_location": "L233",
       "_origin": "ast",
       "id": "scripts_plot_bespoke_spectral_age_plot_age_all_seeds_pdf",
       "community": 91,
@@ -84,17 +624,27 @@
       "label": "plot_spectral_all_seeds_pdf()",
       "file_type": "code",
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L256",
+      "source_location": "L271",
       "_origin": "ast",
       "id": "scripts_plot_bespoke_spectral_age_plot_spectral_all_seeds_pdf",
       "community": 91,
       "norm_label": "plot_spectral_all_seeds_pdf()"
     },
     {
+      "label": "plot_htsr_per_seed()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L314",
+      "_origin": "ast",
+      "id": "scripts_plot_bespoke_spectral_age_plot_htsr_per_seed",
+      "community": 91,
+      "norm_label": "plot_htsr_per_seed()"
+    },
+    {
       "label": "main()",
       "file_type": "code",
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L299",
+      "source_location": "L339",
       "_origin": "ast",
       "id": "scripts_plot_bespoke_spectral_age_main",
       "community": 91,
@@ -134,9 +684,9 @@
       "label": "Generate AGE Diagnostic Plot for a single seed (size 10x6).",
       "file_type": "rationale",
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L149",
+      "source_location": "L164",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_rationale_149",
+      "id": "scripts_plot_bespoke_spectral_age_rationale_164",
       "community": 91,
       "norm_label": "generate age diagnostic plot for a single seed (size 10x6)."
     },
@@ -144,9 +694,9 @@
       "label": "Generate Spectral Diagnostic Plot for a single seed (size 12x6, 2 subplots shari",
       "file_type": "rationale",
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L182",
+      "source_location": "L197",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_rationale_182",
+      "id": "scripts_plot_bespoke_spectral_age_rationale_197",
       "community": 91,
       "norm_label": "generate spectral diagnostic plot for a single seed (size 12x6, 2 subplots shari"
     },
@@ -154,9 +704,9 @@
       "label": "Combined AGE plot across all 5 seeds on a single set of axes.",
       "file_type": "rationale",
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L219",
+      "source_location": "L234",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_rationale_219",
+      "id": "scripts_plot_bespoke_spectral_age_rationale_234",
       "community": 91,
       "norm_label": "combined age plot across all 5 seeds on a single set of axes."
     },
@@ -164,531 +714,711 @@
       "label": "Combined Spectral plot across all 5 seeds with shared X-axis.",
       "file_type": "rationale",
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L257",
+      "source_location": "L272",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_rationale_257",
+      "id": "scripts_plot_bespoke_spectral_age_rationale_272",
       "community": 91,
       "norm_label": "combined spectral plot across all 5 seeds with shared x-axis."
     },
     {
-      "label": "collate_predictor_grid.py",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/collate_predictor_grid.py",
-      "source_location": "L1",
+      "label": "Generate HTSR Alpha Diagnostic Plot for a single seed.",
+      "file_type": "rationale",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L315",
       "_origin": "ast",
-      "community": 183,
-      "norm_label": "collate_predictor_grid.py",
-      "id": "scripts_collate_predictor_grid"
+      "id": "scripts_plot_bespoke_spectral_age_rationale_315",
+      "community": 91,
+      "norm_label": "generate htsr alpha diagnostic plot for a single seed."
     },
     {
-      "label": "get_paths()",
+      "label": "run_htsr_evaluation.py",
       "file_type": "code",
-      "source_file": "06_Code/scripts/collate_predictor_grid.py",
+      "source_file": "06_Code/scripts/run_htsr_evaluation.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_run_htsr_evaluation",
+      "community": 79,
+      "norm_label": "run_htsr_evaluation.py"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/run_htsr_evaluation.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "scripts_run_htsr_evaluation_main",
+      "community": 79,
+      "norm_label": "main()"
+    },
+    {
+      "label": "__init__.py",
+      "file_type": "code",
+      "source_file": "06_Code/tests/htsr/__init__.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "htsr_init",
+      "community": 180,
+      "norm_label": "__init__.py"
+    },
+    {
+      "label": "test_htsr_signal_dependence.py",
+      "file_type": "code",
+      "source_file": "06_Code/tests/htsr/test_htsr_signal_dependence.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "htsr_test_htsr_signal_dependence",
+      "community": 152,
+      "norm_label": "test_htsr_signal_dependence.py"
+    },
+    {
+      "label": "test_injected_powerlaw_alpha()",
+      "file_type": "code",
+      "source_file": "06_Code/tests/htsr/test_htsr_signal_dependence.py",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "htsr_test_htsr_signal_dependence_test_injected_powerlaw_alpha",
+      "community": 152,
+      "norm_label": "test_injected_powerlaw_alpha()"
+    },
+    {
+      "label": "test_featureless_null()",
+      "file_type": "code",
+      "source_file": "06_Code/tests/htsr/test_htsr_signal_dependence.py",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "htsr_test_htsr_signal_dependence_test_featureless_null",
+      "community": 152,
+      "norm_label": "test_featureless_null()"
+    },
+    {
+      "label": "Test Category 1: Injected Feature.     Generate a synthetic power-law distributi",
+      "file_type": "rationale",
+      "source_file": "06_Code/tests/htsr/test_htsr_signal_dependence.py",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "htsr_test_htsr_signal_dependence_rationale_13",
+      "community": 152,
+      "norm_label": "test category 1: injected feature.     generate a synthetic power-law distributi"
+    },
+    {
+      "label": "Test Category 2: Null Signal.     Feed the fitter a random Gaussian distribution",
+      "file_type": "rationale",
+      "source_file": "06_Code/tests/htsr/test_htsr_signal_dependence.py",
+      "source_location": "L31",
+      "_origin": "ast",
+      "id": "htsr_test_htsr_signal_dependence_rationale_31",
+      "community": 152,
+      "norm_label": "test category 2: null signal.     feed the fitter a random gaussian distribution"
+    },
+    {
+      "label": "context_current.md",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "context_current",
+      "community": 167,
+      "norm_label": "context_current.md"
+    },
+    {
+      "label": "Current State of the Grokking Predictor Benchmark (`context_current.md`)",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md",
+      "community": 167,
+      "norm_label": "current state of the grokking predictor benchmark (`context_current.md`)"
+    },
+    {
+      "label": "1. Frozen Experimental Setup",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "context_current_1_frozen_experimental_setup",
+      "community": 167,
+      "norm_label": "1. frozen experimental setup"
+    },
+    {
+      "label": "Training setup (Nov 2026)",
+      "file_type": "document",
+      "source_file": "context_current.md",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 183,
-      "norm_label": "get_paths()",
-      "id": "scripts_collate_predictor_grid_get_paths"
+      "id": "context_current_training_setup_nov_2026",
+      "community": 167,
+      "norm_label": "training setup (nov 2026)"
     },
     {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/collate_predictor_grid.py",
-      "source_location": "L22",
-      "_origin": "ast",
-      "community": 183,
-      "norm_label": "main()",
-      "id": "scripts_collate_predictor_grid_main"
-    },
-    {
-      "label": "analyze_nanda_unified.py",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 170,
-      "norm_label": "analyze_nanda_unified.py",
-      "id": "scripts_analyze_nanda_unified"
-    },
-    {
-      "label": "resolve_results_dir()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L70",
-      "_origin": "ast",
-      "community": 168,
-      "norm_label": "resolve_results_dir()",
-      "id": "scripts_analyze_nanda_unified_resolve_results_dir"
-    },
-    {
-      "label": "default_analysis_dir()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L85",
-      "_origin": "ast",
-      "community": 168,
-      "norm_label": "default_analysis_dir()",
-      "id": "scripts_analyze_nanda_unified_default_analysis_dir"
-    },
-    {
-      "label": "load_seed()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "label": "2. Benchmark Rules & Evaluation Protocol",
+      "file_type": "document",
+      "source_file": "context_current.md",
       "source_location": "L89",
       "_origin": "ast",
-      "community": 5,
-      "norm_label": "load_seed()",
-      "id": "scripts_analyze_nanda_unified_load_seed"
+      "id": "context_current_2_benchmark_rules_evaluation_protocol",
+      "community": 167,
+      "norm_label": "2. benchmark rules & evaluation protocol"
     },
     {
-      "label": "fraction_epochs()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L130",
+      "label": "3. Predictor Benchmark Evaluations",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L120",
       "_origin": "ast",
-      "community": 170,
-      "norm_label": "fraction_epochs()",
-      "id": "scripts_analyze_nanda_unified_fraction_epochs"
+      "id": "context_current_3_predictor_benchmark_evaluations",
+      "community": 160,
+      "norm_label": "3. predictor benchmark evaluations"
     },
     {
-      "label": "build_events()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L144",
+      "label": "Predictor 1: L2 Norm",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L141",
       "_origin": "ast",
-      "community": 5,
-      "norm_label": "build_events()",
-      "id": "scripts_analyze_nanda_unified_build_events"
+      "id": "context_current_predictor_1_l2_norm",
+      "community": 160,
+      "norm_label": "predictor 1: l2 norm"
     },
     {
-      "label": "rank_corr()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L246",
+      "label": "Predictor 2: Dropout",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L158",
       "_origin": "ast",
-      "community": 170,
-      "norm_label": "rank_corr()",
-      "id": "scripts_analyze_nanda_unified_rank_corr"
+      "id": "context_current_predictor_2_dropout",
+      "community": 160,
+      "norm_label": "predictor 2: dropout"
     },
     {
-      "label": "lead_flags()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L266",
+      "label": "Predictor 3: Spectral",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L171",
       "_origin": "ast",
-      "community": 176,
-      "norm_label": "lead_flags()",
-      "id": "scripts_analyze_nanda_unified_lead_flags"
+      "id": "context_current_predictor_3_spectral",
+      "community": 160,
+      "norm_label": "predictor 3: spectral"
     },
     {
-      "label": "evaluate_frozen_protocol()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "label": "Predictor 4: AGE (Adaptive Grokking Epoch via Neural Collapse)",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L186",
+      "_origin": "ast",
+      "id": "context_current_predictor_4_age_adaptive_grokking_epoch_via_neural_collapse",
+      "community": 160,
+      "norm_label": "predictor 4: age (adaptive grokking epoch via neural collapse)"
+    },
+    {
+      "label": "Predictor 5: HTSR Alpha",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L199",
+      "_origin": "ast",
+      "id": "context_current_predictor_5_htsr_alpha",
+      "community": 160,
+      "norm_label": "predictor 5: htsr alpha"
+    },
+    {
+      "label": "Predictor 6: Weight-PCA",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L208",
+      "_origin": "ast",
+      "id": "context_current_predictor_6_weight_pca",
+      "community": 160,
+      "norm_label": "predictor 6: weight-pca"
+    },
+    {
+      "label": "Predictor 7: Higher-MI",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L219",
+      "_origin": "ast",
+      "id": "context_current_predictor_7_higher_mi",
+      "community": 160,
+      "norm_label": "predictor 7: higher-mi"
+    },
+    {
+      "label": "Predictor 8: Commutator Defect",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L230",
+      "_origin": "ast",
+      "id": "context_current_predictor_8_commutator_defect",
+      "community": 160,
+      "norm_label": "predictor 8: commutator defect"
+    },
+    {
+      "label": "Note on Removed Predictor: Correlation Traps",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L242",
+      "_origin": "ast",
+      "id": "context_current_note_on_removed_predictor_correlation_traps",
+      "community": 160,
+      "norm_label": "note on removed predictor: correlation traps"
+    },
+    {
+      "label": "4. Current Repository State",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L248",
+      "_origin": "ast",
+      "id": "context_current_4_current_repository_state",
+      "community": 167,
+      "norm_label": "4. current repository state"
+    },
+    {
+      "label": "5. Unresolved \u2014 Needs Jonathan's Check",
+      "file_type": "document",
+      "source_file": "context_current.md",
       "source_location": "L281",
       "_origin": "ast",
-      "community": 176,
-      "norm_label": "evaluate_frozen_protocol()",
-      "id": "scripts_analyze_nanda_unified_evaluate_frozen_protocol"
+      "id": "context_current_5_unresolved_needs_jonathan_s_check",
+      "community": 175,
+      "norm_label": "5. unresolved \u2014 needs jonathan's check"
     },
     {
-      "label": "score_l2_saved_histories()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L364",
+      "label": "1. Conditional Noise Stress Test False-Positive Rate ($P_i \\sim \\text{Uniform}[0, G_i]$)",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L285",
       "_origin": "ast",
-      "community": 170,
-      "norm_label": "score_l2_saved_histories()",
-      "id": "scripts_analyze_nanda_unified_score_l2_saved_histories"
+      "id": "context_current_1_conditional_noise_stress_test_false_positive_rate_p_i_sim_text_uniform_0_g_i",
+      "community": 175,
+      "norm_label": "1. conditional noise stress test false-positive rate ($p_i \\sim \\text{uniform}[0, g_i]$)"
     },
     {
-      "label": "build_l2_predictor_results()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L397",
+      "label": "2. Treatment of HTSR Alpha Values Below 2 ($\\alpha < 2$)",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L291",
       "_origin": "ast",
-      "community": 168,
-      "norm_label": "build_l2_predictor_results()",
-      "id": "scripts_analyze_nanda_unified_build_l2_predictor_results"
+      "id": "context_current_2_treatment_of_htsr_alpha_values_below_2_alpha_2",
+      "community": 175,
+      "norm_label": "2. treatment of htsr alpha values below 2 ($\\alpha < 2$)"
     },
     {
-      "label": "_metric_pass_fail()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L432",
+      "label": "3. Auxiliary Script `REPO_ROOT` Definitions",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L297",
       "_origin": "ast",
-      "community": 149,
-      "norm_label": "_metric_pass_fail()",
-      "id": "scripts_analyze_nanda_unified_metric_pass_fail"
+      "id": "context_current_3_auxiliary_script_repo_root_definitions",
+      "community": 175,
+      "norm_label": "3. auxiliary script `repo_root` definitions"
     },
     {
-      "label": "print_l2_predictor_results()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L445",
+      "label": "4. Commutator Defect Open Attack Points",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L303",
       "_origin": "ast",
-      "community": 149,
-      "norm_label": "print_l2_predictor_results()",
-      "id": "scripts_analyze_nanda_unified_print_l2_predictor_results"
+      "id": "context_current_4_commutator_defect_open_attack_points",
+      "community": 175,
+      "norm_label": "4. commutator defect open attack points"
     },
     {
-      "label": "score_l2_only()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L490",
+      "label": "6. Structural Evaluation Protocol Reframing \u2014 Synthetic Control Framework as Primary Benchmark Metric (November 2026)",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L312",
       "_origin": "ast",
-      "community": 168,
-      "norm_label": "score_l2_only()",
-      "id": "scripts_analyze_nanda_unified_score_l2_only"
+      "id": "context_current_6_structural_evaluation_protocol_reframing_synthetic_control_framework_as_primary_benchmark_metric_november_2026",
+      "community": 172,
+      "norm_label": "6. structural evaluation protocol reframing \u2014 synthetic control framework as primary benchmark metric (november 2026)"
     },
     {
-      "label": "predictor_name()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L587",
+      "label": "1. Re-Framing the Baseline and Benchmark Hierarchy",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L314",
       "_origin": "ast",
-      "community": 178,
-      "norm_label": "predictor_name()",
-      "id": "scripts_analyze_nanda_unified_predictor_name"
+      "id": "context_current_1_re_framing_the_baseline_and_benchmark_hierarchy",
+      "community": 172,
+      "norm_label": "1. re-framing the baseline and benchmark hierarchy"
     },
     {
-      "label": "is_exploratory()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L594",
+      "label": "2. Positioning the Control Validation Setup as the Primary Benchmark Metric",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L323",
       "_origin": "ast",
-      "community": 170,
-      "norm_label": "is_exploratory()",
-      "id": "scripts_analyze_nanda_unified_is_exploratory"
+      "id": "context_current_2_positioning_the_control_validation_setup_as_the_primary_benchmark_metric",
+      "community": 172,
+      "norm_label": "2. positioning the control validation setup as the primary benchmark metric"
     },
     {
-      "label": "_rho_ok()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L598",
+      "label": "3. Revised Structural Hierarchy of the Benchmark",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L341",
       "_origin": "ast",
-      "community": 170,
-      "norm_label": "_rho_ok()",
-      "id": "scripts_analyze_nanda_unified_rho_ok"
+      "id": "context_current_3_revised_structural_hierarchy_of_the_benchmark",
+      "community": 172,
+      "norm_label": "3. revised structural hierarchy of the benchmark"
     },
     {
-      "label": "attach_pass_checks()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L602",
+      "label": "4. Append-Only Status & Harmonization Note",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L353",
       "_origin": "ast",
-      "community": 170,
-      "norm_label": "attach_pass_checks()",
-      "id": "scripts_analyze_nanda_unified_attach_pass_checks"
+      "id": "context_current_4_append_only_status_harmonization_note",
+      "community": 172,
+      "norm_label": "4. append-only status & harmonization note"
     },
     {
-      "label": "attach_superiority_index()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L619",
+      "label": "5. Predictor Quality Index S (PR #35, 15 Nov 2026)",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L357",
       "_origin": "ast",
-      "community": 170,
-      "norm_label": "attach_superiority_index()",
-      "id": "scripts_analyze_nanda_unified_attach_superiority_index"
+      "id": "context_current_5_predictor_quality_index_s_pr_35_15_nov_2026",
+      "community": 172,
+      "norm_label": "5. predictor quality index s (pr #35, 15 nov 2026)"
     },
     {
-      "label": "summarise()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L645",
+      "label": "6. Control experiment redesign: Superiority Index (PR #40, merge `5b321dc`, 15 November 2026)",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L399",
       "_origin": "ast",
-      "community": 170,
-      "norm_label": "summarise()",
-      "id": "scripts_analyze_nanda_unified_summarise"
+      "id": "context_current_6_control_experiment_redesign_superiority_index_pr_40_merge_5b321dc_15_november_2026",
+      "community": 172,
+      "norm_label": "6. control experiment redesign: superiority index (pr #40, merge `5b321dc`, 15 november 2026)"
     },
     {
-      "label": "predictor_level_verdicts()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L703",
+      "label": "L2 Predictor Signal Dependence Unit Tests",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L422",
       "_origin": "ast",
-      "community": 178,
-      "norm_label": "predictor_level_verdicts()",
-      "id": "scripts_analyze_nanda_unified_predictor_level_verdicts"
+      "id": "context_current_l2_predictor_signal_dependence_unit_tests",
+      "community": 167,
+      "norm_label": "l2 predictor signal dependence unit tests"
     },
     {
-      "label": "_row_verdict_summary()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L729",
+      "label": "Dropout Predictor Evaluation on the Experiment (Salah & Yevick signals)",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L448",
       "_origin": "ast",
-      "community": 178,
-      "norm_label": "_row_verdict_summary()",
-      "id": "scripts_analyze_nanda_unified_row_verdict_summary"
+      "id": "context_current_dropout_predictor_evaluation_on_the_experiment_salah_yevick_signals",
+      "community": 167,
+      "norm_label": "dropout predictor evaluation on the experiment (salah & yevick signals)"
     },
     {
-      "label": "print_table()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L757",
+      "label": "Dropout Predictor & Scorer Synthetic Signal Unit Tests",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L468",
       "_origin": "ast",
-      "community": 5,
-      "norm_label": "print_table()",
-      "id": "scripts_analyze_nanda_unified_print_table"
+      "id": "context_current_dropout_predictor_scorer_synthetic_signal_unit_tests",
+      "community": 167,
+      "norm_label": "dropout predictor & scorer synthetic signal unit tests"
     },
     {
-      "label": "print_verdicts()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L772",
+      "label": "Predictor Experimental Validation Master Tracker",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L503",
       "_origin": "ast",
-      "community": 5,
-      "norm_label": "print_verdicts()",
-      "id": "scripts_analyze_nanda_unified_print_verdicts"
+      "id": "context_current_predictor_experimental_validation_master_tracker",
+      "community": 171,
+      "norm_label": "predictor experimental validation master tracker"
     },
     {
-      "label": "norm01()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L802",
+      "label": "1. L2 Norm Predictor",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L507",
       "_origin": "ast",
-      "community": 170,
-      "norm_label": "norm01()",
-      "id": "scripts_analyze_nanda_unified_norm01"
+      "id": "context_current_1_l2_norm_predictor",
+      "community": 171,
+      "norm_label": "1. l2 norm predictor"
     },
     {
-      "label": "plot_curves()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L807",
+      "label": "2. Dropout Predictor",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L516",
       "_origin": "ast",
-      "community": 5,
-      "norm_label": "plot_curves()",
-      "id": "scripts_analyze_nanda_unified_plot_curves"
+      "id": "context_current_2_dropout_predictor",
+      "community": 171,
+      "norm_label": "2. dropout predictor"
     },
     {
-      "label": "plot_signals()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L822",
+      "label": "3. Spectral Predictor",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L525",
       "_origin": "ast",
-      "community": 5,
-      "norm_label": "plot_signals()",
-      "id": "scripts_analyze_nanda_unified_plot_signals"
+      "id": "context_current_3_spectral_predictor",
+      "community": 171,
+      "norm_label": "3. spectral predictor"
     },
     {
-      "label": "plot_scatter()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L886",
+      "label": "4. AGE Predictor",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L534",
       "_origin": "ast",
-      "community": 5,
-      "norm_label": "plot_scatter()",
-      "id": "scripts_analyze_nanda_unified_plot_scatter"
+      "id": "context_current_4_age_predictor",
+      "community": 171,
+      "norm_label": "4. age predictor"
     },
     {
-      "label": "plot_leads()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L925",
+      "label": "5. HTSR Alpha Predictor",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L543",
       "_origin": "ast",
-      "community": 5,
-      "norm_label": "plot_leads()",
-      "id": "scripts_analyze_nanda_unified_plot_leads"
+      "id": "context_current_5_htsr_alpha_predictor",
+      "community": 171,
+      "norm_label": "5. htsr alpha predictor"
     },
     {
-      "label": "load_lead_c_from_config()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L959",
+      "label": "Session: Spectral Predictor Redesign and Full Six-Phase Validation (November 16, 2026)",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L555",
       "_origin": "ast",
-      "community": 168,
-      "norm_label": "load_lead_c_from_config()",
-      "id": "scripts_analyze_nanda_unified_load_lead_c_from_config"
+      "id": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
+      "community": 26,
+      "norm_label": "session: spectral predictor redesign and full six-phase validation (november 16, 2026)"
     },
     {
-      "label": "score_saved_run()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L973",
+      "label": "1. Scope and Constraints Honored",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L557",
       "_origin": "ast",
-      "community": 5,
-      "norm_label": "score_saved_run()",
-      "id": "scripts_analyze_nanda_unified_score_saved_run"
+      "id": "context_current_1_scope_and_constraints_honored",
+      "community": 26,
+      "norm_label": "1. scope and constraints honored"
     },
     {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L1065",
+      "label": "2. Exact Metric Definitions (Section 2 Blueprint)",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L563",
       "_origin": "ast",
-      "community": 5,
-      "norm_label": "main()",
-      "id": "scripts_analyze_nanda_unified_main"
+      "id": "context_current_2_exact_metric_definitions_section_2_blueprint",
+      "community": 26,
+      "norm_label": "2. exact metric definitions (section 2 blueprint)"
     },
     {
-      "label": "Absolute results folder. Default is the new canonical run.      None and \"\" both",
-      "file_type": "rationale",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L71",
+      "label": "3. Exact Trigger Rule (Section 3 Blueprint)",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L582",
       "_origin": "ast",
-      "community": 168,
-      "norm_label": "absolute results folder. default is the new canonical run.      none and \"\" both",
-      "id": "scripts_analyze_nanda_unified_rationale_71"
+      "id": "context_current_3_exact_trigger_rule_section_3_blueprint",
+      "community": 26,
+      "norm_label": "3. exact trigger rule (section 3 blueprint)"
     },
     {
-      "label": "First epoch at which y has covered `f` of the way from its start to     its fart",
-      "file_type": "rationale",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L131",
+      "label": "4. Implementation Inventory",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L592",
       "_origin": "ast",
-      "community": 170,
-      "norm_label": "first epoch at which y has covered `f` of the way from its start to     its fart",
-      "id": "scripts_analyze_nanda_unified_rationale_131"
+      "id": "context_current_4_implementation_inventory",
+      "community": 26,
+      "norm_label": "4. implementation inventory"
     },
     {
-      "label": "events[predictor_signal][seed] = epoch (or None for a miss).",
-      "file_type": "rationale",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L145",
+      "label": "5. Phase 3 Results: Detector Causality Unit Tests (9 of 9 Passed)",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L599",
       "_origin": "ast",
-      "community": 5,
-      "norm_label": "events[predictor_signal][seed] = epoch (or none for a miss).",
-      "id": "scripts_analyze_nanda_unified_rationale_145"
+      "id": "context_current_5_phase_3_results_detector_causality_unit_tests_9_of_9_passed",
+      "community": 26,
+      "norm_label": "5. phase 3 results: detector causality unit tests (9 of 9 passed)"
     },
     {
-      "label": "Boolean lead mask, one entry per firing seed.      rule=\"fraction\": P_i < c * G_",
-      "file_type": "rationale",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L267",
+      "label": "6. Phase 4 Results: Shared Scorer Synthetic Controls (6 of 6 Passed)",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L611",
       "_origin": "ast",
-      "community": 176,
-      "norm_label": "boolean lead mask, one entry per firing seed.      rule=\"fraction\": p_i < c * g_",
-      "id": "scripts_analyze_nanda_unified_rationale_267"
+      "id": "context_current_6_phase_4_results_shared_scorer_synthetic_controls_6_of_6_passed",
+      "community": 26,
+      "norm_label": "6. phase 4 results: shared scorer synthetic controls (6 of 6 passed)"
     },
     {
-      "label": "Same logic as run_control_experiment.py::evaluate(), with the fractional lead te",
-      "file_type": "rationale",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L282",
-      "_origin": "ast",
-      "community": 176,
-      "norm_label": "same logic as run_control_experiment.py::evaluate(), with the fractional lead te",
-      "id": "scripts_analyze_nanda_unified_rationale_282"
-    },
-    {
-      "label": "Score the L2 row from per-epoch sum_w2 histories.      Does not load the other p",
-      "file_type": "rationale",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L365",
-      "_origin": "ast",
-      "community": 170,
-      "norm_label": "score the l2 row from per-epoch sum_w2 histories.      does not load the other p",
-      "id": "scripts_analyze_nanda_unified_rationale_365"
-    },
-    {
-      "label": "Structured L2 evaluation payload for disk and console display.      superiority_",
-      "file_type": "rationale",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L398",
-      "_origin": "ast",
-      "community": 168,
-      "norm_label": "structured l2 evaluation payload for disk and console display.      superiority_",
-      "id": "scripts_analyze_nanda_unified_rationale_398"
-    },
-    {
-      "label": "Pass/Fail for one Validity Gate metric using control thresholds.",
-      "file_type": "rationale",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L433",
-      "_origin": "ast",
-      "community": 149,
-      "norm_label": "pass/fail for one validity gate metric using control thresholds.",
-      "id": "scripts_analyze_nanda_unified_rationale_433"
-    },
-    {
-      "label": "Human-readable multi-section console summary for L2 evaluation.",
-      "file_type": "rationale",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L446",
-      "_origin": "ast",
-      "community": 149,
-      "norm_label": "human-readable multi-section console summary for l2 evaluation.",
-      "id": "scripts_analyze_nanda_unified_rationale_446"
-    },
-    {
-      "label": "Official L2-only scorer from saved json/npy. No other predictors, no .pt.      W",
-      "file_type": "rationale",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L491",
-      "_origin": "ast",
-      "community": 168,
-      "norm_label": "official l2-only scorer from saved json/npy. no other predictors, no .pt.      w",
-      "id": "scripts_analyze_nanda_unified_rationale_491"
-    },
-    {
-      "label": "Four separate PASS checks. The row passes only when every one is true.",
-      "file_type": "rationale",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L603",
-      "_origin": "ast",
-      "community": 170,
-      "norm_label": "four separate pass checks. the row passes only when every one is true.",
-      "id": "scripts_analyze_nanda_unified_rationale_603"
-    },
-    {
-      "label": "Attach Validity Gate + Superiority Index using evaluate_metrics from control exp",
-      "file_type": "rationale",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "label": "7. Phase 5 Results: Empirical Run Across 5 Seeds",
+      "file_type": "document",
+      "source_file": "context_current.md",
       "source_location": "L620",
       "_origin": "ast",
-      "community": 170,
-      "norm_label": "attach validity gate + superiority index using evaluate_metrics from control exp",
-      "id": "scripts_analyze_nanda_unified_rationale_620"
+      "id": "context_current_7_phase_5_results_empirical_run_across_5_seeds",
+      "community": 26,
+      "norm_label": "7. phase 5 results: empirical run across 5 seeds"
     },
     {
-      "label": "A predictor PASSES only if at least one pre-declared row PASSES.",
-      "file_type": "rationale",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L704",
+      "label": "8. Phase 6 Results: Formal Scoring and Verdict",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L636",
       "_origin": "ast",
-      "community": 178,
-      "norm_label": "a predictor passes only if at least one pre-declared row passes.",
-      "id": "scripts_analyze_nanda_unified_rationale_704"
+      "id": "context_current_8_phase_6_results_formal_scoring_and_verdict",
+      "community": 26,
+      "norm_label": "8. phase 6 results: formal scoring and verdict"
     },
     {
-      "label": "One row entry for frozen_protocol_verdicts.json.",
-      "file_type": "rationale",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L730",
+      "label": "9. Synthetic Control Verification Statement",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L656",
       "_origin": "ast",
-      "community": 178,
-      "norm_label": "one row entry for frozen_protocol_verdicts.json.",
-      "id": "scripts_analyze_nanda_unified_rationale_730"
+      "id": "context_current_9_synthetic_control_verification_statement",
+      "community": 26,
+      "norm_label": "9. synthetic control verification statement"
     },
     {
-      "label": "Print every row verdict and the predictor-level verdict.",
-      "file_type": "rationale",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L773",
+      "label": "10. Post-Hoc Sensitivity Appendix (Non-binding, Read-only)",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L659",
       "_origin": "ast",
-      "community": 5,
-      "norm_label": "print every row verdict and the predictor-level verdict.",
-      "id": "scripts_analyze_nanda_unified_rationale_773"
+      "id": "context_current_10_post_hoc_sensitivity_appendix_non_binding_read_only",
+      "community": 26,
+      "norm_label": "10. post-hoc sensitivity appendix (non-binding, read-only)"
     },
     {
-      "label": "Read evaluation.lead_fraction_c. Falls back to DEFAULT_LEAD_C.",
-      "file_type": "rationale",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L960",
+      "label": "11. Next Task in Benchmark Sequence",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L674",
       "_origin": "ast",
-      "community": 168,
-      "norm_label": "read evaluation.lead_fraction_c. falls back to default_lead_c.",
-      "id": "scripts_analyze_nanda_unified_rationale_960"
+      "id": "context_current_11_next_task_in_benchmark_sequence",
+      "community": 26,
+      "norm_label": "11. next task in benchmark sequence"
     },
     {
-      "label": "Official scorer. Reads saved seed results. Trains nothing.      lead_c: fraction",
-      "file_type": "rationale",
-      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
-      "source_location": "L974",
+      "label": "Session Summary \u2014 November 16, 2026 (AGE Predictor Ground-Up Rebuild)",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L679",
       "_origin": "ast",
-      "community": 5,
-      "norm_label": "official scorer. reads saved seed results. trains nothing.      lead_c: fraction",
-      "id": "scripts_analyze_nanda_unified_rationale_974"
+      "id": "context_current_session_summary_november_16_2026_age_predictor_ground_up_rebuild",
+      "community": 165,
+      "norm_label": "session summary \u2014 november 16, 2026 (age predictor ground-up rebuild)"
+    },
+    {
+      "label": "1. Step 0: Deletion of Old AGE Implementation",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L681",
+      "_origin": "ast",
+      "id": "context_current_1_step_0_deletion_of_old_age_implementation",
+      "community": 165,
+      "norm_label": "1. step 0: deletion of old age implementation"
+    },
+    {
+      "label": "2. Step 1: Signal Definition and Mathematical Foundation",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L686",
+      "_origin": "ast",
+      "id": "context_current_2_step_1_signal_definition_and_mathematical_foundation",
+      "community": 165,
+      "norm_label": "2. step 1: signal definition and mathematical foundation"
+    },
+    {
+      "label": "3. Step 2: Implementation Details",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L701",
+      "_origin": "ast",
+      "id": "context_current_3_step_2_implementation_details",
+      "community": 165,
+      "norm_label": "3. step 2: implementation details"
+    },
+    {
+      "label": "4. Step 3: Unit Tests for Detector Validation",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L706",
+      "_origin": "ast",
+      "id": "context_current_4_step_3_unit_tests_for_detector_validation",
+      "community": 165,
+      "norm_label": "4. step 3: unit tests for detector validation"
+    },
+    {
+      "label": "5. Step 4: Unit Tests for Scorer Validation",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L712",
+      "_origin": "ast",
+      "id": "context_current_5_step_4_unit_tests_for_scorer_validation",
+      "community": 165,
+      "norm_label": "5. step 4: unit tests for scorer validation"
+    },
+    {
+      "label": "6. Step 5: Empirical Execution Results",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L718",
+      "_origin": "ast",
+      "id": "context_current_6_step_5_empirical_execution_results",
+      "community": 165,
+      "norm_label": "6. step 5: empirical execution results"
+    },
+    {
+      "label": "7. Step 6: Formal Scoring and Verdict",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L724",
+      "_origin": "ast",
+      "id": "context_current_7_step_6_formal_scoring_and_verdict",
+      "community": 165,
+      "norm_label": "7. step 6: formal scoring and verdict"
+    },
+    {
+      "label": "8. Physical Interpretation",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L747",
+      "_origin": "ast",
+      "id": "context_current_8_physical_interpretation",
+      "community": 165,
+      "norm_label": "8. physical interpretation"
+    },
+    {
+      "label": "8. Resolution of Canonical Alignment & Checkpoint-Only Recompute (November 16, 2026)",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L754",
+      "_origin": "ast",
+      "id": "context_current_8_resolution_of_canonical_alignment_checkpoint_only_recompute_november_16_2026",
+      "community": 171,
+      "norm_label": "8. resolution of canonical alignment & checkpoint-only recompute (november 16, 2026)"
+    },
+    {
+      "label": "9. Provenance Audit Cleanup and Predictor Plotting Alignment (November 16, 2026)",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L771",
+      "_origin": "ast",
+      "id": "context_current_9_provenance_audit_cleanup_and_predictor_plotting_alignment_november_16_2026",
+      "community": 171,
+      "norm_label": "9. provenance audit cleanup and predictor plotting alignment (november 16, 2026)"
+    },
+    {
+      "label": "2026-11-16 \u2014 Predictor separation completed (L2 / Dropout / Spectral / AGE)",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L787",
+      "_origin": "ast",
+      "id": "context_current_2026_11_16_predictor_separation_completed_l2_dropout_spectral_age",
+      "community": 171,
+      "norm_label": "2026-11-16 \u2014 predictor separation completed (l2 / dropout / spectral / age)"
     },
     {
       "label": "plot_results_per_nanda_power.py",
@@ -746,7 +1476,7 @@
       "source_file": "06_Code/scripts/plot_results_per_nanda_power.py",
       "source_location": "L85",
       "_origin": "ast",
-      "community": 179,
+      "community": 18,
       "norm_label": "format_superiority_index()",
       "id": "scripts_plot_results_per_nanda_power_format_superiority_index"
     },
@@ -756,7 +1486,7 @@
       "source_file": "06_Code/scripts/plot_results_per_nanda_power.py",
       "source_location": "L97",
       "_origin": "ast",
-      "community": 179,
+      "community": 18,
       "norm_label": "format_metric()",
       "id": "scripts_plot_results_per_nanda_power_format_metric"
     },
@@ -766,7 +1496,7 @@
       "source_file": "06_Code/scripts/plot_results_per_nanda_power.py",
       "source_location": "L106",
       "_origin": "ast",
-      "community": 179,
+      "community": 18,
       "norm_label": "l2_eval_annotation()",
       "id": "scripts_plot_results_per_nanda_power_l2_eval_annotation"
     },
@@ -916,7 +1646,7 @@
       "source_file": "06_Code/scripts/plot_results_per_nanda_power.py",
       "source_location": "L86",
       "_origin": "ast",
-      "community": 179,
+      "community": 18,
       "norm_label": "safe display string for si; failed gate (null or 0.0) becomes n/a.",
       "id": "scripts_plot_results_per_nanda_power_rationale_86"
     },
@@ -926,7 +1656,7 @@
       "source_file": "06_Code/scripts/plot_results_per_nanda_power.py",
       "source_location": "L107",
       "_origin": "ast",
-      "community": 179,
+      "community": 18,
       "norm_label": "plain-text box for validity gate + superiority index.",
       "id": "scripts_plot_results_per_nanda_power_rationale_107"
     },
@@ -1739,586 +2469,6 @@
       "community": 137,
       "norm_label": "5. htsr alpha predictor",
       "id": "predictor_experimental_validation_master_tracker_5_htsr_alpha_predictor"
-    },
-    {
-      "label": "context_current.md",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 171,
-      "norm_label": "context_current.md",
-      "id": "context_current"
-    },
-    {
-      "label": "Current State of the Grokking Predictor Benchmark (`context_current.md`)",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 167,
-      "norm_label": "current state of the grokking predictor benchmark (`context_current.md`)",
-      "id": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md"
-    },
-    {
-      "label": "1. Frozen Experimental Setup",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L11",
-      "_origin": "ast",
-      "community": 167,
-      "norm_label": "1. frozen experimental setup",
-      "id": "context_current_1_frozen_experimental_setup"
-    },
-    {
-      "label": "Training setup (Nov 2026)",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L15",
-      "_origin": "ast",
-      "community": 167,
-      "norm_label": "training setup (nov 2026)",
-      "id": "context_current_training_setup_nov_2026"
-    },
-    {
-      "label": "2. Benchmark Rules & Evaluation Protocol",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L89",
-      "_origin": "ast",
-      "community": 167,
-      "norm_label": "2. benchmark rules & evaluation protocol",
-      "id": "context_current_2_benchmark_rules_evaluation_protocol"
-    },
-    {
-      "label": "3. Predictor Benchmark Evaluations",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L120",
-      "_origin": "ast",
-      "community": 160,
-      "norm_label": "3. predictor benchmark evaluations",
-      "id": "context_current_3_predictor_benchmark_evaluations"
-    },
-    {
-      "label": "Predictor 1: L2 Norm",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L141",
-      "_origin": "ast",
-      "community": 160,
-      "norm_label": "predictor 1: l2 norm",
-      "id": "context_current_predictor_1_l2_norm"
-    },
-    {
-      "label": "Predictor 2: Dropout",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L158",
-      "_origin": "ast",
-      "community": 160,
-      "norm_label": "predictor 2: dropout",
-      "id": "context_current_predictor_2_dropout"
-    },
-    {
-      "label": "Predictor 3: Spectral",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L171",
-      "_origin": "ast",
-      "community": 160,
-      "norm_label": "predictor 3: spectral",
-      "id": "context_current_predictor_3_spectral"
-    },
-    {
-      "label": "Predictor 4: AGE (Adaptive Grokking Epoch via Neural Collapse)",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L186",
-      "_origin": "ast",
-      "community": 160,
-      "norm_label": "predictor 4: age (adaptive grokking epoch via neural collapse)",
-      "id": "context_current_predictor_4_age_adaptive_grokking_epoch_via_neural_collapse"
-    },
-    {
-      "label": "Predictor 5: HTSR Alpha",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L199",
-      "_origin": "ast",
-      "community": 160,
-      "norm_label": "predictor 5: htsr alpha",
-      "id": "context_current_predictor_5_htsr_alpha"
-    },
-    {
-      "label": "Predictor 6: Weight-PCA",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L208",
-      "_origin": "ast",
-      "community": 160,
-      "norm_label": "predictor 6: weight-pca",
-      "id": "context_current_predictor_6_weight_pca"
-    },
-    {
-      "label": "Predictor 7: Higher-MI",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L219",
-      "_origin": "ast",
-      "community": 160,
-      "norm_label": "predictor 7: higher-mi",
-      "id": "context_current_predictor_7_higher_mi"
-    },
-    {
-      "label": "Predictor 8: Commutator Defect",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L230",
-      "_origin": "ast",
-      "community": 160,
-      "norm_label": "predictor 8: commutator defect",
-      "id": "context_current_predictor_8_commutator_defect"
-    },
-    {
-      "label": "Note on Removed Predictor: Correlation Traps",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L242",
-      "_origin": "ast",
-      "community": 160,
-      "norm_label": "note on removed predictor: correlation traps",
-      "id": "context_current_note_on_removed_predictor_correlation_traps"
-    },
-    {
-      "label": "4. Current Repository State",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L248",
-      "_origin": "ast",
-      "community": 167,
-      "norm_label": "4. current repository state",
-      "id": "context_current_4_current_repository_state"
-    },
-    {
-      "label": "5. Unresolved \u2014 Needs Jonathan's Check",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L281",
-      "_origin": "ast",
-      "community": 175,
-      "norm_label": "5. unresolved \u2014 needs jonathan's check",
-      "id": "context_current_5_unresolved_needs_jonathan_s_check"
-    },
-    {
-      "label": "1. Conditional Noise Stress Test False-Positive Rate ($P_i \\sim \\text{Uniform}[0, G_i]$)",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L285",
-      "_origin": "ast",
-      "community": 175,
-      "norm_label": "1. conditional noise stress test false-positive rate ($p_i \\sim \\text{uniform}[0, g_i]$)",
-      "id": "context_current_1_conditional_noise_stress_test_false_positive_rate_p_i_sim_text_uniform_0_g_i"
-    },
-    {
-      "label": "2. Treatment of HTSR Alpha Values Below 2 ($\\alpha < 2$)",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L291",
-      "_origin": "ast",
-      "community": 175,
-      "norm_label": "2. treatment of htsr alpha values below 2 ($\\alpha < 2$)",
-      "id": "context_current_2_treatment_of_htsr_alpha_values_below_2_alpha_2"
-    },
-    {
-      "label": "3. Auxiliary Script `REPO_ROOT` Definitions",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L297",
-      "_origin": "ast",
-      "community": 175,
-      "norm_label": "3. auxiliary script `repo_root` definitions",
-      "id": "context_current_3_auxiliary_script_repo_root_definitions"
-    },
-    {
-      "label": "4. Commutator Defect Open Attack Points",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L303",
-      "_origin": "ast",
-      "community": 175,
-      "norm_label": "4. commutator defect open attack points",
-      "id": "context_current_4_commutator_defect_open_attack_points"
-    },
-    {
-      "label": "6. Structural Evaluation Protocol Reframing \u2014 Synthetic Control Framework as Primary Benchmark Metric (November 2026)",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L312",
-      "_origin": "ast",
-      "community": 172,
-      "norm_label": "6. structural evaluation protocol reframing \u2014 synthetic control framework as primary benchmark metric (november 2026)",
-      "id": "context_current_6_structural_evaluation_protocol_reframing_synthetic_control_framework_as_primary_benchmark_metric_november_2026"
-    },
-    {
-      "label": "1. Re-Framing the Baseline and Benchmark Hierarchy",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L314",
-      "_origin": "ast",
-      "community": 172,
-      "norm_label": "1. re-framing the baseline and benchmark hierarchy",
-      "id": "context_current_1_re_framing_the_baseline_and_benchmark_hierarchy"
-    },
-    {
-      "label": "2. Positioning the Control Validation Setup as the Primary Benchmark Metric",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L323",
-      "_origin": "ast",
-      "community": 172,
-      "norm_label": "2. positioning the control validation setup as the primary benchmark metric",
-      "id": "context_current_2_positioning_the_control_validation_setup_as_the_primary_benchmark_metric"
-    },
-    {
-      "label": "3. Revised Structural Hierarchy of the Benchmark",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L341",
-      "_origin": "ast",
-      "community": 172,
-      "norm_label": "3. revised structural hierarchy of the benchmark",
-      "id": "context_current_3_revised_structural_hierarchy_of_the_benchmark"
-    },
-    {
-      "label": "4. Append-Only Status & Harmonization Note",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L353",
-      "_origin": "ast",
-      "community": 172,
-      "norm_label": "4. append-only status & harmonization note",
-      "id": "context_current_4_append_only_status_harmonization_note"
-    },
-    {
-      "label": "5. Predictor Quality Index S (PR #35, 15 Nov 2026)",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L357",
-      "_origin": "ast",
-      "community": 172,
-      "norm_label": "5. predictor quality index s (pr #35, 15 nov 2026)",
-      "id": "context_current_5_predictor_quality_index_s_pr_35_15_nov_2026"
-    },
-    {
-      "label": "6. Control experiment redesign: Superiority Index (PR #40, merge `5b321dc`, 15 November 2026)",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L399",
-      "_origin": "ast",
-      "community": 172,
-      "norm_label": "6. control experiment redesign: superiority index (pr #40, merge `5b321dc`, 15 november 2026)",
-      "id": "context_current_6_control_experiment_redesign_superiority_index_pr_40_merge_5b321dc_15_november_2026"
-    },
-    {
-      "label": "L2 Predictor Signal Dependence Unit Tests",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L422",
-      "_origin": "ast",
-      "community": 167,
-      "norm_label": "l2 predictor signal dependence unit tests",
-      "id": "context_current_l2_predictor_signal_dependence_unit_tests"
-    },
-    {
-      "label": "Dropout Predictor Evaluation on the Experiment (Salah & Yevick signals)",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L448",
-      "_origin": "ast",
-      "community": 167,
-      "norm_label": "dropout predictor evaluation on the experiment (salah & yevick signals)",
-      "id": "context_current_dropout_predictor_evaluation_on_the_experiment_salah_yevick_signals"
-    },
-    {
-      "label": "Dropout Predictor & Scorer Synthetic Signal Unit Tests",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L468",
-      "_origin": "ast",
-      "community": 167,
-      "norm_label": "dropout predictor & scorer synthetic signal unit tests",
-      "id": "context_current_dropout_predictor_scorer_synthetic_signal_unit_tests"
-    },
-    {
-      "label": "Predictor Experimental Validation Master Tracker",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L503",
-      "_origin": "ast",
-      "community": 171,
-      "norm_label": "predictor experimental validation master tracker",
-      "id": "context_current_predictor_experimental_validation_master_tracker"
-    },
-    {
-      "label": "1. L2 Norm Predictor",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L507",
-      "_origin": "ast",
-      "community": 171,
-      "norm_label": "1. l2 norm predictor",
-      "id": "context_current_1_l2_norm_predictor"
-    },
-    {
-      "label": "2. Dropout Predictor",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L516",
-      "_origin": "ast",
-      "community": 171,
-      "norm_label": "2. dropout predictor",
-      "id": "context_current_2_dropout_predictor"
-    },
-    {
-      "label": "3. Spectral Predictor",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L525",
-      "_origin": "ast",
-      "community": 171,
-      "norm_label": "3. spectral predictor",
-      "id": "context_current_3_spectral_predictor"
-    },
-    {
-      "label": "4. AGE Predictor",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L534",
-      "_origin": "ast",
-      "community": 171,
-      "norm_label": "4. age predictor",
-      "id": "context_current_4_age_predictor"
-    },
-    {
-      "label": "5. HTSR Alpha Predictor",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L543",
-      "_origin": "ast",
-      "community": 171,
-      "norm_label": "5. htsr alpha predictor",
-      "id": "context_current_5_htsr_alpha_predictor"
-    },
-    {
-      "label": "Session: Spectral Predictor Redesign and Full Six-Phase Validation (November 16, 2026)",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L555",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "session: spectral predictor redesign and full six-phase validation (november 16, 2026)",
-      "id": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026"
-    },
-    {
-      "label": "1. Scope and Constraints Honored",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L557",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "1. scope and constraints honored",
-      "id": "context_current_1_scope_and_constraints_honored"
-    },
-    {
-      "label": "2. Exact Metric Definitions (Section 2 Blueprint)",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L563",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "2. exact metric definitions (section 2 blueprint)",
-      "id": "context_current_2_exact_metric_definitions_section_2_blueprint"
-    },
-    {
-      "label": "3. Exact Trigger Rule (Section 3 Blueprint)",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L582",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "3. exact trigger rule (section 3 blueprint)",
-      "id": "context_current_3_exact_trigger_rule_section_3_blueprint"
-    },
-    {
-      "label": "4. Implementation Inventory",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L592",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "4. implementation inventory",
-      "id": "context_current_4_implementation_inventory"
-    },
-    {
-      "label": "5. Phase 3 Results: Detector Causality Unit Tests (9 of 9 Passed)",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L599",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "5. phase 3 results: detector causality unit tests (9 of 9 passed)",
-      "id": "context_current_5_phase_3_results_detector_causality_unit_tests_9_of_9_passed"
-    },
-    {
-      "label": "6. Phase 4 Results: Shared Scorer Synthetic Controls (6 of 6 Passed)",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L611",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "6. phase 4 results: shared scorer synthetic controls (6 of 6 passed)",
-      "id": "context_current_6_phase_4_results_shared_scorer_synthetic_controls_6_of_6_passed"
-    },
-    {
-      "label": "7. Phase 5 Results: Empirical Run Across 5 Seeds",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L620",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "7. phase 5 results: empirical run across 5 seeds",
-      "id": "context_current_7_phase_5_results_empirical_run_across_5_seeds"
-    },
-    {
-      "label": "8. Phase 6 Results: Formal Scoring and Verdict",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L636",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "8. phase 6 results: formal scoring and verdict",
-      "id": "context_current_8_phase_6_results_formal_scoring_and_verdict"
-    },
-    {
-      "label": "9. Synthetic Control Verification Statement",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L656",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "9. synthetic control verification statement",
-      "id": "context_current_9_synthetic_control_verification_statement"
-    },
-    {
-      "label": "10. Post-Hoc Sensitivity Appendix (Non-binding, Read-only)",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L659",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "10. post-hoc sensitivity appendix (non-binding, read-only)",
-      "id": "context_current_10_post_hoc_sensitivity_appendix_non_binding_read_only"
-    },
-    {
-      "label": "11. Next Task in Benchmark Sequence",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L674",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "11. next task in benchmark sequence",
-      "id": "context_current_11_next_task_in_benchmark_sequence"
-    },
-    {
-      "label": "Session Summary \u2014 November 16, 2026 (AGE Predictor Ground-Up Rebuild)",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L679",
-      "_origin": "ast",
-      "community": 165,
-      "norm_label": "session summary \u2014 november 16, 2026 (age predictor ground-up rebuild)",
-      "id": "context_current_session_summary_november_16_2026_age_predictor_ground_up_rebuild"
-    },
-    {
-      "label": "1. Step 0: Deletion of Old AGE Implementation",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L681",
-      "_origin": "ast",
-      "community": 165,
-      "norm_label": "1. step 0: deletion of old age implementation",
-      "id": "context_current_1_step_0_deletion_of_old_age_implementation"
-    },
-    {
-      "label": "2. Step 1: Signal Definition and Mathematical Foundation",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L686",
-      "_origin": "ast",
-      "community": 165,
-      "norm_label": "2. step 1: signal definition and mathematical foundation",
-      "id": "context_current_2_step_1_signal_definition_and_mathematical_foundation"
-    },
-    {
-      "label": "3. Step 2: Implementation Details",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L701",
-      "_origin": "ast",
-      "community": 165,
-      "norm_label": "3. step 2: implementation details",
-      "id": "context_current_3_step_2_implementation_details"
-    },
-    {
-      "label": "4. Step 3: Unit Tests for Detector Validation",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L706",
-      "_origin": "ast",
-      "community": 165,
-      "norm_label": "4. step 3: unit tests for detector validation",
-      "id": "context_current_4_step_3_unit_tests_for_detector_validation"
-    },
-    {
-      "label": "5. Step 4: Unit Tests for Scorer Validation",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L712",
-      "_origin": "ast",
-      "community": 165,
-      "norm_label": "5. step 4: unit tests for scorer validation",
-      "id": "context_current_5_step_4_unit_tests_for_scorer_validation"
-    },
-    {
-      "label": "6. Step 5: Empirical Execution Results",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L718",
-      "_origin": "ast",
-      "community": 165,
-      "norm_label": "6. step 5: empirical execution results",
-      "id": "context_current_6_step_5_empirical_execution_results"
-    },
-    {
-      "label": "7. Step 6: Formal Scoring and Verdict",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L724",
-      "_origin": "ast",
-      "community": 165,
-      "norm_label": "7. step 6: formal scoring and verdict",
-      "id": "context_current_7_step_6_formal_scoring_and_verdict"
-    },
-    {
-      "label": "8. Physical Interpretation",
-      "file_type": "document",
-      "source_file": "context_current.md",
-      "source_location": "L747",
-      "_origin": "ast",
-      "community": 165,
-      "norm_label": "8. physical interpretation",
-      "id": "context_current_8_physical_interpretation"
     },
     {
       "label": "project_compilation_npy_dump.md",
@@ -7556,7 +7706,7 @@
       "source_file": "tests/test_spectral_scorer_synthetics.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 152,
+      "community": 33,
       "norm_label": "test_spectral_scorer_synthetics.py",
       "id": "tests_test_spectral_scorer_synthetics"
     },
@@ -7566,7 +7716,7 @@
       "source_file": "tests/test_spectral_scorer_synthetics.py",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 152,
+      "community": 33,
       "norm_label": "_score_signal()",
       "id": "tests_test_spectral_scorer_synthetics_score_signal"
     },
@@ -7576,7 +7726,7 @@
       "source_file": "tests/test_spectral_scorer_synthetics.py",
       "source_location": "L45",
       "_origin": "ast",
-      "community": 152,
+      "community": 33,
       "norm_label": "test_perfect_predictive_signal_passes()",
       "id": "tests_test_spectral_scorer_synthetics_test_perfect_predictive_signal_passes"
     },
@@ -7586,7 +7736,7 @@
       "source_file": "tests/test_spectral_scorer_synthetics.py",
       "source_location": "L59",
       "_origin": "ast",
-      "community": 152,
+      "community": 33,
       "norm_label": "test_zero_variance_signal_fails()",
       "id": "tests_test_spectral_scorer_synthetics_test_zero_variance_signal_fails"
     },
@@ -7596,7 +7746,7 @@
       "source_file": "tests/test_spectral_scorer_synthetics.py",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 152,
+      "community": 33,
       "norm_label": "test_uncorrelated_noise_fails()",
       "id": "tests_test_spectral_scorer_synthetics_test_uncorrelated_noise_fails"
     },
@@ -7606,7 +7756,7 @@
       "source_file": "tests/test_spectral_scorer_synthetics.py",
       "source_location": "L83",
       "_origin": "ast",
-      "community": 152,
+      "community": 33,
       "norm_label": "test_all_none_fails()",
       "id": "tests_test_spectral_scorer_synthetics_test_all_none_fails"
     },
@@ -7616,7 +7766,7 @@
       "source_file": "tests/test_spectral_scorer_synthetics.py",
       "source_location": "L94",
       "_origin": "ast",
-      "community": 152,
+      "community": 33,
       "norm_label": "test_postdictive_signal_fails_lead_gate()",
       "id": "tests_test_spectral_scorer_synthetics_test_postdictive_signal_fails_lead_gate"
     },
@@ -7626,7 +7776,7 @@
       "source_file": "tests/test_spectral_scorer_synthetics.py",
       "source_location": "L107",
       "_origin": "ast",
-      "community": 152,
+      "community": 33,
       "norm_label": "test_monotone_ladder_scaling()",
       "id": "tests_test_spectral_scorer_synthetics_test_monotone_ladder_scaling"
     },
@@ -7636,7 +7786,7 @@
       "source_file": "tests/test_spectral_scorer_synthetics.py",
       "source_location": "L24",
       "_origin": "ast",
-      "community": 152,
+      "community": 33,
       "norm_label": "feeds epochs to the official frozen protocol and returns metrics.",
       "id": "tests_test_spectral_scorer_synthetics_rationale_24"
     },
@@ -7646,7 +7796,7 @@
       "source_file": "tests/test_spectral_scorer_synthetics.py",
       "source_location": "L46",
       "_origin": "ast",
-      "community": 152,
+      "community": 33,
       "norm_label": "s1: p = 0.5 * g elementwise [2000, 3250, 4000, 5500, 6500].      assert validity",
       "id": "tests_test_spectral_scorer_synthetics_rationale_46"
     },
@@ -7656,7 +7806,7 @@
       "source_file": "tests/test_spectral_scorer_synthetics.py",
       "source_location": "L60",
       "_origin": "ast",
-      "community": 152,
+      "community": 33,
       "norm_label": "s2: p = [280, 280, 280, 280, 280].      assert rho == 0.0, superiority index ==",
       "id": "tests_test_spectral_scorer_synthetics_rationale_60"
     },
@@ -7666,7 +7816,7 @@
       "source_file": "tests/test_spectral_scorer_synthetics.py",
       "source_location": "L72",
       "_origin": "ast",
-      "community": 152,
+      "community": 33,
       "norm_label": "s3: p drawn as integers in [1000, 40000] with default_rng(7).      assert validi",
       "id": "tests_test_spectral_scorer_synthetics_rationale_72"
     },
@@ -7676,7 +7826,7 @@
       "source_file": "tests/test_spectral_scorer_synthetics.py",
       "source_location": "L84",
       "_origin": "ast",
-      "community": 152,
+      "community": 33,
       "norm_label": "s4: p = [none, none, none, none, none].      assert validity gate fail, superior",
       "id": "tests_test_spectral_scorer_synthetics_rationale_84"
     },
@@ -7686,7 +7836,7 @@
       "source_file": "tests/test_spectral_scorer_synthetics.py",
       "source_location": "L95",
       "_origin": "ast",
-      "community": 152,
+      "community": 33,
       "norm_label": "s5: p = g + 500 elementwise.      assert lead fraction == 0.0 and validity gate",
       "id": "tests_test_spectral_scorer_synthetics_rationale_95"
     },
@@ -7696,7 +7846,7 @@
       "source_file": "tests/test_spectral_scorer_synthetics.py",
       "source_location": "L108",
       "_origin": "ast",
-      "community": 152,
+      "community": 33,
       "norm_label": "s6: construct five tuples interpolating from perfect-lead/perfect-correlation to",
       "id": "tests_test_spectral_scorer_synthetics_rationale_108"
     },
@@ -9266,7 +9416,7 @@
       "source_file": "06_Code/scripts/run_l2_negative_control.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 154,
+      "community": 33,
       "norm_label": "run_l2_negative_control.py",
       "id": "scripts_run_l2_negative_control"
     },
@@ -9276,7 +9426,7 @@
       "source_file": "06_Code/scripts/run_l2_negative_control.py",
       "source_location": "L55",
       "_origin": "ast",
-      "community": 154,
+      "community": 33,
       "norm_label": "sanitize_correlation()",
       "id": "scripts_run_l2_negative_control_sanitize_correlation"
     },
@@ -9286,7 +9436,7 @@
       "source_file": "06_Code/scripts/run_l2_negative_control.py",
       "source_location": "L65",
       "_origin": "ast",
-      "community": 154,
+      "community": 33,
       "norm_label": "compute_gate_inputs()",
       "id": "scripts_run_l2_negative_control_compute_gate_inputs"
     },
@@ -9296,7 +9446,7 @@
       "source_file": "06_Code/scripts/run_l2_negative_control.py",
       "source_location": "L101",
       "_origin": "ast",
-      "community": 154,
+      "community": 33,
       "norm_label": "build_payload()",
       "id": "scripts_run_l2_negative_control_build_payload"
     },
@@ -9306,7 +9456,7 @@
       "source_file": "06_Code/scripts/run_l2_negative_control.py",
       "source_location": "L139",
       "_origin": "ast",
-      "community": 154,
+      "community": 33,
       "norm_label": "make_plot()",
       "id": "scripts_run_l2_negative_control_make_plot"
     },
@@ -9316,7 +9466,7 @@
       "source_file": "06_Code/scripts/run_l2_negative_control.py",
       "source_location": "L212",
       "_origin": "ast",
-      "community": 154,
+      "community": 33,
       "norm_label": "main()",
       "id": "scripts_run_l2_negative_control_main"
     },
@@ -9326,7 +9476,7 @@
       "source_file": "06_Code/scripts/run_l2_negative_control.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 154,
+      "community": 33,
       "norm_label": "l2 predictor negative control \u2014 constant early firing through the evaluation pip",
       "id": "scripts_run_l2_negative_control_rationale_1"
     },
@@ -9336,7 +9486,7 @@
       "source_file": "06_Code/scripts/run_l2_negative_control.py",
       "source_location": "L56",
       "_origin": "ast",
-      "community": 154,
+      "community": 33,
       "norm_label": "convert undefined / nan spearman rho to 0.0 before the gate check.",
       "id": "scripts_run_l2_negative_control_rationale_56"
     },
@@ -9346,7 +9496,7 @@
       "source_file": "06_Code/scripts/run_l2_negative_control.py",
       "source_location": "L66",
       "_origin": "ast",
-      "community": 154,
+      "community": 33,
       "norm_label": "compute lead fraction, spearman rho, and mean relative lead (noise margin).",
       "id": "scripts_run_l2_negative_control_rationale_66"
     },
@@ -9356,7 +9506,7 @@
       "source_file": "06_Code/scripts/run_l2_negative_control.py",
       "source_location": "L102",
       "_origin": "ast",
-      "community": 154,
+      "community": 33,
       "norm_label": "full results payload; superiority index is always a float (0.0 on fail).",
       "id": "scripts_run_l2_negative_control_rationale_102"
     },
@@ -9366,7 +9516,7 @@
       "source_file": "06_Code/scripts/run_l2_negative_control.py",
       "source_location": "L140",
       "_origin": "ast",
-      "community": 154,
+      "community": 33,
       "norm_label": "scatter of constant (g_i, p_i) with y=x and y=0.5x reference lines.",
       "id": "scripts_run_l2_negative_control_rationale_140"
     },
@@ -9376,7 +9526,7 @@
       "source_file": "06_Code/scripts/run_l2_positive_control.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 161,
+      "community": 33,
       "norm_label": "run_l2_positive_control.py",
       "id": "scripts_run_l2_positive_control"
     },
@@ -9386,7 +9536,7 @@
       "source_file": "06_Code/scripts/run_l2_positive_control.py",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 161,
+      "community": 33,
       "norm_label": "synthetic_firing_epochs()",
       "id": "scripts_run_l2_positive_control_synthetic_firing_epochs"
     },
@@ -9396,7 +9546,7 @@
       "source_file": "06_Code/scripts/run_l2_positive_control.py",
       "source_location": "L53",
       "_origin": "ast",
-      "community": 161,
+      "community": 33,
       "norm_label": "compute_gate_inputs()",
       "id": "scripts_run_l2_positive_control_compute_gate_inputs"
     },
@@ -9406,7 +9556,7 @@
       "source_file": "06_Code/scripts/run_l2_positive_control.py",
       "source_location": "L74",
       "_origin": "ast",
-      "community": 161,
+      "community": 33,
       "norm_label": "build_payload()",
       "id": "scripts_run_l2_positive_control_build_payload"
     },
@@ -9416,7 +9566,7 @@
       "source_file": "06_Code/scripts/run_l2_positive_control.py",
       "source_location": "L109",
       "_origin": "ast",
-      "community": 161,
+      "community": 33,
       "norm_label": "make_plot()",
       "id": "scripts_run_l2_positive_control_make_plot"
     },
@@ -9426,7 +9576,7 @@
       "source_file": "06_Code/scripts/run_l2_positive_control.py",
       "source_location": "L183",
       "_origin": "ast",
-      "community": 161,
+      "community": 33,
       "norm_label": "main()",
       "id": "scripts_run_l2_positive_control_main"
     },
@@ -9436,7 +9586,7 @@
       "source_file": "06_Code/scripts/run_l2_positive_control.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 161,
+      "community": 33,
       "norm_label": "l2 predictor positive control \u2014 synthetic perfect signal through the evaluation",
       "id": "scripts_run_l2_positive_control_rationale_1"
     },
@@ -9446,7 +9596,7 @@
       "source_file": "06_Code/scripts/run_l2_positive_control.py",
       "source_location": "L49",
       "_origin": "ast",
-      "community": 161,
+      "community": 33,
       "norm_label": "p_i = int(0.5 * g_i) \u2014 mid-point relative lead for every seed.",
       "id": "scripts_run_l2_positive_control_rationale_49"
     },
@@ -9456,7 +9606,7 @@
       "source_file": "06_Code/scripts/run_l2_positive_control.py",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 161,
+      "community": 33,
       "norm_label": "compute lead fraction, spearman rho, and mean relative lead (noise margin).",
       "id": "scripts_run_l2_positive_control_rationale_54"
     },
@@ -9466,7 +9616,7 @@
       "source_file": "06_Code/scripts/run_l2_positive_control.py",
       "source_location": "L75",
       "_origin": "ast",
-      "community": 161,
+      "community": 33,
       "norm_label": "full results payload; superiority index is always a float (0.0 on fail).",
       "id": "scripts_run_l2_positive_control_rationale_75"
     },
@@ -9476,7 +9626,7 @@
       "source_file": "06_Code/scripts/run_l2_positive_control.py",
       "source_location": "L110",
       "_origin": "ast",
-      "community": 161,
+      "community": 33,
       "norm_label": "scatter of synthetic (g_i, p_i) with y=x and y=0.5x reference lines.",
       "id": "scripts_run_l2_positive_control_rationale_110"
     },
@@ -11416,7 +11566,7 @@
       "source_file": "06_Code/src/predictors/l2_norm.py",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 138,
+      "community": 144,
       "norm_label": "compute_sum_of_squared_weights()",
       "id": "predictors_l2_norm_compute_sum_of_squared_weights"
     },
@@ -11456,7 +11606,7 @@
       "source_file": "06_Code/src/predictors/l2_norm.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 138,
+      "community": 144,
       "norm_label": "total sum of squared weights over all parameters (nanda et al. 2023, figure 7).",
       "id": "predictors_l2_norm_rationale_21"
     },
@@ -12316,7 +12466,7 @@
       "source_file": "06_Code/tests/test_miss_counts_as_no_lead.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 176,
+      "community": 170,
       "norm_label": "test_miss_counts_as_no_lead.py",
       "id": "tests_test_miss_counts_as_no_lead"
     },
@@ -12326,7 +12476,7 @@
       "source_file": "06_Code/tests/test_miss_counts_as_no_lead.py",
       "source_location": "L25",
       "_origin": "ast",
-      "community": 176,
+      "community": 170,
       "norm_label": "test_four_leads_and_one_miss_is_four_fifths()",
       "id": "tests_test_miss_counts_as_no_lead_test_four_leads_and_one_miss_is_four_fifths"
     },
@@ -12336,7 +12486,7 @@
       "source_file": "06_Code/tests/test_miss_counts_as_no_lead.py",
       "source_location": "L35",
       "_origin": "ast",
-      "community": 176,
+      "community": 170,
       "norm_label": "test_three_firing_seeds_fail_immediately()",
       "id": "tests_test_miss_counts_as_no_lead_test_three_firing_seeds_fail_immediately"
     },
@@ -12346,7 +12496,7 @@
       "source_file": "06_Code/tests/test_miss_counts_as_no_lead.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 176,
+      "community": 170,
       "norm_label": "value 6: a miss counts as no lead in lead_frac and stays in the denominator.  rh",
       "id": "tests_test_miss_counts_as_no_lead_rationale_1"
     },
@@ -13716,7 +13866,7 @@
       "source_file": "archive/Deprecated_Code/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 164,
+      "community": 18,
       "norm_label": "plot_results_four_head.py",
       "id": "src_p97_mainstream_old_plot_results_four_head"
     },
@@ -13726,7 +13876,7 @@
       "source_file": "archive/Deprecated_Code/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L51",
       "_origin": "ast",
-      "community": 164,
+      "community": 18,
       "norm_label": "migrate_legacy_flat_run()",
       "id": "src_p97_mainstream_old_plot_results_four_head_migrate_legacy_flat_run"
     },
@@ -13736,7 +13886,7 @@
       "source_file": "archive/Deprecated_Code/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L73",
       "_origin": "ast",
-      "community": 164,
+      "community": 18,
       "norm_label": "discover_run_dirs()",
       "id": "src_p97_mainstream_old_plot_results_four_head_discover_run_dirs"
     },
@@ -13746,7 +13896,7 @@
       "source_file": "archive/Deprecated_Code/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L87",
       "_origin": "ast",
-      "community": 164,
+      "community": 18,
       "norm_label": "load_run_data()",
       "id": "src_p97_mainstream_old_plot_results_four_head_load_run_data"
     },
@@ -13756,7 +13906,7 @@
       "source_file": "archive/Deprecated_Code/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L113",
       "_origin": "ast",
-      "community": 164,
+      "community": 18,
       "norm_label": "plot_single_run()",
       "id": "src_p97_mainstream_old_plot_results_four_head_plot_single_run"
     },
@@ -13766,7 +13916,7 @@
       "source_file": "archive/Deprecated_Code/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L289",
       "_origin": "ast",
-      "community": 164,
+      "community": 18,
       "norm_label": "plot_comparison()",
       "id": "src_p97_mainstream_old_plot_results_four_head_plot_comparison"
     },
@@ -13776,7 +13926,7 @@
       "source_file": "archive/Deprecated_Code/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L52",
       "_origin": "ast",
-      "community": 164,
+      "community": 18,
       "norm_label": "same migration as train_four_head.py \u2014 kept here too so this     script can be r",
       "id": "src_p97_mainstream_old_plot_results_four_head_rationale_52"
     },
@@ -13786,7 +13936,7 @@
       "source_file": "archive/Deprecated_Code/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L74",
       "_origin": "ast",
-      "community": 164,
+      "community": 18,
       "norm_label": "finds every run_<n> folder inside base_dir, sorted by run number     (not alphab",
       "id": "src_p97_mainstream_old_plot_results_four_head_rationale_74"
     },
@@ -13796,7 +13946,7 @@
       "source_file": "archive/Deprecated_Code/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L114",
       "_origin": "ast",
-      "community": 164,
+      "community": 18,
       "norm_label": "recreates this run's own 8 plots, saved inside results/four_head/run_<n>/ itself",
       "id": "src_p97_mainstream_old_plot_results_four_head_rationale_114"
     },
@@ -13806,7 +13956,7 @@
       "source_file": "archive/Deprecated_Code/src_p97_mainstream_old/plot_results_four_head.py",
       "source_location": "L290",
       "_origin": "ast",
-      "community": 164,
+      "community": 18,
       "norm_label": "builds 4 plots overlaying every discovered run together, saved     directly in r",
       "id": "src_p97_mainstream_old_plot_results_four_head_rationale_290"
     },
@@ -14556,7 +14706,7 @@
       "source_file": "tests/test_l2_signal_dependence.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 180,
+      "community": 144,
       "norm_label": "test_l2_signal_dependence.py",
       "id": "tests_test_l2_signal_dependence"
     },
@@ -14566,7 +14716,7 @@
       "source_file": "tests/test_l2_signal_dependence.py",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 180,
+      "community": 144,
       "norm_label": "test_featureless_null_signal()",
       "id": "tests_test_l2_signal_dependence_test_featureless_null_signal"
     },
@@ -14576,7 +14726,7 @@
       "source_file": "tests/test_l2_signal_dependence.py",
       "source_location": "L34",
       "_origin": "ast",
-      "community": 180,
+      "community": 144,
       "norm_label": "test_injected_feature_signal()",
       "id": "tests_test_l2_signal_dependence_test_injected_feature_signal"
     },
@@ -14586,7 +14736,7 @@
       "source_file": "tests/test_l2_signal_dependence.py",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 180,
+      "community": 144,
       "norm_label": "test 1: the featureless null test.     this test proves the detector does not fi",
       "id": "tests_test_l2_signal_dependence_rationale_18"
     },
@@ -14596,7 +14746,7 @@
       "source_file": "tests/test_l2_signal_dependence.py",
       "source_location": "L35",
       "_origin": "ast",
-      "community": 180,
+      "community": 144,
       "norm_label": "test 2: the injected feature test.     this test proves the detector locks preci",
       "id": "tests_test_l2_signal_dependence_rationale_35"
     },
@@ -18486,7 +18636,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L145",
       "_origin": "ast",
-      "community": 17,
+      "community": 168,
       "norm_label": "session summary \u2014 july 6, 2026 (data pipeline session)",
       "id": "context_split_context_part1_of_3_session_summary_july_6_2026_data_pipeline_session"
     },
@@ -18496,7 +18646,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L168",
       "_origin": "ast",
-      "community": 17,
+      "community": 168,
       "norm_label": "still open / next steps",
       "id": "context_split_context_part1_of_3_still_open_next_steps"
     },
@@ -18506,7 +18656,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L182",
       "_origin": "ast",
-      "community": 185,
+      "community": 17,
       "norm_label": "session summary \u2014 july 6, 2026 (get_dataloaders + code review session)",
       "id": "context_split_context_part1_of_3_session_summary_july_6_2026_get_dataloaders_code_review_session"
     },
@@ -18516,7 +18666,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L218",
       "_origin": "ast",
-      "community": 185,
+      "community": 17,
       "norm_label": "still open / next steps (updated)",
       "id": "context_split_context_part1_of_3_still_open_next_steps_updated"
     },
@@ -18646,7 +18796,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L573",
       "_origin": "ast",
-      "community": 17,
+      "community": 179,
       "norm_label": "session summary \u2014 july 8, 2026 (transformer.py: token embedding built)",
       "id": "context_split_context_part1_of_3_session_summary_july_8_2026_transformer_py_token_embedding_built"
     },
@@ -18656,7 +18806,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L649",
       "_origin": "ast",
-      "community": 17,
+      "community": 179,
       "norm_label": "still open / next steps (updated \u2014 july 8, 2026)",
       "id": "context_split_context_part1_of_3_still_open_next_steps_updated_july_8_2026"
     },
@@ -18706,7 +18856,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L839",
       "_origin": "ast",
-      "community": 17,
+      "community": 176,
       "norm_label": "session summary \u2014 july 8, 2026 (q/k/v wired into forward(), `__call__` vs `forward` experiments)",
       "id": "context_split_context_part1_of_3_session_summary_july_8_2026_q_k_v_wired_into_forward_call_vs_forward_experiments"
     },
@@ -18716,7 +18866,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L942",
       "_origin": "ast",
-      "community": 17,
+      "community": 176,
       "norm_label": "still open / next steps (updated \u2014 july 8, 2026, end of session)",
       "id": "context_split_context_part1_of_3_still_open_next_steps_updated_july_8_2026_end_of_session_942"
     },
@@ -18766,7 +18916,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L1132",
       "_origin": "ast",
-      "community": 186,
+      "community": 17,
       "norm_label": "session summary \u2014 july 9, 2026 (debug print cleanup + train.py single-batch loss)",
       "id": "context_split_context_part1_of_3_session_summary_july_9_2026_debug_print_cleanup_train_py_single_batch_loss"
     },
@@ -18776,7 +18926,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L1197",
       "_origin": "ast",
-      "community": 186,
+      "community": 17,
       "norm_label": "still open / next steps (updated \u2014 july 9, 2026, end of session)",
       "id": "context_split_context_part1_of_3_still_open_next_steps_updated_july_9_2026_end_of_session"
     },
@@ -18846,7 +18996,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L1604",
       "_origin": "ast",
-      "community": 17,
+      "community": 164,
       "norm_label": "session summary \u2014 july 10, 2026 (l2 norm predictor built, mps device verified, phase 1 closed)",
       "id": "context_split_context_part1_of_3_session_summary_july_10_2026_l2_norm_predictor_built_mps_device_verified_phase_1_closed"
     },
@@ -18856,7 +19006,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L1675",
       "_origin": "ast",
-      "community": 17,
+      "community": 164,
       "norm_label": "still open / next steps (updated \u2014 july 10, 2026, phase 1 closed)",
       "id": "context_split_context_part1_of_3_still_open_next_steps_updated_july_10_2026_phase_1_closed"
     },
@@ -19036,7 +19186,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L2032",
       "_origin": "ast",
-      "community": 17,
+      "community": 161,
       "norm_label": "session summary \u2014 august 5, 2026 (l2 norm detection strategy refined: threshold approach)",
       "id": "context_split_context_part1_of_3_session_summary_august_5_2026_l2_norm_detection_strategy_refined_threshold_approach"
     },
@@ -19046,7 +19196,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L2056",
       "_origin": "ast",
-      "community": 17,
+      "community": 161,
       "norm_label": "still open / next steps (updated \u2014 august 5, 2026, end of session)",
       "id": "context_split_context_part1_of_3_still_open_next_steps_updated_august_5_2026_end_of_session"
     },
@@ -19216,7 +19366,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L2328",
       "_origin": "ast",
-      "community": 182,
+      "community": 17,
       "norm_label": "session summary \u2014 august 7, 2026 (zero-crossing trigger fails on 3rd run; plateau investigation; trigger criteria formalized; linear/overlay plots added)",
       "id": "context_split_context_part1_of_3_session_summary_august_7_2026_zero_crossing_trigger_fails_on_3rd_run_plateau_investigation_trigger_criteria_formalized_linear_overlay_plots_added"
     },
@@ -19226,7 +19376,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L2359",
       "_origin": "ast",
-      "community": 182,
+      "community": 17,
       "norm_label": "current final state of relevant files (this session's end)",
       "id": "context_split_context_part1_of_3_current_final_state_of_relevant_files_this_session_s_end"
     },
@@ -19236,7 +19386,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L2366",
       "_origin": "ast",
-      "community": 182,
+      "community": 17,
       "norm_label": "still open / next steps (updated \u2014 august 7, 2026, session close, \"continue tomorrow\")",
       "id": "context_split_context_part1_of_3_still_open_next_steps_updated_august_7_2026_session_close_continue_tomorrow"
     },
@@ -20766,7 +20916,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 146,
+      "community": 136,
       "norm_label": "session summary \u2014 september 2, 2026 (clean slate, ready to run experiments)",
       "id": "context_split_context_part2_of_3_session_summary_september_2_2026_clean_slate_ready_to_run_experiments"
     },
@@ -20776,7 +20926,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L3",
       "_origin": "ast",
-      "community": 146,
+      "community": 136,
       "norm_label": "cleanup & preparation",
       "id": "context_split_context_part2_of_3_cleanup_preparation"
     },
@@ -20786,7 +20936,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 146,
+      "community": 136,
       "norm_label": "current state",
       "id": "context_split_context_part2_of_3_current_state"
     },
@@ -20796,7 +20946,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L45",
       "_origin": "ast",
-      "community": 146,
+      "community": 136,
       "norm_label": "files modified",
       "id": "context_split_context_part2_of_3_files_modified"
     },
@@ -20806,7 +20956,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L49",
       "_origin": "ast",
-      "community": 146,
+      "community": 136,
       "norm_label": "commit",
       "id": "context_split_context_part2_of_3_commit"
     },
@@ -20816,7 +20966,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L53",
       "_origin": "ast",
-      "community": 146,
+      "community": 136,
       "norm_label": "next",
       "id": "context_split_context_part2_of_3_next"
     },
@@ -21986,7 +22136,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L1655",
       "_origin": "ast",
-      "community": 136,
+      "community": 146,
       "norm_label": "addendum \u2014 same day: old `src/` snapshotted, `src/` is now the nanda-unified mainstream",
       "id": "context_split_context_part2_of_3_addendum_same_day_old_src_snapshotted_src_is_now_the_nanda_unified_mainstream"
     },
@@ -21996,7 +22146,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L1665",
       "_origin": "ast",
-      "community": 136,
+      "community": 146,
       "norm_label": "what was done",
       "id": "context_split_context_part2_of_3_what_was_done"
     },
@@ -22006,7 +22156,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L1681",
       "_origin": "ast",
-      "community": 136,
+      "community": 146,
       "norm_label": "clean check on the live `src/` pipeline",
       "id": "context_split_context_part2_of_3_clean_check_on_the_live_src_pipeline"
     },
@@ -22016,7 +22166,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L1700",
       "_origin": "ast",
-      "community": 136,
+      "community": 146,
       "norm_label": "verify (done)",
       "id": "context_split_context_part2_of_3_verify_done"
     },
@@ -22026,7 +22176,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L1712",
       "_origin": "ast",
-      "community": 136,
+      "community": 146,
       "norm_label": "files modified / added (addendum)",
       "id": "context_split_context_part2_of_3_files_modified_added_addendum"
     },
@@ -22036,7 +22186,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L1719",
       "_origin": "ast",
-      "community": 136,
+      "community": 146,
       "norm_label": "still pending (unchanged from the main entry)",
       "id": "context_split_context_part2_of_3_still_pending_unchanged_from_the_main_entry"
     },
@@ -22376,7 +22526,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2257",
       "_origin": "ast",
-      "community": 136,
+      "community": 154,
       "norm_label": "session summary \u2014 september 4, 2026 (discussion: why the benchmark uses multiple seeds \u2014 no code changed)",
       "id": "context_split_context_part2_of_3_session_summary_september_4_2026_discussion_why_the_benchmark_uses_multiple_seeds_no_code_changed"
     },
@@ -22386,7 +22536,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2259",
       "_origin": "ast",
-      "community": 136,
+      "community": 154,
       "norm_label": "1. question answered \u2014 \"what is the point of many different seeds?\"",
       "id": "context_split_context_part2_of_3_1_question_answered_what_is_the_point_of_many_different_seeds"
     },
@@ -22396,7 +22546,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2286",
       "_origin": "ast",
-      "community": 136,
+      "community": 154,
       "norm_label": "files modified",
       "id": "context_split_context_part2_of_3_files_modified_2286"
     },
@@ -22406,7 +22556,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2290",
       "_origin": "ast",
-      "community": 136,
+      "community": 154,
       "norm_label": "next",
       "id": "context_split_context_part2_of_3_next_2290"
     },
@@ -22516,7 +22666,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2524",
       "_origin": "ast",
-      "community": 181,
+      "community": 136,
       "norm_label": "session summary \u2014 september 4, 2026 (supplementary: computed correlation stats for the l2-norm \"why it fails\" discussion \u2014 new number, not previously on record)",
       "id": "context_split_context_part2_of_3_session_summary_september_4_2026_supplementary_computed_correlation_stats_for_the_l2_norm_why_it_fails_discussion_new_number_not_previously_on_record"
     },
@@ -22526,7 +22676,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2526",
       "_origin": "ast",
-      "community": 181,
+      "community": 136,
       "norm_label": "1. new finding \u2014 final l2-norm/\u03c3w2 vs grok-epoch correlation sign-flips on seed 4 alone",
       "id": "context_split_context_part2_of_3_1_new_finding_final_l2_norm_\u03c3w2_vs_grok_epoch_correlation_sign_flips_on_seed_4_alone"
     },
@@ -22536,7 +22686,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2559",
       "_origin": "ast",
-      "community": 181,
+      "community": 136,
       "norm_label": "files modified",
       "id": "context_split_context_part2_of_3_files_modified_2559"
     },
@@ -22546,7 +22696,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2565",
       "_origin": "ast",
-      "community": 181,
+      "community": 136,
       "norm_label": "next",
       "id": "context_split_context_part2_of_3_next_2565"
     },
@@ -23475,243 +23625,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L45",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_plot_bespoke_spectral_age",
-      "target": "scripts_plot_bespoke_spectral_age_load_all_data"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L293",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_plot_bespoke_spectral_age",
-      "target": "scripts_plot_bespoke_spectral_age_main"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L215",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_plot_bespoke_spectral_age",
-      "target": "scripts_plot_bespoke_spectral_age_plot_age_all_seeds_pdf"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L148",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_plot_bespoke_spectral_age",
-      "target": "scripts_plot_bespoke_spectral_age_plot_age_per_seed"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L252",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_plot_bespoke_spectral_age",
-      "target": "scripts_plot_bespoke_spectral_age_plot_spectral_all_seeds_pdf"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L180",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_plot_bespoke_spectral_age",
-      "target": "scripts_plot_bespoke_spectral_age_plot_spectral_per_seed"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L35",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_plot_bespoke_spectral_age",
-      "target": "scripts_plot_bespoke_spectral_age_set_plotting_style"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_plot_bespoke_spectral_age_rationale_1",
-      "target": "scripts_plot_bespoke_spectral_age"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L294",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_plot_bespoke_spectral_age_main",
-      "target": "scripts_plot_bespoke_spectral_age_set_plotting_style"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L36",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_plot_bespoke_spectral_age_rationale_36",
-      "target": "scripts_plot_bespoke_spectral_age_set_plotting_style"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L295",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_plot_bespoke_spectral_age_main",
-      "target": "scripts_plot_bespoke_spectral_age_load_all_data"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L46",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_plot_bespoke_spectral_age_rationale_46",
-      "target": "scripts_plot_bespoke_spectral_age_load_all_data"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L307",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_plot_bespoke_spectral_age_main",
-      "target": "scripts_plot_bespoke_spectral_age_plot_age_per_seed"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L149",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_plot_bespoke_spectral_age_rationale_149",
-      "target": "scripts_plot_bespoke_spectral_age_plot_age_per_seed"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L312",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_plot_bespoke_spectral_age_main",
-      "target": "scripts_plot_bespoke_spectral_age_plot_spectral_per_seed"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L182",
-      "weight": 1.0,
-      "source": "scripts_plot_bespoke_spectral_age_rationale_182",
-      "target": "scripts_plot_bespoke_spectral_age_plot_spectral_per_seed",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L317",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_plot_bespoke_spectral_age_main",
-      "target": "scripts_plot_bespoke_spectral_age_plot_age_all_seeds_pdf"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L219",
-      "weight": 1.0,
-      "source": "scripts_plot_bespoke_spectral_age_rationale_219",
-      "target": "scripts_plot_bespoke_spectral_age_plot_age_all_seeds_pdf",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L321",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_plot_bespoke_spectral_age_main",
-      "target": "scripts_plot_bespoke_spectral_age_plot_spectral_all_seeds_pdf"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
-      "source_location": "L257",
-      "weight": 1.0,
-      "source": "scripts_plot_bespoke_spectral_age_rationale_257",
-      "target": "scripts_plot_bespoke_spectral_age_plot_spectral_all_seeds_pdf",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/collate_predictor_grid.py",
-      "source_location": "L15",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_collate_predictor_grid",
-      "target": "scripts_collate_predictor_grid_get_paths"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/collate_predictor_grid.py",
-      "source_location": "L22",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_collate_predictor_grid",
-      "target": "scripts_collate_predictor_grid_main"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "06_Code/scripts/collate_predictor_grid.py",
-      "source_location": "L30",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_collate_predictor_grid_main",
-      "target": "scripts_collate_predictor_grid_get_paths"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "06_Code/scripts/analyze_nanda_unified.py",
       "source_location": "L345",
       "weight": 1.0,
@@ -23983,6 +23896,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L1112",
+      "weight": 1.0,
+      "source": "scripts_analyze_nanda_unified",
+      "target": "scripts_analyze_nanda_unified_score_htsr_saved_histories",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
       "source_location": "L373",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -24061,6 +23984,17 @@
       "confidence_score": 1.0,
       "source": "scripts_analyze_nanda_unified_rationale_71",
       "target": "scripts_analyze_nanda_unified_resolve_results_dir"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L1120",
+      "weight": 1.0,
+      "source": "scripts_analyze_nanda_unified_score_htsr_saved_histories",
+      "target": "scripts_analyze_nanda_unified_resolve_results_dir",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -24255,6 +24189,17 @@
       "confidence_score": 1.0,
       "source": "scripts_analyze_nanda_unified_rationale_282",
       "target": "scripts_analyze_nanda_unified_evaluate_frozen_protocol"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L1135",
+      "weight": 1.0,
+      "source": "scripts_analyze_nanda_unified_score_htsr_saved_histories",
+      "target": "scripts_analyze_nanda_unified_evaluate_frozen_protocol",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -24585,6 +24530,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L1136",
+      "weight": 1.0,
+      "source": "scripts_analyze_nanda_unified_score_htsr_saved_histories",
+      "target": "scripts_analyze_nanda_unified_attach_pass_checks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
       "source_location": "L409",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -24903,6 +24859,956 @@
       "weight": 1.0,
       "source": "tests_test_frozen_protocol_verdicts_test_l2_confirmed_peak_passes_legacy_at_neighbouring_lead_fractions",
       "target": "scripts_analyze_nanda_unified_score_saved_run"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L1102",
+      "weight": 1.0,
+      "source": "scripts_analyze_nanda_unified_main",
+      "target": "scripts_analyze_nanda_unified_score_htsr_saved_histories",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/analyze_nanda_unified.py",
+      "source_location": "L1113",
+      "weight": 1.0,
+      "source": "scripts_analyze_nanda_unified_rationale_1113",
+      "target": "scripts_analyze_nanda_unified_score_htsr_saved_histories",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/collate_predictor_grid.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_collate_predictor_grid",
+      "target": "scripts_collate_predictor_grid_get_paths"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/collate_predictor_grid.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_collate_predictor_grid",
+      "target": "scripts_collate_predictor_grid_main"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/collate_predictor_grid.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_collate_predictor_grid_main",
+      "target": "scripts_collate_predictor_grid_get_paths"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L45",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age",
+      "target": "scripts_plot_bespoke_spectral_age_load_all_data"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L293",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age",
+      "target": "scripts_plot_bespoke_spectral_age_main"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L215",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age",
+      "target": "scripts_plot_bespoke_spectral_age_plot_age_all_seeds_pdf"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L148",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age",
+      "target": "scripts_plot_bespoke_spectral_age_plot_age_per_seed"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L314",
+      "weight": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age",
+      "target": "scripts_plot_bespoke_spectral_age_plot_htsr_per_seed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L252",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age",
+      "target": "scripts_plot_bespoke_spectral_age_plot_spectral_all_seeds_pdf"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L180",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age",
+      "target": "scripts_plot_bespoke_spectral_age_plot_spectral_per_seed"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age",
+      "target": "scripts_plot_bespoke_spectral_age_set_plotting_style"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age_rationale_1",
+      "target": "scripts_plot_bespoke_spectral_age"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L294",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age_main",
+      "target": "scripts_plot_bespoke_spectral_age_set_plotting_style"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age_rationale_36",
+      "target": "scripts_plot_bespoke_spectral_age_set_plotting_style"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L295",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age_main",
+      "target": "scripts_plot_bespoke_spectral_age_load_all_data"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L46",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age_rationale_46",
+      "target": "scripts_plot_bespoke_spectral_age_load_all_data"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L307",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age_main",
+      "target": "scripts_plot_bespoke_spectral_age_plot_age_per_seed"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L164",
+      "weight": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age_rationale_164",
+      "target": "scripts_plot_bespoke_spectral_age_plot_age_per_seed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L312",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age_main",
+      "target": "scripts_plot_bespoke_spectral_age_plot_spectral_per_seed"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L197",
+      "weight": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age_rationale_197",
+      "target": "scripts_plot_bespoke_spectral_age_plot_spectral_per_seed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L317",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age_main",
+      "target": "scripts_plot_bespoke_spectral_age_plot_age_all_seeds_pdf"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L234",
+      "weight": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age_rationale_234",
+      "target": "scripts_plot_bespoke_spectral_age_plot_age_all_seeds_pdf",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L321",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age_main",
+      "target": "scripts_plot_bespoke_spectral_age_plot_spectral_all_seeds_pdf"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L272",
+      "weight": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age_rationale_272",
+      "target": "scripts_plot_bespoke_spectral_age_plot_spectral_all_seeds_pdf",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L363",
+      "weight": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age_main",
+      "target": "scripts_plot_bespoke_spectral_age_plot_htsr_per_seed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
+      "source_location": "L315",
+      "weight": 1.0,
+      "source": "scripts_plot_bespoke_spectral_age_rationale_315",
+      "target": "scripts_plot_bespoke_spectral_age_plot_htsr_per_seed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_htsr_evaluation.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "scripts_run_htsr_evaluation",
+      "target": "predictors_htsr_alpha",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/run_htsr_evaluation.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "scripts_run_htsr_evaluation",
+      "target": "scripts_run_htsr_evaluation_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/tests/htsr/test_htsr_signal_dependence.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "htsr_test_htsr_signal_dependence",
+      "target": "htsr_test_htsr_signal_dependence_test_featureless_null",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/tests/htsr/test_htsr_signal_dependence.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "htsr_test_htsr_signal_dependence",
+      "target": "htsr_test_htsr_signal_dependence_test_injected_powerlaw_alpha",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/tests/htsr/test_htsr_signal_dependence.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "htsr_test_htsr_signal_dependence_rationale_13",
+      "target": "htsr_test_htsr_signal_dependence_test_injected_powerlaw_alpha",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "06_Code/tests/htsr/test_htsr_signal_dependence.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "htsr_test_htsr_signal_dependence_rationale_31",
+      "target": "htsr_test_htsr_signal_dependence_test_featureless_null",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current",
+      "target": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L502",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current",
+      "target": "context_current_predictor_experimental_validation_master_tracker"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md",
+      "target": "context_current_1_frozen_experimental_setup"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L76",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md",
+      "target": "context_current_2_benchmark_rules_evaluation_protocol"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L107",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md",
+      "target": "context_current_3_predictor_benchmark_evaluations"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L232",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md",
+      "target": "context_current_4_current_repository_state"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L263",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md",
+      "target": "context_current_5_unresolved_needs_jonathan_s_check"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L304",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md",
+      "target": "context_current_6_structural_evaluation_protocol_reframing_synthetic_control_framework_as_primary_benchmark_metric_november_2026"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L447",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md",
+      "target": "context_current_dropout_predictor_evaluation_on_the_experiment_salah_yevick_signals"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L467",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md",
+      "target": "context_current_dropout_predictor_scorer_synthetic_signal_unit_tests"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L421",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md",
+      "target": "context_current_l2_predictor_signal_dependence_unit_tests"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_1_frozen_experimental_setup",
+      "target": "context_current_training_setup_nov_2026"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L226",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_3_predictor_benchmark_evaluations",
+      "target": "context_current_note_on_removed_predictor_correlation_traps"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L128",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_3_predictor_benchmark_evaluations",
+      "target": "context_current_predictor_1_l2_norm"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L143",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_3_predictor_benchmark_evaluations",
+      "target": "context_current_predictor_2_dropout"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L155",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_3_predictor_benchmark_evaluations",
+      "target": "context_current_predictor_3_spectral"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L170",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_3_predictor_benchmark_evaluations",
+      "target": "context_current_predictor_4_age_adaptive_grokking_epoch_via_neural_collapse"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L183",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_3_predictor_benchmark_evaluations",
+      "target": "context_current_predictor_5_htsr_alpha"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L192",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_3_predictor_benchmark_evaluations",
+      "target": "context_current_predictor_6_weight_pca"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L203",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_3_predictor_benchmark_evaluations",
+      "target": "context_current_predictor_7_higher_mi"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L214",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_3_predictor_benchmark_evaluations",
+      "target": "context_current_predictor_8_commutator_defect"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L267",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_5_unresolved_needs_jonathan_s_check",
+      "target": "context_current_1_conditional_noise_stress_test_false_positive_rate_p_i_sim_text_uniform_0_g_i"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L273",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_5_unresolved_needs_jonathan_s_check",
+      "target": "context_current_2_treatment_of_htsr_alpha_values_below_2_alpha_2"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L279",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_5_unresolved_needs_jonathan_s_check",
+      "target": "context_current_3_auxiliary_script_repo_root_definitions"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L285",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_5_unresolved_needs_jonathan_s_check",
+      "target": "context_current_4_commutator_defect_open_attack_points"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L306",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_6_structural_evaluation_protocol_reframing_synthetic_control_framework_as_primary_benchmark_metric_november_2026",
+      "target": "context_current_1_re_framing_the_baseline_and_benchmark_hierarchy"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L315",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_6_structural_evaluation_protocol_reframing_synthetic_control_framework_as_primary_benchmark_metric_november_2026",
+      "target": "context_current_2_positioning_the_control_validation_setup_as_the_primary_benchmark_metric"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L333",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_6_structural_evaluation_protocol_reframing_synthetic_control_framework_as_primary_benchmark_metric_november_2026",
+      "target": "context_current_3_revised_structural_hierarchy_of_the_benchmark"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L345",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_6_structural_evaluation_protocol_reframing_synthetic_control_framework_as_primary_benchmark_metric_november_2026",
+      "target": "context_current_4_append_only_status_harmonization_note"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L349",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_6_structural_evaluation_protocol_reframing_synthetic_control_framework_as_primary_benchmark_metric_november_2026",
+      "target": "context_current_5_predictor_quality_index_s_pr_35_15_nov_2026"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L393",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_6_structural_evaluation_protocol_reframing_synthetic_control_framework_as_primary_benchmark_metric_november_2026",
+      "target": "context_current_6_control_experiment_redesign_superiority_index_pr_40_merge_5b321dc_15_november_2026"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L504",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_predictor_experimental_validation_master_tracker",
+      "target": "context_current_1_l2_norm_predictor"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L787",
+      "weight": 1.0,
+      "source": "context_current_predictor_experimental_validation_master_tracker",
+      "target": "context_current_2026_11_16_predictor_separation_completed_l2_dropout_spectral_age",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L512",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_predictor_experimental_validation_master_tracker",
+      "target": "context_current_2_dropout_predictor"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L520",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_predictor_experimental_validation_master_tracker",
+      "target": "context_current_3_spectral_predictor"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L528",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_predictor_experimental_validation_master_tracker",
+      "target": "context_current_4_age_predictor"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L536",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_predictor_experimental_validation_master_tracker",
+      "target": "context_current_5_htsr_alpha_predictor"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L754",
+      "weight": 1.0,
+      "source": "context_current_predictor_experimental_validation_master_tracker",
+      "target": "context_current_8_resolution_of_canonical_alignment_checkpoint_only_recompute_november_16_2026",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L771",
+      "weight": 1.0,
+      "source": "context_current_predictor_experimental_validation_master_tracker",
+      "target": "context_current_9_provenance_audit_cleanup_and_predictor_plotting_alignment_november_16_2026",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L555",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_predictor_experimental_validation_master_tracker",
+      "target": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L679",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_predictor_experimental_validation_master_tracker",
+      "target": "context_current_session_summary_november_16_2026_age_predictor_ground_up_rebuild"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L659",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
+      "target": "context_current_10_post_hoc_sensitivity_appendix_non_binding_read_only"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L674",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
+      "target": "context_current_11_next_task_in_benchmark_sequence"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L557",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
+      "target": "context_current_1_scope_and_constraints_honored"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L563",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
+      "target": "context_current_2_exact_metric_definitions_section_2_blueprint"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L582",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
+      "target": "context_current_3_exact_trigger_rule_section_3_blueprint"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L592",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
+      "target": "context_current_4_implementation_inventory"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L599",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
+      "target": "context_current_5_phase_3_results_detector_causality_unit_tests_9_of_9_passed"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L611",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
+      "target": "context_current_6_phase_4_results_shared_scorer_synthetic_controls_6_of_6_passed"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L620",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
+      "target": "context_current_7_phase_5_results_empirical_run_across_5_seeds"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L636",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
+      "target": "context_current_8_phase_6_results_formal_scoring_and_verdict"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L656",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
+      "target": "context_current_9_synthetic_control_verification_statement"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L681",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_session_summary_november_16_2026_age_predictor_ground_up_rebuild",
+      "target": "context_current_1_step_0_deletion_of_old_age_implementation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L686",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_session_summary_november_16_2026_age_predictor_ground_up_rebuild",
+      "target": "context_current_2_step_1_signal_definition_and_mathematical_foundation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L701",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_session_summary_november_16_2026_age_predictor_ground_up_rebuild",
+      "target": "context_current_3_step_2_implementation_details"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L706",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_session_summary_november_16_2026_age_predictor_ground_up_rebuild",
+      "target": "context_current_4_step_3_unit_tests_for_detector_validation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L712",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_session_summary_november_16_2026_age_predictor_ground_up_rebuild",
+      "target": "context_current_5_step_4_unit_tests_for_scorer_validation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L718",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_session_summary_november_16_2026_age_predictor_ground_up_rebuild",
+      "target": "context_current_6_step_5_empirical_execution_results"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L724",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_session_summary_november_16_2026_age_predictor_ground_up_rebuild",
+      "target": "context_current_7_step_6_formal_scoring_and_verdict"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L747",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_session_summary_november_16_2026_age_predictor_ground_up_rebuild",
+      "target": "context_current_8_physical_interpretation"
     },
     {
       "relation": "contains",
@@ -27058,576 +27964,6 @@
       "confidence_score": 1.0,
       "source": "predictor_experimental_validation_master_tracker_predictor_experimental_validation_master_tracker",
       "target": "predictor_experimental_validation_master_tracker_5_htsr_alpha_predictor"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current",
-      "target": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L502",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current",
-      "target": "context_current_predictor_experimental_validation_master_tracker"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md",
-      "target": "context_current_1_frozen_experimental_setup"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L76",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md",
-      "target": "context_current_2_benchmark_rules_evaluation_protocol"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L107",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md",
-      "target": "context_current_3_predictor_benchmark_evaluations"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L232",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md",
-      "target": "context_current_4_current_repository_state"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L263",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md",
-      "target": "context_current_5_unresolved_needs_jonathan_s_check"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L304",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md",
-      "target": "context_current_6_structural_evaluation_protocol_reframing_synthetic_control_framework_as_primary_benchmark_metric_november_2026"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L447",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md",
-      "target": "context_current_dropout_predictor_evaluation_on_the_experiment_salah_yevick_signals"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L467",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md",
-      "target": "context_current_dropout_predictor_scorer_synthetic_signal_unit_tests"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L421",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md",
-      "target": "context_current_l2_predictor_signal_dependence_unit_tests"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L15",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_1_frozen_experimental_setup",
-      "target": "context_current_training_setup_nov_2026"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L226",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_3_predictor_benchmark_evaluations",
-      "target": "context_current_note_on_removed_predictor_correlation_traps"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L128",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_3_predictor_benchmark_evaluations",
-      "target": "context_current_predictor_1_l2_norm"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L143",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_3_predictor_benchmark_evaluations",
-      "target": "context_current_predictor_2_dropout"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L155",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_3_predictor_benchmark_evaluations",
-      "target": "context_current_predictor_3_spectral"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L170",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_3_predictor_benchmark_evaluations",
-      "target": "context_current_predictor_4_age_adaptive_grokking_epoch_via_neural_collapse"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L183",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_3_predictor_benchmark_evaluations",
-      "target": "context_current_predictor_5_htsr_alpha"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L192",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_3_predictor_benchmark_evaluations",
-      "target": "context_current_predictor_6_weight_pca"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L203",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_3_predictor_benchmark_evaluations",
-      "target": "context_current_predictor_7_higher_mi"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L214",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_3_predictor_benchmark_evaluations",
-      "target": "context_current_predictor_8_commutator_defect"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L267",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_5_unresolved_needs_jonathan_s_check",
-      "target": "context_current_1_conditional_noise_stress_test_false_positive_rate_p_i_sim_text_uniform_0_g_i"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L273",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_5_unresolved_needs_jonathan_s_check",
-      "target": "context_current_2_treatment_of_htsr_alpha_values_below_2_alpha_2"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L279",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_5_unresolved_needs_jonathan_s_check",
-      "target": "context_current_3_auxiliary_script_repo_root_definitions"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L285",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_5_unresolved_needs_jonathan_s_check",
-      "target": "context_current_4_commutator_defect_open_attack_points"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L306",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_6_structural_evaluation_protocol_reframing_synthetic_control_framework_as_primary_benchmark_metric_november_2026",
-      "target": "context_current_1_re_framing_the_baseline_and_benchmark_hierarchy"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L315",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_6_structural_evaluation_protocol_reframing_synthetic_control_framework_as_primary_benchmark_metric_november_2026",
-      "target": "context_current_2_positioning_the_control_validation_setup_as_the_primary_benchmark_metric"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L333",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_6_structural_evaluation_protocol_reframing_synthetic_control_framework_as_primary_benchmark_metric_november_2026",
-      "target": "context_current_3_revised_structural_hierarchy_of_the_benchmark"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L345",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_6_structural_evaluation_protocol_reframing_synthetic_control_framework_as_primary_benchmark_metric_november_2026",
-      "target": "context_current_4_append_only_status_harmonization_note"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L349",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_6_structural_evaluation_protocol_reframing_synthetic_control_framework_as_primary_benchmark_metric_november_2026",
-      "target": "context_current_5_predictor_quality_index_s_pr_35_15_nov_2026"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L393",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_6_structural_evaluation_protocol_reframing_synthetic_control_framework_as_primary_benchmark_metric_november_2026",
-      "target": "context_current_6_control_experiment_redesign_superiority_index_pr_40_merge_5b321dc_15_november_2026"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L504",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_predictor_experimental_validation_master_tracker",
-      "target": "context_current_1_l2_norm_predictor"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L512",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_predictor_experimental_validation_master_tracker",
-      "target": "context_current_2_dropout_predictor"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L520",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_predictor_experimental_validation_master_tracker",
-      "target": "context_current_3_spectral_predictor"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L528",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_predictor_experimental_validation_master_tracker",
-      "target": "context_current_4_age_predictor"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L536",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_predictor_experimental_validation_master_tracker",
-      "target": "context_current_5_htsr_alpha_predictor"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L555",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_predictor_experimental_validation_master_tracker",
-      "target": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L679",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_predictor_experimental_validation_master_tracker",
-      "target": "context_current_session_summary_november_16_2026_age_predictor_ground_up_rebuild"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L659",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
-      "target": "context_current_10_post_hoc_sensitivity_appendix_non_binding_read_only"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L674",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
-      "target": "context_current_11_next_task_in_benchmark_sequence"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L557",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
-      "target": "context_current_1_scope_and_constraints_honored"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L563",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
-      "target": "context_current_2_exact_metric_definitions_section_2_blueprint"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L582",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
-      "target": "context_current_3_exact_trigger_rule_section_3_blueprint"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L592",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
-      "target": "context_current_4_implementation_inventory"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L599",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
-      "target": "context_current_5_phase_3_results_detector_causality_unit_tests_9_of_9_passed"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L611",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
-      "target": "context_current_6_phase_4_results_shared_scorer_synthetic_controls_6_of_6_passed"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L620",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
-      "target": "context_current_7_phase_5_results_empirical_run_across_5_seeds"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L636",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
-      "target": "context_current_8_phase_6_results_formal_scoring_and_verdict"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L656",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_session_spectral_predictor_redesign_and_full_six_phase_validation_november_16_2026",
-      "target": "context_current_9_synthetic_control_verification_statement"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L681",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_session_summary_november_16_2026_age_predictor_ground_up_rebuild",
-      "target": "context_current_1_step_0_deletion_of_old_age_implementation"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L686",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_session_summary_november_16_2026_age_predictor_ground_up_rebuild",
-      "target": "context_current_2_step_1_signal_definition_and_mathematical_foundation"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L701",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_session_summary_november_16_2026_age_predictor_ground_up_rebuild",
-      "target": "context_current_3_step_2_implementation_details"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L706",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_session_summary_november_16_2026_age_predictor_ground_up_rebuild",
-      "target": "context_current_4_step_3_unit_tests_for_detector_validation"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L712",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_session_summary_november_16_2026_age_predictor_ground_up_rebuild",
-      "target": "context_current_5_step_4_unit_tests_for_scorer_validation"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L718",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_session_summary_november_16_2026_age_predictor_ground_up_rebuild",
-      "target": "context_current_6_step_5_empirical_execution_results"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L724",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_session_summary_november_16_2026_age_predictor_ground_up_rebuild",
-      "target": "context_current_7_step_6_formal_scoring_and_verdict"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "context_current.md",
-      "source_location": "L747",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "context_current_session_summary_november_16_2026_age_predictor_ground_up_rebuild",
-      "target": "context_current_8_physical_interpretation"
     },
     {
       "relation": "contains",
@@ -51358,5 +51694,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "96741cc631736518bf28317393fc2a685d437512"
+  "built_at_commit": "ef40422120316537f03ae2f13a88e7852b92ecfc"
 }
