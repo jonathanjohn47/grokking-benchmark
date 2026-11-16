@@ -70,7 +70,13 @@ from predictors.l2_norm import (                                          # noqa
     detect_confirmed_sum_w2_peak,
     sum_w2_peak,
 )
-from predictors.spectral import compute_spectral_metrics_for_checkpoint   # noqa: E402
+from predictors.spectral import (                                          # noqa: E402
+    compute_spectral_metrics_from_checkpoint,
+    compute_spectral_metrics_for_checkpoint,
+    detect_spectral_trigger,
+    compute_reference_learning_curve,
+    get_deterministic_sample_indices,
+)
 from predictors.age import compute_age_metrics_for_checkpoint             # noqa: E402
 from predictors.htsr_alpha import (                                       # noqa: E402
     compute_htsr_metrics_for_checkpoint, LAYER_NAMES as HTSR_LAYER_NAMES)
@@ -591,7 +597,7 @@ def _checkpoint_predictor_spectral(model, test_loader, ckpt_dir, ckpt_epochs,
     """CHECKPOINT_PREDICTOR_FUNCS["spectral"] — Canatar et al. 2021
     task-model alignment (see src/predictors/spectral.py). Loads each
     saved checkpoint into `model` in turn, computes
-    compute_spectral_metrics_for_checkpoint(model, train_loader, device)
+    compute_spectral_metrics_from_checkpoint(model, train_loader, device)
     — kernel eigenvalues eta_k, task power w_k^2, cumulative power C(k),
     k_90 / k_95, alignment_score, entropy — collects the per-checkpoint
     history, saves it via measurements.save_spectral_data, and returns the
@@ -612,32 +618,111 @@ def _checkpoint_predictor_spectral(model, test_loader, ckpt_dir, ckpt_epochs,
     np.random.seed(seed)
     train_loader, _ = get_dataloaders(number=p, batch_size=batch_size, seed=seed)
 
+    # 4.7 Per-seed artifacts directory under <output_dir>/spectral/seed_<seed>/
+    spectral_artifact_dir = os.path.join(
+        os.path.dirname(measurements.output_dir), "spectral", f"seed_{seed}"
+    )
+    os.makedirs(spectral_artifact_dir, exist_ok=True)
+    os.makedirs(measurements.spectral_dir, exist_ok=True)
+
+    # Persist or reload fixed deterministic sample indices
+    sample_indices_path = os.path.join(spectral_artifact_dir, "spectral_sample_indices.npy")
+    if os.path.exists(sample_indices_path):
+        sample_indices = np.load(sample_indices_path)
+    else:
+        sample_indices = get_deterministic_sample_indices(batch_size, seed=12345, n_spec=2048)
+        np.save(sample_indices_path, sample_indices)
+    np.save(os.path.join(measurements.spectral_dir, "spectral_sample_indices.npy"), sample_indices)
+
     spectral_checkpoints = []
     hist = {
         "k_90": [], "k_95": [], "alignment_score": [], "entropy": [],
         "eigenvalues_history": [], "cumulative_power_history": [],
     }
+    last_metrics = None
 
     for epoch in ckpt_epochs:
         state = torch.load(os.path.join(ckpt_dir, f"model_epoch_{epoch}.pt"), map_location=device)
-        model.load_state_dict(state)
-        m = compute_spectral_metrics_for_checkpoint(model, train_loader, device)
+        if "attn_out.weight" not in state and hasattr(model, "attn_out"):
+            model.attn_out.weight.data.copy_(torch.eye(model.d_model, device=device))
+            if hasattr(model, "mask"):
+                model.mask.data.copy_(torch.ones_like(model.mask))
+            model.load_state_dict(state, strict=False)
+        else:
+            model.load_state_dict(state)
+        m = compute_spectral_metrics_from_checkpoint(
+            model, train_loader, device, sample_indices=sample_indices
+        )
+        last_metrics = m
         spectral_checkpoints.append(epoch)
         hist["k_90"].append(m["k_90"])
         hist["k_95"].append(m["k_95"])
         hist["alignment_score"].append(m["alignment_score"])
-        hist["entropy"].append(m["entropy"])
+        hist["entropy"].append(m["spectral_entropy"])
         hist["eigenvalues_history"].append(m["eigenvalues"])
-        hist["cumulative_power_history"].append(m["cumulative_power"])
+        hist["cumulative_power_history"].append(m["cumulative_task_power"])
 
     measurements.save_spectral_data(spectral_checkpoints, hist)
 
-    # Aggregate signal (Canatar): task-model alignment should form at or
-    # before grokking, i.e. k_90 DROPS and alignment_score RISES around
-    # grok_epoch. Record the checkpoint epoch of minimum k_90 / maximum
-    # alignment and compare against grok_epoch.
     k90 = hist["k_90"]
     align = hist["alignment_score"]
+    P_i = detect_spectral_trigger(spectral_checkpoints, k90, align)
+
+    n_base = min(5, len(k90))
+    b_k = float(np.median(k90[:n_base])) if n_base > 0 else float("nan")
+    eligible_epochs = [e for e in spectral_checkpoints if e >= 200]
+    n_eligible = len(eligible_epochs)
+
+    first_window_start_epoch = P_i
+    if P_i is None:
+        if b_k == 0.0 or np.isnan(b_k):
+            reason_if_none = "baseline b_k is zero or NaN"
+        elif n_eligible < 3:
+            reason_if_none = "fewer than 3 eligible checkpoints with epoch >= 200"
+        else:
+            reason_if_none = "no 3-consecutive persistence window satisfying k_s <= 0.9*b_k and A_s >= 0.50"
+    else:
+        reason_if_none = None
+
+    trigger_data = {
+        "seed": seed,
+        "baseline_b_k": b_k,
+        "P_i": P_i,
+        "fired": bool(P_i is not None),
+        "first_window_start_epoch": first_window_start_epoch,
+        "n_eligible_checkpoints": n_eligible,
+        "reason_if_none": reason_if_none,
+    }
+
+    if last_metrics is not None and len(last_metrics["eigenvalues"]) > 0:
+        ref_curve = compute_reference_learning_curve(
+            last_metrics["eigenvalues"], last_metrics["task_power"]
+        )
+    else:
+        ref_curve = {}
+
+    # Persist the exact 10 artifacts required by Section 4.7
+    np.save(os.path.join(spectral_artifact_dir, "spectral_checkpoints.npy"), np.array(spectral_checkpoints, dtype=int))
+    np.save(os.path.join(spectral_artifact_dir, "spectral_k90.npy"), np.array(hist["k_90"], dtype=float))
+    np.save(os.path.join(spectral_artifact_dir, "spectral_k95.npy"), np.array(hist["k_95"], dtype=float))
+    np.save(os.path.join(spectral_artifact_dir, "spectral_alignment.npy"), np.array(hist["alignment_score"], dtype=float))
+    np.save(os.path.join(spectral_artifact_dir, "spectral_entropy.npy"), np.array(hist["entropy"], dtype=float))
+
+    max_r = max(len(ev) for ev in hist["eigenvalues_history"]) if hist["eigenvalues_history"] else 0
+    eig_mat = np.zeros((len(spectral_checkpoints), max_r), dtype=np.float64)
+    cum_mat = np.zeros((len(spectral_checkpoints), max_r), dtype=np.float64)
+    for i in range(len(spectral_checkpoints)):
+        r_i = len(hist["eigenvalues_history"][i])
+        eig_mat[i, :r_i] = hist["eigenvalues_history"][i]
+        cum_mat[i, :r_i] = hist["cumulative_power_history"][i]
+
+    np.save(os.path.join(spectral_artifact_dir, "spectral_eigenvalues.npy"), eig_mat)
+    np.save(os.path.join(spectral_artifact_dir, "spectral_cumulative_power.npy"), cum_mat)
+    with open(os.path.join(spectral_artifact_dir, "spectral_reference_learning_curve.json"), "w") as f:
+        json.dump(ref_curve, f, indent=2)
+    with open(os.path.join(spectral_artifact_dir, "spectral_trigger.json"), "w") as f:
+        json.dump(trigger_data, f, indent=2)
+
     k_90_min_idx = int(np.argmin(k90))
     k_95_min_idx = int(np.argmin(hist["k_95"]))
     alignment_max_idx = int(np.argmax(align))
@@ -651,6 +736,10 @@ def _checkpoint_predictor_spectral(model, test_loader, ckpt_dir, ckpt_epochs,
         "alignment_history": [float(v) for v in align],
         "entropy_history": [float(v) for v in hist["entropy"]],
         "grok_epoch": grok_epoch,
+        "firing_epoch": P_i,
+        "P_i": P_i,
+        "baseline_b_k": b_k,
+        "fired": bool(P_i is not None),
         "k_90_min_epoch": k_90_min_epoch,
         "k_95_min_epoch": spectral_checkpoints[k_95_min_idx],
         "alignment_max_epoch": alignment_max_epoch,

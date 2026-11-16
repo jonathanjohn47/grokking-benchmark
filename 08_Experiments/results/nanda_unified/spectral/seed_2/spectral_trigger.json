@@ -1,0 +1,9 @@
+{
+  "seed": 2,
+  "baseline_b_k": 116.0,
+  "P_i": 9200,
+  "fired": true,
+  "first_window_start_epoch": 9200,
+  "n_eligible_checkpoints": 399,
+  "reason_if_none": null
+}
