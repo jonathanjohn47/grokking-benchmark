@@ -13556,3 +13556,43 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 - `06_Code/scripts/plot_bespoke_spectral_age.py`: New bespoke diagnostic plotting script.
 - `08_Experiments/results/nanda_unified/analysis/bespoke_diagnostics/*`: Bespoke diagnostic PNGs and combined PDFs.
 - `context.md`: Appended session summary.
+
+
+---
+
+# Session Summary — November 16, 2026 (Fix Spectral Plotting Paths to Read from New Rebuild Directory)
+
+## Session Summary
+- **Implemented:** Updated `06_Code/scripts/plot_bespoke_spectral_age.py` to read Spectral data from the new rebuild location under `08_Experiments/results/nanda_unified/spectral/` and AGE data from `08_Experiments/results/nanda_unified/seed_{i}/age/`.
+- **Investigated:** Audited directory structures between legacy `seed_{i}/spectral/` (where Seed 0 alignment max was 31600) and new rebuild `spectral/seed_{i}/` / `spectral/spectral_summary.json` (where Seed 0 alignment max is correctly 11000). Confirmed that `spectral_summary.json` holds the true rebuild metrics in `diagnostics["alignment_global_max_epochs"]` and `diagnostics["k90_global_min_epochs"]`.
+- **Changed:**
+  - Updated `06_Code/scripts/plot_bespoke_spectral_age.py` data loading logic to read Spectral trajectories and summary metrics from `08_Experiments/results/nanda_unified/spectral/`.
+  - Re-generated all bespoke diagnostic plots in `08_Experiments/results/nanda_unified/analysis/bespoke_diagnostics/` showing the new Spectral extrema (Seed 0 alignment max at epoch 11000, $k_{90}$ min at 34500).
+  - Ensured `aggregate.json` canonical grokking epochs `[8021, 8253, 4094, 7831, 6637]` are respected.
+- **Fixed:** Corrected alignment max and $k_{90}$ min markers on all Spectral plots to match the rebuild rather than legacy runs.
+- **Postponed:** None.
+
+## Technical Decisions
+- Standardized data extraction from `spectral_summary.json` to handle both per-seed blocks and `diagnostics` global arrays without brittle assumptions.
+- Handled true epoch grid from `epochs.npy` / `spectral_checkpoints.npy` (401 checkpoints ending at 39999).
+
+## User Instructions
+- Fix bespoke diagnostic plotting script to read Spectral predictor data from actual new rebuild location.
+- Execute script, verify output images, commit with message `fix: correct Spectral plotting paths to read from new rebuild output directory`, and push to `origin/main`.
+
+## Current Project State
+- **Completed Work:**
+  - Script updated and executed.
+  - Bespoke diagnostic plots for Spectral and AGE refreshed with true rebuild data.
+  - Changes staged, committed, and pushed.
+- **Work in Progress / Next Actions:**
+  - Proceed with next milestone on predictor benchmark roadmap.
+- **Blockers:** None.
+
+## Important Discoveries
+- In the rebuild, alignment max epochs across seeds are $[11000, 5800, 9200, 8700, 21900]$ and $k_{90}$ min epochs are $[34500, 13600, 24100, 19200, 32400]$, which differ significantly from the legacy `seed_{i}/spectral/` records.
+
+## Files Modified
+- `06_Code/scripts/plot_bespoke_spectral_age.py`: Corrected input paths and metrics extraction.
+- `08_Experiments/results/nanda_unified/analysis/bespoke_diagnostics/*`: Refreshed plots.
+- `context.md`: Appended session summary.

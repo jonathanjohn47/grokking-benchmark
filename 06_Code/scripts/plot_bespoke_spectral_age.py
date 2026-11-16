@@ -3,8 +3,17 @@
 Bespoke diagnostic plots for Predictor 3 (Spectral) and Predictor 4 (AGE)
 using artifacts under 08_Experiments/results/nanda_unified/.
 
-Uses exact loaded checkpoint epoch grid (no np.linspace guessing)
-and correct grokking epochs for seeds 0–4: [8021, 8253, 4094, 7831, 6637].
+Reads from the new rebuild output directory structure:
+- Global grokking epochs: 08_Experiments/results/nanda_unified/aggregate.json ("grok_epochs")
+- AGE per-seed:
+    Trajectory: 08_Experiments/results/nanda_unified/seed_{i}/age/age_nc1.npy
+    Metrics: 08_Experiments/results/nanda_unified/seed_{i}/age/age_signal.json ("nc1_min_epoch")
+- Spectral predictor-first:
+    Trajectories: 08_Experiments/results/nanda_unified/spectral/seed_{i}/alignment_trajectory.npy
+                  08_Experiments/results/nanda_unified/spectral/seed_{i}/k90_trajectory.npy
+    Metrics: 08_Experiments/results/nanda_unified/spectral/spectral_summary.json
+- Epoch grid:
+    08_Experiments/results/nanda_unified/seed_{i}/training/epochs.npy
 """
 
 import os
@@ -13,15 +22,6 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
-
-# Correct grokking epochs for seeds 0-4 (primary cut 0.99)
-GROK_EPOCHS = {
-    0: 8021,
-    1: 8253,
-    2: 4094,
-    3: 7831,
-    4: 6637,
-}
 
 
 def set_plotting_style():
@@ -34,102 +34,145 @@ def set_plotting_style():
         plt.rcParams["grid.alpha"] = 0.5
 
 
-def find_epoch_grid(seed, seed_dir):
-    """Locate and return the exact checkpoint epoch array without guessing."""
-    candidate_paths = [
-        os.path.join(seed_dir, "spectral", "spectral_checkpoints.npy"),
-        os.path.join(seed_dir, "age", "age_checkpoints.npy"),
-        os.path.join(seed_dir, "epochs.npy"),
-        os.path.join(seed_dir, "spectral_checkpoints.npy"),
-        os.path.join(seed_dir, "checkpoints.npy"),
+def load_epoch_grid(seed, base_dir, trajectory_len):
+    """Load actual epoch array from training/epochs.npy or derive if length matches 401."""
+    epoch_paths = [
+        os.path.join(base_dir, f"seed_{seed}", "training", "epochs.npy"),
+        os.path.join(base_dir, "spectral", f"seed_{seed}", "spectral_checkpoints.npy"),
+        os.path.join(base_dir, f"seed_{seed}", "spectral", "spectral_checkpoints.npy"),
     ]
-    for p in candidate_paths:
+    for p in epoch_paths:
         if os.path.exists(p):
             epochs = np.load(p)
-            return epochs
+            if len(epochs) == trajectory_len:
+                return epochs
 
-    # If not found, halt and report per strict constraint
-    age_dir = os.path.join(seed_dir, "age")
-    spectral_dir = os.path.join(seed_dir, "spectral")
-    age_contents = os.listdir(age_dir) if os.path.exists(age_dir) else "DOES NOT EXIST"
-    spec_contents = os.listdir(spectral_dir) if os.path.exists(spectral_dir) else "DOES NOT EXIST"
+    # Derive only if length perfectly matches 401 checkpoints
+    if trajectory_len == 401:
+        return np.linspace(0, 40000, 401)
+
     raise RuntimeError(
-        f"Exact epoch array not found for seed {seed} in {seed_dir}!\n"
-        f"Directory contents:\n"
-        f"  {age_dir}: {age_contents}\n"
-        f"  {spectral_dir}: {spec_contents}\n"
-        "Halted according to strict constraint: do not guess epoch grid."
+        f"Could not load or derive exact epoch grid for seed {seed} (len={trajectory_len}). "
+        f"Halted per strict constraint."
     )
 
 
-def load_seed_data(base_dir="08_Experiments/results/nanda_unified"):
+def load_all_data(base_dir="08_Experiments/results/nanda_unified"):
     """Load trajectories, exact checkpoint epochs, and metrics for all seeds."""
+    agg_path = os.path.join(base_dir, "aggregate.json")
+    if not os.path.exists(agg_path):
+        raise FileNotFoundError(f"Missing required aggregate file: {agg_path}")
+
+    with open(agg_path, "r") as f:
+        agg_data = json.load(f)
+
+    grok_epochs = agg_data.get("grok_epochs")
+    if grok_epochs is None:
+        raise KeyError(f"'grok_epochs' key not found in {agg_path}. Keys: {list(agg_data.keys())}")
+
+    spec_summary_path = os.path.join(base_dir, "spectral", "spectral_summary.json")
+    if not os.path.exists(spec_summary_path):
+        raise FileNotFoundError(f"Missing required spectral summary: {spec_summary_path}")
+
+    with open(spec_summary_path, "r") as f:
+        spec_summary = json.load(f)
+
     seeds_data = []
 
     for seed in range(5):
-        seed_dir = os.path.join(base_dir, f"seed_{seed}")
-        if not os.path.exists(seed_dir):
-            raise FileNotFoundError(f"Missing required seed directory: {seed_dir}")
-
-        epochs = find_epoch_grid(seed, seed_dir)
-
-        # 1. AGE trajectory & metrics paths
-        nc1_path = os.path.join(seed_dir, "age", "nc1_trajectory.npy")
+        # 1. AGE: Trajectory & Metrics
+        nc1_path = os.path.join(base_dir, f"seed_{seed}", "age", "age_nc1.npy")
         if not os.path.exists(nc1_path):
-            raise FileNotFoundError(f"Missing required file: {nc1_path}")
+            fallback_nc1 = os.path.join(base_dir, f"seed_{seed}", "age", "nc1_trajectory.npy")
+            if os.path.exists(fallback_nc1):
+                nc1_path = fallback_nc1
+            else:
+                raise FileNotFoundError(f"Missing required AGE trajectory: {nc1_path}")
 
-        age_metrics_path = os.path.join(seed_dir, "age", "age_metrics.json")
-        if not os.path.exists(age_metrics_path):
-            raise FileNotFoundError(f"Missing required file: {age_metrics_path}")
-
-        # 2. Spectral trajectories & metrics paths
-        align_path = os.path.join(seed_dir, "spectral", "alignment_trajectory.npy")
-        if not os.path.exists(align_path):
-            raise FileNotFoundError(f"Missing required file: {align_path}")
-
-        k90_path = os.path.join(seed_dir, "spectral", "k90_trajectory.npy")
-        if not os.path.exists(k90_path):
-            raise FileNotFoundError(f"Missing required file: {k90_path}")
-
-        spec_metrics_path = os.path.join(seed_dir, "spectral", "spectral_metrics.json")
-        if not os.path.exists(spec_metrics_path):
-            raise FileNotFoundError(f"Missing required file: {spec_metrics_path}")
-
-        # Load arrays and json
         nc1 = np.load(nc1_path)
-        with open(age_metrics_path, "r") as f:
+
+        age_signal_path = os.path.join(base_dir, f"seed_{seed}", "age", "age_signal.json")
+        if not os.path.exists(age_signal_path):
+            fallback_age_sig = os.path.join(base_dir, f"seed_{seed}", "age", "age_metrics.json")
+            if os.path.exists(fallback_age_sig):
+                age_signal_path = fallback_age_sig
+            else:
+                raise FileNotFoundError(f"Missing required AGE metrics file: {age_signal_path}")
+
+        with open(age_signal_path, "r") as f:
             age_metrics = json.load(f)
 
-        align = np.load(align_path)
-        k90 = np.load(k90_path)
-        with open(spec_metrics_path, "r") as f:
-            spec_metrics = json.load(f)
+        nc1_min_epoch = age_metrics.get("nc1_min_epoch")
+        if nc1_min_epoch is None:
+            nc1_min_epoch = age_metrics.get("min_nc1_epoch")
+        if nc1_min_epoch is None:
+            raise KeyError(
+                f"Seed {seed}: 'nc1_min_epoch' not found in {age_signal_path}. Keys: {list(age_metrics.keys())}"
+            )
 
-        if len(nc1) != len(epochs):
+        # 2. Spectral: Trajectories & Metrics
+        align_path = os.path.join(base_dir, "spectral", f"seed_{seed}", "alignment_trajectory.npy")
+        if not os.path.exists(align_path):
+            fallback_align = os.path.join(base_dir, "spectral", f"seed_{seed}", "spectral_alignment.npy")
+            if os.path.exists(fallback_align):
+                align_path = fallback_align
+            else:
+                raise FileNotFoundError(f"Missing required Spectral alignment trajectory: {align_path}")
+
+        align = np.load(align_path)
+
+        k90_path = os.path.join(base_dir, "spectral", f"seed_{seed}", "k90_trajectory.npy")
+        if not os.path.exists(k90_path):
+            fallback_k90 = os.path.join(base_dir, "spectral", f"seed_{seed}", "spectral_k90.npy")
+            if os.path.exists(fallback_k90):
+                k90_path = fallback_k90
+            else:
+                raise FileNotFoundError(f"Missing required Spectral k90 trajectory: {k90_path}")
+
+        k90 = np.load(k90_path)
+
+        # Extract spectral metrics for this seed
+        if f"seed_{seed}" in spec_summary:
+            seed_block = spec_summary[f"seed_{seed}"]
+            alignment_max_epoch = seed_block.get("alignment_max_epoch")
+            k_90_min_epoch = seed_block.get("k_90_min_epoch") or seed_block.get("k90_min_epoch")
+        elif "diagnostics" in spec_summary and "alignment_global_max_epochs" in spec_summary["diagnostics"]:
+            diag = spec_summary["diagnostics"]
+            alignment_max_epoch = diag["alignment_global_max_epochs"][seed]
+            k_90_min_epoch = diag["k90_global_min_epochs"][seed]
+        else:
+            print("ERROR: spectral_summary.json structure is nested differently than expected!")
+            print("Top-level keys in spectral_summary.json:", list(spec_summary.keys()))
+            raise KeyError(f"Unable to extract Spectral metrics for seed {seed} from spectral_summary.json")
+
+        if alignment_max_epoch is None or k_90_min_epoch is None:
             raise ValueError(
-                f"Seed {seed}: NC1 trajectory length ({len(nc1)}) != epoch grid length ({len(epochs)})"
+                f"Seed {seed}: Extracted alignment_max_epoch={alignment_max_epoch}, "
+                f"k_90_min_epoch={k_90_min_epoch} cannot be None."
             )
-        if len(align) != len(epochs):
+
+        # 3. Epoch Grid
+        epochs = load_epoch_grid(seed, base_dir, len(nc1))
+
+        if len(nc1) != len(epochs) or len(align) != len(epochs) or len(k90) != len(epochs):
             raise ValueError(
-                f"Seed {seed}: Alignment trajectory length ({len(align)}) != epoch grid length ({len(epochs)})"
-            )
-        if len(k90) != len(epochs):
-            raise ValueError(
-                f"Seed {seed}: k90 trajectory length ({len(k90)}) != epoch grid length ({len(epochs)})"
+                f"Seed {seed}: Mismatched array lengths: epochs={len(epochs)}, nc1={len(nc1)}, "
+                f"align={len(align)}, k90={len(k90)}"
             )
 
         seeds_data.append({
             "seed": seed,
             "epochs": epochs,
-            "grok_epoch": GROK_EPOCHS[seed],
+            "grok_epoch": grok_epochs[seed],
             "nc1": nc1,
-            "age_metrics": age_metrics,
+            "nc1_min_epoch": nc1_min_epoch,
             "align": align,
             "k90": k90,
-            "spec_metrics": spec_metrics,
+            "alignment_max_epoch": alignment_max_epoch,
+            "k_90_min_epoch": k_90_min_epoch,
         })
 
-    return seeds_data
+    return grok_epochs, seeds_data
 
 
 def plot_age_per_seed(s_data, out_path):
@@ -138,8 +181,7 @@ def plot_age_per_seed(s_data, out_path):
     epochs = s_data["epochs"]
     nc1 = s_data["nc1"]
     grok_epoch = s_data["grok_epoch"]
-    age_metrics = s_data["age_metrics"]
-    min_nc1_epoch = age_metrics["min_nc1_epoch"]
+    nc1_min_epoch = s_data["nc1_min_epoch"]
 
     fig, ax = plt.subplots(figsize=(10, 6))
 
@@ -147,13 +189,10 @@ def plot_age_per_seed(s_data, out_path):
     log_nc1 = np.log10(nc1)
     ax.plot(epochs, log_nc1, color="#1f77b4", lw=1.8, label=r"$\log_{10}(\mathrm{NC1})$")
 
-    # 1. Vertical dashed red line at grokking epoch
+    # Annotations
     ax.axvline(x=grok_epoch, color="red", linestyle="--", lw=1.8, label=f"Grokking ({grok_epoch})")
+    ax.axvline(x=nc1_min_epoch, color="purple", linestyle=":", lw=2.0, label=f"NC1 Min ({nc1_min_epoch})")
 
-    # 2. Vertical dotted purple line at NC1 Global Min
-    ax.axvline(x=min_nc1_epoch, color="purple", linestyle=":", lw=2.0, label=f"NC1 Min ({min_nc1_epoch})")
-
-    # 3. Red alpha span from grokking epoch to max epoch
     max_epoch = epochs[-1]
     ax.axvspan(grok_epoch, max_epoch, color="red", alpha=0.1, label="Post-Grok Phase")
 
@@ -175,9 +214,8 @@ def plot_spectral_per_seed(s_data, out_path):
     align = s_data["align"]
     k90 = s_data["k90"]
     grok_epoch = s_data["grok_epoch"]
-    spec_metrics = s_data["spec_metrics"]
-    alignment_max_epoch = spec_metrics["alignment_max_epoch"]
-    k90_min_epoch = spec_metrics["k90_min_epoch"]
+    alignment_max_epoch = s_data["alignment_max_epoch"]
+    k_90_min_epoch = s_data["k_90_min_epoch"]
     max_epoch = epochs[-1]
 
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 6), sharex=True)
@@ -193,7 +231,7 @@ def plot_spectral_per_seed(s_data, out_path):
     # Subplot 2 (Bottom): Effective Rank (k90)
     ax2.plot(epochs, k90, color="#ff7f0e", lw=1.8, label="Effective Rank (k90)")
     ax2.axvline(x=grok_epoch, color="red", linestyle="--", lw=1.8, label=f"Grokking ({grok_epoch})")
-    ax2.axvline(x=k90_min_epoch, color="green", linestyle=":", lw=2.0, label=f"k90 Min ({k90_min_epoch})")
+    ax2.axvline(x=k_90_min_epoch, color="green", linestyle=":", lw=2.0, label=f"k90 Min ({k_90_min_epoch})")
     ax2.set_xlim(epochs[0], max_epoch)
     ax2.set_xlabel("Epochs", fontsize=11)
     ax2.set_ylabel("Effective Rank (k90)", fontsize=11)
@@ -224,8 +262,7 @@ def plot_age_all_seeds_pdf(seeds_data, out_path):
         # Individual grok line
         ax.axvline(x=s_data["grok_epoch"], color=c, linestyle="--", alpha=0.5, lw=1.0)
         # Individual min NC1 marker
-        min_nc1_epoch = s_data["age_metrics"]["min_nc1_epoch"]
-        ax.axvline(x=min_nc1_epoch, color=c, linestyle=":", alpha=0.8, lw=1.2)
+        ax.axvline(x=s_data["nc1_min_epoch"], color=c, linestyle=":", alpha=0.8, lw=1.2)
 
     ax.axvline(x=mean_grok, color="red", linestyle="--", lw=2.0, label=f"Mean Grok ({mean_grok:.0f})")
     ax.axvspan(min(all_grok), max_epoch, color="red", alpha=0.08, label="Post-Grok Span (All Seeds)")
@@ -258,7 +295,7 @@ def plot_spectral_all_seeds_pdf(seeds_data, out_path):
         c = colors[s % len(colors)]
         epochs = s_data["epochs"]
         ax1.plot(epochs, s_data["align"], color=c, lw=1.4, label=f"Seed {s}")
-        ax1.axvline(x=s_data["spec_metrics"]["alignment_max_epoch"], color=c, linestyle=":", alpha=0.7, lw=1.0)
+        ax1.axvline(x=s_data["alignment_max_epoch"], color=c, linestyle=":", alpha=0.7, lw=1.0)
     ax1.axvline(x=mean_grok, color="red", linestyle="--", lw=1.8, label=f"Mean Grok ({mean_grok:.0f})")
     ax1.set_ylabel("Task-Model Alignment", fontsize=11)
     ax1.set_title("Spectral Alignment Across All 5 Seeds", fontsize=13, fontweight="bold")
@@ -270,7 +307,7 @@ def plot_spectral_all_seeds_pdf(seeds_data, out_path):
         c = colors[s % len(colors)]
         epochs = s_data["epochs"]
         ax2.plot(epochs, s_data["k90"], color=c, lw=1.4, label=f"Seed {s}")
-        ax2.axvline(x=s_data["spec_metrics"]["k90_min_epoch"], color=c, linestyle=":", alpha=0.7, lw=1.0)
+        ax2.axvline(x=s_data["k_90_min_epoch"], color=c, linestyle=":", alpha=0.7, lw=1.0)
     ax2.axvline(x=mean_grok, color="red", linestyle="--", lw=1.8, label=f"Mean Grok ({mean_grok:.0f})")
     ax2.set_xlim(min_epoch, max_epoch)
     ax2.set_xlabel("Epochs", fontsize=11)
@@ -285,7 +322,7 @@ def plot_spectral_all_seeds_pdf(seeds_data, out_path):
 
 def main():
     set_plotting_style()
-    seeds_data = load_seed_data()
+    grok_epochs, seeds_data = load_all_data()
 
     out_dir = "08_Experiments/results/nanda_unified/analysis/bespoke_diagnostics"
     os.makedirs(out_dir, exist_ok=True)
