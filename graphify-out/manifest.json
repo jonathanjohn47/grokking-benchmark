@@ -2265,7 +2265,7 @@
     "semantic_hash": ""
   },
   "context_current.md": {
-    "mtime": 1794876437.5306256,
+    "mtime": 1794876522.2678049,
     "ast_hash": "0bbe1d15ebebab56a7f05e2d5ae3c13a",
     "semantic_hash": ""
   },
@@ -2860,8 +2860,8 @@
     "semantic_hash": ""
   },
   "06_Code/scripts/plot_bespoke_spectral_age.py": {
-    "mtime": 1794875798.9602773,
-    "ast_hash": "7f849afa652d684dcbfa92433596f107",
+    "mtime": 1794876833.6593702,
+    "ast_hash": "792d9f6846d1d1d33442df2cf88b0b40",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/spectral_quality_summary.json": {
@@ -2950,68 +2950,68 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/age_all_seeds.pdf": {
-    "mtime": 1794876410.5773761,
-    "ast_hash": "4975e3f732448158390f1f405324fcab",
+    "mtime": 1794876868.9482975,
+    "ast_hash": "34e3a233f88ea864246fce711eda86c3",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/spectral_all_seeds.pdf": {
-    "mtime": 1794876410.8759902,
-    "ast_hash": "a8d490683d2215af1ba612c8daa295a7",
+    "mtime": 1794876869.2527459,
+    "ast_hash": "3e8673f49f65e6306bf8247b3464d506",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/age_seed_0.png": {
-    "mtime": 1794876404.979547,
+    "mtime": 1794876862.6319914,
     "ast_hash": "d69a2f9cc787a1e3ba144e200b38a860",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/age_seed_1.png": {
-    "mtime": 1794876406.0920537,
+    "mtime": 1794876863.8931777,
     "ast_hash": "f651161b636b00acdf1e874e60dbfa3d",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/age_seed_2.png": {
-    "mtime": 1794876407.1921272,
+    "mtime": 1794876865.1512856,
     "ast_hash": "674fd86f420842dfde4e5b9d3d6374a2",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/age_seed_3.png": {
-    "mtime": 1794876408.3239975,
+    "mtime": 1794876866.4095275,
     "ast_hash": "39a6c4c75a0001a3b18fe53fc7ad5081",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/age_seed_4.png": {
-    "mtime": 1794876409.4331632,
+    "mtime": 1794876867.6656332,
     "ast_hash": "c74ed9c394384ccbe7d4a48e12f82413",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/spectral_seed_0.png": {
-    "mtime": 1794876405.2675447,
+    "mtime": 1794876862.91774,
     "ast_hash": "0c8ad6d6d74a7812140b7d5babaee166",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/spectral_seed_1.png": {
-    "mtime": 1794876406.3573852,
+    "mtime": 1794876864.1588378,
     "ast_hash": "e8d288b79e90dffe100e51f74bb68b8f",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/spectral_seed_2.png": {
-    "mtime": 1794876407.4630866,
+    "mtime": 1794876865.431732,
     "ast_hash": "a63b618d32babb18c65e6d5f3968bbd0",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/spectral_seed_3.png": {
-    "mtime": 1794876408.592967,
+    "mtime": 1794876866.674096,
     "ast_hash": "37d839e45ae3c42ecd719e558651a16a",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/spectral_seed_4.png": {
-    "mtime": 1794876409.6986673,
+    "mtime": 1794876867.9268947,
     "ast_hash": "8118eac46776f945740cbba5124164b7",
     "semantic_hash": ""
   },
   "06_Code/scripts/collate_predictor_grid.py": {
-    "mtime": 1794875798.8549013,
-    "ast_hash": "92b72d61e30a418386db8c626b4a7a69",
+    "mtime": 1794876856.6015277,
+    "ast_hash": "77831a65f4e1dd719b19ec62ff473d01",
     "semantic_hash": ""
   },
   "06_Code/tests/age/__init__.py": {
@@ -3305,27 +3305,27 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/htsr_seed_0.png": {
-    "mtime": 1794876405.430863,
+    "mtime": 1794876863.0861468,
     "ast_hash": "51d7bf0aa195a8f3c0da3d1ebe8a9310",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/htsr_seed_1.png": {
-    "mtime": 1794876406.5244672,
+    "mtime": 1794876864.3360615,
     "ast_hash": "9dd550660b2e992494c147a01beb6ada",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/htsr_seed_2.png": {
-    "mtime": 1794876407.6463778,
+    "mtime": 1794876865.5935724,
     "ast_hash": "cf1492db9051a09457a61c1bbf7721df",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/htsr_seed_3.png": {
-    "mtime": 1794876408.76543,
+    "mtime": 1794876866.848985,
     "ast_hash": "ee4a0bb1ec688b31324a82f00095479a",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/htsr_seed_4.png": {
-    "mtime": 1794876409.8618724,
+    "mtime": 1794876868.0881915,
     "ast_hash": "c86c47b8d7196202a0e7ae2163c5c529",
     "semantic_hash": ""
   },
@@ -3380,27 +3380,27 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/weight_pca_seed_0.png": {
-    "mtime": 1794876405.587083,
+    "mtime": 1794876863.2428355,
     "ast_hash": "c803952008b9e24c8482c75529f06676",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/weight_pca_seed_1.png": {
-    "mtime": 1794876406.703961,
+    "mtime": 1794876864.491811,
     "ast_hash": "632313b32226365dd1301e0ee185ce13",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/weight_pca_seed_2.png": {
-    "mtime": 1794876407.8135648,
+    "mtime": 1794876865.7535517,
     "ast_hash": "d9ee84fc465a1c7e6d7643de3625fd0a",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/weight_pca_seed_3.png": {
-    "mtime": 1794876408.9291322,
+    "mtime": 1794876867.0122201,
     "ast_hash": "b1013be2f8026d059de13f7bf624a4a5",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/weight_pca_seed_4.png": {
-    "mtime": 1794876410.041182,
+    "mtime": 1794876868.2443895,
     "ast_hash": "522ef2d49cd3e17751a9910b66836481",
     "semantic_hash": ""
   },
@@ -3455,27 +3455,27 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/higher_mi_seed_0.png": {
-    "mtime": 1794876405.7522151,
+    "mtime": 1794876863.404694,
     "ast_hash": "a00544d53b49be85909c6eb57f91a635",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/higher_mi_seed_1.png": {
-    "mtime": 1794876406.859496,
+    "mtime": 1794876864.6450775,
     "ast_hash": "fd0bbbc68ee63205e39d58b6f7197f1b",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/higher_mi_seed_2.png": {
-    "mtime": 1794876407.9802177,
+    "mtime": 1794876865.9111822,
     "ast_hash": "4d98e509f70d87d7b1717e4abe19694f",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/higher_mi_seed_3.png": {
-    "mtime": 1794876409.0884376,
+    "mtime": 1794876867.1676936,
     "ast_hash": "ac2804b9da2ebfa8fe166548dcdf6443",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/higher_mi_seed_4.png": {
-    "mtime": 1794876410.1980078,
+    "mtime": 1794876868.4161425,
     "ast_hash": "44b1e37a86641815d744331055e49974",
     "semantic_hash": ""
   },
@@ -3525,33 +3525,63 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/commutator_defect_seed_0.png": {
-    "mtime": 1794876405.9312215,
+    "mtime": 1794876863.5760107,
     "ast_hash": "7fbc438f934d6612cf871c6c0bfd9628",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/commutator_defect_seed_1.png": {
-    "mtime": 1794876407.020996,
+    "mtime": 1794876864.8035545,
     "ast_hash": "ef090c354cd840b37c20d3924c2c4ea9",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/commutator_defect_seed_2.png": {
-    "mtime": 1794876408.1367266,
+    "mtime": 1794876866.0844426,
     "ast_hash": "9e16723a2851bada8b0963baa744fdc2",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/commutator_defect_seed_3.png": {
-    "mtime": 1794876409.2664125,
+    "mtime": 1794876867.3196993,
     "ast_hash": "71ef839af8f63856b1538351ee7ab2e3",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/commutator_defect_seed_4.png": {
-    "mtime": 1794876410.36157,
+    "mtime": 1794876868.5771995,
     "ast_hash": "c773d037534eb90cba02d1692eb2b995",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/predictor_grid_5x7.png": {
     "mtime": 1794876419.7166178,
     "ast_hash": "0a914c3792808fe0829ece14b9872480",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/dropout_seed_0.png": {
+    "mtime": 1794876863.733003,
+    "ast_hash": "0c243d84deb2a8439deecb71733f4e87",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/dropout_seed_1.png": {
+    "mtime": 1794876864.962463,
+    "ast_hash": "231163c0b74abca5a5c6730a8bd70d1f",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/dropout_seed_2.png": {
+    "mtime": 1794876866.2443614,
+    "ast_hash": "3a3ffe8b784efd0d17d0c22464916a31",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/dropout_seed_3.png": {
+    "mtime": 1794876867.483875,
+    "ast_hash": "df05852956c9f3fc2207674e623e6432",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/dropout_seed_4.png": {
+    "mtime": 1794876868.7483883,
+    "ast_hash": "b41519e5c3eb98503f46432cb117454f",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/results_per_nanda_power/analysis/predictor_grid_5x8.png": {
+    "mtime": 1794876878.0447168,
+    "ast_hash": "cfb73e83a4f36175c491cf6bf7fcd8c1",
     "semantic_hash": ""
   }
 }
