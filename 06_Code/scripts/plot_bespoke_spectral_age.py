@@ -155,6 +155,13 @@ def load_all_data(base_dir=CANONICAL_BASE_DIR):
         with open(hmi_path, "r") as f:
             hmi_metrics = json.load(f)
 
+        # 6. Commutator Defect: Trajectory & Metrics
+        cd_path = os.path.join(base_dir, f"seed_{seed}", "commutator_defect", "commutator_defect_signal.json")
+        if not os.path.exists(cd_path):
+            raise FileNotFoundError(f"Missing required Commutator Defect signal file: {cd_path}")
+        with open(cd_path, "r") as f:
+            cd_metrics = json.load(f)
+
         seeds_data.append({
             "seed": seed,
             "grok_epoch": int(grok_epochs[seed]),
@@ -174,7 +181,10 @@ def load_all_data(base_dir=CANONICAL_BASE_DIR):
             "w_pca_min_epoch": w_pca_metrics["norm_eff_rank_min_epoch"],
             "hmi_epochs": hmi_metrics["higher_mi_checkpoints"],
             "hmi_omega_history": hmi_metrics["population_omega_history"],
-            "hmi_max_epoch": hmi_metrics["population_omega_max_epoch"]
+            "hmi_max_epoch": hmi_metrics["population_omega_max_epoch"],
+            "cd_epochs": cd_metrics["commutator_defect_checkpoints"],
+            "cd_history": cd_metrics["median_history"],
+            "cd_event_epoch": cd_metrics["event_epoch"]
         })
 
     return grok_epochs, seeds_data
@@ -406,6 +416,32 @@ def plot_higher_mi_per_seed(s_data, out_path):
     plt.close(fig)
 
 
+def plot_commutator_defect_per_seed(s_data, out_path):
+    """Generate Commutator Defect Diagnostic Plot for a single seed."""
+    seed = s_data["seed"]
+    epochs = s_data["cd_epochs"]
+    history = s_data["cd_history"]
+    grok_epoch = s_data["grok_epoch"]
+    event_epoch = s_data["cd_event_epoch"]
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.plot(epochs, history, color="#9467bd", lw=1.8, label="Commutator Defect (Median)")
+    
+    ax.axvline(x=grok_epoch, color="red", linestyle="--", lw=1.8, label=f"Grokking ({grok_epoch})")
+    if event_epoch is not None:
+        ax.axvline(x=event_epoch, color="purple", linestyle=":", lw=2.0, label=f"Event Onset ({event_epoch})")
+
+    ax.set_xscale("log")
+    ax.set_xlim(max(1, epochs[0]), epochs[-1])
+    ax.set_xlabel("Epochs", fontsize=11)
+    ax.set_ylabel("Commutator Defect", fontsize=11)
+    ax.set_title(f"Seed {seed}: Commutator Defect", fontsize=13, fontweight="bold")
+    ax.legend(loc="upper right", frameon=True)
+    fig.tight_layout()
+    fig.savefig(out_path, dpi=200)
+    plt.close(fig)
+
+
 def main():
     set_plotting_style()
     grok_epochs, seeds_data = load_all_data(CANONICAL_BASE_DIR)
@@ -440,6 +476,10 @@ def main():
         hmi_png = os.path.join(out_dir, f"higher_mi_seed_{seed}.png")
         plot_higher_mi_per_seed(s_data, hmi_png)
         generated_files.append(hmi_png)
+
+        cd_png = os.path.join(out_dir, f"commutator_defect_seed_{seed}.png")
+        plot_commutator_defect_per_seed(s_data, cd_png)
+        generated_files.append(cd_png)
 
     # Combined PDFs
     age_pdf = os.path.join(out_dir, "age_all_seeds.pdf")

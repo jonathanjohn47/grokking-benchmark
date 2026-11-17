@@ -1100,6 +1100,10 @@ def main(argv=None):
         "--higher-mi-only", action="store_true",
         help="Score only the Higher-MI row from saved per-checkpoint higher_mi_signal.json files.",
     )
+    parser.add_argument(
+        "--commutator-defect-only", action="store_true",
+        help="Score only the Commutator Defect row from saved per-checkpoint commutator_defect_signal.json files.",
+    )
     args = parser.parse_args(argv)
     if args.l2_only:
         score_l2_only(
@@ -1116,6 +1120,10 @@ def main(argv=None):
         print(json.dumps(res, indent=2))
     elif args.higher_mi_only:
         res = score_higher_mi_saved_histories(results_dir=args.results_dir)
+        import json
+        print(json.dumps(res, indent=2))
+    elif args.commutator_defect_only:
+        res = score_commutator_defect_saved_histories(results_dir=args.results_dir)
         import json
         print(json.dumps(res, indent=2))
     else:
@@ -1225,6 +1233,41 @@ def score_higher_mi_saved_histories(results_dir=None):
     
     return {
         "signal": "Higher-MI: population O-information maximum",
+        "per_seed": [{"seed": i, "grok_epoch": g, "signal_epoch": p} for i, (g, p) in enumerate(zip(grok_epochs, firing_epochs))],
+        "n_firing": frozen_scored["n_firing"],
+        "lead_frac": frozen_scored["lead_frac"],
+        "spearman_rho": frozen_scored["rho"],
+        "mean_relative_lead": frozen_scored["mean_rel_lead"],
+        "verdict": frozen_scored["verdict"]
+    }
+
+
+def score_commutator_defect_saved_histories(results_dir=None):
+    """Score the Commutator Defect row from the saved per-checkpoint signal files."""
+    import json
+    import os
+    import numpy as np
+    
+    root = resolve_results_dir(results_dir)
+    with open(os.path.join(root, "aggregate.json")) as handle:
+        grok_epochs = json.load(handle)["grok_epochs"]
+        
+    firing_epochs = []
+    for seed in range(len(grok_epochs)):
+        seed_file = os.path.join(root, f"seed_{seed}", "commutator_defect", "commutator_defect_signal.json")
+        if not os.path.exists(seed_file):
+            firing_epochs.append(None)
+            continue
+        with open(seed_file) as f:
+            data = json.load(f)
+        # The primary event rule is the detected event epoch (onset of defect drop)
+        firing_epochs.append(data.get("event_epoch"))
+        
+    frozen_result = evaluate_frozen_protocol(grok_epochs, firing_epochs)
+    frozen_scored = attach_pass_checks(frozen_result)
+    
+    return {
+        "signal": "Commutator Defect: onset",
         "per_seed": [{"seed": i, "grok_epoch": g, "signal_epoch": p} for i, (g, p) in enumerate(zip(grok_epochs, firing_epochs))],
         "n_firing": frozen_scored["n_firing"],
         "lead_frac": frozen_scored["lead_frac"],

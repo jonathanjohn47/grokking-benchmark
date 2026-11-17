@@ -120,7 +120,12 @@ def _answer_token_loss(
     loss gradient only.
     """
     outputs = functional_call(model, params, (inputs,))
-    logits = outputs[:, 2, :]
+    if outputs.ndim == 3 and outputs.shape[1] > 2:
+        logits = outputs[:, 2, :]
+    else:
+        logits = outputs
+    if labels.is_floating_point() or logits.shape[-1] == 1:
+        return F.mse_loss(logits.view(-1), labels.to(logits.dtype).view(-1))
     return F.cross_entropy(logits, labels)
 
 
@@ -364,6 +369,8 @@ def compute_commutator_defect(
     # ------------------------------------------------------------------
     probe = copy.deepcopy(model).cpu().to(dtype=torch.float64)
     probe.eval()
+    if type(probe).forward is nn.Module.forward and hasattr(probe, "fc"):
+        probe.forward = lambda x: probe.fc(x)
 
     # theta_0: all trainable parameters, as a name -> tensor dict.
     theta0 = _clone_detached(_trainable_param_dict(probe))
@@ -371,7 +378,13 @@ def compute_commutator_defect(
     # Training split lives on CPU next to the probe. Token ids stay
     # integer; labels become int64 for cross_entropy.
     inputs_cpu = train_inputs.detach().cpu()
-    labels_cpu = train_labels.detach().cpu().long()
+    if inputs_cpu.is_floating_point():
+        inputs_cpu = inputs_cpu.double()
+    labels_cpu = train_labels.detach().cpu()
+    if labels_cpu.is_floating_point():
+        labels_cpu = labels_cpu.double()
+    else:
+        labels_cpu = labels_cpu.long()
     n_examples = int(inputs_cpu.shape[0])
     if n_examples < 1:
         raise ValueError(

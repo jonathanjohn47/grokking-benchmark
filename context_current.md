@@ -231,11 +231,10 @@ Correlation Traps     : REMOVED from line-up on 2026-09-30 (detects post-grok an
   - Commutator defect:
     $$D = \frac{\|\theta_{AB} - \theta_{BA}\|}{\|\eta g_A(\theta_0)\| \cdot \|\eta g_B(\theta_0)\|}$$
     evaluated on CPU float64 using the gradient-difference numerator $\eta \|(g_A(\theta_B) - g_A(\theta_0)) - (g_B(\theta_A) - g_B(\theta_0))\|$, probe step $\eta = 10^{-3}$, $K = 5$ fresh pairs of batches ($A, B$ of size 512 sampled with replacement from train split, generator seed 20261103). Firing rule: Xu onset rule — baseline $b = \text{median}(\tilde{D}_0, \tilde{D}_1, \tilde{D}_2)$, first snapshot $k \ge 2$ where $\tilde{D}_k > 10 \cdot \max(b, 0.1)$ and $\tilde{D}_k > 20$. From Xu (2026).
-- **Official Results ($c = 0.8$)**:
-  - *Primary ($\eta = 10^{-3}$) Onset*: $P_i = [600, 500, 500, 400, 600]$. Firing count: $5/5$. $\text{lead\_frac} = 1.0000$, $\rho = 0.6325$, $\bar{r} = 0.9535$. **FAIL** (fails $\rho \ge 0.90$ and $\bar{r} \le 0.90$).
-  - *Secondary ($\eta = 10^{-4}$, unscored)*: $P_i = [2500, 400, 500, 500, 400]$. $\text{lead\_frac} = 1.0000$, $\rho = 0.1581$, $\bar{r} = 0.9270$. **FAIL**.
+- **Official Results on Canonical Experiment ($results\_per\_nanda\_power$, $c = 0.8$, $G_i$ at cut 0.99: [8021, 8253, 4094, 7831, 6637])**:
+  - *Primary ($\eta = 10^{-3}$) Onset*: $P_i = [400, 300, 500, 300, 300]$. Firing count: $5/5$. $\text{lead\_frac} = 1.0000$, $\rho = -0.4472$, $\bar{r} = 0.9416$. **FAIL** (fails $\rho \ge 0.90$ and $\bar{r} \le 0.90$).
 - **Verdict**: **CLOSED, NEGATIVE** (0 of 1 rows passing).
-- **Scientific Reason & Notes**: Defect alarms fire during early memorization (epochs $400 - 600$) when gradient norms contract and $\tilde{D}$ jumps from $\sim 13$ to $\sim 1700$. It exhibits weak rank correlation with grokking time ($\rho = 0.6325$), and mean relative lead ($\bar{r} = 0.9535$) exceeds the $0.90$ ceiling (*2026-11-03: Commutator Defect frozen rules*; *2026-11-04: Commutator Defect Stage 7 frozen verdict*).
+- **Scientific Reason & Notes**: Defect alarms fire during early memorization (epochs $300 - 500$) as the model establishes the initial training solution. It exhibits negative rank correlation with grokking time ($\rho = -0.4472$), and mean relative lead ($\bar{r} = 0.9416$) exceeds the $0.90$ ceiling (*Evaluated and verified 2026-11-17*).
 
 ### Note on Removed Predictor: Correlation Traps
 - **Status**: Removed from the benchmark evaluation sequence on 2026-09-30.

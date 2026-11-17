@@ -14034,3 +14034,57 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 - `08_Experiments/results/results_per_nanda_power/analysis/`: Diagnostic plots, 5x6 grid.
 - `context_current.md`: Updated Predictor 7 results to canonical Nanda-Power run.
 - `context.md`: Appended session summary.
+
+---
+
+# Session Summary — Commutator Defect Pipeline Implementation and Evaluation (2026-11-17)
+
+## Session Summary
+- **Implemented:**
+  - Created synthetics test suite in `06_Code/tests/commutator_defect/test_commutator_defect_signal_dependence.py` with `test_zero_defect` and `test_high_defect`.
+  - Added `score_commutator_defect_saved_histories()` and `--commutator-defect-only` flag to `06_Code/scripts/analyze_nanda_unified.py`.
+  - Created checkpoint runner `06_Code/scripts/run_commutator_defect_evaluation.py` measuring median $D$ across 401 checkpoints per seed with probe step $\eta = 1e-3$ and $K = 5$ batch pairs.
+  - Updated `06_Code/scripts/plot_bespoke_spectral_age.py` with `plot_commutator_defect_per_seed()`.
+  - Updated `06_Code/scripts/collate_predictor_grid.py` to produce a 5x7 collation grid (`predictor_grid_5x7.png`).
+- **Investigated:**
+  - Evaluated Commutator Defect across all 5 seeds on Nanda modular-addition checkpoints: event onset epochs are $P_i = [400, 300, 500, 300, 300]$ against grokking epochs $G_i = [8021, 8253, 4094, 7831, 6637]$.
+- **Fixed:**
+  - Supported DummyModel in `06_Code/src/predictors/commutator_defect.py` (handling floating point inputs/labels and regression MSE loss without modifying base model logic).
+- **Postponed:** None.
+
+## Technical Decisions
+- Evaluated under frozen benchmark protocol ($c = 0.8$): Commutator Defect onset yields $5/5$ firing count, $1.0$ lead fraction, rank correlation $\rho = -0.4472$, and mean relative lead $\bar{r} = 0.9416$.
+- The predictor fails the frozen validity criteria due to negative rank correlation ($\rho < 0.90$) and premature firing during early memorization ($\bar{r} > 0.90$), resulting in an official verdict of **FAIL**.
+
+## User Instructions
+- Work only on branch `main`. Never create a branch. Never open a PR.
+- DO NOT modify base model, data, or training loops.
+- DO NOT change existing logic for the other 7 predictors.
+- Execute steps in order, run evaluation, regenerate plots, commit and push.
+
+## Current Project State
+- **Completed Work:**
+  - Commutator Defect unit tests pass (`pytest tests/commutator_defect -q`).
+  - Per-checkpoint signal files `commutator_defect_signal.json` generated for seeds 0 through 4.
+  - Diagnostic plots `commutator_defect_seed_{0..4}.png` generated in `08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/`.
+  - 5x7 collation grid `predictor_grid_5x7.png` generated.
+  - Predictor 8 evaluation complete.
+- **Work in Progress:** Thesis benchmark synthesis across all 8 predictors.
+- **Blockers:** None.
+- **Next Actions:** Final unified comparative analysis across all 8 predictors.
+
+## Important Discoveries
+- Defect alarms fire during early memorization (epochs $300 - 500$) across all seeds, long before Fourier circuit formation. The onset does not rank-order with grokking time ($\rho = -0.4472$), and relative lead exceeds the $0.90$ cap ($\bar{r} = 0.9416$), confirming that the gradient commutator defect metric is an artifact of early optimization dynamics rather than a predictive indicator of generalization.
+
+## Files Modified
+- `06_Code/tests/commutator_defect/__init__.py`: Package init.
+- `06_Code/tests/commutator_defect/test_commutator_defect_signal_dependence.py`: Synthetics test suite.
+- `06_Code/src/predictors/commutator_defect.py`: Compatibility for synthetic DummyModel regression loss.
+- `06_Code/scripts/analyze_nanda_unified.py`: Added `score_commutator_defect_saved_histories()` and `--commutator-defect-only`.
+- `06_Code/scripts/run_commutator_defect_evaluation.py`: Checkpoint evaluation runner for Commutator Defect.
+- `06_Code/scripts/plot_bespoke_spectral_age.py`: Added Commutator Defect loader and per-seed plotter.
+- `06_Code/scripts/collate_predictor_grid.py`: Expanded to 5x7 grid including Commutator Defect.
+- `08_Experiments/results/results_per_nanda_power/seed_*/commutator_defect/commutator_defect_signal.json`: Generated signals.
+- `08_Experiments/results/results_per_nanda_power/analysis/`: Diagnostic plots, 5x7 grid.
+- `context_current.md`: Updated Predictor 8 results to canonical Nanda-Power run.
+- `context.md`: Appended session summary.
