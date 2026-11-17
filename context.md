@@ -13980,3 +13980,57 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 - `08_Experiments/results/results_per_nanda_power/analysis/`: Diagnostic plots, 5x5 grid.
 - `context_current.md`: Updated Predictor 6 results to canonical Nanda-Power run.
 - `context.md`: Appended session summary.
+
+
+---
+
+# 2026-11-17: Full Higher-MI Predictor Pipeline (Predictor 7)
+
+## Session Summary
+- **Implemented:**
+  - Full Higher-MI pipeline for Predictor 7 following Pomarico et al. (2025) adapted to population-based O-information.
+  - Synthetic test suite in `06_Code/tests/higher_mi/test_higher_mi_signal_dependence.py` verifying independent null ($\Omega \approx 0$) and synergistic feature injection ($\Omega < -0.5$).
+  - Dedicated Higher-MI evaluation runner `06_Code/scripts/run_higher_mi_evaluation.py` evaluating all 401 checkpoints (every 100 epochs, 0 to 40000) across all 5 seeds on Nanda-Power checkpoints (`results_per_nanda_power`).
+  - Added `score_higher_mi_saved_histories()` and `--higher-mi-only` CLI flag to `06_Code/scripts/analyze_nanda_unified.py`.
+  - Added Higher-MI per-seed diagnostic plotting `plot_higher_mi_per_seed()` to `06_Code/scripts/plot_bespoke_spectral_age.py`.
+  - Expanded collation grid in `06_Code/scripts/collate_predictor_grid.py` to a 5x6 grid (`predictor_grid_5x6.png`) featuring L2 Norm, Spectral, AGE, HTSR, Weight-PCA, and Higher-MI.
+- **Investigated:**
+  - Evaluated population O-information trajectories across all 5 seeds on Nanda modular-addition checkpoints: peak O-information epochs are $P_i = [20100, 27800, 12000, 12300, 7300]$ against grokking epochs $G_i = [8021, 8253, 4094, 7831, 6637]$.
+- **Fixed:**
+  - Placed `score_higher_mi_saved_histories()` before `main()` execution in `analyze_nanda_unified.py`.
+- **Postponed:** None.
+
+## Technical Decisions
+- Preserved frozen protocol without online detection engineering: primary event rule is the global maximum of population O-information across test examples.
+- Scored strictly under frozen benchmark protocol ($c = 0.8$): Higher-MI achieves 5/5 firing count, 0.0 lead fraction, $\rho = 0.9000$, and mean relative lead $\bar{r} = -1.2952$, resulting in a frozen verdict of **FAIL**.
+
+## User Instructions
+- Work only on branch `main`. Never create a branch. Never open a PR.
+- DO NOT modify base model, data, or training loops.
+- DO NOT change existing L2, Dropout, Spectral, AGE, HTSR, or Weight-PCA logic.
+- Execute steps in order, run evaluation, regenerate plots, commit and push.
+
+## Current Project State
+- **Completed Work:**
+  - Higher-MI synthetics and unit tests pass (`pytest tests/higher_mi -q`).
+  - Per-checkpoint Higher-MI signal JSON files generated for seeds 0 through 4 under `08_Experiments/results/results_per_nanda_power/seed_{i}/higher_mi/higher_mi_signal.json`.
+  - Diagnostic plots `higher_mi_seed_{0..4}.png` generated in `08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/`.
+  - 5x6 collation grid `predictor_grid_5x6.png` generated.
+- **Work in Progress:** Remaining predictor benchmarking (Predictor 8: Commutator Defect).
+- **Blockers:** None.
+- **Next Actions:** Evaluate Predictor 8 (Commutator Defect).
+
+## Important Discoveries
+- Population O-information peaks well after grokking ($1.10 - 3.37 \times G_i$) across all 5 seeds ($P_i = [20100, 27800, 12000, 12300, 7300]$ vs $G_i = [8021, 8253, 4094, 7831, 6637]$). While rank correlation is high ($\rho = 0.9000$), all events occur strictly post-grokking ($\text{lead\_frac} = 0.0000$, $\bar{r} = -1.2952$), confirming that logit O-information expansion accompanies post-grok margin separation and circuit consolidation rather than serving as an early indicator of grokking.
+
+## Files Modified
+- `06_Code/tests/higher_mi/__init__.py`: Package init.
+- `06_Code/tests/higher_mi/test_higher_mi_signal_dependence.py`: Synthetics test suite.
+- `06_Code/scripts/analyze_nanda_unified.py`: Added `score_higher_mi_saved_histories()` and `--higher-mi-only`.
+- `06_Code/scripts/run_higher_mi_evaluation.py`: Checkpoint evaluation runner for Higher-MI.
+- `06_Code/scripts/plot_bespoke_spectral_age.py`: Added Higher-MI data loader and `plot_higher_mi_per_seed()`.
+- `06_Code/scripts/collate_predictor_grid.py`: Expanded to 5x6 grid including Higher-MI.
+- `08_Experiments/results/results_per_nanda_power/seed_*/higher_mi/higher_mi_signal.json`: Generated Higher-MI signals.
+- `08_Experiments/results/results_per_nanda_power/analysis/`: Diagnostic plots, 5x6 grid.
+- `context_current.md`: Updated Predictor 7 results to canonical Nanda-Power run.
+- `context.md`: Appended session summary.

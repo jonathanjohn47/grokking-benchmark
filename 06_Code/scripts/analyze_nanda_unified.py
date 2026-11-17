@@ -1096,6 +1096,10 @@ def main(argv=None):
         "--weight-pca-only", action="store_true",
         help="Score only the Weight-PCA row from saved per-checkpoint weight_pca_signal.json files.",
     )
+    parser.add_argument(
+        "--higher-mi-only", action="store_true",
+        help="Score only the Higher-MI row from saved per-checkpoint higher_mi_signal.json files.",
+    )
     args = parser.parse_args(argv)
     if args.l2_only:
         score_l2_only(
@@ -1108,6 +1112,10 @@ def main(argv=None):
         print(json.dumps(res, indent=2))
     elif args.weight_pca_only:
         res = score_weight_pca_saved_histories(results_dir=args.results_dir)
+        import json
+        print(json.dumps(res, indent=2))
+    elif args.higher_mi_only:
+        res = score_higher_mi_saved_histories(results_dir=args.results_dir)
         import json
         print(json.dumps(res, indent=2))
     else:
@@ -1191,5 +1199,41 @@ def score_weight_pca_saved_histories(results_dir=None):
 
 
 
+def score_higher_mi_saved_histories(results_dir=None):
+    """Score the Higher-MI row from the saved per-checkpoint higher_mi_signal.json files."""
+    import json
+    import os
+    import numpy as np
+    
+    root = resolve_results_dir(results_dir)
+    with open(os.path.join(root, "aggregate.json")) as handle:
+        grok_epochs = json.load(handle)["grok_epochs"]
+        
+    firing_epochs = []
+    for seed in range(len(grok_epochs)):
+        seed_file = os.path.join(root, f"seed_{seed}", "higher_mi", "higher_mi_signal.json")
+        if not os.path.exists(seed_file):
+            firing_epochs.append(None)
+            continue
+        with open(seed_file) as f:
+            data = json.load(f)
+        # The primary event rule is the global maximum of population O-information
+        firing_epochs.append(data.get("population_omega_max_epoch"))
+        
+    frozen_result = evaluate_frozen_protocol(grok_epochs, firing_epochs)
+    frozen_scored = attach_pass_checks(frozen_result)
+    
+    return {
+        "signal": "Higher-MI: population O-information maximum",
+        "per_seed": [{"seed": i, "grok_epoch": g, "signal_epoch": p} for i, (g, p) in enumerate(zip(grok_epochs, firing_epochs))],
+        "n_firing": frozen_scored["n_firing"],
+        "lead_frac": frozen_scored["lead_frac"],
+        "spearman_rho": frozen_scored["rho"],
+        "mean_relative_lead": frozen_scored["mean_rel_lead"],
+        "verdict": frozen_scored["verdict"]
+    }
+
+
 if __name__ == "__main__":
     main()
+

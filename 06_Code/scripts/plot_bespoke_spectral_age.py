@@ -148,6 +148,13 @@ def load_all_data(base_dir=CANONICAL_BASE_DIR):
         with open(w_pca_path, "r") as f:
             w_pca_metrics = json.load(f)
 
+        # 5. Higher-MI: Trajectory & Metrics
+        hmi_path = os.path.join(base_dir, f"seed_{seed}", "higher_mi", "higher_mi_signal.json")
+        if not os.path.exists(hmi_path):
+            raise FileNotFoundError(f"Missing required Higher-MI signal file: {hmi_path}")
+        with open(hmi_path, "r") as f:
+            hmi_metrics = json.load(f)
+
         seeds_data.append({
             "seed": seed,
             "grok_epoch": int(grok_epochs[seed]),
@@ -164,7 +171,10 @@ def load_all_data(base_dir=CANONICAL_BASE_DIR):
             "alpha_min_epoch": int(alpha_min_epoch),
             "w_pca_epochs": w_pca_metrics["weight_pca_checkpoints"],
             "w_pca_rank_history": w_pca_metrics["norm_eff_rank_history"],
-            "w_pca_min_epoch": w_pca_metrics["norm_eff_rank_min_epoch"]
+            "w_pca_min_epoch": w_pca_metrics["norm_eff_rank_min_epoch"],
+            "hmi_epochs": hmi_metrics["higher_mi_checkpoints"],
+            "hmi_omega_history": hmi_metrics["population_omega_history"],
+            "hmi_max_epoch": hmi_metrics["population_omega_max_epoch"]
         })
 
     return grok_epochs, seeds_data
@@ -371,6 +381,31 @@ def plot_weight_pca_per_seed(s_data, out_path):
     plt.close(fig)
 
 
+def plot_higher_mi_per_seed(s_data, out_path):
+    """Generate Higher-MI Diagnostic Plot for a single seed."""
+    seed = s_data["seed"]
+    epochs = s_data["hmi_epochs"]
+    omega = s_data["hmi_omega_history"]
+    grok_epoch = s_data["grok_epoch"]
+    max_epoch = s_data["hmi_max_epoch"]
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.plot(epochs, omega, color="#d62728", lw=1.8, label="Population O-information")
+    
+    ax.axvline(x=grok_epoch, color="red", linestyle="--", lw=1.8, label=f"Grokking ({grok_epoch})")
+    ax.axvline(x=max_epoch, color="purple", linestyle=":", lw=2.0, label=f"Max Omega ({max_epoch})")
+
+    ax.set_xscale("log")
+    ax.set_xlim(max(1, epochs[0]), epochs[-1])
+    ax.set_xlabel("Epochs", fontsize=11)
+    ax.set_ylabel("O-information", fontsize=11)
+    ax.set_title(f"Seed {seed}: Higher-MI Trajectory", fontsize=13, fontweight="bold")
+    ax.legend(loc="upper right", frameon=True)
+    fig.tight_layout()
+    fig.savefig(out_path, dpi=200)
+    plt.close(fig)
+
+
 def main():
     set_plotting_style()
     grok_epochs, seeds_data = load_all_data(CANONICAL_BASE_DIR)
@@ -401,6 +436,10 @@ def main():
         w_pca_png = os.path.join(out_dir, f"weight_pca_seed_{seed}.png")
         plot_weight_pca_per_seed(s_data, w_pca_png)
         generated_files.append(w_pca_png)
+
+        hmi_png = os.path.join(out_dir, f"higher_mi_seed_{seed}.png")
+        plot_higher_mi_per_seed(s_data, hmi_png)
+        generated_files.append(hmi_png)
 
     # Combined PDFs
     age_pdf = os.path.join(out_dir, "age_all_seeds.pdf")

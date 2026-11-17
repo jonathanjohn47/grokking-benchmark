@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Collate L2, Spectral, AGE, HTSR, and Weight-PCA plots into a single 5x5 grid."""
+"""Collate L2, Spectral, AGE, HTSR, Weight-PCA, and Higher-MI plots into a single 5x6 grid."""
 import os
 import matplotlib
 matplotlib.use("Agg")
@@ -10,7 +10,7 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fi
 BASE_DIR = os.path.join(REPO_ROOT, "08_Experiments", "results", "results_per_nanda_power")
 FIG_DIR = os.path.join(BASE_DIR, "figures")
 DIAG_DIR = os.path.join(BASE_DIR, "analysis", "bespoke_diagnostics")
-OUT_PATH = os.path.join(BASE_DIR, "analysis", "predictor_grid_5x5.png")
+OUT_PATH = os.path.join(BASE_DIR, "analysis", "predictor_grid_5x6.png")
 
 def get_paths(seed):
     return [
@@ -18,12 +18,13 @@ def get_paths(seed):
         os.path.join(DIAG_DIR, f"spectral_seed_{seed}.png"),
         os.path.join(DIAG_DIR, f"age_seed_{seed}.png"),
         os.path.join(DIAG_DIR, f"htsr_seed_{seed}.png"),
-        os.path.join(DIAG_DIR, f"weight_pca_seed_{seed}.png")
+        os.path.join(DIAG_DIR, f"weight_pca_seed_{seed}.png"),
+        os.path.join(DIAG_DIR, f"higher_mi_seed_{seed}.png")
     ]
 
 def main():
-    fig, axes = plt.subplots(nrows=5, ncols=5, figsize=(30, 25))
-    col_titles = ["L2 Norm", "Spectral", "AGE", "HTSR", "Weight-PCA"]
+    fig, axes = plt.subplots(nrows=5, ncols=6, figsize=(36, 25))
+    col_titles = ["L2 Norm", "Spectral", "AGE", "HTSR", "Weight-PCA", "Higher-MI"]
 
     for col, title in enumerate(col_titles):
         axes[0, col].set_title(title, fontsize=16, fontweight="bold", pad=15)

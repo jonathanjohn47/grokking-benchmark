@@ -220,12 +220,10 @@ Correlation Traps     : REMOVED from line-up on 2026-09-30 (detects post-grok an
 - **Paper**: Pomarico et al. (2025, arXiv:2507.23346).
 - **Signal & Firing Rules**:
   - Population O-information $\Omega_{\text{pop}}(t) = I(F_0; F_1) - I(F_0; F_1 | F_2)$ averaged across the 6 permutations of correct, runner-up, and rest-mean logits pooled across the test set, estimated via the KSG mutual information estimator ($k = 4$, with strict-inequality tree correction). Firing rule: Global maximum of $\Omega_{\text{pop}}(t)$. Project adaptation from continuous time series to population logit triplet. (Exploratory zero-crossing and windowed temporal control are reported but not counted).
-- **Official Results ($c = 0.8$)**:
-  - *Population $\Omega$ Maximum*: $P_i = [15500, 8500, 20600, 12900, 32500]$. Firing count: $5/5$. $\text{lead\_frac} = 0.0000$, $\rho = 0.7000$, $\bar{r} = -0.4254$. **FAIL**.
-  - *Exploratory Zero-Crossing*: $P_i = [200, 1600, 500, 1100, 400]$. Firing count: $5/5$. $\text{lead\_frac} = 1.0000$, $\rho = -0.7000$, $\bar{r} = 0.9181$. FAIL (reported, not counted).
-  - *Exploratory Temporal Control Max*: $P_i = [9300, 7100, 9200, 9400, 23700]$. Firing count: $5/5$. $\text{lead\_frac} = 0.8000$, $\rho = 0.1118$, $\bar{r} = 0.1703$. FAIL (reported, not counted).
+- **Official Results on Canonical Experiment ($results\_per\_nanda\_power$, $c = 0.8$, $G_i$ at cut 0.99: [8021, 8253, 4094, 7831, 6637])**:
+  - *Population $\Omega$ Maximum*: $P_i = [20100, 27800, 12000, 12300, 7300]$. Firing count: $5/5$. $\text{lead\_frac} = 0.0000$, $\rho = 0.9000$, $\bar{r} = -1.2952$. **FAIL** (fails $\text{lead\_frac} \ge 0.80$ and $\bar{r} \ge 0.05$).
 - **Verdict**: **CLOSED, NEGATIVE** (0 of 1 rows passing).
-- **Scientific Reason & Notes**: $\Omega_{\text{pop}}(t)$ displays quasi-periodic oscillatory spikes across training, with maximum peak occurring post-grok ($1.17 - 2.17 \times G_i$). Spike grid analysis confirmed that spikes drift with model-specific trajectories ($11.90\% \le 30\%$ cross-seed coincidence), reflecting logit margin expansion rather than a transition trigger (*2026-10-03: Higher-MI implemented*; *2026-10-30: Higher-MI spike grid diagnosis settled*).
+- **Scientific Reason & Notes**: Population O-information peaks well after grokking ($1.10 - 3.37 \times G_i$) across all 5 seeds. While rank correlation is high ($\rho = 0.9000$), all events occur strictly post-grokking ($\text{lead\_frac} = 0.0000$, $\bar{r} = -1.2952$), reflecting post-grok logit margin expansion and circuit consolidation rather than an early warning signal of generalization (*Evaluated and verified 2026-11-17*).
 
 ### Predictor 8: Commutator Defect
 - **Paper**: Y. Xu (2026, arXiv:2602.16746).
