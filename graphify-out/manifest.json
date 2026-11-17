@@ -1670,8 +1670,8 @@
     "semantic_hash": ""
   },
   "06_Code/scripts/analyze_nanda_unified.py": {
-    "mtime": 1794874569.2726405,
-    "ast_hash": "dfc645446ca178592695e1851784f52f",
+    "mtime": 1794875661.701101,
+    "ast_hash": "ff190077169a4d7b6aa78453d247011a",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/analysis/predictor_events.json": {
@@ -1965,8 +1965,8 @@
     "semantic_hash": ""
   },
   "06_Code/src/predictors/commutator_defect.py": {
-    "mtime": 1793747765.7159846,
-    "ast_hash": "34d7f43661139f89a43035c529765635",
+    "mtime": 1794875799.1967986,
+    "ast_hash": "a9dc231d9a0463d3693ce6797d78b706",
     "semantic_hash": ""
   },
   "06_Code/scripts/plot_commutator_defect_stage6.py": {
@@ -2265,8 +2265,8 @@
     "semantic_hash": ""
   },
   "context_current.md": {
-    "mtime": 1794874635.0557113,
-    "ast_hash": "d04f241e098c06e3b6b5ecfde8e41415",
+    "mtime": 1794876437.5306256,
+    "ast_hash": "0bbe1d15ebebab56a7f05e2d5ae3c13a",
     "semantic_hash": ""
   },
   "context_split/context_part1_of_3.md": {
@@ -2550,7 +2550,7 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/frozen_protocol_verdicts.json": {
-    "mtime": 1794871961.892857,
+    "mtime": 1794876399.27616,
     "ast_hash": "b9564fd2bf3dbe5130e1fe56f6f841ea",
     "semantic_hash": ""
   },
@@ -2560,7 +2560,7 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/predictor_events.json": {
-    "mtime": 1794871961.892108,
+    "mtime": 1794876399.2751386,
     "ast_hash": "0ef34c395a76e19e539141588abebe1d",
     "semantic_hash": ""
   },
@@ -2840,32 +2840,32 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/01_grokking_curves.png": {
-    "mtime": 1794871962.1841457,
-    "ast_hash": "aa347aacd8604e7a71c4eac432f79beb",
+    "mtime": 1794876399.6180048,
+    "ast_hash": "2761f35d1df76052eb1db1c1ef96ba64",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/02_signals_vs_grok.png": {
-    "mtime": 1794871963.0687275,
-    "ast_hash": "339c5d73f9f95450033a13484881ea55",
+    "mtime": 1794876400.6084428,
+    "ast_hash": "aec432ff080a55f403b3b8025e1d40d6",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/03_event_vs_grok_scatter.png": {
-    "mtime": 1794871963.1929343,
-    "ast_hash": "55dab256876eb611ef22f5f5b43af794",
+    "mtime": 1794876400.7114017,
+    "ast_hash": "bb131c4a1a95eb0ec135962ae105f8bf",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/04_lead_times.png": {
-    "mtime": 1794871963.331014,
-    "ast_hash": "b65d55be2d2a31d720fd902720560b98",
+    "mtime": 1794876400.8025374,
+    "ast_hash": "0b432eab7b278b5e4157dd1440841063",
     "semantic_hash": ""
   },
   "06_Code/scripts/plot_bespoke_spectral_age.py": {
-    "mtime": 1794873929.8779485,
-    "ast_hash": "46505bf71b64af3be0f1e1f570ffbfb4",
+    "mtime": 1794875798.9602773,
+    "ast_hash": "7f849afa652d684dcbfa92433596f107",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/spectral_quality_summary.json": {
-    "mtime": 1794871961.8936741,
+    "mtime": 1794876399.278201,
     "ast_hash": "83ce141dfdd9559c1ed2f4997658dc22",
     "semantic_hash": ""
   },
@@ -2950,68 +2950,68 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/age_all_seeds.pdf": {
-    "mtime": 1794874586.709198,
-    "ast_hash": "632c2bf2cdeb5a769fc8411c9025f46c",
+    "mtime": 1794876410.5773761,
+    "ast_hash": "4975e3f732448158390f1f405324fcab",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/spectral_all_seeds.pdf": {
-    "mtime": 1794874586.9977698,
-    "ast_hash": "5a1923429660d4081629ac9887379cf4",
+    "mtime": 1794876410.8759902,
+    "ast_hash": "a8d490683d2215af1ba612c8daa295a7",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/age_seed_0.png": {
-    "mtime": 1794874581.9257286,
+    "mtime": 1794876404.979547,
     "ast_hash": "d69a2f9cc787a1e3ba144e200b38a860",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/age_seed_1.png": {
-    "mtime": 1794874582.9280565,
+    "mtime": 1794876406.0920537,
     "ast_hash": "f651161b636b00acdf1e874e60dbfa3d",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/age_seed_2.png": {
-    "mtime": 1794874583.881077,
+    "mtime": 1794876407.1921272,
     "ast_hash": "674fd86f420842dfde4e5b9d3d6374a2",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/age_seed_3.png": {
-    "mtime": 1794874584.827598,
+    "mtime": 1794876408.3239975,
     "ast_hash": "39a6c4c75a0001a3b18fe53fc7ad5081",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/age_seed_4.png": {
-    "mtime": 1794874585.7515993,
+    "mtime": 1794876409.4331632,
     "ast_hash": "c74ed9c394384ccbe7d4a48e12f82413",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/spectral_seed_0.png": {
-    "mtime": 1794874582.2088954,
+    "mtime": 1794876405.2675447,
     "ast_hash": "0c8ad6d6d74a7812140b7d5babaee166",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/spectral_seed_1.png": {
-    "mtime": 1794874583.2139595,
+    "mtime": 1794876406.3573852,
     "ast_hash": "e8d288b79e90dffe100e51f74bb68b8f",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/spectral_seed_2.png": {
-    "mtime": 1794874584.1575222,
+    "mtime": 1794876407.4630866,
     "ast_hash": "a63b618d32babb18c65e6d5f3968bbd0",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/spectral_seed_3.png": {
-    "mtime": 1794874585.089727,
+    "mtime": 1794876408.592967,
     "ast_hash": "37d839e45ae3c42ecd719e558651a16a",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/spectral_seed_4.png": {
-    "mtime": 1794874586.0145507,
+    "mtime": 1794876409.6986673,
     "ast_hash": "8118eac46776f945740cbba5124164b7",
     "semantic_hash": ""
   },
   "06_Code/scripts/collate_predictor_grid.py": {
-    "mtime": 1794873929.7921612,
-    "ast_hash": "3b09c2609fd47289e0240def42567b35",
+    "mtime": 1794875798.8549013,
+    "ast_hash": "92b72d61e30a418386db8c626b4a7a69",
     "semantic_hash": ""
   },
   "06_Code/tests/age/__init__.py": {
@@ -3305,27 +3305,27 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/htsr_seed_0.png": {
-    "mtime": 1794874582.395769,
+    "mtime": 1794876405.430863,
     "ast_hash": "51d7bf0aa195a8f3c0da3d1ebe8a9310",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/htsr_seed_1.png": {
-    "mtime": 1794874583.3800824,
+    "mtime": 1794876406.5244672,
     "ast_hash": "9dd550660b2e992494c147a01beb6ada",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/htsr_seed_2.png": {
-    "mtime": 1794874584.3216703,
+    "mtime": 1794876407.6463778,
     "ast_hash": "cf1492db9051a09457a61c1bbf7721df",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/htsr_seed_3.png": {
-    "mtime": 1794874585.249917,
+    "mtime": 1794876408.76543,
     "ast_hash": "ee4a0bb1ec688b31324a82f00095479a",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/htsr_seed_4.png": {
-    "mtime": 1794874586.194063,
+    "mtime": 1794876409.8618724,
     "ast_hash": "c86c47b8d7196202a0e7ae2163c5c529",
     "semantic_hash": ""
   },
@@ -3380,27 +3380,27 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/weight_pca_seed_0.png": {
-    "mtime": 1794874582.5687597,
+    "mtime": 1794876405.587083,
     "ast_hash": "c803952008b9e24c8482c75529f06676",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/weight_pca_seed_1.png": {
-    "mtime": 1794874583.5395198,
+    "mtime": 1794876406.703961,
     "ast_hash": "632313b32226365dd1301e0ee185ce13",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/weight_pca_seed_2.png": {
-    "mtime": 1794874584.4821568,
+    "mtime": 1794876407.8135648,
     "ast_hash": "d9ee84fc465a1c7e6d7643de3625fd0a",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/weight_pca_seed_3.png": {
-    "mtime": 1794874585.427088,
+    "mtime": 1794876408.9291322,
     "ast_hash": "b1013be2f8026d059de13f7bf624a4a5",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/weight_pca_seed_4.png": {
-    "mtime": 1794874586.3582702,
+    "mtime": 1794876410.041182,
     "ast_hash": "522ef2d49cd3e17751a9910b66836481",
     "semantic_hash": ""
   },
@@ -3455,33 +3455,103 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/higher_mi_seed_0.png": {
-    "mtime": 1794874582.7440083,
+    "mtime": 1794876405.7522151,
     "ast_hash": "a00544d53b49be85909c6eb57f91a635",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/higher_mi_seed_1.png": {
-    "mtime": 1794874583.7175915,
+    "mtime": 1794876406.859496,
     "ast_hash": "fd0bbbc68ee63205e39d58b6f7197f1b",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/higher_mi_seed_2.png": {
-    "mtime": 1794874584.6638262,
+    "mtime": 1794876407.9802177,
     "ast_hash": "4d98e509f70d87d7b1717e4abe19694f",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/higher_mi_seed_3.png": {
-    "mtime": 1794874585.5867927,
+    "mtime": 1794876409.0884376,
     "ast_hash": "ac2804b9da2ebfa8fe166548dcdf6443",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/higher_mi_seed_4.png": {
-    "mtime": 1794874586.5139465,
+    "mtime": 1794876410.1980078,
     "ast_hash": "44b1e37a86641815d744331055e49974",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/predictor_grid_5x6.png": {
     "mtime": 1794874594.7939558,
     "ast_hash": "cf0e49c5a2bb3209495b1561830dc4aa",
+    "semantic_hash": ""
+  },
+  "06_Code/scripts/run_commutator_defect_evaluation.py": {
+    "mtime": 1794875683.6961727,
+    "ast_hash": "42b3e123bcdad23816f2b3c3af6adb60",
+    "semantic_hash": ""
+  },
+  "06_Code/tests/commutator_defect/__init__.py": {
+    "mtime": 1794875799.3082075,
+    "ast_hash": "68b329da9893e34099c7d8ad5cb9c940",
+    "semantic_hash": ""
+  },
+  "06_Code/tests/commutator_defect/test_commutator_defect_signal_dependence.py": {
+    "mtime": 1794875372.8272104,
+    "ast_hash": "6d0a298a5af2f92016d0c0e68cbe66e9",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/results_per_nanda_power/seed_0/commutator_defect/commutator_defect_signal.json": {
+    "mtime": 1794875898.6219714,
+    "ast_hash": "db28276562f2d188c191efe4af602c9c",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/results_per_nanda_power/seed_1/commutator_defect/commutator_defect_signal.json": {
+    "mtime": 1794876017.3560948,
+    "ast_hash": "a611edb724b2c670edd3630698bb4056",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/results_per_nanda_power/seed_2/commutator_defect/commutator_defect_signal.json": {
+    "mtime": 1794876137.7673976,
+    "ast_hash": "9dc97df8408f077ca7c15085b477ee0e",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/results_per_nanda_power/seed_3/commutator_defect/commutator_defect_signal.json": {
+    "mtime": 1794876262.8829324,
+    "ast_hash": "7619e8fe4ff83b63b625ec25cea1c8d2",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/results_per_nanda_power/seed_4/commutator_defect/commutator_defect_signal.json": {
+    "mtime": 1794876385.3560205,
+    "ast_hash": "899f64e86c2c4f4ea7209ea0c99da147",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/commutator_defect_seed_0.png": {
+    "mtime": 1794876405.9312215,
+    "ast_hash": "7fbc438f934d6612cf871c6c0bfd9628",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/commutator_defect_seed_1.png": {
+    "mtime": 1794876407.020996,
+    "ast_hash": "ef090c354cd840b37c20d3924c2c4ea9",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/commutator_defect_seed_2.png": {
+    "mtime": 1794876408.1367266,
+    "ast_hash": "9e16723a2851bada8b0963baa744fdc2",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/commutator_defect_seed_3.png": {
+    "mtime": 1794876409.2664125,
+    "ast_hash": "71ef839af8f63856b1538351ee7ab2e3",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/commutator_defect_seed_4.png": {
+    "mtime": 1794876410.36157,
+    "ast_hash": "c773d037534eb90cba02d1692eb2b995",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/results_per_nanda_power/analysis/predictor_grid_5x7.png": {
+    "mtime": 1794876419.7166178,
+    "ast_hash": "0a914c3792808fe0829ece14b9872480",
     "semantic_hash": ""
   }
 }
