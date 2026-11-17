@@ -14088,3 +14088,49 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 - `08_Experiments/results/results_per_nanda_power/analysis/`: Diagnostic plots, 5x7 grid.
 - `context_current.md`: Updated Predictor 8 results to canonical Nanda-Power run.
 - `context.md`: Appended session summary.
+
+
+---
+
+# 2026-11-17: Add Dropout to Diagnostic Plots and Expand Collation Grid to 5x8
+
+## Session Summary
+- **Implemented:**
+  - Added Dropout signal loading to `06_Code/scripts/plot_bespoke_spectral_age.py`: loaded `dropout_signal.json` and `dropout_variance_history.npy` across seeds 0 to 4.
+  - Implemented `plot_dropout_per_seed` plotting the variance trajectory on a log scale with grokking and variance peak vertical lines.
+  - Generated per-seed diagnostic plots `dropout_seed_{0..4}.png` in `08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/`.
+  - Updated `06_Code/scripts/collate_predictor_grid.py` to an 8-column layout (5x8 grid) incorporating all 8 benchmark predictors: L2 Norm, Spectral, AGE, HTSR, Weight-PCA, Higher-MI, Commutator, and Dropout.
+  - Generated 5x8 collation grid `08_Experiments/results/results_per_nanda_power/analysis/predictor_grid_5x8.png`.
+- **Investigated:** Validated artifact generation and layout consistency across all 5 seeds.
+- **Changed:**
+  - `06_Code/scripts/plot_bespoke_spectral_age.py`: Added Dropout loader and per-seed diagnostic plot generator.
+  - `06_Code/scripts/collate_predictor_grid.py`: Expanded grid from 5x7 to 5x8 (`ncols=8`, `figsize=(48, 25)`), added "Dropout" column title and dropout plot paths.
+- **Fixed:** None.
+- **Postponed:** None.
+
+## Technical Decisions
+- Standardized collation grid across all 8 benchmark predictors: L2 Norm, Spectral, AGE, HTSR, Weight-PCA, Higher-MI, Commutator Defect, and Dropout into a unified 5x8 layout.
+
+## User Instructions
+- Work only on branch `main`.
+- DO NOT modify base model, data, or training loops.
+- DO NOT change existing logic for L2, Spectral, AGE, HTSR, Weight-PCA, Higher-MI, or Commutator Defect.
+- Regenerate diagnostic plots and collation grid, commit and push to origin main.
+
+## Current Project State
+- **Completed Work:**
+  - Individual per-seed Dropout diagnostic plots `dropout_seed_0.png` through `dropout_seed_4.png` generated.
+  - Collation grid `predictor_grid_5x8.png` generated with dimensions 5x8.
+- **Work in Progress:** Thesis benchmark synthesis across all 8 predictors.
+- **Blockers:** None.
+- **Next Actions:** Final unified comparative analysis across all 8 predictors.
+
+## Important Discoveries
+- Dropout variance peak occurs well post-grokking across all seeds on the canonical Nanda-Power modular addition task, as seen in the per-seed plots and unified 5x8 grid.
+
+## Files Modified
+- `06_Code/scripts/plot_bespoke_spectral_age.py`: Added Dropout data loading, per-seed plotting function, and execution calls.
+- `06_Code/scripts/collate_predictor_grid.py`: Expanded grid configuration to 5x8 and added Dropout plots.
+- `08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/dropout_seed_{0..4}.png`: Generated per-seed diagnostic plots.
+- `08_Experiments/results/results_per_nanda_power/analysis/predictor_grid_5x8.png`: Generated unified 5x8 grid image.
+- `context.md`: Appended session summary.

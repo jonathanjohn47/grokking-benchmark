@@ -162,6 +162,13 @@ def load_all_data(base_dir=CANONICAL_BASE_DIR):
         with open(cd_path, "r") as f:
             cd_metrics = json.load(f)
 
+        # 7. Dropout: Trajectory & Metrics
+        dropout_path = os.path.join(base_dir, f"seed_{seed}", "dropout", "dropout_signal.json")
+        if not os.path.exists(dropout_path):
+            raise FileNotFoundError(f"Missing required Dropout signal file: {dropout_path}")
+        with open(dropout_path, "r") as f:
+            dropout_metrics = json.load(f)
+
         seeds_data.append({
             "seed": seed,
             "grok_epoch": int(grok_epochs[seed]),
@@ -184,7 +191,10 @@ def load_all_data(base_dir=CANONICAL_BASE_DIR):
             "hmi_max_epoch": hmi_metrics["population_omega_max_epoch"],
             "cd_epochs": cd_metrics["commutator_defect_checkpoints"],
             "cd_history": cd_metrics["median_history"],
-            "cd_event_epoch": cd_metrics["event_epoch"]
+            "cd_event_epoch": cd_metrics["event_epoch"],
+            "dropout_epochs": list(range(0, 40001, 100)),
+            "dropout_variance_history": np.load(os.path.join(base_dir, f"seed_{seed}", "dropout", "dropout_variance_history.npy")),
+            "dropout_peak_epoch": dropout_metrics["variance_peak_epoch"]
         })
 
     return grok_epochs, seeds_data
@@ -442,6 +452,31 @@ def plot_commutator_defect_per_seed(s_data, out_path):
     plt.close(fig)
 
 
+def plot_dropout_per_seed(s_data, out_path):
+    """Generate Dropout Diagnostic Plot for a single seed."""
+    seed = s_data["seed"]
+    epochs = s_data["dropout_epochs"]
+    variance = s_data["dropout_variance_history"]
+    grok_epoch = s_data["grok_epoch"]
+    peak_epoch = s_data["dropout_peak_epoch"]
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.plot(epochs, variance, color="#8c564b", lw=1.8, label="Dropout Variance")
+    
+    ax.axvline(x=grok_epoch, color="red", linestyle="--", lw=1.8, label=f"Grokking ({grok_epoch})")
+    ax.axvline(x=peak_epoch, color="purple", linestyle=":", lw=2.0, label=f"Variance Peak ({peak_epoch})")
+
+    ax.set_xscale("log")
+    ax.set_xlim(max(1, epochs[0]), epochs[-1])
+    ax.set_xlabel("Epochs", fontsize=11)
+    ax.set_ylabel("Dropout Variance", fontsize=11)
+    ax.set_title(f"Seed {seed}: Dropout Variance", fontsize=13, fontweight="bold")
+    ax.legend(loc="upper right", frameon=True)
+    fig.tight_layout()
+    fig.savefig(out_path, dpi=200)
+    plt.close(fig)
+
+
 def main():
     set_plotting_style()
     grok_epochs, seeds_data = load_all_data(CANONICAL_BASE_DIR)
@@ -480,6 +515,10 @@ def main():
         cd_png = os.path.join(out_dir, f"commutator_defect_seed_{seed}.png")
         plot_commutator_defect_per_seed(s_data, cd_png)
         generated_files.append(cd_png)
+
+        dropout_png = os.path.join(out_dir, f"dropout_seed_{seed}.png")
+        plot_dropout_per_seed(s_data, dropout_png)
+        generated_files.append(dropout_png)
 
     # Combined PDFs
     age_pdf = os.path.join(out_dir, "age_all_seeds.pdf")
