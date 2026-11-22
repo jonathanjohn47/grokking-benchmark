@@ -14134,3 +14134,49 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 - `08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/dropout_seed_{0..4}.png`: Generated per-seed diagnostic plots.
 - `08_Experiments/results/results_per_nanda_power/analysis/predictor_grid_5x8.png`: Generated unified 5x8 grid image.
 - `context.md`: Appended session summary.
+
+
+---
+
+# 2026-11-22: Update Graphify Knowledge Graph and Project Compilation Dumps
+
+## Session Summary
+- **Implemented:**
+  - Regenerated and updated comprehensive project compilation Markdown and array dumps (`project_compilation.md` and `project_compilation_npy_dump.md`).
+  - Updated Graphify knowledge graph artifacts (`GRAPH_REPORT.md`, `graph.json`, `manifest.json`, `stat-index.json`, `graph.html`, and `.graphify_labels.json`).
+- **Investigated:**
+  - Tracked status across workspace; verified exclusion of compiled PDF artifacts (`project_compilation.pdf`, `Logical_Defense_and_QA_Prep_Guide.pdf`, and `Thesis_Methods_and_Results_Summary.pdf`) from git commit and remote push per user request.
+- **Changed:**
+  - `graphify-out/*`: Updated knowledge graph analysis, report, and indices.
+  - `project_compilation.md`: Refreshed full repository code, documentation, and figure embeds.
+  - `project_compilation_npy_dump.md`: Refreshed companion raw array dump.
+- **Fixed:** None.
+- **Postponed:** None.
+
+## Technical Decisions
+- Preserved compiled binary PDFs locally in workspace while excluding them from git commit and remote push to avoid repository bloat and respect file handling rules.
+
+## User Instructions
+- Commit all modified and untracked project files except all PDFs, and push to remote.
+
+## Current Project State
+- **Completed Work:**
+  - Project compilation documents and Graphify knowledge graphs updated and synced.
+  - All 8 predictors benchmarked on canonical Nanda-Power modular addition setup.
+- **Work in Progress:** Thesis defense preparation and final presentation artifacts.
+- **Blockers:** None.
+- **Next Actions:** Continue viva preparation and presentation deck finalization.
+
+## Important Discoveries
+- None in this documentation and knowledge graph update session.
+
+## Files Modified
+- `graphify-out/.graphify_labels.json`
+- `graphify-out/GRAPH_REPORT.md`
+- `graphify-out/cache/stat-index.json`
+- `graphify-out/graph.html`
+- `graphify-out/graph.json`
+- `graphify-out/manifest.json`
+- `project_compilation.md`
+- `project_compilation_npy_dump.md`
+- `context.md`

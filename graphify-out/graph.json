@@ -21,14 +21,34 @@
   },
   "nodes": [
     {
+      "label": "generate_meeting_pdf.py",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/generate_meeting_pdf.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_generate_meeting_pdf",
+      "community": 187,
+      "norm_label": "generate_meeting_pdf.py"
+    },
+    {
+      "label": "create_pdf()",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/generate_meeting_pdf.py",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "scripts_generate_meeting_pdf_create_pdf",
+      "community": 187,
+      "norm_label": "create_pdf()"
+    },
+    {
       "label": "collate_predictor_grid.py",
       "file_type": "code",
       "source_file": "06_Code/scripts/collate_predictor_grid.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "scripts_collate_predictor_grid",
       "community": 183,
-      "norm_label": "collate_predictor_grid.py"
+      "norm_label": "collate_predictor_grid.py",
+      "id": "scripts_collate_predictor_grid"
     },
     {
       "label": "get_paths()",
@@ -36,9 +56,9 @@
       "source_file": "06_Code/scripts/collate_predictor_grid.py",
       "source_location": "L15",
       "_origin": "ast",
-      "id": "scripts_collate_predictor_grid_get_paths",
       "community": 183,
-      "norm_label": "get_paths()"
+      "norm_label": "get_paths()",
+      "id": "scripts_collate_predictor_grid_get_paths"
     },
     {
       "label": "main()",
@@ -46,9 +66,9 @@
       "source_file": "06_Code/scripts/collate_predictor_grid.py",
       "source_location": "L27",
       "_origin": "ast",
-      "id": "scripts_collate_predictor_grid_main",
       "community": 183,
-      "norm_label": "main()"
+      "norm_label": "main()",
+      "id": "scripts_collate_predictor_grid_main"
     },
     {
       "label": "plot_bespoke_spectral_age.py",
@@ -56,9 +76,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age",
       "community": 91,
-      "norm_label": "plot_bespoke_spectral_age.py"
+      "norm_label": "plot_bespoke_spectral_age.py",
+      "id": "scripts_plot_bespoke_spectral_age"
     },
     {
       "label": "set_plotting_style()",
@@ -66,9 +86,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L35",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_set_plotting_style",
       "community": 91,
-      "norm_label": "set_plotting_style()"
+      "norm_label": "set_plotting_style()",
+      "id": "scripts_plot_bespoke_spectral_age_set_plotting_style"
     },
     {
       "label": "load_all_data()",
@@ -76,9 +96,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L45",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_load_all_data",
       "community": 91,
-      "norm_label": "load_all_data()"
+      "norm_label": "load_all_data()",
+      "id": "scripts_plot_bespoke_spectral_age_load_all_data"
     },
     {
       "label": "plot_age_per_seed()",
@@ -86,9 +106,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L203",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_plot_age_per_seed",
       "community": 91,
-      "norm_label": "plot_age_per_seed()"
+      "norm_label": "plot_age_per_seed()",
+      "id": "scripts_plot_bespoke_spectral_age_plot_age_per_seed"
     },
     {
       "label": "plot_spectral_per_seed()",
@@ -96,9 +116,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L236",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_plot_spectral_per_seed",
       "community": 91,
-      "norm_label": "plot_spectral_per_seed()"
+      "norm_label": "plot_spectral_per_seed()",
+      "id": "scripts_plot_bespoke_spectral_age_plot_spectral_per_seed"
     },
     {
       "label": "plot_age_all_seeds_pdf()",
@@ -106,9 +126,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L273",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_plot_age_all_seeds_pdf",
       "community": 91,
-      "norm_label": "plot_age_all_seeds_pdf()"
+      "norm_label": "plot_age_all_seeds_pdf()",
+      "id": "scripts_plot_bespoke_spectral_age_plot_age_all_seeds_pdf"
     },
     {
       "label": "plot_spectral_all_seeds_pdf()",
@@ -116,9 +136,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L311",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_plot_spectral_all_seeds_pdf",
       "community": 91,
-      "norm_label": "plot_spectral_all_seeds_pdf()"
+      "norm_label": "plot_spectral_all_seeds_pdf()",
+      "id": "scripts_plot_bespoke_spectral_age_plot_spectral_all_seeds_pdf"
     },
     {
       "label": "plot_htsr_per_seed()",
@@ -126,9 +146,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L354",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_plot_htsr_per_seed",
       "community": 91,
-      "norm_label": "plot_htsr_per_seed()"
+      "norm_label": "plot_htsr_per_seed()",
+      "id": "scripts_plot_bespoke_spectral_age_plot_htsr_per_seed"
     },
     {
       "label": "plot_weight_pca_per_seed()",
@@ -136,9 +156,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L379",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_plot_weight_pca_per_seed",
       "community": 91,
-      "norm_label": "plot_weight_pca_per_seed()"
+      "norm_label": "plot_weight_pca_per_seed()",
+      "id": "scripts_plot_bespoke_spectral_age_plot_weight_pca_per_seed"
     },
     {
       "label": "plot_higher_mi_per_seed()",
@@ -146,9 +166,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L404",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_plot_higher_mi_per_seed",
       "community": 91,
-      "norm_label": "plot_higher_mi_per_seed()"
+      "norm_label": "plot_higher_mi_per_seed()",
+      "id": "scripts_plot_bespoke_spectral_age_plot_higher_mi_per_seed"
     },
     {
       "label": "plot_commutator_defect_per_seed()",
@@ -156,9 +176,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L429",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_plot_commutator_defect_per_seed",
       "community": 91,
-      "norm_label": "plot_commutator_defect_per_seed()"
+      "norm_label": "plot_commutator_defect_per_seed()",
+      "id": "scripts_plot_bespoke_spectral_age_plot_commutator_defect_per_seed"
     },
     {
       "label": "plot_dropout_per_seed()",
@@ -166,9 +186,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L455",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_plot_dropout_per_seed",
       "community": 91,
-      "norm_label": "plot_dropout_per_seed()"
+      "norm_label": "plot_dropout_per_seed()",
+      "id": "scripts_plot_bespoke_spectral_age_plot_dropout_per_seed"
     },
     {
       "label": "main()",
@@ -176,9 +196,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L480",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_main",
       "community": 91,
-      "norm_label": "main()"
+      "norm_label": "main()",
+      "id": "scripts_plot_bespoke_spectral_age_main"
     },
     {
       "label": "plot_bespoke_spectral_age.py ================================ Strict bespoke dia",
@@ -186,9 +206,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_rationale_1",
       "community": 91,
-      "norm_label": "plot_bespoke_spectral_age.py ================================ strict bespoke dia"
+      "norm_label": "plot_bespoke_spectral_age.py ================================ strict bespoke dia",
+      "id": "scripts_plot_bespoke_spectral_age_rationale_1"
     },
     {
       "label": "Apply standard clean styling.",
@@ -196,9 +216,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L36",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_rationale_36",
       "community": 91,
-      "norm_label": "apply standard clean styling."
+      "norm_label": "apply standard clean styling.",
+      "id": "scripts_plot_bespoke_spectral_age_rationale_36"
     },
     {
       "label": "Load trajectories, exact checkpoint epochs, and metrics for all seeds strictly.",
@@ -206,9 +226,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L46",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_rationale_46",
       "community": 91,
-      "norm_label": "load trajectories, exact checkpoint epochs, and metrics for all seeds strictly."
+      "norm_label": "load trajectories, exact checkpoint epochs, and metrics for all seeds strictly.",
+      "id": "scripts_plot_bespoke_spectral_age_rationale_46"
     },
     {
       "label": "Generate AGE Diagnostic Plot for a single seed (size 10x6).",
@@ -216,9 +236,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L204",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_rationale_204",
       "community": 91,
-      "norm_label": "generate age diagnostic plot for a single seed (size 10x6)."
+      "norm_label": "generate age diagnostic plot for a single seed (size 10x6).",
+      "id": "scripts_plot_bespoke_spectral_age_rationale_204"
     },
     {
       "label": "Generate Spectral Diagnostic Plot for a single seed (size 12x6, 2 subplots shari",
@@ -226,9 +246,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L237",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_rationale_237",
       "community": 91,
-      "norm_label": "generate spectral diagnostic plot for a single seed (size 12x6, 2 subplots shari"
+      "norm_label": "generate spectral diagnostic plot for a single seed (size 12x6, 2 subplots shari",
+      "id": "scripts_plot_bespoke_spectral_age_rationale_237"
     },
     {
       "label": "Combined AGE plot across all 5 seeds on a single set of axes.",
@@ -236,9 +256,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L274",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_rationale_274",
       "community": 91,
-      "norm_label": "combined age plot across all 5 seeds on a single set of axes."
+      "norm_label": "combined age plot across all 5 seeds on a single set of axes.",
+      "id": "scripts_plot_bespoke_spectral_age_rationale_274"
     },
     {
       "label": "Combined Spectral plot across all 5 seeds with shared X-axis.",
@@ -246,9 +266,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L312",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_rationale_312",
       "community": 91,
-      "norm_label": "combined spectral plot across all 5 seeds with shared x-axis."
+      "norm_label": "combined spectral plot across all 5 seeds with shared x-axis.",
+      "id": "scripts_plot_bespoke_spectral_age_rationale_312"
     },
     {
       "label": "Generate HTSR Alpha Diagnostic Plot for a single seed.",
@@ -256,9 +276,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L355",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_rationale_355",
       "community": 91,
-      "norm_label": "generate htsr alpha diagnostic plot for a single seed."
+      "norm_label": "generate htsr alpha diagnostic plot for a single seed.",
+      "id": "scripts_plot_bespoke_spectral_age_rationale_355"
     },
     {
       "label": "Generate Weight-PCA Diagnostic Plot for a single seed.",
@@ -266,9 +286,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L380",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_rationale_380",
       "community": 91,
-      "norm_label": "generate weight-pca diagnostic plot for a single seed."
+      "norm_label": "generate weight-pca diagnostic plot for a single seed.",
+      "id": "scripts_plot_bespoke_spectral_age_rationale_380"
     },
     {
       "label": "Generate Higher-MI Diagnostic Plot for a single seed.",
@@ -276,9 +296,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L405",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_rationale_405",
       "community": 91,
-      "norm_label": "generate higher-mi diagnostic plot for a single seed."
+      "norm_label": "generate higher-mi diagnostic plot for a single seed.",
+      "id": "scripts_plot_bespoke_spectral_age_rationale_405"
     },
     {
       "label": "Generate Commutator Defect Diagnostic Plot for a single seed.",
@@ -286,9 +306,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L430",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_rationale_430",
       "community": 91,
-      "norm_label": "generate commutator defect diagnostic plot for a single seed."
+      "norm_label": "generate commutator defect diagnostic plot for a single seed.",
+      "id": "scripts_plot_bespoke_spectral_age_rationale_430"
     },
     {
       "label": "Generate Dropout Diagnostic Plot for a single seed.",
@@ -296,9 +316,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L456",
       "_origin": "ast",
-      "id": "scripts_plot_bespoke_spectral_age_rationale_456",
       "community": 91,
-      "norm_label": "generate dropout diagnostic plot for a single seed."
+      "norm_label": "generate dropout diagnostic plot for a single seed.",
+      "id": "scripts_plot_bespoke_spectral_age_rationale_456"
     },
     {
       "label": "analyze_nanda_unified.py",
@@ -19056,7 +19076,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L182",
       "_origin": "ast",
-      "community": 17,
+      "community": 177,
       "norm_label": "session summary \u2014 july 6, 2026 (get_dataloaders + code review session)",
       "id": "context_split_context_part1_of_3_session_summary_july_6_2026_get_dataloaders_code_review_session"
     },
@@ -19066,7 +19086,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L218",
       "_origin": "ast",
-      "community": 17,
+      "community": 177,
       "norm_label": "still open / next steps (updated)",
       "id": "context_split_context_part1_of_3_still_open_next_steps_updated"
     },
@@ -19136,7 +19156,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L376",
       "_origin": "ast",
-      "community": 181,
+      "community": 17,
       "norm_label": "session summary \u2014 july 7, 2026 (transformer input design, mentoring session)",
       "id": "context_split_context_part1_of_3_session_summary_july_7_2026_transformer_input_design_mentoring_session"
     },
@@ -19146,7 +19166,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L398",
       "_origin": "ast",
-      "community": 181,
+      "community": 17,
       "norm_label": "still open / next steps (updated \u2014 july 7, 2026)",
       "id": "context_split_context_part1_of_3_still_open_next_steps_updated_july_7_2026"
     },
@@ -19176,7 +19196,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L472",
       "_origin": "ast",
-      "community": 151,
+      "community": 17,
       "norm_label": "session summary \u2014 july 7, 2026 (`__getitem__` review cycle, close-out)",
       "id": "context_split_context_part1_of_3_session_summary_july_7_2026_getitem_review_cycle_close_out"
     },
@@ -19186,7 +19206,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L555",
       "_origin": "ast",
-      "community": 151,
+      "community": 17,
       "norm_label": "still open / next steps (updated \u2014 july 7, 2026, session close)",
       "id": "context_split_context_part1_of_3_still_open_next_steps_updated_july_7_2026_session_close"
     },
@@ -19316,7 +19336,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L1132",
       "_origin": "ast",
-      "community": 17,
+      "community": 181,
       "norm_label": "session summary \u2014 july 9, 2026 (debug print cleanup + train.py single-batch loss)",
       "id": "context_split_context_part1_of_3_session_summary_july_9_2026_debug_print_cleanup_train_py_single_batch_loss"
     },
@@ -19326,7 +19346,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L1197",
       "_origin": "ast",
-      "community": 17,
+      "community": 181,
       "norm_label": "still open / next steps (updated \u2014 july 9, 2026, end of session)",
       "id": "context_split_context_part1_of_3_still_open_next_steps_updated_july_9_2026_end_of_session"
     },
@@ -19796,7 +19816,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L2377",
       "_origin": "ast",
-      "community": 177,
+      "community": 17,
       "norm_label": "session summary \u2014 august 10\u201311, 2026 (l2 norm set aside; dropout predictor started; transformer.py dropout wiring)",
       "id": "context_split_context_part1_of_3_session_summary_august_10_11_2026_l2_norm_set_aside_dropout_predictor_started_transformer_py_dropout_wiring"
     },
@@ -19806,7 +19826,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L2391",
       "_origin": "ast",
-      "community": 177,
+      "community": 17,
       "norm_label": "current verified state of `src/models/transformer.py`",
       "id": "context_split_context_part1_of_3_current_verified_state_of_src_models_transformer_py"
     },
@@ -19816,7 +19836,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L2442",
       "_origin": "ast",
-      "community": 177,
+      "community": 17,
       "norm_label": "still open / next steps (superseded \u2014 see next session below, dropout work reverted)",
       "id": "context_split_context_part1_of_3_still_open_next_steps_superseded_see_next_session_below_dropout_work_reverted"
     },
@@ -19826,7 +19846,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L2459",
       "_origin": "ast",
-      "community": 17,
+      "community": 157,
       "norm_label": "session summary \u2014 august 11, 2026 (dropout predictor attempt #1 \u2014 reverted, restarting fresh)",
       "id": "context_split_context_part1_of_3_session_summary_august_11_2026_dropout_predictor_attempt_1_reverted_restarting_fresh"
     },
@@ -19836,7 +19856,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L2476",
       "_origin": "ast",
-      "community": 17,
+      "community": 157,
       "norm_label": "current verified state (after revert)",
       "id": "context_split_context_part1_of_3_current_verified_state_after_revert"
     },
@@ -19846,7 +19866,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L2482",
       "_origin": "ast",
-      "community": 17,
+      "community": 157,
       "norm_label": "still open / next steps (updated \u2014 august 11, 2026, session close)",
       "id": "context_split_context_part1_of_3_still_open_next_steps_updated_august_11_2026_session_close"
     },
@@ -21306,7 +21326,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 60,
+      "community": 146,
       "norm_label": "context_part2_of_3.md",
       "id": "context_split_context_part2_of_3"
     },
@@ -21656,7 +21676,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L388",
       "_origin": "ast",
-      "community": 157,
+      "community": 146,
       "norm_label": "thesis motivation",
       "id": "context_split_context_part2_of_3_thesis_motivation"
     },
@@ -21666,7 +21686,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L390",
       "_origin": "ast",
-      "community": 157,
+      "community": 146,
       "norm_label": "why this research matters",
       "id": "context_split_context_part2_of_3_why_this_research_matters"
     },
@@ -21676,7 +21696,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L400",
       "_origin": "ast",
-      "community": 157,
+      "community": 146,
       "norm_label": "the thesis contribution",
       "id": "context_split_context_part2_of_3_the_thesis_contribution"
     },
@@ -21686,7 +21706,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L409",
       "_origin": "ast",
-      "community": 157,
+      "community": 146,
       "norm_label": "core philosophy",
       "id": "context_split_context_part2_of_3_core_philosophy"
     },
@@ -21876,7 +21896,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L617",
       "_origin": "ast",
-      "community": 60,
+      "community": 146,
       "norm_label": "addendum \u2014 same day: two legacy plot scripts brought up to date (sweep + current layout)",
       "id": "context_split_context_part2_of_3_addendum_same_day_two_legacy_plot_scripts_brought_up_to_date_sweep_current_layout"
     },
@@ -21886,7 +21906,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L648",
       "_origin": "ast",
-      "community": 60,
+      "community": 146,
       "norm_label": "housekeeping needed (blocked from doing it automatically)",
       "id": "context_split_context_part2_of_3_housekeeping_needed_blocked_from_doing_it_automatically"
     },
@@ -21896,7 +21916,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L665",
       "_origin": "ast",
-      "community": 60,
+      "community": 146,
       "norm_label": "files modified (addendum)",
       "id": "context_split_context_part2_of_3_files_modified_addendum"
     },
@@ -21906,7 +21926,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L673",
       "_origin": "ast",
-      "community": 60,
+      "community": 135,
       "norm_label": "addendum 2 \u2014 same day: run_full_benchmark.py made fully resumable",
       "id": "context_split_context_part2_of_3_addendum_2_same_day_run_full_benchmark_py_made_fully_resumable"
     },
@@ -21916,7 +21936,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L680",
       "_origin": "ast",
-      "community": 60,
+      "community": 135,
       "norm_label": "how resume now works",
       "id": "context_split_context_part2_of_3_how_resume_now_works"
     },
@@ -21926,7 +21946,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L701",
       "_origin": "ast",
-      "community": 60,
+      "community": 135,
       "norm_label": "assumption (documented in the code)",
       "id": "context_split_context_part2_of_3_assumption_documented_in_the_code"
     },
@@ -21936,7 +21956,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L709",
       "_origin": "ast",
-      "community": 60,
+      "community": 135,
       "norm_label": "tested",
       "id": "context_split_context_part2_of_3_tested_709"
     },
@@ -21946,7 +21966,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L716",
       "_origin": "ast",
-      "community": 60,
+      "community": 135,
       "norm_label": "files modified (addendum 2)",
       "id": "context_split_context_part2_of_3_files_modified_addendum_2"
     },
@@ -21956,7 +21976,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L723",
       "_origin": "ast",
-      "community": 60,
+      "community": 146,
       "norm_label": "end-of-session state \u2014 september 2, 2026",
       "id": "context_split_context_part2_of_3_end_of_session_state_september_2_2026"
     },
@@ -22926,7 +22946,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2257",
       "_origin": "ast",
-      "community": 135,
+      "community": 146,
       "norm_label": "session summary \u2014 september 4, 2026 (discussion: why the benchmark uses multiple seeds \u2014 no code changed)",
       "id": "context_split_context_part2_of_3_session_summary_september_4_2026_discussion_why_the_benchmark_uses_multiple_seeds_no_code_changed"
     },
@@ -22936,7 +22956,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2259",
       "_origin": "ast",
-      "community": 135,
+      "community": 146,
       "norm_label": "1. question answered \u2014 \"what is the point of many different seeds?\"",
       "id": "context_split_context_part2_of_3_1_question_answered_what_is_the_point_of_many_different_seeds"
     },
@@ -22946,7 +22966,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2286",
       "_origin": "ast",
-      "community": 135,
+      "community": 146,
       "norm_label": "files modified",
       "id": "context_split_context_part2_of_3_files_modified_2286"
     },
@@ -22956,7 +22976,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2290",
       "_origin": "ast",
-      "community": 135,
+      "community": 146,
       "norm_label": "next",
       "id": "context_split_context_part2_of_3_next_2290"
     },
@@ -23106,7 +23126,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2580",
       "_origin": "ast",
-      "community": 60,
+      "community": 151,
       "norm_label": "session summary \u2014 september 4, 2026 (dropout predictor reopened \u2014 literature search found a directly-relevant paper (salah & yevick) after the earlier \"formally closed\" decision; decision reversed; opencode prompt drafted, not yet implemented)",
       "id": "context_split_context_part2_of_3_session_summary_september_4_2026_dropout_predictor_reopened_literature_search_found_a_directly_relevant_paper_salah_yevick_after_the_earlier_formally_closed_decision_decision_reversed_opencode_prompt_drafted_not_yet_implemented"
     },
@@ -23116,7 +23136,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2582",
       "_origin": "ast",
-      "community": 60,
+      "community": 151,
       "norm_label": "1. what happened, in order",
       "id": "context_split_context_part2_of_3_1_what_happened_in_order"
     },
@@ -23126,7 +23146,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2652",
       "_origin": "ast",
-      "community": 60,
+      "community": 151,
       "norm_label": "2. files modified",
       "id": "context_split_context_part2_of_3_2_files_modified"
     },
@@ -23136,7 +23156,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2669",
       "_origin": "ast",
-      "community": 60,
+      "community": 151,
       "norm_label": "next",
       "id": "context_split_context_part2_of_3_next_2669"
     },
@@ -24025,6 +24045,16 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "06_Code/scripts/generate_meeting_pdf.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "scripts_generate_meeting_pdf",
+      "target": "scripts_generate_meeting_pdf_create_pdf",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "06_Code/scripts/collate_predictor_grid.py",
       "source_location": "L15",
       "weight": 1.0,
@@ -24109,9 +24139,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L455",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_plot_bespoke_spectral_age",
-      "target": "scripts_plot_bespoke_spectral_age_plot_dropout_per_seed",
-      "confidence_score": 1.0
+      "target": "scripts_plot_bespoke_spectral_age_plot_dropout_per_seed"
     },
     {
       "relation": "contains",
@@ -24242,9 +24272,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L204",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_plot_bespoke_spectral_age_rationale_204",
-      "target": "scripts_plot_bespoke_spectral_age_plot_age_per_seed",
-      "confidence_score": 1.0
+      "target": "scripts_plot_bespoke_spectral_age_plot_age_per_seed"
     },
     {
       "relation": "calls",
@@ -24263,9 +24293,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L237",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_plot_bespoke_spectral_age_rationale_237",
-      "target": "scripts_plot_bespoke_spectral_age_plot_spectral_per_seed",
-      "confidence_score": 1.0
+      "target": "scripts_plot_bespoke_spectral_age_plot_spectral_per_seed"
     },
     {
       "relation": "calls",
@@ -24284,9 +24314,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L274",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_plot_bespoke_spectral_age_rationale_274",
-      "target": "scripts_plot_bespoke_spectral_age_plot_age_all_seeds_pdf",
-      "confidence_score": 1.0
+      "target": "scripts_plot_bespoke_spectral_age_plot_age_all_seeds_pdf"
     },
     {
       "relation": "calls",
@@ -24305,9 +24335,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L312",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_plot_bespoke_spectral_age_rationale_312",
-      "target": "scripts_plot_bespoke_spectral_age_plot_spectral_all_seeds_pdf",
-      "confidence_score": 1.0
+      "target": "scripts_plot_bespoke_spectral_age_plot_spectral_all_seeds_pdf"
     },
     {
       "relation": "calls",
@@ -24326,9 +24356,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L355",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_plot_bespoke_spectral_age_rationale_355",
-      "target": "scripts_plot_bespoke_spectral_age_plot_htsr_per_seed",
-      "confidence_score": 1.0
+      "target": "scripts_plot_bespoke_spectral_age_plot_htsr_per_seed"
     },
     {
       "relation": "calls",
@@ -24347,9 +24377,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L380",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_plot_bespoke_spectral_age_rationale_380",
-      "target": "scripts_plot_bespoke_spectral_age_plot_weight_pca_per_seed",
-      "confidence_score": 1.0
+      "target": "scripts_plot_bespoke_spectral_age_plot_weight_pca_per_seed"
     },
     {
       "relation": "calls",
@@ -24368,9 +24398,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L405",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_plot_bespoke_spectral_age_rationale_405",
-      "target": "scripts_plot_bespoke_spectral_age_plot_higher_mi_per_seed",
-      "confidence_score": 1.0
+      "target": "scripts_plot_bespoke_spectral_age_plot_higher_mi_per_seed"
     },
     {
       "relation": "calls",
@@ -24389,9 +24419,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L430",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_plot_bespoke_spectral_age_rationale_430",
-      "target": "scripts_plot_bespoke_spectral_age_plot_commutator_defect_per_seed",
-      "confidence_score": 1.0
+      "target": "scripts_plot_bespoke_spectral_age_plot_commutator_defect_per_seed"
     },
     {
       "relation": "calls",
@@ -24400,9 +24430,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L520",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_plot_bespoke_spectral_age_main",
-      "target": "scripts_plot_bespoke_spectral_age_plot_dropout_per_seed",
-      "confidence_score": 1.0
+      "target": "scripts_plot_bespoke_spectral_age_plot_dropout_per_seed"
     },
     {
       "relation": "rationale_for",
@@ -24410,9 +24440,9 @@
       "source_file": "06_Code/scripts/plot_bespoke_spectral_age.py",
       "source_location": "L456",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_plot_bespoke_spectral_age_rationale_456",
-      "target": "scripts_plot_bespoke_spectral_age_plot_dropout_per_seed",
-      "confidence_score": 1.0
+      "target": "scripts_plot_bespoke_spectral_age_plot_dropout_per_seed"
     },
     {
       "relation": "contains",
@@ -52722,5 +52752,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "0e9fe1d3cc59dfaae40f2cf756b8a0945d169e7b"
+  "built_at_commit": "44764056a50f05e444ec1dbf6cacab4d11b7d92c"
 }

@@ -1,16 +1,16 @@
-# Graph Report - grokking-benchmark  (2026-11-17)
+# Graph Report - grokking-benchmark  (2026-11-21)
 
 ## Corpus Check
-- 325 files · ~9,878,112 words
+- 326 files · ~19,534,494 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2400 nodes · 2814 edges · 188 communities (169 shown, 19 thin omitted)
+- 2402 nodes · 2815 edges · 189 communities (170 shown, 19 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 47 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `0e9fe1d3`
+- Built from commit: `44764056`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -215,7 +215,7 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (188 total, 19 thin omitted)
+## Communities (189 total, 19 thin omitted)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.06
@@ -279,7 +279,7 @@ Nodes (11): 10. Likely Viva Questions and Model Answers, 1. What This Report Is 
 
 ### Community 17 - "Community 17"
 Cohesion: 0.03
-Nodes (60): Current Project State (Updated — July 6, 2026, later session), Current verified state (after revert), Identity & Context, Jonathan's Learning Style Notes (carried forward), Pending (Not Yet Done), Project Plan (unchanged reference material), Session Summary — August 11, 2026 (Dropout predictor attempt #1 — reverted, restarting fresh), Session Summary — August 11, 2026 (Dropout predictor attempt #2 — `compute_accuracy` done, `compute_dropout_gap` has a known open bug) (+52 more)
+Nodes (60): Current Project State (Updated — July 6, 2026, later session), Current verified state of `src/models/transformer.py`, Identity & Context, Jonathan's Learning Style Notes (carried forward), Pending (Not Yet Done), Project Plan (unchanged reference material), Session Summary — August 10–11, 2026 (L2 Norm set aside; Dropout predictor started; transformer.py dropout wiring), Session Summary — August 11, 2026 (Dropout predictor attempt #2 — `compute_accuracy` done, `compute_dropout_gap` has a known open bug) (+52 more)
 
 ### Community 18 - "Community 18"
 Cohesion: 0.10
@@ -374,8 +374,8 @@ Cohesion: 0.38
 Nodes (10): Path, discover_seeds(), load_seed(), main(), mark_events(), plot_accuracy(), plot_combined_pdf(), plot_drc() (+2 more)
 
 ### Community 60 - "Community 60"
-Cohesion: 0.11
-Nodes (18): 1. Question answered — "why can't L2 Norm be used as a predictor?", 1. What happened, in order, 2. Files Modified, 2. Follow-up correction — "isn't the one postdictive run (Run 3) the, Addendum 2 — same day: run_full_benchmark.py made fully resumable, Addendum — same day: two legacy plot scripts brought up to date (sweep + current layout), Assumption (documented in the code), End-of-session state — September 2, 2026 (+10 more)
+Cohesion: 0.40
+Nodes (5): 1. Question answered — "why can't L2 Norm be used as a predictor?", 2. Follow-up correction — "isn't the one postdictive run (Run 3) the, Files Modified, Next, Session Summary — September 4, 2026 (Discussion: why L2 Norm cannot be used as a grokking predictor — full review of plots, results and numbers; no code changed)
 
 ### Community 64 - "Community 64"
 Cohesion: 0.18
@@ -642,8 +642,8 @@ Cohesion: 0.33
 Nodes (6): 1. What was asked and checked, 2. Restated answer (for the record, in one place), 3. File added — `Literature/Salah and Yevick.pdf`, 4. Files Modified / Added, Next, Session Summary — September 5, 2026 (Literature-mapping check for Dropout predictor; Salah & Yevick PDF added to `Literature/`; committed)
 
 ### Community 135 - "Community 135"
-Cohesion: 0.50
-Nodes (4): 1. Question answered — "what is the point of many different seeds?", Files Modified, Next, Session Summary — September 4, 2026 (Discussion: why the benchmark uses multiple seeds — no code changed)
+Cohesion: 0.40
+Nodes (5): Addendum 2 — same day: run_full_benchmark.py made fully resumable, Assumption (documented in the code), Files Modified (addendum 2), How resume now works, Tested
 
 ### Community 136 - "Community 136"
 Cohesion: 0.33
@@ -686,8 +686,8 @@ Cohesion: 0.27
 Nodes (10): all_eight_out(), family(), main(), First full frozen-protocol score of every stored row for all 8 predictors.  Read, analysis_paths(), main(), passes(), Re-score saved P_i and G_i under the fractional lead rule. No training.  Reads < (+2 more)
 
 ### Community 146 - "Community 146"
-Cohesion: 0.33
-Nodes (6): Addendum — same day: old `src/` snapshotted, `src/` is now the Nanda-Unified mainstream, Clean check on the live `src/` pipeline, Files Modified / Added (addendum), Still pending (unchanged from the main entry), Verify (done), What was done
+Cohesion: 0.11
+Nodes (18): 1. Question answered — "what is the point of many different seeds?", Addendum — same day: old `src/` snapshotted, `src/` is now the Nanda-Unified mainstream, Addendum — same day: two legacy plot scripts brought up to date (sweep + current layout), Clean check on the live `src/` pipeline, Core Philosophy, End-of-session state — September 2, 2026, Files Modified, Files Modified / Added (addendum) (+10 more)
 
 ### Community 147 - "Community 147"
 Cohesion: 0.50
@@ -704,6 +704,10 @@ Nodes (16): attach_superiority_index(), build_l2_predictor_results(), is_explora
 ### Community 150 - "Community 150"
 Cohesion: 0.22
 Nodes (5): The official scorer's predictor-level verdicts, checked in code.  Loads the save, One official row: the confirmed peak of the total sum of squared weights., scored(), test_l2_confirmed_peak_passes_legacy_at_neighbouring_lead_fractions(), test_l2_official_row_is_the_confirmed_peak()
+
+### Community 151 - "Community 151"
+Cohesion: 0.50
+Nodes (4): 1. What happened, in order, 2. Files Modified, Next, Session Summary — September 4, 2026 (Dropout predictor REOPENED — literature search found a directly-relevant paper (Salah & Yevick) after the earlier "formally closed" decision; decision reversed; Opencode prompt drafted, not yet implemented)
 
 ### Community 152 - "Community 152"
 Cohesion: 0.40
@@ -726,8 +730,8 @@ Cohesion: 0.22
 Nodes (7): Epoch labels at which a model checkpoint is SAVED.      0, save_every, 2*save_ev, Subsample the evaluation grid from the SAVED checkpoint epochs.     Keeps saved, save_checkpoint_schedule(), select_eval_epochs(), Canonical results folder and the final-epoch checkpoint name.  The saved nanda_u, test_final_checkpoint_is_saved_once_on_the_eval_grid(), test_results_dir_argument_changes_the_read_path()
 
 ### Community 157 - "Community 157"
-Cohesion: 0.50
-Nodes (4): Core Philosophy, The Thesis Contribution, Thesis Motivation, Why This Research Matters
+Cohesion: 0.67
+Nodes (3): Current verified state (after revert), Session Summary — August 11, 2026 (Dropout predictor attempt #1 — reverted, restarting fresh), Still Open / Next Steps (updated — August 11, 2026, session close)
 
 ### Community 158 - "Community 158"
 Cohesion: 0.25
@@ -797,10 +801,6 @@ Nodes (5): Unit tests for AGE scorer with frozen protocol., Test 2: Synthetic NC
 Cohesion: 0.40
 Nodes (5): 1. Conditional Noise Stress Test False-Positive Rate ($P_i \sim \text{Uniform}[0, G_i]$), 2. Treatment of HTSR Alpha Values Below 2 ($\alpha < 2$), 3. Auxiliary Script `REPO_ROOT` Definitions, 4. Commutator Defect Open Attack Points, 5. Unresolved — Needs Jonathan's Check
 
-### Community 177 - "Community 177"
-Cohesion: 0.67
-Nodes (3): Current verified state of `src/models/transformer.py`, Session Summary — August 10–11, 2026 (L2 Norm set aside; Dropout predictor started; transformer.py dropout wiring), Still Open / Next Steps (superseded — see next session below, dropout work reverted)
-
 ### Community 179 - "Community 179"
 Cohesion: 0.67
 Nodes (3): Current final state of relevant files (this session's end), Session Summary — August 7, 2026 (zero-crossing trigger fails on 3rd run; plateau investigation; trigger criteria formalized; linear/overlay plots added), Still Open / Next Steps (updated — August 7, 2026, session close, "continue tomorrow")
@@ -826,9 +826,9 @@ Nodes (4): 1. New finding — final L2-norm/Σw² vs grok-epoch correlation sign
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `train_one_seed()` connect `Community 138` to `Community 14`, `Community 144`, `Community 19`, `Community 24`, `Community 156`, `Community 93`?**
-  _High betweenness centrality (0.036) - this node is a cross-community bridge._
+  _High betweenness centrality (0.037) - this node is a cross-community bridge._
 - **Why does `Tensor` connect `Community 78` to `Community 21`, `Community 22`?**
-  _High betweenness centrality (0.022) - this node is a cross-community bridge._
+  _High betweenness centrality (0.021) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `PredictorMeasurements` (e.g. with `recompute_from_checkpoints()` and `train_one_seed()`) actually correct?**
   _`PredictorMeasurements` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 2 inferred relationships involving `score_saved_run()` (e.g. with `scored()` and `test_l2_confirmed_peak_passes_legacy_at_neighbouring_lead_fractions()`) actually correct?**
