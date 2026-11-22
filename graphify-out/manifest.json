@@ -705,8 +705,8 @@
     "semantic_hash": ""
   },
   "project_compilation.pdf": {
-    "mtime": 1794930371.9348369,
-    "ast_hash": "e814c1e21fa16f98d0bdb22dd3295ce1",
+    "mtime": 1795260441.3963957,
+    "ast_hash": "1b2017776dda46ba8d3622fb909dafd0",
     "semantic_hash": ""
   },
   "archive/Baseline_v4_24_Checkpoints/nanda_unified/aggregate.json": {
@@ -1950,8 +1950,8 @@
     "semantic_hash": ""
   },
   "project_compilation_npy_dump.md": {
-    "mtime": 1794930322.2780468,
-    "ast_hash": "28e4d3e50f5e1d39ba876d4ef056ffa5",
+    "mtime": 1795260391.604246,
+    "ast_hash": "f8fdb85067c6bf0c6d603aa02164b69f",
     "semantic_hash": ""
   },
   "11_Predictor_Issues_and_Lacunas/07_Higher_MI_Issues/Higher_MI_Attack_Points.md": {
@@ -3125,8 +3125,8 @@
     "semantic_hash": ""
   },
   "project_compilation.md": {
-    "mtime": 1794930322.7749991,
-    "ast_hash": "618805e57e53a1cbea38f9ec3f6d98a6",
+    "mtime": 1795260392.1337638,
+    "ast_hash": "0b9a4de6c1a53839f28b772df373b2e8",
     "semantic_hash": ""
   },
   "archive/relics_pre_nov14/benchmark_analysis/benchmark_report.pdf": {
@@ -3592,6 +3592,11 @@
   "Thesis_Methods_and_Results_Summary.pdf": {
     "mtime": 1795258829.8669038,
     "ast_hash": "aad94dc143a97273996041c2c61b22a9",
+    "semantic_hash": ""
+  },
+  "Logical_Defense_and_QA_Prep_Guide.pdf": {
+    "mtime": 1795260114.347736,
+    "ast_hash": "a48ca123f116cf57529861f6da4e923a",
     "semantic_hash": ""
   }
 }

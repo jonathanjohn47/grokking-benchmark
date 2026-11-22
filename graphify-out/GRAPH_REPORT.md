@@ -1,16 +1,16 @@
-# Graph Report - grokking-benchmark  (2026-11-21)
+# Graph Report - grokking-benchmark  (2026-11-22)
 
 ## Corpus Check
-- 326 files · ~19,534,494 words
+- 326 files · ~19,535,150 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2402 nodes · 2815 edges · 189 communities (170 shown, 19 thin omitted)
-- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 47 edges (avg confidence: 0.79)
+- 3464 nodes · 3876 edges · 195 communities (178 shown, 17 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 47 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `44764056`
+- Built from commit: `e466103c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -184,28 +184,34 @@
 - [[_COMMUNITY_Community 183|Community 183]]
 - [[_COMMUNITY_Community 184|Community 184]]
 - [[_COMMUNITY_Community 186|Community 186]]
+- [[_COMMUNITY_Community 188|Community 188]]
+- [[_COMMUNITY_Community 189|Community 189]]
+- [[_COMMUNITY_Community 191|Community 191]]
+- [[_COMMUNITY_Community 192|Community 192]]
+- [[_COMMUNITY_Community 193|Community 193]]
+- [[_COMMUNITY_Community 194|Community 194]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `Project Compilation — Full NPY Data Dump` - 506 edges
-2. `Session Summary — Thesis Gantt Chart & Setup` - 63 edges
-3. `PredictorMeasurements` - 19 edges
-4. `score_saved_run()` - 18 edges
-5. `compute_commutator_defect()` - 18 edges
-6. `train_one_seed()` - 17 edges
-7. `main()` - 16 edges
-8. `Indian English Communication Skill` - 16 edges
-9. `Indian English Communication Skill` - 16 edges
-10. `Tensor` - 15 edges
+1. `Project Compilation — Full NPY Data Dump` - 811 edges
+2. `Part I: Project Documentation, Source Code & Data Files` - 337 edges
+3. `Part II: Visual Figures & Diagnostic Plots` - 294 edges
+4. `Commit` - 115 edges
+5. `Session Summary — Thesis Gantt Chart & Setup` - 63 edges
+6. `PredictorMeasurements` - 19 edges
+7. `score_saved_run()` - 18 edges
+8. `compute_commutator_defect()` - 18 edges
+9. `train_one_seed()` - 17 edges
+10. `main()` - 16 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `Module` --uses--> `TransformerFourHead`  [INFERRED]
+  06_Code/scripts/sanity_commutator_defect.py → archive/Deprecated_Code/src_p97_mainstream_old/models/transformer_four_head.py
 - `score_dropout_metric_signal()` --calls--> `evaluate_frozen_protocol()`  [INFERRED]
   tests/test_dropout_scorer_synthetics.py → 06_Code/scripts/analyze_nanda_unified.py
 - `score_dropout_metric_signal()` --calls--> `attach_pass_checks()`  [INFERRED]
   tests/test_dropout_scorer_synthetics.py → 06_Code/scripts/analyze_nanda_unified.py
 - `score_dropout_metric_signal()` --calls--> `evaluate_metrics()`  [INFERRED]
   tests/test_dropout_scorer_synthetics.py → 06_Code/scripts/run_control_experiment.py
-- `Module` --uses--> `TransformerFourHead`  [INFERRED]
-  06_Code/scripts/sanity_commutator_defect.py → archive/Deprecated_Code/src_p97_mainstream_old/models/transformer_four_head.py
 - `test_results_dir_argument_changes_the_read_path()` --calls--> `load_seed()`  [INFERRED]
   06_Code/tests/test_results_dir_and_final_checkpoint.py → 06_Code/scripts/analyze_nanda_unified.py
 
@@ -215,7 +221,7 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (189 total, 19 thin omitted)
+## Communities (195 total, 17 thin omitted)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.06
@@ -234,8 +240,8 @@ Cohesion: 0.07
 Nodes (27): 1.1 What is grokking, 1.2 What a grokking predictor is supposed to do, 1. Prerequisites Recap, 2.1 What a kernel is, 2.2 Why a trained network's hidden layer defines a kernel, 2.3 The representation matrix and the Gram matrix, 2. Kernel Regression Basics, 3.1 Eigenvalues and eigenvectors of $K$ (+19 more)
 
 ### Community 5 - "Community 5"
-Cohesion: 0.20
-Nodes (18): default_analysis_dir(), load_lead_c_from_config(), load_seed(), main(), plot_curves(), plot_leads(), plot_scatter(), plot_signals() (+10 more)
+Cohesion: 0.17
+Nodes (13): build_l2_predictor_results(), default_analysis_dir(), load_lead_c_from_config(), _metric_pass_fail(), print_l2_predictor_results(), Structured L2 evaluation payload for disk and console display.      superiority_, Pass/Fail for one Validity Gate metric using control thresholds., Human-readable multi-section console summary for L2 evaluation. (+5 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.25
@@ -262,12 +268,12 @@ Cohesion: 0.09
 Nodes (20): apply_moving_average(), compute_acceleration(), compute_fast_slow_moving_averages(), compute_ma_of_slow_ma(), compute_noise_floor(), detect_inflection(), detect_ma_crossover(), detect_ma_of_ma_trigger() (+12 more)
 
 ### Community 13 - "Community 13"
-Cohesion: 0.11
-Nodes (22): compute_weight_pca_for_model(), compute_weight_pca_metrics_for_checkpoint(), effective_rank(), find_global_minimum_epoch(), find_steepest_drop_epoch(), find_threshold_crossing_epoch(), _layer_singular_values(), Weight-PCA predictor (Predictor 7 of 8) — Spectral Dynamics / Rank Minimization (+14 more)
+Cohesion: 0.15
+Nodes (16): compute_weight_pca_for_model(), compute_weight_pca_metrics_for_checkpoint(), find_global_minimum_epoch(), find_steepest_drop_epoch(), find_threshold_crossing_epoch(), _layer_singular_values(), Weight-PCA predictor (Predictor 7 of 8) — Spectral Dynamics / Rank Minimization, Singular values of one weight matrix (float64, CPU), descending.     Same MPS-sa (+8 more)
 
 ### Community 14 - "Community 14"
-Cohesion: 0.22
-Nodes (17): aggregate(), apply_config_constants(), checkpoints_dir_for(), get_done_predictors(), has_saved_checkpoints(), is_predictor_done(), load_config(), load_summary() (+9 more)
+Cohesion: 0.12
+Nodes (32): compute_sum_of_squared_weights(), Total sum of squared weights over all parameters (Nanda et al. 2023, Figure 7)., aggregate(), apply_config_constants(), checkpoints_dir_for(), dips_key(), get_done_predictors(), grok_epoch_from() (+24 more)
 
 ### Community 15 - "Community 15"
 Cohesion: 0.33
@@ -279,7 +285,7 @@ Nodes (11): 10. Likely Viva Questions and Model Answers, 1. What This Report Is 
 
 ### Community 17 - "Community 17"
 Cohesion: 0.03
-Nodes (60): Current Project State (Updated — July 6, 2026, later session), Current verified state of `src/models/transformer.py`, Identity & Context, Jonathan's Learning Style Notes (carried forward), Pending (Not Yet Done), Project Plan (unchanged reference material), Session Summary — August 10–11, 2026 (L2 Norm set aside; Dropout predictor started; transformer.py dropout wiring), Session Summary — August 11, 2026 (Dropout predictor attempt #2 — `compute_accuracy` done, `compute_dropout_gap` has a known open bug) (+52 more)
+Nodes (66): Current Project State (Updated — July 6, 2026, later session), Current verified state of `src/models/transformer.py`, Identity & Context, Jonathan's Learning Style Notes (carried forward), Pending (Not Yet Done), Project Plan (unchanged reference material), Session Summary — August 10–11, 2026 (L2 Norm set aside; Dropout predictor started; transformer.py dropout wiring), Session Summary — August 11, 2026 (Dropout predictor attempt #2 — `compute_accuracy` done, `compute_dropout_gap` has a known open bug) (+58 more)
 
 ### Community 18 - "Community 18"
 Cohesion: 0.10
@@ -294,8 +300,8 @@ Cohesion: 0.25
 Nodes (7): Figures for the 40,000-epoch retrain, Overview, Seed 0, Seed 1, Seed 2, Seed 3, Seed 4
 
 ### Community 21 - "Community 21"
-Cohesion: 0.10
-Nodes (12): get_dataloaders(), ModularArithmeticDataset, generate_pairs(), get_dataloaders(), ModularArithmeticDataset, generate_pairs(), get_dataloaders(), ModularArithmeticDataset (+4 more)
+Cohesion: 0.24
+Nodes (6): get_dataloaders(), ModularArithmeticDataset, Read task.train_fraction from the benchmark yaml. Not a hardcoded 0.3., Nanda gen_train_test.      pairs = [(i, j, p) for i in range(p) for j in range(p, train_fraction_from_yaml(), Dataset
 
 ### Community 22 - "Community 22"
 Cohesion: 0.08
@@ -359,7 +365,7 @@ Nodes (12): 10. Voice-mode quality control, 1. Highest-priority rule, 2. Greek a
 
 ### Community 47 - "Community 47"
 Cohesion: 0.00
-Nodes (506): 100. `08_Experiments/results/nanda_unified/seed_1/commutator_defect/commutator_defect_q75.npy`, 101. `08_Experiments/results/nanda_unified/seed_1/commutator_defect/commutator_defect_seed.npy`, 102. `08_Experiments/results/nanda_unified/seed_1/commutator_defect/commutator_defect_values.npy`, 103. `08_Experiments/results/nanda_unified/seed_1/commutator_defect_eta1e-4/commutator_defect_batch_size.npy`, 104. `08_Experiments/results/nanda_unified/seed_1/commutator_defect_eta1e-4/commutator_defect_checkpoints.npy`, 105. `08_Experiments/results/nanda_unified/seed_1/commutator_defect_eta1e-4/commutator_defect_eta.npy`, 106. `08_Experiments/results/nanda_unified/seed_1/commutator_defect_eta1e-4/commutator_defect_grad_norm_A.npy`, 107. `08_Experiments/results/nanda_unified/seed_1/commutator_defect_eta1e-4/commutator_defect_grad_norm_B.npy` (+498 more)
+Nodes (811): 100. `08_Experiments/results/nanda_unified/seed_1/commutator_defect_eta1e-4/commutator_defect_grad_norm_A.npy`, 101. `08_Experiments/results/nanda_unified/seed_1/commutator_defect_eta1e-4/commutator_defect_grad_norm_B.npy`, 102. `08_Experiments/results/nanda_unified/seed_1/commutator_defect_eta1e-4/commutator_defect_k_pairs.npy`, 103. `08_Experiments/results/nanda_unified/seed_1/commutator_defect_eta1e-4/commutator_defect_median.npy`, 104. `08_Experiments/results/nanda_unified/seed_1/commutator_defect_eta1e-4/commutator_defect_q25.npy`, 105. `08_Experiments/results/nanda_unified/seed_1/commutator_defect_eta1e-4/commutator_defect_q75.npy`, 106. `08_Experiments/results/nanda_unified/seed_1/commutator_defect_eta1e-4/commutator_defect_seed.npy`, 107. `08_Experiments/results/nanda_unified/seed_1/commutator_defect_eta1e-4/commutator_defect_values.npy` (+803 more)
 
 ### Community 49 - "Community 49"
 Cohesion: 0.60
@@ -426,8 +432,8 @@ Cohesion: 0.21
 Nodes (13): detect_peaks(), load_seed_series(), main(), plot_spike_grid(), Performs peak detection, Test 1 (Coincidence), and Test 2 (Period).     Computes, Generates spike_grid_check.png with 5 subplots showing detected peaks., Saves full numeric details to JSON so every number can be checked by hand., Writes the short diagnostic report in Markdown format. (+5 more)
 
 ### Community 78 - "Community 78"
-Cohesion: 0.06
-Nodes (59): Module, Any, TransformerFourHead, DummyModel, Test Category 1: Null Signal (Identical Gradients).     If batch A and batch B a, Test Category 2: Injected Feature (Non-Commuting Gradients).     If batch A and, test_high_defect(), test_zero_defect() (+51 more)
+Cohesion: 0.13
+Nodes (21): defect_one_pair(), find_commutator_defect_event_epoch(), _flatten(), _json_float(), _nan_summary(), _params_difference_norm(), _params_minus_eta_grad(), Commutator Defect predictor (Predictor 8 of 8) — Xu (2026).  SOURCE (locked) --- (+13 more)
 
 ### Community 79 - "Community 79"
 Cohesion: 0.18
@@ -638,8 +644,8 @@ Cohesion: 0.33
 Nodes (6): Choice of Prime Modulus: P = 97 (not 113), Context, Files Modified, Findings & Decision, Session Summary — September 1, 2026 (Methodology: Justifying 3-run protocol), Status
 
 ### Community 134 - "Community 134"
-Cohesion: 0.33
-Nodes (6): 1. What was asked and checked, 2. Restated answer (for the record, in one place), 3. File added — `Literature/Salah and Yevick.pdf`, 4. Files Modified / Added, Next, Session Summary — September 5, 2026 (Literature-mapping check for Dropout predictor; Salah & Yevick PDF added to `Literature/`; committed)
+Cohesion: 0.01
+Nodes (337): 100. `06_Code/scripts/run_control_experiment.py`, 101. `06_Code/scripts/run_higher_mi_evaluation.py`, 102. `06_Code/scripts/run_htsr_evaluation.py`, 103. `06_Code/scripts/run_nanda_benchmark.py`, 104. `06_Code/scripts/run_weight_pca_evaluation.py`, 105. `06_Code/scripts/sanity_commutator_defect.py`, 106. `06_Code/scripts/scaffold.py`, 107. `06_Code/src/data/modular_arithmetic.py` (+329 more)
 
 ### Community 135 - "Community 135"
 Cohesion: 0.40
@@ -654,8 +660,8 @@ Cohesion: 0.29
 Nodes (6): 1. L2 Norm Predictor, 2. Dropout Predictor, 3. Spectral Predictor, 4. AGE Predictor, 5. HTSR Alpha Predictor, Predictor Experimental Validation Master Tracker
 
 ### Community 138 - "Community 138"
-Cohesion: 0.18
-Nodes (13): compute_sum_of_squared_weights(), Total sum of squared weights over all parameters (Nanda et al. 2023, Figure 7)., dips_key(), grok_epoch_from(), grok_epochs_by_threshold(), limit_cycle_check(), _num_or_none(), First epoch at which test accuracy exceeds `threshold` (default: the     primary (+5 more)
+Cohesion: 0.01
+Nodes (294): Fig 100. `08_Experiments/results/results_per_nanda_power/figures/seed_2_train_test_accuracy.png`, Fig 101. `08_Experiments/results/results_per_nanda_power/figures/seed_2_train_test_loss.png`, Fig 102. `08_Experiments/results/results_per_nanda_power/figures/seed_3_l2_norm.png`, Fig 103. `08_Experiments/results/results_per_nanda_power/figures/seed_3_train_test_accuracy.png`, Fig 104. `08_Experiments/results/results_per_nanda_power/figures/seed_3_train_test_loss.png`, Fig 105. `08_Experiments/results/results_per_nanda_power/figures/seed_4_l2_norm.png`, Fig 106. `08_Experiments/results/results_per_nanda_power/figures/seed_4_train_test_accuracy.png`, Fig 107. `08_Experiments/results/results_per_nanda_power/figures/seed_4_train_test_loss.png` (+286 more)
 
 ### Community 139 - "Community 139"
 Cohesion: 0.40
@@ -687,7 +693,7 @@ Nodes (10): all_eight_out(), family(), main(), First full frozen-protocol score 
 
 ### Community 146 - "Community 146"
 Cohesion: 0.11
-Nodes (18): 1. Question answered — "what is the point of many different seeds?", Addendum — same day: old `src/` snapshotted, `src/` is now the Nanda-Unified mainstream, Addendum — same day: two legacy plot scripts brought up to date (sweep + current layout), Clean check on the live `src/` pipeline, Core Philosophy, End-of-session state — September 2, 2026, Files Modified, Files Modified / Added (addendum) (+10 more)
+Nodes (18): 1. Question answered — "what is the point of many different seeds?", 1. What happened, in order, 1. What was asked and checked, 2. Files Modified, 2. Restated answer (for the record, in one place), 3. File added — `Literature/Salah and Yevick.pdf`, 4. Files Modified / Added, Addendum — same day: two legacy plot scripts brought up to date (sweep + current layout) (+10 more)
 
 ### Community 147 - "Community 147"
 Cohesion: 0.50
@@ -699,15 +705,15 @@ Nodes (4): Files Modified / Added (this session), Origin of the LayerNorm idea, 
 
 ### Community 149 - "Community 149"
 Cohesion: 0.15
-Nodes (16): attach_superiority_index(), build_l2_predictor_results(), is_exploratory(), _metric_pass_fail(), predictor_level_verdicts(), predictor_name(), print_l2_predictor_results(), rank_corr() (+8 more)
+Nodes (25): attach_superiority_index(), build_events(), fraction_epochs(), is_exploratory(), load_seed(), main(), plot_curves(), plot_leads() (+17 more)
 
 ### Community 150 - "Community 150"
 Cohesion: 0.22
 Nodes (5): The official scorer's predictor-level verdicts, checked in code.  Loads the save, One official row: the confirmed peak of the total sum of squared weights., scored(), test_l2_confirmed_peak_passes_legacy_at_neighbouring_lead_fractions(), test_l2_official_row_is_the_confirmed_peak()
 
 ### Community 151 - "Community 151"
-Cohesion: 0.50
-Nodes (4): 1. What happened, in order, 2. Files Modified, Next, Session Summary — September 4, 2026 (Dropout predictor REOPENED — literature search found a directly-relevant paper (Salah & Yevick) after the earlier "formally closed" decision; decision reversed; Opencode prompt drafted, not yet implemented)
+Cohesion: 0.02
+Nodes (115): 338. `Higher_MI_Calculations_and_Concepts_Explained.docx`, 339. `Higher_MI_Textbook_LaTeX/2026-10-27_Progress_Report_Higher_MI.tex`, 340. `Higher_MI_Textbook_LaTeX/main.tex`, 341. `IBM_Plex_Serif/IBMPlexSerif-Bold.ttf`, 342. `IBM_Plex_Serif/IBMPlexSerif-BoldItalic.ttf`, 343. `IBM_Plex_Serif/IBMPlexSerif-ExtraLight.ttf`, 344. `IBM_Plex_Serif/IBMPlexSerif-ExtraLightItalic.ttf`, 345. `IBM_Plex_Serif/IBMPlexSerif-Italic.ttf` (+107 more)
 
 ### Community 152 - "Community 152"
 Cohesion: 0.40
@@ -726,8 +732,8 @@ Cohesion: 0.67
 Nodes (3): Current final state of new `src/predictors/l2_norm.py` functions (this session), Session Summary — August 7, 2026 (MA-of-MA threshold trigger strategy, direct implementation), Still Open / Next Steps (superseded — see next session below for what actually happened)
 
 ### Community 156 - "Community 156"
-Cohesion: 0.22
-Nodes (7): Epoch labels at which a model checkpoint is SAVED.      0, save_every, 2*save_ev, Subsample the evaluation grid from the SAVED checkpoint epochs.     Keeps saved, save_checkpoint_schedule(), select_eval_epochs(), Canonical results folder and the final-epoch checkpoint name.  The saved nanda_u, test_final_checkpoint_is_saved_once_on_the_eval_grid(), test_results_dir_argument_changes_the_read_path()
+Cohesion: 0.29
+Nodes (5): Epoch labels at which a model checkpoint is SAVED.      0, save_every, 2*save_ev, save_checkpoint_schedule(), Canonical results folder and the final-epoch checkpoint name.  The saved nanda_u, test_final_checkpoint_is_saved_once_on_the_eval_grid(), test_results_dir_argument_changes_the_read_path()
 
 ### Community 157 - "Community 157"
 Cohesion: 0.67
@@ -774,8 +780,8 @@ Cohesion: 0.22
 Nodes (8): 1. Frozen Experimental Setup, 2. Benchmark Rules & Evaluation Protocol, 4. Current Repository State, Current State of the Grokking Predictor Benchmark (`context_current.md`), Dropout Predictor Evaluation on the Experiment (Salah & Yevick signals), Dropout Predictor & Scorer Synthetic Signal Unit Tests, L2 Predictor Signal Dependence Unit Tests, Training setup (Nov 2026)
 
 ### Community 168 - "Community 168"
-Cohesion: 0.50
-Nodes (4): build_events(), fraction_epochs(), First epoch at which y has covered `f` of the way from its start to     its fart, events[predictor_signal][seed] = epoch (or None for a miss).
+Cohesion: 0.19
+Nodes (17): Module, _build_model(), _caller_weights_unchanged(), check1_same_batch_zero(), check2_halving_eta(), check3_reproducible(), configure_results(), _dicts_exactly_equal() (+9 more)
 
 ### Community 170 - "Community 170"
 Cohesion: 0.13
@@ -801,9 +807,21 @@ Nodes (5): Unit tests for AGE scorer with frozen protocol., Test 2: Synthetic NC
 Cohesion: 0.40
 Nodes (5): 1. Conditional Noise Stress Test False-Positive Rate ($P_i \sim \text{Uniform}[0, G_i]$), 2. Treatment of HTSR Alpha Values Below 2 ($\alpha < 2$), 3. Auxiliary Script `REPO_ROOT` Definitions, 4. Commutator Defect Open Attack Points, 5. Unresolved — Needs Jonathan's Check
 
+### Community 177 - "Community 177"
+Cohesion: 0.22
+Nodes (15): Any, Module, _answer_token_loss(), _clone_detached(), compute_commutator_defect(), _grads_at(), Training loss used by run_nanda_benchmark.py, reused here.      Exact training-l, Gradient of the answer-token loss at the given parameter dict.      We mark a de (+7 more)
+
+### Community 178 - "Community 178"
+Cohesion: 0.18
+Nodes (10): 337. `CLAUDE.md`, Commit, Part I: Documentation, Source Code & Data Files, Part II: Visual Figures & Diagnostic Plots, Part III: Model Checkpoints Inventory (.pt), Part III: Model Checkpoints Inventory (.pt), Project Comprehensive Compilation, Scope & Inclusions (+2 more)
+
 ### Community 179 - "Community 179"
 Cohesion: 0.67
 Nodes (3): Current final state of relevant files (this session's end), Session Summary — August 7, 2026 (zero-crossing trigger fails on 3rd run; plateau investigation; trigger criteria formalized; linear/overlay plots added), Still Open / Next Steps (updated — August 7, 2026, session close, "continue tomorrow")
+
+### Community 181 - "Community 181"
+Cohesion: 0.36
+Nodes (3): generate_pairs(), get_dataloaders(), ModularArithmeticDataset
 
 ### Community 182 - "Community 182"
 Cohesion: 0.40
@@ -817,25 +835,45 @@ Nodes (4): Test Category 1: Null Signal (Independent Variables).     If three va
 Cohesion: 0.50
 Nodes (4): 1. New finding — final L2-norm/Σw² vs grok-epoch correlation sign-flips on seed 4 alone, Files Modified, Next, Session Summary — September 4, 2026 (Supplementary: computed correlation stats for the L2-Norm "why it fails" discussion — new number, not previously on record)
 
+### Community 188 - "Community 188"
+Cohesion: 0.36
+Nodes (3): generate_pairs(), get_dataloaders(), ModularArithmeticDataset
+
+### Community 189 - "Community 189"
+Cohesion: 0.38
+Nodes (5): DummyModel, Test Category 1: Null Signal (Identical Gradients).     If batch A and batch B a, Test Category 2: Injected Feature (Non-Commuting Gradients).     If batch A and, test_high_defect(), test_zero_defect()
+
+### Community 191 - "Community 191"
+Cohesion: 0.33
+Nodes (6): effective_rank(), EffRank(W) (Eqn 1) and NormEffRank(W) (Eqn 2), Yunis et al. 2024.      singular_, Test Category 1: Full Rank (Maximum Entropy)., Test Category 2: Low Rank (Minimum Entropy)., test_effective_rank_full_rank(), test_effective_rank_low_rank()
+
+### Community 193 - "Community 193"
+Cohesion: 0.33
+Nodes (6): Addendum — same day: old `src/` snapshotted, `src/` is now the Nanda-Unified mainstream, Clean check on the live `src/` pipeline, Files Modified / Added (addendum), Still pending (unchanged from the main entry), Verify (done), What was done
+
+### Community 194 - "Community 194"
+Cohesion: 0.50
+Nodes (4): Core Philosophy, The Thesis Contribution, Thesis Motivation, Why This Research Matters
+
 ## Knowledge Gaps
-- **1267 isolated node(s):** `Any`, `Training setup (Nov 2026)`, `2. Benchmark Rules & Evaluation Protocol`, `Predictor 1: L2 Norm`, `Predictor 2: Dropout` (+1262 more)
+- **2321 isolated node(s):** `Scope & Inclusions`, `Part I: Documentation, Source Code & Data Files`, `Part II: Visual Figures & Diagnostic Plots`, `Part III: Model Checkpoints Inventory (.pt)`, `1. `.agents/skills/indian-english/SKILL.md`` (+2316 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **19 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **17 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `train_one_seed()` connect `Community 138` to `Community 14`, `Community 144`, `Community 19`, `Community 24`, `Community 156`, `Community 93`?**
-  _High betweenness centrality (0.037) - this node is a cross-community bridge._
-- **Why does `Tensor` connect `Community 78` to `Community 21`, `Community 22`?**
-  _High betweenness centrality (0.021) - this node is a cross-community bridge._
-- **Are the 2 inferred relationships involving `PredictorMeasurements` (e.g. with `recompute_from_checkpoints()` and `train_one_seed()`) actually correct?**
-  _`PredictorMeasurements` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 2 inferred relationships involving `score_saved_run()` (e.g. with `scored()` and `test_l2_confirmed_peak_passes_legacy_at_neighbouring_lead_fractions()`) actually correct?**
-  _`score_saved_run()` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 2 inferred relationships involving `compute_commutator_defect()` (e.g. with `test_high_defect()` and `test_zero_defect()`) actually correct?**
-  _`compute_commutator_defect()` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `plot_bespoke_spectral_age.py ================================ Strict bespoke dia`, `Apply standard clean styling.`, `Load trajectories, exact checkpoint epochs, and metrics for all seeds strictly.` to the rest of the system?**
-  _1574 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `Part I: Project Documentation, Source Code & Data Files` connect `Community 134` to `Community 178`?**
+  _High betweenness centrality (0.038) - this node is a cross-community bridge._
+- **Why does `Project Comprehensive Compilation` connect `Community 178` to `Community 138`, `Community 134`, `Community 151`?**
+  _High betweenness centrality (0.036) - this node is a cross-community bridge._
+- **What connects `Scope & Inclusions`, `Part I: Documentation, Source Code & Data Files`, `Part II: Visual Figures & Diagnostic Plots` to the rest of the system?**
+  _2628 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 1` be split into smaller, more focused modules?**
   _Cohesion score 0.058823529411764705 - nodes in this community are weakly interconnected._
+- **Should `Community 2` be split into smaller, more focused modules?**
+  _Cohesion score 0.08907563025210084 - nodes in this community are weakly interconnected._
+- **Should `Community 4` be split into smaller, more focused modules?**
+  _Cohesion score 0.07142857142857142 - nodes in this community are weakly interconnected._
+- **Should `Community 9` be split into smaller, more focused modules?**
+  _Cohesion score 0.12 - nodes in this community are weakly interconnected._
