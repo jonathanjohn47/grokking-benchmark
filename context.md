@@ -14180,3 +14180,58 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 - `project_compilation.md`
 - `project_compilation_npy_dump.md`
 - `context.md`
+
+
+---
+
+# 2026-11-23: Finalized Thesis Framing, Predictor Taxonomy & Examiner-Proof Protocol
+
+## Session Summary
+- **Implemented:**
+  - Integrated finalized authoritative thesis framing and restructured predictor taxonomy into `context_current.md`.
+  - Re-organized literature PDF structure into `04_Literature/Papers/Predictors/` with clear canonical naming prefixes across all benchmark predictors and updated `04_Literature/README.md`.
+  - Included defense prep guides (`Logical_Defense_and_QA_Prep_Guide.pdf`, `Thesis_Methods_and_Results_Summary.pdf`) and updated compilation PDFs and dump files.
+- **Investigated:**
+  - Evaluated theoretical and methodological alignment against potential examiner challenges.
+  - Eliminated "apples-to-oranges" vulnerability by partitioning metrics into Tier 1 (Core Direct-Domain Benchmark: 6 predictors), Tier 2 (Cross-Paradigm Transferability Test: 1 predictor - Higher-MI), and Relegated Diagnostics (Canatar et al. to Appendix lazy-regime sanity check, Papyan et al. to Related Work / Discussion).
+- **Changed:**
+  - `context_current.md`: Inserted authoritative update on thesis narrative, frozen testbed protocol, restructured taxonomy, control terminology standard, and viva defense protocol.
+  - `04_Literature/Papers/Predictors/*`: Literature PDFs systematically organized and renamed by predictor family.
+  - `04_Literature/README.md`: Updated file links and paths to match the restructured literature layout.
+  - `context.md`: Appended this session summary.
+- **Fixed:**
+  - Replaced imprecise "universal law disproof" claims with a defensible, standardized operational early-warning benchmark negative finding.
+- **Postponed:** None.
+
+## Technical Decisions
+- Established the central thesis theoretical takeaway: grokking in finite-width Transformers is governed by mechanistic discrete circuit formation and cleanup rather than smooth external spectral, norm, or information-theoretic phase transitions detectable ex-ante.
+- Enforced strict control terminology: "Positive Control" ($\lambda = 1.0$) and "Negative Control" ($\lambda = 0.0$) strictly reserved for training conditions; metrics grouped into Tier 1 Core Benchmark and Tier 2 Transferability Test.
+- Preserved compiled binary PDFs (`Logical_Defense_and_QA_Prep_Guide.pdf`, `Thesis_Methods_and_Results_Summary.pdf`, `project_compilation.pdf`) and oversized array dump (`project_compilation_npy_dump.md` at 269MB, exceeding GitHub's 100MB limit) locally in the workspace, untracking them from Git and adding them to `.gitignore` to keep remote pushes compliant and lightweight.
+
+## User Instructions
+- Commit and push everything to origin main.
+
+## Current Project State
+- **Completed Work:**
+  - Authoritative thesis framing, restructured taxonomy, and examiner-proof protocol locked in.
+  - All 8 predictors benchmarked on canonical Nanda-Power substrate.
+  - Literature PDFs and documentation cleanly mapped to predictor families.
+  - Repository size sanitized for GitHub remote pushing.
+- **Work in Progress:** Thesis write-up and viva defense preparation.
+- **Blockers:** None.
+- **Next Actions:** Final thesis chapter integration and presentation deck synthesis.
+
+## Important Discoveries
+- Falsifying black-box early warning claims across 6 direct-domain predictors and 1 transferability test provides a unified empirical boundary condition for deep learning generalization theory.
+
+## Files Modified
+- `.gitignore` (added compilation dumps and large PDFs)
+- `04_Literature/Papers/Predictors/*` (renamed literature PDFs)
+- `04_Literature/README.md`
+- `context_current.md`
+- `context.md`
+- `graphify-out/*` (updated knowledge graph artifacts)
+- `project_compilation.pdf` (untracked from git index, preserved locally)
+- `project_compilation_npy_dump.md` (untracked from git index, preserved locally)
+
+

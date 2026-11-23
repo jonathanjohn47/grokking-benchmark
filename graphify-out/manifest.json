@@ -250,8 +250,8 @@
     "semantic_hash": ""
   },
   "04_Literature/README.md": {
-    "mtime": 1794466191.707756,
-    "ast_hash": "7315c2a191c84fbe968e848f221ede4a",
+    "mtime": 1795417516.470505,
+    "ast_hash": "db66f27b90393e5968b0a8d8d7a1e702",
     "semantic_hash": ""
   },
   "06_Code/README.md": {
@@ -309,19 +309,9 @@
     "ast_hash": "e24787300d30fb241b56ebd885eeb07b",
     "semantic_hash": ""
   },
-  "04_Literature/Papers/Abdulkadir Canatar - Spectral bias and task-model alignment explain generalization in kernel regression and infinitely wide ne.pdf": {
-    "mtime": 1788436569.6994758,
-    "ast_hash": "0f1749b518b25efaec888e8d6df1f29f",
-    "semantic_hash": ""
-  },
   "04_Literature/Papers/Alethea Power - Grokking Generalization beyond overfitting on small algorithmic datasets [2022].pdf": {
     "mtime": 1788436642.0081117,
     "ast_hash": "3390f82d86710b7783ed8de3f048eec5",
-    "semantic_hash": ""
-  },
-  "04_Literature/Papers/Charles H. Martin - Predicting trends in the quality of state-of-the-art neural networks without access to training or testing.pdf": {
-    "mtime": 1788436569.7160504,
-    "ast_hash": "63b378b71ffa73d0823792cd15e5ae8a",
     "semantic_hash": ""
   },
   "04_Literature/Papers/Chiyuan Zhang - Understanding deep learning (still) requires rethinking generalization [2021].pdf": {
@@ -347,11 +337,6 @@
   "04_Literature/Papers/D. Mixon - Neural collapse with unconstrained features [2020].pdf": {
     "mtime": 1788436569.779265,
     "ast_hash": "a4fda3929e875d95745569ec04a3569a",
-    "semantic_hash": ""
-  },
-  "04_Literature/Papers/Domenico Pomarico - Transfer Entropy and O-Information to Detect Grokking in Tensor Network Multi-Class Classification Problem.pdf": {
-    "mtime": 1788436569.7908213,
-    "ast_hash": "3ab83d7e860627031d59ebb27e14381a",
     "semantic_hash": ""
   },
   "04_Literature/Papers/Giulio Biroli - Dynamical regimes of diffusion models [2024].pdf": {
@@ -384,11 +369,6 @@
     "ast_hash": "4b8cfcd1ed366573dbcd489b739021de",
     "semantic_hash": ""
   },
-  "04_Literature/Papers/Neel Nanda - Progress measures for grokking via mechanistic interpretability [2023].pdf": {
-    "mtime": 1794466191.706791,
-    "ast_hash": "c46ffc8571e58b68c7ed9d1ad6d29371",
-    "semantic_hash": ""
-  },
   "04_Literature/Papers/P. Baldi - Temporal Evolution of Generalization during Learning in Linear Networks [1991].pdf": {
     "mtime": 1788436569.8899305,
     "ast_hash": "76f2b2ee6f1b35732403bcebd0bd6c33",
@@ -419,11 +399,6 @@
     "ast_hash": "57920a9b0807452b03f0253ba8582942",
     "semantic_hash": ""
   },
-  "04_Literature/Papers/Salah and Yevick.pdf": {
-    "mtime": 1788552161.9362955,
-    "ast_hash": "0eea09791e51a94d88c242ff934f04c4",
-    "semantic_hash": ""
-  },
   "04_Literature/Papers/Song Mei - A mean field view of the landscape of two-layer neural networks [2018].pdf": {
     "mtime": 1788436569.9840193,
     "ast_hash": "ff96a121b61e0e93e16ea33a58999495",
@@ -432,11 +407,6 @@
   "04_Literature/Papers/Song Mei - The Generalization Error of Random Features Regression Precise Asymptotics and the Double Descent Curve [2019].pdf": {
     "mtime": 1788436569.9964538,
     "ast_hash": "a2929cf64b35fc13fb9d0372716b6d85",
-    "semantic_hash": ""
-  },
-  "04_Literature/Papers/Vardan Papyan - Prevalence of neural collapse during the terminal phase of deep learning training [2020].pdf": {
-    "mtime": 1788436570.0094085,
-    "ast_hash": "519360e70de94694334d792eecab46da",
     "semantic_hash": ""
   },
   "04_Literature/Papers/Yasaman Bahri - Explaining neural scaling laws [2021].pdf": {
@@ -2265,8 +2235,8 @@
     "semantic_hash": ""
   },
   "context_current.md": {
-    "mtime": 1794876522.2678049,
-    "ast_hash": "0bbe1d15ebebab56a7f05e2d5ae3c13a",
+    "mtime": 1795420930.1408393,
+    "ast_hash": "5dffa9d5573fa9e6d04f7436a2c25d58",
     "semantic_hash": ""
   },
   "context_split/context_part1_of_3.md": {
@@ -2299,24 +2269,9 @@
     "ast_hash": "2a7cfe8ef46a17101f8af11f6067b473",
     "semantic_hash": ""
   },
-  "04_Literature/Papers/Liu Omnigrok.pdf": {
-    "mtime": 1794458697.728363,
-    "ast_hash": "0bb8a3b9eca2493aff021f07c7e1c64e",
-    "semantic_hash": ""
-  },
-  "04_Literature/Papers/Liu et al.pdf": {
-    "mtime": 1794458697.8094409,
-    "ast_hash": "e78f9c0b21ed26735b4a9f04281a5276",
-    "semantic_hash": ""
-  },
   "04_Literature/Papers/Notsawo.pdf": {
     "mtime": 1794275350.478214,
     "ast_hash": "92215228e2b9889147caaa883703a190",
-    "semantic_hash": ""
-  },
-  "04_Literature/Papers/Prakash Martin.pdf": {
-    "mtime": 1794391524.9106581,
-    "ast_hash": "b0985024ca07eee17ff851d617fa5a90",
     "semantic_hash": ""
   },
   "04_Literature/Papers/Prieto.pdf": {
@@ -2327,11 +2282,6 @@
   "04_Literature/Papers/Thilak.pdf": {
     "mtime": 1794387083.948598,
     "ast_hash": "ded99d2e7eade3a45007dab371ec4195",
-    "semantic_hash": ""
-  },
-  "04_Literature/Papers/Yongzhong Xu.pdf": {
-    "mtime": 1794930699.057741,
-    "ast_hash": "c2422923e2f64a2feb8d208c790ffd36",
     "semantic_hash": ""
   },
   "04_Literature/Papers/colas.pdf": {
@@ -3374,11 +3324,6 @@
     "ast_hash": "45c369b3e2ea54bb0c131a5003e347f5",
     "semantic_hash": ""
   },
-  "04_Literature/Papers/Yunis.pdf": {
-    "mtime": 1794872491.4369028,
-    "ast_hash": "c895f1cf3a59f2cd1f3942ffd9f3f7c2",
-    "semantic_hash": ""
-  },
   "08_Experiments/results/results_per_nanda_power/analysis/bespoke_diagnostics/weight_pca_seed_0.png": {
     "mtime": 1794876863.2428355,
     "ast_hash": "c803952008b9e24c8482c75529f06676",
@@ -3597,6 +3542,61 @@
   "Logical_Defense_and_QA_Prep_Guide.pdf": {
     "mtime": 1795260114.347736,
     "ast_hash": "a48ca123f116cf57529861f6da4e923a",
+    "semantic_hash": ""
+  },
+  "04_Literature/Papers/Predictors/AGE-Vardan Papyan-Prevalence of Neural Collapse during the Terminal Phase of Deep Learning Training.pdf": {
+    "mtime": 1788436570.0094085,
+    "ast_hash": "519360e70de94694334d792eecab46da",
+    "semantic_hash": ""
+  },
+  "04_Literature/Papers/Predictors/Commutator Defect-Yongzhong Xu-Early-Warning Signals of Grokking via Loss-Landscape Geometry.pdf": {
+    "mtime": 1794930699.057741,
+    "ast_hash": "c2422923e2f64a2feb8d208c790ffd36",
+    "semantic_hash": ""
+  },
+  "04_Literature/Papers/Predictors/Dropout-Ahmed Salah-Tracing the Path to Grokking, Embeddings, Dropout, and Network Activation.pdf": {
+    "mtime": 1788552161.9362955,
+    "ast_hash": "0eea09791e51a94d88c242ff934f04c4",
+    "semantic_hash": ""
+  },
+  "04_Literature/Papers/Predictors/HTSR Alpha-Charles H. Martin-Predicting Trends in the Quality of State-of-the-Art Neural Networks without Access to Training or Testing Data.pdf": {
+    "mtime": 1788436569.7160504,
+    "ast_hash": "63b378b71ffa73d0823792cd15e5ae8a",
+    "semantic_hash": ""
+  },
+  "04_Literature/Papers/Predictors/HTSR Alpha-Hari K. Prakash-Grokking and Generalization Collapse, Insights from HTSR Theory.pdf": {
+    "mtime": 1794391524.9106581,
+    "ast_hash": "b0985024ca07eee17ff851d617fa5a90",
+    "semantic_hash": ""
+  },
+  "04_Literature/Papers/Predictors/Higher-MI-Domenico Pomarico-Transfer Entropy and O-Information to Detect Grokking in Tensor Network Multi-Class Classification Problems.pdf": {
+    "mtime": 1788436569.7908213,
+    "ast_hash": "3ab83d7e860627031d59ebb27e14381a",
+    "semantic_hash": ""
+  },
+  "04_Literature/Papers/Predictors/L2 Norm-Neel Nanda-Progress Measures for Grokking via Mechanistic Interpretability.pdf": {
+    "mtime": 1794466191.706791,
+    "ast_hash": "c46ffc8571e58b68c7ed9d1ad6d29371",
+    "semantic_hash": ""
+  },
+  "04_Literature/Papers/Predictors/L2 Norm-Ziming Liu-Omnigrok, Grokking Beyond Algorithmic Data.pdf": {
+    "mtime": 1794458697.728363,
+    "ast_hash": "0bb8a3b9eca2493aff021f07c7e1c64e",
+    "semantic_hash": ""
+  },
+  "04_Literature/Papers/Predictors/L2 Norm-Ziming Liu-Towards Understanding Grokking, An Effective Theory of Representation Learning.pdf": {
+    "mtime": 1794458697.8094409,
+    "ast_hash": "e78f9c0b21ed26735b4a9f04281a5276",
+    "semantic_hash": ""
+  },
+  "04_Literature/Papers/Predictors/Spectral-Abdulkadir Canatar-Spectral Bias and Task-Model Alignment Explain Generalization in Kernel Regression and Infinitely Wide Neural Networks.pdf": {
+    "mtime": 1788436569.6994758,
+    "ast_hash": "0f1749b518b25efaec888e8d6df1f29f",
+    "semantic_hash": ""
+  },
+  "04_Literature/Papers/Predictors/Weight-PCA-David Yunis-Approaching Deep Learning through the Spectral Dynamics of Weights.pdf": {
+    "mtime": 1794872491.4369028,
+    "ast_hash": "c895f1cf3a59f2cd1f3942ffd9f3f7c2",
     "semantic_hash": ""
   }
 }

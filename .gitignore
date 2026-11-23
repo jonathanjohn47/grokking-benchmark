@@ -62,3 +62,10 @@ full_context_profile.pdf
 
 # heavy_tail_demo.py (local-only script)
 06_Code/scripts/heavy_tail_demo.py
+
+# ── Project compilation dump & large PDFs (local disk only) ─────────
+project_compilation_npy_dump.md
+project_compilation.pdf
+Logical_Defense_and_QA_Prep_Guide.pdf
+Thesis_Methods_and_Results_Summary.pdf
+

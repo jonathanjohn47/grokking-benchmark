@@ -16,23 +16,23 @@ Total: 36 PDFs.
 | File | Note |
 |---|---|
 | `Alethea Power - Grokking Generalization beyond overfitting on small algorithmic datasets [2022].pdf` | Power, Burda, Edwards, Babuschkin, Misra (2022). **The paper that first reported grokking.** This project follows it for the modulus `p = 97` and the 3-seeds-per-predictor protocol. (Was supplied as `Paper et al.pdf`.) |
-| `Liu et al.pdf` | Liu, Kitouni, Nolte, Michaud, Tegmark, Williams (2022), *Towards Understanding Grokking: An Effective Theory of Representation Learning*, NeurIPS 2022, arXiv:2205.10343v2. One of the two source papers for treating weight norm as a controlling quantity for grokking, not merely a descriptive plot. Nanda et al. do not propose L2 as a predictor. |
-| `Liu Omnigrok.pdf` | Liu, Michaud and Tegmark (2023), *Omnigrok: Grokking Beyond Algorithmic Data*, ICLR 2023, arXiv:2210.01117v2. The other source paper for the weight-norm / LU-mechanism claim (training and test loss against weight norm). Together with Liu et al. 2022, this is the source behind L2 as a predictor in this thesis. Nanda et al. 2023 Figure 7 remains a descriptive plot of the sum of squared weights only. |
-| `Neel Nanda - Progress measures for grokking via mechanistic interpretability [2023].pdf` | Nanda, Chan, Lieberum, Smith, Steinhardt (2023), *Progress measures for grokking via mechanistic interpretability*, ICLR. **The architecture/setup reference for this project's four-head model.** Defines restricted loss and excluded loss, the three phases (memorisation / circuit formation / cleanup), and states plainly (Sec. 3) that no LayerNorm is used. |
-| `Domenico Pomarico - Transfer Entropy and O-Information to Detect Grokking in Tensor Network Multi-Class Classification Problem.pdf` | Grokking detection via information-theoretic measures. Relevant to the **Higher-MI** predictor. |
+| `Predictors/L2 Norm-Ziming Liu-Towards Understanding Grokking, An Effective Theory of Representation Learning.pdf` | Liu, Kitouni, Nolte, Michaud, Tegmark, Williams (2022), *Towards Understanding Grokking: An Effective Theory of Representation Learning*, NeurIPS 2022, arXiv:2205.10343v2. One of the two source papers for treating weight norm as a controlling quantity for grokking, not merely a descriptive plot. Nanda et al. do not propose L2 as a predictor. |
+| `Predictors/L2 Norm-Ziming Liu-Omnigrok, Grokking Beyond Algorithmic Data.pdf` | Liu, Michaud and Tegmark (2023), *Omnigrok: Grokking Beyond Algorithmic Data*, ICLR 2023, arXiv:2210.01117v2. The other source paper for the weight-norm / LU-mechanism claim (training and test loss against weight norm). Together with Liu et al. 2022, this is the source behind L2 as a predictor in this thesis. Nanda et al. 2023 Figure 7 remains a descriptive plot of the sum of squared weights only. |
+| `Predictors/L2 Norm-Neel Nanda-Progress Measures for Grokking via Mechanistic Interpretability.pdf` | Nanda, Chan, Lieberum, Smith, Steinhardt (2023), *Progress measures for grokking via mechanistic interpretability*, ICLR. **The architecture/setup reference for this project's four-head model.** Defines restricted loss and excluded loss, the three phases (memorisation / circuit formation / cleanup), and states plainly (Sec. 3) that no LayerNorm is used. |
+| `Predictors/Higher-MI-Domenico Pomarico-Transfer Entropy and O-Information to Detect Grokking in Tensor Network Multi-Class Classification Problems.pdf` | Grokking detection via information-theoretic measures. Relevant to the **Higher-MI** predictor. |
 
 ## 2. Heavy-tailed self-regularisation / weight-matrix spectra
 
 | File | Note |
 |---|---|
-| `Charles H. Martin - Predicting trends in the quality of state-of-the-art neural networks without access to training or testing.pdf` | Martin & Mahoney — HTSR / `weightwatcher`. **Source for the HTSR Alpha predictor**; also feeds the Spectral predictor. |
+| `Predictors/HTSR Alpha-Charles H. Martin-Predicting Trends in the Quality of State-of-the-Art Neural Networks without Access to Training or Testing Data.pdf` | Martin & Mahoney — HTSR / `weightwatcher`. **Source for the HTSR Alpha predictor**; also feeds the Spectral predictor. |
 | `Chunheng Jiang - Network properties determine neural network performance [2024].pdf` | Network-science view of what predicts NN performance. |
 
 ## 3. Neural collapse (terminal phase of training)
 
 | File | Note |
 |---|---|
-| `Vardan Papyan - Prevalence of neural collapse during the terminal phase of deep learning training [2020].pdf` | The original neural-collapse paper. **Source for the AGE predictor** — AGE (Adaptive Grokking Epoch via Neural Collapse) reads off the epoch of NC1 "within-class variability collapse", `Tr(Sigma_W)/Tr(Sigma_B) -> 0`. |
+| `Predictors/AGE-Vardan Papyan-Prevalence of Neural Collapse during the Terminal Phase of Deep Learning Training.pdf` | The original neural-collapse paper. **Source for the AGE predictor** — AGE (Adaptive Grokking Epoch via Neural Collapse) reads off the epoch of NC1 "within-class variability collapse", `Tr(Sigma_W)/Tr(Sigma_B) -> 0`. |
 | `D. Mixon - Neural collapse with unconstrained features [2020].pdf` | Unconstrained-features model of neural collapse. |
 | `Cong Fang - Exploring deep neural networks via layer-peeled model Minority collapse in imbalanced training [2021].pdf` | Layer-peeled model; minority collapse. |
 | `Mengjia Xu - Dynamics in Deep Classifiers Trained with the Square Loss Normalization, Low Rank, Neural Collapse, and Generaliz.pdf` | Square-loss training dynamics linking normalisation, low rank, neural collapse, generalisation. |
@@ -54,7 +54,7 @@ Total: 36 PDFs.
 |---|---|
 | `Song Mei - A mean field view of the landscape of two-layer neural networks [2018].pdf` | Mean-field limit of two-layer nets. |
 | `Song Mei - The Generalization Error of Random Features Regression Precise Asymptotics and the Double Descent Curve [2019].pdf` | Random-features regression; precise double-descent asymptotics. |
-| `Abdulkadir Canatar - Spectral bias and task-model alignment explain generalization in kernel regression and infinitely wide ne.pdf` | Spectral bias / task-model alignment in kernel regression and wide nets. Relevant to the **Spectral** predictor. |
+| `Predictors/Spectral-Abdulkadir Canatar-Spectral Bias and Task-Model Alignment Explain Generalization in Kernel Regression and Infinitely Wide Neural Networks.pdf` | Spectral bias / task-model alignment in kernel regression and wide nets. Relevant to the **Spectral** predictor. |
 | `Convex_Formulation_of_Overparameterized_Deep_Neural_Networks.pdf` | Convex reformulation of overparameterised DNN training. |
 | `Jean Barbier - Optimal errors and phase transitions in high-dimensional generalized linear models [2017].pdf` | Phase transitions in high-dimensional GLMs. |
 

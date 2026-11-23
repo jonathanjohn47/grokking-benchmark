@@ -8,6 +8,55 @@ This document summarizes the active, in-force state of the thesis research proje
 
 ---
 
+## [2026-11-23] Finalized Thesis Framing, Predictor Taxonomy & Examiner-Proof Protocol (Authoritative Update)
+
+### 1. Core Thesis Narrative & Overarching Scientific Theory
+- **Correction of Framing (No Overclaiming):** Previous notes that loosely referred to "disproving all source papers" or "disproving universal laws across all 8 predictors" are hereby superseded. Not all source papers claimed universal laws across all architectures, and claiming blanket disproof creates a fatal "apples-to-oranges" vulnerability during thesis defense.
+- **True Overarching Contribution (Unified Negative Finding):** Under a strict, pre-registered, frozen early-warning protocol on Nanda et al.’s (2023) canonical modular addition testbed, **none of the proposed external/black-box proxy metrics reliably predict the onset of generalization prior to $t_{\text{grok}}$**.
+- **Theoretical Takeaway:** Grokking in finite-width Transformers is governed by **mechanistic discrete circuit formation and cleanup** (the trigonometric/Fourier multiplication algorithm) rather than generic spectral, norm, loss-landscape curvature, or information-theoretic phase transitions that can be detected *ex ante* by external black-box probes.
+
+### 2. Frozen Canonical Testbed & Evaluation Protocol
+- **Task & Dataset:** Modular addition ($a + b \bmod 113$), $30\%$ training split ($3,830$ pairs) / $70\%$ test split ($8,939$ pairs), following Nanda et al. (2023).
+- **Architecture:** 1-layer ReLU Transformer ($d_{\text{model}} = 128$, $4$ attention heads of dimension $32$, $d_{\text{mlp}} = 512$, no LayerNorm, untied embeddings).
+- **Optimization:** Full-batch AdamW ($\text{lr} = 10^{-3}$, $\beta_1 = 0.9, \beta_2 = 0.98$, $\text{weight\_decay } \lambda = 1.0$) trained for $40,000$ epochs across $5$ random seeds. Memorization saturates around epochs $1,000\text{–}1,500$, and grokking occurs around epochs $9,000\text{–}14,000$.
+- **Frozen Early-Warning Criteria:** All predictor definitions and trigger rules are locked prior to evaluation without post-hoc threshold tuning. A valid early-warning predictor must:
+  1. Trigger reliably *after* memorization saturation and strictly *before* the sustained test accuracy transition ($t_{\text{grok}}$).
+  2. Maintain consistent positive lead time across all $5$ random seeds.
+  3. Remain silent (no false positives) on the non-grokking negative control runs ($\lambda = 0.0$).
+
+### 3. Restructured Predictor Taxonomy (Eliminating "Apples-to-Oranges" Criticism)
+To ensure methodological rigor and prevent examiners from dismissing the benchmark due to violated mathematical assumptions, the metrics are formally partitioned into **Tier 1 (Core Direct-Domain Benchmark)**, **Tier 2 (Cross-Paradigm Transferability Test)**, and **Relegated/Out-of-Scope Diagnostics**:
+
+#### Tier 1: Core Direct-Domain Benchmark (6 Predictors — "Apples-to-Apples")
+These metrics are drawn directly from deep learning grokking or weight-spectral literature where testing on Nanda’s setup is domain-valid:
+1. **L2 Weight Norm** (*Liu et al., 2022; Nanda et al., 2023*): Directly studied in modular arithmetic grokking. *Result:* Closed-Negative (tracks smooth decay/cleanup rather than acting as a sharp pre-grok trigger).
+2. **Dropout Variance / Robustness (`DRC`)** (*Salah & Yevick, 2025*): Directly claims to forecast grokking in modular addition (originally tested on a 2-layer MLP with $P=53$). *Result:* Closed-Negative (fails to provide a consistent pre-grok early-warning trigger in Nanda's 1-layer Transformer).
+3. **Spectral Dynamics / Effective Rank (`AGE`)** (*Yunis et al., 2024*): Directly evaluated on Nanda’s modular addition setup and larger architectures. *Result:* Closed-Negative as an *early-warning* predictor (rank minimization coincides with or lags the generalization transition rather than preceding it).
+4. **HTSR Power-Law Exponent (`alpha`)** (*Martin & Mahoney, 2021; Prakash & Martin, 2025*): Explicitly claims $\alpha \approx 2$ as a **"universal layer-convergence target"** tracking grokking (originally tested on a 3-layer MLP on MNIST). *Result:* Closed-Negative (fails to identify $t_{\text{grok}}$ in advance on the 1-layer Transformer, challenging the universality of the $\alpha \approx 2$ target).
+5. **Weight-PCA (`PC1` Execution Manifold)** (*Xu, 2026*): Proposed for modular arithmetic grokking trajectories. *Result:* Closed-Negative under the frozen early-warning protocol.
+6. **Commutator Defect ($\mathcal{D}$)** (*Xu, 2026*): Explicitly claims to be a **"robust, architecture-agnostic, and causally implicated early-warning signal for grokking"**. *Critical Finding:* Xu’s formulation relies on mini-batch SGD gradient non-commutativity, whereas canonical Nanda grokking uses full-batch AdamW. When evaluated via resampled mini-batch pairs along the full-batch trajectory, $\mathcal{D}$ fires prematurely during early memorization (epochs $400\text{–}600$), falsifying its claimed universal/optimizer-agnostic early-warning reliability.
+
+#### Tier 2: Cross-Paradigm Transferability Test (1 Predictor)
+7. **Higher-MI / Population O-Information ($\Omega_{\text{pop}}$)** (*Pomarico et al., 2025*): Originally formulated for 3-class quantum-inspired Matrix Product State (MPS) tensor networks.
+   - *Methodological Justification:* Included directly in response to the authors' explicit call in Section V (Conclusions) to test the framework's generality across other structured domains and datasets.
+   - *Result:* Closed-Negative (peaks *after* grokking rather than before, demonstrating that redundancy transitions in 3-class quantum tensor networks do not transfer as early-warning probes to 113-class classical Transformers).
+
+#### Relegated Metrics (Removed from Main Early-Warning Comparison Table)
+To prevent invalid assumption violations ("apples-to-oranges" attacks), the following two frameworks are excluded from the main early-warning predictor comparison:
+- **Canatar et al. (2021) — *Spectral Bias & Task-Model Alignment*:** Relegated to **Appendix (Lazy-Regime Sanity Check / Diagnostic)**. Canatar et al.’s analytical generalization formula is strictly derived for **infinite-width NTK / kernel regression**, and the authors explicitly state that it breaks down under finite-width feature learning. Presenting it as an early-warning predictor on a $d=128$ Transformer violates its foundational mathematical assumptions. In the Appendix, it serves purely as a diagnostic confirming that Nanda’s grokking operates in the rich feature-learning regime rather than the lazy kernel regime.
+- **Papyan, Han, & Donoho (2020) — *Neural Collapse*:** Relegated to **Related Work / Discussion** only. Papyan et al. characterize Terminal Phase of Training (TPT) geometry in standard supervised vision classification (VGG/ResNet/DenseNet) and never propose Neural Collapse as an early-warning predictor of grokking.
+
+### 4. Strict Control Terminology Standard
+To avoid terminology collision in the thesis text and viva defense:
+- **Training-Level Controls:** Reserve the terms **Positive Control** ($\lambda = 1.0$, grokking runs) and **Negative Control** ($\lambda = 0.0$, non-grokking memorization runs) strictly for training hyperparameter conditions.
+- **Metric-Level Categorization:** Refer to Group A as the **Tier 1 Core Benchmark** and Pomarico et al. as a **Tier 2 Cross-Paradigm Transferability Test**. Never refer to Tier 2 or Canatar et al. as "negative controls."
+
+### 5. Viva Defense Protocol (Key Talking Points)
+- **On "Why compare diverse metrics on one setup?":** We are not comparing raw metric magnitudes against each other; we are benchmarking a standardized binary operational capability (**Pass/Fail:** *Does the metric reliably fire between memorization and $t_{\text{grok}}$ across seeds?*) on a single, well-understood mechanistic testbed where ground-truth circuit formation is known.
+- **On "Negative Results":** A unified negative result across $6$ direct-domain predictors and $1$ transferability test establishes a critical boundary condition for the field: practitioners cannot rely on current black-box spectral, geometric, or information-theoretic proxies as universal early-warning alarms for delayed algorithmic generalization.
+
+---
+
 ## 1. Frozen Experimental Setup
 
 The experimental substrate is configured in `06_Code/configs/nanda_unified.yaml` and executed via `06_Code/scripts/run_nanda_benchmark.py`. It is the Nanda et al. (2023) modular-addition task. It does **not** strictly replicate Nanda Section 3, and it does **not** match that section exactly. The code was aligned with Nanda's released training code in November 2026. The paragraph "Training setup (Nov 2026)" below is the description of that code. The 40,000-epoch, five-seed experiment that uses this setup finished on 13 November 2026. \(G_i\) at the cuts stored in `aggregate.json` are listed under "New-setup grok epochs". The L2 verdict in section 3 is on this experiment. Every other predictor verdict printed later in this file was computed on the **old** setup (no \(W_O\), no causal mask, no warmup, init \(0.8/\sqrt{d_{\mathrm{model}}}\), checkpoints every 50 epochs, primary grok cut 0.9). Those other verdicts are not results of the new setup. They still have to be recomputed.
