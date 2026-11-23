@@ -14235,3 +14235,44 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 - `project_compilation_npy_dump.md` (untracked from git index, preserved locally)
 
 
+
+
+---
+
+# 2026-11-23: Final Examiner Guardrails, Pass/Fail Provenance & Onset Math (Addendum)
+
+## Session Summary
+- **Implemented:**
+  - Integrated the Addendum on final examiner guardrails, pass/fail provenance, and onset mathematics into `context_current.md`.
+- **Investigated:**
+  - Bounded external validity explicitly to Nanda et al.'s (2023) canonical modular addition testbed ($1$-layer ReLU Transformer, $d_{\text{model}}=128$, $4$ heads, $d_{\text{mlp}}=512$, $a+b \bmod 113$, $30\%$ train split, full-batch AdamW with $\text{lr}=10^{-3}$, $\lambda=1.0$) across $n=5$ random seeds.
+  - Verified literature provenance for the 3 frozen pass/fail criteria (Xu 2026 and Nanda et al. 2023).
+  - Formalized exact mathematical definitions of grokking step $t_{\text{grok}}$ ($\ge 0.98$ for $n_{\text{sustained}} = 3$) and predictor onset $t_{\text{onset}}$ ($\mathcal{D}(t) > 10 \times \mathcal{D}_{\text{baseline}}$ and $\mathcal{D}(t) > 20$).
+  - Consolidated domain alignment defense for Tier 1 predictors across modular arithmetic benchmarks.
+- **Changed:**
+  - `context_current.md`: Appended the authoritative addendum detailing examiner guardrails, literature provenance, onset math, and domain alignment defense.
+  - `context.md`: Appended this session summary.
+- **Fixed:** None.
+- **Postponed:** None.
+
+## Technical Decisions
+- Guarded against viva/examiner challenges by explicitly establishing that all negative findings are strictly bounded to the frozen modular addition testbed, preventing accusations of unwarranted over-generalization to multi-layer networks or natural language tasks.
+- Grounded all pass/fail thresholds in prior literature (Xu 2026 and Nanda et al. 2023) to demonstrate zero residual freedom or post-hoc threshold tuning.
+
+## User Instructions
+- Commit and push everything to origin main.
+
+## Current Project State
+- **Completed Work:**
+  - Core thesis framing, predictor taxonomy, examiner-proof guardrails, and literature provenance recorded in `context_current.md`.
+  - All benchmark results, control runs, and literature archives committed.
+- **Work in Progress:** Thesis write-up and viva defense preparation.
+- **Blockers:** None.
+- **Next Actions:** Align thesis methodology and discussion chapters with locked guardrails and onset mathematics.
+
+## Important Discoveries
+- Explicit literature grounding of the 3 pass/fail criteria and exact mathematical definition of $t_{\text{onset}}$ / $t_{\text{grok}}$ eliminates examiner vulnerability regarding arbitrary threshold selection.
+
+## Files Modified
+- `context_current.md` (added examiner guardrails, literature provenance, onset math, domain alignment defense)
+- `context.md` (appended session summary)

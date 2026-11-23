@@ -57,6 +57,39 @@ To avoid terminology collision in the thesis text and viva defense:
 
 ---
 
+## [2026-11-23] Final Examiner Guardrails, Pass/Fail Provenance & Onset Math (Addendum)
+
+### 1. Final Scope Guardrails (Grok-Audited Examiner-Proofing)
+To ensure zero vulnerability during thesis evaluation and viva defense, the following four strict scope boundaries apply across all chapters:
+1. **External Validity (No Over-Generalization):** Do not claim results for "all finite Transformers in general." Explicitly bound all claims to **Nanda et al.’s (2023) canonical modular addition testbed** ($1$-layer ReLU Transformer, $d_{\text{model}}=128$, $4$ heads, $d_{\text{mlp}}=512$, $a+b \bmod 113$, $30\%$ train split, full-batch AdamW with $\text{lr}=10^{-3}$, $\lambda=1.0$). Note multi-layer networks, mini-batch SGD, and natural/formal language tasks (e.g., SCAN, Dyck) as future scope.
+2. **Sample Size Framing ($n = 5$ Seeds):** Do not claim "universal consistency across all possible initializations." Frame seed consistency specifically as **"consistent across all $n = 5$ random seeds (matching Nanda et al.’s original seed count)"**.
+3. **Zero Residual Freedom in Trigger Rules:** Exhaustively document exact mathematical thresholds, baselines, and sustained evaluation windows ($n_{\text{sustained}} = 3$) in the Methodology section so no post-hoc tuning can be alleged.
+4. **Strictly Negative Contribution (No Positive Mechanistic Overclaim):** Keep the thesis contribution strictly focused on the **unified negative finding** that all $6$ direct-domain predictors and $1$ cross-paradigm probe fail to reliably predict generalization onset under the frozen protocol. Cite Nanda et al.’s Fourier multiplication circuit strictly as established background context rather than claiming a new positive mechanistic discovery from black-box proxies.
+
+### 2. Literature Provenance of the 3 Pass/Fail Criteria
+The three frozen evaluation criteria are directly grounded in prior grokking literature rather than arbitrary thresholds:
+1. **Criterion 1 — Post-Memorization, Pre-$t_{\text{grok}}$ Window ($\Delta t = t_{\text{grok}} - t_{\text{onset}} > 0$):** Derived from **Xu (2026)** (Section 4.2–4.3, positive lead-time definition) and **Nanda et al. (2023)** (Section 5.2, *Circuit Formation phase* occurring after memorization saturation and before cleanup/generalization). Triggers during memorization measure fitting, not generalization; triggers at or after $t_{\text{grok}}$ are lagging diagnostics, not early warnings.
+2. **Criterion 2 — Multi-Seed Consistency ($5/5$ Seeds):** Derived from **Nanda et al. (2023)** (Section 3 & Appendix C.2.1, $5$-seed validation) and **Xu (2026)** (Section 5.1–5.2, per-seed reliability).
+3. **Criterion 3 — Zero False Positives on Non-Grokking Control ($\lambda = 0.0$):** Derived directly from **Xu (2026)** (Section 4.4, 5.3.2, & Table 8: *"Controls grok: 0/6 (0%) — no false positives"*) and **Nanda et al. (2023)** (Appendix D.1, $\lambda = 0$ control). A valid early-warning predictor must remain silent when weight decay is removed and grokking never occurs.
+
+### 3. Exact Mathematical Definition of $t_{\text{grok}}$ and $t_{\text{onset}}$
+* **Grokking Step ($t_{\text{grok}}$):** Following **Xu (2026)** (Section 4.2), $t_{\text{grok}}$ is the first training step/epoch where test accuracy exceeds $\ge 0.98$ ($98\%$) for $n_{\text{sustained}} = 3$ consecutive evaluations.
+* **Defect / Predictor Onset Step ($t_{\text{onset}}$):** Following **Xu (2026)** (Section 4.3), $t_{\text{onset}}$ is the first step where the median metric (e.g., Commutator Defect $\mathcal{D}(t)$) simultaneously satisfies a dual criterion:
+  1. $\mathcal{D}(t) > 10 \times \mathcal{D}_{\text{baseline}}$ (where $\mathcal{D}_{\text{baseline}}$ is the median of the first $3$ early-training measurements), and
+  2. $\mathcal{D}(t) > 20$ (absolute floor to prevent near-zero early noise from triggering false alarms).
+* **Lead Time:** $\Delta t = t_{\text{grok}} - t_{\text{onset}}$. In our full-batch AdamW runs, resampled mini-batch defect measurements cross both thresholds prematurely during early memorization (epochs $400\text{–}600$), invalidating $\mathcal{D}(t)$ as a pre-grokking early-warning signal.
+
+### 4. Domain Alignment Defense for Tier 1 Predictors
+Most Tier 1 source papers explicitly evaluate on modular arithmetic setups closely aligned with Nanda et al. (2023):
+* **Nanda et al. (2023):** Modular addition ($P=113$), $1$-layer ReLU Transformer, full-batch AdamW.
+* **Yunis et al. (2024):** Directly uses Nanda et al.’s $1$-layer Transformer on modular addition ($P=97$) (Section 3 & Appendix A.6).
+* **Xu (2026):** Extends his prior modular arithmetic ($P=97$) $2$-layer Transformer framework (`Xu, 2026b`) to SCAN and Dyck.
+* **Salah & Yevick (2025):** Uses modular addition ($P=53$) with AdamW on a $2$-layer ReLU MLP.
+* **Prakash & Martin (2025):** Uses a $3$-layer MLP on MNIST ($1,000$ samples) but explicitly claims $\alpha \approx 2$ as a **universal layer-convergence target** for grokking.
+This shared task/phenomenon foundation makes our Tier 1 benchmark a direct, domain-valid ("apples-to-apples") testbed.
+
+---
+
 ## 1. Frozen Experimental Setup
 
 The experimental substrate is configured in `06_Code/configs/nanda_unified.yaml` and executed via `06_Code/scripts/run_nanda_benchmark.py`. It is the Nanda et al. (2023) modular-addition task. It does **not** strictly replicate Nanda Section 3, and it does **not** match that section exactly. The code was aligned with Nanda's released training code in November 2026. The paragraph "Training setup (Nov 2026)" below is the description of that code. The 40,000-epoch, five-seed experiment that uses this setup finished on 13 November 2026. \(G_i\) at the cuts stored in `aggregate.json` are listed under "New-setup grok epochs". The L2 verdict in section 3 is on this experiment. Every other predictor verdict printed later in this file was computed on the **old** setup (no \(W_O\), no causal mask, no warmup, init \(0.8/\sqrt{d_{\mathrm{model}}}\), checkpoints every 50 epochs, primary grok cut 0.9). Those other verdicts are not results of the new setup. They still have to be recomputed.
