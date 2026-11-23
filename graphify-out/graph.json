@@ -771,6 +771,56 @@
       "norm_label": "2026-11-16 \u2014 predictor separation completed (l2 / dropout / spectral / age)"
     },
     {
+      "label": "[2026-11-23] Final Examiner Guardrails, Pass/Fail Provenance & Taxonomy Lock",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L917",
+      "_origin": "ast",
+      "id": "context_current_2026_11_23_final_examiner_guardrails_pass_fail_provenance_taxonomy_lock",
+      "community": 192,
+      "norm_label": "[2026-11-23] final examiner guardrails, pass/fail provenance & taxonomy lock"
+    },
+    {
+      "label": "1. Final Scope Guardrails (Examiner-Proofing)",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L919",
+      "_origin": "ast",
+      "id": "context_current_1_final_scope_guardrails_examiner_proofing",
+      "community": 192,
+      "norm_label": "1. final scope guardrails (examiner-proofing)"
+    },
+    {
+      "label": "2. Literature Provenance of the 3 Pass/Fail Criteria",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L925",
+      "_origin": "ast",
+      "id": "context_current_2_literature_provenance_of_the_3_pass_fail_criteria_925",
+      "community": 192,
+      "norm_label": "2. literature provenance of the 3 pass/fail criteria"
+    },
+    {
+      "label": "3. Exact Mathematical Definitions",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L930",
+      "_origin": "ast",
+      "id": "context_current_3_exact_mathematical_definitions",
+      "community": 192,
+      "norm_label": "3. exact mathematical definitions"
+    },
+    {
+      "label": "4. Final Predictor Taxonomy",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L937",
+      "_origin": "ast",
+      "id": "context_current_4_final_predictor_taxonomy",
+      "community": 192,
+      "norm_label": "4. final predictor taxonomy"
+    },
+    {
       "label": "project_compilation.md",
       "file_type": "document",
       "source_file": "project_compilation.md",
@@ -10456,7 +10506,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L366",
       "_origin": "ast",
-      "community": 14,
+      "community": 182,
       "norm_label": "dips_key()",
       "id": "scripts_run_nanda_benchmark_dips_key"
     },
@@ -10656,7 +10706,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L367",
       "_origin": "ast",
-      "community": 14,
+      "community": 182,
       "norm_label": "key under which limit_cycle_check stores its dip count. with the     primary gro",
       "id": "scripts_run_nanda_benchmark_rationale_367"
     },
@@ -22146,7 +22196,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L1829",
       "_origin": "ast",
-      "community": 192,
+      "community": 17,
       "norm_label": "session summary \u2014 august 2, 2026 (regression caught + fixed, style nitpick applied)",
       "id": "context_split_context_part1_of_3_session_summary_august_2_2026_regression_caught_fixed_style_nitpick_applied"
     },
@@ -22156,7 +22206,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L1858",
       "_origin": "ast",
-      "community": 192,
+      "community": 17,
       "norm_label": "still open / next steps (updated \u2014 august 2, 2026)",
       "id": "context_split_context_part1_of_3_still_open_next_steps_updated_august_2_2026"
     },
@@ -25476,7 +25526,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2047",
       "_origin": "ast",
-      "community": 136,
+      "community": 60,
       "norm_label": "session summary \u2014 september 4, 2026 (`run_nanda_benchmark.py`'s console table explicitly reverted; full per-seed results moved into `make_pdf.py` instead, as a new results section built from `aggregate.json`)",
       "id": "context_split_context_part2_of_3_session_summary_september_4_2026_run_nanda_benchmark_py_s_console_table_explicitly_reverted_full_per_seed_results_moved_into_make_pdf_py_instead_as_a_new_results_section_built_from_aggregate_json"
     },
@@ -25486,7 +25536,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2049",
       "_origin": "ast",
-      "community": 136,
+      "community": 60,
       "norm_label": "1. `run_nanda_benchmark.py` \u2014 the per-seed table added last session was reverted",
       "id": "context_split_context_part2_of_3_1_run_nanda_benchmark_py_the_per_seed_table_added_last_session_was_reverted"
     },
@@ -25496,7 +25546,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2068",
       "_origin": "ast",
-      "community": 136,
+      "community": 60,
       "norm_label": "2. the same \"full numbers\" request was instead implemented in `make_pdf.py`",
       "id": "context_split_context_part2_of_3_2_the_same_full_numbers_request_was_instead_implemented_in_make_pdf_py"
     },
@@ -25506,7 +25556,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2112",
       "_origin": "ast",
-      "community": 136,
+      "community": 60,
       "norm_label": "verification done",
       "id": "context_split_context_part2_of_3_verification_done_2112"
     },
@@ -25516,7 +25566,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2130",
       "_origin": "ast",
-      "community": 136,
+      "community": 60,
       "norm_label": "files modified / added",
       "id": "context_split_context_part2_of_3_files_modified_added_2130"
     },
@@ -25526,7 +25576,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2136",
       "_origin": "ast",
-      "community": 136,
+      "community": 60,
       "norm_label": "next",
       "id": "context_split_context_part2_of_3_next_2136"
     },
@@ -25626,7 +25676,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2301",
       "_origin": "ast",
-      "community": 60,
+      "community": 136,
       "norm_label": "session summary \u2014 september 4, 2026 (discussion: why l2 norm cannot be used as a grokking predictor \u2014 full review of plots, results and numbers; no code changed)",
       "id": "context_split_context_part2_of_3_session_summary_september_4_2026_discussion_why_l2_norm_cannot_be_used_as_a_grokking_predictor_full_review_of_plots_results_and_numbers_no_code_changed"
     },
@@ -25636,7 +25686,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2303",
       "_origin": "ast",
-      "community": 60,
+      "community": 136,
       "norm_label": "1. question answered \u2014 \"why can't l2 norm be used as a predictor?\"",
       "id": "context_split_context_part2_of_3_1_question_answered_why_can_t_l2_norm_be_used_as_a_predictor"
     },
@@ -25646,7 +25696,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2385",
       "_origin": "ast",
-      "community": 60,
+      "community": 136,
       "norm_label": "2. follow-up correction \u2014 \"isn't the one postdictive run (run 3) the",
       "id": "context_split_context_part2_of_3_2_follow_up_correction_isn_t_the_one_postdictive_run_run_3_the"
     },
@@ -25656,7 +25706,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2412",
       "_origin": "ast",
-      "community": 60,
+      "community": 136,
       "norm_label": "files modified",
       "id": "context_split_context_part2_of_3_files_modified_2412"
     },
@@ -25666,7 +25716,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2417",
       "_origin": "ast",
-      "community": 60,
+      "community": 136,
       "norm_label": "next",
       "id": "context_split_context_part2_of_3_next_2417"
     },
@@ -26718,9 +26768,9 @@
       "source_file": "context_current.md",
       "source_location": "L60",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "context_current_current_state_of_the_grokking_predictor_benchmark_context_current_md",
-      "target": "context_current_2026_11_23_final_examiner_guardrails_pass_fail_provenance_onset_math_addendum",
-      "confidence_score": 1.0
+      "target": "context_current_2026_11_23_final_examiner_guardrails_pass_fail_provenance_onset_math_addendum"
     },
     {
       "relation": "contains",
@@ -26898,9 +26948,9 @@
       "source_file": "context_current.md",
       "source_location": "L62",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "context_current_2026_11_23_final_examiner_guardrails_pass_fail_provenance_onset_math_addendum",
-      "target": "context_current_1_final_scope_guardrails_grok_audited_examiner_proofing",
-      "confidence_score": 1.0
+      "target": "context_current_1_final_scope_guardrails_grok_audited_examiner_proofing"
     },
     {
       "relation": "contains",
@@ -26908,9 +26958,9 @@
       "source_file": "context_current.md",
       "source_location": "L69",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "context_current_2026_11_23_final_examiner_guardrails_pass_fail_provenance_onset_math_addendum",
-      "target": "context_current_2_literature_provenance_of_the_3_pass_fail_criteria",
-      "confidence_score": 1.0
+      "target": "context_current_2_literature_provenance_of_the_3_pass_fail_criteria"
     },
     {
       "relation": "contains",
@@ -26918,9 +26968,9 @@
       "source_file": "context_current.md",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "context_current_2026_11_23_final_examiner_guardrails_pass_fail_provenance_onset_math_addendum",
-      "target": "context_current_3_exact_mathematical_definition_of_t_text_grok_and_t_text_onset",
-      "confidence_score": 1.0
+      "target": "context_current_3_exact_mathematical_definition_of_t_text_grok_and_t_text_onset"
     },
     {
       "relation": "contains",
@@ -26928,9 +26978,9 @@
       "source_file": "context_current.md",
       "source_location": "L82",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "context_current_2026_11_23_final_examiner_guardrails_pass_fail_provenance_onset_math_addendum",
-      "target": "context_current_4_domain_alignment_defense_for_tier_1_predictors",
-      "confidence_score": 1.0
+      "target": "context_current_4_domain_alignment_defense_for_tier_1_predictors"
     },
     {
       "relation": "contains",
@@ -27151,6 +27201,16 @@
       "confidence_score": 1.0,
       "source": "context_current_predictor_experimental_validation_master_tracker",
       "target": "context_current_2026_11_16_predictor_separation_completed_l2_dropout_spectral_age"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L917",
+      "weight": 1.0,
+      "source": "context_current_predictor_experimental_validation_master_tracker",
+      "target": "context_current_2026_11_23_final_examiner_guardrails_pass_fail_provenance_taxonomy_lock",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -27421,6 +27481,46 @@
       "confidence_score": 1.0,
       "source": "context_current_session_summary_november_16_2026_age_predictor_ground_up_rebuild",
       "target": "context_current_8_physical_interpretation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L919",
+      "weight": 1.0,
+      "source": "context_current_2026_11_23_final_examiner_guardrails_pass_fail_provenance_taxonomy_lock",
+      "target": "context_current_1_final_scope_guardrails_examiner_proofing",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L925",
+      "weight": 1.0,
+      "source": "context_current_2026_11_23_final_examiner_guardrails_pass_fail_provenance_taxonomy_lock",
+      "target": "context_current_2_literature_provenance_of_the_3_pass_fail_criteria_925",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L930",
+      "weight": 1.0,
+      "source": "context_current_2026_11_23_final_examiner_guardrails_pass_fail_provenance_taxonomy_lock",
+      "target": "context_current_3_exact_mathematical_definitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L937",
+      "weight": 1.0,
+      "source": "context_current_2026_11_23_final_examiner_guardrails_pass_fail_provenance_taxonomy_lock",
+      "target": "context_current_4_final_predictor_taxonomy",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -58032,5 +58132,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "2e389bf744cf4666732a02de0f5651ff05798a58"
+  "built_at_commit": "ae7b2dde87d0693fdfdddb4980e2cf9dea8ef006"
 }
