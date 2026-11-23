@@ -910,3 +910,31 @@ runner — deferred.
 **Untouched (as required):** Nanda/Power base model, dataset, training loops,
 `run_nanda_benchmark.py`, existing plot scripts, canonical results tree,
 `archive/` contents.
+
+
+---
+
+## [2026-11-23] Final Examiner Guardrails, Pass/Fail Provenance & Taxonomy Lock
+
+### 1. Final Scope Guardrails (Examiner-Proofing)
+1. **External Validity:** Claims are strictly bounded to Nanda et al.’s (2023) canonical modular addition testbed (1-layer ReLU Transformer, full-batch AdamW). No over-generalization to "all finite Transformers".
+2. **Sample Size Framing:** Seed consistency is framed as "consistent across all n = 5 random seeds", matching Nanda et al.'s original protocol.
+3. **Strictly Negative Contribution:** The thesis establishes a unified negative finding on a frozen testbed. No claims of discovering positive mechanistic theories from black-box proxies.
+4. **Zero Residual Freedom:** All exact mathematical thresholds and sustained windows are pre-registered and locked.
+
+### 2. Literature Provenance of the 3 Pass/Fail Criteria
+1. **Criterion 1 (Post-Memorization, Pre-Generalization Trigger):** Derived from Xu (2026) (positive lead-time $\Delta t > 0$) and Nanda et al. (2023) (circuit formation phase).
+2. **Criterion 2 (Multi-Seed Consistency):** Derived from Nanda et al. (2023) ($5/5$ seed validation protocol).
+3. **Criterion 3 (Zero False Positives):** Derived from Xu (2026) ("0/6 false positives") and Nanda et al. (2023) ($\lambda = 0.0$ non-grokking control).
+
+### 3. Exact Mathematical Definitions
+* **$t_{\text{grok}}$:** First epoch where test accuracy $\ge 0.98$ for $n_{\text{sustained}} = 3$ consecutive evaluations.
+* **$t_{\text{onset}}$:** First epoch where a metric $\mathcal{M}(t)$ simultaneously satisfies: 
+  1. $\mathcal{M}(t) > 10 \times \mathcal{M}_{\text{baseline}}$ 
+  2. $\mathcal{M}(t) > 20$ (absolute floor).
+* **Lead Time:** $\Delta t = t_{\text{grok}} - t_{\text{onset}}$.
+
+### 4. Final Predictor Taxonomy
+* **Tier 1 (Core Direct-Domain Benchmark - "Apples-to-Apples"):** L2 Weight Norm, Dropout Variance (DRC), AGE (Effective Rank), HTSR Exponent ($\alpha$), PC1 Execution Manifold, Commutator Defect ($\mathcal{D}$).
+* **Tier 2 (Cross-Paradigm Transferability Test):** Population O-Information ($\Omega_{\text{pop}}$).
+* **Relegated/Excluded:** Canatar et al. (Spectral Bias/NTK) relegated to Appendix as a lazy-regime diagnostic. Papyan et al. (Neural Collapse) relegated to Related Work.

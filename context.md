@@ -14276,3 +14276,50 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 ## Files Modified
 - `context_current.md` (added examiner guardrails, literature provenance, onset math, domain alignment defense)
 - `context.md` (appended session summary)
+
+
+---
+
+# 2026-11-23: Grok-Audited Examiner Guardrails, Exact Math & Taxonomy Lock
+
+## Session Summary
+- **Implemented:**
+  - Appended the authoritative addendum to `context_current.md` locking in the Grok-audited examiner guardrails, exact mathematical definitions of $t_{\text{grok}}$ and $t_{\text{onset}}$, literature provenance for the three pass/fail criteria, and the final restructured predictor taxonomy.
+- **Investigated:**
+  - Verified non-negotiable boundaries: claims strictly bounded to Nanda et al.'s (2023) canonical modular addition testbed, sample size framing fixed to $n = 5$ random seeds, thesis contribution strictly framed as a unified negative finding on black-box proxies.
+  - Confirmed literature provenance for the three frozen evaluation criteria: Criterion 1 grounded in Xu (2026) and Nanda et al. (2023); Criterion 2 grounded in Nanda et al. (2023); Criterion 3 grounded in Xu (2026) and Nanda et al. (2023).
+  - Confirmed exact threshold rules: $t_{\text{grok}}$ at test accuracy $\ge 0.98$ for $n_{\text{sustained}} = 3$ consecutive evaluations; $t_{\text{onset}}$ at $\mathcal{M}(t) > 10 \times \mathcal{M}_{\text{baseline}}$ and $\mathcal{M}(t) > 20$.
+  - Partitioned predictors cleanly into Tier 1 (Core Direct-Domain Benchmark: L2, DRC, AGE, HTSR Alpha, PC1, Commutator Defect), Tier 2 (Cross-Paradigm Transferability Test: Population O-Information), and Relegated/Excluded diagnostics (Canatar et al. to Appendix, Papyan et al. to Related Work).
+- **Changed:**
+  - `context_current.md`: Appended the authoritative section at the end of the file preserving all existing content.
+  - `context.md`: Appended this session summary.
+- **Fixed:**
+  - Locked down zero residual freedom in evaluation thresholds to eliminate examiner critique during thesis defense.
+- **Postponed:**
+  - None.
+
+## Technical Decisions
+- Preserved append-only integrity for both `context_current.md` and `context.md`.
+- Explicitly documented literature provenance for all benchmark criteria and operational definitions to guarantee examiner-proofing and defendability against post-hoc threshold tuning claims.
+- Bounded scope strictly to Nanda et al.'s modular addition testbed to prevent over-generalization attacks.
+
+## User Instructions
+- Commit and push everything to remote.
+
+## Current Project State
+- **Completed Work:**
+  - Authoritative addendum appended to `context_current.md`.
+  - Final examiner guardrails, exact onset/grokking mathematical formulations, literature provenance, and predictor taxonomy locked into project memory.
+- **Work in Progress:**
+  - Thesis dissertation writing and viva defense alignment.
+- **Blockers:**
+  - None.
+- **Next Actions:**
+  - Ensure all thesis chapter drafts strictly adhere to the locked taxonomy and bounded scope.
+
+## Important Discoveries
+- Framing the thesis as a rigorous unified negative finding on a frozen canonical benchmark provides complete immunity against examiner criticism regarding black-box proxy applicability.
+
+## Files Modified
+- `context_current.md` (appended authoritative addendum)
+- `context.md` (appended session summary)
