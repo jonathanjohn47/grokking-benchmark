@@ -2235,8 +2235,8 @@
     "semantic_hash": ""
   },
   "context_current.md": {
-    "mtime": 1795493248.3077414,
-    "ast_hash": "f907131e2ff4a5b49e3b575560e7e0ae",
+    "mtime": 1795551063.5311804,
+    "ast_hash": "05e17835c7f0427b6e8ac003565e7548",
     "semantic_hash": ""
   },
   "context_split/context_part1_of_3.md": {
@@ -3525,7 +3525,7 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/predictor_grid_5x8.png": {
-    "mtime": 1794876878.0447168,
+    "mtime": 1795501169.3153436,
     "ast_hash": "cfb73e83a4f36175c491cf6bf7fcd8c1",
     "semantic_hash": ""
   },
@@ -3602,6 +3602,71 @@
   "08_Experiments/results/results_per_nanda_power/aggregate_higher_mi.json": {
     "mtime": 1795499108.978094,
     "ast_hash": "85bb6dd18735a6eeca67873f36b15146",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified_lambda0/aggregate.json": {
+    "mtime": 1795518198.8124437,
+    "ast_hash": "d78f4e3d3f9d988736174df6c7ef2d7b",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified_lambda0/seed_0/l2_norm/l2_predictor_signals.json": {
+    "mtime": 1795512147.2255523,
+    "ast_hash": "250c450b4afbc0fddb287ce2e91b7fd9",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified_lambda0/seed_0/summary.json": {
+    "mtime": 1795512147.2259333,
+    "ast_hash": "1f0e1bf0ae2b2dc002eb7ad15bc01304",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified_lambda0/seed_1/l2_norm/l2_predictor_signals.json": {
+    "mtime": 1795513646.5642786,
+    "ast_hash": "e4cf0f67febcbd85aed9e5e78d8a43ed",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified_lambda0/seed_1/summary.json": {
+    "mtime": 1795513646.5646398,
+    "ast_hash": "9bf6a0fa8caab16b0ffea48d1829713a",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified_lambda0/seed_2/l2_norm/l2_predictor_signals.json": {
+    "mtime": 1795515156.852953,
+    "ast_hash": "218d778f1f808074e2981f4b32a9c936",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified_lambda0/seed_2/summary.json": {
+    "mtime": 1795515156.8533378,
+    "ast_hash": "b1a5a02dca27f6d3bf7848cc58d8e88a",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified_lambda0/seed_3/l2_norm/l2_predictor_signals.json": {
+    "mtime": 1795516694.2019837,
+    "ast_hash": "3101a7867e4258981d4b7be3d76ebc87",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified_lambda0/seed_3/summary.json": {
+    "mtime": 1795516694.2023642,
+    "ast_hash": "2864d23952f3c7432e7b1706d50f2290",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified_lambda0/seed_4/l2_norm/l2_predictor_signals.json": {
+    "mtime": 1795518198.8109546,
+    "ast_hash": "96eec6d4a26c0d8f20ba51f689c6d593",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/nanda_unified_lambda0/seed_4/summary.json": {
+    "mtime": 1795518198.8113348,
+    "ast_hash": "02410edffa30644a1c9b801d24992ae0",
+    "semantic_hash": ""
+  },
+  "verify_negative_control.py": {
+    "mtime": 1795510708.996445,
+    "ast_hash": "1749efbd37ed5e66daffa718a438fd16",
+    "semantic_hash": ""
+  },
+  "06_Code/configs/nanda_unified_lambda0.yaml": {
+    "mtime": 1795510600.6642246,
+    "ast_hash": "aa8bc5a740e16b6c9af0e5d1e22fb9e8",
     "semantic_hash": ""
   }
 }
