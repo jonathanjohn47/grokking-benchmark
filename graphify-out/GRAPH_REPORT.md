@@ -1,16 +1,16 @@
 # Graph Report - grokking-benchmark  (2026-11-25)
 
 ## Corpus Check
-- 338 files · ~4,502,734 words
+- 339 files · ~4,502,994 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2682 nodes · 3100 edges · 189 communities (173 shown, 16 thin omitted)
+- 2686 nodes · 3103 edges · 192 communities (173 shown, 19 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 50 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d0aa2995`
+- Built from commit: `755cbac5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -176,13 +176,15 @@
 - [[_COMMUNITY_Community 173|Community 173]]
 - [[_COMMUNITY_Community 174|Community 174]]
 - [[_COMMUNITY_Community 175|Community 175]]
+- [[_COMMUNITY_Community 177|Community 177]]
 - [[_COMMUNITY_Community 178|Community 178]]
 - [[_COMMUNITY_Community 179|Community 179]]
+- [[_COMMUNITY_Community 181|Community 181]]
 - [[_COMMUNITY_Community 182|Community 182]]
 - [[_COMMUNITY_Community 183|Community 183]]
 - [[_COMMUNITY_Community 184|Community 184]]
+- [[_COMMUNITY_Community 186|Community 186]]
 - [[_COMMUNITY_Community 188|Community 188]]
-- [[_COMMUNITY_Community 189|Community 189]]
 - [[_COMMUNITY_Community 191|Community 191]]
 
 ## God Nodes (most connected - your core abstractions)
@@ -215,7 +217,7 @@
 ## Hyperedges (group relationships)
 - **Thesis Organization and Direction** — grokking_benchmark_context_thesis_unified_benchmark, grokking_benchmark_context_jonathan_john, grokking_benchmark_context_sheikh_faisal_rashid, grokking_benchmark_context_iu_internationale_hochschule [EXTRACTED 1.00]
 
-## Communities (189 total, 16 thin omitted)
+## Communities (192 total, 19 thin omitted)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.06
@@ -266,8 +268,8 @@ Cohesion: 0.11
 Nodes (22): compute_weight_pca_for_model(), compute_weight_pca_metrics_for_checkpoint(), effective_rank(), find_global_minimum_epoch(), find_steepest_drop_epoch(), find_threshold_crossing_epoch(), _layer_singular_values(), Weight-PCA predictor (Predictor 7 of 8) — Spectral Dynamics / Rank Minimization (+14 more)
 
 ### Community 14 - "Community 14"
-Cohesion: 0.22
-Nodes (17): aggregate(), apply_config_constants(), checkpoints_dir_for(), get_done_predictors(), has_saved_checkpoints(), is_predictor_done(), load_config(), load_summary() (+9 more)
+Cohesion: 0.19
+Nodes (19): aggregate(), apply_config_constants(), checkpoints_dir_for(), dips_key(), get_done_predictors(), has_saved_checkpoints(), is_predictor_done(), load_config() (+11 more)
 
 ### Community 15 - "Community 15"
 Cohesion: 0.33
@@ -279,7 +281,7 @@ Nodes (11): 10. Likely Viva Questions and Model Answers, 1. What This Report Is 
 
 ### Community 17 - "Community 17"
 Cohesion: 0.03
-Nodes (66): Current Project State (Updated — July 6, 2026, later session), Current verified state of `src/models/transformer.py`, Identity & Context, Jonathan's Learning Style Notes (carried forward), Pending (Not Yet Done), Project Plan (unchanged reference material), Session Summary — August 10–11, 2026 (L2 Norm set aside; Dropout predictor started; transformer.py dropout wiring), Session Summary — August 11, 2026 (Dropout predictor attempt #2 — `compute_accuracy` done, `compute_dropout_gap` has a known open bug) (+58 more)
+Nodes (60): Current Project State (Updated — July 6, 2026, later session), Current verified state of `src/models/transformer.py`, Identity & Context, Jonathan's Learning Style Notes (carried forward), Pending (Not Yet Done), Project Plan (unchanged reference material), Session Summary — August 10–11, 2026 (L2 Norm set aside; Dropout predictor started; transformer.py dropout wiring), Session Summary — August 11, 2026 (Dropout predictor attempt #2 — `compute_accuracy` done, `compute_dropout_gap` has a known open bug) (+52 more)
 
 ### Community 18 - "Community 18"
 Cohesion: 0.23
@@ -315,7 +317,7 @@ Nodes (10): _analysis_outputs_present(), BenchmarkAnalyzer, main(), prepare_runs
 
 ### Community 26 - "Community 26"
 Cohesion: 0.05
-Nodes (38): 10. Post-Hoc Sensitivity Appendix (Non-binding, Read-only), 11. Next Task in Benchmark Sequence, 1. Final Scope Guardrails (Examiner-Proofing), 1. L2 Norm Predictor, 1. Scope and Constraints Honored, 1. Setup & Execution, 1. Step 0: Deletion of Old AGE Implementation, 2026-11-16 — Predictor separation completed (L2 / Dropout / Spectral / AGE) (+30 more)
+Nodes (41): 10. Post-Hoc Sensitivity Appendix (Non-binding, Read-only), 11. Next Task in Benchmark Sequence, 1. Final Scope Guardrails (Examiner-Proofing), 1. L2 Norm Predictor, 1. Scope and Constraints Honored, 1. Setup & Execution, 1. Step 0: Deletion of Old AGE Implementation, 2026-11-16 — Predictor separation completed (L2 / Dropout / Spectral / AGE) (+33 more)
 
 ### Community 27 - "Community 27"
 Cohesion: 0.13
@@ -359,7 +361,7 @@ Nodes (12): 10. Voice-mode quality control, 1. Highest-priority rule, 2. Greek a
 
 ### Community 47 - "Community 47"
 Cohesion: 0.40
-Nodes (5): 1. New file — `plot_nanda_results.py` (repo root), 2. `make_pdf.py` — cwd bug found and fixed, Files Modified / Added, Next, Session Summary — September 4, 2026 (New `plot_nanda_results.py`: full plotting tool for the 5-seed Nanda-Unified run; `make_pdf.py` cwd bug found and fixed)
+Nodes (5): 1. Decision — Dropout will NOT be evaluated as a live/causal predictor, 2. What this decision means going forward, 3. Files Modified, Next, Session Summary — September 4, 2026 (Dropout predictor formally closed as a post-hoc characterization metric, not a live predictor — decision recorded, no code changed; project moving to Spectral)
 
 ### Community 49 - "Community 49"
 Cohesion: 0.60
@@ -646,8 +648,8 @@ Cohesion: 0.40
 Nodes (5): Addendum 2 — same day: run_full_benchmark.py made fully resumable, Assumption (documented in the code), Files Modified (addendum 2), How resume now works, Tested
 
 ### Community 136 - "Community 136"
-Cohesion: 0.11
-Nodes (17): 1. Decision — Dropout will NOT be evaluated as a live/causal predictor, 1. New finding — final L2-norm/Σw² vs grok-epoch correlation sign-flips on seed 4 alone, 2. What this decision means going forward, 3. Files Modified, Addendum — same day: two legacy plot scripts brought up to date (sweep + current layout), Core Philosophy, End-of-session state — September 2, 2026, Files Modified (+9 more)
+Cohesion: 0.09
+Nodes (21): 1. New file — `plot_nanda_results.py` (repo root), 1. New finding — final L2-norm/Σw² vs grok-epoch correlation sign-flips on seed 4 alone, 1. Question answered — "what is the point of many different seeds?", 1. What happened, in order, 2. Files Modified, 2. `make_pdf.py` — cwd bug found and fixed, Addendum — same day: two legacy plot scripts brought up to date (sweep + current layout), End-of-session state — September 2, 2026 (+13 more)
 
 ### Community 137 - "Community 137"
 Cohesion: 0.29
@@ -678,8 +680,8 @@ Cohesion: 0.40
 Nodes (5): Files Modified (this commit), Session Summary — August 17, 2026 (Shadow LayerNorm experiment — commit), Still Open / Next Steps (updated — August 17, 2026, this commit), User instruction this session, What was found (this session, on `git status` at commit time)
 
 ### Community 144 - "Community 144"
-Cohesion: 0.13
-Nodes (16): compute_sum_of_squared_weights(), detect_confirmed_sum_w2_peak(), L2 Norm predictor: Nanda et al. (2023) Figure 7, plus one own-choice rule.  S(t), Total sum of squared weights over all parameters (Nanda et al. 2023, Figure 7)., Global peak of S(t): first epoch of the maximum, and that value., First epoch when S has stayed strictly below its running maximum for k epochs., sum_w2_peak(), plot_single_run() (+8 more)
+Cohesion: 0.15
+Nodes (14): detect_confirmed_sum_w2_peak(), L2 Norm predictor: Nanda et al. (2023) Figure 7, plus one own-choice rule.  S(t), Global peak of S(t): first epoch of the maximum, and that value., First epoch when S has stayed strictly below its running maximum for k epochs., sum_w2_peak(), plot_single_run(), Recreates this run's plots, saved inside results/four_head/run_<N>/ itself., Plot the total sum of squared weights, with the global peak and confirmed-peak e (+6 more)
 
 ### Community 145 - "Community 145"
 Cohesion: 0.19
@@ -801,6 +803,10 @@ Nodes (5): Unit tests for AGE scorer with frozen protocol., Test 2: Synthetic NC
 Cohesion: 0.50
 Nodes (4): _checkpoint_predictor_commutator_defect(), Per-checkpoint Commutator Defect measurement at one probe eta.      Returns (che, CHECKPOINT_PREDICTOR_FUNCS["commutator_defect"] — Xu (2026)     Commutator Defec, _run_commutator_defect_pass()
 
+### Community 177 - "Community 177"
+Cohesion: 0.50
+Nodes (4): Core Philosophy, The Thesis Contribution, Thesis Motivation, Why This Research Matters
+
 ### Community 178 - "Community 178"
 Cohesion: 0.18
 Nodes (10): 337. `CLAUDE.md`, Commit, Part I: Documentation, Source Code & Data Files, Part II: Visual Figures & Diagnostic Plots, Part III: Model Checkpoints Inventory (.pt), Part III: Model Checkpoints Inventory (.pt), Project Comprehensive Compilation, Scope & Inclusions (+2 more)
@@ -811,42 +817,34 @@ Nodes (3): Current final state of relevant files (this session's end), Session S
 
 ### Community 182 - "Community 182"
 Cohesion: 0.22
-Nodes (11): dips_key(), grok_epoch_from(), grok_epochs_by_threshold(), limit_cycle_check(), _num_or_none(), First epoch at which test accuracy exceeds `threshold` (default: the     primary, {"0.99": epoch, "0.9": epoch, "0.95": epoch} for every threshold in     GROK_THR, Detect the post-grok test-accuracy oscillation seen in the p=113     run_1 (test (+3 more)
+Nodes (11): compute_sum_of_squared_weights(), Total sum of squared weights over all parameters (Nanda et al. 2023, Figure 7)., grok_epoch_from(), grok_epochs_by_threshold(), limit_cycle_check(), _num_or_none(), First epoch at which test accuracy exceeds `threshold` (default: the     primary, {"0.99": epoch, "0.9": epoch, "0.95": epoch} for every threshold in     GROK_THR (+3 more)
 
 ### Community 184 - "Community 184"
 Cohesion: 0.40
 Nodes (4): Test Category 1: Null Signal (Independent Variables).     If three variables are, Test Category 2: Injected Feature (Synergy).     If F2 = F0 + F1, the variables, test_independent_null(), test_synergistic_feature()
-
-### Community 188 - "Community 188"
-Cohesion: 0.50
-Nodes (4): 1. Question answered — "what is the point of many different seeds?", Files Modified, Next, Session Summary — September 4, 2026 (Discussion: why the benchmark uses multiple seeds — no code changed)
-
-### Community 189 - "Community 189"
-Cohesion: 0.50
-Nodes (4): 1. What happened, in order, 2. Files Modified, Next, Session Summary — September 4, 2026 (Dropout predictor REOPENED — literature search found a directly-relevant paper (Salah & Yevick) after the earlier "formally closed" decision; decision reversed; Opencode prompt drafted, not yet implemented)
 
 ### Community 191 - "Community 191"
 Cohesion: 0.33
 Nodes (6): 1. What was asked and checked, 2. Restated answer (for the record, in one place), 3. File added — `Literature/Salah and Yevick.pdf`, 4. Files Modified / Added, Next, Session Summary — September 5, 2026 (Literature-mapping check for Dropout predictor; Salah & Yevick PDF added to `Literature/`; committed)
 
 ## Knowledge Gaps
-- **1528 isolated node(s):** `1. Core Thesis Narrative & Overarching Scientific Theory`, `2. Frozen Canonical Testbed & Evaluation Protocol`, `Tier 1: Core Direct-Domain Benchmark (6 Predictors — "Apples-to-Apples")`, `Tier 2: Cross-Paradigm Transferability Test (1 Predictor)`, `Relegated Metrics (Removed from Main Early-Warning Comparison Table)` (+1523 more)
+- **1530 isolated node(s):** `1. Core Thesis Narrative & Overarching Scientific Theory`, `2. Frozen Canonical Testbed & Evaluation Protocol`, `Tier 1: Core Direct-Domain Benchmark (6 Predictors — "Apples-to-Apples")`, `Tier 2: Cross-Paradigm Transferability Test (1 Predictor)`, `Relegated Metrics (Removed from Main Early-Warning Comparison Table)` (+1525 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **16 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **19 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Part I: Project Documentation, Source Code & Data Files` connect `Community 134` to `Community 178`?**
-  _High betweenness centrality (0.065) - this node is a cross-community bridge._
+  _High betweenness centrality (0.066) - this node is a cross-community bridge._
 - **Why does `Part II: Visual Figures & Diagnostic Plots` connect `Community 138` to `Community 178`?**
-  _High betweenness centrality (0.059) - this node is a cross-community bridge._
+  _High betweenness centrality (0.062) - this node is a cross-community bridge._
 - **Why does `Project Comprehensive Compilation` connect `Community 178` to `Community 138`, `Community 134`, `Community 151`?**
-  _High betweenness centrality (0.054) - this node is a cross-community bridge._
+  _High betweenness centrality (0.056) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `score_saved_run()` (e.g. with `canonical()` and `scored()`) actually correct?**
   _`score_saved_run()` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `1. Core Thesis Narrative & Overarching Scientific Theory`, `2. Frozen Canonical Testbed & Evaluation Protocol`, `Tier 1: Core Direct-Domain Benchmark (6 Predictors — "Apples-to-Apples")` to the rest of the system?**
-  _1836 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _1838 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 1` be split into smaller, more focused modules?**
   _Cohesion score 0.058823529411764705 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**

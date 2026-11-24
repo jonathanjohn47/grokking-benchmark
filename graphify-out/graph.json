@@ -21,6 +21,16 @@
   },
   "nodes": [
     {
+      "label": "power_check.py",
+      "file_type": "code",
+      "source_file": "06_Code/scripts/power_check.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_power_check",
+      "community": 189,
+      "norm_label": "power_check.py"
+    },
+    {
       "label": "context_current.md",
       "file_type": "document",
       "source_file": "context_current.md",
@@ -851,14 +861,44 @@
       "norm_label": "2. experimental outcomes (criterion 3 evaluation)"
     },
     {
+      "label": "[2026-11-25] Frozen-Protocol Power Check Script",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L969",
+      "_origin": "ast",
+      "id": "context_current_2026_11_25_frozen_protocol_power_check_script",
+      "community": 26,
+      "norm_label": "[2026-11-25] frozen-protocol power check script"
+    },
+    {
+      "label": "What was added",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L971",
+      "_origin": "ast",
+      "id": "context_current_what_was_added",
+      "community": 26,
+      "norm_label": "what was added"
+    },
+    {
+      "label": "What did not change",
+      "file_type": "document",
+      "source_file": "context_current.md",
+      "source_location": "L977",
+      "_origin": "ast",
+      "id": "context_current_what_did_not_change",
+      "community": 26,
+      "norm_label": "what did not change"
+    },
+    {
       "label": "verify_negative_control.py",
       "file_type": "code",
       "source_file": "verify_negative_control.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "verify_negative_control",
       "community": 78,
-      "norm_label": "verify_negative_control.py"
+      "norm_label": "verify_negative_control.py",
+      "id": "verify_negative_control"
     },
     {
       "label": "main()",
@@ -866,9 +906,9 @@
       "source_file": "verify_negative_control.py",
       "source_location": "L15",
       "_origin": "ast",
-      "id": "verify_negative_control_main",
       "community": 78,
-      "norm_label": "main()"
+      "norm_label": "main()",
+      "id": "verify_negative_control_main"
     },
     {
       "label": "analyze_nanda_unified.py",
@@ -10706,7 +10746,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L366",
       "_origin": "ast",
-      "community": 182,
+      "community": 14,
       "norm_label": "dips_key()",
       "id": "scripts_run_nanda_benchmark_dips_key"
     },
@@ -10906,7 +10946,7 @@
       "source_file": "06_Code/scripts/run_nanda_benchmark.py",
       "source_location": "L367",
       "_origin": "ast",
-      "community": 182,
+      "community": 14,
       "norm_label": "key under which limit_cycle_check stores its dip count. with the     primary gro",
       "id": "scripts_run_nanda_benchmark_rationale_367"
     },
@@ -15036,7 +15076,7 @@
       "source_file": "06_Code/src/predictors/l2_norm.py",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 144,
+      "community": 182,
       "norm_label": "compute_sum_of_squared_weights()",
       "id": "predictors_l2_norm_compute_sum_of_squared_weights"
     },
@@ -15076,7 +15116,7 @@
       "source_file": "06_Code/src/predictors/l2_norm.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 144,
+      "community": 182,
       "norm_label": "total sum of squared weights over all parameters (nanda et al. 2023, figure 7).",
       "id": "predictors_l2_norm_rationale_21"
     },
@@ -21996,7 +22036,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L472",
       "_origin": "ast",
-      "community": 17,
+      "community": 181,
       "norm_label": "session summary \u2014 july 7, 2026 (`__getitem__` review cycle, close-out)",
       "id": "context_split_context_part1_of_3_session_summary_july_7_2026_getitem_review_cycle_close_out"
     },
@@ -22006,7 +22046,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L555",
       "_origin": "ast",
-      "community": 17,
+      "community": 181,
       "norm_label": "still open / next steps (updated \u2014 july 7, 2026, session close)",
       "id": "context_split_context_part1_of_3_still_open_next_steps_updated_july_7_2026_session_close"
     },
@@ -22056,7 +22096,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L744",
       "_origin": "ast",
-      "community": 17,
+      "community": 186,
       "norm_label": "session summary \u2014 july 8, 2026 (q/k/v projections built, mentoring session)",
       "id": "context_split_context_part1_of_3_session_summary_july_8_2026_q_k_v_projections_built_mentoring_session"
     },
@@ -22066,7 +22106,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L821",
       "_origin": "ast",
-      "community": 17,
+      "community": 186,
       "norm_label": "still open / next steps (updated \u2014 july 8, 2026, end of session)",
       "id": "context_split_context_part1_of_3_still_open_next_steps_updated_july_8_2026_end_of_session"
     },
@@ -22136,7 +22176,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L1132",
       "_origin": "ast",
-      "community": 17,
+      "community": 188,
       "norm_label": "session summary \u2014 july 9, 2026 (debug print cleanup + train.py single-batch loss)",
       "id": "context_split_context_part1_of_3_session_summary_july_9_2026_debug_print_cleanup_train_py_single_batch_loss"
     },
@@ -22146,7 +22186,7 @@
       "source_file": "context_split/context_part1_of_3.md",
       "source_location": "L1197",
       "_origin": "ast",
-      "community": 17,
+      "community": 188,
       "norm_label": "still open / next steps (updated \u2014 july 9, 2026, end of session)",
       "id": "context_split_context_part1_of_3_still_open_next_steps_updated_july_9_2026_end_of_session"
     },
@@ -24476,7 +24516,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L388",
       "_origin": "ast",
-      "community": 136,
+      "community": 177,
       "norm_label": "thesis motivation",
       "id": "context_split_context_part2_of_3_thesis_motivation"
     },
@@ -24486,7 +24526,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L390",
       "_origin": "ast",
-      "community": 136,
+      "community": 177,
       "norm_label": "why this research matters",
       "id": "context_split_context_part2_of_3_why_this_research_matters"
     },
@@ -24496,7 +24536,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L400",
       "_origin": "ast",
-      "community": 136,
+      "community": 177,
       "norm_label": "the thesis contribution",
       "id": "context_split_context_part2_of_3_the_thesis_contribution"
     },
@@ -24506,7 +24546,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L409",
       "_origin": "ast",
-      "community": 136,
+      "community": 177,
       "norm_label": "core philosophy",
       "id": "context_split_context_part2_of_3_core_philosophy"
     },
@@ -25696,7 +25736,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2151",
       "_origin": "ast",
-      "community": 47,
+      "community": 136,
       "norm_label": "session summary \u2014 september 4, 2026 (new `plot_nanda_results.py`: full plotting tool for the 5-seed nanda-unified run; `make_pdf.py` cwd bug found and fixed)",
       "id": "context_split_context_part2_of_3_session_summary_september_4_2026_new_plot_nanda_results_py_full_plotting_tool_for_the_5_seed_nanda_unified_run_make_pdf_py_cwd_bug_found_and_fixed"
     },
@@ -25706,7 +25746,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2153",
       "_origin": "ast",
-      "community": 47,
+      "community": 136,
       "norm_label": "1. new file \u2014 `plot_nanda_results.py` (repo root)",
       "id": "context_split_context_part2_of_3_1_new_file_plot_nanda_results_py_repo_root"
     },
@@ -25716,7 +25756,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2202",
       "_origin": "ast",
-      "community": 47,
+      "community": 136,
       "norm_label": "2. `make_pdf.py` \u2014 cwd bug found and fixed",
       "id": "context_split_context_part2_of_3_2_make_pdf_py_cwd_bug_found_and_fixed"
     },
@@ -25726,7 +25766,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2235",
       "_origin": "ast",
-      "community": 47,
+      "community": 136,
       "norm_label": "files modified / added",
       "id": "context_split_context_part2_of_3_files_modified_added_2235"
     },
@@ -25736,7 +25776,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2243",
       "_origin": "ast",
-      "community": 47,
+      "community": 136,
       "norm_label": "next",
       "id": "context_split_context_part2_of_3_next_2243"
     },
@@ -25746,7 +25786,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2257",
       "_origin": "ast",
-      "community": 188,
+      "community": 136,
       "norm_label": "session summary \u2014 september 4, 2026 (discussion: why the benchmark uses multiple seeds \u2014 no code changed)",
       "id": "context_split_context_part2_of_3_session_summary_september_4_2026_discussion_why_the_benchmark_uses_multiple_seeds_no_code_changed"
     },
@@ -25756,7 +25796,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2259",
       "_origin": "ast",
-      "community": 188,
+      "community": 136,
       "norm_label": "1. question answered \u2014 \"what is the point of many different seeds?\"",
       "id": "context_split_context_part2_of_3_1_question_answered_what_is_the_point_of_many_different_seeds"
     },
@@ -25766,7 +25806,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2286",
       "_origin": "ast",
-      "community": 188,
+      "community": 136,
       "norm_label": "files modified",
       "id": "context_split_context_part2_of_3_files_modified_2286"
     },
@@ -25776,7 +25816,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2290",
       "_origin": "ast",
-      "community": 188,
+      "community": 136,
       "norm_label": "next",
       "id": "context_split_context_part2_of_3_next_2290"
     },
@@ -25836,7 +25876,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2428",
       "_origin": "ast",
-      "community": 136,
+      "community": 47,
       "norm_label": "session summary \u2014 september 4, 2026 (dropout predictor formally closed as a post-hoc characterization metric, not a live predictor \u2014 decision recorded, no code changed; project moving to spectral)",
       "id": "context_split_context_part2_of_3_session_summary_september_4_2026_dropout_predictor_formally_closed_as_a_post_hoc_characterization_metric_not_a_live_predictor_decision_recorded_no_code_changed_project_moving_to_spectral"
     },
@@ -25846,7 +25886,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2430",
       "_origin": "ast",
-      "community": 136,
+      "community": 47,
       "norm_label": "1. decision \u2014 dropout will not be evaluated as a live/causal predictor",
       "id": "context_split_context_part2_of_3_1_decision_dropout_will_not_be_evaluated_as_a_live_causal_predictor"
     },
@@ -25856,7 +25896,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2443",
       "_origin": "ast",
-      "community": 136,
+      "community": 47,
       "norm_label": "2. what this decision means going forward",
       "id": "context_split_context_part2_of_3_2_what_this_decision_means_going_forward"
     },
@@ -25866,7 +25906,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2468",
       "_origin": "ast",
-      "community": 136,
+      "community": 47,
       "norm_label": "3. files modified",
       "id": "context_split_context_part2_of_3_3_files_modified"
     },
@@ -25876,7 +25916,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2478",
       "_origin": "ast",
-      "community": 136,
+      "community": 47,
       "norm_label": "next",
       "id": "context_split_context_part2_of_3_next_2478"
     },
@@ -25926,7 +25966,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2580",
       "_origin": "ast",
-      "community": 189,
+      "community": 136,
       "norm_label": "session summary \u2014 september 4, 2026 (dropout predictor reopened \u2014 literature search found a directly-relevant paper (salah & yevick) after the earlier \"formally closed\" decision; decision reversed; opencode prompt drafted, not yet implemented)",
       "id": "context_split_context_part2_of_3_session_summary_september_4_2026_dropout_predictor_reopened_literature_search_found_a_directly_relevant_paper_salah_yevick_after_the_earlier_formally_closed_decision_decision_reversed_opencode_prompt_drafted_not_yet_implemented"
     },
@@ -25936,7 +25976,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2582",
       "_origin": "ast",
-      "community": 189,
+      "community": 136,
       "norm_label": "1. what happened, in order",
       "id": "context_split_context_part2_of_3_1_what_happened_in_order"
     },
@@ -25946,7 +25986,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2652",
       "_origin": "ast",
-      "community": 189,
+      "community": 136,
       "norm_label": "2. files modified",
       "id": "context_split_context_part2_of_3_2_files_modified"
     },
@@ -25956,7 +25996,7 @@
       "source_file": "context_split/context_part2_of_3.md",
       "source_location": "L2669",
       "_origin": "ast",
-      "community": 189,
+      "community": 136,
       "norm_label": "next",
       "id": "context_split_context_part2_of_3_next_2669"
     },
@@ -27326,11 +27366,21 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "context_current.md",
-      "source_location": "L952",
+      "source_location": "L969",
       "weight": 1.0,
       "source": "context_current_predictor_experimental_validation_master_tracker",
-      "target": "context_current_2026_11_25_negative_control_benchmark_execution_lambda_0_0_non_grokking_baseline",
+      "target": "context_current_2026_11_25_frozen_protocol_power_check_script",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L952",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "context_current_predictor_experimental_validation_master_tracker",
+      "target": "context_current_2026_11_25_negative_control_benchmark_execution_lambda_0_0_non_grokking_baseline"
     },
     {
       "relation": "contains",
@@ -27648,9 +27698,9 @@
       "source_file": "context_current.md",
       "source_location": "L954",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "context_current_2026_11_25_negative_control_benchmark_execution_lambda_0_0_non_grokking_baseline",
-      "target": "context_current_1_setup_execution",
-      "confidence_score": 1.0
+      "target": "context_current_1_setup_execution"
     },
     {
       "relation": "contains",
@@ -27658,8 +27708,28 @@
       "source_file": "context_current.md",
       "source_location": "L959",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "context_current_2026_11_25_negative_control_benchmark_execution_lambda_0_0_non_grokking_baseline",
-      "target": "context_current_2_experimental_outcomes_criterion_3_evaluation",
+      "target": "context_current_2_experimental_outcomes_criterion_3_evaluation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L977",
+      "weight": 1.0,
+      "source": "context_current_2026_11_25_frozen_protocol_power_check_script",
+      "target": "context_current_what_did_not_change",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "context_current.md",
+      "source_location": "L971",
+      "weight": 1.0,
+      "source": "context_current_2026_11_25_frozen_protocol_power_check_script",
+      "target": "context_current_what_was_added",
       "confidence_score": 1.0
     },
     {
@@ -27669,9 +27739,9 @@
       "source_file": "verify_negative_control.py",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "verify_negative_control",
-      "target": "predictors_commutator_defect",
-      "confidence_score": 1.0
+      "target": "predictors_commutator_defect"
     },
     {
       "relation": "contains",
@@ -27679,9 +27749,9 @@
       "source_file": "verify_negative_control.py",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "verify_negative_control",
-      "target": "verify_negative_control_main",
-      "confidence_score": 1.0
+      "target": "verify_negative_control_main"
     },
     {
       "relation": "contains",
@@ -58408,5 +58478,5 @@
       "source_file": "context.md"
     }
   ],
-  "built_at_commit": "d0aa29959827504ce66b59365c4fe356c1b646c8"
+  "built_at_commit": "755cbac511767031a24d765b884a8856210b97a8"
 }
