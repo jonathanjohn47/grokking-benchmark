@@ -14446,3 +14446,50 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 - `verify_negative_control.py`
 - `context_current.md`
 - `context.md`
+
+
+---
+
+# 2026-11-25: Frozen-Protocol Power Check Script
+
+## Session Summary
+- **Implemented:**
+  - Added `06_Code/scripts/power_check.py`. It estimates how often the frozen protocol still returns PASS when a synthetic predictor fires at half the canonical grok epoch and is then disturbed by multiplicative Gaussian noise.
+- **Investigated:**
+  - The script uses the five canonical primary-cut grok epochs from `results_per_nanda_power`: 8021, 8253, 4094, 7831, and 6637.
+  - Noise coefficients of variation are 0.02, 0.05, 0.10, 0.20, 0.30, and 0.40. Each setting uses 2000 draws from NumPy generator seed 0.
+  - Scoring reuses `evaluate_frozen_protocol` with `rule="fraction"` and `c=0.8`, then `attach_pass_checks`. A draw passes only when all four frozen checks pass.
+- **Changed:**
+  - `06_Code/scripts/power_check.py` was added.
+  - `context_current.md` and `context.md` record the script.
+- **Fixed:**
+  - None.
+- **Postponed:**
+  - The printed pass rates are not saved to a results file. Running the script and storing those rates is still open.
+
+## Technical Decisions
+- The check stays outside the predictor line-up. It reuses the existing frozen scorer and does not add a new pass rule.
+- The synthetic event is centred at \(0.5 G_i\), so the noiseless case sits inside the lead window \(P_i < 0.8 G_i\) and inside the mean-relative-lead window \([0.05, 0.90]\). The sweep then asks how much multiplicative noise that centred signal can take before the frozen verdict fails.
+
+## User Instructions
+- Commit everything and push.
+
+## Current Project State
+- **Completed Work:**
+  - Canonical eight-predictor scoring remains FAIL on the \(\lambda = 1.0\) run.
+  - The \(\lambda = 0.0\) negative-control run remains recorded.
+  - The power-check script is now in `06_Code/scripts/power_check.py`.
+- **Work in Progress:**
+  - Thesis writing and viva preparation.
+- **Blockers:**
+  - None.
+- **Next Actions:**
+  - Run `power_check.py` and keep the printed pass rates if they are needed in the thesis.
+
+## Important Discoveries
+- No numerical pass rate is recorded in this commit. The script prints the rate and does not write it to disk.
+
+## Files Modified
+- `06_Code/scripts/power_check.py`
+- `context_current.md`
+- `context.md`

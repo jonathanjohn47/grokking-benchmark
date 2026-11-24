@@ -962,3 +962,18 @@ The benchmark evaluates a full 8-predictor line-up (6 in Tier 1, 1 in Tier 2, an
   - **L2 Norm:** Peak detection fires early during memorization (e.g., epoch $1629$ on seed 0) despite zero generalization / no grokking occurring. This empirically confirms a false-positive trigger on non-grokking controls.
   - **Commutator Defect ($\mathcal{D}$):** Verified non-zero defect during memorization even without weight decay, confirming that early optimization transients in resampled mini-batches do not indicate circuit formation or impending generalization.
 
+
+
+---
+
+## [2026-11-25] Frozen-Protocol Power Check Script
+
+### What was added
+- `06_Code/scripts/power_check.py` is a Monte Carlo check of the frozen pass/fail protocol. It is not a new predictor and it does not rescore the canonical run.
+- The grok epochs are the canonical primary-cut values from `results_per_nanda_power/aggregate.json`: seed 0 = 8021, seed 1 = 8253, seed 2 = 4094, seed 3 = 7831, seed 4 = 6637.
+- For each coefficient of variation in {0.02, 0.05, 0.10, 0.20, 0.30, 0.40}, the script draws 2000 synthetic event vectors with NumPy seed 0. Each event is \(P_i = 0.5 G_i (1 + \varepsilon_i)\), where \(\varepsilon_i\) is normal with mean 0 and standard deviation equal to that coefficient of variation.
+- Each draw is scored by `evaluate_frozen_protocol(G, P, rule="fraction", c=0.8)` and `attach_pass_checks` from `analyze_nanda_unified.py`. The script prints the fraction of draws that pass. It does not write a results file.
+
+### What did not change
+- The frozen thresholds, the canonical results, the predictor code, and the shared model were not changed.
+- No printed pass rate from this script is stored in the repository yet. The script only prints to the terminal.
