@@ -1,0 +1,57 @@
+{
+  "grok_epochs": [
+    8021,
+    8253,
+    4094,
+    7831,
+    6637
+  ],
+  "lead_c": 0.8,
+  "signals": [
+    {
+      "signal": "Higher-MI: population omega maximum (implemented)",
+      "epochs": [
+        20100.0,
+        27800.0,
+        12000.0,
+        12300.0,
+        7300.0
+      ],
+      "lead": [
+        -12079.0,
+        -19547.0,
+        -7906.0,
+        -4469.0,
+        -663.0
+      ],
+      "seeds_before_grok": 0,
+      "spearman": 0.8999999999999998,
+      "pearson": 0.5503874615752749,
+      "epoch_cv": 0.4547304642346297,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": 0.8999999999999998,
+        "mean_rel_lead": -1.2952175789744158,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": true,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL",
+        "gate_lead_frac": 0.0,
+        "gate_correlation": 0.8999999999999998,
+        "gate_noise_margin": -1.2952175789744158,
+        "gate_pass": false,
+        "superiority_index": 0.0
+      }
+    }
+  ]
+}

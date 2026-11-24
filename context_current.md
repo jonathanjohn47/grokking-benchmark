@@ -922,19 +922,27 @@ runner — deferred.
 3. **Strictly Negative Contribution:** The thesis establishes a unified negative finding on a frozen testbed. No claims of discovering positive mechanistic theories from black-box proxies.
 4. **Zero Residual Freedom:** All exact mathematical thresholds and sustained windows are pre-registered and locked.
 
-### 2. Literature Provenance of the 3 Pass/Fail Criteria
-1. **Criterion 1 (Post-Memorization, Pre-Generalization Trigger):** Derived from Xu (2026) (positive lead-time $\Delta t > 0$) and Nanda et al. (2023) (circuit formation phase).
-2. **Criterion 2 (Multi-Seed Consistency):** Derived from Nanda et al. (2023) ($5/5$ seed validation protocol).
-3. **Criterion 3 (Zero False Positives):** Derived from Xu (2026) ("0/6 false positives") and Nanda et al. (2023) ($\lambda = 0.0$ non-grokking control).
+### 2. The 4 Quantitative Pass/Fail Gates
+1. **Firing Count:** Must fire on at least 4 out of 5 seeds ($n_{\text{firing}} \ge 4$).
+2. **Lead Fraction:** Must be $\ge 0.80$ (where a valid lead is $P_i < 0.8 \cdot G_i$).
+3. **Rank Correlation:** Spearman $\rho \ge 0.90$.
+4. **Noise Margin:** Mean relative lead $\bar{r} \in [0.05, 0.90]$.
 
 ### 3. Exact Mathematical Definitions
-* **$t_{\text{grok}}$:** First epoch where test accuracy $\ge 0.98$ for $n_{\text{sustained}} = 3$ consecutive evaluations.
-* **$t_{\text{onset}}$:** First epoch where a metric $\mathcal{M}(t)$ simultaneously satisfies: 
-  1. $\mathcal{M}(t) > 10 \times \mathcal{M}_{\text{baseline}}$ 
-  2. $\mathcal{M}(t) > 20$ (absolute floor).
-* **Lead Time:** $\Delta t = t_{\text{grok}} - t_{\text{onset}}$.
+* **$t_{\text{grok}}$:** The first epoch where test accuracy strictly exceeds 0.99 (99%), following Power et al. (2022).
+* **$t_{\text{onset}}$:** Each predictor has its own pre-registered trigger rule (e.g., L2 uses a 100-epoch peak window, AGE uses global minimum). The $10\times$ baseline with an absolute floor of 20 applies *strictly* and *only* to the Commutator Defect ($\mathcal{D}(t) > 10 \times \mathcal{D}_{\text{baseline}}$ and $\mathcal{D}(t) > 20$).
+* **Lead Time:** $\Delta t = t_{\text{grok}} - t_{\text{onset}}$ (with valid lead defined as $P_i < 0.8 \cdot G_i$).
 
 ### 4. Final Predictor Taxonomy
-* **Tier 1 (Core Direct-Domain Benchmark - "Apples-to-Apples"):** L2 Weight Norm, Dropout Variance (DRC), AGE (Effective Rank), HTSR Exponent ($\alpha$), PC1 Execution Manifold, Commutator Defect ($\mathcal{D}$).
-* **Tier 2 (Cross-Paradigm Transferability Test):** Population O-Information ($\Omega_{\text{pop}}$).
-* **Relegated/Excluded:** Canatar et al. (Spectral Bias/NTK) relegated to Appendix as a lazy-regime diagnostic. Papyan et al. (Neural Collapse) relegated to Related Work.
+The benchmark evaluates a full 8-predictor line-up (6 in Tier 1, 1 in Tier 2, and the Commutator Defect):
+* **Tier 1 (Core Direct-Domain Benchmark - "Apples-to-Apples", 6 Predictors):**
+  1. L2 Weight Norm (*Liu et al., 2022; Nanda et al., 2023*)
+  2. Dropout Variance (*Salah & Yevick, 2025*)
+  3. Spectral ($k_{90}$ and alignment) (*Canatar et al., 2021*)
+  4. AGE (Neural Collapse/NC1) (*Papyan et al., 2020*)
+  5. HTSR Alpha (*Martin & Mahoney, 2021; Prakash & Martin, 2025*)
+  6. Weight-PCA (NormEffRank) (*Xu, 2026*)
+* **Tier 2 (Cross-Paradigm Transferability Test, 1 Predictor):**
+  7. Higher-MI / Population O-Information ($\Omega_{\text{pop}}$) (*Pomarico et al., 2025*)
+* **Non-Commutative Optimization Metric (1 Predictor):**
+  8. Commutator Defect ($\mathcal{D}$) (*Xu, 2026*)

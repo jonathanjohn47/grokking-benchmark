@@ -14323,3 +14323,73 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 ## Files Modified
 - `context_current.md` (appended authoritative addendum)
 - `context.md` (appended session summary)
+
+
+---
+
+# 2026-11-24: Score Canonical Run for HTSR Alpha, Weight-PCA, Higher-MI and Commutator Defect
+
+## Session Summary
+- **Implemented:**
+  - Updated `06_Code/scripts/analyze_nanda_unified.py` to support scoring HTSR Alpha, Weight-PCA, Higher-MI, and Commutator Defect directly from seed signal files (`seed_N/<name>/<name>_signal.json`) when `summary.json` blocks are null or missing (as in canonical run `08_Experiments/results/results_per_nanda_power`).
+  - Added `SIGNAL_FILE_SOURCES` table and `load_signal_file_epoch` helper verifying `grok_epoch` alignment between signal files and `summary.json`.
+  - Added strict per-seed completeness check in `build_events` refusing to score incomplete rows across seeds.
+  - Attached Validity Gate and Superiority Index evaluation to every predictor row across all 8 predictors in `summarise`.
+  - Modified `predictor_level_verdicts` to report `NOT_SCORED` instead of `FAIL` when a predictor has no pre-declared rows built, preventing missing inputs from being falsely logged as failed predictors.
+  - Added non-zero exit code (`sys.exit(2)`) in `main` if any predictor remains `NOT_SCORED`.
+  - Updated `06_Code/tests/test_frozen_protocol_verdicts.py` with 3 new comprehensive tests verifying canonical scoring for all four predictors and ensuring unscored predictors yield `NOT_SCORED`.
+  - Re-scored the canonical run `results_per_nanda_power` at $c = 0.8$, updating analysis verdict and event files (`frozen_protocol_verdicts.json`, `predictor_events.json`, plot figures).
+- **Investigated:**
+  - Ran pre-flight integrity checks (md5, line counts, git status).
+  - Validated test suite: 13 passed tests across frozen protocol, miss-handling, and checkpoint logic.
+  - Verified stability of legacy `nanda_unified` run: L2 Norm PASS, other legacy verdicts unchanged.
+  - Performed dry-runs of $c = 0.7$ and $c = 0.9$ without file writes, confirming consistency of verdicts across lead parameters.
+- **Changed:**
+  - `06_Code/scripts/analyze_nanda_unified.py`: signal file loading fallback, gate attachment for all predictors, `NOT_SCORED` logic, exit code 2 on missing predictors.
+  - `06_Code/tests/test_frozen_protocol_verdicts.py`: added canonical run test fixtures and assertions.
+  - `08_Experiments/results/results_per_nanda_power/analysis/`: updated verdicts, predictor events, and figures.
+  - `08_Experiments/results/results_per_nanda_power/aggregate_higher_mi.json`: generated as Higher-MI row is now evaluated.
+  - `context_current.md`: user update clarifying the 4 quantitative pass/fail gates and 8-predictor taxonomy.
+  - `context.md`: appended session summary.
+- **Fixed:**
+  - Fixed canonical run scoring where HTSR Alpha, Weight-PCA, Higher-MI, and Commutator Defect were previously omitted from rows due to null `summary.json` blocks.
+- **Postponed:**
+  - None.
+
+## Technical Decisions
+- Preserved exact frozen protocol thresholds (`RHO_THRESH = 0.8999999999999998`, `DEFAULT_LEAD_C = 0.8`, `CORR_THRESH = 0.9`).
+- Maintained exact distinction between `FAIL` (evaluated and failed pre-declared criteria) and `NOT_SCORED` (pre-declared rows missing or omitted).
+- Avoided overwriting L2-only exploratory sensitivity outputs in `analysis/c_0.7` and `analysis/c_0.9`.
+
+## User Instructions
+- Commit and push everything done in this session.
+
+## Current Project State
+- **Completed Work:**
+  - All 8 predictors now fully operational and scored on canonical run `results_per_nanda_power`.
+  - All 8 predictors FAIL the frozen early-warning protocol on the canonical modular addition benchmark (L2 Norm, Dropout, Spectral, AGE, HTSR Alpha, Weight-PCA, Higher-MI, Commutator Defect).
+  - All unit tests pass cleanly (13/13).
+- **Work in Progress:**
+  - Thesis dissertation alignment and defense preparations.
+- **Blockers:**
+  - None.
+- **Next Actions:**
+  - Prepare dissertation chapters and thesis figures incorporating full 8-predictor benchmark findings.
+
+## Important Discoveries
+- On the canonical modular addition testbed, HTSR Alpha, Weight-PCA, and Higher-MI all fail lead fraction ($\text{lead\_frac} = 0.0$, firing after $t_{\text{grok}}$).
+- Commutator Defect fires early during memorization ($P_i \in [300, 500]$), achieving $\text{lead\_frac} = 1.0$ but failing correlation ($\rho = -0.4472$) and noise margin window ($\bar{r} = 0.9416 > 0.90$).
+- Higher-MI achieves high rank correlation ($\rho = 0.8999999999999998$) but fires strictly after grokking ($\text{lead\_frac} = 0.0$, $\bar{r} = -1.2952$).
+
+## Files Modified
+- `06_Code/scripts/analyze_nanda_unified.py`
+- `06_Code/tests/test_frozen_protocol_verdicts.py`
+- `08_Experiments/results/results_per_nanda_power/analysis/frozen_protocol_verdicts.json`
+- `08_Experiments/results/results_per_nanda_power/analysis/predictor_events.json`
+- `08_Experiments/results/results_per_nanda_power/analysis/01_grokking_curves.png`
+- `08_Experiments/results/results_per_nanda_power/analysis/02_signals_vs_grok.png`
+- `08_Experiments/results/results_per_nanda_power/analysis/03_event_vs_grok_scatter.png`
+- `08_Experiments/results/results_per_nanda_power/analysis/04_lead_times.png`
+- `08_Experiments/results/results_per_nanda_power/aggregate_higher_mi.json`
+- `context_current.md`
+- `context.md`

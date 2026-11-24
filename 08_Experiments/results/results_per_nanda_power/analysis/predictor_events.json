@@ -547,6 +547,186 @@
         "gate_pass": false,
         "superiority_index": 0.0
       }
+    },
+    {
+      "signal": "HTSR: mean alpha minimum (implemented)",
+      "epochs": [
+        31100.0,
+        17300.0,
+        17600.0,
+        16000.0,
+        28700.0
+      ],
+      "lead": [
+        -23079.0,
+        -9047.0,
+        -13506.0,
+        -8169.0,
+        -22063.0
+      ],
+      "seeds_before_grok": 0,
+      "spearman": -0.09999999999999999,
+      "pearson": 0.17820301890020324,
+      "epoch_cv": 0.28924734821598685,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": -0.09999999999999999,
+        "mean_rel_lead": -2.327981650307303,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL",
+        "gate_lead_frac": 0.0,
+        "gate_correlation": -0.09999999999999999,
+        "gate_noise_margin": -2.327981650307303,
+        "gate_pass": false,
+        "superiority_index": 0.0
+      }
+    },
+    {
+      "signal": "Weight-PCA: effective-rank minimum (implemented)",
+      "epochs": [
+        33200.0,
+        40000.0,
+        38400.0,
+        30500.0,
+        23000.0
+      ],
+      "lead": [
+        -25179.0,
+        -31747.0,
+        -34306.0,
+        -22669.0,
+        -16363.0
+      ],
+      "seeds_before_grok": 0,
+      "spearman": 0.39999999999999997,
+      "pearson": -0.11028828218462389,
+      "epoch_cv": 0.18393945871449843,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": 0.39999999999999997,
+        "mean_rel_lead": -4.145127067970694,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL",
+        "gate_lead_frac": 0.0,
+        "gate_correlation": 0.39999999999999997,
+        "gate_noise_margin": -4.145127067970694,
+        "gate_pass": false,
+        "superiority_index": 0.0
+      }
+    },
+    {
+      "signal": "Higher-MI: population omega maximum (implemented)",
+      "epochs": [
+        20100.0,
+        27800.0,
+        12000.0,
+        12300.0,
+        7300.0
+      ],
+      "lead": [
+        -12079.0,
+        -19547.0,
+        -7906.0,
+        -4469.0,
+        -663.0
+      ],
+      "seeds_before_grok": 0,
+      "spearman": 0.8999999999999998,
+      "pearson": 0.5503874615752749,
+      "epoch_cv": 0.4547304642346297,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 0.0,
+        "rho": 0.8999999999999998,
+        "mean_rel_lead": -1.2952175789744158,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": false,
+          "rho_at_least_threshold": true,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL",
+        "gate_lead_frac": 0.0,
+        "gate_correlation": 0.8999999999999998,
+        "gate_noise_margin": -1.2952175789744158,
+        "gate_pass": false,
+        "superiority_index": 0.0
+      }
+    },
+    {
+      "signal": "Commutator Defect: Xu onset on median D (implemented)",
+      "epochs": [
+        400.0,
+        300.0,
+        500.0,
+        300.0,
+        300.0
+      ],
+      "lead": [
+        7621.0,
+        7953.0,
+        3594.0,
+        7531.0,
+        6337.0
+      ],
+      "seeds_before_grok": 5,
+      "spearman": -0.7,
+      "pearson": -0.7612647042322231,
+      "epoch_cv": 0.2222222222222222,
+      "row_role": "predeclared",
+      "counts_towards_predictor": true,
+      "frozen_protocol_verdict": {
+        "lead_frac": 1.0,
+        "rho": -0.44721359549995787,
+        "mean_rel_lead": 0.9416280226732147,
+        "n_firing": 5,
+        "lead_rule": "fraction",
+        "lead_c": 0.8,
+        "lead_margin": null,
+        "checks": {
+          "n_firing_at_least_4": true,
+          "lead_frac_at_least_0.8": true,
+          "rho_at_least_threshold": false,
+          "mean_rel_lead_in_window": false
+        },
+        "passed": false,
+        "verdict": "FAIL",
+        "gate_lead_frac": 1.0,
+        "gate_correlation": -0.44721359549995787,
+        "gate_noise_margin": 0.9416280226732147,
+        "gate_pass": false,
+        "superiority_index": 0.0
+      }
     }
   ]
 }

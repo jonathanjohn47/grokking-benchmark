@@ -381,30 +381,146 @@
     {
       "predictor": "HTSR Alpha",
       "verdict": "FAIL",
-      "n_predeclared_rows": 0,
+      "n_predeclared_rows": 1,
       "n_predeclared_passing": 0,
-      "rows": []
+      "rows": [
+        {
+          "signal": "HTSR: mean alpha minimum (implemented)",
+          "role": "predeclared",
+          "counts_towards_predictor": true,
+          "P_i": [
+            31100.0,
+            17300.0,
+            17600.0,
+            16000.0,
+            28700.0
+          ],
+          "n_firing": 5,
+          "lead_frac": 0.0,
+          "rho": -0.09999999999999999,
+          "mean_rel_lead": -2.327981650307303,
+          "checks": {
+            "n_firing_at_least_4": true,
+            "lead_frac_at_least_0.8": false,
+            "rho_at_least_threshold": false,
+            "mean_rel_lead_in_window": false
+          },
+          "verdict": "FAIL",
+          "gate_lead_frac": 0.0,
+          "gate_correlation": -0.09999999999999999,
+          "gate_noise_margin": -2.327981650307303,
+          "gate_pass": false,
+          "superiority_index": 0.0
+        }
+      ]
     },
     {
       "predictor": "Weight-PCA",
       "verdict": "FAIL",
-      "n_predeclared_rows": 0,
+      "n_predeclared_rows": 1,
       "n_predeclared_passing": 0,
-      "rows": []
+      "rows": [
+        {
+          "signal": "Weight-PCA: effective-rank minimum (implemented)",
+          "role": "predeclared",
+          "counts_towards_predictor": true,
+          "P_i": [
+            33200.0,
+            40000.0,
+            38400.0,
+            30500.0,
+            23000.0
+          ],
+          "n_firing": 5,
+          "lead_frac": 0.0,
+          "rho": 0.39999999999999997,
+          "mean_rel_lead": -4.145127067970694,
+          "checks": {
+            "n_firing_at_least_4": true,
+            "lead_frac_at_least_0.8": false,
+            "rho_at_least_threshold": false,
+            "mean_rel_lead_in_window": false
+          },
+          "verdict": "FAIL",
+          "gate_lead_frac": 0.0,
+          "gate_correlation": 0.39999999999999997,
+          "gate_noise_margin": -4.145127067970694,
+          "gate_pass": false,
+          "superiority_index": 0.0
+        }
+      ]
     },
     {
       "predictor": "Higher-MI",
       "verdict": "FAIL",
-      "n_predeclared_rows": 0,
+      "n_predeclared_rows": 1,
       "n_predeclared_passing": 0,
-      "rows": []
+      "rows": [
+        {
+          "signal": "Higher-MI: population omega maximum (implemented)",
+          "role": "predeclared",
+          "counts_towards_predictor": true,
+          "P_i": [
+            20100.0,
+            27800.0,
+            12000.0,
+            12300.0,
+            7300.0
+          ],
+          "n_firing": 5,
+          "lead_frac": 0.0,
+          "rho": 0.8999999999999998,
+          "mean_rel_lead": -1.2952175789744158,
+          "checks": {
+            "n_firing_at_least_4": true,
+            "lead_frac_at_least_0.8": false,
+            "rho_at_least_threshold": true,
+            "mean_rel_lead_in_window": false
+          },
+          "verdict": "FAIL",
+          "gate_lead_frac": 0.0,
+          "gate_correlation": 0.8999999999999998,
+          "gate_noise_margin": -1.2952175789744158,
+          "gate_pass": false,
+          "superiority_index": 0.0
+        }
+      ]
     },
     {
       "predictor": "Commutator Defect",
       "verdict": "FAIL",
-      "n_predeclared_rows": 0,
+      "n_predeclared_rows": 1,
       "n_predeclared_passing": 0,
-      "rows": []
+      "rows": [
+        {
+          "signal": "Commutator Defect: Xu onset on median D (implemented)",
+          "role": "predeclared",
+          "counts_towards_predictor": true,
+          "P_i": [
+            400.0,
+            300.0,
+            500.0,
+            300.0,
+            300.0
+          ],
+          "n_firing": 5,
+          "lead_frac": 1.0,
+          "rho": -0.44721359549995787,
+          "mean_rel_lead": 0.9416280226732147,
+          "checks": {
+            "n_firing_at_least_4": true,
+            "lead_frac_at_least_0.8": true,
+            "rho_at_least_threshold": false,
+            "mean_rel_lead_in_window": false
+          },
+          "verdict": "FAIL",
+          "gate_lead_frac": 1.0,
+          "gate_correlation": -0.44721359549995787,
+          "gate_noise_margin": 0.9416280226732147,
+          "gate_pass": false,
+          "superiority_index": 0.0
+        }
+      ]
     }
   ]
 }

@@ -107,6 +107,7 @@ def load_seed(seed, results_dir=None):
 
     return {
         "summary": summary,
+        "seed_dir": d,
         "grok": summary["grok_epoch"],
         "test_acc": ld("training", "test_acc_history.npy"),
         "train_acc": ld("training", "train_acc_history.npy"),
@@ -139,6 +140,49 @@ def fraction_epochs(epochs, y, fractions=FRACTIONS):
         idx = np.nonzero(sign * (y - target) >= 0)[0]
         out[f] = int(epochs[idx[0]])
     return out
+
+
+# HTSR Alpha, Weight-PCA, Higher-MI and Commutator Defect: where each one's
+# official firing epoch lives. Used by build_events.
+# Fields: (summary.json key, sub-folder and file stem, firing-epoch key,
+#          official row name).
+# The signal files are written by 06_Code/scripts/run_htsr_evaluation.py,
+# run_weight_pca_evaluation.py, run_higher_mi_evaluation.py and
+# run_commutator_defect_evaluation.py as
+# seed_N/<stem>/<stem>_signal.json.
+SIGNAL_FILE_SOURCES = (
+    ("htsr_predictor", "htsr", "alpha_min_epoch",
+     "HTSR: mean alpha minimum (implemented)"),
+    ("weight_pca_predictor", "weight_pca", "norm_eff_rank_min_epoch",
+     "Weight-PCA: effective-rank minimum (implemented)"),
+    ("higher_mi_predictor", "higher_mi", "population_omega_max_epoch",
+     "Higher-MI: population omega maximum (implemented)"),
+    ("commutator_defect_predictor", "commutator_defect", "event_epoch",
+     "Commutator Defect: Xu onset on median D (implemented)"),
+)
+
+
+def load_signal_file_epoch(seed_dir, stem, epoch_key, grok_epoch):
+    """Firing epoch from seed_dir/<stem>/<stem>_signal.json.
+
+    Returns (found, epoch). found is False when the file does not exist.
+    epoch may be None (a miss, e.g. Commutator Defect never fired).
+    Raises if the key is absent or if the file's grok_epoch differs from
+    the seed's summary.json grok_epoch (the file would belong to another run).
+    """
+    path = os.path.join(seed_dir, stem, f"{stem}_signal.json")
+    if not os.path.exists(path):
+        return False, None
+    with open(path) as handle:
+        block = json.load(handle)
+    if epoch_key not in block:
+        raise KeyError(f"{path}: key {epoch_key!r} not found")
+    if block.get("grok_epoch") != grok_epoch:
+        raise ValueError(
+            f"{path}: grok_epoch {block.get('grok_epoch')!r} does not match "
+            f"summary.json grok_epoch {grok_epoch!r}"
+        )
+    return True, block[epoch_key]
 
 
 def build_events(runs):
@@ -188,25 +232,37 @@ def build_events(runs):
                 put("AGE: log10 NC1 10% of fall", s, fr[0.1])
                 put("AGE: log10 NC1 50% of fall", s, fr[0.5])
 
-        # HTSR Alpha: published-style rule only (epoch of lowest mean alpha).
-        # No fraction-of-change level is added (scope decision: no new rules).
-        if sm.get("htsr_predictor") is not None:
-            put("HTSR: mean alpha minimum (implemented)", s, sm["htsr_predictor"]["alpha_min_epoch"])
+        # HTSR Alpha (lowest mean alpha), Weight-PCA (global minimum of mean
+        # NormEffRank), Higher-MI (population omega maximum) and Commutator
+        # Defect (Xu onset on median D; None = miss). Row names are unchanged.
+        # Source 1: the seed's summary.json block (legacy nanda_unified run).
+        # Source 2, only when that block is null or missing: the canonical
+        # seed_N/<name>/<name>_signal.json file (results_per_nanda_power run).
+        # If neither exists the row is not built, and predictor_level_verdicts
+        # reports that predictor as NOT_SCORED.
+        for summary_key, sub, epoch_key, row_name in SIGNAL_FILE_SOURCES:
+            block = sm.get(summary_key)
+            if block is not None:
+                if summary_key == "commutator_defect_predictor":
+                    put(row_name, s, block.get(epoch_key))
+                else:
+                    put(row_name, s, block[epoch_key])
+                continue
+            found, epoch = load_signal_file_epoch(
+                r["seed_dir"], sub, epoch_key, r["grok"]
+            )
+            if found:
+                put(row_name, s, epoch)
 
-        # Weight-PCA: PRIMARY rule only (global minimum of mean NormEffRank)
-        if sm.get("weight_pca_predictor") is not None:
-            put("Weight-PCA: effective-rank minimum (implemented)", s,
-                sm["weight_pca_predictor"]["norm_eff_rank_min_epoch"])
-
-        # Higher-MI (Pomarico et al. 2025; see src/predictors/higher_mi.py)
-        if sm.get("higher_mi_predictor") is not None:
-            put("Higher-MI: population omega maximum (implemented)", s,
-                sm["higher_mi_predictor"]["population_omega_max_epoch"])
-
-        # Commutator Defect (Xu 2026): PRIMARY Xu onset on median D̃.
-        if sm.get("commutator_defect_predictor") is not None:
-            put("Commutator Defect: Xu onset on median D (implemented)", s,
-                sm["commutator_defect_predictor"].get("event_epoch"))
+    # Every seed must have a value (an epoch or a None miss) for each of the
+    # four rows above. A row present for only some seeds means a signal file
+    # or summary block is missing for the others: stop rather than score it.
+    for _summary_key, _sub, _epoch_key, row_name in SIGNAL_FILE_SOURCES:
+        if row_name in ev and len(ev[row_name]) != len(runs):
+            raise RuntimeError(
+                f"[build_events] {row_name}: value for only "
+                f"{len(ev[row_name])} of {len(runs)} seeds; refusing to score"
+            )
 
     # EXPLORATORY Higher-MI signals, added OUTSIDE the per-seed loop above.
     # Both can legitimately come back None for a seed (population
@@ -691,7 +747,9 @@ def summarise(ev, grok, lead_c=DEFAULT_LEAD_C):
         )
         attach_pass_checks(verdict)
         # Validity Gate + Superiority Index: scored via control experiment evaluate_metrics.
-        if name.startswith("L2:") or name.startswith("Spectral:") or name.startswith("Dropout:") or name.startswith("AGE:"):
+        # Attached to every row of all eight predictors (L2, Dropout, Spectral,
+        # AGE, HTSR, Weight-PCA, Higher-MI, Commutator Defect).
+        if predictor_name(name) is not None:
             attach_superiority_index(verdict)
         row["row_role"] = "exploratory" if is_exploratory(name) else "predeclared"
         row["counts_towards_predictor"] = row["row_role"] == "predeclared"
@@ -701,7 +759,12 @@ def summarise(ev, grok, lead_c=DEFAULT_LEAD_C):
 
 
 def predictor_level_verdicts(rows):
-    """A predictor PASSES only if at least one pre-declared row PASSES."""
+    """A predictor PASSES only if at least one pre-declared row PASSES.
+
+    A predictor with no pre-declared row was never scored. It is written
+    as NOT_SCORED, not FAIL, so a missing input is never reported as a
+    failed predictor.
+    """
     grouped = {name: [] for _, name in PREDICTORS}
     for row in rows:
         name = predictor_name(row["signal"])
@@ -713,9 +776,15 @@ def predictor_level_verdicts(rows):
         members = grouped[name]
         counting = [r for r in members if r["counts_towards_predictor"]]
         n_pass = sum(1 for r in counting if r["frozen_protocol_verdict"]["passed"])
+        if not counting:
+            verdict = "NOT_SCORED"
+        elif n_pass >= 1:
+            verdict = "PASS"
+        else:
+            verdict = "FAIL"
         out.append({
             "predictor": name,
-            "verdict": "PASS" if n_pass >= 1 else "FAIL",
+            "verdict": verdict,
             "n_predeclared_rows": len(counting),
             "n_predeclared_passing": n_pass,
             "rows": [
@@ -741,7 +810,7 @@ def _row_verdict_summary(r):
         "checks": v["checks"],
         "verdict": v["verdict"],
     }
-    # Validity Gate + Superiority Index sit next to the L2 verdict only.
+    # Validity Gate + Superiority Index are copied for every row that has them.
     for key in (
         "gate_lead_frac",
         "gate_correlation",
@@ -1127,10 +1196,21 @@ def main(argv=None):
         import json
         print(json.dumps(res, indent=2))
     else:
-        score_saved_run(
+        result = score_saved_run(
             lead_c=args.lead_c, out_dir=args.out_dir, write=True,
             results_dir=args.results_dir,
         )
+        not_scored = [
+            p["predictor"] for p in result["predictors"]
+            if p["verdict"] == "NOT_SCORED"
+        ]
+        if not_scored:
+            print(
+                "ERROR: predictor(s) NOT_SCORED (no pre-declared row was built): "
+                + ", ".join(not_scored),
+                file=sys.stderr,
+            )
+            sys.exit(2)
 
 
 def score_htsr_saved_histories(results_dir=None):
