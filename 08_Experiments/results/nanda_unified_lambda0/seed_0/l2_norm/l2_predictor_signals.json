@@ -1,0 +1,8 @@
+{
+  "signal": "sum of squared weights",
+  "rule": "confirmed peak (own choice)",
+  "k": 100,
+  "peak_epoch": 9999,
+  "peak_S": 6371.312308855355,
+  "confirmed_peak_epoch": 1629
+}

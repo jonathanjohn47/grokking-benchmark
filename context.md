@@ -14393,3 +14393,56 @@ The same official row on `nanda_unified` gives \(P_i = [1153, 1137, 1151, 1141, 
 - `08_Experiments/results/results_per_nanda_power/aggregate_higher_mi.json`
 - `context_current.md`
 - `context.md`
+
+
+---
+
+# 2026-11-25: Negative Control Experiment Execution (lambda = 0.0) and Verification
+
+## Session Summary
+- **Implemented:**
+  - Added dedicated negative control configuration `06_Code/configs/nanda_unified_lambda0.yaml` setting `weight_decay: 0.0` ($\lambda = 0.0$) on the canonical 1-layer 4-head Transformer ($p = 113$, full-batch AdamW).
+  - Executed 5-seed 10,000-epoch negative control benchmark, saving results and metrics under `08_Experiments/results/nanda_unified_lambda0/`.
+  - Added verification script `verify_negative_control.py` to evaluate Criterion 3 (Zero False Positives on Non-Grokking Control) and inspect predictor false-alarm behaviors.
+- **Investigated:**
+  - Confirmed that across all 5 random seeds (0..4), 0/5 seeds achieve grokking ($t_{\text{grok}}$ at cut 0.99 is null for all seeds; maximum test accuracies reached: seed 0: 7.03%, seed 1: 2.46%, seed 2: 8.64%, seed 3: 22.37%, seed 4: 16.58%).
+  - Evaluated L2 Norm detector on seed 0: confirmed peak detection fires at epoch 1629 despite zero grokking, verifying a false positive on non-grokking negative control runs.
+  - Evaluated Commutator Defect behavior at epoch 500 under $\lambda = 0.0$.
+- **Changed:**
+  - `context_current.md`: documented the completed $\lambda = 0.0$ negative control run, directory structure, and Criterion 3 findings.
+  - `context.md`: recorded session details.
+- **Fixed:**
+  - None.
+- **Postponed:**
+  - None.
+
+## Technical Decisions
+- Standardized negative control protocol on $\lambda = 0.0$ for 10,000 epochs with identical architecture ($p=113$, 4 heads, $d_{\text{model}}=128$, no LayerNorm) to test predictor behavior when grokking is completely absent.
+- Preserved `.gitignore` policy: raw `.pt` checkpoints remain on local disk and are not committed to git; history arrays, summary jsons, and aggregate records are tracked.
+
+## User Instructions
+- Commit and push all files and results regarding the lambda = 0 run.
+
+## Current Project State
+- **Completed Work:**
+  - Negative control run ($\lambda = 0.0$) completed across 5 seeds; zero grokking observed ($0/5$).
+  - Criterion 3 false-positive behavior verified for L2 Norm.
+  - Full 8-predictor benchmark remains scored and verified as failing the frozen early-warning protocol on the canonical grokking setup ($\lambda = 1.0$).
+- **Work in Progress:**
+  - Thesis writing and viva defense preparation.
+- **Blockers:**
+  - None.
+- **Next Actions:**
+  - Incorporate negative control empirical findings into thesis Chapter 4/5 (Evaluation & Results) to demonstrate why Criterion 3 disqualifies predictors that fire indiscriminately during memorization.
+
+## Important Discoveries
+- Setting weight decay to zero ($\lambda = 0.0$) completely suppresses grokking on modular addition $p = 113$: training loss reaches zero and training accuracy saturates at 100%, but generalization does not occur within 10,000 epochs.
+- L2 Norm confirmed peak detector fires at epoch 1629 on seed 0 despite no generalization ever taking place, proving that norm turnover during memorization is not causally tied to generalization or circuit formation.
+
+## Files Modified
+- `06_Code/configs/nanda_unified_lambda0.yaml`
+- `08_Experiments/results/nanda_unified_lambda0/aggregate.json`
+- `08_Experiments/results/nanda_unified_lambda0/seed_0/` through `seed_4/` (histories, signals, summaries)
+- `verify_negative_control.py`
+- `context_current.md`
+- `context.md`

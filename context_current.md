@@ -946,3 +946,19 @@ The benchmark evaluates a full 8-predictor line-up (6 in Tier 1, 1 in Tier 2, an
   7. Higher-MI / Population O-Information ($\Omega_{\text{pop}}$) (*Pomarico et al., 2025*)
 * **Non-Commutative Optimization Metric (1 Predictor):**
   8. Commutator Defect ($\mathcal{D}$) (*Xu, 2026*)
+
+---
+
+## [2026-11-25] Negative Control Benchmark Execution ($\lambda = 0.0$, Non-Grokking Baseline)
+
+### 1. Setup & Execution
+- **Configuration:** `06_Code/configs/nanda_unified_lambda0.yaml` (`task.modulus = 113`, $d_{\text{model}} = 128$, $4$ heads, no LayerNorm, full-batch AdamW, $\text{weight\_decay } \lambda = 0.0$, $10,000$ epochs across $5$ random seeds `0..4`).
+- **Results Folder:** `08_Experiments/results/nanda_unified_lambda0/` (`aggregate.json`, per-seed `summary.json`, training histories, and L2 norm signals).
+- **Verification Script:** `verify_negative_control.py`.
+
+### 2. Experimental Outcomes (Criterion 3 Evaluation)
+- **Generalization / Grokking:** Exactly $0$ of $5$ seeds grokked ($n_{\text{grokked}} = 0$). While training accuracy reached $1.0$ (memorization saturated), test accuracy stayed low across all $10,000$ epochs (seed max test accuracies: 7.03%, 2.46%, 8.64%, 22.37%, 16.58%).
+- **Predictor False Positive Behavior:**
+  - **L2 Norm:** Peak detection fires early during memorization (e.g., epoch $1629$ on seed 0) despite zero generalization / no grokking occurring. This empirically confirms a false-positive trigger on non-grokking controls.
+  - **Commutator Defect ($\mathcal{D}$):** Verified non-zero defect during memorization even without weight decay, confirming that early optimization transients in resampled mini-batches do not indicate circuit formation or impending generalization.
+

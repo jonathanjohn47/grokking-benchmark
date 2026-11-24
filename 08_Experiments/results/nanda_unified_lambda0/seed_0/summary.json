@@ -1,0 +1,36 @@
+{
+  "seed": 0,
+  "epochs": 10000,
+  "modulus": 113,
+  "grok_epoch": null,
+  "grok_epochs_by_threshold": {
+    "0.99": null,
+    "0.9": null,
+    "0.95": null
+  },
+  "final_train_acc": 1.0,
+  "final_test_acc": 0.06980646604765633,
+  "sum_w2_init": 1783.3780074119568,
+  "sum_w2_final": 6371.312308855355,
+  "l2_predictor": {
+    "signal": "sum of squared weights",
+    "rule": "confirmed peak (own choice)",
+    "k": 100,
+    "peak_epoch": 9999,
+    "peak_S": 6371.312308855355,
+    "confirmed_peak_epoch": 1629
+  },
+  "dropout_final_gap_by_rate": null,
+  "dropout_variance_predictor": null,
+  "spectral_predictor": null,
+  "age_predictor": null,
+  "htsr_predictor": null,
+  "higher_mi_predictor": null,
+  "commutator_defect_predictor": null,
+  "limit_cycle_check": {
+    "applicable": false,
+    "limit_cycle": false,
+    "reason": "no grok"
+  },
+  "wall_time_sec": 1500.4
+}

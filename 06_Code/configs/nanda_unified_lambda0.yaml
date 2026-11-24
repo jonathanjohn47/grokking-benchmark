@@ -1,0 +1,84 @@
+# ======================================================================
+# Nanda-Unified — Negative Control (lambda = 0.0, weight_decay = 0.0).
+#
+# Used to verify false-positive behavior of grokking predictors on
+# non-grokking (memorization-only) training runs.
+# ======================================================================
+
+task:
+  operation: "(a + b) mod p"
+  modulus: 113                 # Nanda mainline prime. NOT 97.
+  equals_token_id: 113         # number tokens are 0..p-1; "=" token id is p
+  vocab_size: 114              # p + 1
+  sequence: "a b ="            # 3 positions; logits read at the "=" position
+  read_position: 2
+  train_fraction: 0.3          # 30 / 70 random split
+  split: random
+
+architecture:
+  layers: 1
+  num_heads: 4
+  d_model: 128
+  head_dim: 32                 # d_model / num_heads
+  d_mlp: 512                   # 4 * d_model
+  mlp_activation: relu
+  layernorm: false             # Nanda uses NO LayerNorm (paper Section 3)
+  tied_embeddings: false
+  positional_embedding: learned
+  attention_bias: false        # no bias in query / key / value
+  embedding_bias: false
+  unembedding_bias: false      # no bias in output_head
+  mlp_bias: true               # Nanda keeps b_in / b_out in the MLP
+
+init:
+  scheme: nanda_randn_over_sqrt
+  d_model_std_formula: "1 / sqrt(d_model)"
+  unembed_std_formula: "1 / sqrt(d_vocab)"
+  applies_to_d_model_scale:
+    - token_embedding
+    - position_embedding
+    - query
+    - key
+    - value
+    - attn_out
+    - mlp_in
+    - mlp_out
+  applies_to_d_vocab_scale:
+    - output_head
+  bias_init: zeros             # b_in and b_out only; no other biases
+
+optimizer:
+  name: adamw
+  lr: 0.001
+  weight_decay: 0.0            # decoupled (torch.optim.AdamW) - negative control
+  betas: [0.9, 0.98]           # NOT the PyTorch default (0.9, 0.999)
+
+training:
+  epochs: 10000
+  full_batch: true             # batch_size = floor(train_fraction * p * p)
+  warmup_steps: 10             # LambdaLR: min(step/10, 1), Nanda code; Power Appendix A warms up for 10 updates
+  loss: cross_entropy_high_precision   # float64 log_softmax on the final position, all 114 logits
+  device_preference: [mps, cpu]
+
+seeds:
+  per_predictor_min_runs: 3
+
+evaluation:
+  grok_thresholds: [0.99, 0.9, 0.95]
+  lead_fraction_c: 0.8
+  lead_margin_epochs: 100
+  log_lines_per_run: 40
+  limit_cycle:
+    settle_fraction: 0.05
+    std_above: 0.05
+
+dropout:
+  rates: [0.1, 0.3, 0.5, 0.7, 0.9]
+  n_samples: 100
+  variance_rate: 0.5
+
+l2_norm:
+  confirmed_peak_k: 100
+
+logging:
+  weight_norm_total_sum_w2: true
