@@ -1640,8 +1640,8 @@
     "semantic_hash": ""
   },
   "06_Code/scripts/analyze_nanda_unified.py": {
-    "mtime": 1794875661.701101,
-    "ast_hash": "ff190077169a4d7b6aa78453d247011a",
+    "mtime": 1795499011.4720087,
+    "ast_hash": "a4b33e2269d2c4e56c5297ce99dc1d19",
     "semantic_hash": ""
   },
   "08_Experiments/results/nanda_unified/analysis/predictor_events.json": {
@@ -2120,8 +2120,8 @@
     "semantic_hash": ""
   },
   "06_Code/tests/test_frozen_protocol_verdicts.py": {
-    "mtime": 1794546716.062492,
-    "ast_hash": "e79729db2c34ff248a01fb95b61ea5d2",
+    "mtime": 1795499081.0094302,
+    "ast_hash": "2421ec6bcf8043b8744c28e0eb2f1335",
     "semantic_hash": ""
   },
   "06_Code/tests/test_miss_counts_as_no_lead.py": {
@@ -2235,8 +2235,8 @@
     "semantic_hash": ""
   },
   "context_current.md": {
-    "mtime": 1795423086.7110472,
-    "ast_hash": "86d05cd64439aad4b6f0941eac02ab83",
+    "mtime": 1795493248.3077414,
+    "ast_hash": "f907131e2ff4a5b49e3b575560e7e0ae",
     "semantic_hash": ""
   },
   "context_split/context_part1_of_3.md": {
@@ -2500,8 +2500,8 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/frozen_protocol_verdicts.json": {
-    "mtime": 1794876399.27616,
-    "ast_hash": "b9564fd2bf3dbe5130e1fe56f6f841ea",
+    "mtime": 1795499108.9769042,
+    "ast_hash": "1736b6ff65227ce566a0a6a939465856",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/l2_quality_summary.json": {
@@ -2510,8 +2510,8 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/predictor_events.json": {
-    "mtime": 1794876399.2751386,
-    "ast_hash": "0ef34c395a76e19e539141588abebe1d",
+    "mtime": 1795499108.976216,
+    "ast_hash": "0d012ebda6a4f036c631c31fb0e65573",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/l2_predictor_results.json": {
@@ -2790,23 +2790,23 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/01_grokking_curves.png": {
-    "mtime": 1794876399.6180048,
-    "ast_hash": "2761f35d1df76052eb1db1c1ef96ba64",
+    "mtime": 1795499109.2360349,
+    "ast_hash": "9be23367c856ad4f952180ff8051c96d",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/02_signals_vs_grok.png": {
-    "mtime": 1794876400.6084428,
-    "ast_hash": "aec432ff080a55f403b3b8025e1d40d6",
+    "mtime": 1795499109.891238,
+    "ast_hash": "b1a7a90d3f856e2f503d8416251b001a",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/03_event_vs_grok_scatter.png": {
-    "mtime": 1794876400.7114017,
-    "ast_hash": "bb131c4a1a95eb0ec135962ae105f8bf",
+    "mtime": 1795499110.0579443,
+    "ast_hash": "b263105b172b3a160e5d3b06791ffe01",
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/04_lead_times.png": {
-    "mtime": 1794876400.8025374,
-    "ast_hash": "0b432eab7b278b5e4157dd1440841063",
+    "mtime": 1795499110.1607556,
+    "ast_hash": "f0ba5157bfcda23fecfe1aa41b28bed8",
     "semantic_hash": ""
   },
   "06_Code/scripts/plot_bespoke_spectral_age.py": {
@@ -2815,7 +2815,7 @@
     "semantic_hash": ""
   },
   "08_Experiments/results/results_per_nanda_power/analysis/spectral_quality_summary.json": {
-    "mtime": 1794876399.278201,
+    "mtime": 1795499108.977825,
     "ast_hash": "83ce141dfdd9559c1ed2f4997658dc22",
     "semantic_hash": ""
   },
@@ -3597,6 +3597,11 @@
   "04_Literature/Papers/Predictors/Weight-PCA-David Yunis-Approaching Deep Learning through the Spectral Dynamics of Weights.pdf": {
     "mtime": 1794872491.4369028,
     "ast_hash": "c895f1cf3a59f2cd1f3942ffd9f3f7c2",
+    "semantic_hash": ""
+  },
+  "08_Experiments/results/results_per_nanda_power/aggregate_higher_mi.json": {
+    "mtime": 1795499108.978094,
+    "ast_hash": "85bb6dd18735a6eeca67873f36b15146",
     "semantic_hash": ""
   }
 }
