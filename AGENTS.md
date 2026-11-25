@@ -1,3 +1,16 @@
+# 0. EXCLUDED FILES AND FOLDERS (USER OVERRIDE)
+
+Unless the user explicitly states otherwise, Codex **must NOT** read, search, or look into any of the following:
+
+1. `context.md`
+2. `context_current.md`
+3. The `archive/` folder (or any files inside it)
+4. `CLAUDE.md` (reserved for Claude only)
+
+This rule takes precedence over any instruction in this file that requires reading `context_current.md` or `context.md`.
+
+---
+
 # 1. MANDATORY PRECURSOR — READ `context_current.md` FIRST
 
 Before doing **anything** for this project, Codex **MUST** locate and read `context_current.md` from the project root.
